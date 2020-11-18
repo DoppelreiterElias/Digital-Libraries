@@ -1,0 +1,990 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.tei-c.org/ns/1.0 /home/pisenberg/grobid/grobid-home/schemas/xsd/Grobid.xsd"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+	<teiHeader xml:lang="en">
+		<encodingDesc>
+			<appInfo>
+				<application version="0.4.1" ident="GROBID" when="2016-09-09T13:38+0000">
+					<ref target="https://github.com/kermitt2/grobid">GROBID - A machine learning software for extracting information from scholarly documents</ref>
+				</application>
+			</appInfo>
+		</encodingDesc>
+		<fileDesc>
+			<titleStmt>
+				<title level="a" type="main">Characterizing Users&apos; Visual Analytic Activity for Insight Provenance</title>
+			</titleStmt>
+			<publicationStmt>
+				<publisher/>
+				<availability status="unknown"><licence/></availability>
+			</publicationStmt>
+			<sourceDesc>
+				<biblStruct>
+					<analytic>
+						<author>
+							<persName>
+								<forename type="first">David</forename>
+								<surname>Gotz</surname>
+							</persName>
+							<affiliation>
+								<orgName type="institution">IBM T.J. Watson Research Center</orgName>
+							</affiliation>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Michelle</forename>
+								<forename type="middle">X</forename>
+								<surname>Zhou</surname>
+							</persName>
+							<affiliation>
+								<orgName type="institution">IBM T.J. Watson Research Center</orgName>
+							</affiliation>
+						</author>
+						<title level="a" type="main">Characterizing Users&apos; Visual Analytic Activity for Insight Provenance</title>
+					</analytic>
+					<monogr>
+						<imprint>
+							<date/>
+						</imprint>
+					</monogr>
+				</biblStruct>
+			</sourceDesc>
+		</fileDesc>
+		<profileDesc>
+			<textClass>
+				<keywords>
+					<term>Taxonomy, Information Visualization, Analytic Ac-</term>
+					<term>tivity, Visual Analytics, Insight Provenance</term>
+					<term>Index Terms: H50 [Information Systems]: Information Inter-</term>
+					<term>faces and Presentation—General</term>
+				</keywords>
+			</textClass>
+			<abstract>
+				<p>Insight provenance—a historical record of the process and rationale by which an insight is derived—is an essential requirement in many visual analytics applications. While work in this area has relied on either manually recorded provenance (e.g., user notes) or automatically recorded event-based insight provenance (e.g., clicks, drags, and key-presses), both approaches have fundamental limitations. Our aim is to develop a new approach that combines the benefits of both approaches while avoiding their deficiencies. Toward this goal, we characterize users&apos; visual analytic activity at multiple levels of granularity. Moreover, we identify a critical level of abstraction , Actions, that can be used to represent visual analytic activity with a set of general but semantically meaningful behavior types. In turn, the action types can be used as the semantic building blocks for insight provenance. We present a catalog of common actions identified through observations of several different visual analytic systems. In addition, we define a taxonomy to categorize actions into three major classes based on their semantic intent. The concept of actions has been integrated into our lab&apos;s prototype visual analytic system, HARVEST, as the basis for its insight provenance capabilities.</p>
+			</abstract>
+		</profileDesc>
+	</teiHeader>
+	<text xml:lang="en">
+		<body>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1">INTRODUCTION</head><p> Visual analytic systems have enabled analysts to interactively explore and derive insights from large corpora of information by exploiting human visual perception and abstract reasoning <ref type="bibr" coords="1,263.72,462.76,13.74,8.45" target="#b23">[25]</ref>. In many applications, it is essential to track an insight's provenance to record how and from where each insight was obtained. We use the term insight provenance to refer to a historical record of the process and rationale by which an insight is derived during a visual analytic task. Insight provenance includes the user's relevant visual activity, the information being explored, as well as the derived insight itself. A number of existing visual analytic systems have been equipped with tools specifically designed to capture insight provenance (e.g., <ref type="bibr" coords="1,54.00,553.33,9.71,8.45" target="#b2">[3,</ref><ref type="bibr" coords="1,66.38,553.33,6.72,8.45" target="#b6"> 7,</ref><ref type="bibr" coords="1,75.78,553.33,11.21,8.45"> 13,</ref><ref type="bibr" coords="1,89.65,553.33,11.21,8.45" target="#b12"> 14,</ref><ref type="bibr" coords="1,103.53,553.33,11.21,8.45" target="#b13"> 15,</ref><ref type="bibr" coords="1,117.41,553.33,10.31,8.45" target="#b14"> 16]</ref>). Although these tools vary widely, they can be broadly classified into two categories based on the level of user involvement: manual capture of insight provenance and automatic capture of insight provenance. The manual approach to insight provenance requires users to explicitly record their visual analytic activity (including their notes or argument structures) to document their findings (e.g., <ref type="bibr" coords="1,250.52,614.01,9.71,8.45" target="#b6">[7,</ref><ref type="bibr" coords="1,262.94,614.01,11.21,8.45"> 13,</ref><ref type="bibr" coords="1,276.87,614.01,10.31,8.45" target="#b14"> 16]</ref>). This approach is often very effective for capturing the high-level rationale by which users connect individual insights into an overall conclusion. Because users manually record their own logic, this * e-mail: dgotz@us.ibm.com † e-mail: mzhou@us.ibm.com approach accurately documents the semantics of a user's insight provenance. However, the manual approach has limitations. Most critically, it is difficult to scale up the manual approach to handle the highly interactive nature of visual analytic activity. During a visual analytic task, users typically perform a very large number of activities at a very fast pace. Each of these activities— every query, filter, or sort request—is motivated by a logical rationale . However, it is too laborious and impractical for a user to manually record each individual activity and its rationale due to the overwhelming amount of information involved. For this reason, users often record just the final state of a visualization and tag it with a high-level description. Users typically omit from their documentation the intermediate steps that led to the insight. Moreover, users often omit seemingly unimportant visualizations from their notes even if they directly motivated additional lines of inquiry. As a result, critical information may be lost and the manual approach fails to capture a user's insight provenance comprehensively. For example, a financial analyst who has been looking through stock market data would typically capture only a select number of visualization states that support his/her final investment recommendations . The details of the analyst's exploration path, as well as his/her intermediate findings, would be lost. The analyst's client would be unable to verify exactly how the investment recommendations were derived. Given the limitations described above, systems that automatically capture insight provenance (e.g., <ref type="bibr" coords="1,456.16,411.73,9.71,8.45" target="#b2">[3,</ref><ref type="bibr" coords="1,468.01,411.73,11.21,8.45" target="#b12"> 14,</ref><ref type="bibr" coords="1,481.36,411.73,11.20,8.45" target="#b13"> 15]</ref>) are a compelling alternative. Unlike the manual approach, a system that automatically records a user's analysis process could potentially capture a comprehensive model of insight provenance. However, the automatic approach has its own limitations. In particular, most existing visual analytic systems are eventbased systems that are designed to recognize and process specific, often low-level user interaction events like mouse clicks and drags, but can rarely understand and capture the semantics of such events (e.g., the analytic purpose of a user's mouse drag). In addition, during visual analysis the high rate of user activity often creates a large number of low-level user interaction events that grows enormously as the analysis unfolds. As a result, it is extremely difficult for these systems to organize the large linear list of user interaction events into semantically meaningful segments of activity. It is even more challenging for such as system to infer the high level semantic constructs that can capture the complex, non-linear nature of a user's visual analysis process. To capture insight provenance more effectively, we are investigating a new approach that combines the benefits of both manual and automatic approaches while addressing their limitations. Our approach allows for the automatic capture of both a semantic and comprehensive record of user activity, from which we can infer the high-level logical constructs of a user's analysis with minimal user involvement. Our work is based on the hypothesis that we can achieve this goal by developing a semantics-based rather than event-based visual analytic system. Instead of reacting to low-level user interaction events (e.g., clicks and drags), such a system is designed to support and recognize a set of semantic but general user activities (e.g., query and filter) that are broadly applicable across a variety of different visualization tools and applications. The set of user activities can then be used as semantic building blocks from which the system can automatically infer the higher level logical structures within a user's analytic activity for use as insight provenance. To identify an effective set of semantic building blocks, we characterize a user's visual analytic behavior at multiple levels of granularity based on the semantic richness of user activity. Motivated by Activity Theory <ref type="bibr" coords="2,124.88,137.89,14.94,8.45" target="#b16">[18] </ref>and our own empirical studies of analysts' behavior <ref type="bibr" coords="2,87.92,147.85,9.52,8.45" target="#b7">[8]</ref>, we model user visual analytic activity at four levels: Tasks, Sub-tasks, Actions, and Events. Tasks and sub-tasks represent high-level, logical structures of a user's analytic process, such as the user's cognitive goals and sub-goals. Tasks and sub-tasks have rich semantics and are often domain or application specific (e.g., the task of investigating the financial market for investment recommendations). The action tier represents the individual executable semantic steps, such as making a data inquiry, taken by a user while working toward their analytic goal. At the bottom of our model, events correspond to the lowest-level of user interaction events (e.g., a mouse click or a menu item selection) which carry very little semantic meaning. In this paper, we focus on the action tier, which uniquely bridges the gap between higher-level logical constructs and the lowest-level user interaction events. Because of its unique role, we use the action tier to identify the semantic building blocks in our approach to insight provenance. In particular, we characterize the action tier by a number of dimensions, such as the type, intent, and parameters of each user action. Based on this characterization, we develop an action taxonomy that identifies a core set of semantic building blocks for our approach to insight provenance. In addition, our characterization can be used to guide the future definition of new actions to expand the set of building blocks as required by new functionality. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="123"></head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2">RELATED WORK</head><p>Our multi-tier characterization of user visual analytic activity is based on Activity Theory, which describes how tools act as mediators of human behavior <ref type="bibr" coords="2,152.75,422.54,13.74,8.45" target="#b15">[17]</ref>. Activity Theory has been widely used by the HCI community to help explain how human users interact with computerized tools <ref type="bibr" coords="2,165.86,442.46,13.74,8.45" target="#b16">[18]</ref>. Directly motivating our work, it includes a three-level hierarchy that characterizes human activity at multiple levels of abstraction, ranging from high-level task motivations to low-level human operations. Adopting this multitier activity model, we specifically tailor the model to characterize users' visual analytic behavior for insight provenance. Our work is also influenced by previous empirical studies that examine users' visual analytic behavior. These include studies that capture and analyze the high-level structure of user visual analytic behavior (e.g., <ref type="bibr" coords="2,110.26,532.67,14.19,8.45" target="#b9">[10,</ref><ref type="bibr" coords="2,127.78,532.67,11.21,8.45" target="#b17"> 19,</ref><ref type="bibr" coords="2,142.29,532.67,10.31,8.45" target="#b18"> 20]</ref>), and others that focus on examining lower-level user analytic activity <ref type="bibr" coords="2,176.80,542.64,14.19,8.45" target="#b11">[12,</ref><ref type="bibr" coords="2,194.17,542.64,10.65,8.45" target="#b20"> 22]</ref>. These studies directly motivate our layered approach to insight provenance, which captures user activity comprehensively at multiple levels of granularity. Also related are a number of visual analytic system that provide tools for preserving insight provenance, an important aspect of visual analytics <ref type="bibr" coords="2,104.23,593.00,14.19,8.45" target="#b19">[21,</ref><ref type="bibr" coords="2,120.37,593.00,10.65,8.45" target="#b23"> 25]</ref>. While each system takes a unique approach, they can be classified into two broad categories: (1) manual capture of insight provenance and (2) automatic capture of insight prove- nance. Manual approaches include user-created notes <ref type="bibr" coords="2,231.98,633.41,9.52,8.45" target="#b6">[7]</ref> , manually authored diagrams illustrating a user's analytic steps <ref type="bibr" coords="2,239.75,643.37,14.34,8.45">[13]</ref> ) and userbuilt structured argumentation graphs <ref type="bibr" coords="2,192.37,653.33,13.74,8.45" target="#b14">[16]</ref>. Since these tools have users themselves manually record their own logic, the captured insight provenance provides a clear, logical view of a user's analytic process. Nevertheless, it is often too onerous for individual analysts to manually record every step that leads them to their insights. As a result, key details of a user's insight provenance may be lost. In contrast, automatic approaches attempt to systematically capture the full history of a user's analytic process. For example, the VisTrails system <ref type="bibr" coords="2,379.20,67.59,10.45,8.45" target="#b2">[3] </ref>captures chains of visualization operations that represent scientific visualization workflows. There are also visual analytic systems that record histories of user visual operations and the parameters of these operations <ref type="bibr" coords="2,446.18,97.48,14.19,8.45" target="#b12">[14,</ref><ref type="bibr" coords="2,463.32,97.48,10.65,8.45" target="#b13"> 15]</ref>. Although these tools comprehensively and faithfully record user analytic activity, they cannot abstract the high-level semantic constructs obtained in the manual approach. Recognizing the limitations of each approach, Groth and Streefkerk <ref type="bibr" coords="2,358.50,148.62,14.94,8.45" target="#b10">[11] </ref>introduced a state-based interaction model which combines both automatically captured visualization states with manually authored annotations that capture a user's fine-grained rationale for each individual interaction. However, the annotation process faces the same limits as other manual-based methods and can be onerous for complex tasks. Our goal is to combine the benefits of both manual and automatic approaches while avoiding their deficiencies. Toward this goal, our work presented here is to characterize user visual analytic activity at multiple levels of granularity. More importantly, we identify the right level of abstraction that can be used to represent a set of general but meaningful user activity primitives. In turn these activities can be used as semantic building blocks for a visual analytic system to understand and infer the meaning and rationale of such behavior. Most similar to our approach is the Aruvi system <ref type="bibr" coords="2,514.34,290.75,13.74,8.45" target="#b22">[24]</ref>. Aruvi supports two ways of preserving a user's insight provenance. First, it automatically records a user's navigational steps. Second, it provides an interface component that allows users to manually add notes. However, the granularity of a user's navigational steps are determined by application-specific heuristics (e.g. when the mouse pointer exits from a particular UI panel) that do not generalize for use with other visual metaphors or applications. In contrast, our action-tier focuses on abstracting meaningful user actions that are general across a range of visualization tools and domains. In other work, a number of taxonomies have been developed that characterize visualization activity. Broadly speaking, these efforts fall into two distinct families: system-oriented taxonomies and user-oriented taxonomies. System-oriented taxonomies focus on describing visualization or data operations (e.g., <ref type="bibr" coords="2,397.95,442.85,9.71,8.45" target="#b3">[4,</ref><ref type="bibr" coords="2,410.78,442.85,6.72,8.45" target="#b4"> 5,</ref><ref type="bibr" coords="2,420.60,442.85,6.72,8.45" target="#b5"> 6,</ref><ref type="bibr" coords="2,430.44,442.85,11.21,8.45" target="#b25"> 28,</ref><ref type="bibr" coords="2,444.75,442.85,10.31,8.45" target="#b26"> 29]</ref>). For example, Chuah and Roth <ref type="bibr" coords="2,338.11,452.81,10.45,8.45" target="#b5">[6] </ref> define a set of operators, called basic visualization interactions (BVIs), describing various data and visual interaction operations (e.g., set-graphical-value). Because these taxonomies are not designed to model user activity, they are most applicable for representing a system's response to user activity, not the user activity itself. In contrast, user-oriented taxonomies typically characterize high-level human cognitive tasks or visual perceptual behaviors (e.g., <ref type="bibr" coords="2,339.48,533.84,9.71,8.45" target="#b0">[1,</ref><ref type="bibr" coords="2,352.31,533.84,6.72,8.45" target="#b1"> 2,</ref><ref type="bibr" coords="2,362.16,533.84,6.72,8.45" target="#b8"> 9,</ref><ref type="bibr" coords="2,372.01,533.84,10.31,8.45" target="#b21"> 23]</ref>). For example, Amar et al. <ref type="bibr" coords="2,493.17,533.84,10.45,8.45" target="#b0">[1] </ref>have come up with ten basic task types describing various users' needs in information analysis. Existing user-oriented taxonomies often characterize behavior at granularities which correspond closely to the Task or Sub-task tiers in our characterization. Compared to the previous taxonomies, our work is unique in identifying the Action tier, a granularity of activity that bridges the semantic gap between highlevel human cognitive activity and low-level user visual interaction events. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.1">Tasks and Tools</head><p>We designed two real-world analysis tasks based on common business-oriented activities. The first task asked users to analyze stock market data for investment opportunities, focusing on the financial and technology sectors. The second task had users research business travel facilities for a complex multi-city event, asking them to produce several competing alternatives (e.g., meeting places and hotels). To avoid potential biases (e.g., unrealistic data or unreliable tools), we provided our participants with commercial-grade visualization systems and real-world data to accomplish the two tasks. For the first task, participants were given access to the Map of the Market visualization tool from SmartMoney.com <ref type="bibr" coords="3,234.30,171.01,13.74,8.45">[27]</ref>. They were also allowed to use directly linked web resources such as analyst reports and related news articles. For the second task, participants were given access to a map-based travel tool that combines lodging , dining, and entertainment reviews with corporate databases and policies regarding hotels, rental cars, and office locations. Each user was allotted one hour to accomplish his/her task. During this process, each user's activity was both video taped and manually recorded by a human moderator. Participants were also given proper tools to record hand-written notes to capture visual snapshots of their screens (e.g., pens, paper, and the screen capturing tool SnagIt). </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.2">Observations</head><p>We analyzed the extensive records of user activity captured in our experiments (e.g., videos, user notes, and the moderator's logs) and distilled three key observations. These observations have helped guide us in our characterization of visual analytic activity. Multiple Tiers of Analytic Behavior. All participants demonstrated distinct hierarchical approaches to their tasks. In all cases, there was a clear pattern of task decomposition that divided each high-level task into smaller and more concrete sub-tasks. For example , when performing the market analysis task, one participant began by uncovering the best and worst performing stocks in financial and technology sectors, respectively. From our observations and conversations with the participants, several people consciously took a hierarchical approach to the task as part of a concrete plan. For others, the decomposition was less formal but implicitly done in ad hoc fashion over the course of the task. Similarly, we observed the decomposition of sub-tasks into individual user actions that could be performed with the provided tools. Each action represented a distinct user intention to elicit a response from the visual tool. For example, during the market analysis task, a common sub-task was to identify the best-performing companies in a particular sector. To accomplish this sub-task, one user carried out the following actions: @BULLET Zoom in to the technology sector to view stock performance of various industries in the sector. @BULLET Create notes to record the strongest industries. @BULLET Zoom in further to the software industry to examine stock performance of various companies in the industry. Our observations are consistent with the hierarchical nature of human activity predicted by Activity Theory <ref type="bibr" coords="3,223.25,713.66,13.74,8.45" target="#b16">[18]</ref>. In particular, we observed that a user's visual analysis process is inherently hierarchical , including high-level user cognitive activities and lowerlevel , concrete user actions (e.g., creating a note to annotate his/her discovery). A Common Set of Semantic Building Blocks. The participants in our experiments performed two very different tasks using two very different visualization tools. One group of users was investigating investment opportunities while the other was planning a complex business event. Yet at a particular granularity, we found a common set of user actions that were repeatedly performed regardless of the visualization tool being used or the specific tasks being performed. For example, the user actions listed above (e.g., Zoom in and Create notes), were performed by all of the participants in both tasks. Moreover, our observations showed that such actions were motivated by a specific user purpose. For example, the intention of a user that Zooms in is to change his/her existing view of a set of information to display a larger or more detailed view of a particular region. The user intent for each action was the same across both tasks and tools, regardless when or where it was performed. This finding supports our hypothesis that we can identify a common set of meaningful user actions on which one can build a semantics-based visual analytic system. This set of user actions can then serve as the set of semantic building blocks needed to automatically capture comprehensive insight provenance from which higher-level user intentions can be inferred. Inferring Logical Provenance from User Actions. Our third key observation is that users aggregate chains of actions on their way to discovering individual insights. We observed from our study that, at the action level, the insight discovery process typically contains two phases. First, in an exploration phase, a participant gathers or filters data, changes views, or otherwise explores through the available information. Then, when the user has identified an interesting insight, the participant engages in an insight phase during which they document their discovery by taking notes, capturing a visualization snapshot, or both. Since a user often explicitly signals the discovery of an insight via actions like note taking, a visual analytic system can use these cues to punctuate the sequence of user performed actions, marking important semantic boundaries in the recorded history of user activity . These boundaries can then be used to infer how chains of user actions aggregate to form the provenance of an individual insight. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4">MULTI-TIER CHARACTERIZATION OF USER ANALYTIC ACTIVITY</head><p>Motivated by Activity Theory <ref type="bibr" coords="3,430.95,509.23,13.74,8.45" target="#b16">[18]</ref>, we characterize user analytic behavior at multiple levels of granularity based on the semantic richness of the activity. In particular, we characterize user visual analytic activity at four levels: tasks, sub-tasks, actions, and events. The top three tiers describe activities that inherently possess some degree of semantics, with tasks as the richest of all tiers. The bottom tier represents the lowest-level user interaction events, such as mouse clicks and key presses, which in isolation hold little semantic value (see <ref type="figure" coords="3,356.07,588.93,28.89,8.45">Figure 1</ref>). Throughout this section, we use the following concrete example scenario to help explain our characterization. Consider a stock market analyst, Bob, who is asked to use visualization software to analyze the stock market in order to make investment recommendations in two market sectors: finance and technology. Tasks: The task tier captures a user's highest-level analytic goals. These goals, which are often open ended or ambiguous, are what drive a user's overall analysis process. In practice, analysts often juggle multiple tasks at the same time. In the example scenario, Bob has just a single task T 1 : @BULLET T 1 : Identify key market insights to generate investment rec- ommendations. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Events -E i </head><p>Poor Semantics </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Rich Semantics </head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Actions -A i </head><p>Sub-Tasks -S i </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Tasks -T i </head><p>Figure 1: We characterize user analytic behavior at multiple levels of granularity based on the semantic richness of the activity. We define four tiers—Tasks, Sub-Tasks, Actions, and Events—which capture user behavior at decreasing semantic levels. Activities from each tier are combined into sequences to perform a single activity from the next highest layer as illustrated by the tree-like structure in the <ref type="figure" coords="4,272.02,198.41,22.03,8.12">figure.</ref>Typically, tasks are tightly coupled to the domain or application in which the user is working. For example, while T 1 is very appropriate for an investment analyst working with financial tools, a travel agent (working with a set of travel and transportation tools) would not likely perform the same task. While tasks vary widely, researchers have developed general taxonomies to help characterize their different types (e.g., <ref type="bibr" coords="4,147.15,283.97,9.41,8.45" target="#b1">[2]</ref>). Sub-Tasks: The sub-task tier corresponds to more objective, concrete analytic goals. For instance, sub-tasks (noted S i ) for T 1 in our example scenario might include: @BULLET S 1 : Characterize the overall 52-week market trend in the technology sector. @BULLET S 2 : Identify the best and worst performing financial companies over the last eight weeks. </p><p> Analysts typically follow a divide-and-conquer approach, performing several sub-tasks to achieve the requirements of a single top-level task. As in the task tier, sub-tasks are often tightly coupled to the domain or application in which the user is working. For example, S 2 is a reasonable sub-task for the investment analyst in our example scenario. However, users in other domains would not likely encounter the same sub-task. Similar to tasks, sub-tasks can also be characterized using existing task taxonomies (e.g., <ref type="bibr" coords="4,264.29,450.38,9.41,8.45" target="#b0">[1]</ref>). Actions: The third tier in our characterization of user analytic activity is the action tier. Here we define an action as an atomic analytic step performed by a user with a visual analytic system. Sequences of actions (noted as A i ) can be aggregated to accomplish individual sub-tasks. In our example scenario, Bob might start subtask S 2 with the following actions: @BULLET A 1 : Query for eight weeks worth of stock market data. @BULLET A 2 : Split companies by sector. @BULLET A 3 : Filter to show only the financial sector. @BULLET A 4 : Sort companies by their changes in stock price. @BULLET A 5 : Inspect the company with greatest change in stock price to ask for more details such as financial reports. </p><p> Unlike the task or sub-task tier, where activity is typically domain or application specific, the action tier is generic. It represents a typical set of user actions that can be performed across different visualization tools and domains. For example, the Query action in A 1 can be performed by both financial analysts using stock market visualization tools, and travel agents using their own visualization tools. This contrasts strongly with both T 1 and S 2 , both of which were only appropriate in the investment domain. While application independent, each action retains a rich level of semantics not found in low-level user-interaction events, such as a mouse click or drag. For example, an isolated click event has little meaning without additional context. In contrast, an action such as Query or Zoom represents a semantically meaningful user activity. Actions, therefore, are unique in that they are both generic with respect to domains and tools, yet semantically rich in terms of user intent. While taxonomies have been developed for both tasks and subtasks , relatively little attention has been focused on characterizing actions. However, actions are critical to our approach to capturing insight provenance since they represent the most basic, meaningful user analytic steps from which we can infer higher-level user tasks and sub-tasks. For this reason, we develop our own action taxonomy later in this paper. Events: The fourth and lowest tier in our characterization is the event tier. An event E i represents a low-level user interaction event which, in isolation, has little semantic value. This is in contrast to the three previous tiers (tasks, sub-tasks, and actions) all of which had rich semantic connotations. Returning to the example scenario, action A 4 might consist of several low-level user events: </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5">CHARACTERIZATION OF THE ACTION TIER</head><p>The action tier is unique in our characterization of visual analytic activity because it is the only tier to combine two key properties. First, actions are domain independent, making them applicable to a broad range of user analytic tasks and applications. Second, actions represent meaningful units of user activity with well-defined semantics. Therefore, if a visual analytic system is designed to explicitly support user behavior in terms of actions, it can easily capture a semantic record of a user's activity without using domain knowledge or tool-specific heuristics based on low-level interaction events as often done in other systems (e.g., <ref type="bibr" coords="4,473.74,426.17,13.44,8.45" target="#b22">[24]</ref>). In this section, we first define a user action representation that captures its main properties. Then, based on that representation, we develop an action taxonomy that categorizes a set of common actions identified during our observations of visual analytic activity. Finally, we show how this taxonomy is used to define a representation that we use to semi-automatically infer how actions combine to satisfy higher-level sub-tasks. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.1">Action Representation</head><p> An action corresponds to an atomic and semantic analytic step performed by a user with a visual analytic system. A representation must therefore capture both (1) the general semantic properties of an action, and (2) the parameters that specify the particulars of an individual action instance. To satisfy this criteria, we represent an action with the following tuple: Action =&lt; Type, Intent, Parameters &gt; </p><formula>(1) </formula><p>The Type attribute defines a unique semantic signature for each action. For example, Zoom and Pan, which have unique semantic connotations, are both action types. Intent represents the primary user intention for invoking the specific action type. For example, both Zoom and Pan actions correspond to users' intention to change the visual presentation of data. Finally, an action's Parameters define the functional scope of an action and include the values required by a system to implement the action. For example, a Query action has a set of parameters that enumerates the main data concepts and data constraints that are required to formulate executable query statements (e.g., SQL). Our action representation is invariant to the underlying visual metaphor which supports it. For example, users can Zoom in with a timeline just as they Zoom in on a map. In both cases, the user's action has the same intent and type. Therefore, both Zooms are considered semantically equivalent. Similarly, our representation is independent of the underlying interaction events used to initiate an action. For example, Google Maps provides three distinct user interaction techniques for zooming in. Users can either (1) double click on the map, (2) drag a zoom slider, or (3) click on a " plus " button. All three gestures are semantically equivalent and can be represented by the same action. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Data Exploration Actions </head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.2">Catalog of Actions</head><p> Using on our action representation, we surveyed several visual analytic systems (both commercial products and our own prototype applications) and developed a catalog of common actions which we use to build our action taxonomy. In compiling this catalog, we reviewed systems from a wide variety of task domains (e.g., finance, travel, real estate, import/export trade, text document analysis) and with a broad spectrum of visual metaphors (e.g., statistical graphs, maps, timelines, treemaps). We also reviewed the detailed activity logs captured during our 30-person experiments. Our analysis identified twenty distinct action types as summarized in <ref type="figure" coords="5,84.20,482.14,25.71,8.45" target="#tab_1">Table 1</ref> . For each action, the table includes a formal definition (type, intent, and parameters) as well as a brief description. Each action is described using one or more intents based on the primary user motivation. We use four distinct intents: (1) data change, </p><formula>(2) visual change, (3) notes change, and </formula><p>(4) history change. The list of actions represents a union of the actions we identified across all of the systems in our review. No single system supported the entire set of actions. Moreover, the action catalog is not comprehensive enough to represent every potentially possible action in systems beyond our survey. However, we believe that the catalog captures the most common user actions supported by a range of visual analytic tools. The actions in this catalog serve two purposes. First, we use the action definitions to motivate the structure of an action taxonomy. Second, the list of actions types provides a common vocabulary for describing the basic semantic functions within a visual analytic system . For example, we use a subset of this catalog within our lab's prototype visual analytic system, HARVEST, to enable its semiautomated insight provenance functionality. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.3">Action Taxonomy</head><p> Using the twenty actions identified in our catalog, we further characterize the action tier to develop a general taxonomy. This taxonomy is designed for two purposes. First, its categories are used as <ref type="figure" coords="5,317.96,220.30,29.35,8.12">Figure 3</ref>: A Query action in this real estate analysis tool triggers a system response that changes both the data set under analysis as well as the visual presentation. However, because the primary intent of a Query is to change the data set, it is considered a data exploration action in our taxonomy. the basis for our approach to inferring higher-level sub-tasks from a sequence of user performed actions. In addition, the taxonomy serves as a guideline for others to expand the set of actions within our characterization. Using intent a primary feature, we identify three broad classes of actions: exploration actions, insight actions, and meta actions. Within each class, we further group actions into sub-categories based on their semantics (<ref type="figure" coords="5,412.40,370.46,28.23,8.45" target="#fig_1">Figure 2</ref>). Next, we describe each action category and use concrete examples to elaborate key differences. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.3.1">Exploration Actions</head><p>Exploration actions are performed as users access and explore data in search of new insights. In terms of Intent, we classify all actions with a data change and/or visual change intention as exploration actions. Most actions fall into this category, including Query, Filter , Pan and Zoom. We further categorize exploration actions into two sub-categories: visual exploration actions and data exploration actions. Visual exploration actions, such as Sort and Change-Metaphor, are actions where the primary user intention is to change the visual presentation of information that is already being presented to the user. For this reason, exploration actions whose only intent is visual change fall into this category. For example, the Sort action is primarily a request by the user to view the data elements in a data set (e.g., shipments) in a certain order (e.g., ascending order) by a particular data dimension (e.g., shipment arrival date). Similarly , the Change-Metaphor action is primarily intended by a user to change the view of currently presented information (e.g., a mapbased display) to an alternative view (e.g., a timeline display). In contrast, data exploration actions are those in which the user intends to change the current data that is under investigation. Any exploration action with a data change intent falls into this category, such as traditional data inquiry behaviors Query and Filter. Our classification of data and visual exploration actions is based on the user's primary intention, not the eventual system response. In practice, exploration actions in both categories can result in a system response that will modify both the data being viewed and the visual presentation of the data. To illustrate this point, we describe two exploration actions in detail: Query, and Split. Query: A Query action represents a user's request to bring a specific data set into a visualization. The definition of this action includes three key query parameters: a data concept, a list of straints, and a summary function. Data concept defines what type of data entities a user is interested in. For example, in a real-estate domain, there may be multiple data concepts including houses, cities, and schools. The constraint list defines the desired data entity properties. Finally, the summary function describes how the matching data should be summarized. For example, common summary functions include Enumerate, Count, and Average. As captured by the parameters of a Query action, the primary user intent is to change the set of data under analysis. This makes Query a data exploration action. In practice, however, a user's Query often results in changes to both the data set and visual presentation . For example, the real estate analysis tool shown in <ref type="figure" coords="6,270.64,619.75,23.41,8.45;6,54.00,629.71,4.48,8.45">Figure  3</ref>automatically translates and scales a map to properly display the information returned by a user query. Split: The Split action represents a user's request to re-cluster the data represented by a selected set of visual objects based on certain criteria, such as attribute values. The definition of Split has two key parameters. First, split parameters are used as the criteria for re-clustering. Second, for each selected visual object to be split, a constraint list is provided to define the scope of the action. As the parameters of the Split action indicate, the primary user intent is to change the visual presentation without altering the underlying set of data itself. This makes Split a view exploration action . For example, the temporal analysis tool shown in <ref type="figure" coords="6,526.85,527.96,31.15,8.45">Figure 4</ref>shows a user's split action performed on calendar data. The single summary timeline is split into five smaller timelines, one for each person. However, while the user's intent is simply to change his/her view, the timeline tool performs an additional background query to gather the personnel data needed to perform the required clustering. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.3.2">Insight Actions</head><p> Insight actions are performed by users as they discover or manipulate the insights obtained over the course of an analysis. A user's insights can be recorded, for example, as free-form notes or lists of visualization bookmarks. We classify all actions with the notes change intent as insight actions. Based on the parameters of an insight action, we further classify them into two categories: visual insight actions and knowledge insight actions. Visual insight actions are those whose parameters explicitly reference objects within a visualization, such as Annotate and Bookmark. In these cases, users are explicitly marking visual objects (or entire visualizations) as related to their derived insights. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>A </head><p>Split i <ref type="figure" coords="7,54.00,184.34,28.98,8.12">Figure 4</ref>: A Split action in this timeline-based analysis tool breaks apart a single timeline into several based on specific data attributes. The user's request is to change the visual organization of information already on display. For this reason, the Split action is a visual exploration action. </p><p>In contrast, knowledge insight actions relate to the expression and manipulation of new knowledge created by a user as the result of knowledge synthesis. This second category represents insight actions that have no direct reference to visual objects, such as Create. Knowledge insight actions are typically found in visual analytic systems that have a note taking or knowledge management component (e.g. <ref type="bibr" coords="7,114.80,323.46,9.71,8.45" target="#b8">[9,</ref><ref type="bibr" coords="7,126.76,323.46,10.31,8.45" target="#b22"> 24]</ref>). </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.3.3">Meta Actions</head><p>The third class in our taxonomy is meta actions. These actions, such as Undo and Redo, operate neither on the data set nor the visual presentation , but rather on the user's action history itself. In terms of intent, this class contains all actions with the history change intent. Meta actions are important in part because they help distill the units of user activity that should constitute an action. For example, a user would not undo a single click, but may wish to undo a Filter or Zoom. In formulating our catalog of actions, we have attempted to define each at this " undo " granularity. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.4">An Action-Based Sub-Task Representation</head><p> The actions identified in our catalog provide the semantic building blocks of insight provenance. However, it is insufficient for a visual analytic system to simply record a linear history of user performed actions. Such a history fails to capture how users combine multiple actions to accomplish higher-level sub-tasks. To provide more meaningful insight provenance, we must define a representation that captures how multiple actions combine to signal the accomplishment of a sub-task. A sub-task representation can be developed based on the observation (reported in Section 3) that user's perform sub-tasks in two distinct phases: an exploration phase followed by an insight phase. In terms of the action taxonomy, a user will accomplish a sub-task using a combination of exploration actions followed by a combination of insight actions. We refer to this pattern as a trail. For example, assume that Bob from the sample scenario has just recorded a visualization bookmark in his notes to show that internet companies trade at a higher price-to-earnings ratio compared to other market sectors. To get to that point, Bob performed a series of actions: Query for financial stocks, Split by sector, Sort by price-to-earnings ratio, and finally a Bookmark action to record the visualization snapshot in his notes. These actions compose a trail that documents the provenance behind Bob's conclusion. In practice, trails are typically more complicated than the four step sequence described above. Analysts often progressively chain together insights from multiple trails to satisfy specific sub-tasks. For example, Bob might retrieve an annotated set of high-growth <ref type="figure" coords="7,317.96,191.19,28.29,8.12">Figure 5</ref> : HARVEST is a web-based visual analysis platform that incorporates semantic actions as a core design element. As user's interact with the system, a trail with the logical history of userperformed actions is extracted and exposed in real time at the bottom of the screen. companies to use as the starting point for a future sub-task. In these cases, trails become interconnected to document the web of insight provenance that satisfies an overall task. We therefore represent a trail τ using the regular expression shown in Equation 2. </p><formula>τ = ([A Exploration i |τ]@BULLET) * A Insight i (2) </formula><p> This definition, in combination with our taxonomy, allows a visual analytic system to detect how sequences of user performed actions combine to satisfy individual sub-tasks. Just as an insight action allow users to record what has been discovered, the automatically captured trail for each insight represents how a particular insight was generated. When paired with a user's notes, automatically extracted trails provide a comprehensive and logically meaningful model of insight provenance. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6">PRACTICAL VALIDATION: HARVEST</head><p>Our characterization of analytic activity is motivated by the initial hypothesis that a semantics-based visual analytic system can automatically capture comprehensive and logically organized insight provenance without using application or domain heuristics. To validate this hypothesis, we have built a visual analytic system called HARVEST (see <ref type="figure" coords="7,376.87,493.53,29.06,8.45">Figure 5</ref> ) which uses semantic actions as a core design element for representing interaction activity. As a result, HAR- VEST is able to capture a semantic record of a user's analysis without any additional user work beyond their normal exploration and note taking behavior. Here we review some initial feedback, gathered through interviews, from both developers and analysts who have worked with the HARVEST system. Developer Feedback. HARVEST is a multi-metaphor visualization system which allows users to interactively switch between various views of data (e.g, maps, timelines, scatter-plots, parallel coordinates, etc.). To integrate a new visualization widget into the HARVEST system, a developer must ensure that all user interactions with the widget are modeled as actions and expressed through a defined API. We worked with several visualization developers and all of them found it straightforward and useful to model their components based on the semantic actions they provide to users. For example, HARVEST includes parallel coordinate visualization tool that supports several actions. The developer of this visualization implemented a large variety of interaction mechanisms for triggering new commands, ranging from " drag and drop " to popup context menus. However, using our action taxonomy, the developer was able to distill the systems functionality into four basic semantic behaviors: <ref type="bibr" coords="7,357.91,713.50,124.12,8.62">Bookmark, Brush, Filter, and Sort. </ref>Another contributor extended several widgets from the ManyEyes widget library <ref type="bibr" coords="8,149.81,67.60,14.94,8.45" target="#b24">[26] </ref>to allow additional interaction and customization capabilities. These extended widgets were then added to the HARVEST system. According this developer, it " was pretty straightforward " to map the existing features of each tool to corresponding actions. " This was actually quite easy to do ... and it took a very little of my time. " Moreover, the action catalog was sufficient for his widgets: " For the visualizations I was working on there were more than enough of the action types. " Analyst Feedback. We also observed several end users of the HARVEST system. The users analyzed enterprise data containing personnel, funding, and strategy information describing ongoing projects within our company. In addition to observing their behavior , we performed interviews to gather feedback on HARVEST's action tracking and insight provenance capabilities. The initial feedback from these users indicates that our approach aligns well with users' own mental models. For example, one user reported that actions " match well with what I consider <ref type="bibr" coords="8,256.79,226.99,17.43,8.45">[my] </ref>individual steps. " This same user also mentioned that " it is very helpful to have the actions updated and displayed in real time while I interact with the system, " stating that it helps give a " clear picture of what state I am in. " In addition, user's welcomed the use of action trails as provenance for recorded visualization bookmarks. When opening saved bookmarks, " restoring the action trail [is helpful for] explaining how the visualization result was derived. " </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="7">CONCLUSION</head><p> Insight provenance is a critical requirement for many visual analytic applications. While previous work in this area has relied on either manually recorded provenance (e.g., user notes and bookmarks ) or automatically recorded event-based insight provenance (e.g., clicks and key-presses), both techniques have fundamental limitations. Our aim is to develop a new approach based on a semantic model of user activity that combines the benefits of both approaches while avoiding their deficiencies. We therefore set out to identify a set of semantic units of user activity that could be used to capture insight provenance. To identify an effective set of semantic building blocks, we have characterized a user's visual analytic behavior at multiple levels of granularity based on the semantic richness of user activity. Motivated by Activity Theory and our own empirical studies of analysts' behavior, we model user visual analytic activity at four levels: Tasks, Sub-tasks, Actions, and Events. Most critical in this model is the Action tier which we use to identify a set of generic and semantic units of user activity. We identified a set of common actions based on a review of several different visual analytic systems. We then characterized these actions along a number of dimensions, such as the type, intent, and parameters of each user action. Based on this characterization, we developed a taxonomy that identifies three general classes of actions: exploration actions, insight actions, and meta actions. The taxonomy can be used to both assist in inferring higher-level subtasks , and as a guide for defining new action types. To validate our approach, we incorporated actions as a core design element within our lab's visual analytic system, HARVEST. The initial feedback from both developers and analysts is promising. Several challenges remain to address in future work. For example , more effective algorithms for inferring high-level logical structures from a user's performed actions are required. Another area we are exploring is new uses for insight provenance to assist in building more effective visual analysis environments. Finally, we must perform more comprehensive user studies to fully evaluate our ap- proach. </p></div><figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_0" coords="3,64.34,608.44,196.24,11.66;3,64.34,620.43,182.97,11.66;3,64.34,632.41,204.47,11.66;3,64.34,644.39,209.21,11.66;3,64.34,656.37,157.27,11.66;3,64.34,668.35,167.66,11.66;3,64.34,680.34,152.52,11.66"><head></head><figDesc>@BULLET Create another note for the top software performers. @BULLET Change the view to show just the past 26 weeks. @BULLET Record notes on top software performers at this range. @BULLET Several changes to the time range of data being viewed. @BULLET Zoom out to the entire technology sector. @BULLET Zoom in to focus in on the internet industry. @BULLET Create notes on top internet performers. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_1" coords="5,54.00,199.21,240.04,8.12;5,54.00,208.67,188.04,8.12"><head>Figure 2: </head><figDesc>Figure 2: The action taxonomy contains three top-level categories: exploration actions, insight actions, and meta actions. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_1" validated="false" coords="4,328.29,229.78,229.71,82.42"><figDesc coords="4,328.29,229.78,194.69,11.75;4,328.29,242.47,192.14,11.75;4,328.29,255.16,227.56,11.75;4,328.29,267.85,18.55,11.74;4,347.35,267.84,12.93,11.66;4,360.27,269.86,197.73,9.73;4,337.88,280.00,220.12,8.45;4,337.88,289.96,88.90,8.45;4,328.29,300.46,213.55,11.75">@BULLET E 1 : mouse-drag to select all companies to be sorted @BULLET E 2 : mouse-right-click to select open a popup menu @BULLET E 3 : menu-select to choose " Sort " from a list of menu options @BULLET E 3 ...E 8 : keyboard-events to set sorting parameters (e.g., choosing 'price change' as the property to sort and the selecting the sorting order) @BULLET E 9 : mouse-click to submit the entered sorting parameters</figDesc><table></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_3" validated="false" coords="6,59.98,55.89,497.01,407.50"><figDesc coords="6,59.98,55.89,18.77,8.60;6,138.29,55.89,23.41,8.60;6,204.78,55.89,44.22,8.60;6,330.21,55.89,44.33,8.60;6,59.98,78.18,32.38,8.62;6,138.29,68.39,48.55,8.45;6,204.78,68.22,341.82,8.62;6,221.20,78.35,50.57,8.45;6,330.21,78.35,96.87,8.45;6,221.20,88.32,13.23,8.45">Type Intent Parameters Description Annotate Notes change For each selected visual object: A request to tag meta-information to the data represented by Constraint list one or more visual objects. Tag</figDesc><table coords="6,59.98,98.68,497.01,364.71">Bookmark 
+Notes change 
+Visualization state 
+A request to save the current visualization for future review. 
+Metadata (e.g., title, tags) 
+Brush 
+Visual change 
+Constraint list 
+A request to highlight a subset of visual objects. 
+Create 
+Notes change 
+Content 
+The creation of a new entry within a user's electronic notes. 
+Change-Metaphor Visual change 
+Metaphor 
+A request to alter the active visualization technique. 
+
+Delete 
+History change Action 
+Similar to undo, removes an action from the middle of a user's 
+sequence of historically performed actions. 
+
+Edit 
+History change Selected action 
+A request to modify the parameters of an action in a user's 
+Modified parameters 
+action history. 
+
+Filter 
+Data change 
+Constraint list 
+A request to reduce the data set being visualized. 
+Visual change 
+
+Inspect 
+Data change 
+Constraint list 
+A request for  " details-on-demand "  for a visual object. 
+Visual change 
+
+Merge 
+Visual change 
+For each selected visual object: A request to combine the data represented by two or more visual 
+Constraint list 
+objects into a single visual group. 
+
+Modify 
+Notes change 
+Selected note 
+A request to alter an existing observation in a user's electronic 
+Content 
+notes. 
+
+Pan 
+Visual change 
+Range constraint list 
+A request to scroll a visualization to a new location along an 
+ordinal dimension. 
+
+Query 
+
+Data change 
+Data concept 
+A request to bring additional data into a visualization. 
+Visual change 
+Summary function 
+Constraint list 
+Redo 
+History change — 
+The inverse of undo, a request to re-perform an undone action. 
+Remove 
+Notes change 
+Selected note 
+A request to delete an observation from a user's electronic notes. 
+
+Restore 
+Data change 
+Bookmark 
+A request to restore a previously saved bookmark. 
+Visual change 
+Revisit 
+History change Selected Action 
+A request to return to an earlier stage of analysis. 
+
+Sort 
+Visual change 
+Dimension 
+A request to re-arrange the visual presentation along a 
+Order 
+particular dimension. 
+
+Split 
+
+Visual change 
+Split parameters 
+A request to break apart the data represented by a set of visual 
+For each selected visual object: objects into several new visual objects based upon some criteria, 
+Constraint list 
+such as keywords or attribute values. 
+
+Undo 
+History change — 
+Removes the most recently performed action from a user's 
+sequence of historically performed actions. 
+
+Zoom 
+Visual change 
+Range constraint list 
+A request to scale a visualization to display a new range along 
+an ordinal dimension. 
+
+</table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_4" validated="false" coords="6,132.12,475.20,347.76,8.12"><figDesc coords="6,132.12,475.20,347.76,8.12">Table 1: The set of actions identified in our survey of several different visual analysis environments.</figDesc><table></table></figure>
+
+			<note place="foot" n="3"> OBSERVATIONS OF USER VISUAL ANALYTIC ACTIVITY Visual analytics is a complex process. Any useful model of insight provenance must accurately capture its non-linear and progressive nature. To better understand and characterize a user&apos;s visual analytic behavior, we invited 30 users and asked them to perform typical visual analytic tasks using commercial visualization tools [8]. We share the key insights obtained from our observations and discuss how they motivate our work.</note>
+		</body>
+		<back>
+			<div type="references">
+
+				<listBibl>
+
+<biblStruct coords="8,72.26,704.53,221.80,7.51;8,72.26,713.84,191.36,7.66"  xml:id="b0">
+	<analytic>
+		<title level="a" type="main">Low-level components of analytic activity in information visualization</title>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Amar</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Eagan</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Stasko</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">IEEE InfoVis</title>
+		<imprint>
+			<date type="published" when="2005" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.22,58.34,221.78,7.51;8,336.22,67.65,217.49,7.66"  xml:id="b1">
+	<analytic>
+		<title level="a" type="main">A knowledge task-based framework for design and evaluation of information visualizations</title>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Amar</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Stasko</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">IEEE InfoVis</title>
+		<imprint>
+			<date type="published" when="2004" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.22,77.27,221.78,7.51;8,336.22,86.73,221.79,7.51;8,336.22,96.04,108.10,7.66"  xml:id="b2">
+	<analytic>
+		<title level="a" type="main">Vistrails: Enabling interactive multiple-view visualizations</title>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<surname>Bavoil</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<forename type="middle">P</forename>
+				<surname>Callahan</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<forename type="middle">J</forename>
+				<surname>Crossno</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Freire</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<forename type="middle">E</forename>
+				<surname>Scheidegger</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<forename type="middle">T</forename>
+				<surname>Silva</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<forename type="middle">T</forename>
+				<surname>Vo</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">IEEE Vis</title>
+		<imprint>
+			<date type="published" when="2005" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.22,105.66,221.78,7.51;8,336.22,114.97,128.66,7.66"  xml:id="b3">
+	<analytic>
+		<title level="a" type="main">A taxonomy of visualization techniques using the data state reference model</title>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<forename type="middle">H</forename>
+				<surname>Chi</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">IEEE InfoVis</title>
+		<imprint>
+			<date type="published" when="2000" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.22,124.59,221.78,7.51;8,336.22,133.90,131.78,7.66"  xml:id="b4">
+	<analytic>
+		<title level="a" type="main">An operator interaction framework for visualization systems</title>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<forename type="middle">H</forename>
+				<surname>Chi</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">T</forename>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">IEEE InfoVis</title>
+		<imprint>
+			<date type="published" when="1998" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.22,143.52,221.78,7.51;8,336.22,152.83,101.90,7.66"  xml:id="b5">
+	<analytic>
+		<title level="a" type="main">On the semantics of interactive visualizations</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<forename type="middle">C</forename>
+				<surname>Chuah</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<forename type="middle">F</forename>
+				<surname>Roth</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">IEEE InfoVis</title>
+		<imprint>
+			<date type="published" when="1996" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.22,162.45,221.78,7.51;8,336.22,171.76,86.16,7.66"  xml:id="b6">
+	<analytic>
+		<title level="a" type="main">Stories in geotime</title>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Eccles</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Kapler</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Harper</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Wright</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. of IEEE VAST</title>
+		<meeting>. of IEEE VAST</meeting>
+		<imprint>
+			<date type="published" when="2007" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.22,181.38,221.78,7.51;8,336.22,190.84,221.78,7.51;8,336.22,200.30,17.93,7.51"  xml:id="b7">
+	<monogr>
+		<title level="m" type="main">An empirical study of user interaction behavior during visual analysis</title>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Gotz</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<forename type="middle">X</forename>
+				<surname>Zhou</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2008" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.22,209.77,221.79,7.51;8,336.22,219.08,149.94,7.66"  xml:id="b8">
+	<analytic>
+		<title level="a" type="main">Interactive visual synthesis of analytic knowledge</title>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Gotz</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<forename type="middle">X</forename>
+				<surname>Zhou</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">V</forename>
+				<surname>Aggarwal</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">IEEE VAST</title>
+		<imprint>
+			<date type="published" when="2006-11" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.21,228.70,221.79,7.51;8,336.22,238.01,221.79,7.66;8,336.22,247.48,122.78,7.66"  xml:id="b9">
+	<analytic>
+		<title level="a" type="main">A study of information gathering and result processing in intelligence analysis</title>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Gotz</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<forename type="middle">X</forename>
+				<surname>Zhou</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Z</forename>
+				<surname>Wen</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">ACM IUI: Workshop on IUI for Intelligence Analysis</title>
+		<imprint>
+			<date type="published" when="2006" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.22,257.09,221.78,7.51;8,336.22,266.40,221.78,7.66;8,336.22,276.02,17.93,7.51"  xml:id="b10">
+	<analytic>
+		<title level="a" type="main">Provenance and annotation for visual exploration systems</title>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<forename type="middle">P</forename>
+				<surname>Groth</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Streefkerk</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Trans on Vis and Comp Graphics</title>
+		<imprint>
+			<biblScope unit="volume">12</biblScope>
+			<biblScope unit="issue">6</biblScope>
+			<date type="published" when="2006" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.22,285.49,221.78,7.51;8,336.22,294.80,173.79,7.66;8,317.96,304.41,192.82,7.51"  xml:id="b11">
+	<analytic>
+		<title level="a" type="main">Instrumenting the intelligence analysis process</title>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<surname>Hampson</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Cowley</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Inter. Conf. on Intelligence Analysis, 2005. [13] i2 Incorporated. Analsyt&apos;s</title>
+		<imprint/>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.22,313.88,221.78,7.51;8,336.22,323.19,140.73,7.66"  xml:id="b12">
+	<analytic>
+		<title level="a" type="main">A model for the visualization exploration process</title>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Jankun-Kelly</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">K.-L</forename>
+				<surname>Ma</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Gertz</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">IEEE Vis</title>
+		<imprint>
+			<date type="published" when="2002" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.22,332.81,221.79,7.51;8,336.22,342.12,135.99,7.66"  xml:id="b13">
+	<analytic>
+		<title level="a" type="main">A history mechanism for visual data mining</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Kreuseler</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Nocke</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Schumann</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">IEEE InfoVis</title>
+		<imprint>
+			<date type="published" when="2004" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.22,351.74,221.78,7.51;8,336.22,361.20,221.79,7.51;8,336.22,370.51,93.83,7.66"  xml:id="b14">
+	<analytic>
+		<title level="a" type="main">Vast 2006 contest second place, corporate category: Decide</title>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<forename type="middle">A</forename>
+				<surname>Lankenau</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<forename type="middle">A</forename>
+				<surname>Eick</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Decherd</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Khalio</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Paris</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Fugitt</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">IEEE VAST Contest</title>
+		<imprint>
+			<date type="published" when="2006" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.22,379.98,221.78,7.66;8,336.22,389.59,17.93,7.51"  xml:id="b15">
+	<monogr>
+		<title level="m" type="main">Leont&apos;ev. Activity, Consciousness, Personality</title>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<forename type="middle">N</forename>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="1978" />
+			<publisher>Prentice Hall</publisher>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.22,398.91,221.78,7.66"  xml:id="b16">
+	<monogr>
+		<title level="m" type="main">Context and Consciousness</title>
+		<editor>B. A. Nardi</editor>
+		<imprint>
+			<date type="published" when="1996" />
+			<publisher>The MIT Press</publisher>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.22,408.52,221.78,7.51;8,336.22,417.99,221.78,7.51;8,336.22,427.30,221.79,7.66;8,336.22,436.77,174.43,7.66"  xml:id="b17">
+	<analytic>
+		<title level="a" type="main">Using cognitive task analysis (CTA) to seed design concepts for intelligence analysts under data overload</title>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<forename type="middle">S</forename>
+				<surname>Patterson</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<forename type="middle">D</forename>
+				<surname>Woods</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Tinapple</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<forename type="middle">M</forename>
+				<surname>Roth</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. of the Human Factors and Ergonomics Society 45th Annual Meeting</title>
+		<meeting>. of the Human Factors and Ergonomics Society 45th Annual Meeting</meeting>
+		<imprint>
+			<date type="published" when="2001-10" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.22,446.38,221.78,7.51;8,336.22,455.85,221.78,7.51;8,336.22,465.16,136.39,7.66"  xml:id="b18">
+	<analytic>
+		<title level="a" type="main">The sensemaking process and leverage points for analyst technology as identified through cognitive task analysis</title>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Pirolli</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Card</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Inter. Conf. on Intelligence Analysis</title>
+		<imprint>
+			<date type="published" when="2005" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.22,474.78,221.78,7.51;8,336.22,484.09,221.79,7.66;8,336.22,493.55,52.02,7.66"  xml:id="b19">
+	<analytic>
+		<title level="a" type="main">An insight-based longitudinal study of visual analytics</title>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Saraiya</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>North</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">V</forename>
+				<surname>Lam</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<forename type="middle">A</forename>
+				<surname>Duca</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Trans on Vis and Comp Graphics</title>
+		<imprint>
+			<biblScope unit="issue">6</biblScope>
+			<biblScope unit="page">12</biblScope>
+			<date type="published" when="2006" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.22,503.17,221.79,7.51;8,336.22,512.48,221.78,7.66;8,336.22,521.95,110.69,7.66"  xml:id="b20">
+	<analytic>
+		<title level="a" type="main">In depth observational studies of professional intelligence analysts</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Scholtz</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<surname>Morse</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Hewett</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Human Performance, Situation Awareness, and Automation</title>
+		<imprint>
+			<date type="published" when="2004" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.22,531.56,221.78,7.51;8,336.22,540.87,221.79,7.66"  xml:id="b21">
+	<analytic>
+		<title level="a" type="main">The eyes have it: a task by data type taxonomy for information visualizations</title>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Shneiderman</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">IEEE Symp on Visual Languages</title>
+		<imprint>
+			<date type="published" when="1996" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.22,550.49,221.78,7.51;8,336.22,559.80,194.34,7.66"  xml:id="b22">
+	<analytic>
+		<title level="a" type="main">Supporting the analytical reasoning process in information visualization</title>
+		<author>
+			<persName>
+				<forename type="first">Y</forename>
+				<forename type="middle">B</forename>
+				<surname>Shrinivasan</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">J</forename>
+				<surname>Van Wijk</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">ACM CHI</title>
+		<imprint>
+			<date type="published" when="2008" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.22,569.27,221.78,7.66;8,336.22,578.73,221.79,7.66;8,336.22,588.35,17.93,7.51"  xml:id="b23">
+	<monogr>
+		<title level="m" type="main">Illuminating the Path: The Research and Development Agenda for Visual Analytics</title>
+		<editor>J. J. Thomas and K. A. Cook</editor>
+		<imprint>
+			<date type="published" when="2005" />
+			<publisher>IEEE Press</publisher>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.22,597.82,221.78,7.51;8,336.22,607.13,221.79,7.66;8,336.22,616.74,17.93,7.51;8,317.96,626.21,27.34,7.51;8,362.22,626.21,38.39,7.51;8,451.29,626.21,14.61,7.51;8,482.83,626.21,6.64,7.51;8,506.40,626.21,9.74,7.51;8,533.07,626.21,24.93,7.51;8,336.22,635.67,154.40,7.51"  xml:id="b24">
+	<analytic>
+		<title level="a" type="main">Many eyes: A site for visualization at internet scale</title>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<forename type="middle">B</forename>
+				<surname>Viegas</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Wattenberg</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<surname>Van Ham</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Kriss</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Mckeon</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">IEEE InfoVis Map of the Market</title>
+		<imprint>
+			<date type="published" when="1998" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.22,645.14,221.78,7.51;8,336.22,654.45,127.79,7.66"  xml:id="b25">
+	<analytic>
+		<title level="a" type="main">A problem-oriented classification of visualization techniques</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Wehrend</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Lewis</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">IEEE Vis</title>
+		<imprint>
+			<date type="published" when="1990" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.22,664.07,221.78,7.51;8,336.22,673.38,171.54,7.66"  xml:id="b26">
+	<analytic>
+		<title level="a" type="main">Visual task characterization for automated visual discourse synthesis</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<forename type="middle">X</forename>
+				<surname>Zhou</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<forename type="middle">K</forename>
+				<surname>Feiner</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">ACM CHI</title>
+		<imprint>
+			<date type="published" when="1998" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+				</listBibl>
+			</div>
+		</back>
+	</text>
+</TEI>

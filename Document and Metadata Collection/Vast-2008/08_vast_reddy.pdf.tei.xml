@@ -1,0 +1,665 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.tei-c.org/ns/1.0 /home/pisenberg/grobid/grobid-home/schemas/xsd/Grobid.xsd"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+	<teiHeader xml:lang="en">
+		<encodingDesc>
+			<appInfo>
+				<application version="0.4.1" ident="GROBID" when="2016-09-09T13:38+0000">
+					<ref target="https://github.com/kermitt2/grobid">GROBID - A machine learning software for extracting information from scholarly documents</ref>
+				</application>
+			</appInfo>
+		</encodingDesc>
+		<fileDesc>
+			<titleStmt>
+				<title level="a" type="main">Generating Hypotheses of Trends in High-Dimensional Data Skeletons</title>
+			</titleStmt>
+			<publicationStmt>
+				<publisher/>
+				<availability status="unknown"><licence/></availability>
+			</publicationStmt>
+			<sourceDesc>
+				<biblStruct>
+					<analytic>
+						<author>
+							<persName>
+								<forename type="first">Chandan</forename>
+								<forename type="middle">K</forename>
+								<surname>Reddy</surname>
+							</persName>
+							<affiliation>
+								<orgName type="department" key="dep1">Department of Computer Science</orgName>
+								<orgName type="department" key="dep2">Department of Computer Science</orgName>
+								<orgName type="department" key="dep3">Bell Labs Alcatel-Lucent</orgName>
+								<orgName type="institution" key="instit1">Wayne State University</orgName>
+								<orgName type="institution" key="instit2">Wayne State University</orgName>
+							</affiliation>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Snehal</forename>
+								<surname>Pokharkar</surname>
+							</persName>
+							<affiliation>
+								<orgName type="department" key="dep1">Department of Computer Science</orgName>
+								<orgName type="department" key="dep2">Department of Computer Science</orgName>
+								<orgName type="department" key="dep3">Bell Labs Alcatel-Lucent</orgName>
+								<orgName type="institution" key="instit1">Wayne State University</orgName>
+								<orgName type="institution" key="instit2">Wayne State University</orgName>
+							</affiliation>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Kam</forename>
+								<surname>Ho</surname>
+							</persName>
+							<affiliation>
+								<orgName type="department" key="dep1">Department of Computer Science</orgName>
+								<orgName type="department" key="dep2">Department of Computer Science</orgName>
+								<orgName type="department" key="dep3">Bell Labs Alcatel-Lucent</orgName>
+								<orgName type="institution" key="instit1">Wayne State University</orgName>
+								<orgName type="institution" key="instit2">Wayne State University</orgName>
+							</affiliation>
+						</author>
+						<title level="a" type="main">Generating Hypotheses of Trends in High-Dimensional Data Skeletons</title>
+					</analytic>
+					<monogr>
+						<imprint>
+							<date/>
+						</imprint>
+					</monogr>
+				</biblStruct>
+			</sourceDesc>
+		</fileDesc>
+		<profileDesc>
+			<textClass>
+				<keywords>
+					<term>Index Terms: G41 [Mathematics of Computing]: Mathemat-</term>
+					<term>ical Software—Algorithm design and analysis; I53 [Computing</term>
+					<term>Methodologies]: Pattern Recognition—Clustering</term>
+				</keywords>
+			</textClass>
+			<abstract>
+				<p>We seek an information-revealing representation for high-dimensional data distributions that may contain local trends in certain subspaces. Examples are data that have continuous support in simple shapes with identifiable branches. Such data can be represented by a graph that consists of segments of locally fit principal curves or surfaces summarizing each identifiable branch. We describe a new algorithm to find the optimal paths through such a principal graph. The paths are optimal in the sense that they represent the longest smooth trends through the data set, and jointly they cover the data set entirely with minimum overlap. The algorithm is suitable for hypothesizing trends in high-dimensional data, and can assist exploratory data analysis and visualization.</p>
+			</abstract>
+		</profileDesc>
+	</teiHeader>
+	<text xml:lang="en">
+		<body>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1">INTRODUCTION</head><p> A fundamental concern in data analysis is to find correlations hidden in large, high-dimensional data sets. To analyze correlations the data must be ordered in a certain way in each notion of variability . With such ordering one can proceed to study how variability in one aspect is associated with those in others. The ordering itself would then describe the general course or direction the distributions extended along i.e a certain trend in the data set. Ordering data points in a high-dimensional space is a highly nontrivial problem. Simply arranging the points along each coordinate does not serve the purpose, because the intrinsic variability in the data may not necessarily align with a specific observation dimension . An example is that in image analysis the samples may be represented as intensity per pixel, and the pixels are raster-scanned as a feature vector, which is then considered as a point in a multidimensional space. Yet, the trends of variability in the image, such as the movement of an object, are not necessarily revealed if one follows the intensity changes in a particular pixel. They are observable only as certain associated changes in multiple feature components (data dimensions). Furthermore, the changes may not necessarily involve all of the components. For example, the images may contain background pixels that do not have intensity changes as the object moves. The trends do not necessarily span the entire image collection either, because the changes may occur only in those samples collected in the time window containing the duration of the object's movement. In this work, we seek a way to uncover trends in datasets that may be local (i.e., not necessarily global), or may be visible in only certain subspaces. We start with an unsupervised learning procedure to obtain a graph structure that describes the local proximity relationship between data points. We then propose an algorithm to navigate the proximity graph, where each navigation path gives a hypothesis of a possible trend in the dataset. An example is given in <ref type="figure" coords="1,326.75,157.41,20.51,9.41">Fig. 1</ref>for data in a two-dimensional space. The focus of our work is a novel graph-transformation-based framework for identifying a critical set of independent patterns (or trends) with the least amount of overlap. A set of continuous models for the trends is then built by fitting a principal curve using the subset of data points that belong to each of these trends. It may appear that our procedure would discover a trend on any arbitrary data set even if there is none. In fact, what we are looking for is simply a dominant (or weakly dominant) ordering of the points that may be present in certain subspaces. We conjecture that such an ordering exists in most of the data sets of practical concern. Ideally, this conjecture should be validated by a statistical testing procedure, which is beyond the scope of our current work. In this work, we treat this as an exploratory analysis tool, and caution that one must validate the discovered trend by trying to make sense of the ordering of the associated raw data, or by developing a correlation model with other relevant parameters. The trends resulting from this procedure can then be analyzed with standard curve properties such as length, curvature, overlap, etc. Their explicit, continuous models can be used to estimate functional relationships between the trends. Analyzing such trends in data can yield more insights for comparing different variability in the data, such as the effects of observational parameters on the outcome , or correlations between different groups of features. We describe the use of this trend finding algorithm in a visualization task <ref type="bibr" coords="1,334.63,409.30,9.52,9.41" target="#b7">[8]</ref>, which can be a useful starting point for data analysis. The main contributions in the proposed method are:  The rest of this paper is organized as follows: Section 2 gives information about the relevant background on the various concepts used in the paper. Section 3 describes the problem formulation and explains the key concepts needed to comprehend our algorithm. Section 4 provides the implementation details. Section 5 gives the experimental results of the proposed algorithm on various synthetic and real-world datasets. Finally, Section 6 concludes our discussion and gives the future research directions. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="139"></head><p>IEEE Symposium on Visual Analytics Science and Technology October 21 -23, Columbus, Ohio, USA U.S. Government work not protected by U.S. copyright. </p><p>(a) Original data with principal curves (b) Possible Paths in the principal curves <ref type="figure" coords="2,54.00,197.67,29.06,8.37">Figure 1</ref>: Sample data and the possible trends in the data (a) The original data is being fitted using principal curves which go through the " medial-axis " of the data (b) With four different end nodes (a,b,c and d) and two intersection nodes (x,y). There are six possible end-to-end paths (A,B,C,D,E and F). A = (a,x,y,b), B = (c,x,y,d), C=(a,x,c), D=(a,x,y,d), E=(c,x,y,b), F=(d,y,b). </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head> 2 INFERENCE OF PROXIMITY STRUCTURES AND HYPOTHE- SIZING TRENDS IN DATA </head><p> Fitting continuous models to data is a much explored area in statistics . A popular choice is a spline <ref type="bibr" coords="2,180.79,281.79,9.52,9.41" target="#b6">[7]</ref>, which is a special function defined by piecewise polynomial (parametric) curves <ref type="bibr" coords="2,245.52,291.76,9.52,9.41" target="#b2">[3]</ref> , and is often used in applications requiring data interpolation and smoothing of multi-dimensional data. Spline functions for interpolation are normally determined as the minimizers of suitable measures of roughness subject to the interpolation constraints. Smoothing splines may be viewed as generalizations of interpolation splines where the functions are determined to minimize a weighted combination of the average squared approximation error over observed data and the roughness measure. For a number of meaningful definitions of the roughness measure, the spline functions are found to be finite dimensional in nature, which is the primary reason for their utility in computation and representation. Principal curve <ref type="bibr" coords="2,121.76,412.04,10.45,9.41" target="#b5">[6] </ref>fitting is another popular technique that has been successfully used for various applications in pattern recognition and machine learning <ref type="bibr" coords="2,153.71,431.97,9.71,9.41" target="#b3">[4,</ref><ref type="bibr" coords="2,166.70,431.97,6.47,9.41" target="#b8"> 9]</ref>. They give a representation for low-dimensional manifolds in the data that can be exploited further to form the trends. However, there is a difficulty in applying these models to a new dataset without prior knowledge about the embedded data geometry. Because not all the data points may participate in each possible trend, forcing a fit using all the points may degrade the overall goodness of the fit and damage the models' validity. An example case is that if there are two separate trends that are intersecting , a single application of the principal curve algorithm may not be able to directly ascribe the precise number of trends and then find them. One way to avoid this problem is to build the models in small neighborhoods, and then seek to connect and extend the local models. To assign points to local groups in close proximity, one may employ various clustering algorithms. Popular choices include the k-means procedure and Gaussian mixture estimation <ref type="bibr" coords="2,250.64,582.14,13.74,9.41" target="#b9">[10]</ref> . However , studies on clustering often stop at assigning the data points to clusters. We argue that an important next step is to understand the relationship at the next level, i.e., the relative positioning and potential relationships between the clusters. Therefore, we introduce the cluster relationship graph, as a representation of the proximity structure in the data. A useful choice for this is a minimum spanning tree that connects the cluster centroids. We then seek meaningful ways to traverse this graph that can best reveal underlying trends. Data in the clusters that are considered to be in a trend are then taken to fit a continuous model. Additional procedures that can be of use in this context include data shrinking <ref type="bibr" coords="2,108.08,702.42,14.93,9.41" target="#b11">[12] </ref>methods. These are analogous to thinning and skeletonization in a 2D context that are popular in the computer vision community and have been applied to problems like character recognition <ref type="bibr" coords="2,361.04,257.32,9.52,9.41" target="#b8">[9]</ref>. These techniques can reduce the noise and remove any outliers that usually do not contribute to the main trend, and hence avoid the interference of these points to model fitting. A note of caution related to dimensionality reduction. Dimensionality reduction is an active area of research in exploratory analysis with high-dimensional data <ref type="bibr" coords="2,436.19,311.11,9.52,9.41" target="#b0">[1]</ref>. Proper methods can preserve essential proximity structure in the data. But simplistic schemes do not always yield desirable results. For example, many attempts for visualization of high-dimensional data involve systematically presenting different low-dimensional projections of the data onto a restricted number of coordinates. We caution that such operations may not allow a good view into the true variability in the data. An example is given in <ref type="figure" coords="2,391.70,380.85,21.43,9.41" target="#fig_1">Fig. 2</ref>shows a spiral in 3-D space along with the data generating curve. Two projections of the data (onto x-y plane and onto x-z plane) are also shown. It is almost impossible to obtain the original structure of the data and the parametric form of the data generating curve from these two projections. This demonstrates the significance of fitting the trend models in the original dataset and not in the projected space, unless it can be assured that the proximity structure is preserved in the projection. </p><p> In the discussion that follows, we assume that the k-means procedure is used for clustering. The k-means procedure is known to have problems, such as dependence on initialization and employing a strong assumption on the cluster shapes. For only some of these problems there are remedies. However, we find the simplicity of k-means attractive as a starting procedure in exploratory analysis. Furthermore, in our context it serves mainly as a data compression step. As long as a large enough k is used, the shape assumption has only a local effect. The global shape of the manifold is preserved in the resulting data skeleton, i.e., the Principal Tree that we will describe below. Nevertheless, we expect that our method can work with another more robust clustering procedure, or with the assistance of procedures that give an estimation of the intrinsic dimensionality of the data. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.1">The Notion of Trends</head><p>Trends (ϒ) are the minimal set of most independent sequence of patterns over the feature space containing the dataset. A pattern is a continuous region in a feature space that is filled with data points to a pre-designated density. The degree of independence of the patterns is inversely proportional to the length of overlap between the pair of patterns. The key terms used in the paper are now defined here We illustrate these with an example in <ref type="figure" coords="3,475.48,403.36,21.29,9.41" target="#fig_2">Fig. 3</ref>(a) that contains a two-dimensional dataset. <ref type="figure" coords="3,423.57,413.32,21.59,9.41" target="#fig_2">Fig. 3</ref>(b) presents the (centroid) C i s in the dataset, one for each cluster identified. C i s are the single point representations of clusters identified by the k-means proce- dure. <ref type="figure" coords="3,339.41,443.21,31.04,9.41" target="#fig_2">Fig. 3(c)</ref> shows the Principal Tree with the C i s and their corresponding L i j s. In <ref type="figure" coords="3,387.89,453.17,19.63,9.41" target="#fig_3">Fig. 4</ref> (a) the end nodes are a,b,c,d as they are incident to only one (link) L i j in the G p , the internal nodes are w,x,y,z, the intersection nodes are x and y, the path D is a path connecting a,w,x,y,d. The overlap between paths D and E is (x,y). <ref type="figure" coords="3,514.45,483.06,20.11,9.41" target="#fig_3">Fig. 4</ref> (b) indicates the length weights for each segment of the paths. Every path in <ref type="figure" coords="3,326.89,502.99,19.90,9.41" target="#fig_3">Fig. 4</ref>(b) is represented as a node in the Traversal Graph given by <ref type="figure" coords="3,317.96,512.95,20.00,9.41" target="#fig_3">Fig. 4</ref>(c). The overlap between each path is the edge weight in the graph, as shown. One can see that each possible End-To-End path in the original feature space will be represented as a node in the Traversal Graph. There are a total of ( t 2 ) nodes in G t for t End Nodes in the Principal tree. In this paper, we propose an algorithm to extract the most informative End-To-End paths that cover the entire data set. To this end, we will now formalize the notion of the most informative End- To-End paths, and define the optimal graph traversal problem that finds the minimal set of such informative paths contained in the data set.  To evaluate the pairs of P I s and obtain the minimal set, a measure Γ given by Eq.(2) is introduced. Kruskal's algorithm <ref type="bibr" coords="3,534.02,712.38,14.93,9.41" target="#b12">[13] </ref>is  modified and used here. On the identification of the set of optimal End-To-End Paths, a principal curve is fitted to the data points belonging to each P I to obtain the ϒ in the dataset. Principal curves are non linear summarizations of multidimensional data points represented by a smooth, one dimensional curve. The curve passes through the densest regions of the dataset, or the 'middle' of the dataset, taking the shape according to the distributions of the dataset. Let X be a random vector in ℜ d and assume that n samples of X are available. A principal curve f ⊂ ℜ d is a smooth (C ∞ ) unitspeed curve explicitly ordered by λ ∈ Λ ⊂ ℜ 1 , that passes through the middle of the d-dimensional data described by the probability distribution of X. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Definition 1 Principal Tree -is a graph G </head><formula>p = ({C i }, {L i j }) (i, j = 1, ...</formula></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Definition 7 Traversal Graph -is a graph G </head><formula>t =({P I },{O IJ }) (I, J = 1, ..., |P i j |), </formula></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.2">The Optimal Traversal Problem</head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.3">Principal Curves</head><formula>f (λ ) = f (1) (λ )... f (d) (λ ) T = E[X|λ f (X) = λ ] (1) </formula><p>where, the projection index λ f (x) of x is the value of λ for which f(x) is closest to x. If a number of such points are present, the point with the largest value of λ is chosen. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.4">Algorithm</head><p> We will now propose the following algorithm to generate trend hypotheses in a dataset: 1. Noise Elimination -implementing a density based noise removal algorithm to reduce the noise and outliers from the dataset. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head> 2. Clustering and Computing Centroids -implementing the kmeans algorithm for clustering. </head><p> 3. Principal Tree Generation -implementing Kruskal's Algorithm to generate an MST connecting the cluster centroids. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.">Identifying Independent Paths -implementing Find Ind Path algorithm</head><p>5. Modeling and Visualizing Trends -fitting principal curves to each identified paths; isolating and ordering data points along each trend for inspection. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4">IMPLEMENTATION DETAILS</head><p>The top level algorithm is given as Algorithm 1. In this section, we will elaborate on each of the five main steps in the proposed algorithm. Computing Centroids -The k-means partitional clustering methodology is chosen here for its better run time efficiency. For a given input of dataset D and a pre-designated number k, the algorithm partitions the dataset into k clusters as the output. We represent the clusters by their centroid C i . Membership for each cluster is determined by maximizing the inter-cluster distances and minimizing the intra-cluster distances between feature vectors (the sum of squared error (SSE)). Principal Tree (MST) Generation -The main purpose of this step is to compute a compact representation of the relationship between the clusters. Here we chose the representation to be the minimum spanning tree connecting the cluster centroids. The connection weights to be minimized are the Euclidean distance between the centroids. To compute the MST, we use Kruskal's algorithm which is an efficient greedy algorithm that runs in O(nlogn) time. The output is the Adjacency matrix(A) for the MST or the Principal Tree. All the permutations of pairs of en ids are computed in the matrix Pends by the function Get Nodes, Pends = [en id1 ,en id2 ;en id1 ,en id3 ;...]. Identifying Independent Paths -This is the core component of our algorithm. The Principal Tree is the skeleton from which the End-To-End Paths P I s are identified. To obtain the mappings of the P I s, their l I s, the pairwise O IJ and the curvature ς I , the algorithm Path Value (incorporating Dijkstra's Algorithm <ref type="bibr" coords="5,276.06,572.90,14.33,9.41" target="#b12">[13]</ref>) is implemented on the input Pends and A . Some of the P I s are completely independent of each other while some intersect with others. Some others overlap. The End-To-End Paths are transformed to a G t with these considerations. </p><formula>Algorithm 1 Finding Trends 1: Input: Dataset X 2: Output: Trends ϒ 3: Algorithm: 4: D ← Noise Removal(X , E ps, M) 5: σ ← k-means(D) 6: A ← Kruskal(σ ) 7: ρ, µ, γ, Pends i, j ← Get Nodes (A) 8: P I ,l I ,o I,J , ς I ← </formula><p> The curvature factor of a given path is a measure of the cumulative cosine function values at the neighborhood of the intersection points. See <ref type="figure" coords="5,96.20,652.61,20.94,9.41" target="#fig_4">Fig. 5</ref>where path P1 is a curved path compared to path P2 which is straight. The curvature value for a path is a measure of the summation of the cosine values of the angles made by the line segments at the intersection points. In order to compensate for any uncharacteristic deviations in the location of the centroids, we take the cosine measure of angles between two segments on either side of the intersection point. Here, P1 and P2 intersect at point d.  Thus, curvature(P1) = cos(bcd)+ cos(cde)+ cos(def) = 0.75. Similarly , curvature(P2) = cos(ihd)+ cos(hdj)+ cos(djk) = 0. Path P1 has a higher curvature value as it has more curvature compared to the straightness of path P2. To obtain the set of P I s for the ϒ, the search is performed for the set of pair-wise combination of P I s which has in them all the C i s covered and are most independent. The main algorithm here is Find Ind Path which selects the P I s using a pairwise weight Γ. All the P I , P J pairs and the corresponding Γ IJ between them are identified as the Path matrix </p><formula>PV =[P I ,P J ,Γ IJ ]</formula><p>. This is the input to this algorithm along with the normalized weight parameters w o , w c and w l which sum to unity </p><formula>(w o + w c + w l = 1). </formula><p>The weight parameters control the relative importance of overlap, curvature, and length in the selection of the final paths. These are user input parameters whose value depends on the nature of trends desired and the type of dataset. Ind is the set of Indicator variables for C I s. For every P I selected, the C I s ∈ P I s are eliminated from Ind until Ind = φ . </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Algorithm 3 Find Ind Path </head><formula>φ do 7: τ,Ind ← Find Path (P I , τ, Ind) 8: τ,Ind ← Find Path (P J , τ, Ind) 9: end for 10: return (τ) </formula><p>The main goal of computing the Traversal Graph (G t ) is to obtain the most independent set of paths (τ i ) that will cover all the data points. Our goal is to identify the minimal set of paths that cover all the cluster centroids and have the minimum edge weight (ensuring minimum overlap) between them. The algorithm Find Ind Path generates this minimal set τ. This problem of finding the optimal set of paths is formulated as a min-max optimization problem where the aim is to maximize the vertex weights (hence the inclusion of maximum number of Cluster Centroids) and minimizing the edge weights (thus minimizing the overlap). For a given set of vertices (P I ) and (P J ), the input weight (Γ IJ )to the Find Ind Path algorithm is formulated by the following objective function: </p><formula>Γ IJ = w o * η IJ + w c * (ς I + ς J ) − (w l * (Φ I + Φ J )) (2) </formula><p> The overlap parameter is (w o * η IJ ) is minimized here by subtracting the parameter for length (</p><formula>(w l * (Φ I + Φ J ))). </formula><formula>if P i (j) =Ind(k) then 8: Ind(k)←0 9: s ← size(τ) 10: τ(s + 1) ← P i 11: end if 12: </formula><p>end for 13: end for 14: return (τ, Ind) </p><formula>curvature (w c * (ς I + ς J )</formula><p>) is added as well and the weights w o ,w l and w c determine the importance of each parameter in the 'trend' selection process. These weights are user input values and can be varied depending upon the type of trends desired and the nature of the dataset. For example, w l can be dominant in value amongst the weights if lengthy trends are desired. The End-to-End Paths corresponding to this minimal set of nodes are the trends in the data. As mentioned earlier, all the P I , P J pairs and the corresponding Γ IJ between them are described by the Path matrix PV=</p><formula>[P I ,P J ,Γ IJ ]. This and the weights w o ,w c ,w l , </formula><p> are the input to the algorithm whose output is τ. Algorithm 3 gives the implementation of Find Ind Path. All pairs (P I ,P J ) are ranked in ascending order as per their Γ. The function Get Centroids obtains the corresponding set of nodes for each P I . The ranked pairs of paths are checked for the C i s that they include. Those C i s are eliminated from the Ind set which is a set of Indicator variables for C i s. The pairs of paths are sequentially checked for any new C i that they may add and the process terminates once all C i s are eliminated, that is, </p><formula>(C i ∈ τ) ∩ σ = φ . </formula><p>This task is performed by the function Find Path (See Algorithm 4). </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Visualizing Trends -Each P I includes </head><p>a sequence of C i s that represent the clusters of the data. Hence each P I is associated with a set of data points included in those clusters. These data points are identified and a principal curve can be fitted on this subset of the dataset <ref type="bibr" coords="6,81.12,494.42,9.52,9.41" target="#b8">[9]</ref>. This is the representation of a trend in that data set. A Note about the Parameters -The procedure as described contains several parameters that require user input. Thus it is not a fully automated procedure yet. Until a systematic way to determine the values of the parameters can be obtained, the procedure is best considered as a tool for exploratory analysis. For example, it can be embedded into a data visualization tool (such as Mirage<ref type="bibr" coords="6,264.37,564.63,11.47,9.41" target="#b7">[8]</ref>), so that a user can iterate on trials of different parameter values. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5">EXPERIMENTAL RESULTS</head><p> All programs were written in MATLAB Version 6.5 and run on pentium Dual Core 2.8 GHz machines. Experiments were performed using both synthetic and high-dimensional real-world datasets. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.1">Synthetic Data sets</head><p>Our algorithm was tested successfully on various synthetic data sets that inherently contain trends. Several data sets were created with intersecting and overlapping paths in them. Our algorithm identified the data points along these paths and was able to separate out different trends in these data sets. <ref type="figure" coords="6,186.42,702.42,21.16,9.41" target="#fig_6">Fig. 6</ref>(a)-(d) shows one such synthetic data set where a sine wave intersects with a cos wave in a four-dimensional space. The data set was created by pseudorandomly generating data points using these intersecting curves. The k-means clustering algorithm identified 18 Cluster centroids which were then used to build the Principal Tree using the Kruskal's algorithm. The weight parameters used in our objective function (see Eq. 2) were: w l = 0.4, w o = 0.4 and w c = 0.2. There were six nodes in the Traversal Graph (G t ) using all the six possible paths constructed from the four end nodes of the MST. For this dataset, our algorithm was able to identify two independent trends, as shown in <ref type="figure" coords="6,327.55,146.01,19.96,9.41" target="#fig_6">Fig. 6</ref>(f). Finally, principal curves were fitted to the data points belonging to each trend individually to obtain a continuous model for the trend. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.2">Real-world Data sets</head><p>Real-world data sets were obtained from image sequences in the CMU Vision and Autonomous Systems Center's Image Database 1 . The motion images were of particular importance because they have numerous motion sequences represented by frames numbered in order of the motion's progression. The movement in the images generated by either the change in the camera placement or its angle, or the actual physical movement of the subject provided a highdimensional data set with a definite ordered change in the data values as the motion sequence progressed. The entirety of the dataset contains all the images came from the same subject. The feature vectors obtained from the original images were of very high dimensions . A lower number of dimensions were obtained by rescaling the images. <ref type="figure" coords="6,361.56,315.91,26.41,9.41" target="#tab_2">Table 2</ref>provides details about various data sets used in our experiments. Most of these motion data sets inherently contain some form of a 'trend' in a very high-dimensional feature space representing the intensities at the pixels. In order to obtain data sets that are more suitable for testing our algorithm, we increased the complexity of these sequences by adding more image sequences which were obtained by shifting images at a particular location. In other words, we generated more trends in the data by obtaining sequences using simulated camera panning that provided a new image sequence. The image at a certain location in the original sequence was used as the basis for subsequently generating more sequences by shifting the axis, thus generating either overlapping or intersecting image sequences of transfigured or shifted images. <ref type="figure" coords="6,441.02,445.43,21.14,9.41" target="#fig_7">Fig. 7</ref>shows the image data sets containing intersecting and overlapping image sequences overlaid on the original image sequence. Artichoke data set contains 100 images of a scene which has a toy dog, a cup and a road sign. By shifting the image 50 of the original sequence, an additional set of 121 images were obtained corresponding to a new intersecting trend in the data. Hence, there are a total of 221 images, each of size 60x64, containing trends that intersect at image number 50. This is shown in <ref type="figure" coords="6,493.05,525.13,29.08,9.41" target="#fig_7">Fig 7(a)</ref>using the images in each sequence/trend. Hand data set contains 481 images of a hand holding a rice bowl. We included only the first 200 images in our original sequence. We obtained overlapping sequences by shifting images at two different locations (100 and 150) in the sequence. A total of 120 (60 + 60) images were added to the original sequence and hence a set of overlapping trends was obtained. The image size is 60x64 and the sequences overlap between images 100 and 150, as shown in  The original image sequence and the transfigured image sequence represent two different trends in the data set. It is important to note that the trends were extracted in the original space and are visualized in the reduced 2D space in <ref type="figure" coords="8,196.95,277.16,20.77,9.41" target="#fig_7">Fig. 7</ref> . The original highdimensional feature vectors can be visualized in either 2D or 3D space using traditional manifold learning algorithms <ref type="bibr" coords="8,247.07,297.09,9.71,9.41" target="#b1">[2,</ref><ref type="bibr" coords="8,259.58,297.09,6.47,9.41" target="#b4"> 5]</ref> . However , one cannot visualize more complicated datasets using such algorithms. Our algorithm, on the other hand, can extract the trends (and data corresponding to such trends) individually and then lay out the data ordered by each trend in a low-dimensional space. This gives users a way to inspect the trend-specific variability in the data that could be difficult to un-entangle by full manifold projections. In all these data sets, we were able to identify the trends in the data using our algorithm. <ref type="figure" coords="8,151.26,377.41,27.14,9.41" target="#tab_3">Table 3</ref>gives the results after applying the algorithm to the datasets. Depending on the form of the data and number of data points, we initialized the k-means algorithm with a certain number of centroids between 40 and 60. The only other input parameters to our algorithm are the set of weights which will have to be chosen so that the output trends will have minimum overlap, maximum length and maximum smoothness. The standard parameter values used in our testing were w l = 0.4, w o = 0.4 and w c = 0.2. In some cases (such as the House data set) a minor tweaking of the parameters was needed in order to obtain the original trends. <ref type="figure" coords="8,54.00,477.04,26.96,9.41" target="#tab_3">Table 3</ref>also gives the number of data points belonging to each of the trends. Since the MST and the data assignment are done based on the centroid, a data point (especially in the neighborhood of the intersecting centroids) may belong to more than one trend. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6">CONCLUSION AND FUTURE RESEARCH</head><p>In spite of the vast literature in clustering and curve fitting, some real-world problems pose interesting challenges that require development of novel algorithms that can advance one step further from the basic clustering or curve fitting solutions. Our algorithm proposes to find interesting, continuous trends in the datasets. Analyzing these trends can provide useful insight into the nature of the data distributions and existing correlations. Future work in this direction is to use the uncovered trends for real world datasets and find interesting associations between trends from different descriptions of the data, such as different subsets of features. Clustering procedures other than k-means can be explored for potential improvements, like cluster sculptor which allows the user to tune the clustering parameters so that the domain knowledge of the user can assist in creating better clusters <ref type="bibr" coords="8,243.22,672.53,13.74,9.41" target="#b10">[11]</ref>. For very high-dimensional datasets, simple Euclidean distances may not be the best metric for clustering. Additional possibilities include an analysis of local intrinsic dimensionality of the data, and using it to guide a weighting on the metric to minimize the effect of noise. </p><p>Another possible extension is to cut the principal tree (MST) at the longest edges to break the data down to more natural clusters, in case there exists such an edge (known as the inconsistent edge in graph-theoretic methods for clustering). This can help avoid forcing a global trend on data that contain natural clusters that are far apart. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>ACKNOWLEDGMENTS </head><p>This work is partially funded by the Wayne State University Faculty research award and the DHS Dynamic Data Analysis Center grant. </p></div><figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_0" coords="3,120.19,148.85,76.57,8.37;3,241.50,148.85,129.04,8.37;3,389.47,148.85,128.15,8.37"><head></head><figDesc>of the data onto x-y plane (c) Projection of the data onto x-z plane </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_1" coords="3,54.00,172.33,504.14,8.37;3,54.01,181.80,148.78,8.37"><head>Figure 2: </head><figDesc>Figure 2: The original spiral data (a) the generating curve is represented by a solid line. (b) projection of the data onto a 2D x-y plane. (c) Projection of the data onto a 2D x-z plane. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_2" coords="4,110.42,158.71,388.53,8.37"><head>Figure 3: </head><figDesc>Figure 3: The original data , the cluster identification and the Minimum Spanning Tree of the Cluster Centroids. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_3" coords="4,54.00,337.41,504.14,8.37;4,54.01,346.87,111.97,8.37"><head>Figure 4: </head><figDesc>Figure 4: Graph Transformation: Vertices are End-To-End Paths with weights as the lengths of the End-To-End Paths. Edges are the overlaps between the End-To-End Paths. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_4" coords="5,388.08,222.67,99.82,8.37"><head>Figure 5: </head><figDesc>Figure 5: Curvature of paths </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_5" coords="6,317.96,614.80,31.36,9.41;6,327.92,624.76,230.00,9.41;6,317.96,634.72,239.93,9.41;6,317.96,644.68,239.93,9.41;6,317.96,654.65,217.76,9.41;6,327.92,664.61,229.99,9.41;6,317.96,674.57,239.94,9.41;6,317.96,684.54,239.93,9.41;6,317.96,694.50,202.53,9.41;7,82.14,171.89,69.93,8.37;7,207.85,171.89,70.39,8.37;7,334.01,171.89,69.93,8.37;7,459.72,171.89,70.38,8.37;7,102.79,273.33,68.17,8.37;7,277.83,273.33,56.36,8.37;7,449.98,273.33,50.34,8.37"><head></head><figDesc>Fig 7(b). House data set contains a total of 111 images of a toy house. We obtained a set of overlapping sequences by shifting images 25 and 75. At each location, 50 images were generated. The image size is 72x48 and the sequences overlap between images 25 and 75. SRI data set contains 125 images of a lab scene. A sequence of 49 images were obtained from Image 60 using a similar transformation used in the Artichoke dataset. The image size is 60x64 and the data set contains two trends intersecting at image 60. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_6" coords="7,54.00,296.82,504.15,8.37;7,54.01,306.28,504.00,8.37;7,54.00,315.74,501.03,8.37"><head>Figure 6: </head><figDesc>Figure 6: Example of synthetic data set used to test our algorithm. The first row shows various views of the data across different dimensions. The second row shows the results of various steps in our algorithm. (e) Original data and the cluster centroids obtained using the k-means procedure. (f) Principal Tree which is the MST of the cluster centroids. (g) Two most independent End-to-End Paths identified by our algorithm. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_7" coords="7,54.00,637.54,504.14,8.37;7,54.01,647.01,504.04,8.37;7,54.00,656.47,202.92,8.37"><head>Figure 7: </head><figDesc>Figure 7: Examples of Intersecting and Overlapping trends in Image datasets. Additional image sequences are obtained by simulating the camera panning which is done by shifting the coordinates. (a) Intersecting trends in the Artichoke data set. (b) Overlapping trends containing two intersecting nodes in the Hands image sequence data set. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_0" validated="false" coords="1,328.29,442.84,229.61,187.05"><figDesc coords="1,328.29,442.84,229.61,9.41;1,337.88,452.80,220.02,9.41;1,337.88,462.76,27.50,9.41">@BULLET Dealing with intersecting principal curves by smoothing the data and increasing the curve detection ability of Principal Curves.</figDesc><table coords="1,328.29,486.33,229.61,143.56">@BULLET Identifying trends in the data using a continuous representa-
+tion. 
+
+@BULLET Obtaining the minimum number of most independent paths 
+that cover the entire dataset. 
+
+@BULLET Untangling intersecting paths in high-dimensional spaces. 
+
+@BULLET Visualizing trends that summarize the data in continuous 
+form. 
+
+@BULLET Hypothesizing correlations amongst various feature trends in 
+the dataset. 
+
+</table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_1" validated="false" coords="3,59.98,219.11,232.09,297.95"><figDesc coords="3,108.51,219.11,131.06,8.37;3,59.98,228.30,86.47,9.41;3,70.93,238.66,8.46,9.41;3,104.63,238.66,46.05,9.41;3,72.44,248.62,6.94,9.41;3,104.63,248.62,64.95,9.41;3,74.26,258.59,3.98,9.41;3,104.63,258.59,68.70,9.41;3,72.01,268.55,7.69,10.45;3,104.63,268.55,60.99,9.41;3,73.14,278.41,5.40,9.54;3,104.63,278.51,46.18,10.45;3,70.88,288.48,10.40,10.45;3,104.63,288.48,83.14,9.41;3,73.50,298.32,4.92,9.54;3,104.63,298.43,33.82,10.46;3,71.62,308.39,8.92,10.46;3,104.63,308.39,96.58,9.41;3,73.49,318.25,5.16,9.54;3,104.63,318.35,32.33,10.46;3,72.12,328.32,7.92,10.46;3,104.63,328.32,111.02,9.41;3,74.11,338.17,3.68,9.54;3,104.63,338.28,32.33,10.46;3,71.04,348.24,9.90,10.46;3,104.63,348.24,171.44,10.46;3,70.84,358.20,10.48,10.36;3,104.63,358.20,187.44,10.46;3,72.56,368.17,6.68,10.46;3,104.63,368.17,88.08,10.36;3,104.63,378.13,5.05,9.41;3,104.63,398.06,44.03,10.45;3,69.79,408.02,12.24,10.45;3,104.63,408.02,158.56,10.45;3,72.78,417.88,6.26,10.56;3,104.63,417.98,89.54,9.41;3,71.34,427.94,9.47,10.36;3,104.63,427.94,67.22,9.41;3,71.54,437.91,9.08,10.36;3,104.63,437.91,74.23,9.41;3,71.94,447.87,7.92,10.73;3,104.63,447.87,63.01,9.41;3,71.72,457.83,8.24,10.36;3,104.63,457.83,112.42,10.45;3,71.32,467.80,9.16,10.45;3,104.63,467.80,97.24,10.45;3,70.33,477.65,11.18,10.56;3,104.63,477.76,73.53,10.45;3,73.98,487.62,3.93,9.54;3,104.63,487.72,81.00,10.45;3,70.32,497.68,11.18,10.45;3,104.63,497.68,147.83,9.41;3,73.55,507.65,5.56,9.41;3,104.63,507.65,24.58,9.41">Table 1: Notations used in this paper. Notation Description X Input dataset D Noise-free dataset k Number of clusters C i Cluster centroids σ Set of C i ...C j en i End Nodes of the MST ρ Set of en i in i Internal Nodes of the MST µ Set of in i is i Intersection Nodes of the MST γ Set of in i L i j Set of edges connecting the Centroids C i and C j G p Principal Tree = ({C i }, {L i j }) ; MST connecting C i s P I End-To-End Paths of G p = Length of P I O IJ Overlap between P I and P J = length(P I ∩ P J ) ς I Curvature factor of paths w o Weight for overlap w c Weight for curvature w l Weight for length G t Traversal Graph =({P I },{O IJ }) Φ I Weight at the Vertex P I = l I η IJ Edge Weight for O IJ τ Set of Independent P I s Γ IJ Input weight to Find Ind Path algorithm ϒ Trends</figDesc><table coords="3,73.09,378.13,128.73,30.38">(en i , ..., in  *  , ..., en j ) 
+A 
+Adjacency matrix for MST 
+l I 
+</table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_2" validated="false" coords="3,54.00,212.50,504.00,510.23"><figDesc coords="3,351.40,242.39,206.58,10.59;3,317.96,250.80,42.65,10.97;3,358.84,256.97,3.49,7.32;3,362.82,252.35,195.12,9.41;3,317.96,262.32,74.81,10.45;3,317.96,280.14,239.54,10.45;3,317.96,290.11,154.64,9.41">(en i , in 1 , in 2 , ..., in m , en j ) (if there are m Internal Nodes). There are ( t 2 ) paths if there are t End Nodes and all nodes appear just once in each P i j . Definition 5 Intersection Nodes (is i ) -are those Internal Nodes in i that are on two or more End-To-End Paths.</figDesc><table coords="3,54.00,212.50,504.00,510.23">, k) where the vertex set {C i } is the set of k Cluster Centroids 
+obtained using a k-means procedure, and the set of edges {L i j } 
+connecting centroids C i and C j is the set of links that jointly form a 
+Minimum Spanning Tree (MST) over the vertex set {C i }. 
+
+Definition 2 End Nodes (en i ) -are those C i with degree 1 in G p . 
+
+Definition 3 Internal Nodes (in i ) -are those C i with degree ≥ 2 in 
+G p . 
+
+Definition 4 End-To-End Paths (P i j ) -are those paths in G p that 
+contain exactly two End Nodes en i and en j and the Internal Nodes 
+between them. They are ordered sequences of vertices that are of 
+the form Definition 6 Overlap(O i j,i j ) -For two End-to-End Paths P i j and 
+P i j , the overlap is the set P i j ∩ P i j . 
+
+</table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_4" validated="false" coords="3,317.96,642.64,240.04,50.30"><figDesc coords="3,317.96,642.64,240.04,10.45;3,317.96,652.61,157.00,10.45;3,317.96,662.57,239.95,10.45;3,317.96,672.53,20.91,9.41;3,317.96,682.50,190.84,10.45">Given a Traversal Graph G t =(P I , O IJ ), a set of weights {Φ I }, {η IJ }, find the minimal set of P I s such that: 1) the P I s in the set have the smallest amount of overlap with each other; 2) the P I s cover all the C i s in the Principal Graph G p .</figDesc><table></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_6" validated="false" coords="4,317.96,636.38,240.01,85.41"><figDesc coords="4,393.18,636.38,82.97,9.41;4,322.51,646.24,139.21,10.84;4,318.53,656.31,74.70,9.41;4,317.96,682.50,239.97,9.41;4,317.96,692.46,240.01,9.41;4,317.96,702.42,239.94,9.41;4,317.96,712.38,239.96,9.41;5,54.00,56.34,239.94,9.41;5,54.01,66.30,239.94,9.41;5,54.00,76.27,239.94,9.41;5,54.01,86.23,240.04,9.41;5,54.00,96.19,239.97,9.41;5,54.00,106.15,240.03,9.41;5,54.00,116.12,239.94,9.41;5,54.01,126.08,209.87,9.41;5,54.00,148.29,104.28,9.41;5,58.56,160.74,208.31,9.41">Path Values (Pends, A) 9: τ ← Find Ind Path (PV, w o , w c , w l ) 10: ϒ ← P-Curve(τ) Noise Elimination -Most real world datasets contain noise and outliers. Standard clustering algorithms like k-means, Hierarchical, etc., are sensitive to these factors. The density-based algorithm (Noise Removal) is used as a data preprocessing step to eliminate the noise and outliers. Outliers are points in the dataset which are characteristically low in density and can hence be identified using density based approaches. Two parameters are used to determine whether a point is in a sparse region: a neighborhood radius Eps and a count M of neighboring data points. Every data point which is not within the neighborhood radius Eps of at least M other data points is classified as a noise point. All such points are eliminated to obtain the output D. Algorithm 2 gives the pseudocode. Algorithm 2 Noise Removal 1: Input: Dataset X , Threshold value Eps, Min count M</figDesc><table coords="5,54.58,170.70,164.57,128.96">2: Output: Noise-free dataset D 
+3: Pseudocode: 
+4: D ← X 
+5: for i← 1 : size(X ) do 
+
+6: 
+
+Ind = / 
+0 
+
+7: 
+
+for r ← 1 : size(X ), r =i do 
+
+8: 
+
+Dist← dist[X (i),X (r)] 
+
+9: 
+
+Ind = [Ind ; (Dist ≤ Eps ? X (r) : / 
+0) 
+
+10: 
+
+end for 
+
+11: 
+
+if size(Ind) ≤ M then 
+
+12: 
+
+D ← D -X (i) 
+
+13: 
+
+end if 
+14: end for 
+
+</table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_7" validated="false" coords="5,322.51,444.73,177.49,59.22"><figDesc coords="5,322.51,444.73,177.49,10.73;5,322.51,454.59,139.22,9.54;5,322.51,464.65,58.49,9.41;5,322.51,474.62,54.03,9.41;5,322.51,484.47,163.08,10.56;5,322.51,494.54,115.12,9.41">1: Input: Path Matrix PV, Weights w o , w c and w l 2: Output: Set of Independent Paths τ 3: Pseudocode: 4: sort (PV, Γ) 5: Ind = σ // Set of Indicator variables for C is 6: for i=1:size(PV) AND Ind =</figDesc><table></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_8" validated="false" coords="5,505.75,712.38,52.22,9.41"><figDesc coords="5,505.75,712.38,52.22,9.41;6,54.00,55.35,86.39,9.41;6,58.56,67.59,235.46,10.56;6,69.24,77.66,38.13,10.45;6,58.56,87.51,65.46,9.54;6,58.56,97.58,58.48,9.41;6,58.56,107.54,96.52,10.45;6,58.56,117.51,77.09,10.45">Parameters for Algorithm 4 Find Path 1: Input:Vertex P I , set of independent paths τ, indicator matrix for C i s Ind 2: Output: τ, Ind 3: Pseudocode: 4: P i ← Get Centroids(P I ) 5: for j=1:size(P i ) do</figDesc><table coords="6,58.56,127.47,96.45,19.17">6: 
+
+for k=1:size(Ind) do 
+
+7: 
+
+</table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_9" validated="true" coords="8,105.48,63.01,401.02,68.92"><figDesc coords="8,140.22,63.01,328.91,8.37">Table 2: Description of various real-world image sequence data sets used in our experiments.</figDesc><table coords="8,105.48,72.30,401.02,59.62">Dataset 
+Original Size 
+Image Width Image Height No. of Dimensions 
+Nature of trends 
+(No. of Images) 
+(Pixels) 
+(Pixels) 
+Artichoke 
+100 
+60 
+64 
+3840 
+Intersecting 
+Hand 
+200 
+60 
+64 
+3840 
+Significant overlapping 
+House 
+111 
+72 
+48 
+3456 
+Significant overlapping 
+SRI 
+125 
+60 
+64 
+3840 
+Intersecting 
+
+</table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_10" validated="true" coords="8,88.54,154.49,434.89,68.93"><figDesc coords="8,206.17,154.49,199.72,8.37">Table 3: Results of our algorithm on real-world data sets.</figDesc><table coords="8,88.54,163.79,434.89,59.62">Augmented Data Size 
+No. of 
+Size of 
+Size of 
+Runtime 
+Dataset 
+(with trends) No. of Images Clusters Trend 1 Trend 2 Total Size w o 
+w c 
+w l 
+CPU (sec) 
+Artichoke 
+221 
+50 
+105 
+125 
+230 
+0.4 0.2 0.4 
+100 
+Hand 
+320 
+60 
+166 
+202 
+368 
+0.4 0.2 0.4 
+235 
+House 
+211 
+55 
+139 
+128 
+267 
+0.3 0.2 0.5 
+89 
+SRI 
+174 
+40 
+87 
+94 
+181 
+0.4 0.2 0.4 
+65 
+
+</table></figure>
+
+			<note place="foot" n="3"> OPTIMAL TRAVERSAL OF PRINCIPAL GRAPH FOR GEN- ERATING TREND HYPOTHESES In this section, we will mathematically formulate the task of generating trend hypotheses as a graph traversal problem. We first give definitions for the notion of trends and a number of graph-theoretic entities needed in the description of the algorithm. We then give the problem statement. Table 1 gives the notations followed in this paper.</note>
+
+			<note place="foot" n="1"> http://vasc.ri.cmu.edu/idb/html/motion/</note>
+		</body>
+		<back>
+			<div type="references">
+
+				<listBibl>
+
+<biblStruct coords="8,336.21,372.50,221.84,8.37;8,336.21,381.96,221.84,8.37;8,336.21,391.44,221.82,8.37;8,336.21,400.90,115.44,8.37"  xml:id="b0">
+	<analytic>
+		<title level="a" type="main">Enhanced high dimensional data visualization through dimension reduction and attribute arrangement</title>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<forename type="middle">O</forename>
+				<surname>Artero</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<forename type="middle">F</forename>
+				<surname>De Oliveira</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Levkowitz</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the conference on Information Visualization</title>
+		<meeting>the conference on Information Visualization</meeting>
+		<imprint>
+			<date type="published" when="2006" />
+			<biblScope unit="page" from="707" to="712" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.21,410.36,221.84,8.37;8,336.21,419.82,221.79,8.37;8,336.21,429.29,37.87,8.37"  xml:id="b1">
+	<analytic>
+		<title level="a" type="main">Laplacian eigenmaps for dimensionality reduction and data representation</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Belkin</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Niyogi</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Neural Computation</title>
+		<imprint>
+			<biblScope unit="volume">15</biblScope>
+			<biblScope unit="issue">6</biblScope>
+			<biblScope unit="page" from="1373" to="1396" />
+			<date type="published" when="2003" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.21,438.76,208.03,8.37"  xml:id="b2">
+	<monogr>
+		<title level="m" type="main">A Practical Guide to Splines</title>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<forename type="middle">D</forename>
+				<surname>Boor</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="1978" />
+			<publisher>Springer-Verlag</publisher>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.21,448.22,221.84,8.37;8,336.21,457.68,221.84,8.37;8,336.21,467.15,83.83,8.37"  xml:id="b3">
+	<analytic>
+		<title level="a" type="main">A unified model for probabilistic principal surfaces</title>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Chang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Ghosh</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Pattern Analysis and Machine Intelligence</title>
+		<imprint>
+			<biblScope unit="volume">23</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="22" to="41" />
+			<date type="published" when="2001" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.21,476.61,221.84,8.37;8,336.21,486.08,221.80,8.37;8,336.21,495.54,185.97,8.37"  xml:id="b4">
+	<analytic>
+		<title level="a" type="main">Hessian eigenmaps: Locally linear embedding techniques for high-dimensional data</title>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<forename type="middle">L</forename>
+				<surname>Donoho</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Grimes</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the National Academy of Sciences</title>
+		<meeting>the National Academy of Sciences</meeting>
+		<imprint>
+			<date type="published" when="2003" />
+			<biblScope unit="page" from="5591" to="5596" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.21,505.01,221.80,8.37;8,336.21,514.47,135.07,8.37"  xml:id="b5">
+	<analytic>
+		<title level="a" type="main">Principal curves</title>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Hastie</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Stuetzle</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Journal of American Statistical Association</title>
+		<imprint>
+			<biblScope unit="volume">84</biblScope>
+			<biblScope unit="page" from="502" to="516" />
+			<date type="published" when="1989" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.21,523.93,221.80,8.37;8,336.21,533.40,221.80,8.37;8,336.21,542.87,172.40,8.37"  xml:id="b6">
+	<monogr>
+		<title level="m" type="main">The Elements of Statistical Learning. Data Mining, Inference, and Prediction, chapter Boosting and Additive Trees</title>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Hastie</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Tibshirani</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Friedman</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2001" />
+			<publisher>Springer-Verlag</publisher>
+			<pubPlace>New York</pubPlace>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.21,552.33,221.80,8.37;8,336.21,561.79,221.78,8.37;8,336.21,571.26,56.03,8.37"  xml:id="b7">
+	<analytic>
+		<title level="a" type="main">Interactive tools for pattern discovery</title>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Ho</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 17th International Conference on Pattern Recognition</title>
+		<meeting>the 17th International Conference on Pattern Recognition<address><addrLine>Cambridge, U.K.</addrLine></address></meeting>
+		<imprint>
+			<date type="published" when="2004" />
+			<biblScope unit="page" from="509" to="512" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.21,580.72,221.84,8.37;8,336.21,590.19,221.78,8.37;8,336.21,599.65,61.34,8.37"  xml:id="b8">
+	<analytic>
+		<title level="a" type="main">Piecewise linear skeletonization using principal curves</title>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Kegl</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Krzyzak</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Trans. Pattern Analysis and Machine Intelligence</title>
+		<imprint>
+			<biblScope unit="volume">24</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="59" to="74" />
+			<date type="published" when="2002" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.21,609.12,221.81,8.37;8,336.21,618.58,192.23,8.37"  xml:id="b9">
+	<monogr>
+		<title level="m" type="main">Mixture models: Inference and applications to clustering</title>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<forename type="middle">J</forename>
+				<surname>Mclachlan</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<forename type="middle">E</forename>
+				<surname>Basford</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="1988" />
+			<publisher>Marcel Dekker</publisher>
+			<pubPlace>New York</pubPlace>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.21,628.04,221.85,8.37;8,336.21,637.51,221.79,8.37;8,336.21,646.98,221.79,8.37;8,336.21,656.44,41.85,8.37"  xml:id="b10">
+	<analytic>
+		<title level="a" type="main">Clustersculptor: A visual analytics tool for high-dimensional data</title>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<surname>Nam</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Y</forename>
+				<surname>Han</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Mueller</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Zelenyuk</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Imre</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">IEEE Symposium on Visual Analytics Science and Technology (VAST)</title>
+		<imprint>
+			<date type="published" when="2007" />
+			<biblScope unit="page" from="75" to="82" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.21,665.90,221.84,8.37;8,336.21,675.36,221.82,8.37;8,336.21,684.83,156.54,8.37"  xml:id="b11">
+	<analytic>
+		<title level="a" type="main">A shrinking-based clustering approach for multidimensional data</title>
+		<author>
+			<persName>
+				<forename type="first">Y</forename>
+				<surname>Shi</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Y</forename>
+				<surname>Song</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Zhang</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Knowledge and Data Engineering</title>
+		<imprint>
+			<biblScope unit="volume">17</biblScope>
+			<biblScope unit="issue">10</biblScope>
+			<biblScope unit="page" from="1389" to="1403" />
+			<date type="published" when="2005" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.21,694.30,221.78,8.37;8,336.21,703.76,221.81,8.37;8,336.21,713.23,136.42,8.37"  xml:id="b12">
+	<monogr>
+		<title level="m" type="main">Introduction to Algorithms,Second Edition, chapter Minimum Spanning Trees</title>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<forename type="middle">L R</forename>
+				<surname>Thomas</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Cormen</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Charles</forename>
+				<forename type="middle">E</forename>
+				<surname>Leiserson</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Stein</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2001" />
+			<publisher>MIT Press and McGraw-Hill</publisher>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+				</listBibl>
+			</div>
+		</back>
+	</text>
+</TEI>

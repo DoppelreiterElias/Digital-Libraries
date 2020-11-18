@@ -1,0 +1,463 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.tei-c.org/ns/1.0 /home/pisenberg/grobid/grobid-home/schemas/xsd/Grobid.xsd"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+	<teiHeader xml:lang="en">
+		<encodingDesc>
+			<appInfo>
+				<application version="0.4.1" ident="GROBID" when="2016-09-09T13:35+0000">
+					<ref target="https://github.com/kermitt2/grobid">GROBID - A machine learning software for extracting information from scholarly documents</ref>
+				</application>
+			</appInfo>
+		</encodingDesc>
+		<fileDesc>
+			<titleStmt>
+				<title level="a" type="main">Visualizing the Performance of Computational Linguistics Algorithms</title>
+			</titleStmt>
+			<publicationStmt>
+				<publisher/>
+				<availability status="unknown"><licence/></availability>
+			</publicationStmt>
+			<sourceDesc>
+				<biblStruct>
+					<analytic>
+						<author>
+							<persName>
+								<forename type="first">Stephen</forename>
+								<forename type="middle">G</forename>
+								<surname>Eick</surname>
+							</persName>
+							<affiliation>
+								<orgName type="institution" key="instit1">SSS Research, Inc</orgName>
+								<orgName type="institution" key="instit2">SAIC Advanced Systems &amp; Concepts</orgName>
+								<orgName type="institution" key="instit3">National Security Agency</orgName>
+							</affiliation>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Justin</forename>
+								<surname>Mauger</surname>
+							</persName>
+							<affiliation>
+								<orgName type="institution" key="instit1">SSS Research, Inc</orgName>
+								<orgName type="institution" key="instit2">SAIC Advanced Systems &amp; Concepts</orgName>
+								<orgName type="institution" key="instit3">National Security Agency</orgName>
+							</affiliation>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Alan</forename>
+								<surname>Ratner</surname>
+							</persName>
+							<affiliation>
+								<orgName type="institution" key="instit1">SSS Research, Inc</orgName>
+								<orgName type="institution" key="instit2">SAIC Advanced Systems &amp; Concepts</orgName>
+								<orgName type="institution" key="instit3">National Security Agency</orgName>
+							</affiliation>
+						</author>
+						<title level="a" type="main">Visualizing the Performance of Computational Linguistics Algorithms</title>
+					</analytic>
+					<monogr>
+						<imprint>
+							<date/>
+						</imprint>
+					</monogr>
+				</biblStruct>
+			</sourceDesc>
+		</fileDesc>
+		<profileDesc>
+			<textClass>
+				<keywords>
+					<term>CR Categories: H52 [Information Interfaces and Presentation]: User Interfaces—Screen Design</term>
+					<term>H34 [Information Storage and Retrieval]: Systems and Software—Performance Evaluation</term>
+					<term>[H31 [Information Storage and Retrieval]: Content Analysis and Indexing—Linguistic Processing</term>
+					<term>H33 [Information Storage and Retrieval]: Information Search and Retrieval—Clustering Keywords: AJAX, thin-client, SVG, ROC curves, confusion matrices, document categorization</term>
+				</keywords>
+			</textClass>
+			<abstract>
+				<p>1 We have built a visualization system and analysis portal for evaluating the performance of computational linguistics algorithms. Our system focuses on algorithms that classify and cluster documents by assigning weights to words and scoring each document against high dimensional reference concept vectors. The visualization and algorithm analysis techniques include Confusion Matrices, ROC Curves, Document Visualizations showing word importance, and Interactive Reports. One of the unique aspects of our system is that the visualizations are thin-client web-based components built using SVG visualization components.</p>
+			</abstract>
+		</profileDesc>
+	</teiHeader>
+	<text xml:lang="en">
+		<body>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1">INTRODUCTION</head><p>One of the current challenges in computer science is developing new methods to represent, structure, analyze, and automatically process unstructured multilingual text to obtain semantic understanding. To aid with this task, we have built an analysis system and portal that helps researchers quantify the performance of their algorithms. Our target users are developing hardwareaccelerated algorithms that are described in other papers, see for example <ref type="bibr" coords="1,86.88,516.59,9.45,8.35" target="#b0">[1]</ref>, <ref type="bibr" coords="1,101.77,516.59,9.63,8.35" target="#b1">[2]</ref>, <ref type="bibr" coords="1,116.89,516.59,9.45,8.35" target="#b2">[3]</ref>, and <ref type="bibr" coords="1,147.14,516.59,9.45,8.35" target="#b3">[4]</ref>. The goals for our analysis system, called AFEWeb, are to provide unambiguous performance metrics for algorithm developers, develop visualizations that show key algorithm 1 This research was sponsored by the Air Force Research Laboratory, Air Force Materiel Command, USAF, under Contract number MDA972-03-9-0001. The views and conclusions contained herein are those of the authors and should not be interpreted as necessarily representing the official policies or endorsements, either expressed or implied, of AFRL or the U.S. Government. abstractions, and create new visualizations that show why documents are identified as belonging to specific concepts of interest. Our system compares the performance of various algorithms, helps our algorithm designers set thresholds, provides simple and intuitive access to misclassified documents, and displays key algorithmic concepts to users and developers in an understandable way. It cross-references all of the words seen, it is fully interactive, and displays in a standard web browser. AFEWeb includes many standard document algorithm analysis tools such as Confusion Matrices, ROC curves, Precision and Recall plots, and Interactive Reports. It also includes new visualizations showing document clusters, and visualizations of the words in the documents themselves. Although, some of the analysis tools are known, what is new is to have them packaged together as an analytical system within a web-based document analysis portal. Furthermore, some of our visualizations are novel and particularly well-suited to document analysis. Our interactive portal is surprisingly useful. Using our portal we have identified several algorithm bugs and algorithm performance characteristics that have influenced the developers and our corpus collection techniques. Our portal is written using AJAX 2 , SVG 3 , and other Web 2.0 programming techniques. Using these techniques, it is possible to develop rich interactive user visualizations that are totally browser-based. Our portal combines the utility of rich desktop analysis systems with the flexibility and linking of web-based systems. It works remarkably well and demonstrates that is possible to build powerful visualization tools in a thin-client browser platform. In the remainder of this paper we describe our system in more detail. First, however, we review key concepts for processing unstructured information using the constraints imposed by our hardware testbed as a concrete example. In subsequent sections we will describe AFEWeb's analysis tools and interactive portal. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2">COMPUTATIONAL LINGUISTIC BACKGROUND</head><p>This section briefly reviews some of the key ideas from computation linguistics and relates them back to our test environment. Although our test environment is somewhat constrained because of limitations in our hardware, our analysis and visualization techniques are broadly applicable. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.1">Feature Vector Representations of Documents and Concepts</head><p>Our focus is on text analysis algorithms that use feature vectors to represent documents, as in <ref type="bibr" coords="1,420.92,623.86,9.63,8.35" target="#b5">[6]</ref> . We have mainly used centroidbased models (i.e. Rocchio, TFIDF <ref type="bibr" coords="1,465.13,633.95,9.43,8.35" target="#b4">[5]</ref>). In our particular implementation, the dimensions of the vector corresponding to a document are equivalence classes of words and the coefficients are the number of occurrences of words in each class. The hardware is designed to store 4000 4-bit counters per document vector. As an example, consider the document shown in <ref type="figure" coords="2,266.16,81.23,27.83,8.35" target="#tab_1">Table 1</ref>and word equivalence classes shown in <ref type="figure" coords="2,200.40,91.31,26.70,8.35" target="#tab_2">Table 2</ref>. There are seven stop words that are assigned to dimension 0 (stop words), two football words assigned to dimension 1 (football concept), one compensation word assigned to dimension 2 (compensation concept), and one circus word assigned to dimension 4 (circus concept). The document vector representing the document in using the semantic dimensions in <ref type="figure" coords="2,251.52,151.31,20.61,8.35;2,289.44,151.31,4.56,8.35" target="#tab_2">Table  2</ref>is: </p><formula>) 0 ..., , 0 , 1 , 0 , 1 , 2 , 7 ( = d . </formula></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Table 1. A sample document </head><p>The NFL of the modern era is a high flying circus act of elite athletes who make big salaries and big hits. , Virgo, Libra, Aquarius, Pisces, Capricorn, Sagittarius, Scorpio, ... 4 circus, flying, tiger, trapeze, ... 5 backwards, forward, sideways, left, right, behind, ahead, … … ... 3999 dog, cat, rabbit, fish, </p><formula>turtle, A concept vector ) , , ( 3999 0 c c c = </formula><p>is a weighting of the semantic dimensions that represents the content in a particular class of documents. The counters for the concept vectors are 8 bits wide, and thus have a maximum value of 255. So, for example, a concept vector representing the concept of football </p><formula>might be ) 0 , , 0 , 0 , 0 , 175 , 255 , 0 ( = football c football c </formula><p>assigns no weight to stop words, maximum weight to the words in dimension 1, medium weight to financial words in dimension 2, no weight to the horoscope words in dimension 3 and no weight to the other dimensions. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.2">Document Classification</head><p>The raw score football ns of d with respect to football c is the dot product of these two vectors: </p><formula>685 = = footbal football c d s </formula><p>Since both the size of the concept vectors and size of the document may vary widely, we use the normalized score football ns </p><p>(A document is scored against all the concept vectors to determine how closely it matches each concept and is tentatively assigned to the concept that it best matches. It is then " rejected " as noise if its score statistic is less than a concept threshold t i : d is assigned to concept i if </p><formula>{ } j m j i ns ns ≤ ≤ = 1 max and i i t ns ≥ , </formula><p>where i t is the threshold for concept i, and m is the number of concept vectors. If i i t ns &lt; , then d is rejected as none of the known concepts. One of the challenges for our visualization software is to set the thresholds { } i t . </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3">CORPUS ORGANIZATION</head><p>To evaluate our algorithms we organize documents in our corpus into three categories labeled signal, interference, and noise. Signal documents are message documents that belong to the concepts that our algorithms are trained on. Interference documents belong to concepts that are not exposed to our algorithms during training. Noise documents are not message documents but documents that include executables, images, audio and video. The challenge for our algorithms is to classify the signal documents into the correct concepts, discover and group the interference documents, and reject the noise documents. To illustrate our approach, the table below shows one of our corpora derived from Google newsgroups. It consists of seven signal groups, four interference groups, and a 1,000 file noise group consisting of GIF and JPEG files with sizes ranging uniformly from 250 to 5000 bytes. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4">VISUALIZING ALGORITHM PERFORMANCE</head><p>This section describes our analysis methods in detail. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.1">Measuring Overall Algorithm Performance – Aggregate Statistics</head><p>For each experiment, the system calculates a variety of global statistics including Classification Accuracy, Rejection Accuracy, Total Accuracy, Total Precision, Total Recall, and F1-Measure. These measures are well known in the information retrieval community. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.2">Interactive Confusion Matrices – Showing Classification Mistakes</head><p>A confusion matrix organizes documents into cells with the document labels (true concepts) along the rows and the assigned concepts as columns. The number in each cell is the number of documents either correctly classified (diagonal entries) or incorrectly classified (off diagonals). In our implementation, as shown in <ref type="figure" coords="3,90.48,208.19,29.82,8.35">Figure 1</ref>, we display Precision, Recall and F1-measure for each signal concept. We also display Rejection Accuracy for each interference concept and noise. The first seven rows are the signal categories, the next four are the interference categories, and the last row represents the noise documents. In this example our algorithm had trouble with the frugal concept and confused frugal documents with equestrian documents. Our frugal threshold setting may be too high as 10 of the 22 frugal documents were rejected as noise. (Our algorithm also had trouble rejecting the libraries interference category.) Although confusion matrices are well known, there are three interesting aspects to ours. First, our matrix is interactive and runs in a thin-client web browser. Second, as described above, we exploit the browser's ability to hyperlink to tie various pieces of an analysis together. For example, clicking on the highlighted cell corresponding to the five misclassified frugal documents launches an interactive report. This report lists the documents that make up the counts in that cell and provides an interface to read these documents to see why they are misclassified. Third, the rejection rates in the confusion matrix depend on the current value of each concept's rejection threshold. Users may manipulate this threshold using our ROC visualizations, which we describe next. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.3">Setting Concept Thresholds using ROC Curves</head><p>A standard approach for evaluating the performance of a classification algorithm with a single test statistic is the use of ROC curves. For each concept, a ROC curve shows the true positive and (log) false positive rates corresponding to each possible threshold value. It shows the tradeoffs among correctly classified documents, incorrectly classified documents, and rejected documents. <ref type="figure" coords="3,62.64,523.07,30.77,8.35" target="#fig_0">Figure 2</ref>shows our implementation of ROC curves that are tied to our confusion matrix. One of the interesting usability aspects of the web page shown in <ref type="figure" coords="3,149.26,542.99,30.51,8.35" target="#fig_0">Figure 2</ref>is that it is fully interactive. As a user manipulates the thresholds by moving the vertical line in each ROC display the ROC curves, confusion matrix, and global statistics update continuously. According to human factors guidelines, achieving smooth updating requires that the display update at least every 100 milliseconds. The round trip access time for server calculations is typically around a couple seconds and thus it is not possible to access any server resources and achieve 100 millisecond responses. All of the calculations are done within the browser to provide a real-time response to user manipulations. Although it would not be difficult to recompute the confusion matrix on a server, it is not possible to recalculate it on a desktop personal computer. The problem is that a generic personal computer is not powerful enough to meet our 100-millisecond response goal. To get around this problem and still provide realtime response, we use instead a lookup table. We pre-calculate all of the possible change points for each cell in the confusion matrix and download the relevant tables asynchronously into the user browser. When the user updates a threshold, rather than recompute the cell the browser performs a binary search and table lookup. Using this technique it is possible to provide real-time browser-based display updating even on inexpensive PCs. One potential problem with this approach is the startup delay in downloading of the lookup tables. It would be distracting if the computer froze for a few seconds while the display initialized itself. To overcome this problem we use a new style of web programming called AJAX that employs asynchronous downloads. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.4">Visualizing Words within Documents</head><p>A question of interest to algorithm developers is determining why particular documents are assigned to concepts. The reason, of course, is that certain words in the document are relevant to the semantic dimensions that are weighted by the concept. To present this information in a useful way we have created a document visualization that shows the importance of each word to the relevant concept. Our technique uses both the font size of each word and places a superscript next to each word to show the respective weight that each word receives for the selected concept vector. So, for example in <ref type="figure" coords="3,419.27,275.64,29.74,8.35" target="#fig_1">Figure 3</ref>, we show the document with the highest frugal score. The frugal concept assigns a high weight, 255, to rent, rental, and ownership and less weight, 56, to advantages (clipped in the figure). There are three pleasing features of this visual representation. The first, and most obvious, is that important words for a concept are large and stand out visually. A user's attention is drawn to the important words. The second feature involves the user's ability to recalibrate the display by selecting a different concept. This makes it easy to see how well a document might match another concept. The third feature involves new words. Any word not observed in the training documents is colored green. For example, the name of the individual making this posting, Shawn Hearn, is colored green since it was not seen in the training documents. Although it does not occur here, in some documents there are green words with superscripts. This would indicate that a new word not observed in the training corpus is contributing to a document's assignment to a concept. The reason for this is a hash collision in the hardware lookup tables. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.5">Visualizing Related Groups of Documents</head><p>One of the goals of our system is to group related documents. For example, in the corpus shown in <ref type="figure" coords="3,451.21,500.52,28.25,8.35">Table 3</ref>, an ideal clustering would identify 12 unique clusters. Seven of the clusters would contain each of the signal concepts, four would contain each of the interference concepts, and one would contain the noise documents. Thus a perfect clustering would uniquely identify and group all of the documents in the signal, interference, and noise concepts, respectively. This is rarely possible. <ref type="figure" coords="3,326.88,570.36,31.00,8.35" target="#fig_2">Figure 4</ref>shows a visualization for flat clustering algorithms. It resembles a confusion matrix, with a couple of significant differences. The clusters are shown as rows and columns contain the number of document in the cluster for each of the concepts. Each cluster is labelled according to its most popular concept. That is a cluster is assigned the label of the concept that has the most documents in that cluster. A perfect clustering would have a diagonal structure with all of the documents in a cluster belonging to a single concept. The clustering shown in <ref type="figure" coords="3,484.30,650.76,30.75,8.35" target="#fig_2">Figure 4</ref>is adequate since it is somewhat close to diagonal, although there are many interference clusters which should be combined 4 . The bars on the right display the size of each cluster. As before, each cell and cluster is hyperlinked to reports listing the relevant documents. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5">AFEWEB IN USE</head><p>Although we have not conducted any formal user studies, our experience using AFEWeb to analyze the performance of various algorithms has been very positive. The value has come in several ways. First, the system calculates authoritative statistics for comparing algorithms that prevents researchers from </p><p>(unintentionally) misreporting their results by using slightly different calculations. Second, AFEWeb's confusion matrix has been very helpful for cleaning our corpus and identifying mislabeled documents. Clicking on any off diagonal cell in the confusion matrix brings up an interactive report that lists misclassified documents. It is frequently the case, or at least at the beginning of our study, that many of the misclassified documents were really mislabelled in our corpus. Third, using AFEWeb's document visualization we have discovered how specific words contribute to a concept. For example the highest scoring document for the " baseball " concept had a set of unusual high scoring words including shooty, igloo, dcfg, dfb, and a's. In this case shooty, dcfb, and dfb were the user id's for frequent posters to the baseball newsgroup. In another example from a different experiment, the word misarie appeared in one test document and one training document. Both documents discussed an inscription in Old English that allegedly appeared on a tombstone. This case leads us to question the advisability of assigning high weights to words that only appear in a single training document. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6">SYSTEM IMPLEMENTATION</head><p>There are two interesting parts to this system: the front end and back end. Our portal, the front end, is implemented as a series of interactive PHP 5 pages that use Scalable Vector Graphics 6 (SVG) to draw the visualizations. PHP is a popular scripting language for building dynamic websites and SVG is an emerging standard for browser-based 2D graphics. Our backend, described later in this section, is a series of Python 7 programs that analyze the score files and cross-reference the documents. Python is one of the newer scripting languages for building systems. The interface between the front and backend is a series of XML files. First, we describe our portal. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6.1">Front-end Processing – Thin-client SVG Visualization Components</head><p>Each of the visualizations is implemented as an interactive SVG component that runs in a web page. The components may be moved around freely on the web page as if they were windows. They are linked to each other so that interactive operations propagate. The remarkable aspect is they run completely within the browser and require no client-side software install. Data is downloaded to the components using an innovative new programming paradigm that is often called Web 2.0 or AJAX in the popular press. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6.2">Backend Processing – Python Scripts for Document Processing and Indexing</head><p>We have developed approximately eight python programs that analyze algorithm performance, calculate statistics, generate Confusion Matrices, ROC, Precision and Recall curves (not shown in this paper), and index the words in the documents. Intermediate data is written out and stored in XML files. Although it is beyond the scope of this paper, many of the calculations are interesting in the way that they pre-compute many relevant statistics to enable interactive browser response. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="7">DISCUSSION AND SUMMARY</head><p>A critical problem for computational linguistic researchers is to understand the performance of their algorithms, set rejection thresholds, determine why documents are assigned to concepts, and investigate the internal workings of their algorithms. To help with this task we have built an environment for analyzing the performance of text analysis algorithms. Although our system is tuned for a particular platform, it is broadly useful and applicable to any of the linguistic algorithms based on document feature vectors. Our system consists of backend processing programs that analyze the performance of experiments and a portal that shows the results. There is a clean separation between the backend and our portal. The results of backend processing are a series of XML files that capture key analytical results. The portal presents the results to users. There are several interesting aspects to our portal. The first involves an interactive page that combines ROC curves and Confusion Matrices. Using this page, algorithm designers manipulate concept rejection thresholds on the ROC curves and observe the effects on the confusion matrix. One of the unique aspects of this page is its ability to rapidly display new results without performing large recalculations. This effect is achieved by pre-computing partial results, storing arrays of change points, and asynchronously downloading the information into the browser. This occurs asynchronously while allowing the user to continue working. The usability effect is dramatic and the resulting user interface for manipulating thresholds is even better than what can be achieved with a rich desktop visualization application. The second interesting aspect is our document visualization. By using font size and superscripts to encode dimension weights, the display clearly shows which words cause documents to be assigned to concepts. This visual abstraction provides a clear and succinct representation of how our system works and why documents are assigned to the respective concepts. The third interesting aspect is the hyperlinks between analysis pages. Our engineering goal is to hyperlink every item so that a click brings up the relevant information to answer the next important question. Each of the cells in the confusion matrix is hyperlinked to interactive lists of documents. The documents in these lists are hyperlinked to document visualizations. Each of the words in the document visualization is hyperlinked to other documents which contain that word. The word superscripts showing the dimension weights are linked to the other words in that equivalence class. Each of these words is in turn linked to the documents that contain it. The fourth interesting aspect involves its implementation. Our portal runs as a thin client and is completely browser based. Each of the visualizations is done with SVG web components that provide the look and feel of independent windows except that they are browser-based. The rendering is accomplished using SVG, while the interactivity is achieved by manipulating the web page's document object model. To achieve interactive performance while downloading large information the gadgets use a new style of programming called AJAX. Taken together, the effect is stunning. In many ways it is superior to a desktop visualization without the installation and maintenance hassles. </p></div><figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_0" coords="6,177.60,353.39,256.44,8.24"><head>Figure 2. </head><figDesc>Figure 2. Linked (log-transformed) ROC and Confusion Matrices. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_1" coords="6,57.12,683.39,497.79,8.24;6,60.96,693.95,489.96,8.24"><head>Figure 3. </head><figDesc>Figure 3. Document visualization showing the importance of words to the frugal concept. Word font size and superscript are tied to the weight assigned to the word by the selected concept. Green words are new words not observed in the training documents. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_2" coords="7,235.68,330.35,140.67,8.24"><head>Figure 4. </head><figDesc>Figure 4. Flat Cluster Visuallization </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_0" validated="false" coords="2,91.20,284.51,165.07,121.15"><figDesc coords="2,91.20,284.51,31.06,8.24">Table 2.</figDesc><table coords="2,108.72,284.51,147.55,121.15">Semantic dimensions for a corpus 
+Dimension 
+Equivalence Classes 
+of Words 
+0 
+a, are, and, if, is, of, 
+was, … 
+1 
+athletes, 
+NFL, 
+football, sports, pass, 
+downfield, 
+running, 
+passing, points, … 
+2 
+bonus, compensation, 
+options, salary, … 
+3 
+Gemini, 
+Taurus</table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_1" validated="false" coords="2,318.24,68.48,240.00,56.44"><figDesc coords="2,321.97,68.48,236.27,10.06;2,318.24,82.43,28.20,8.35;2,353.04,86.45,15.77,5.61;2,348.00,80.72,4.03,10.04;2,371.28,82.43,2.54,8.35">cosine distance) as the measure of how close document d is to concept football c :</figDesc><table coords="2,365.28,97.81,154.34,27.11">2986 
+. 
+9565 
+55 
+
+685 
+= 
+= 
+⋅ 
+= 
+
+football 
+
+footbal 
+football 
+
+c 
+d 
+
+c 
+d 
+ns 
+
+
+
+
+
+
+
+</table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_2" validated="true" coords="2,318.24,428.31,240.00,239.90"><figDesc coords="2,318.24,428.31,240.00,9.11;2,318.24,439.84,46.40,9.11">Table 3. Corpus organized into training and testing documents</figDesc><table coords="2,348.00,461.15,189.07,207.07">Signal 
+Concepts 
+
+Training 
+Documents 
+
+Testing 
+Documents 
+baseball 
+21 
+43 
+equestrian 
+27 
+54 
+frugal 
+10 
+22 
+neural_net 
+15 
+32 
+programming 
+31 
+62 
+wagner 
+13 
+40 
+writing 
+24 
+49 
+
+Interference 
+Concepts 
+
+Training 
+Documents 
+
+Testing 
+Documents 
+archeology 
+0 
+138 
+libraries 
+0 
+32 
+logic 
+0 
+60 
+marital_arts 
+0 
+56 
+
+Noise 
+Training 
+Documents 
+
+Testing 
+Documents 
+Noise 
+0 
+1000 
+
+</table></figure>
+
+			<note place="foot" n="2"> http://en.wikipedia.org/wiki/AJAX 3 Scalable Vector Graphics, a W3C XML standard for vector graphics.</note>
+
+			<note place="foot" n="4"> This clustering came from another experiment and is not related to the previous experiment. 5 http://www.php.net/ 6 http://www.w3.org/Graphics/SVG/ 7 http://www.python.org/</note>
+		</body>
+		<back>
+			<div type="references">
+
+				<listBibl>
+
+<biblStruct coords="5,72.00,115.42,221.64,7.25;5,72.00,125.50,221.81,7.25;5,75.14,135.58,218.54,7.25;5,72.00,145.42,144.29,7.25"  xml:id="b0">
+	<analytic>
+		<title level="a" type="main">Transformation Algorithms for Data Streams</title>
+		<author>
+			<persName>
+				<forename type="first">Mike</forename>
+				<surname>Attig</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Stephen</forename>
+				<forename type="middle">G</forename>
+				<surname>Eick</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Chip</forename>
+				<surname>Kastner</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Andrew</forename>
+				<surname>Levine</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">John</forename>
+				<forename type="middle">W</forename>
+				<surname>Lockwood</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Ron</forename>
+				<surname>Loui</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">James</forename>
+				<surname>Moscola</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Doyle</forename>
+				<forename type="middle">J</forename>
+				<surname>Weishar</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Aerospace Conference</title>
+		<imprint>
+			<date type="published" when="2005-03" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="5,72.00,155.50,221.83,7.25;5,72.00,165.58,221.82,7.25;5,75.20,175.42,218.76,7.25;5,336.24,52.30,182.73,7.25"  xml:id="b1">
+	<analytic>
+		<title level="a" type="main">Hardware Accelerated Algorithms for Semantic Processing of Document Streams</title>
+		<author>
+			<persName>
+				<forename type="first">John</forename>
+				<surname>Byrnes</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Stephen</forename>
+				<forename type="middle">G</forename>
+				<surname>Eick</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Andrew</forename>
+				<surname>Levine</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">John</forename>
+				<surname>Lockwood</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Ron</forename>
+				<surname>Loui</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Justin</forename>
+				<surname>Mauger</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Alan</forename>
+				<surname>Ratner</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Doyle</forename>
+				<surname>Weishar</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">IEEE Aerospace Conference</title>
+		<imprint>
+			<date type="published" when="2006" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="5,336.24,62.38,221.61,7.25;5,336.24,72.22,204.05,7.25"  xml:id="b2">
+	<analytic>
+		<title level="a" type="main">Text Modeling for Real-Time Document Categorization</title>
+		<author>
+			<persName>
+				<forename type="first">John</forename>
+				<surname>Byrnes</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Richard</forename>
+				<surname>Rohwer</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Aerospace Conference</title>
+		<imprint>
+			<date type="published" when="2005" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="5,336.24,82.30,221.88,7.25;5,336.24,92.38,221.98,7.25;5,336.24,102.22,221.59,7.25;5,336.24,112.30,221.60,7.25;5,336.24,122.38,18.30,7.25"  xml:id="b3">
+	<analytic>
+		<title level="a" type="main">HAIL: A Hardware-Accelerated Algorithm for Language Identification</title>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Adam</forename>
+				<surname>Covington</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Charles</forename>
+				<forename type="middle">M</forename>
+				<surname>Kastner</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Andrew</forename>
+				<forename type="middle">A</forename>
+				<surname>Levine</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">John</forename>
+				<forename type="middle">W</forename>
+				<surname>Lockwood</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">15th Annual Conference on Field Programmable Logic and Applications (FPL)</title>
+		<meeting><address><addrLine>Tampere, Finland</addrLine></address></meeting>
+		<imprint>
+			<date type="published" when="2005" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="5,336.24,132.22,221.64,7.25;5,336.24,142.30,222.05,7.25;5,336.24,152.38,199.51,7.25"  xml:id="b4">
+	<analytic>
+		<title level="a" type="main">Relevance Feedback in Information Retrieval</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Rocchio</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">The SMART Retrieval System: Experiments in Automatic Document Processing</title>
+		<imprint>
+			<publisher>Prentice-Hall Inc</publisher>
+			<date type="published" when="1971" />
+			<biblScope unit="page" from="313" to="323" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="5,336.24,162.22,221.73,7.25;5,336.24,172.30,153.88,7.25;5,54.00,194.82,30.99,6.29;5,228.72,481.31,154.44,8.24"  xml:id="b5">
+	<analytic>
+		<title level="a" type="main">Dynamic Information and Library Processing</title>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Salton</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">FIGURES Figure 1. Interactive Confusion Matrix</title>
+		<meeting><address><addrLine>Englewood Cliffs, New Jersey</addrLine></address></meeting>
+		<imprint>
+			<publisher>Prentice- Hall, Inc</publisher>
+			<date type="published" when="1975" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+				</listBibl>
+			</div>
+		</back>
+	</text>
+</TEI>

@@ -1,0 +1,1497 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.tei-c.org/ns/1.0 /home/pisenberg/grobid/grobid-home/schemas/xsd/Grobid.xsd"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+	<teiHeader xml:lang="en">
+		<encodingDesc>
+			<appInfo>
+				<application version="0.4.1" ident="GROBID" when="2016-09-09T13:50+0000">
+					<ref target="https://github.com/kermitt2/grobid">GROBID - A machine learning software for extracting information from scholarly documents</ref>
+				</application>
+			</appInfo>
+		</encodingDesc>
+		<fileDesc>
+			<titleStmt>
+				<title level="a" type="main">Visualizing Mobility of Public Transportation System</title>
+			</titleStmt>
+			<publicationStmt>
+				<publisher/>
+				<availability status="unknown"><licence/></availability>
+			</publicationStmt>
+			<sourceDesc>
+				<biblStruct>
+					<analytic>
+						<author>
+							<persName>
+								<forename type="first">Wei</forename>
+								<surname>Zeng</surname>
+								<roleName>Student Member, Ieee</roleName>
+							</persName>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Chi-Wing</forename>
+								<surname>Fu</surname>
+								<roleName>Member, Ieee</roleName>
+							</persName>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Stefan</forename>
+								<forename type="middle">M ¨ Uller</forename>
+								<surname>Arisona</surname>
+							</persName>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Alexander</forename>
+								<surname>Erath</surname>
+							</persName>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Huamin</forename>
+								<surname>Qu</surname>
+								<roleName>Member, Ieee</roleName>
+							</persName>
+						</author>
+						<title level="a" type="main">Visualizing Mobility of Public Transportation System</title>
+					</analytic>
+					<monogr>
+						<imprint>
+							<date/>
+						</imprint>
+					</monogr>
+					<idno type="DOI">10.1109/TVCG.2014.2346893</idno>
+					<note>1833</note>
+				</biblStruct>
+			</sourceDesc>
+		</fileDesc>
+		<profileDesc>
+			<textClass>
+				<keywords>
+					<term>Index Terms—Mobility</term>
+					<term>public transportation</term>
+					<term>visual analytics</term>
+				</keywords>
+			</textClass>
+			<abstract>
+				<p>Fig. 1. Left: the isotime flow map view overviews time-efficient routes from a source location in a parallel isotime fashion. Right: the OD-pair journey view enables us to explore temporal variations of mobility-related factors for specific time-efficient routes. Abstract— Public transportation systems (PTSs) play an important role in modern cities, providing shared/massive transportation services that are essential for the general public. However, due to their increasing complexity, designing effective methods to visualize and explore PTS is highly challenging. Most existing techniques employ network visualization methods and focus on showing the network topology across stops while ignoring various mobility-related factors such as riding time, transfer time, waiting time, and round-the-clock patterns. This work aims to visualize and explore passenger mobility in a PTS with a family of analytical tasks based on inputs from transportation researchers. After exploring different design alternatives, we come up with an integrated solution with three visualization modules: isochrone map view for geographical information, isotime flow map view for effective temporal information comparison and manipulation, and OD-pair journey view for detailed visual analysis of mobility factors along routes between specific origin-destination pairs. The isotime flow map linearizes a flow map into a parallel isoline representation, maximizing the visualization of mobility information along the horizontal time axis while presenting clear and smooth pathways from origin to destinations. Moreover, we devise several interactive visual query methods for users to easily explore the dynamics of PTS mobility over space and time. Lastly, we also construct a PTS mobility model from millions of real passenger trajectories, and evaluate our visualization techniques with assorted case studies with the transportation researchers.</p>
+			</abstract>
+		</profileDesc>
+	</teiHeader>
+	<text xml:lang="en">
+		<body>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1">INTRODUCTION</head><p>Public transportation system (PTS) is an important infrastructure in most modern cities. From the perspective of city management and urban planning, PTS is more than a service provider. It has several significant impacts to a city: economically, since PTS could reduce the overall transport cost of the city <ref type="bibr" coords="1,164.19,506.67,14.19,10.80" target="#b19">[20,</ref><ref type="bibr" coords="1,180.92,506.67,10.83,10.80" target="#b10"> 11]</ref>; socially, since PTS ensures all members of the city are able to travel <ref type="bibr" coords="1,200.03,516.63,13.94,10.80" target="#b33">[35]</ref>; and environmentally, since PTS generally saves more energy than private transport <ref type="bibr" coords="1,267.16,526.59,9.52,10.80" target="#b8">[9]</ref>. From the perspective of passengers, public transportation systems provide not only shared passenger transport services available to everyone in the general public, but also rapid transit services via trains and subways, thus capable of moving large volume of people efficiently across a city. This is particularly important for big cities in Asia, where private cars and taxis are not the major modes of port, and most people rely on PTS to travel. Hence, studying the efficiency of a PTS is highly beneficial to both individuals as well as to the entire city as a whole. Thanks to recent availability of various forms of public transportation data, including the passenger journey data collected via RFID cards, transit schedule data, and transportation network data, we now can study and explore the efficiency of a PTS by modeling and integrating these real-world data rather than relying on simulations. By then, we can further design and develop visual analytics methods to explore these data and serve the transportation researchers and urban planners. In particular, this work focuses on exploring and visualizing passenger mobility in a PTS, e.g., how fast passengers can travel by PTS, which is a highly crucial factor that impacts the overall PTS efficiency. However, developing visual analytics methods to meet this goal is a highly challenging task due to the following issues: @BULLET First, public transportation systems are increasingly complex to meet the population growth, e.g., metropolises like London and New York have 270 underground stations and 460 subway stations , respectively, offering more than a billion passenger trips per year. If we also consider buses and other transport modes, the PTS network would be overly complex for exploration and analysis . This motivates us to study PTS mobility models <ref type="bibr" coords="1,530.10,681.47,14.19,10.80" target="#b27">[29,</ref><ref type="bibr" coords="1,547.25,681.47,11.95,10.80" target="#b18"> 19] </ref>from the transportation research community to analyze routes started from a common origin in a complex network. @BULLET Second, existing works in visualizing public transportation networks mostly employ network visualization methods and focus on presenting the network topology across stops. They ignore various mobility-related factors, e.g., riding time, transfer time, waiting time, etc., that affect the PTS efficiency. Hence, novel methods have to be developed to meet the needs of exploring and analyzing these factors. @BULLET Lastly, the mobility-related factors to be explored are not static. They vary dynamically with both time and space, and could also exhibit round-the-clock patterns. Hence, spatio-temporal visualization strategies have to be considered to maximize the visual analytics capability of a method. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>@BULLET Wei Zeng and Chi-Wing Fu are with Nanyang Technological University</head><p> To address the above issues, we present in this work a visual analytics framework to visualize and explore mobility-related factors in a public transportation system with three visualization modules: @BULLET isochrone map view, which presents geographical regions accessible from a given starting location within certain duration; @BULLET isotime flow map view, a novel strategy that linearizes a flow map in a parallel isotime fashion, enabling visualization and exploration of various mobility-related factors; and @BULLET OD-pair journey view, which enables interactive exploration of various mobility-related factors, and their temporal variations, along the origin-destination journeys. To develop the above visualization modules, we first analyzed the problem with the help of two transportation researchers, and identified the related analytical tasks (Section 3). Then, we constructed a PTS mobility model from different pieces of real data including transport network data and passenger RFID card data with several million trips (Section 4). After that, we developed the three visualization modules mentioned above, and refined their visual designs with the transportation researchers (Sections 5.1 to 5.3). During the design phase, we also implemented and explored different design alternatives for presenting mobility-related factors (Section 5.4). Lastly, to evaluate our visual analytics framework, we explored two case studies with transportation researchers who are currently working on public transportation planning and management, and also presented expert reviews received from two transportation researchers (Section 6). </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2">RELATED WORK</head><p>This section discusses related works in the following five categories: </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.1">Isochrone Maps</head><p>Isochrone maps <ref type="bibr" coords="2,111.01,471.63,13.74,10.80" target="#b37">[39]</ref> , or isochrone diagrams, are traditional visual representations used in transportation and urban planning for showing areas of equal travel time from a given starting location. Isochrone maps usually employ contour lines/colors in its representation, and can be easily overlaid on geographical maps for depicting information such as accessibility <ref type="bibr" coords="2,110.06,521.44,14.19,10.80">[26,</ref><ref type="bibr" coords="2,126.97,521.44,10.65,10.80" target="#b11"> 12]</ref> . However, isochrone maps alone are insufficient for revealing the exact travel time and routes from the starting location, as well as other mobility-related factors. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.2">Schematic Maps</head><p>Public transportation networks are increasingly complex in cities. They can comprise hundreds of subway stations and thousands of bus stops. Exploring such a complex structure is a challenging task. Hence, schematic maps <ref type="bibr" coords="2,139.12,604.31,14.94,10.80" target="#b22">[23] </ref>were proposed to overview the network's essential topological relations across stops, aiming to help users navigate the network and identify paths to bring them from their origins to destinations. One early work is the London underground map designed by Harry Beck in 1933 <ref type="bibr" coords="2,165.55,644.16,13.74,10.80" target="#b13">[14]</ref>. This pioneering idea has further inspired the design of many metro maps around the world <ref type="bibr" coords="2,259.17,654.12,13.74,10.80" target="#b25">[27]</ref>, as well as many automated methods <ref type="bibr" coords="2,156.76,664.08,14.19,10.80" target="#b23">[24,</ref><ref type="bibr" coords="2,173.20,664.08,11.21,10.80" target="#b34"> 36,</ref><ref type="bibr" coords="2,186.65,664.08,10.65,10.80" target="#b38"> 40]</ref>. Through a user study, Bartram <ref type="bibr" coords="2,176.22,674.43,14.94,10.80" target="#b9">[10] </ref> confirmed that users can navigate the transport network efficiently and accurately with the help of schematic maps. Meilinger et al. <ref type="bibr" coords="2,173.53,694.36,14.94,10.80" target="#b21">[22] </ref>further explored and confirmed the value of schematic maps for better wayfinding and self localization . In addition, these studies also show that users can still acquire valuable information about the PTS even though exact geographical information is not available in the visual presentation. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.3">Visual Analytics of Movement</head><p>Andrienko et al. <ref type="bibr" coords="2,379.96,65.82,10.45,10.80" target="#b3">[4] </ref>discussed various characteristics of movement data, and summarized three visualization categories: direction depiction , summarisation and pattern extraction, see <ref type="bibr" coords="2,491.25,85.74,10.45,10.80" target="#b5">[6] </ref>for more details. Later, Zhong et al. <ref type="bibr" coords="2,382.16,95.70,14.94,10.80" target="#b40">[42] </ref>and Goncalves et al. <ref type="bibr" coords="2,472.02,95.70,14.94,10.80" target="#b14">[15] </ref>summarized common techniques in visualizing movement data, e.g., static maps, space-time cube, animated maps, and small-multiples. Recently, some works focused on visual analytics of movement data related to urban traffic. Archambault et al. <ref type="bibr" coords="2,497.01,136.36,10.45,10.80" target="#b6">[7] </ref> explored localconnection patterns between airports in a worldwide flight dataset by browsing the proximity and paths around particular airports. Wang et al. <ref type="bibr" coords="2,326.50,166.24,14.94,10.80" target="#b35">[37] </ref> designed a multiple-view visual analysis system to study traffic congestion in taxi data. Ferreira et al. <ref type="bibr" coords="2,463.65,176.20,14.94,10.80" target="#b12">[13] </ref>proposed a novel visual query model, allowing users to interactively explore and compare results obtained from millions of taxi trips. Zeng et al. <ref type="bibr" coords="2,508.91,196.13,14.94,10.80" target="#b39">[41] </ref>proposed a novel visualization technique called the interchange circos diagram to reveal interchange patterns in massive public transport trips. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.4">Time-Oriented Data Visualization</head><p>Time-oriented data, or data with a temporal dimension, is ubiquitous in many fields. Extensive amount of effort has been devoted to develop visualization methods to meet the needs of analyzing and understanding such kind of data, see <ref type="bibr" coords="2,413.34,281.90,9.71,10.80" target="#b1">[2,</ref><ref type="bibr" coords="2,426.02,281.90,7.47,10.80" target="#b2"> 3] </ref> for comprehensive surveys. In particular , Aigner et al. <ref type="bibr" coords="2,390.56,291.86,10.45,10.80" target="#b1">[2] </ref>highlighted that the time dimension could be linear or cyclical, so different visualization strategies could be adopted for different situations accordingly. For example, to show sunshine intensity variation over days, which is a kind of cyclical time data, we can employ spiral graphs <ref type="bibr" coords="2,407.46,331.71,14.94,10.80" target="#b36">[38] </ref>to reveal the cyclical patterns. The data set we used contains both linear and cyclical temporal patterns , e.g., travel time from a point to all locations on a map is linear, whereas travel time variation between an origin-destination pair over a day is cyclical. To account for different types of time attributes, this work adopts both linear line and circular graph visualization strategies. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.5">Flow Map Visualization</head><p>Flow map <ref type="bibr" coords="2,353.80,418.29,14.94,10.80" target="#b16">[17] </ref> is an effective visualization technique, commonly employed to show the movement of objects from one origin location to many destinations, e.g., people migration across a country <ref type="bibr" coords="2,534.19,438.21,14.19,10.80" target="#b26">[28,</ref><ref type="bibr" coords="2,551.60,438.21,10.65,10.80" target="#b15"> 16]</ref>. A pioneering work was done by Tobler <ref type="bibr" coords="2,461.58,448.17,13.74,10.80" target="#b30">[32]</ref>, who joined origins and destinations with lines and arrows, and revealed flow volumes with line width or color. However, it has certain issues: first, visual clutter would easily occur when applied to large data sets; second, longer flow lines can easily overlap and occlude shorter flow lines. To address these issues, spatial generalization and aggregation methods <ref type="bibr" coords="2,349.19,508.75,14.19,10.80" target="#b15">[16,</ref><ref type="bibr" coords="2,366.77,508.75,7.47,10.80" target="#b4"> 5] </ref> have been proposed to reduce the number of locations pairs before presenting the flow map. Another effective method to resolve these issues is edge bundling. Phan et al. <ref type="bibr" coords="2,514.60,528.67,14.94,10.80" target="#b26">[28] </ref>proposed the flow map layout method to automatically cluster nodes into a treelike hierarchical structure, and then bundle neighboring flow lines to present the general flow trend, while Verbeek et al. <ref type="bibr" coords="2,497.96,558.56,14.94,10.80" target="#b32">[34] </ref>later proposed a spiral-tree-based method to compute crossing-free flows. In this work, our goal is to develop a visual analytics interface to present and explore passenger mobility in a public transportation system . In particular, we design the isotime flow map that linearizes a flow map into a parallel isoline representation, maximizing the visualization of mobility information while presenting clear and smooth pathways from origin to destinations. We further develop the OD trip journey view overlaid on this parallel isoline representation, enabling users to visualize and analyze mobility information, as well as their temporal variation, along specific routes in the flow map. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3">OVERVIEW</head><p> In this section, we first introduce relevant terminologies from the transportation research, and present the problem definition. After that, we describe the related analytical tasks, the mobility-related factors, and the input data set, and then give an overview of the system workflow. <ref type="figure" coords="3,46.20,152.24,19.00,9.87">Fig. 2</ref>. Overview of our system workflow. In the data preprocessing stage, we integrate the input data to estimate various mobility-related factors. These information are then presented in the visual exploration and analysis stage, which comprises three visualization modules: (i) isochrone map view, (ii) isotime flow map view, and (iii) OD-pair journey view, which complement one another and work together to support various analytical tasks. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>VISUAL </head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.1">Terminologies and Problem Definition</head><p>In the following, we list down common terminologies about public transportation system (PTS) <ref type="bibr" coords="3,149.07,216.78,14.94,10.80" target="#b24">[25] </ref>to facilitate the discussion: @BULLET A transportation network consists of roads and subways, and is usually modeled as a directed graph data structure, where nodes are stops (metro station platforms and bus stops) with geographical locations, and directed edges connect neighboring nodes; @BULLET A transit route is a sequence of nodes and edges, starting and ending at bus/subway terminals; @BULLET A transit line is a public transportation service offered by a certain transport mode, e.g., a bus line and a subway line. There are two kinds of transit lines: bidirectional with two transit routes between two distinct terminals, and cyclical with one single transit route starting and ending at the same terminal; @BULLET A trip refers to an individual transit route service taken between two stops/terminals; @BULLET A transfer refers to a change of transit route services; it could happen at the same location (e.g., a bus stop), or between two different but neighboring locations (e.g., between different subway platforms or from subway to bus); and @BULLET A journey is a passenger travel from an origin to a destination in the PTS; it could comprise multiple trips and transfers. </p><p> In land-use and public transport planning, transportation researchers would like to explore the level of connections, or the travel efficiency, from a particular location to other parts of the city, given the existing land use and transport network. By this, they can quickly identify which part(s) of the city is/are less developed, find out what facilities are lacking, and explore inefficient usage of public transportation resources. This problem is also related to optimal routes algorithms <ref type="bibr" coords="3,88.11,512.17,14.19,10.80" target="#b27">[29,</ref><ref type="bibr" coords="3,105.88,512.17,11.95,10.80" target="#b18"> 19] </ref>in transportation research, where transportation researchers study routes starting from a common origin to different points of interests in the city. This is a collaborative work with two transportation researchers specialized in public transport systems. Based on their inputs, the following visualization problem is defined: </p><p>@BULLET Input: an origin A in a given public transportation network, time t 0 , and a certain duration T ; @BULLET Output: a set of destinations B (and related routes) that are reachable from A at t 0 within T ; and @BULLET Goal: we aim to present and explore mobility-related factors (see Section 3.2) associated with the routes from A to B. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.2">Analytical Tasks and Mobility-Related Factors</head><p>To address the problem, here are the basic analytical tasks that our visual analytics interface should support: The above basic tasks focus on presenting and exploring routes starting from A at a given time t 0 . Additionally, we would need to allow the users to select specific destination nodes, say B i ∈ B, and then: @BULLET T4: Present detailed path information from A to B i , i.e., various mobility-related factors, see below for details; and @BULLET T5: Examine the mobility-related factors and their round-theclock pattern, i.e., their temporal variations over a day. In this work, the following mobility-related factors are considered: @BULLET Waiting time at a bus stop or subway platform for a route service; @BULLET Riding time on a vehicle for traveling between two stops; @BULLET Transfer time for walking between neighboring stops; and @BULLET Travel efficiency measures the efficiency of traveling between a specific pair of origin and destination relative to the average efficiency (speed) of travel in the PTS. </p><p>The above analytical tasks and mobility-related factors are the baseline requirements for our visual design to be presented in Section 5. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.3">Input Data Sets</head><p> Passenger RFID card data records passenger journeys in the Singapore public transportation system over a typical working day. This includes the metro system called the mass rapid transit (MRT) and the public bus network, where passengers use their personalized RFID cards to tap on card readers on buses and MRT station entries to go in/out of the PTS. The card reader system records every tap in/out action , and also considers transfers between bus and MRT service: if the transfer time is ≤30 minutes, the two trips will be sequenced together. Each trip record includes an anonymous card ID, tap-in/out stops, tap-in time, riding time, transportation type (bus or MRT), and transfer number. The tap-in time works slightly different for buses and MRT: for buses, passengers tap-in when they hop on buses, while for MRT, they tap-in when entering the station gates; after that, they still need to proceed to the platform and wait on the platform before getting into a train. We account for this difference and devise different strategies in estimating mobility-related factors for bus and MRT, see Section 4. The whole data set has 5.31M trip records in total. </p><p>Transportation network data includes the Singapore public road and the MRT network, which are modeled as a directed graph. </p><p>Transit line schedule data includes transit routes, stop facilities, and schedule information. For stop facilities, there are 4.8k bus and MRT stops, each with geographical position, name, reference ID, and related edge connection in the PTS network. For schedule information, it is a timetable showing when each bus/train leaves its starting terminal, and reaches each stop along its transit route. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.4">System Workflow</head><p>The workflow of our visual analytics framework is illustrated in <ref type="figure" coords="3,536.36,684.36,19.47,10.80">Fig. 2</ref>. It has two major phases: The data preprocessing phase loads and integrates various input data, estimates mobility-related factors over space and time, and constructs the PTS mobility model, see Section 4. To support near real-time determination of routes from a given origin A to destinations B, we index the mobility-related factors on stops and transit routes. Note that this preprocessing phase is a one-time offline process, after which we store the precomputed information on hard disk, and load them in the next phase. The visual exploration and analysis phase starts with our main interface with three modules: isochrone map view (Section 5.1), isotime flow map view (Section 5.2), and OD-pair journey view (Section 5.3), which complement one another and work together to present the mobility-related factors and support the various analytical tasks. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4">MODELING PTS MOBILITY</head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.1">PTS Mobility Model</head><p> In reality, public transport stops are usually not the origin or destination of a passenger journey; one often needs an initial walk, say from home/office/shop to a public transport stop, before the PTS trips and transfers, as well as a final walk to reach the destination. Since we have no data about the initial and final walks, we consider passenger journeys to start and end at stops in the public transport network. One key factor that affects how passengers plan their journeys is travel time, which is also a crucial factor that affects the overall efficiency of a public transportation system. Hence, we choose to construct a PTS model <ref type="bibr" coords="4,123.31,258.26,14.19,10.80" target="#b27">[29,</ref><ref type="bibr" coords="4,139.69,258.26,11.95,10.80" target="#b18"> 19] </ref>that focuses on time-efficient journeys. In detail, we model a passenger journey with n trips and n-1 transfers, so the overall travel time of the journey is modeled as </p><formula>T journey = n ∑ i=1 T i trip + n−1 ∑ i=1 T i trans , n ≥ 1 , </formula><p>where T i trip is the travel time for the ith trip, and T i trans is the transfer time between the ith and (i+1)th trips. Since waiting time is often needed before boarding a vehicle, e.g., train and bus, we further divide T i trip into waiting time T i wait and riding time T i ride : </p><formula>T journey = n ∑ i=1 T i wait + T i ride + n−1 ∑ i=1 T i trans , n ≥ 1 . </formula></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.2">Estimating Mobility-Related Factors</head><p>In the data preprocessing stage, we first clean the raw passenger trip data by removing incomplete and erroneous data records, e.g., some passengers went out of buses without tap-out, some passengers stayed exceptional long inside the metro system compared to normal travel time needed to go between their tap-in and tap-out stations, etc. Since mobility-related factors are time-varying, it is not feasible to estimate their continuous changes over time even with millions of passenger trip records. Hence, we divide the temporal dimension into seventy-two 15-minute time bins from 6am to midnight, which is the normal PTS operating period of a day. Then, we integrate various input data, and estimate the average value of each mobility-related factor (per stop or stop connection) per time bin. Note also that since passenger tap-in and tap-out mechanisms are slightly different for buses and metro services, we may need to consider bus and metro independently when estimating the mobility-related factors. Moreover, we assume that metro services always follow the transit line schedule while bus services may not (due to road sharing and local traffic). Waiting Time is a per transit route, per stop and per time bin quantity. To estimate it for bus services, we extract all bus trips from the RFID card data. For each stop of each bus transit route, we first compute the average time over all tap-in tap-out times at the same stop of the same bus to estimate when the bus stays at each stop, say t i bus . Hence, we can obtain all t i bus for all bus services (same transit route) at a given stop over the day, and then compute the time interval between successive t i bus to estimate the bus frequency (interval) at each stop per bus line per time bin; half of such a value is the expected waiting time. For MRT services, though transit line schedule data is accurate, actual waiting time may sometimes be longer than the time interval between successive trains since during the peak hours, passengers may not be able to board a train immediately after reaching the MRT platform . Hence, we estimate MRT waiting time as follows. First, we extract all MRT trips without MRT-to-MRT transfer since having a  trip, we extract the tap-in time, and search for the next train that the passenger should have boarded at the tap-in station. By this, we can look up the transit line schedule to obtain the riding time required for him/her to reach the destination station, and estimate the related waiting time as: ( tap-out time -tap-in time ) -scheduled riding time. Since we can obtain multiple waiting time from different passenger records, we further compute their average as the expected waiting time. Riding Time is a per successive stops (along the service route) and per time bin quantity. For bus services, after we estimate t i bus at the stops of each bus line (see above), we can estimate the riding time of each bus between successive stops of the same bus. Again, we average multiple instances of such a value to obtain the expected riding time per successive stops and per time bin. For MRT services, we obtain riding time simply by looking up the transit line schedule data. Transfer Time. There are three cases of transfer: First, it is from MRT to MRT. If the transfer happens between nearby platforms, we assume zero transfer time. However, in some cases, one may have to walk a fairly long distance from one platform to another. Since there are no card tapping activities during the transfer, we estimate transfer time by taking advantage of the data massive-ness: 1) extract all MRT journeys with only one transfer; 2) estimate the transfer time of the journey as: ( tap-out time -tap-in time ) -( </p><formula>T 1 wait + T 1 ride + T 2 ride ); </formula><p>and 3) again, average the results from different journeys per time bin. The second case is from bus/MRT to bus. If the two bus stops are the same (same reference ID), we assume zero transfer time. Otherwise , we need a walk to the next bus stop, so we estimate the transfer time as tap-in time (next bus) -tap-out time (prev. bus) -wait time (next bus). Note that MRT to bus is slightly different from bus to bus since it requires a walk from MRT platform to the tap-out gate. However , since we have no information about such a walk, we ignore it and estimate transfer time in the same manner as bus to bus. The last case is from bus to MRT, where we estimate the transfer time as tap-in time (MRT ) -tap-out time (bus). Travel Efficiency differs from the general concept of speed since it considers also waiting and transfer time in addition to riding time. Moreover, it describes the relative efficiency of travel along a specific route as compared to the mean mobility of the entire PTS network. Before computing the travel efficiency of a specific route, we first determine the mean mobility of the entire PTS by: 1) compute the mobility of each passenger journey in the RFID data as: total journey distance divided by T journey ; and 2) compute the mean mobility µ and also its standard deviation σ over all the journeys. By this, the travel efficiency of a given route (started at a given time) is obtained by normalizing its mobility value against µ and σ . <ref type="figure" coords="4,485.88,724.25,21.87,10.80" target="#fig_0">Fig. 3</ref>plots the travel efficiency of all bus services in the 8:00-8:15 time bin. Here we </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5">VISUALIZATION DESIGN</head><p>In this section, we describe how we support the analytical tasks defined in Section 3.2 through the following three visualization modules: </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.1">Isochrone Map View</head><p>For Task 1, our goal is to extract and present all reachable locations B given A, t 0 , and T . To handle it, we first compute time-efficient journeys from A to every single stop in the PTS using the estimated mobility-related factors. This is done by a real-time breadth-firstlike mechanism (single-source shortest time-efficient paths) that iteratively identifies and expands time-reachable stops (nodes in the network graph) over the geographical map before T is reached. In addition, at every reachable stop (including A), we consider " passenger walk " from the stop by using the remaining journey time at the stop within T , and assume a constant walking speed of 5km/h without encountering obstacles like buildings and roads. Hence, every stop will be surrounded by a circular region; we further union all these regions to determine time-reachable regions on the map (note: such union is done by rendering without tedious geometric computation). After that, we can plot the related contour lines and areas, see <ref type="figure" coords="5,275.19,603.23,21.39,10.80">Fig. 5</ref>for an example with a city center location as A. Here we use a red icon on the map to show the location of A, and highlight the contour regions in blue: dark blue for <ref type="bibr" coords="5,153.96,634.68,9.45,8.97">[0,</ref><ref type="bibr" coords="5,164.41,633.12,11.45,10.80" target="#b28"> 30] </ref>min., light blue for (<ref type="bibr" coords="5,252.14,634.68,11.20,8.97" target="#b28">30,</ref><ref type="bibr" coords="5,264.34,633.12,11.45,10.80"> 60] </ref>min., and white for &gt;60 min. Moreover, we present in gray the set of all reachable edges, which is a subset of the entire PTS network, and adjust their line width to reveal the amount of time-efficient journeys that pass through each edge. By this, main branches can be emphasized. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.2">Isotime Flow Map View</head><p>To handle Tasks 2 &amp; 3, i.e., to present clear routes from A to B and to examine and compare their travel efficiencies, the isochrone map view alone is insufficient. If we apply colors to B in this view to show the travel efficiency, the colors we employed would easily mess up with <ref type="figure" coords="5,308.83,505.08,19.82,9.87">Fig. 5</ref>. The isochrone map view presents spatial-reachability regions from 8am at origin A (red icon), which is station WW16/YY3 in the city center, by contour lines and areas over the geographical map. Dark blue and light blue indicate <ref type="bibr" coords="5,387.98,535.10,8.40,7.97">[0,</ref><ref type="bibr" coords="5,397.26,533.71,10.18,9.60" target="#b28"> 30] </ref>and (<ref type="bibr" coords="5,428.48,535.10,9.95,7.97" target="#b28">30,</ref><ref type="bibr" coords="5,439.32,533.71,10.18,9.60"> 60] </ref>minutes, respectively. the isochrone colors. Moreover, it is hard to present clear pathways for examining and comparing time-efficient journeys in the isochrone map view, particularly with numerous pathways from A to B. Hence, handling Tasks 2 &amp; 3 is nontrivial, so we first explore different design alternatives in a pilot study, see Section 5.4 for detail. After comparing these alternatives, we propose the isotime flow map view, which is a novel visualization strategy, that presents a flow map visualization in a parallel isotime fashion, see <ref type="figure" coords="5,478.16,618.91,21.42,10.80" target="#fig_1">Fig. 4</ref>for an example. The followings detail its construction procedure: 1. Parallel isotime model. First, we arrange a horizontal timeline on the bottom of the view to show the journey time from t 0 and t 0 + T (left to right). In this view, A is the red dot on the left while all destinations and nodes to B (in fact, all visual elements) are tagged with time. Thus, we can quickly look at the horizontal coordinate of any visual element w.r.t. the time axis to find out the related journey time from A. To further facilitate such visual examination and comparison, we draw an array of vertical gray lines in the background of the view to show different amount of time intervals. 2. Tree structure. To present time-efficient journeys from A to B, rather than showing them one by one, we present them as a tree structure, which is a subgraph of the entire PTS rooted at A. Such tree is constructed it by examining the journeys and identifying branch nodes (transfer stops) and leaf nodes among the journeys. Here we also count the number of time-efficient journeys (as a weight factor) that go through each branch node. 3. Spatial layout. To present the time-efficiency journeys as a tree structure, we take the flow map visualization approach and layout the tree according to the parallel isotime model. Hence, the horizontal coordinates of all the nodes in the tree are fixed according to the related journey time from A, see <ref type="figure" coords="6,198.50,496.61,20.24,10.80" target="#fig_1">Fig. 4</ref>, and so, our main task in this step is to determine the vertical coordinates of all the nodes in the tree. As for this, we devise the following recursive method, which helps to avoid visual clutter and promote tree balancing: </p><p>@BULLET Given A, we first extract all child branch nodes of A. @BULLET To improve the tree balancing, we sort these branch nodes as follows: Given k nodes, we first find out the node with the highest weight factor and assign it as n 1 ; the node with the 2nd highest weight as n k ; the node with the 3rd highest weight as n 2 ; then as n k−1 , etc. Let w i be the corresponding weight of node n i . @BULLET Then, we divide the vertical range from A into sub-ranges according to w i . See <ref type="figure" coords="6,140.61,611.72,19.49,10.80" target="#fig_4">Fig. 7</ref>(right): node B 2 with the highest weight on the top, B 3 with the 2nd highest weight on the bottom, etc. @BULLET Lastly, we repeat the above procedure for each child branch nodes of A till reaching the leaf nodes. </p><p>Note also that to reduce up-and-down wobbling along consecutive branches, see <ref type="figure" coords="6,116.71,666.21,20.77,10.80" target="#fig_5">Fig. 8</ref>, we use simple node-based moving-window averaging to slightly shift the vertical position of the nodes. 4. Branch routing. After positioning all the nodes in the view, we next construct a Bézier curve to connect the nodes to form clear and smooth pathways. However, neighboring branches may overlap , see <ref type="figure" coords="6,94.04,718.01,19.97,10.80" target="#fig_6">Fig. 9</ref>(a). To resolve this issue, we examine Bézier curves among sibling branches; if an overlap occurs, we horizontally shift the related Bézier control points, see <ref type="figure" coords="6,197.71,737.94,19.88,10.80" target="#fig_6">Fig. 9</ref>(b). 5. Node color and label. Lastly, we color code each node according to its travel efficiency (see Section 4.2), and put text labels (name or stop reference ID) at nodes whose on-screen radius is larger than 5 pixels in a up-down-up-down-etc. along consecutive branches. <ref type="figure" coords="6,315.42,524.31,29.09,11.67" target="#tab_4">Tasks 4</ref>&amp; 5 focus on supporting visual analysis of mobility-related factors along specific routes from A. Clearly, if we color-code all flow lines in the isotime flow map view and present also their temporal variation, visual clutter would likely happen. Hence, we allow the users to click-and-select destination node(s) in the isotime flow map view, and then perform Tasks 4 &amp; 5 through the OD-pair journey view, which is an overlay on the isotime flow map view, see <ref type="figure" coords="6,510.86,584.41,19.93,10.80" target="#fig_3">Fig. 6</ref>: @BULLET To support Task 4, we need to present detailed mobility-related information in the parallel isotime flow map: 1) we widen to highlight the branches along the user-selected route(s); 2) we color-code different portions of the flow line(s) to show the related mobilityrelated conditions: light blue for waiting, gray for transfer, standard colors of Singapore MRT lines for MRT riding (e.g., green for WW line), and yellow for bus riding; and 3) we highlight the starting, transfer, and ending nodes in red, gray, and dark blue, respectively, and label them with corresponding reference IDs/names. <ref type="figure" coords="6,341.99,694.35,3.61,10.80" target="#fig_3">6</ref>(a) shows two user-selected routes: both routes have similar initial waiting time in WW16/YY3 station, but have different waiting times at their transfer nodes. For the journey to XX7 station on top, though it has no transfer time (nearby MRT platforms), it has much longer waiting time than the other route. @BULLET To support Task 5, we design a visual cue called the mobility wheel, which is inspired by <ref type="bibr" coords="7,135.55,235.09,14.19,10.80" target="#b20">[21,</ref><ref type="bibr" coords="7,153.25,235.09,10.65,10.80" target="#b31"> 33]</ref>, to show round-the-clock temporal variation of mobility-related factors, see <ref type="figure" coords="7,207.59,245.05,20.96,10.80" target="#fig_3">Fig. 6</ref>(b). Our key idea here is to stack the mobility-related factors as small vertical bars, and then pack them in a time bin by time bin fashion around the mobility wheel. By this, we can visualize round-the-clock variation of all contributing mobility-related factors altogether. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.3">OD-pair Journey View</head><p>In detail, we put a mobility wheel at each user-selected destination when the OD-pair journey view is brought up, see again <ref type="figure" coords="7,262.59,309.59,20.25,10.80" target="#fig_3">Fig. 6</ref>(b). In addition, we use the same color coding scheme for showing the mobility-related factors as in Task 4, and highlight the current time bin (according to the main visualization) in the wheel by a thin red rectangle. The radius of the mobility wheels remain 200×200 on screen, so the user can zoom in and separate out overlapping wheels if wheel overlap occurs; moreover, the user may also click on a wheel to bring it to the top layer. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.4">Design Alternatives</head><p>As discussed earlier in Section 5.2, when we design the isotime flow map view to handle Tasks 2 &amp; 3, we explore different design alternatives to present the flow map and time-efficiency journeys from A to B. This section presents how we devise and implement these alternative designs, and compare them with the parallel isotime layout we have chosen. Below are the two design alternatives we explored: 1. Time-scaled network distortion deforms the 2D map, so that distances between points on the deformed map relate to travel time <ref type="bibr" coords="7,283.90,495.95,9.52,10.80" target="#b0">[1]</ref>, see <ref type="figure" coords="7,71.36,505.91,23.25,10.80" target="#fig_9">Fig. 10</ref>(a). This method was popularly used in transportation to show travel time between locations, and some methods <ref type="bibr" coords="7,258.88,515.88,14.19,10.80" target="#b28">[30,</ref><ref type="bibr" coords="7,275.49,515.88,6.72,10.80" target="#b7"> 8,</ref><ref type="bibr" coords="7,284.65,515.88,11.95,10.80" target="#b29"> 31] </ref>have been proposed to perform the deformation. </p><p>In this work, we develop the time-scaled network distortion by a breadth-first visit from A: immediate child nodes of A are shifted to reflect their travel time from A, and we recursively repeat this for the branch nodes until the leaf nodes in the tree structure. </p><p>The first problem of this approach concerns with the complexity of the PTS network. When we consider many time-efficient journeys from A in the transport network, severe visual clutter would easily occur. Hence, this approach cannot present clear pathways from A to the reachable stops B (against Task 2). Second, it is difficult to accurately compare the travel efficiency of different routes in the visualization (against <ref type="figure" coords="7,137.47,644.62,24.54,11.67" target="#tab_3">Task 3</ref>) even though we know that the total length of the (zigzag) routes relate to travel efficiency, see again <ref type="figure" coords="7,57.91,664.87,23.26,10.80" target="#fig_9">Fig. 10</ref> (a). To the best of our knowledge, none of the existing timescaled method can handle these two issues. 2. Radial isotime layout. Besides the parallel isotime layout, we implemented and explored another layout alternative: a radial layout, see <ref type="figure" coords="7,71.48,714.25,23.53,10.80" target="#fig_9">Fig. 10</ref>(b). It can be constructed in a way similar to the parallel isotime layout, but it positions A at the center, and B on concentric circles with increasing travel time along radial direction from A. Comparing with the parallel isotime layout, radial layout can still present clear pathways from A to the reachable stops, but after we show this early design to the transportation researchers, several negative feedbacks were received from them: First, concerning Task 3, it is not intuitive for them to examine and compare the travel time as routes and mobility-related information are arranged in a radial fashion. According to Heer et al. <ref type="bibr" coords="7,487.03,284.86,13.74,10.80" target="#b17">[18]</ref>, encoding time progress from left to right along the horizontal axis can aid comparison of time-series events and their trends. Second, the radial layout cannot make full use of the screen space as the aspect ratio of common displays, e.g., 16:9. Lastly, in the parallel isotime layout , we can drag the horizontal time axis to left/right to intuitively modify the current time of the visualization, i.e., t 0 , but for radial isotime layout, such an operation is not intuitive. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6">CASE STUDIES</head><p>This section presents 1) two case studies on exploring PTS mobility with our interface and 2) feedback from transportation researchers. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6.1">Case Study 1: Spatial Variation of PTS Mobility</head><p> In land-use and transportation planning, researchers and urban planners are interested in exploring the travel efficiency from a selected location to other parts of the city, as in Tasks 1 &amp; 3. By the visual analysis, they can know what is lacking and also how to improve. In this case study, we demonstrate how our system facilitates the exploration of PTS mobility over different locations in a city. <ref type="figure" coords="7,533.55,475.05,25.65,10.80">Fig. 11</ref>presents the isochrone map views and isotime flow map views related to two different locations on the map: an MRT station (left) and a ruralarea bus stop (right). Though the starting time for both visualizations is 8am, the isochrone map views reveal very different sizes of reachable dominions from the two locations. In fact, the starting location for <ref type="figure" coords="7,308.83,534.82,24.68,10.80">Fig. 11</ref>(a) is an interchange MRT station, which is the (WW24/XX1) station in Singapore, with two MRT service lines and a bus terminal nearby. With rapid MRT services, passengers can reach very long distances from this location within a short period of time. In contrast, the starting location for <ref type="figure" coords="7,392.89,574.67,23.68,10.80">Fig. 11</ref>(b) is a rural-area bus stop with only two bus lines available. From the isochrone map view on the right, we can clearly see the reachable regions along the two major directions from the bus stop corresponding to the two available buses. Moreover, the bus service line towards the south-east direction relates to more timeefficient journeys since its line width is wider than the other direction from that bus stop. Besides, the node colors in the isotime flow map view also confirm that the local travel efficiency here is very low, as compared to that in <ref type="figure" coords="7,380.55,654.36,23.50,10.80">Fig. 11</ref>(a). </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6.2">Case Study 2: Analyzing Mobility-related Factors</head><p>Our interface can also allow users to analyze and compare various mobility-related factors that affect the PTS efficiency, as in Tasks 4 &amp; 5. <ref type="figure" coords="7,319.98,704.30,24.56,10.80">Fig. 12</ref> (a) presents two user-selected routes from the source location MRT station WW24/XX1 to destinations Bus stop 67852 and MRT station ZZ13/YY12: the red and blue icons on the isochrone map in <ref type="figure" coords="7,308.83,734.18,25.41,10.80">Fig. 11</ref>(a) show their geographical locations, respectively. <ref type="figure" coords="8,52.80,346.74,23.24,9.87">Fig. 11</ref>. Case Study #1: Exploring the spatial variation of PTS mobility from two different starting points at 8am in the morning. The two chosen locations are the MRT station " WW24/XX1 " (left) and a rural-area bus stop (right). From the isochrone views shown on the top, we can easily compare the reachable dominions from the two locations within durations of 30 minutes and 1 hour. From the isotime flow map views shown on the bottom, we can also easily see and compare the amount of time-efficient routes originated from the two chosen spots. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>a b </head><p>From the isochrone map view, we can see that the physical travel distance from WW24/XX1 to ZZ13/YY12 is much longer than WW24/XX1 to Bus stop 67852. However, <ref type="figure" coords="8,213.02,417.52,25.25,10.80">Fig. 12</ref>(a) clearly shows that their travel time are almost the same with a difference of just a few minutes. To understand how this happens, we can refer to the detailed mobility information shown along the two selected routes in <ref type="figure" coords="8,52.79,457.37,23.23,10.80">Fig. 12</ref>(a). Here we can find that the main overhead of traveling to Bus stop 67852 is the riding time spent in the bus trip (yellow segment in the figure) since the bus is relatively slow. We can further explore the temporal variation of the mobilityrelated factors using the mobility wheels shown in <ref type="figure" coords="8,235.21,498.04,23.49,10.80">Fig. 12</ref>(a), see also their zoomed views in <ref type="figure" coords="8,134.04,508.00,24.62,10.80">Fig. 12</ref>(b &amp; c). In <ref type="figure" coords="8,199.86,508.00,25.36,10.80">Fig. 12</ref>(b), we can find huge variations of travel time over a day, with three peaks that correspond to the morning peak hour, evening peak hour, and late night period. The interesting observation here is that riding time in late night period does not vary too much, similar to that of the non-peak hours, but the related waiting time suddenly increases. This finding is also confirmed by the local transportation agency since both bus and train service frequencies are halved after 22:30. On the other hand, the travel time from WW24/XX1 to ZZ13/YY12 </p><p>shows much less variations compared to the other route. <ref type="figure" coords="8,266.88,598.48,24.94,10.80">Fig. 12</ref>(c) also reveals that the MRT services (green and purple) are relatively more stable over time as compared to the bus services (yellow) shown in <ref type="figure" coords="8,62.10,628.37,23.75,10.80">Fig. 12</ref>(b). Concerning the peak hours in the morning and evening, the local transportation agency told us that the MRT service frequency is doubled during these periods, so waiting time could be reduced. However, the visualizations here show that the waiting time during these peak hours are actually longer than that of the normal periods because passengers may not be able to board a train immediately after reaching the platform during peak periods. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6.3">Experts Review</head><p> We interviewed two transportation researchers who specialized in public transportation systems, and obtained their feedbacks of our interface . One of them is from university E (Expert A), while another from a Singapore PTS agency (Expert B). In detail, we first explained to them our system workflow and visual encoding, and then demonstrated to them the two case studies we presented above. They both thought that our interface can be a useful tool for planners and operational managers. Their feedbacks are summarized as follows. Interactive Visual Design. Both of them were impressed by the visual design, especially the isotime flow map view. Expert B commented " It is an excellent idea to display the information of a public transport system in multiple presentation formats under an integrated and interactive manner. Differing the visualization based on the nature of the information item of major concern would greatly enhance the users' understanding. " Expert A added " the isotime flow map view makes it very easy to identify the time-shortest routes to all destinations that can be reached within a certain travel time threshold, and parallel isotime model makes it easy for him to compare the travel time and efficiency. " Both experts appreciated the idea of exploring the PTS mobility. Expert A specifically recognized that the choices to select destinations and visualize the detailed mobility-related factors are very useful. He is particularly interested in visualizing transfer information in our interface , as they are strongly negatively perceived travel elements. Expert B pointed out that the ability to switch between different views can greatly enhance users' understanding of the major information. </p><p> Improvements. Both reviewers gave several fruitful comments to improve our system, including providing more visual encoding options for users to select and adding more icons for users to recognize the nodes. Expert A suggested that it might make sense to indicate the level of passenger capacity or the actual passenger numbers along the pathways, instead of showing the number of time-efficient journeys currently in our isotime flow map view. He also recommended us to " show icons or pictograms indicating nearby landmark buildings next to the stops in the isotime flow map view to help user localize the various branches and identify which facilities can be reached. " Expert Estimated waiting, riding, and transfer time can be clearly presented along the pathways using the color coding scheme we described in Section 5.3; we can also see together the related MRT and bus trips, as well as the transfer points. (b &amp; c) show the zoomed views of the mobility wheels in (a) for presenting the round-the-clock mobility patterns. </p><formula>(a) (b) (c) </formula><p>B further pointed out that the multiple presentation formats could be explored to emphasize many transportation factors, like the boarding and alighting patterns at stops. Applicability. Expert A also commented: " the tool is highly suitable to support location choice decision processes such as the choice of residence or place for setting up a business. " As shown in Case Study 1, the system allows users to evaluate different location options by comparing the ease of traveling with public transport from one to many places. If land use data is also included, it could be extended to be a very powerful tool for site selection in real estate industry. An application example might be that the user would pre-select in what type of places of interest she/he is interested in and the tool would generate an overview of how easy it is to get to various location options. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="7">DISCUSSION</head><p>The case studies demonstrate the applicability of our interface in showing mobility-related factors in a PTS. Our current model extracts mobility-related information from massive amount of passenger RFID card data, enabling transportation researchers to analyze the efficiency of a PTS based on real data rather than simulations. However, PTS efficiency is affected by many dynamic factors that pose difficulties for transportation researchers to recognize and compare. Hence, our interactive method presents various mobility-related factors in an intuitive visualization, allowing researchers to evaluate and compare travel efficiency , as well as to analyze round-the-clock variations and patterns of these factors. Moreover, transportation experts can explore the relative travel efficiency of a PTS, and apply the results to land-use and transportation planning. Furthermore, such results can also help passengers to make better travel planning through the PTS. Future work. In our preprocessing stage, we estimate the mobilityrelated factors from the transportation data sets with certain assumptions . Our PTS model may fail to show MRT interruption events since we use the MRT transit line schedule in the estimation. Regarding this, we plan to derive improved methods by incorporating more real-world data into the estimation, e.g., platform to platform distances in MRT stations, gate to platform distances, residential and land use data, etc. Our current method presents only waiting time, riding time, transfer time, and travel efficiency along time-efficient journeys. In the future, we would like to explore other transportation attributes such as vehicle capacity and passenger composition (e.g., senior, student, and disabled). These are also important elements in a PTS. Moreover, we would also like to study the uncertainty of various factors by analyzing the massive RFID card data. Furthermore, we plan to extend our system for real-time analysis of PTS mobility, so that we may deliver adaptive journey planning for passengers. Lastly, we would also like to explore the various suggestions given in the expert feedback. Limitations. First, our current approach assumes no train interruption, so that we can use the MRT transit line schedule data to estimate the mobility factors. Second, we ignore the initial and final walks taken by the passengers to and from the PTS stops in estimating the mobility factors. Third, our method lacks global perspectives on the transportation data, e.g., congestion patterns that affect certain areas of the PTS at certain times, which is an interesting aggregation condition to be explored. Fourth, our current method focuses on one source to many destinations (one-to-many) rather than many sources to many destinations (many-to-many), which is in fact a very challenging problem. Thanks for the reviewer comment that suggests a global overview to browse through possible origins, we will explore and study about it. Lastly, currently we only consider how fast people move, and ignore other factors that affect people's choice, e.g., comfort-ness, cost, etc. </p></div><figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_0" coords="4,315.42,232.18,250.38,9.87;4,315.42,241.65,220.01,9.87;4,315.42,263.18,250.38,10.80;4,315.42,273.14,250.38,10.80;4,315.42,283.10,250.38,10.80;4,315.42,293.07,250.38,10.80;4,315.42,303.03,250.38,10.80;4,315.42,312.99,250.38,10.80;4,315.42,322.95,250.38,10.80;4,315.42,332.91,212.36,10.80"><head>Fig. 3. </head><figDesc>Fig. 3. Road network travel efficiency in 8:00-8:15. Green and red colors indicate high and low travel efficiency w.r.t. mean, respectively. transfer could bias the computation below. Then, for each trip, we extract the tap-in time, and search for the next train that the passenger should have boarded at the tap-in station. By this, we can look up the transit line schedule to obtain the riding time required for him/her to reach the destination station, and estimate the related waiting time as: ( tap-out time -tap-in time ) -scheduled riding time. Since we can obtain multiple waiting time from different passenger records, we further compute their average as the expected waiting time. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_1" coords="5,46.20,328.85,513.00,9.87;5,46.20,338.31,513.00,9.87;5,46.20,347.78,331.79,9.87;5,46.20,370.25,250.38,10.80;5,46.20,380.21,250.38,10.80;5,46.20,390.17,248.30,10.80"><head>Fig. 4. </head><figDesc>Fig. 4. The example isotime flow map view above shows time-efficient journeys started from the city center station WW16/YY3 at 8am within a duration T of one hour. These journeys are arranged in a parallel isotime fashion with corresponding travel time and travel efficiency revealed by the horizontal time axis and color code on nodes (see the color map on the right), respectively. tize and color-code the travel efficiency in five ranges: below -1.5σ , [-1.5σ ,-0.5σ ], [-0.5σ ,+0.5σ ], [+0.5σ ,+1.5σ ], and above +1.5σ . Note that we use a green-red color map, which is analogous to traffic light. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_3" coords="6,52.80,245.41,513.00,10.37;6,52.80,254.93,513.00,9.87;6,52.80,264.39,380.21,9.87"><head>Fig. 6. </head><figDesc>Fig. 6. The OD-pair journey view focuses on Tasks 4 &amp; 5, presenting detailed mobility-related information along routes from A to user-specified nodes (left), as well as their round-the-clock variations using our proposed visual representation: mobility wheel (right). Note also that we employ the standard colors of Singapore MRT lines to show the riding time on MRT, and encode bus lines by yellow. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_4" coords="6,52.80,349.96,250.38,9.87;6,52.80,359.43,250.38,9.87;6,52.80,368.89,160.53,9.87"><head>Fig. 7. </head><figDesc>Fig. 7. Left: A tree structure that includes all time-efficient journeys from starting node A. Right: the result of applying our spatial layout algorithm to arrange the nodes in the visualization view. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_5" coords="6,315.42,341.91,250.38,9.87;6,315.42,351.37,185.66,9.87;6,362.68,366.47,4.48,8.16"><head>Fig. 8. </head><figDesc>Fig. 8. Left: up-and-down wobbling. Right: we fix it by vertically shifting the nodes by node-based moving-window averaging. A </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_6" coords="6,315.42,428.89,250.38,9.87;6,315.42,438.20,148.83,10.02;6,460.70,438.36,68.98,9.87"><head>Fig. 9. </head><figDesc>Fig. 9. Branch routing. Left: branches overlap issue may occur. Right: we resolve it by horizontally shifting the B ´ ezier control points. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_7" coords="6,325.00,694.35,240.79,10.80;6,325.00,704.31,240.79,10.80;6,325.00,714.28,240.79,10.80;6,325.00,724.24,240.79,10.80;6,325.00,734.20,166.77,10.80"><head>Fig. </head><figDesc>Fig. 6(a) shows two user-selected routes: both routes have similar initial waiting time in WW16/YY3 station, but have different waiting times at their transfer nodes. For the journey to XX7 station on top, though it has no transfer time (nearby MRT platforms), it has much longer waiting time than the other route. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_9" coords="7,46.20,202.66,490.18,10.04"><head>Fig. 10. </head><figDesc>Fig. 10. Designs alternative that we have explored for handling Tasks 2 &amp; 3: (a) time-scaled network distortion and (b) radial isotime layout. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_10" coords="9,46.20,196.24,513.00,9.87;9,46.20,205.71,513.00,9.87;9,46.20,215.17,513.00,9.87;9,46.20,224.64,497.61,9.87"><head>Fig</head><figDesc>Fig. 12. Case Study #2: Analyzing detailed mobility-related factors along two different user-specified journeys starting from MRT station " WW24/XX1 " to destinations Bus stop 67852 and MRT station " ZZ13/YY12. " (a) Estimated waiting, riding, and transfer time can be clearly presented along the pathways using the color coding scheme we described in Section 5.3; we can also see together the related MRT and bus trips, as well as the transfer points. (b &amp; c) show the zoomed views of the mobility wheels in (a) for presenting the round-the-clock mobility patterns. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_2" validated="false" coords="3,50.87,50.54,479.90,94.64"><figDesc coords="3,354.88,50.54,78.38,8.13;3,77.16,50.54,60.13,8.13">EXPLORATION AND ANALYSIS DATA PREPROCESSING</figDesc><table coords="3,50.87,69.67,479.90,75.51">Passenger RFID 
+Card Data 
+Transportation 
+Network 
+Transit Line 
+Schedule 
+
+Transfer 
+Time 
+Riding 
+Time 
+Travel 
+Efficiency 
+
+Mobility-Related 
+Factors 
+
+Select Origin 
+and Time 
+
+PTS Mobility 
+Model 
+
+Time-Efficient 
+Journeys 
+
+Isochrone Map View 
+OD-pair Journey View 
+Isotime Flow Map View 
+
+Waiting 
+Time 
+
+</table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_3" validated="false" coords="3,56.54,687.79,240.05,57.77"><figDesc coords="3,56.54,689.11,4.60,15.56;3,66.12,687.79,230.46,11.83;3,66.13,697.43,90.15,11.67;3,56.55,712.32,4.60,15.56;3,66.13,710.68,185.23,11.67;3,56.55,725.58,4.60,15.56;3,66.13,724.26,230.45,10.80;3,66.13,733.90,92.89,11.67">@BULLET T1: Given the input information A, t 0 and T , extract and present reachable destinations B; @BULLET T2: Present clear pathways/routes from A to B; and @BULLET T3: Examine and compare the travel time and travel efficiency of the routes from A to B.</figDesc><table></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_4" validated="false" coords="9,46.20,196.24,513.00,19.34"><figDesc coords="9,56.17,196.24,503.04,9.87;9,46.20,205.71,296.75,9.87">. 12. Case Study #2: Analyzing detailed mobility-related factors along two different user-specified journeys starting from MRT station " WW24/XX1 " to destinations Bus stop 67852 and MRT station " ZZ13/YY12. " (a)</figDesc><table></table></figure>
+
+			<note place="foot" n="8"> CONCLUSION This paper presents a collaborative work with transportation researchers , aiming to help them visualize and explore passenger mobility in a public transportation system (PTS). In this work, after we define the problem and the analytical tasks, we then introduce and construct a PTS mobility model that characterizes the passenger mobility , and derive methods to estimate various mobility-related factors , including waiting time, riding time, transfer time, and travel efficiency , from the massive passenger RFID card data. Our visual analytic interface is an integrated solution with three visualization modules: isochrone map view, isotime flow map view, and OD-pair journey view, enabling us to efficiently perform the five analytical tasks concerning time-efficient journeys originated from a given starting location . Particularly, the isotime flow map view is a novel visualization strategy, which linearizes a flow map in a parallel isotime layout, thereby presenting clear and smooth pathways from the given origin to destinations as well as maximizing the visualization and comparison of various mobility-related factors along the routes. To come up with this design, we also explore and compare two other design alternatives. Moreover, we propose the visual strategy called the mobility wheel in the OD-pair journey view for examining round-the-clock temporal variation with all the contributing mobility information. In the end, we also explore two case studies with the transportation researchers, and present their expert feedbacks on the interface design.</note>
+		</body>
+		<back>
+
+			<div type="acknowledgement">
+			</div>
+
+			<div type="references">
+
+				<listBibl>
+
+<biblStruct coords="10,71.05,72.62,232.12,9.60;10,71.05,82.09,232.12,9.60;10,71.05,91.55,165.09,9.60"  xml:id="b0">
+	<analytic>
+		<title level="a" type="main">Time–space transformations of geographic space for exploring, analyzing and visualizing transportation systems</title>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Ahmed</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<forename type="middle">J</forename>
+				<surname>Miller</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Journal of Transport Geography</title>
+		<imprint>
+			<biblScope unit="volume">15</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="2" to="17" />
+			<date type="published" when="2007" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,71.05,101.02,232.12,9.60;10,71.05,110.48,232.12,9.60;10,71.05,119.95,166.37,9.60"  xml:id="b1">
+	<analytic>
+		<title level="a" type="main">Visual methods for analyzing time-oriented data</title>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Aigner</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Miksch</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Müller</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Schumann</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Tominski</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Visualization and Computer Graphics</title>
+		<imprint>
+			<biblScope unit="volume">14</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="47" to="60" />
+			<date type="published" when="2008" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,71.05,129.41,232.11,9.60;10,71.05,138.88,113.01,9.60"  xml:id="b2">
+	<monogr>
+		<title level="m" type="main">Visualization of time-oriented data</title>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Aigner</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Miksch</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Schumann</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Tominski</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2011" />
+			<publisher>Springer</publisher>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,71.05,148.34,232.12,9.60;10,71.05,157.80,232.12,9.60;10,71.05,167.27,232.11,9.60;10,71.05,176.73,81.69,9.60"  xml:id="b3">
+	<analytic>
+		<title level="a" type="main">Geovisualization of dynamics, movement and change: key issues and developing approaches in visualization research</title>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Andrienko</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Andrienko</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Dykes</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<forename type="middle">I</forename>
+				<surname>Fabrikant</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Wachowicz</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Information Visualization</title>
+		<imprint>
+			<biblScope unit="volume">7</biblScope>
+			<biblScope unit="issue">3</biblScope>
+			<biblScope unit="page" from="173" to="180" />
+			<date type="published" when="2008" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,71.05,186.20,232.12,9.60;10,71.05,195.66,232.12,9.60;10,71.05,205.13,136.69,9.60"  xml:id="b4">
+	<analytic>
+		<title level="a" type="main">Spatial generalization and aggregation of massive movement data</title>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Andrienko</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Andrienko</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Visualization and Computer Graphics</title>
+		<imprint>
+			<biblScope unit="volume">17</biblScope>
+			<biblScope unit="issue">2</biblScope>
+			<biblScope unit="page" from="205" to="219" />
+			<date type="published" when="2011" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,71.05,214.59,232.12,9.60;10,71.05,224.06,232.12,9.60;10,71.05,233.52,57.34,9.60"  xml:id="b5">
+	<analytic>
+		<title level="a" type="main">Visual analytics of movement: An overview of methods, tools and procedures</title>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Andrienko</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Andrienko</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Information Visualization</title>
+		<imprint>
+			<biblScope unit="volume">12</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="3" to="24" />
+			<date type="published" when="2013" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,71.05,242.99,232.12,9.60;10,71.05,252.45,232.12,9.60;10,71.05,261.92,153.72,9.60"  xml:id="b6">
+	<analytic>
+		<title level="a" type="main">TugGraph: Path-preserving hierarchies for browsing proximity and paths in graphs</title>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Archambault</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Munzner</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Auber</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">IEEE Pacific Visualization Symposium</title>
+		<imprint>
+			<date type="published" when="2009" />
+			<biblScope unit="page" from="113" to="120" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,71.05,271.38,232.11,9.60;10,71.04,280.85,232.12,9.60;10,71.04,290.31,99.16,9.60"  xml:id="b7">
+	<analytic>
+		<title level="a" type="main">Constructing time-scaled maps: Switzerland from</title>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<forename type="middle">W</forename>
+				<surname>Axhausen</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Dolci</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Fröhlich</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Scherer</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Carosio</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Transport Reviews</title>
+		<imprint>
+			<biblScope unit="volume">28</biblScope>
+			<biblScope unit="issue">3</biblScope>
+			<biblScope unit="page" from="391" to="413" />
+			<date type="published" when="1950" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,71.04,299.78,232.12,9.60;10,71.04,309.24,215.92,9.60"  xml:id="b8">
+	<analytic>
+		<title level="a" type="main">Energy savings in public transport</title>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Barrero</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Van Mierlo</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">X</forename>
+				<surname>Tackoen</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Vehicular Technology Magazine</title>
+		<imprint>
+			<biblScope unit="volume">3</biblScope>
+			<biblScope unit="issue">3</biblScope>
+			<biblScope unit="page" from="26" to="36" />
+			<date type="published" when="2008" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,71.04,318.70,232.12,9.60;10,71.04,328.17,232.12,9.60;10,71.04,337.63,144.80,9.60"  xml:id="b9">
+	<analytic>
+		<title level="a" type="main">Comprehending spatial information: The relative efficiency of different methods of presenting information about bus routes</title>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Bartram</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Journal of Applied Psychology</title>
+		<imprint>
+			<biblScope unit="volume">65</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="103" to="110" />
+			<date type="published" when="1980" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,71.04,347.09,232.13,9.60;10,71.05,356.56,232.12,9.60;10,71.05,366.02,119.68,9.60"  xml:id="b10">
+	<analytic>
+		<title level="a" type="main">Increased energy efficiency and the rebound effect: Effects on consumption and emissions</title>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Brännlund</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Ghalwash</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Nordström</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Energy economics</title>
+		<imprint>
+			<biblScope unit="volume">29</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="1" to="17" />
+			<date type="published" when="2007" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,71.05,375.49,232.12,9.60;10,71.05,384.95,232.12,9.60;10,71.05,394.42,232.12,9.52;10,71.05,403.88,132.61,9.60"  xml:id="b11">
+	<analytic>
+		<title level="a" type="main">Isochrones, traffic and DEMOgraphics</title>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Efentakis</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Grivas</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Lamprianidis</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Magenschab</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Pfoser</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 21st ACM SIGSPATIAL International Conference on Advances in Geographic Information Systems</title>
+		<meeting>the 21st ACM SIGSPATIAL International Conference on Advances in Geographic Information Systems</meeting>
+		<imprint>
+			<date type="published" when="2013" />
+			<biblScope unit="page" from="558" to="561" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,71.05,413.35,232.12,9.60;10,71.05,422.81,232.12,9.60;10,71.05,432.28,232.12,9.60;10,71.05,441.74,81.25,9.60"  xml:id="b12">
+	<analytic>
+		<title level="a" type="main">Visual exploration of big spatio-temporal urban data: A study of New York city taxi trips</title>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Ferreira</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Poco</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<forename type="middle">T</forename>
+				<surname>Vo</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Freire</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<forename type="middle">T</forename>
+				<surname>Silva</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Visualization and Computer Graphics</title>
+		<imprint>
+			<biblScope unit="volume">19</biblScope>
+			<biblScope unit="issue">12</biblScope>
+			<biblScope unit="page" from="2149" to="2158" />
+			<date type="published" when="2013" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,71.05,451.21,213.95,9.60"  xml:id="b13">
+	<analytic>
+		<title level="a" type="main">Mr Beck&apos;s underground map</title>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Garland</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Capital Transport</title>
+		<imprint>
+			<date type="published" when="1994" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,71.05,460.67,232.12,9.60;10,71.05,470.14,232.12,9.60;10,71.05,479.60,137.52,9.60"  xml:id="b14">
+	<analytic>
+		<title level="a" type="main">Visual analysis of mobility data</title>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Goncalves</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<forename type="middle">P</forename>
+				<surname>Afonso</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Martins</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">IEEE 14th International Conference on Mobile Data Management (MDM)</title>
+		<imprint>
+			<date type="published" when="2013" />
+			<biblScope unit="page" from="7" to="10" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,71.05,489.07,232.12,9.60;10,71.05,498.53,232.12,9.60;10,71.05,507.99,90.10,9.60"  xml:id="b15">
+	<analytic>
+		<title level="a" type="main">Flow mapping and multivariate visualization of large spatial interaction data</title>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Guo</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Visualization and Computer Graphics</title>
+		<imprint>
+			<biblScope unit="volume">15</biblScope>
+			<biblScope unit="issue">6</biblScope>
+			<biblScope unit="page" from="1041" to="1048" />
+			<date type="published" when="2009" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,71.05,517.46,232.11,9.60;10,71.04,526.92,118.54,9.60"  xml:id="b16">
+	<monogr>
+		<title level="m" type="main">Information graphics: A comprehensive illustrated reference</title>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<forename type="middle">L</forename>
+				<surname>Harris</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="1999" />
+			<publisher>Oxford University Press</publisher>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,71.04,536.38,232.12,9.60;10,71.04,545.85,232.12,9.60;10,71.04,555.31,232.12,9.60;10,71.04,564.78,144.56,9.60"  xml:id="b17">
+	<analytic>
+		<title level="a" type="main">Sizing the horizon: The effects of chart size and layering on the graphical perception of time series visualizations</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Heer</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Kong</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Agrawala</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the SIGCHI Conference on Human Factors in Computing Systems</title>
+		<meeting>the SIGCHI Conference on Human Factors in Computing Systems</meeting>
+		<imprint>
+			<date type="published" when="2009" />
+			<biblScope unit="page" from="1303" to="1312" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,71.04,574.24,232.12,9.60;10,71.04,583.71,232.12,9.60;10,71.04,593.17,127.23,9.60"  xml:id="b18">
+	<analytic>
+		<title level="a" type="main">Algorithm for finding optimal paths in a public transit network with real-time data</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Jariyasunant</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<surname>Mai</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Sengupta</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Transportation Research Record</title>
+		<imprint>
+			<biblScope unit="volume">2256</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="34" to="42" />
+			<date type="published" when="2011" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,71.04,602.64,232.12,9.60;10,71.03,612.10,38.74,9.60"  xml:id="b19">
+	<monogr>
+		<title level="m" type="main">Cost-benefit analysis</title>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Layard</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Glaister</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="1994" />
+			<publisher>Cambridge University Press</publisher>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,71.03,621.57,232.12,9.60;10,71.03,631.03,232.12,9.60;10,71.03,640.50,135.17,9.60"  xml:id="b20">
+	<analytic>
+		<title level="a" type="main">Visual analysis of route diversity</title>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Liu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Y</forename>
+				<surname>Gao</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<surname>Lu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Liu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Qu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<forename type="middle">M</forename>
+				<surname>Ni</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">IEEE Conference on Visual Analytics Science and Technology (VAST)</title>
+		<imprint>
+			<date type="published" when="2011" />
+			<biblScope unit="page" from="171" to="180" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,71.03,649.96,232.12,9.60;10,71.03,659.43,232.12,9.60;10,71.03,668.89,232.12,9.60;10,71.03,678.36,80.93,9.60"  xml:id="b21">
+	<analytic>
+		<title level="a" type="main">How much information do you need? Schematic maps in wayfinding and self localisation</title>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Meilinger</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Hölscher</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<forename type="middle">J</forename>
+				<surname>Büchner</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Brösamle</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Spatial Cognition V Reasoning</title>
+		<meeting><address><addrLine>Action, Interaction</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer</publisher>
+			<date type="published" when="2007" />
+			<biblScope unit="page" from="381" to="400" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,71.03,687.82,232.13,9.60;10,71.03,697.28,17.93,9.60"  xml:id="b22">
+	<monogr>
+		<title level="m" type="main">How to lie with maps</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Monmonier</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="1991" />
+			<publisher>The University of Chicago Press</publisher>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,71.03,706.75,232.12,9.60;10,71.03,716.21,232.12,9.60;10,71.03,725.67,165.04,9.60"  xml:id="b23">
+	<analytic>
+		<title level="a" type="main">Drawing and labeling high-quality metro maps by mixed-integer programming</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Nöllenburg</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Wolff</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Visualization and Computer Graphics</title>
+		<imprint>
+			<biblScope unit="volume">17</biblScope>
+			<biblScope unit="issue">5</biblScope>
+			<biblScope unit="page" from="626" to="641" />
+			<date type="published" when="2011" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,71.03,735.14,222.62,9.60;10,315.39,52.10,250.38,9.60;10,333.65,61.57,232.12,9.60;10,333.65,71.04,232.12,9.60;10,333.65,80.50,33.87,9.60"  xml:id="b24">
+	<analytic>
+		<title level="a" type="main">Modelling transport Using desktop GIS for the investigation of accessibility by public transport: an isochrone approach</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">D</forename>
+				<surname>Ortuzar</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<forename type="middle">G</forename>
+				<surname>Willumsen26</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">] D. O &apos;</forename>
+				<surname>Sullivan</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Morrison</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Shearer</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">International Journal of Geographical Information Science</title>
+		<imprint>
+			<publisher>Wiley</publisher>
+			<biblScope unit="volume">14</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="85" to="104" />
+			<date type="published" when="1994" />
+			<publisher>Wiley</publisher>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,333.65,89.97,205.55,9.60"  xml:id="b25">
+	<analytic>
+		<title level="a" type="main">Metro maps of the world</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Ovenden</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Capital Transport</title>
+		<imprint>
+			<date type="published" when="2005" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,333.65,99.43,232.12,9.60;10,333.65,108.90,232.11,9.60;10,333.65,118.36,33.87,9.60"  xml:id="b26">
+	<analytic>
+		<title level="a" type="main">Flow map layout</title>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Phan</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<surname>Xiao</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Yeh</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Hanrahan</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Winograd</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">IEEE Symposium on Information Visualization</title>
+		<imprint>
+			<date type="published" when="2005" />
+			<biblScope unit="page" from="219" to="224" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,333.65,127.83,232.12,9.60;10,333.65,137.29,232.12,9.60;10,333.65,146.76,139.69,9.60"  xml:id="b27">
+	<analytic>
+		<title level="a" type="main">Efficient models for timetable information in public transportation systems</title>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<surname>Pyrga</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<surname>Schulz</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Wagner</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Zaroliagis</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Journal of Experimental Algorithmics (JEA)</title>
+		<imprint>
+			<biblScope unit="volume">12</biblScope>
+			<biblScope unit="page" from="1" to="39" />
+			<date type="published" when="2008" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,333.65,156.22,232.12,9.60;10,333.65,165.69,232.12,9.60;10,333.65,175.15,69.95,9.60"  xml:id="b28">
+	<analytic>
+		<title level="a" type="main">Time-space mapping based on topological transformation of physical map</title>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<surname>Shimizu</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">6th World Conference on Transport Research</title>
+		<imprint>
+			<date type="published" when="1993" />
+			<biblScope unit="page" from="219" to="230" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,333.65,184.62,232.12,9.60;10,333.65,194.08,232.12,9.60;10,333.65,203.54,81.25,9.60"  xml:id="b29">
+	<analytic>
+		<title level="a" type="main">A new algorithm for distance cartogram construction</title>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<surname>Shimizu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Inoue</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">International Journal of Geographical Information Science</title>
+		<imprint>
+			<biblScope unit="volume">23</biblScope>
+			<biblScope unit="issue">11</biblScope>
+			<biblScope unit="page" from="1453" to="1470" />
+			<date type="published" when="2009" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,333.65,213.01,232.12,9.60;10,333.65,222.47,133.08,9.60"  xml:id="b30">
+	<monogr>
+		<title level="m" type="main">Experiments in migration mapping by computer. The American Cartographer</title>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<forename type="middle">R</forename>
+				<surname>Tobler</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="1987" />
+			<biblScope unit="page" from="155" to="163" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,333.65,231.93,232.12,9.60;10,333.65,241.40,232.12,9.60;10,333.65,250.86,206.07,9.60"  xml:id="b31">
+	<analytic>
+		<title level="a" type="main">Stackingbased visualization of trajectory attribute data</title>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Tominski</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Schumann</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Andrienko</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Andrienko</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Visualization and Computer Graphics</title>
+		<imprint>
+			<biblScope unit="volume">18</biblScope>
+			<biblScope unit="issue">12</biblScope>
+			<biblScope unit="page" from="2565" to="2574" />
+			<date type="published" when="2012" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,333.65,260.33,232.12,9.60;10,333.65,269.79,232.12,9.60;10,333.65,279.26,81.25,9.60"  xml:id="b32">
+	<analytic>
+		<title level="a" type="main">Flow map layout via spiral trees</title>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Verbeek</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Buchin</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Speckmann</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Visualization and Computer Graphics</title>
+		<imprint>
+			<biblScope unit="volume">17</biblScope>
+			<biblScope unit="issue">12</biblScope>
+			<biblScope unit="page" from="2536" to="2544" />
+			<date type="published" when="2011" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,333.65,288.72,232.12,9.60;10,333.65,298.19,232.12,9.60;10,333.65,307.65,33.87,9.60"  xml:id="b33">
+	<analytic>
+		<title level="a" type="main">Making urban road pricing acceptable and effective: searching for quality and equity in urban mobility</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">M</forename>
+				<surname>Viegas</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Transport Policy</title>
+		<imprint>
+			<biblScope unit="volume">8</biblScope>
+			<biblScope unit="issue">4</biblScope>
+			<biblScope unit="page" from="289" to="294" />
+			<date type="published" when="2001" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,333.65,317.12,232.12,9.60;10,333.65,326.58,232.12,9.60"  xml:id="b34">
+	<analytic>
+		<title level="a" type="main">Focus+context metro maps</title>
+		<author>
+			<persName>
+				<forename type="first">Y.-S</forename>
+				<surname>Wang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M.-T</forename>
+				<surname>Chi</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Visualization and Computer Graphics</title>
+		<imprint>
+			<biblScope unit="volume">17</biblScope>
+			<biblScope unit="issue">12</biblScope>
+			<biblScope unit="page" from="2528" to="2535" />
+			<date type="published" when="2011" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,333.65,336.05,232.12,9.60;10,333.65,345.51,232.12,9.60;10,333.65,354.98,162.60,9.60"  xml:id="b35">
+	<analytic>
+		<title level="a" type="main">Visual traffic jam analysis based on trajectory data</title>
+		<author>
+			<persName>
+				<forename type="first">Z</forename>
+				<surname>Wang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Lu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">X</forename>
+				<surname>Yuan</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Zhang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<forename type="middle">V</forename>
+				<surname>Wetering</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Visualization and Computer Graphics</title>
+		<imprint>
+			<biblScope unit="volume">19</biblScope>
+			<biblScope unit="issue">12</biblScope>
+			<biblScope unit="page" from="2159" to="2168" />
+			<date type="published" when="2013" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,333.65,364.44,232.13,9.60;10,333.66,373.91,219.69,9.60"  xml:id="b36">
+	<analytic>
+		<title level="a" type="main">Visualizing time-series on spirals</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Weber</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Alexa</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Müller</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">IEEE Symposium on Information Visualization</title>
+		<imprint>
+			<date type="published" when="2001" />
+			<biblScope unit="page" from="7" to="13" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,333.66,383.37,232.12,9.60;10,333.66,393.74,88.07,8.35"  xml:id="b37">
+	<monogr>
+		<title level="m" type="main">Isochrone map</title>
+		<author>
+			<persName>
+				<surname>Wikipedia</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2014" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,333.66,402.30,232.12,9.60;10,333.66,411.76,232.12,9.60;10,333.66,421.22,135.86,9.60"  xml:id="b38">
+	<analytic>
+		<title level="a" type="main">Spatially efficient design of annotated metro maps</title>
+		<author>
+			<persName>
+				<forename type="first">H.-Y</forename>
+				<surname>Wu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Takahashi</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Hirono</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Arikawa</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C.-C</forename>
+				<surname>Lin</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H.-C</forename>
+				<surname>Yen</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Computer Graphics Forum</title>
+		<imprint>
+			<biblScope unit="volume">32</biblScope>
+			<biblScope unit="issue">3pt3</biblScope>
+			<biblScope unit="page" from="261" to="270" />
+			<date type="published" when="2013" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,333.66,430.69,232.12,9.60;10,333.66,440.15,232.12,9.60;10,333.66,449.62,79.48,9.60"  xml:id="b39">
+	<analytic>
+		<title level="a" type="main">Visualizing interchange patterns in massive movement data</title>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Zeng</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C.-W</forename>
+				<surname>Fu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<forename type="middle">Müller</forename>
+				<surname>Arisona</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Qu</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Computer Graphics Forum</title>
+		<imprint>
+			<biblScope unit="volume">32</biblScope>
+			<biblScope unit="issue">3pt3</biblScope>
+			<biblScope unit="page" from="271" to="280" />
+			<date type="published" when="2013" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,333.66,459.08,232.12,9.60;10,333.67,468.55,232.12,9.60;10,333.67,478.01,139.60,9.60"  xml:id="b40">
+	<analytic>
+		<title level="a" type="main">Spatiotemporal visualisation: A survey and outlook</title>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Zhong</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Wang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Zeng</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<forename type="middle">Müller</forename>
+				<surname>Arisona</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Digital Urban Modeling and Simulation</title>
+		<imprint>
+			<publisher>Springer</publisher>
+			<date type="published" when="2012" />
+			<biblScope unit="page" from="299" to="317" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+				</listBibl>
+			</div>
+		</back>
+	</text>
+</TEI>

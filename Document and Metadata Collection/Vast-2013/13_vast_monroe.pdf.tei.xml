@@ -1,0 +1,1167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.tei-c.org/ns/1.0 /home/pisenberg/grobid/grobid-home/schemas/xsd/Grobid.xsd"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+	<teiHeader xml:lang="en">
+		<encodingDesc>
+			<appInfo>
+				<application version="0.4.1" ident="GROBID" when="2016-09-09T13:47+0000">
+					<ref target="https://github.com/kermitt2/grobid">GROBID - A machine learning software for extracting information from scholarly documents</ref>
+				</application>
+			</appInfo>
+		</encodingDesc>
+		<fileDesc>
+			<titleStmt>
+				<title level="a" type="main">Temporal Event Sequence Simplification</title>
+			</titleStmt>
+			<publicationStmt>
+				<publisher/>
+				<availability status="unknown"><licence/></availability>
+			</publicationStmt>
+			<sourceDesc>
+				<biblStruct>
+					<analytic>
+						<author>
+							<persName>
+								<forename type="first">Megan</forename>
+								<surname>Monroe</surname>
+							</persName>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Rongjian</forename>
+								<surname>Lan</surname>
+							</persName>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Hanseung</forename>
+								<surname>Lee</surname>
+							</persName>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Catherine</forename>
+								<surname>Plaisant</surname>
+							</persName>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Ben</forename>
+								<surname>Shneiderman</surname>
+							</persName>
+						</author>
+						<title level="a" type="main">Temporal Event Sequence Simplification</title>
+					</analytic>
+					<monogr>
+						<imprint>
+							<date/>
+						</imprint>
+					</monogr>
+				</biblStruct>
+			</sourceDesc>
+		</fileDesc>
+		<profileDesc>
+			<textClass>
+				<keywords>
+					<term>Index Terms—Event sequences</term>
+					<term>simplification</term>
+					<term>electronic heath records</term>
+					<term>temporal query</term>
+				</keywords>
+			</textClass>
+			<abstract>
+				<p>Fig. 1. In EventFlow, the original LABA dataset, consisting of over 2700 visual elements (left), was quickly pared down to the events most critical to the study. The simplified dataset (right) consists of only 492 visual elements, an 80% reduction in visual complexity. From this simplified figure, aligned by the patients&apos; &quot; new &quot; LABA prescription, researchers were immediately able to notice the data sparsity on the left side of the alignment point, indicating that patients had not received other treatments in the months leading up to their LABA prescription (i.e. not following the recommended practices). Abstract—Electronic Health Records (EHRs) have emerged as a cost-effective data source for conducting medical research. The difficulty in using EHRs for research purposes, however, is that both patient selection and record analysis must be conducted across very large, and typically very noisy datasets. Our previous work introduced EventFlow, a visualization tool that transforms an entire dataset of temporal event records into an aggregated display, allowing researchers to analyze population-level patterns and trends. As datasets become larger and more varied, however, it becomes increasingly difficult to provide a succinct, summarizing display. This paper presents a series of user-driven data simplifications that allow researchers to pare event records down to their core elements. Furthermore, we present a novel metric for measuring visual complexity, and a language for codifying disjoint strategies into an overarching simplification framework. These simplifications were used by real-world researchers to gain new and valuable insights from initially overwhelming datasets.</p>
+			</abstract>
+		</profileDesc>
+	</teiHeader>
+	<text xml:lang="en">
+		<body>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1">INTRODUCTION</head><p>Temporal event data is at the forefront of today's Big Data boom. Across the world, sensors and forms and spreadsheets are capturing and storing every aspect of our existence as sequences of categorized, timestamped events. The motivating question is simple: how can we best leverage the things that have already happened to inform our future actions? To this end, researchers approach these datasets with the goal of gaining understanding on two different levels: @BULLET Intra-Record Understanding: Knowledge is gained about the sequence of events that comprises a single record (i.e. a patient record or a shipment record): @BULLET Inter-Record Understanding: Knowledge is gained about population-level trends and patterns across an entire group of records: Of all the patients who were transferred to the ICU, what was the most common outcome? Two years ago, our effort to help researchers achieve these two levels of understanding resulted in the LifeFlow visualization tool <ref type="bibr" coords="1,527.32,547.13,13.74,8.02" target="#b29">[32]</ref>. LifeFlow was primarily used for analyzing point-based process log data. It combined the list-based display of its predecessor, LifeLines2 <ref type="bibr" coords="1,294.12,577.02,13.74,8.02" target="#b26">[29]</ref>, with an aggregated display that summarized the entire dataset in a single view. The aggregated display (discussed in further detail in Section 3) was extremely effective at revealing inter-record trends, while the list-based display allowed users to explore the intra-record patterns. LifeFlow caught the attention of researchers at the U.S. Army Pharmacovigilance Center (PVC). They were conducting a long-term study on asthma treatment, and the prescription of Long-Acting Beta Agonists (LABAs). This type of medication should only be prescribed when alternate treatments have proven ineffective. It is meant to be both preceded and followed by prescriptions for other, less-potent asthma medications <ref type="bibr" coords="1,412.36,686.61,9.52,8.02" target="#b1">[2]</ref>. The question researchers were trying to answer, given a sample dataset of 100 patients, was whether this recommended practice was actually being followed. Their request was that LifeFlow be given the capability to handle not only point events such as a heart attack or a surgery, but also interval events such as medication prescriptions and hospitals stays. This required an extensive remodeling of LifeFlow's data structure, display rendering, and the mechanisms for exploring and querying the data <ref type="bibr" coords="2,228.40,63.35,13.74,8.02" target="#b15">[17]</ref>. Happy to oblige, however, the application was restructured and redubbed as EventFlow <ref type="bibr" coords="2,63.62,83.27,14.69,8.02" target="#b16">[18]</ref>(see <ref type="figure" coords="2,95.12,83.27,28.76,8.02" target="#fig_0">Figure 2</ref>). Our work, it would seem, was finished. Then the PVC researchers loaded their LABA dataset.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>.. </head><p>The resulting display, shown in <ref type="figure" coords="2,147.34,123.31,28.86,8.02" target="#fig_1">Figure 1</ref> -left, was so visually complex that it was initially described as " confetti. " EventFlow's aggregated display is generated by grouping records with the same event sequence, however, the patient records in the LABA dataset were so long and varied that the chances of two records having the same sequence were extremely small. In this case, EventFlow cannot effectively group records, and the aggregated display defaults to rendering each record individually. The ability to leverage the visualization for inter-record understanding is lost. This visual complexity became less of an isolated incident and more of a theme as we took on additional case studies in the medical domain . The complexity of raw EHR data, manifests itself on both the intra-record and inter-record fronts. For example, it is not always clear which symptoms motivate which treatments. Relationships between events have to be inferred from the raw data alone. A single patient record may contain simultaneous treatments for multiple conditions (intra-record complexity). Additionally, EHR data is collected under real-world conditions, where variables cannot be meticulously controlled . The strategy for boosting the signal through this noise then, is to use increasingly larger datasets (inter-record complexity). Despite the size and heterogeneity of EHR datasets, however, the questions being asked of them typically only revolve around a subset of patients and events. Furthermore, due to the nuances of data entry and extraction, the event sequences in an initial dataset are frequently more complex than the real-world events that they represent. There is a huge opportunity to discard irrelevant data points, bearing in mind that relevance changes on a study-by-study or even a question-by-question basis. This paper reports on the design of a series of intuitive and effective controls that allow users to quickly simplify an event record dataset down to its most meaningful elements and most accurate representation . This process was structured around a design study framework as described in <ref type="bibr" coords="2,99.23,432.54,13.74,8.02" target="#b20">[22]</ref>. Not surprisingly, the effort focused on two different strategies for simplifying a dataset: </p><p>@BULLET Intra-Record Simplification: Altering the events within an event record. </p><p>@BULLET Inter-Record Simplification: Altering the subset of records in the dataset. </p><p>These simplifications were evaluated in multiple long-term case studies including: @BULLET LABA Study with the U.S. Army Pharmacovigilance Center. @BULLET Opioid Misclassification with the U.S. Army Pharmacovigilance Center. The LABA study will serve as an overarching example throughout this paper, and the Opioid Misclassification study will be presented, in greater detail, in Section 7. We also describe the use of simplification on an experimental dataset of basketball statistics to demonstrate the generalizability of these approaches. Across all of these studies, we found that complex datasets could consistently be simplified by around 80%, and that extraneous records and events could be both removed and re-inserted in only a few clicks. The resulting visualizations allowed researchers to generate novel insights through both hypothesis generation and hypothesis testing, and communicate these results to their peers in clean, readable figures. These new simplifications required extensive software engineering efforts with novel data structures, but more importantly, they required fresh ways of thinking for both our users and ourselves. This involved defining a clear language of simplification, as well as metrics for evaluating its success. Our filter and transformation-based simplifications, and the open-ended possibilities of a universal, Find-and-Replace system of simplification dramatically expand the potential to extract signal from noise in large datasets. This paper is organized as follows: Previous work on event sequence simplification is presented in Section 2. A discussion of visual complexity, and our novel metric for measuring it, follows in Section 3. The process of designing simplifications, and the evolution from filter-based simplifications to a universal, Find &amp; Replace interface is described in Sections 4 through 6. The effectiveness of these methods and our work on two different datasets is presented in Sections 7 and 8. Finally, we discuss future work and conclude in Section 9. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2">BACKGROUND</head><p> Solutions for dataset simplification have been explored for many different data types, including graphs and maps <ref type="bibr" coords="2,449.42,270.03,14.19,8.02" target="#b17">[19,</ref><ref type="bibr" coords="2,466.13,270.03,6.72,8.02" target="#b7"> 9,</ref><ref type="bibr" coords="2,475.35,270.03,6.47,8.02" target="#b4"> 6]</ref> . For event sequences , however, current solutions revolve around two primary techniques: filtering and clustering. Filtering keeps control in the users' hands, allowing them to remove events and records based on preexisting attributes. These strategies are discussed in detail in Section 4. Filter options can be found in a wide range of tools for analyzing temporal event sequences. They are a principal component of the Align, Rank, and Filter framework for visualizing temporal data <ref type="bibr" coords="2,381.49,350.41,13.74,8.02" target="#b27">[30]</ref>, employed by numerous applications <ref type="bibr" coords="2,285.12,360.38,14.19,8.02" target="#b9">[11,</ref><ref type="bibr" coords="2,302.85,360.38,11.21,8.02" target="#b25"> 28,</ref><ref type="bibr" coords="2,317.59,360.38,10.65,8.02" target="#b18"> 20]</ref>. Filtering is also relatively straightforward to perform using command-based tools <ref type="bibr" coords="2,388.67,370.34,14.19,8.02">[23,</ref><ref type="bibr" coords="2,405.51,370.34,11.21,8.02" target="#b8"> 10,</ref><ref type="bibr" coords="2,419.37,370.34,6.47,8.02" target="#b2"> 4]</ref> . However, there are no existing applications that extend filtering into an overarching framework of data simplification that gives users precise control over how their data is represented. Clustering entrusts data mining algorithms to find meaningful patterns , despite noisy data, in order to group similar patients. However, this method brings about a new set of difficulties. First, the definition of what constitutes similarity between two patients can change on a study-by-study, or even question-by-question basis. In one study, the paramount metric of patient similarity may be the duration of time that a patient was taking a medication. For another study, it may be the number of emergency room visits. Because of this, the underlying clustering models must be constantly tuned and recalibrated. Even with supervised machine learning techniques <ref type="bibr" coords="2,446.82,500.54,14.19,8.02" target="#b22">[25,</ref><ref type="bibr" coords="2,462.87,500.54,11.21,8.02" target="#b21"> 24,</ref><ref type="bibr" coords="2,475.94,500.54,10.65,8.02" target="#b30"> 33]</ref>, the extent to which rules can be effectively carried over between studies is unclear. Additionally, medical researchers are not likely to have expertise in data mining or clustering. This makes it difficult for these front-end users to evaluate the success of the clustering and provide meaningful feedback to the back-end developers. Finally, even when these methods achieve an effective grouping, the problem remains of generating a meaningful display from which inter-record hypotheses can be confirmed or refuted. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3">COMPLEXITY AND AGGREGATION</head><p>It is impossible to address simplification without first defining some notion of complexity. Unfortunately, there is no single, universal metric for defining and measuring visual complexity. The topic has been extensively discussed in psychology <ref type="bibr" coords="2,423.45,646.07,9.71,8.02" target="#b3">[5,</ref><ref type="bibr" coords="2,436.98,646.07,11.21,8.02" target="#b24"> 27,</ref><ref type="bibr" coords="2,452.01,646.07,7.47,8.02" target="#b3"> 5] </ref>and, more recently, computer science <ref type="bibr" coords="2,351.28,656.03,14.19,8.02" target="#b28">[31,</ref><ref type="bibr" coords="2,368.44,656.03,11.21,8.02" target="#b13"> 15,</ref><ref type="bibr" coords="2,382.60,656.03,6.47,8.02" target="#b5"> 7]</ref>. The lack of a consensus suggests that the scale of visual complexity depends, to some extent, on the style and structure of the visualization itself. To further complicate matters, the complexity of the visualization becomes irrelevant if the dataset has been simplified beyond use. This is a fine line to walk when the visualization is being used for both hypothesis testing and hypothesis generation. For hypothesis testing, there is a specific question to be answered, and users typically have a clear idea of what events and records are relevant to that question. , the aggregated record display (center), and the individual record display (right). Here, a sample dataset is aligned by the Stroke event in each patient record, creating mirrored alignments in both the individual and aggregated displays. In EventFlow, record filtering is done using the " Remove " buttons at the top of the control panel. Category filtering is done using the checkboxes in the legend. Time and Attribute filtering is done using the " Window " and " Attribute " tabs respectively. </p><p> In this case, the visualization can be simplified until only those elements remain. Hypothesis generation, however, is a more open-ended process. Users run the risk of oversimplifying their data, and missing potential insights. Thus, while complexity metrics are presented here and utilized in the following sections, we emphasize that these metrics must be tempered with some subjective notion of maintaining the integrity of the dataset. As mentioned previously, EventFlow creates an aggregated view of a dataset by grouping records with the same event sequence. This grouping is done using a tree-structure that branches as the event sequences diverge from each other (see <ref type="bibr" coords="3,171.95,434.34,14.94,8.02" target="#b29">[32] </ref>for a detailed description this process). Events are represented using vertical bars, where the height of each bar is dictated by the number of records grouped at that branch. The default behavior is to root the aggregation at the beginning of each record, however users can also root the aggregation at any alignment point of interest. For example, in the LABA study, patients were frequently aligned by their first LABA prescription. In this case, two aggregations are done: one for the events that led up to this alignment point, and one for those that followed it (see <ref type="figure" coords="3,226.93,514.04,28.60,8.02" target="#fig_1">Figure 1</ref>-right). Because of this aggregation strategy, metrics such as the number of patient records, or even the number of total events in the dataset are not reliable predictors for the complexity of the resulting visualization. For example, <ref type="figure" coords="3,81.27,554.96,30.35,8.02" target="#fig_0">Figure 2</ref>depicts over 250 patient records in a clean and easily readable display. Ultimately, the complexity of EventFlow's visualization is dictated by how frequently, and the extent to which the records in the dataset share the same event sequence. In medical datasets, this can be a rare occurrence <ref type="bibr" coords="3,168.93,594.81,13.74,8.02" target="#b19">[21]</ref>. As such, visual complexity will be defined and measured by two different metrics: the number of visual elements in the display, and the average size of these elements. The first metric, proposed in <ref type="bibr" coords="3,261.04,625.76,9.52,8.02" target="#b5">[7]</ref>, is simply a count of each vertical, colored bar in EventFlow's aggregated display. This metric gives a sense of how difficult it will be for users to weave the unique elements in the display into a holistic impression of their dataset. The number of visual elements should decrease as the dataset is simplified. The second metric, defined more specifically as the average height of each vertical bar (as a percentage of the display height), provides insight into how well the individual records are being aggregated together into a summarizing display. Though this metric is specific to EventFlow, it draws on two of the oldest notions of visual complexity: separability and information density. Separability, introduced by Garner in 1974 <ref type="bibr" coords="3,349.61,333.64,9.52,8.02" target="#b6">[8]</ref>, describes how larger items are easier to distinguish from one another, thus reducing the perceived complexity. Information density, proposed by Edward Tufte <ref type="bibr" coords="3,424.58,353.57,13.74,8.02" target="#b23">[26]</ref> , relates to the amount of information conveyed by each visual element. In EventFlow, the height of each vertical bar represents the number of records aggregated at that branch. Thus, the average height across all these elements should increase as the dataset is simplified. The initial LABA dataset began with over 2700 visual elements, each averaging only 1.14% of the total display height (<ref type="figure" coords="3,494.62,413.62,28.31,8.02" target="#fig_1">Figure 1</ref>-left). From this display, the PVC researchers found it virtually impossible to visually parse out any meaningful trends. In the following three sections , we will describe the simplifications that these researchers used to ultimately gain novel insight from this dataset using EventFlow. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4">FILTER-BASED SIMPLIFICATIONS</head><p>Filter-based simplifications allow users to remove events and records from the dataset based on the fundamental features of the data type. They have been implemented, in some form, across a wide range of visualization and command-based tools and are an essential component of visual analytics. We discuss them here for the sake of completeness, but more importantly, to demonstrate that in real-world data analysis , filter-based simplifications are most effective when they can be interleaved with more advanced simplifications. In EventFlow, filterbased simplifications are designed to be readily accessible and easily reversible (see <ref type="figure" coords="3,348.04,576.21,28.89,8.02" target="#fig_0">Figure 2</ref>). The use of EventFlow's filter-based simplifications can be demonstrated by an initial question that the PVC researchers had while reviewing the LABA dataset. The dataset was set up such that one LABA prescription in each patient record had been flagged with an attribute to indicate that this was the patient's " first " LABA prescription . It was around this prescription that they planned to look for the intended pattern of less-potent asthma medications. To make this attribute visible in EventFlow's aggregated display, the researchers converted it into a marker event that was inserted into each record (see the full description of marker events in Section 5). When the dataset was then aligned by this marker, they noticed that, for many patients, their so-called " first " LABA prescription was actually preceded by other LABA prescriptions. The researchers determined that this was occurring because the criteria used for identifying the " first " LABA prescription was only contingent on there being no other LABA prescriptions in the preceding 3 months. However, the original data extraction was done by selecting all prescriptions for the entire year preceding the " first " LABA, resulting in the inclusion of LABA prescriptions that were greater than 3 but less than 12 months prior. Their question, was whether this inconsistency would be eliminated if they updated the extraction script to require that the " first " LABA be preceded by 6 months without another LABA prescription. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>By Record </head><p>Filtering by record allows users to remove a subset of records, either through query (described in further detail in Section 6), or by simply clicking any element in the individual or aggregated display. Removing a large subset of uninteresting records can free up a substantial amount of screen space to render the interesting elements at a larger scale. For example, out of the entire LABA dataset, the question of whether or not it would be necessary to do a new data extraction could be answered by examining the relationship between only two event points in a subset of the patient records. To isolate the critical records, the researchers used EventFlow's query system <ref type="bibr" coords="4,257.94,234.08,14.94,8.02" target="#b15">[17] </ref>to identify patients whose " first " LABA prescription was preceded by another LABA prescription. Records not matching this search were filtered from the dataset, narrowing 100 records down to 26 (see <ref type="figure" coords="4,22.50,273.93,29.02,8.02" target="#fig_2">Figure 3</ref>, Steps 1 → 2). EventFlow's most fundamental form of intra-record simplification, is the ability to remove event categories from the display using the category check boxes in EventFlow's legend. Reducing the number of event categories can significantly increase the chances that two records will have the same event sequence and thus aggregate into fewer and larger visual elements. Returning to the question of whether to perform a new data extraction, the PVC researchers narrowed the LABA dataset down further by filtering out all of the event categories except LABA and " first " LABA events (see Step 3 of <ref type="figure" coords="4,235.57,414.77,30.83,8.02" target="#fig_2">Figure 3</ref>). Some of these filtered categories, in fact, remained excluded from the dataset for the duration of the study. </p><p>Step 3: 99 elements, 15.01% of display height per element </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>By Time </head><p>Filtering by time allows users to limit EventFlow's aggregated display to a certain window of time around the current alignment point. Since the chances of two records having the same event sequence decreases as you get further and further away from the alignment point, the visual elements at the far ends of the display will be the smallest. The time filter allows users to limit the display to only the largest, most information dense elements. The final step in simplifying the LABA dataset to answer the " first " LABA question was to filter out all events more than 6 months prior to the alignment point. In doing this, researchers could clearly see that only one patient had their actual first LABA prescription within 6 months of their " first " LABA event. All of the other patients had LABA prescriptions prior to this cutoff point. This meant that only one patient would have been excluded from the dataset if the extraction were changed to require that the " first " LABA be preceded by 6 months without another LABA prescription. Based on this information, the PVC researchers decided that it was not worth doing a new data extraction. The " first " LABA prescription, from this point on, was referred to as a " new " LABA prescription. This simplification process can be seen in its entirety in <ref type="figure" coords="4,153.98,675.28,29.02,8.02" target="#fig_2">Figure 3</ref>. </p><p>Step 4: 35 elements, 22.75% of display height per element </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>By Attribute </head><p> EventFlow allows attributes to be assigned to both records and individual events. For example, a patient record might have the attribute " der, " and a prescription event might have the attribute " dosage. " Users can perform both intra-record simplification and inter-record simplification by removing events or records based on their attributes. Again, this serves to either increase the chances of aggregation, or free up screen space for the records of interest. While this filtering technique was not used as part of the LABA study, it was used extensively on many of the other datasets. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5">TRANSFORMATION-BASED SIMPLIFICATIONS</head><p> While the filter-based simplifications in the previous section can significantly reduce large datasets, they are designed only to remove information . However, real-world datasets are not only messy with respect to volume, but also with respect to the logical translation between the event data, and the real-world events that transpired. Users frequently need to manipulate their data, not just by removing events, but by transforming the way it's represented, a process typically known as data wrangling <ref type="bibr" coords="5,87.28,177.94,14.19,8.02" target="#b10">[12,</ref><ref type="bibr" coords="5,103.72,177.94,10.65,8.02" target="#b11"> 13]</ref>. To discover the types of data transformations that were needed beyond filtering, we spent extensive time with all of our collaborators as they explored their datasets. Based on their difficulties and feedback, we designed a series of transformation-based simplifications that met universal demands across all five research groups. These simplifications were deployed, one by one, in order to gain an initial understanding of whether they were effective at reducing complexity. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Interval Event Merging </head><p>In many cases, a given dataset is not only unnecessarily complex, but it is more complex than the events that actually transpired. For example, in the LABA dataset, prescription intervals were calculated based on the dispensing date and the intended duration of the prescription. The start and end date of each prescription then, was dictated substantially by the behavior of the patient: Perhaps it was convenient for the patient to refill their asthma medication a few days before the previous one ran out. In the raw event data, this presents as a series of overlapping and disjoint medication intervals. When researchers at the PVC analyze medication use, however, they are primarily concerned with exposure. That is, the time during which the patient was actually taking a medication and exposed to its effects. Exposure can only be roughly inferred from a series of prescriptions , but it can generally be assumed that if a patient receives a series of thirty-day prescriptions, with each prescription starting a few days before or after the previous one ends, that this indicates a continuous , steady exposure. Short gaps and overlaps between successive prescriptions do not necessarily imply that the patient stopped taking the medication or took a double dose during those few days. It is important to distinguish this scenario, which results from an obvious and common behavior, from situations where a combined dose of a single medication is a critical and interesting phenomenon. In order to better represent exposure, and not to clutter the display with clinically uninteresting information about the exact dates of prescription refills, EventFlow provides a simple interface that allows for multiple interval events of the same category to be merged into a single interval event (see <ref type="figure" coords="5,99.05,542.40,28.94,8.02" target="#fig_3">Figure 4</ref> ). This can be done in two ways: eliminating gaps of a certain duration, and eliminating overlaps of a certain duration . This feature was designed to serve as a shortcut to two subsets of Allen's 13 interval relationships <ref type="bibr" coords="5,158.68,572.29,9.71,8.02" target="#b0">[1]</ref> : disjoint intervals and overlapping intervals. Much like Morchen's hierarchical interval model <ref type="bibr" coords="5,264.70,582.25,13.74,8.02" target="#b14">[16]</ref>, interval merging focuses on duration and coincidence, rather than the exact sequence of interval end-points. For the LABA study, any prescriptions within 14 days of each other (a standard allowance) were merged into a single exposure interval. This simplification was performed for nearly every medication category in the dataset. Interval merging can be easily undone, or saved permanently as a new dataset. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Category Merging </head><p>Category merging allows for multiple event categories to be combined into a single meta-category. This feature is particularly useful when individual medication types can be merged into an overarching drug class, or when drugs are prescribed in tandem. In the LABA study, three different medications were considered to be similar, low-dose treatment strategies that could serve as a valid precursor to a LABA  prescription. These medications were merged into a single event category entitled " Low-Dose. " Unlike category filtering, category merging does not reduce the number of events being displayed. However, these meta-categories increase the chances that two records will have the same event sequence , and thus be merged into larger bars in the aggregated display (see <ref type="figure" coords="5,310.80,345.15,28.89,8.02" target="#fig_4">Figure 5</ref>). </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Marker Event Insertion </head><p>In many datasets, certain event types repeat over and over again throughout a single record. However, for a particular question, only one of these occurrences may be of paramount interest. Marker events allow users to insert a new event at any alignment point within the data. For example, in the LABA study, the PVC researchers aligned their dataset by the LABA event flagged with the " first " attribute, and inserted a marker event at this point in each record that was (eventually ) called " New LABA " (see Step 1 of <ref type="figure" coords="5,454.09,445.71,29.66,8.02" target="#fig_2">Figure 3</ref>). For questions pertaining only to the " new " LABA prescription then, the entire category of LABA prescriptions could be filtered from the dataset, leaving only the single " New LABA " marker. Swapping an entire category for one event decreases the number of visual elements in the display and increases the chances of larger, more information dense elements. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6">A UNIVERSAL SIMPLIFICATION SYSTEM</head><p>EventFlow's filter and transformation-based simplifications proved to be extremely effective in simplifying datasets, both by removing unnecessary records, and by re-representing the events in the remaining records. So effective, in fact, that their deployment was immediately followed by a barrage of requests from our users for increasingly customized simplifications. In some cases, the feature being requested was specific to a single study, or even a single research question. It did not make sense to continue to implement these features on an ad hoc basis, as separate interfaces within EventFlow. The result would have been an extremely cluttered and complex application. Upon further reflection , however, it became apparent that all of these simplifications had the same general objective: users wanted to find a certain event of pattern of events, and replace it with a more meaningful representa- tion. In addition to EventFlow's simplification features, development had just been completed on a graphic-based, advanced query system. The advanced query system allowed users to draw out their query using the same icons that are used to represent events in the individual record display. The goal of this query system was to give users more precise control over inter-record simplification, offering access to the full range of Allen's interval relationships <ref type="bibr" coords="5,435.40,726.46,9.52,8.02" target="#b0">[1]</ref>, as well as a host of other temporal features. Users could select either the records that matched their query, or the records that did not match their query, and then remove the selected records from the dataset. The system had been extensively tested both in lab settings and with users to evaluate accuracy and usability, including the clarity of query specification language and the handling of false positives/negatives<ref type="bibr" coords="6,183.11,274.32,14.09,8.02" target="#b15">[17]</ref>. The question then, was whether we could leverage this existing system to also perform intra-record simplification. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Find &amp; Replace </head><p>To perform intra-record simplification, EventFlow's advanced query system was augmented to include a replace feature <ref type="bibr" coords="6,209.93,334.42,13.74,8.02" target="#b12">[14]</ref>. This allows users to not only find a sequence of events, but to replace it with an event sequence of their choosing. The replacement sequence is specified using the same graphical language that is used to specify the search sequence (see <ref type="figure" coords="6,102.96,374.27,30.06,8.02" target="#fig_5">Figure 6</ref> ), and can include existing event categories or new event categories. Find &amp; Replace capitalizes on the fact that users are typically very familiar with this functionality based on their experience with a wide range of other applications including word processing and spreadsheet manipulation. In the LABA study, Find &amp; Replace was used when the researchers observed that LABAs are typically prescribed in tandem with an Inhaled Cortical Steroid (ICS). The result, in the aggregated display, is a sequence of four event points that essentially represent one treatment. This pattern was simplified by replacing it with a single interval, representing the combined prescription of LABA + ICS (see <ref type="figure" coords="6,236.73,473.89,29.67,8.02" target="#fig_5">Figure 6</ref>). Furthermore, as described previously, each record contained a point event that marked the start of a " new " LABA prescription. This marker and the interval it tagged were replaced, by representing it as simply a " New LABA " interval. In total, the following sequence of simplifications were performed on the LABA dataset: The resulting, aggregated display is shown in <ref type="figure" coords="6,462.73,487.36,29.41,8.02" target="#fig_1">Figure 1</ref>-right. This simplified display consists of only 492 visual elements, each averaging 2.08% of the display height per element. This constitutes an 81% reduction in visual elements, and an 82% increase in the average size of each element. It becomes possible to visually extract meaningful information from the display. For example, the PVC researchers immediately observed that a significant number of patients had not received any other treatment in the six months prior to their LABA prescription, which is not the recommended practice. This was a new and valuable insight that generated countless other questions. It is critical to point out that this series of simplifications to the LABA dataset was only an initial pass to narrow the data down to the general theme of the research objective. As questions get more specific, the dataset can be further simplified. Find &amp; Replace can also be used to insert new events (without removing existing events), which allows users to see exactly which events are being selected by the " find " component of this feature. The system can also be used to delete events (by replacing a search sequence with an empty replace sequence). Modified records can be saved as a new dataset, and all replacement sequences are catalogued, allowing users to undo them if need be. Most importantly, Find &amp; Replace can be used to replicate the functionality of both filter and transformation-based simplifications in a single interface. As a result, the overall application can be trimmed down to a much simpler set of interfaces and controls without compromising any functionality. Alternatively, the more specialized sim-plification interfaces could remain in the application to serve as introductory training for the more complex, Find &amp; Replace interface. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="7">OPIOID MISCLASSIFICATION</head><p> In addition to the LABA study, the researchers at the PVC were investigating opioid use as part of a second long-term study. Opioids, a class of medications that are typically prescribed for pain management , can be habit-forming when taken improperly and are blamed for an increasing number of drug related deaths <ref type="bibr" coords="7,196.92,137.25,9.52,8.02">[3]</ref>. In the most recent phase of this work, researchers were trying to determine within a sample dataset of 1000 records if patients that had been previously classified as acute users were actually misclassified chronic users. These classifications are determined by reviewing a series of prescriptions, which could be for either high or low dose opioids, and consolidating them into " episodes " that are then classified as acute, intermediate or chronic. The question was whether patients with repeated acute episodes should be classified as chronic users. The first step of the simplification process was for the researchers to take the raw prescription data (1064 visual elements, with each element averaging only .49% of the total display height), and restructure it into acute, intermediate, and chronic episodes. An episode was defined as any consecutive prescriptions within 14 days of each other. To account for this, they first merged the high and low dose prescriptions into a single event category, and then used the Find &amp; Replace system to mark the first prescription in each episode (see <ref type="figure" coords="7,210.05,297.06,28.89,8.02" target="#fig_6">Figure 7</ref>). From here, they replaced episodes with acute, intermediate, and chronic events based on the duration of the episode and the number of prescriptions. For example, acute episodes were any episodes under 60 days and consisting of two or fewer prescriptions. These were identified by first replacing one and two prescription intervals with a placeholder interval. Then, placeholder intervals lasting less than 60 days were replaced by a new event representing an acute interval. Similar strategies were use to identify chronic episodes, and any remaining episodes were replaced as intermediate episodes. The resulting dataset consisted of only 180 visual elements, each averaging 1.96% of the total display height, an 83% reduction in visual elements and almost a 300% increase in the average element height (see <ref type="figure" coords="7,72.84,676.23,30.14,8.02" target="#fig_8">Figure 8</ref>-Steps 1 → 2). Using this simplified dataset, it was immediately apparent from the aggregated display that the majority of acute users had been classified correctly. These patients had only one, acute episode, and were easily distinguishable from the rest of the population that consisted of more varied episodes. Using selection, these patients were removed from the dataset, reducing the number of patients by over 60% in a single click (see <ref type="figure" coords="7,333.81,726.46,31.81,8.02" target="#fig_8">Figure 8</ref>-Steps 3). This filtering did not significantly reduce the number of visual elements, but increased the average height of the remaining elements to 3.04% of the total display height. The researchers then narrowed the dataset down further, using query, to include only the patients who had consecutive acute episodes. From here, they could scroll over the time lapse between each pair of acute episodes to see the distribution of when each patient started their second episode in relation to ending their first. If these patients were exhibiting chronic behavior, the distribution would have been heavily front-weighted. That is, patients would be starting their second acute episode very soon after their first. </p><p>Step 4: 156 elements, 3.79% of display height per element However, this was not the case. The lapse of time between when patients started their second episode, relative to the end of their first episode, was uniformly distributed. This indicated that there was no obvious reason to believe that a significant portion of these patients had been misclassified. The final consensus was that patients had been accurately classified as either acute or chronic users. <ref type="figure" coords="8,211.92,253.74,29.98,8.02" target="#fig_8">Figure 8</ref>summarizes the opioid simplifications. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="8">BASKETBALL PLAY-BY-PLAY BREAKDOWN</head><p> To demonstrate that EventFlow's simplification capabilities can be applied to datasets outside of the medical domain, we created a dataset (or, more accurately, two datasets) based on the play-by-play statistics from the University of Maryland men's basketball team. Play-by-play data consists of the events that took place over the course of a game (shots, rebounds, steals), timestamped against the game clock. The play-by-play breakdown of every college and professional basketball game is freely available online. For this study, we looked at the March 16th, 2013 game against the University of North Carolina (UNC), a game that Maryland ultimately lost by three points. The goal of this experimental analysis was to try to determine what went wrong. <ref type="figure" coords="8,22.50,495.78,19.79,7.37">Fig. 9</ref>. Moving through time, left to right, the game can viewed as a series of alternating possessions (Maryland in red, UNC in blue. </p><p> A basketball game can be thought of as a series of disjoint, alternating possessions between the two teams (see <ref type="figure" coords="8,199.69,537.65,29.99,8.02">Figure 9</ref>). The two phenomenon that we can look at, using EventFlow, is how events affect each other within possessions, and how events affect each other across possessions. The latter of these objectives comes in the form of two questions: </p><p>@BULLET How well does Maryland transition from offense to defense? @BULLET How well does Maryland transition from defense to offense? </p><p>These questions were addressed by splitting the play-by-play data into two overlapping datasets. The first dataset takes the entire game of possession changes, and segments it into two-possession increments of a Maryland possession followed by a UNC possession. The second dataset does the same thing, but in increments of a UNC possession followed by a Maryland possession. In both datasets, each twopossession increment is treated as a record. Thus, the three-possession sequence shown above would be segmented such that the first and second possessions constituted one record in the Offense→Defense dataset, and the second and third possessions constituted one record in the Defense→Offense dataset. From a simplification standpoint, the primary challenge of the playby-play data was the granularity of the event categories. Nearly every category had sub-categories that could be useful for certain questions , but irrelevant for others. Shots could be 3-point jumpers, 2-point jumpers, or layups. Rebounds could be offensive or defensive. Timeouts could be called by either team or the officials. Without some degree of category merging, there would be too many categories, resulting in too many colors in the display for users to visually discern between. Our strategy in analyzing this dataset then, was to begin by merging the event categories as much as possible, to produce the least visually complex display. The Offense→Defense dataset, loaded into Event- Flow's aggregated display and aligned by the possession change, is shown in <ref type="figure" coords="8,320.46,183.63,33.22,8.02" target="#fig_1">Figure 11</ref>(1). At this level of aggregation, it is easy to pick out the notable dynamics of the game, such as the events that caused the possession change, and the various scoring attempts. Essentially, the initial simplification strategy was to oversimplify. From there, complexity could be reinserted only when it was needed for a particular question. This could be done by simply un-merging the meta-category, however, it frequently proved more effective to reinsert complexity using the Find &amp; Replace interface, as it offered more fine-tuned control over how much complexity was being added. For example, offensive and defensive rebounds were merged into the meta-category, " Rebound. " One of the questions we had of this dataset was, " Did UNC capitalize on their offensive rebounds? " This question could be answered by un-merging all of the rebound events across both possessions. However, since a defensive rebound results in an immediate possession change, we could use Find &amp; Replace to isolate only the rebounds in which UNC had possession and maintained possession , and replace them as " Offensive Rebound " (see <ref type="figure" coords="8,474.02,343.77,32.75,8.02" target="#fig_1">Figure 10</ref>). The big question remained then: " What could Maryland have done in order to win? " It's an interesting question, given that the final score differential was only one basket. In fact, using various different filtering , merging and un-merging, and Find &amp; Replace, the two datasets produced almost identical aggregations of how each team performed. However, there was one glaring difference: We can think of an offensive possession as starting either actively (via a steal or a rebound) or passively (via an opponent's score or a dead ball). In both datasets, we can isolate the passive possession changes by removing the possessions that began with either a steal or a rebound. The remaining possessions can be further simplified by removing dead ball events, such as timeouts or jump balls. Finally, since the datasets are already filtered by the type of possession change, we can remove the preceding possession entirely (using <ref type="bibr" coords="8,285.12,716.50,59.16,8.02">Find &amp; Replace)</ref>. This process, being done to the Offense→Defense dataset, is shown in <ref type="figure" coords="8,357.37,726.46,33.13,8.02" target="#fig_1">Figure 11</ref>. <ref type="figure" coords="9,41.46,105.05,32.88,8.02" target="#fig_1">Figure 11</ref>(4) shows both of the resulting simplifications. Both teams had roughly the same number of offensive possessions coming out of passive possession changes (Maryland -38, UNC -37). However, UNC was clearly executing their offense more efficiently. Their most common outcome was a score which, on average, occurred much faster than the first event in any of the Maryland possessions. In passive possession change scenarios, UNC scored on twice as many possessions as Maryland did. It would be reasonable then, to conjecture that the game was ultimately decided by UNC's ability to quickly execute their half court sets. Defensively, Maryland could have improved their chances by scouting these plays, and practicing to defend them at speed. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="9">CONCLUSIONS AND FUTURE WORK</head><p>Event sequence simplification is critical to obtaining population-level overviews and more accurate representations of real-world events. This paper reports on an in-depth design study that resulted in targeted simplification techniques, allowing users to precisely and iteratively pare down complex temporal event datasets to the key visual elements that reveal meaningful patterns. Our work draws on techniques from both temporal event query and data mining, as well as countless hours with domain experts, working to understand how temporal relationships can be accessed and transformed within complex datasets. We believe that these innovative simplifications could benefit many developers of temporal analysis systems as well as the researchers who use them. Working with 5 real-world user teams, these simplifications could reduce the visual complexity of initially overwhelming datasets by over 80%. This reduction allowed researchers to quickly and successfully generate and test hypotheses, as well as produce comprehensible figures for communicating their results. While validation with other datasets and in other domains is needed to further support this work, these simplifications appear to be a powerful and generalizable approach for solving problems with temporal datasets. While EventFlow has been successful thus far in allowing users to eliminate complexity, it is important to remember that these capabilities make it equally possible for users to remove or obscure important features of their datasets. This can occur either accidentally or as a deliberate attempt to mislead others. To prevent this from occurring, we are working to better couple EventFlow's logging system with the data input files, so that new datasets cannot be generated without including a complete history of the modifications performed. As mentioned previously, EventFlow currently allows users to save simplified records as a new dataset. We are currently extending this capability to also allow users to save their simplification process. That is, EventFlow will allow users to save a series of simplifications as a stored procedure that can be applied to a new dataset before it is loaded into the visualization. Users can skip over the " confetti " stage of visual complexity and arrive immediately at a visualization from which they can glean meaningful insight. Stemming from this is the addition benefit that EventFlow will be able to scale to increasingly larger datasets. When a dataset is reduced by 80%, then intuitively, the application should be able to load a simplified dataset that is 5 times larger. This could have a significant impact on the extremely large datasets that put a strain on memory usage and rendering times, and will be the focus of EventFlow's development moving forward. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>ACKNOWLEDGMENTS </head><p>We appreciate the support of the Oracle Corporation, and would like to thank Jeff Millstein from Oracle, Seth Powsner from Yale School of Medicine, the US Army Pharmacovigilance Center, and the University of Maryland Human-Computer Interaction Lab. </p></div><figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_0" coords="3,31.50,273.99,513.00,7.37;3,31.50,283.46,513.00,7.37;3,31.50,292.92,513.00,7.37;3,31.50,302.39,401.02,7.37"><head>Fig. 2. </head><figDesc>Fig. 2. EventFlow consists of three panels: the control panel (left), the aggregated record display (center), and the individual record display (right). Here, a sample dataset is aligned by the Stroke event in each patient record, creating mirrored alignments in both the individual and aggregated displays. In EventFlow, record filtering is done using the " Remove " buttons at the top of the control panel. Category filtering is done using the checkboxes in the legend. Time and Attribute filtering is done using the " Window " and " Attribute " tabs respectively. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_1" coords="4,32.46,293.74,215.95,8.12;4,32.46,303.71,211.47,8.12;4,22.50,321.35,49.60,8.29"><head>Step 1: </head><figDesc>2724 elements, 1.14% of display height per element Step 2: 993 elements, 4.69% of display height per element By Category </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_2" coords="4,285.12,612.15,250.38,7.37;4,285.12,621.54,250.38,7.48;4,285.12,631.08,250.38,7.37;4,285.12,640.47,250.38,7.48;4,285.12,649.93,250.38,7.48;4,285.12,659.40,250.38,7.48;4,285.12,668.94,131.58,7.37"><head>Fig. 3. </head><figDesc>Fig. 3. Should a new data extraction be done to exclude patients who had LABA prescriptions prior to their " first " LABA prescription? -Step 1: The original LABA dataset is aligned by the " first " LABA marker event (in black). Step 2: Patients without a LABA prescription before their " first " LABA are filtered out. Step 3: Categories other than LABA prescriptions (in red) and the " first " marker are filtered out. Step 4: Data is filtered to 6 months around the alignment point. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_3" coords="5,294.12,244.47,250.38,7.37;5,294.12,253.94,50.98,7.37"><head>Fig. 4. </head><figDesc>Fig. 4. A series of disjoint and overlapping intervals are merged into a single interval. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_4" coords="6,22.50,193.75,513.00,7.37;6,22.50,203.22,347.34,7.37"><head>Fig. 5. </head><figDesc>Fig. 5. Four different event permutations (left) involving an inhaled corticosteroid (ICS -in blue) and a leukotriene-receptor antagonist (LTRA -in pink) are aggregated into a single grouping (right) when these two categories are merged together. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_5" coords="6,285.12,409.49,250.38,7.37;6,285.12,418.96,250.38,7.37;6,285.12,428.42,99.12,7.37"><head>Fig. 6. </head><figDesc>Fig. 6. Concurrent LABA (in bright red) and ICS (in blue) prescriptions are replaced by a single interval representing the combined treatment of LABA + ICS (in dark red). </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_6" coords="7,31.50,496.76,250.38,7.37;7,31.50,506.23,250.38,7.37;7,31.50,515.69,250.38,7.37;7,31.50,525.16,250.38,7.37;7,31.50,534.62,176.50,7.37"><head>Fig. 7. </head><figDesc>Fig. 7. The first prescription in each episode, defined as any prescription preceded by 14 days without another prescription, is replaced with a marker interval (in red). A second replacement was also done to replace the first prescription of each record, which would also be considered the start of an episode, with the same marker interval. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_7" coords="7,41.46,696.05,211.47,8.12;7,41.46,706.01,211.47,8.12"><head>Step 1: </head><figDesc>1064 elements, .49% of display height per element Step 2: 180 elements, 1.96% of display height per element </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_8" coords="7,294.12,600.44,250.38,7.48;7,294.12,609.91,250.38,7.48;7,294.12,619.37,250.38,7.48;7,294.12,628.84,250.38,7.48;7,294.12,638.30,250.38,7.48;7,294.12,647.84,80.75,7.37"><head>Fig. 8. </head><figDesc>Fig. 8. Were chronic opioid users misclassified as acute users? -Step 1: The original Opioid dataset consists only of raw prescription data. Step 2: The dataset is restructured into acute (red), intermediate (in blue), and chronic episodes (in red). Step 3: Patients that only had one acute episode are removed. Step 4: Patients without consecutive acute episodes are removed. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_9" coords="8,32.46,73.20,211.47,8.12"><head>Step 3: </head><figDesc>180 elements, 3.04% of display height per element </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_10" coords="8,285.12,544.12,250.38,7.37;8,285.12,553.58,233.01,7.37"><head>Fig. 10. </head><figDesc> Fig. 10. Rebounds (in black) in which UNC had possession and maintained possession are replaced as " Offensive Rebounds " (in pink). </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_11" coords="9,294.12,658.11,250.38,7.37;9,294.12,667.50,250.38,7.48;9,294.12,676.96,250.38,7.48;9,294.12,686.50,250.38,7.37;9,294.12,695.89,250.38,7.48;9,294.12,705.43,250.38,7.37;9,294.12,714.90,224.39,7.37"><head>Fig. 11. </head><figDesc> Fig. 11. How did the UNC offense perform off of passive transitions? - Step 1: The initial aggregated display of the Offense→Defense dataset, aligned by the possession change. Step 2: Active possession changes, identified by rebounds (in black) and steals (in orange), are selected and removed. Step 3: Dead ball events are filtered out. Step 4: The Maryland possession is removed (top). The process is then repeated to isolate the analogous Maryland offensive possessions (bottom). </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_1" validated="false" coords="2,32.84,586.79,240.04,57.25"><figDesc coords="2,32.84,586.79,240.04,8.66;2,42.43,597.40,36.11,8.02;2,32.84,611.08,240.04,8.66;2,42.43,621.69,110.07,8.02;2,32.84,635.38,237.15,8.66">@BULLET The Diabetic Foot with the University of Florida College of Medicine. @BULLET Attention Deficit Disorder Treatment with the University of Maryland School of Medicine. @BULLET Pediatric Trauma Procedures with MedStar Health Facilities.</figDesc><table></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_2" validated="false" coords="6,30.72,542.32,242.16,202.12"><figDesc coords="6,30.72,542.32,6.72,8.02">1.</figDesc><table coords="6,30.72,542.32,242.16,202.12">Add marker event for  " new "  LABA prescriptions. 
+2724 elements, 1.14% of display height per element 
+
+2. Filter out extraneous categories. 
+2694 elements, 1.15% of display height per element 
+
+3. Replace concurrent LABA and ICS prescription with single 
+LABA + ICS interval. 
+2061 elements, 1.16% of display height per element 
+
+4. Replace LABA prescription marked as  " new "  with a single New 
+LABA interval. 
+1993 elements, 1.15% of display height per element 
+
+5. Merge intervals to reflect exposure. 
+1450 elements, 1.19% of display height per element 
+
+6. Aggregate similar medications into single category. 
+1332 elements, 1.25% of display height per element 
+
+7. Align by point of interest. 
+1123 elements, 1.56% of display height per element 
+
+</table></figure>
+
+			<note place="foot">MONROE ET AL: TEMPORAL EVENT SEQUENCE SIMPLIFICATION</note>
+
+			<note place="foot">IEEE TRANSACTIONS ON VISUALIZATION AND COMPUTER GRAPHICS, VOL. 19, NO. 12, DECEMBER 2013 Step 1: 183 elements, 5.32% of display height per element Step 2: 106 elements, 9.26% of display height per element Step 3: 92 elements, 10.46% of display height per element Step 4: 39 elements, 9.98% of display height per element</note>
+		</body>
+		<back>
+			<div type="references">
+
+				<listBibl>
+
+<biblStruct coords="10,40.76,74.58,232.12,7.13;10,40.76,84.05,226.71,7.13"  xml:id="b0">
+	<analytic>
+		<title level="a" type="main">Actions and events in interval temporal logic</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">F</forename>
+				<surname>Allen</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Ferguson</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Journal of Logic and Computation</title>
+		<imprint>
+			<date type="published" when="1994" />
+			<biblScope unit="page" from="531" to="579" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,93.51,232.12,7.13;10,40.76,102.97,139.24,7.13;10,26.49,112.44,246.40,7.13;10,40.76,121.98,232.12,6.86;10,40.76,131.37,232.12,7.13;10,40.76,140.83,17.93,7.13"  xml:id="b1">
+	<monogr>
+		<title level="m" type="main">Asthma in adults [3] CDC. QuickStats: Number of Deaths From Poisoning, Drug Poisoning, and Drug Poisoning Involving Opioid Analgesics</title>
+		<author>
+			<persName>
+				<surname>Bestpractice</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2013-01" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,150.30,232.12,7.13;10,40.76,159.76,232.12,7.13;10,40.76,169.23,93.64,7.13"  xml:id="b2">
+	<analytic>
+		<title level="a" type="main">A temporal query system for protocoldirected decision support</title>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<forename type="middle">K</forename>
+				<surname>Das</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<forename type="middle">A</forename>
+				<surname>Musen</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Methods of information in medicine</title>
+		<imprint>
+			<date type="published" when="1994" />
+			<biblScope unit="page" from="358" to="70" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,178.69,232.12,7.13;10,40.76,188.16,103.67,7.13"  xml:id="b3">
+	<analytic>
+		<title level="a" type="main">Visual complexity: A review</title>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<forename type="middle">C</forename>
+				<surname>Donderi</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">In Psychological Bulletin</title>
+		<imprint>
+			<biblScope unit="volume">132</biblScope>
+			<biblScope unit="page" from="73" to="97" />
+			<date type="published" when="2006" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,197.62,232.12,7.13;10,40.76,207.08,232.12,7.13;10,40.76,216.63,232.12,6.86;10,40.76,226.01,111.57,7.13"  xml:id="b4">
+	<analytic>
+		<title level="a" type="main">Motif simplication: Improving network visualization readability with fan and parallel glyphs</title>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Dunne</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Shneiderman</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 2013 Annual Conference on Human Factors in Computing Systems (CHI&apos;13)</title>
+		<meeting>the 2013 Annual Conference on Human Factors in Computing Systems (CHI&apos;13)</meeting>
+		<imprint>
+			<date type="published" when="2013" />
+			<biblScope unit="page" from="3247" to="3256" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,235.48,232.12,7.13;10,40.76,244.94,232.12,7.13;10,40.76,254.41,17.93,7.13"  xml:id="b5">
+	<analytic>
+		<title level="a" type="main">Visual scalability</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<forename type="middle">G</forename>
+				<surname>Eick</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<forename type="middle">F</forename>
+				<surname>Karr</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">National Institute of Statistical Sciences</title>
+		<imprint>
+			<date type="published" when="2002" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,263.87,232.12,7.13;10,40.76,273.34,51.89,7.13"  xml:id="b6">
+	<monogr>
+		<title level="m" type="main">The processing of information and structure</title>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<forename type="middle">R</forename>
+				<surname>Garner</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="1974" />
+			<publisher>Wiley</publisher>
+			<pubPlace>New York, NY</pubPlace>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,282.80,232.12,7.13;10,40.76,292.26,232.12,7.13;10,40.76,301.73,166.10,7.13"  xml:id="b7">
+	<analytic>
+		<title level="a" type="main">Simplifying filter/flow graphs by subgraph substitution</title>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<surname>Haag</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Lohmann</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Ertl</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Visual Languages and Human-Centric Computing</title>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2012" />
+			<biblScope unit="page" from="145" to="148" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,311.19,232.12,7.13;10,40.76,320.74,232.12,6.86;10,40.76,330.12,118.65,7.13"  xml:id="b8">
+	<analytic>
+		<title level="a" type="main">The tsql benchmark</title>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<forename type="middle">S</forename>
+				<surname>Jensen</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Cliord</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<forename type="middle">K G</forename>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the International Workshop on an Infrastructure for Temporal Databases</title>
+		<meeting>the International Workshop on an Infrastructure for Temporal Databases</meeting>
+		<imprint>
+			<date type="published" when="1993" />
+			<biblScope unit="page" from="1" to="28" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,339.59,232.12,7.13;10,40.76,349.05,232.12,7.13;10,40.76,358.52,170.37,7.13"  xml:id="b9">
+	<analytic>
+		<title level="a" type="main">Interactive querying of temporal data using a comic strip metaphor</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Jin</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Szekely</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">2010 IEEE Symposium on Visual Analytics Science and Technology (VAST)</title>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2010" />
+			<biblScope unit="page" from="163" to="170" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,367.98,232.12,7.13;10,40.76,377.45,232.12,7.13;10,40.76,386.91,232.12,7.13;10,40.76,396.37,232.12,7.13;10,40.76,405.84,206.22,7.13"  xml:id="b10">
+	<analytic>
+		<title level="a" type="main">Research directions in data wrangling: visuatizations and transformations for usable and credible data</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Kandel</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Heer</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Plaisant</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Kennedy</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<surname>Van Ham</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<forename type="middle">H</forename>
+				<surname>Riche</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Weaver</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Lee</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Brodbeck</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Buono</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Information Visualization -Special issue on State of the Field and New Research Directions</title>
+		<imprint>
+			<date type="published" when="2011" />
+			<biblScope unit="page" from="271" to="288" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,415.30,232.12,7.13;10,40.76,424.77,232.12,7.13;10,40.76,434.31,232.12,6.86;10,40.76,443.70,99.75,7.13"  xml:id="b11">
+	<analytic>
+		<title level="a" type="main">Wrangler: interactive visual specification of data transformation scripts</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Kandel</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Paepcke</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Hellerstein</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Heer</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the SIGCHI Conference on Human Factors in Computing Systems (CHI&apos;11)</title>
+		<meeting>the SIGCHI Conference on Human Factors in Computing Systems (CHI&apos;11)</meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="2011" />
+			<biblScope unit="page" from="3363" to="3372" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,453.16,232.12,7.13;10,40.76,462.63,232.12,7.13;10,40.76,472.09,232.12,7.13;10,40.76,481.55,165.22,7.13"  xml:id="b12">
+	<monogr>
+		<title level="m" type="main">Temporal search and replace: An interactive tool for the analysis of temporal event sequences</title>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Lan</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Lee</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Fong</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Monroe</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Plaisant</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Shneiderman</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2013" />
+			<pubPlace>College Park, Maryland</pubPlace>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,491.02,232.12,7.13;10,40.76,500.48,82.79,7.13"  xml:id="b13">
+	<monogr>
+		<title level="m" type="main">Visual Complexity: Mapping Patterns of Information</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Lima</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2011" />
+			<publisher>Princeton Architectural Press</publisher>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,509.95,232.12,7.13;10,40.76,519.49,232.12,6.86;10,40.76,528.88,196.42,7.13"  xml:id="b14">
+	<analytic>
+		<title level="a" type="main">Algorithms for time series knowledge mining</title>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<surname>Moerchen</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">KDD &apos;06 Proceedings of the 12th ACM SIGKDD international conference on Knowledge discovery and data mining</title>
+		<imprint>
+			<date type="published" when="2006" />
+			<biblScope unit="page" from="668" to="673" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,538.34,232.12,7.13;10,40.76,547.81,232.12,7.13;10,40.76,557.27,232.12,7.13;10,40.76,566.74,203.75,7.13"  xml:id="b15">
+	<analytic>
+		<title level="a" type="main">The challenges of specifying intervals and absences in temporal queries: A graphical language approach</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Monroe</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Lan</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">M</forename>
+				<surname>Del Olmo</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Shneiderman</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Plaisant</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Millstein</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. of ACM Conference on Human-Computer Interaction</title>
+		<meeting>. of ACM Conference on Human-Computer Interaction</meeting>
+		<imprint>
+			<date type="published" when="2013" />
+			<biblScope unit="page" from="2349" to="2358" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,576.20,232.12,7.13;10,40.76,585.66,232.12,7.13;10,40.76,595.13,232.12,7.13;10,40.76,604.59,199.56,7.13"  xml:id="b16">
+	<monogr>
+		<title level="m" type="main">Exploring point and interval event patterns: Display methods and interactive visual query</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Monroe</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Wongsuphasawat</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Plaisant</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Shneiderman</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Millstein</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Gold</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2012" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,614.06,232.12,7.13;10,40.76,623.52,232.12,7.13;10,40.76,632.99,230.10,7.13"  xml:id="b17">
+	<analytic>
+		<title level="a" type="main">Dynamic simplication and visualization of large maps</title>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Mustafa</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Krishnan</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Varadhan</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Venkatasubramanian</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">In International Journal of Geographic Information Systems</title>
+		<imprint>
+			<biblScope unit="volume">20</biblScope>
+			<biblScope unit="page">273302</biblScope>
+			<date type="published" when="2006" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,642.45,232.12,7.13;10,40.76,651.92,231.95,7.13"  xml:id="b18">
+	<monogr>
+		<title level="m" type="main">Information visualisation and the electronic health record</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<forename type="middle">J</forename>
+				<surname>Nordb</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2006" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,661.38,232.12,7.13;10,40.76,670.84,232.12,7.13;10,40.76,680.31,232.12,7.13;10,40.76,689.85,232.12,6.86;10,40.76,699.24,175.60,7.13"  xml:id="b19">
+	<analytic>
+		<title level="a" type="main">Experiences with mining temporal event sequences from electronic medical records: initial successes and some challenges</title>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Patnaik</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Butler</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Ramakrishnan</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<surname>Parida</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<forename type="middle">J</forename>
+				<surname>Keller</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<forename type="middle">A</forename>
+				<surname>Hanauer</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 17th ACM SIGKDD international conference on Knowledge discovery and data mining</title>
+		<meeting>the 17th ACM SIGKDD international conference on Knowledge discovery and data mining</meeting>
+		<imprint>
+			<date type="published" when="2011" />
+			<biblScope unit="page" from="360" to="368" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,708.70,232.12,7.13;10,40.76,718.17,232.12,7.13;10,40.76,727.63,232.12,7.13;10,40.76,737.10,17.93,7.13;10,285.12,54.06,250.38,7.13;10,303.38,63.52,228.28,7.13"  xml:id="b20">
+	<analytic>
+		<title level="a" type="main">Design study methodology: Reflections from the trenches and the stacks [23] R. Snodgrass. The temporal query language tquel</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Sedlmair</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<forename type="middle">D</forename>
+				<surname>Meyer</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Munzner</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Visualization and Computer Graphics In ACM Transactions on Database Systems (TODS)</title>
+		<imprint>
+			<publisher>ACM</publisher>
+			<biblScope unit="volume">18</biblScope>
+			<biblScope unit="issue">12</biblScope>
+			<biblScope unit="page" from="2431" to="2440" />
+			<date type="published" when="1987" />
+			<publisher>ACM</publisher>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,72.99,232.12,7.13;10,303.38,82.45,232.12,7.13;10,303.38,91.92,106.34,7.13"  xml:id="b21">
+	<analytic>
+		<title level="a" type="main">Visual cluster analysis in support of clinical decision intelligence</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Sun</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<surname>Wang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Hu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Edabollahi</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">AMIA Annual Symposium Proceedings</title>
+		<imprint>
+			<date type="published" when="2011" />
+			<biblScope unit="page">481490</biblScope>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,101.38,232.12,7.13;10,303.38,110.85,232.12,7.13;10,303.38,120.31,232.12,7.13;10,303.38,129.78,39.75,7.13"  xml:id="b22">
+	<analytic>
+		<title level="a" type="main">Supervised patient similarity measure of heterogeneous patient records</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Sun</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<surname>Wang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Hu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Edabollahi</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">In SIGKDD ACM Special Interest Group on Knowledge Discovery in Data</title>
+		<imprint>
+			<publisher>ACM</publisher>
+			<biblScope unit="volume">14</biblScope>
+			<biblScope unit="page" from="16" to="24" />
+			<date type="published" when="2012" />
+			<publisher>ACM</publisher>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,139.24,232.12,7.13;10,303.38,148.70,17.93,7.13"  xml:id="b23">
+	<monogr>
+		<title level="m" type="main">The Visual Display of Quantitative Information</title>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<surname>Tufte</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="1983" />
+			<publisher>Graphic Press</publisher>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,158.17,232.12,7.13;10,303.38,167.63,166.18,7.13"  xml:id="b24">
+	<analytic>
+		<title level="a" type="main">Preference for different amounts of visual complexity</title>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<forename type="middle">C</forename>
+				<surname>Vitz</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">In Behavioral Science</title>
+		<imprint>
+			<biblScope unit="volume">11</biblScope>
+			<biblScope unit="page">105114</biblScope>
+			<date type="published" when="1966" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,177.10,232.12,7.13;10,303.38,186.56,232.12,7.13;10,303.38,196.03,232.12,7.13;10,303.38,205.49,69.95,7.13"  xml:id="b25">
+	<analytic>
+		<title level="a" type="main">Activitree: Interactive visual exploration of sequences in event-based data using graph similarity</title>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Vrotsou</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Johansson</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Cooper</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">IEEE Transactions on Visualization and Computer Graphics</title>
+		<imprint>
+			<date type="published" when="2000" />
+			<biblScope unit="page" from="945" to="952" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,214.96,232.12,7.13;10,303.38,224.42,232.12,7.13;10,303.38,233.88,124.91,7.13"  xml:id="b26">
+	<analytic>
+		<title level="a" type="main">Interactive visualization techniques for searching temporal categorical data</title>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<forename type="middle">D</forename>
+				<surname>Wang</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Ph.D. Dissertation from the</title>
+		<imprint>
+			<date type="published" when="2010" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,243.35,232.12,7.13;10,303.38,252.81,232.12,7.13;10,303.38,262.28,232.12,7.13;10,303.38,271.74,170.89,7.13"  xml:id="b27">
+	<analytic>
+		<title level="a" type="main">Aligning temporal data by sentinel events: Discovering patterns in electronic health records</title>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<forename type="middle">D</forename>
+				<surname>Wang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Plaisant</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<forename type="middle">J</forename>
+				<surname>Quinn</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Stanchak</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Shneiderman</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Murphy</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. of ACM Conference on Human Factors in Computing Systems</title>
+		<meeting>. of ACM Conference on Human Factors in Computing Systems</meeting>
+		<imprint>
+			<date type="published" when="2008" />
+			<biblScope unit="page" from="457" to="466" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,281.21,232.12,7.13;10,303.38,290.67,55.56,7.13"  xml:id="b28">
+	<monogr>
+		<title level="m" type="main">Information Visualization: Perception for Design</title>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Ware</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2004" />
+			<publisher>Morgan Kaufmann</publisher>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,300.14,232.12,7.13;10,303.38,309.60,232.12,7.13;10,303.38,319.07,232.12,7.13;10,303.38,328.53,232.12,7.13;10,303.38,337.99,17.93,7.13"  xml:id="b29">
+	<analytic>
+		<title level="a" type="main">Lifeflow: Visualizing an overview of event sequences</title>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Wongsuphasawat</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">A G</forename>
+				<surname>Gómez</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Plaisant</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<forename type="middle">D</forename>
+				<surname>Wang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Taieb-Maimon</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Shneiderman</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 2011 Annual Conference on Human Factors in Computing Systems (CHI&apos;11)</title>
+		<meeting>the 2011 Annual Conference on Human Factors in Computing Systems (CHI&apos;11)</meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="2011" />
+			<biblScope unit="page" from="1747" to="1756" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,347.46,232.12,7.13;10,303.38,356.92,232.12,7.13;10,303.38,366.47,232.12,6.86;10,303.38,375.85,161.57,7.13"  xml:id="b30">
+	<analytic>
+		<title level="a" type="main">Subsequence matching on structured time series data</title>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Wu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Salzberg</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<forename type="middle">C</forename>
+				<surname>Sharp</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<forename type="middle">B</forename>
+				<surname>Jiang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Shirato</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Kaeli</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">SIGMOD &apos;05 Proceedings of the 2005 ACM SIGMOD international conference on Management of data</title>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="2005" />
+			<biblScope unit="page" from="682" to="693" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+				</listBibl>
+			</div>
+		</back>
+	</text>
+</TEI>

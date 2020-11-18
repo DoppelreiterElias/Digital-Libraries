@@ -1,0 +1,2663 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.tei-c.org/ns/1.0 /home/pisenberg/grobid/grobid-home/schemas/xsd/Grobid.xsd"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+	<teiHeader xml:lang="en">
+		<encodingDesc>
+			<appInfo>
+				<application version="0.4.1" ident="GROBID" when="2016-09-09T13:52+0000">
+					<ref target="https://github.com/kermitt2/grobid">GROBID - A machine learning software for extracting information from scholarly documents</ref>
+				</application>
+			</appInfo>
+		</encodingDesc>
+		<fileDesc>
+			<titleStmt>
+				<title level="a" type="main"></title>
+			</titleStmt>
+			<publicationStmt>
+				<publisher/>
+				<availability status="unknown"><licence/></availability>
+			</publicationStmt>
+			<sourceDesc>
+				<biblStruct>
+					<analytic>
+					</analytic>
+					<monogr>
+						<imprint>
+							<date/>
+						</imprint>
+					</monogr>
+				</biblStruct>
+			</sourceDesc>
+		</fileDesc>
+		<profileDesc>
+			<abstract/>
+		</profileDesc>
+	</teiHeader>
+	<text xml:lang="en">
+		<body>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1"></head><p>well capture the evolutionary processes of spatiotemporal phenomena, they are costly and have other wellknown limitations <ref type="bibr" coords="2,113.12,119.66,13.75,9.96" target="#b0">[10]</ref>. For example, most of these techniques attach great importance to the analysis models, while lacking interactive processes and the capability of intuitively analyzing big meteorological data. Individual changes hidden in such statisticsoriented processes are often ignored, when analyzing the overall changes. Furthermore, because a large number of climate problems have no reliable " ground truth " data, it is crucial to develop objective evaluation methods for comparing the outcomes of different analysis techniques. We thus resort to visualization techniques, and attempt to design a visualization framework that can intuitively and interactively reveal the evolutionary nature of climate change patterns at different spatiotemporal scales. We aim at addressing the following requirements <ref type="bibr" coords="2,135.15,239.66,9.52,9.96">[3]</ref>. First, climate represents the long-term average meteorological status in given regions, to evaluate climate changes, statistical analyses based on decades or longer observation data are necessary. Second, climate is inherently associated with geoinformation , so the visualization granularities between temporal and spatial dimensions must be balanced and easily tuned. Finally, apart from macro and global climate change phenomena, users, such as climate researchers and policy makers, may also be interested in local and micro (e.g. abnormal) conditions. Our goal is to identify climate change patterns through visual analysis based on in-site climate observation station data which are also essential for traditional quantitative methods. The proposed visualization framework for climate changes, which we will call Vismate, contains three visualization modules, i.e. Global Radial Map, Time Series Discs and Anomalies Detection Scatterplot. To evaluate our approach, we used Vismate to analyze China Surface Data for International Exchange and Global Historical Climate Network (GHCN) <ref type="bibr" coords="2,119.63,409.64,15.00,9.96" target="#b15">[25] </ref>data, as shown in <ref type="figure" coords="2,217.99,409.64,43.04,9.96">Fig. 1 and</ref><ref type="figure" coords="2,266.62,409.64,28.90,9.96">Fig. 12</ref>respectively. By consulting domain experts and checking against the related literature, all the patterns discovered in our case studies have been confirmed, thus proving the effectiveness and the scalability of our approach. The major contributions of this paper include: @BULLET Visimate, a visual analytical framework for discovering climate change patterns at different spatiotemporal scales. @BULLET Three complementary visualization techniques for spatial and temporal patterns in a single view, time-series patterns, and anomaly detection. </p><p>@BULLET Discovery of several temperature patterns of China and the world relating to the climate changes. </p><p>The remaining part of this paper is organized as follows. Section 2 reviews related work. The approach overview is then described in Section 3, followed by three complementary visualization techniques in Section 4, 5, and 6 respectively. Section 7 describes two analytical case studies and an expert review. Finally, we conclude the paper in Section 8. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2">RELATED WORK</head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.1">Spatial and Temporal Visualization</head><p>Thematic map <ref type="bibr" coords="2,102.04,659.66,14.95,9.96" target="#b31">[41] </ref> is perhaps the most traditional method of georelated data visualization, which can be viewed as an overlay of heatmap or glyphs on a map. A novel type of quantitative thematic map was introduced by Speckman et al. <ref type="bibr" coords="2,200.69,689.66,13.75,9.96" target="#b33">[43]</ref>, i.e. Necklace Maps. Taggram <ref type="bibr" coords="2,81.03,699.68,14.99,9.96" target="#b19">[29] </ref>is another type of thematic map, in which tag clouds <ref type="bibr" coords="2,45.36,709.64,14.98,9.96" target="#b16">[26] </ref>were plotted on a map to represent the area characteristics. These methods work well for representing static data, but provide limited supports for visualizing time-oriented geographic data. Many researchers attempted to tackle this problem by jointly using a map and other time-series visualization techniques. Malik et al. <ref type="bibr" coords="2,543.08,59.66,14.94,9.96" target="#b17">[27] </ref>comprehensively used the map, bar chart, line chart and pie chart to analyze the correlation between urban crime activities and spatiotemporal dimensions. Landesberger et al. <ref type="bibr" coords="2,496.13,89.66,14.93,9.96" target="#b14">[24] </ref>designed a dynamic categorical data view (DCDV) to visualize human position transitions in one day, and associated it with a geography view. Furthermore, parallel coordinates <ref type="bibr" coords="2,437.46,119.66,14.26,9.96" target="#b10">[20,</ref><ref type="bibr" coords="2,456.41,119.66,10.65,9.96" target="#b37"> 47]</ref>, ThemeRiver <ref type="bibr" coords="2,524.97,119.66,14.19,9.96" target="#b6">[16,</ref><ref type="bibr" coords="2,543.86,119.66,10.59,9.96" target="#b7"> 17]</ref>, stacked bar charts <ref type="bibr" coords="2,392.57,129.68,13.78,9.96" target="#b20">[30]</ref>, and even all existing time-series visualization techniques can be combined with a map to form effective spatiotemporal data visualization tools. However, these loosely coupled spatiotemporal visualization methods do not provide an overview of spatial and temporal dimensions, and lack of intuitive and compact methods for visualizing spatiotemporal data in a single view. Different from such multi-view methods, our approach offers a global yet compact view, integrating both the spatial and the temporal features. Radial visualization, or displaying data in a circular or elliptical layout, is an increasingly common technique in information visualization <ref type="bibr" coords="2,358.56,239.66,9.51,9.96">[6]</ref>, which often encode time dimension by several concentric rings <ref type="bibr" coords="2,369.49,249.68,9.76,9.96">[2,</ref><ref type="bibr" coords="2,382.39,249.68,10.65,9.96" target="#b40"> 50]</ref>. However, we often ignore its advantage of representing orientation and position due to its non-directional shape. For example, Qu et al. <ref type="bibr" coords="2,403.85,269.66,14.99,9.96" target="#b24">[34] </ref>designed an s-shaped axis used in parallel coordinates to represent the wind direction, and Malik et al. <ref type="bibr" coords="2,307.80,289.64,15.01,9.96" target="#b18">[28] </ref>used multiple regular polygons for the comparative visualization. To improve the effectiveness and gain enough space for extra visualization components, one often utilizes the inside and outside of the radial visualizations. For example, Draper et al. <ref type="bibr" coords="2,505.86,319.64,10.52,9.96">[7] </ref>put search conditions in the central space, while Wu et al. <ref type="bibr" coords="2,487.98,329.66,15.02,9.96" target="#b40">[50] </ref>utilized inside space to place a triangular ScatterPlot. A human body chart was laid in radar plot by Zhang et al. <ref type="bibr" coords="2,425.48,349.64,14.99,9.96" target="#b44">[54] </ref>to visualize a person's health condition, and Burch <ref type="bibr" coords="2,399.10,359.66,10.50,9.96">[2] </ref>drew many thumbnails outside the outermost ring of the TimeRadar. Inspired by these methods, the main visualization in our framework has also a radial layout. We encode time dimension by different concentric rings along radial direction with a map in the center, so that our approach can visualize spatial and temporal dimension at the same time. Moreover, the outside area of the radial plot is utilized to represent clustered information that is very essential for climate studies. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.2">Climate Data Visualization</head><p>Visualization has been an effective tool in climate studies, and there are many classic visualization methods, such as contour line <ref type="bibr" coords="2,540.83,471.68,13.71,9.96" target="#b39">[49]</ref>, standard coloration <ref type="bibr" coords="2,380.64,481.64,13.75,9.96" target="#b31">[41]</ref>, rose diagram <ref type="bibr" coords="2,451.16,481.64,13.78,9.96" target="#b11">[21]</ref>, etc.. These methods are usually simple and can only show analysis results, lacking interactions and the abilities for discovering the potential knowledge from big climate data. To clarify the use of the visualization techniques in climate studies, Nocke et al. <ref type="bibr" coords="2,489.17,521.66,15.02,9.96" target="#b21">[31] </ref>performed a questionnaire with climate researchers. The results showed that traditional 2D visualization techniques were the most widely used tools in climate studies, and there was a gap between climate studies and information visualization techniques. As the advance of information visualization, more climate researchers have applied the state-of-the-art visualization techniques to climate studies. Koethur et al. <ref type="bibr" coords="2,333.20,591.68,15.02,9.96" target="#b12">[22] </ref>combined clustering and visualization to capture the prominent spatiotemporal features from environment models. Tominski et al. <ref type="bibr" coords="2,370.99,611.66,14.97,9.96" target="#b38">[48] </ref>visualized the global climate network using information visualization techniques. Johansson et al. <ref type="bibr" coords="2,504.13,621.68,14.99,9.96" target="#b9">[19] </ref>used a 3D GIS platform to show the climate data. Both Yannier et al. <ref type="bibr" coords="2,527.25,631.64,15.02,9.96" target="#b41">[51] </ref>and Janicke et al. <ref type="bibr" coords="2,358.85,641.66,14.95,9.96" target="#b8">[18] </ref>have studied how to visualize weather variations, which are similar to our work. Their studies, however, focus on the use of touch screen in enhancing the viewer's perception, which would potentially complement our work. The most related idea was that of Drocourt et al. <ref type="bibr" coords="2,496.09,681.68,9.47,9.96">[8]</ref>, which uses a radial layout plus a map to study the changes (advance/retreat) of glaciers in Greenland. Glyphs of different shapes and colors were drawn on the sectors of a circle to represent individual changes. The visualization result, however, is a static picture without any interaction for exploring the detailed information, and the plot can <ref type="bibr" coords="3,192.38,500.60,15.01,9.96" target="#b34">[44] </ref>revie of using the c oject <ref type="bibr" coords="3,189.96,520.64,15.00,9.96" target="#b13">[23] </ref>contai in climate chan ions Program in he boundaries o disciplinary char mong the public i yzed the media a omparing the n variation in the (AR4) <ref type="bibr" coords="3,197.71,620.60,16.60,9.96">[4] </ref>nomaly Detectio w, column, or hy mensional vector y slice from all t sed on PCA <ref type="bibr" coords="3,386.18,691.70,14.91,9.96" target="#b11">[21] </ref>he three module zation, suppleme heir own strengt ns. It is, howe nd subtle climate city is needed to lization surely gh several relat a analyses of cli stomized design is an urgent nee ionals and the k. tasks, and one can use either one module separately, or two or three together based on the analytical tasks at hand. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4">GLOBAL RADIAL MAP</head><p>We believe that full awareness, investigation, and understanding of both time and spatial patterns at the same time is extremely important, and therefore design the Global Radial Map to visualize spatiotemporal patterns in a compact view. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.1">Map Drawing</head><p>To embed a map into a circle, the map's bounding box should fit into the circle. Using the traditional longitude/latitude equidistance grid projection, a world map could be projected onto a rectangle with the width twice of its height, which will waste much space in the circle, as shown in Our drawing method not only needs to cater for the world map, it should also be designed as generic as possible to accommodate other geographic shapes of different countries. One of the key problems is to compute the map's central coordinate. Drocourt <ref type="bibr" coords="4,253.28,525.02,10.49,9.96">[8] </ref>used a modified standard formula to compute the map gravity center of Greenland. The author, however, has not considered the scale issue and not tested his method on any map having a concave polygon contour. Inspired by GIS platforms, we use several interactive operations, such as pan, zoom-in, zoom-out, etc., to operate maps containing any countries and areas, instead of using complicated algorithms. Through these interactions, users could flexibly explore various geographical areas at any scales in an interactive manner, which is particularly useful for visualizing big data obtained from a huge amount of stations. To keep the map style intuitive and minimize the viewer's cognitive effort, we use the online tool ColorBrewer <ref type="bibr" coords="4,242.49,645.02,10.50,9.96">[1] </ref>to assign a color in the recommended color solution to each area. The selected color solution is also used for spatial mapping (see Section 4.2), in which stations are colored the same as the areas they belong to. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.2">Spatial Mapping</head><p>Mapping each station with longitude, latitude and elevation 3D coordinate to a 1D angular coordinate system creates extra space that could be used to represent time and clustering information. One of the challenges in spatiotemporal mapping is to minimize the loss of spatial information when computing the angular coordinate for each station. The fact that not all the stations are on the contours of any country makes the coordinate transformation more difficult. To avoid that two geographically distant stations are arranged near each other on the ring, we use a hierarchical mapping strategy, i.e. first divide a map into several subareas and assign an angular span to each subarea in proportion to the number of the stations in that area, and then project the stations in each area onto the ring according to a reference. We use the latitude coordinate of a station as the reference (see <ref type="figure" coords="4,326.59,149.66,25.58,9.96" target="#fig_5">Fig. 4b</ref>), because climate change is sensitive to the latitude. Having obtained the angular coordinate of the first station in one area, which is equal to the area's starting angle, the angular coordinates of other stations in that area can be determined by simply adding an equal angular interval to the angular coordinate of the previous station to simplify the drawing algorithm and to maintain the symmetry of the visualization, as in <ref type="figure" coords="4,438.66,209.66,23.69,9.96" target="#fig_5">Fig. 4a</ref>. Assume P be the set of stations, L be the set of hierarchical levels, and A i be the set of subareas at the ith level. The algorithm of computing the origin i,j and span i,j representing the starting angle and the angular span of the jth area in the ith level as follows: </p><p>Algorithm.1 Determine the origin and span of each subarea </p><formula>{ } { } { } ( ) 1 2 ,1 , 1, 2 , 1,1 1 , j , </formula><formula>, nts the , statio , , , , n i i j i i j i j i i N i i M origin a a l L a L A span a l l l A a a a a P ← ∈ ∈ ← × = ∈ … = … , 1 , 1 , , 1 , 1 number symbol , 1 els if e 1 then nd for End , 1 End if f E or i j i j i j i j origin origin i origin origin p n i j s a − − ← &gt; ← + &gt; = </formula></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.3">Temporal Mapping</head><p>The Global Radial Map provides sector-based ring plot for displaying raw observation data, offering the visualization of the basic meteorological condition of each station. Radial direction indicates the positive direction of the time axis. Each sector indicates the time series of one station, while a radial bin is colored to represent the concrete attribute value at a time point. <ref type="figure" coords="4,501.31,709.16,25.26,9.96" target="#fig_6">Fig. 5a</ref>shows a time series visualization example of four years at six stations. Each sector is colored according to the attribute value, and the selected </p><formula>a s k s a 4 T th r a th v a c s ti a r f F b (c 4 W d s e u d d g M b d 4 T p ta n w c c a g (a (c) </formula><p>attribute is also subsection. Desi key to temporal m standard <ref type="bibr" coords="5,88.44,79.70,15.01,9.96" target="#b43">[53] </ref>to attributes, as dep </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.4">Cluster</head><p>To clearly displa he Global Rad epresenting a clu and cold colors e he cluster respe value of the aver a meteorological compute the slo station. Let X={x ime interval, an attribute values epresent the ave follows: </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.5">Typical</head><p>When using the draw the Global selection bar con etc.. If the month use the month d default. The num drop-down-list generated the ma Moreover, the s because the und data pre-processi </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.6">Limitati</head><p>The current visu possible scenario ailored for diffe number of statio with a large num clearly display e could modify ou assigning an ang group. Second, t </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>a) </head><p>) </p><p>used for clust igning an intuiti mapping. We us define the colo picted in <ref type="figure" coords="5,143.72,89.72,27.27,9.96" target="#fig_6">Fig. 5c.</ref>ing ay the stations ex dial Map inclu uster of the stati encode positive a ectively. A ring rage slope of line l parameter attri ope to represent x1, x2,…, x N } be nd Y={y1, y2,… at the corresp erage value of th <ref type="bibr" coords="5,343.62,584.61,58.38,6.21;5,344.70,557.01,11.88,6.04;5,360.54,542.67,11.82,6.04;5,376.08,528.33,11.82,6.04;5,391.26,513.99,8.88,6.04">1982 1983 1984 1985 1982 1983 1984 198 </ref><ref type="bibr" coords="5,452.52,584.61,5.88,6.04;5,399.42,584.61,49.44,6.34;5,452.52,456.57,5.88,6.04;5,400.50,513.99,2.88,6.04;5,422.58,485.31,11.82,6.04;5,438.12,470.91,11.82,6.04;5,407.04,499.65,11.88,6.04">19 5 1986 1987 1988 19 5 1987 1988 1986 </ref> the timeterns of a statio ange of an area. aligning the tr nter (see <ref type="figure" coords="6,86.97,503.48,24.65,9.96">Fig. 7b</ref>Triangles -series triangle c n, in many case We therefore co riangles represen ), through which f the stations. W When the use s is performed drawn in the tim d breakpoints to r the time axis, erval. <ref type="figure" coords="6,135.69,573.44,25.24,9.96">Fig. 7c</ref><ref type="figure" coords="6,202.65,227.72,28.16,9.96">Fig. 6d</ref>88 are almost e to these two ye nd the selected s d in the mid-198 may be conside rom a single rect potenuse increa ngle. Each hypo s average chang in <ref type="figure" coords="6,182.69,331.70,25.64,9.96">Fig. 6e</ref>. For ents the continu 1 to 1990, and th ange of 2-year ordinal, occasion h that the over nuse having on rate over the en mperature had r the 1980s were a can be used to d es one wishes to onstruct a radial nting multiple h users could obs We also associate er clicks on a on the clicked e series plot, as o the time serie and view the ows an example 5, while 1981 an default). By ob e user could imm choose a more uals over all the cantly improve ide a toolbar for </p><formula>( ( 1 N i slope = =  </formula><formula>( )( )) ( ) 2 1 i i N i i x x y y x x = − − −  </formula></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.2"></head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="7">EVAL</head><p>This secti studies in <ref type="bibr" coords="6,350.88,443.22,51.30,4.22">1981-1982 1982-1983 198 </ref>omaly Detection elected as the ng the climate c on has been con s convenient to re. A similar me oral similarity in w, column or hyp ctor. We use A) <ref type="bibr" coords="6,408.48,324.92,15.05,9.96" target="#b11">[21] </ref>to map a wo-dimensional etween a spatia a box query an matically highlig n in <ref type="figure" coords="6,415.56,374.90,20.98,9.96" target="#fig_9">Fig. 8</ref><ref type="bibr" coords="6,457.08,442.86,55.77,4.22">6 1986-1987 1987-1988 1988</ref>Series Disc, we f sh, indicating a h the conclusio s, and there was . Many other c as, climate warm ar in history, an han in other seas </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="7.1">Chi</head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>LUATION </head><p>Findings verage records t during the period on the cluster r In <ref type="figure" coords="7,412.09,179.72,26.70,9.96" target="#fig_10">Fig. 9b</ref>, the all the station , showing that th heast China and finding is that various degrees ected results. W tain a detailed vi te changes durin time series ana Despite a large n om to clearly still be observed ed, representing ng the " Row Pa e found the co o randomly sele which also show n also be found </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2">Global Hist</head><p>e Global Histor aset is one of t rld's historical er 7000 meteoro ich have differe cause this datas nly 15.4%) statio dings during the ves to compare ring the same p cember as our an smate. To acco veral representat cribed in Section We divided all oling), as in <ref type="figure" coords="8,100.20,609.08,14.19,9.96;8,55.50,619.04,3.37,9.96">Fig.  g</ref>, we found that other areas of th e <ref type="figure" coords="8,62.40,639.08,25.21,9.96">Fig.12c</ref>), while (see <ref type="figure" coords="8,76.76,649.04,28.09,9.96">Fig. 12b</ref>). the 1980s, which the stations in rming change in c. The variation her than in So ivities caused c rth America was nds except in the n the winters see the dark red obvious warming re obvious than s the weakest. W 2000s were the med our findings e characteristics e " hypotenuse s 1-2012) vector, a d the stations hav n in <ref type="figure" coords="8,128.31,159.74,28.47,9.96">Fig. 11a</ref>, the m other mapped nding time serie opposite change maxima point). smate in finding aly Detection Sc series plot. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>torical </head><p>Climate rical Climatolog the most import climate change logical observat ent start years an set only contain ons have records e period of 198 the global clima period. We sele nalysis objects t mmodate large tional changes n 4.5. the stations int 12a. By viewin t global warmin he world, becaus e only the station We also observe h was consistent China had risi n China than the ns in the popul outhern Hemisp climate changes s an exception, i e northwest. Surf was very stro d sectors in <ref type="figure" coords="8,214.88,59.72,14.23,9.96;8,170.70,69.74,4.49,9.96">Fig.  g</ref>trends, and in in the winter. T We found that th same as the pri s by stating that that do not sudd slice " for each and used the An ving abnormal ye ere is a station i d points. We sele es plot (<ref type="figure" coords="8,200.98,179.72,30.86,9.96">Fig. 11b</ref><ref type="bibr" coords="9,118.68,619.04,9.53,9.96">[4]</ref>. We theref alizing actual ob xperts to verify te may also gui atterns found in ration <ref type="bibr" coords="9,136.49,669.02,13.78,9.96" target="#b1">[11]</ref>. Vismate receive Our findings w ght of applying i l meteorology f the paper, other because our app e changes in oth any number of eve that our t elds, such as observation stat m data. In partic ises from the ex backgrounds p ns was slower th ore of the interac ws was confirme more professiona ssed strong intere which was meas ormance, the sy the time-consum re the system s d in real-time. A been reduced to pect is not as hig ooked the amou ected a high sy the lowest score an quickly learn too short for the moothly. Using Radial Map may nt limitation of process, affecte ve been verified ure findings wit isting models ou of our incom d the fact that no cally modeled. E ferent meteorolo the most impo Goddard Institute Climate Data C ar, while based f the UK Met Of the climate sci mbles to mitigat For instance, I assessment of fu Vismate capabl can be an effe s generated by o more in</p><formula>s a a F a e to a e r p th v s b c a S o th w th p h to g d a a m c c r u th o a c S (N H 1 c u u c o a m b </formula></div><figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_0" coords="3,338.82,457.70,59.81,9.96;3,340.86,467.72,59.63,9.96;3,345.36,486.62,55.05,10.04;3,342.90,499.70,61.13,9.96;3,340.62,509.72,62.69,9.96;3,340.86,519.74,59.93,9.96;3,341.88,533.72,60.17,9.96;3,340.86,543.74,60.47,9.96;3,340.86,553.70,60.10,9.96;3,341.34,563.72,57.25,9.96;3,340.86,577.70,61.39,9.96;3,339.36,587.72,64.07,9.96;3,340.38,597.74,63.29,9.96;3,342.36,607.70,62.27,9.96;3,340.38,617.72,62.25,9.96;3,337.38,627.74,64.54,9.96;3,339.36,637.70,55.96,9.96"><head></head><figDesc>bnormal Case: tterns drastically Visualization on the collected ped a comprehen ntains three mod obal Radial Ma ospatial distribu apted in this vi mber of groups, me-Series Discs ound a center p angular HeatMap years of a station angles as a disc a me trends and i fferent stations. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_2" coords="4,91.32,197.66,204.23,9.96;4,45.36,207.68,250.24,9.96;4,45.36,217.64,250.22,9.96;4,45.36,227.66,13.49,9.96;4,76.56,227.66,83.79,9.96;4,178.06,227.66,85.80,9.96;4,281.56,227.66,13.99,9.96;4,45.36,237.68,250.21,9.96;4,45.36,247.64,250.22,9.96;4,45.36,257.66,250.19,9.96;4,45.36,267.68,250.27,9.96;4,45.36,277.64,250.17,9.96;4,45.36,287.66,99.75,9.96;4,59.46,404.37,22.35,5.32;4,152.94,338.43,19.25,5.32;4,59.46,338.43,20.67,5.32;4,150.78,402.63,20.69,5.32;4,80.64,354.68,6.72,12.05;4,276.90,424.76,12.04,5.00;4,179.70,425.90,9.16,5.00;4,179.58,433.94,30.46,5.00;4,241.50,425.00,20.68,5.00;4,226.98,434.00,29.57,5.00;4,273.78,433.76,15.22,5.00;4,205.38,425.90,17.56,5.00;4,212.46,340.41,68.09,5.44;4,216.66,401.79,63.95,5.80"><head></head><figDesc>Fig. 3(left). We choose to change the map projection by selecting the Mercator projection [42] featured with shape-preserving after converting a world map to a square within a specified bounding box (longitude:-180°~180°, latitude:-85.05°~85.5°). The phenomenon of area enlargement becomes more serious as latitude increases, and the regions higher than 85.05° and lower than -85.05° cannot be mapped. Such effects on our visualizations are, however, limited due to the area-preserving feature of the Mercator projection and the fact of only one station (Amundsen-Scott South Pole Station) in such a high-latitude area. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_3" coords="4,45.36,458.98,244.22,8.91;4,45.36,468.46,164.45,8.91"><head>Fig. 3. </head><figDesc>Fig. 3. Comparison of traditional longitude/latitude equidistance grid projection (left) and Mercator projection (right). </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_5" coords="4,307.80,599.32,244.12,8.91;4,307.80,608.86,244.17,8.91;4,307.80,618.34,32.01,8.91"><head>Fig. 4. </head><figDesc>Fig. 4. (a) An example of spatial mapping (the ring band representing time information is omitted); (b) Sorting stations based on their latitudes. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_6" coords="5,54.12,453.40,60.89,8.91;5,54.12,462.88,62.93,8.91;5,56.76,472.42,58.65,8.91"><head>Fig. 5. </head><figDesc>Fig. 5. (a) Temp band. (b) An actu c) Temperature l </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_7" coords="5,513.06,347.72,54.06,9.96;5,513.00,357.74,54.11,9.96;5,515.94,367.70,51.22,9.96;5,510.78,377.72,56.39,9.96;5,512.58,387.74,54.53,9.96;5,511.44,397.70,55.67,9.96;5,514.80,407.72,52.33,9.96;5,508.80,417.74,58.31,9.96;5,511.08,427.70,56.05,9.96;5,546.78,456.35,12.73,7.16;5,537.12,463.07,25.32,7.16;5,537.12,469.79,25.32,7.16;5,537.12,476.57,25.32,7.16;5,537.12,483.29,25.32,7.16;5,537.12,490.01,25.32,7.16;5,537.30,496.73,25.26,7.16;5,537.12,503.45,25.32,7.16;5,537.12,510.17,19.02,7.16;5,543.60,516.95,17.52,7.16;5,539.40,523.67,22.26,7.16;5,539.40,530.39,22.26,7.16;5,539.40,537.11,22.26,7.16;5,539.40,543.83,22.26,7.16;5,539.40,550.55,22.26,7.16;5,539.40,557.27,22.26,7.16;5,539.94,564.05,22.26,7.16;5,549.78,570.77,11.23,7.16;5,517.32,679.54,43.77,8.91;5,513.00,689.02,39.52,8.91;5,516.36,714.86,50.86,9.96;5,508.86,724.82,58.31,9.96;5,511.14,659.49,30.18,8.83;5,548.58,606.09,14.25,8.83;5,548.94,658.41,14.25,8.83;6,45.42,93.21,4.13,11.70;6,45.42,187.17,4.13,11.70;6,45.42,281.19,4.13,11.70"><head></head><figDesc>.8 ~ -0.7 -0.7 ~ -0.6 -0.6 ~ -0.5 -0.5 ~ -0.4 -0.4 ~ -0.3 -0.3 ~ -0.2 -0.2 ~ -0.1 -0.1 ~ 0 0 ~ 0.1 0.1 ~ 0.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_8" coords="6,163.49,573.44,7.98,9.96;6,115.50,583.46,57.05,9.96;6,114.42,593.48,55.49,9.96;6,111.42,603.44,61.41,9.96;6,111.06,613.46,60.15,9.96;6,111.42,623.48,61.73,9.96;6,113.40,633.44,60.57,9.96;6,114.42,643.46,57.52,9.96;6,113.40,653.48,59.49,9.96;6,108.24,663.44,65.35,9.96;6,114.96,673.46,56.47,9.96;6,110.34,683.48,61.73,9.96;6,110.70,705.32,60.74,10.04;6,113.22,719.48,59.39,9.96;6,110.46,729.44,63.63,9.96;6,167.94,49.70,62.33,9.96;6,172.26,59.72,55.63,9.96;6,167.82,69.74,61.84,9.96;6,169.44,93.74,59.69,9.96;6,171.36,103.70,60.39,9.96;6,167.40,113.72,63.99,9.96;6,169.98,123.74,58.75,9.96;6,169.20,133.70,62.51,9.96;6,170.04,143.72,60.29,9.96;6,170.34,153.74,61.77,9.96;6,170.46,163.70,58.25,9.96;6,169.80,173.72,62.43,9.96;6,170.46,187.70,62.09,9.96;6,169.62,197.72,61.89,9.96;6,171.78,207.74,57.87,9.96;6,169.68,217.70,59.81,9.96;6,167.88,227.72,29.90,9.96"><head></head><figDesc>sh (1984 and 1985 are selected by ression lines, the ach interval and e smallest residu t could signific . We also provi ulate the time se me series analysis interactively sh p the change tren ETECTION SCA bal climate chan hotspots. For exa ange from that y most important undled together t codes the chan esented by this c distribution in a c maxima year (w ad risen in the 1 lumn of 1990 ar arly average tem o all other year to 1984 are all ne al nearby rectang in a block indica ented. A specia t stable and con mple in </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_9" coords="6,307.56,570.82,39.59,8.91;6,307.56,580.30,38.93,8.91;6,307.56,589.84,32.87,8.91"><head>Fig. 8. </head><figDesc>Fig. 8. Ano slice is se mapping. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_10" coords="7,54.12,533.32,62.05,8.91;7,54.12,542.80,61.07,8.91;7,55.92,552.28,54.45,8.91;7,56.76,561.82,57.03,8.91;7,54.12,571.30,60.75,8.91;7,54.12,580.78,60.05,8.91"><head>Fig. 9. </head><figDesc>Fig. 9. The winter 2012. (a) The pa n the selected eddish ring and minima point an series plot also p </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_12" coords="9,168.84,165.57,61.31,8.83;9,176.46,178.83,23.50,8.83;9,220.91,178.83,9.75,8.83;9,186.24,189.03,3.98,8.83;9,227.52,189.03,3.98,8.83;9,186.24,198.27,3.98,8.83;9,227.52,198.27,3.98,8.83;9,186.24,207.45,3.98,8.83;9,227.52,207.45,3.98,8.83;9,186.24,216.63,3.98,8.83;9,227.52,216.63,3.98,8.83;9,186.24,225.87,3.98,8.83;9,227.52,225.87,3.98,8.83;9,186.24,235.05,3.98,8.83;9,227.52,235.05,3.98,8.83;9,186.24,244.23,3.98,8.83;9,227.52,244.23,3.98,8.83;9,169.32,259.04,60.37,9.96;9,171.54,269.00,58.35,9.96;9,171.12,279.02,58.09,9.96;9,169.38,289.04,64.33,9.96;9,170.52,299.00,59.45,9.96;9,167.46,309.02,63.34,9.96;9,173.70,319.04,56.15,9.96;9,169.02,329.00,61.25,9.96;9,167.94,339.02,64.85,9.96;9,172.02,349.04,60.47,9.96;9,167.58,359.00,63.89,9.96;9,170.22,369.02,60.45,9.96;9,167.76,379.04,62.20,9.96;9,173.04,389.00,55.74,9.96;9,169.68,399.02,60.28,9.96;9,172.32,409.04,60.75,9.96;9,173.94,419.00,56.15,9.96;9,170.70,439.04,59.33,9.96;9,170.16,449.00,61.85,9.96;9,169.74,459.02,62.69,9.96;9,169.02,469.04,60.65,9.96;9,166.02,479.00,62.53,9.96;9,171.12,489.02,54.21,9.96;9,169.02,499.04,60.47,9.96;9,169.98,509.00,61.41,9.96;9,169.38,519.02,60.05,9.96;9,171.48,529.04,54.14,9.96;9,170.10,539.00,59.89,9.96;9,165.48,549.02,65.81,9.96;9,167.64,559.04,63.57,9.96;9,169.38,569.00,61.97,9.96;9,170.88,579.02,57.01,9.96;9,169.56,589.04,64.23,9.96;9,169.32,599.00,58.96,9.96;9,170.40,609.02,58.41,9.96;9,170.88,619.04,54.53,9.96;9,171.12,629.00,56.40,9.96;9,174.18,639.02,57.01,9.96;9,169.44,649.04,61.35,9.96;9,174.30,659.00,51.11,9.96;9,169.50,679.04,61.17,9.96;9,168.00,689.00,62.67,9.96;9,171.00,699.02,60.53,9.96;9,168.72,709.04,56.25,9.96;9,173.10,719.00,57.34,9.96;9,226.74,49.70,61.83,9.96;9,228.48,59.72,58.81,9.96;9,228.42,69.74,58.42,9.96;9,227.46,79.70,55.73,9.96;9,230.40,89.72,55.44,9.96;9,226.44,99.74,58.32,9.96;9,225.36,109.70,61.17,9.96;9,225.12,119.72,62.43,9.96;9,226.56,129.74,61.66,9.96;9,226.56,139.70,59.51,9.96;9,227.28,149.72,44.98,9.96;9,227.88,165.57,2.21,8.83;9,226.62,178.83,21.28,8.83;9,269.56,178.83,17.72,8.83;9,227.46,189.03,14.00,8.83;9,277.02,189.03,9.98,8.83;9,227.46,198.27,14.00,8.83;9,277.02,198.27,9.98,8.83;9,227.46,207.45,14.00,8.83;9,277.02,207.45,9.98,8.83;9,227.46,216.63,14.00,8.83;9,277.02,216.63,9.98,8.83;9,227.46,225.87,14.00,8.83;9,277.02,225.87,9.98,8.83;9,227.46,235.05,14.00,8.83;9,277.02,235.05,9.98,8.83;9,227.46,244.23,14.00,8.83;9,277.02,244.23,9.98,8.83"><head></head><figDesc>three view sed us to add m hey even expres on as possible, w prove the perfo ocess, i.e. all t are done befor re be responded essing time has b performance asp he experts overlo ystem and expe aspect received t not everyone c earning time is t and operate sm in the Global R ut an importan a complicated p e discovered hav ess of our futu wever, all the ex nties, because al processes and e been scientific n drawn by diff e, as three of tions, NASA G OAA National C he warmest yea Hadley Centre of t year [13]. So i-approach ensem del might have. o present its a fore hope that bservation data the conclusions ide experts in m our approach, </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_13" coords="9,339.30,487.87,32.45,7.83;9,344.76,501.15,58.62,8.83;9,341.64,511.11,59.52,8.83;9,350.10,521.13,50.54,8.83;9,342.18,531.15,57.68,8.83;9,344.34,541.11,56.63,8.83;9,342.72,551.13,37.63,8.83;9,339.90,561.15,60.36,8.83;9,342.06,571.11,59.05,8.83;9,341.22,581.13,58.87,8.83;9,346.50,591.15,49.84,8.83;9,339.90,601.11,61.94,8.83;9,344.70,611.13,55.51,8.83;9,341.28,621.15,59.24,8.83;9,342.60,631.11,42.01,8.83;9,346.68,641.13,56.55,8.83;9,340.32,651.15,60.50,8.83;9,342.60,661.11,49.99,8.83;9,345.66,671.13,56.95,8.83;9,339.90,681.15,61.07,8.83;9,340.32,691.11,61.74,8.83;9,342.60,701.13,10.03,8.83;9,343.38,711.15,57.41,8.83;9,340.32,721.11,60.65,8.83;9,397.74,194.38,61.40,8.91;9,401.94,203.92,59.45,8.91;9,401.40,244.10,59.09,10.04;9,396.78,258.20,63.57,9.96;9,397.92,268.22,58.74,9.96;9,400.74,278.24,53.82,9.96;9,399.60,288.20,53.55,9.96;9,396.72,298.22,60.58,9.96;9,400.20,308.24,58.83,9.96;9,399.06,318.20,60.10,9.96;9,401.52,328.22,59.87,9.96;9,399.48,338.24,60.47,9.96;9,399.36,348.20,55.19,9.96;9,398.76,358.22,59.39,9.96;9,399.90,368.24,58.48,9.96;9,398.64,378.20,61.97,9.96;9,400.32,388.22,23.97,9.96;9,398.88,411.91,4.67,7.83;9,398.28,424.22,64.23,9.96;9,395.94,434.24,61.35,9.96;9,398.52,444.20,59.63,9.96;9,398.22,454.22,60.33,9.96;9,397.08,464.24,60.47,9.96;9,396.54,501.15,63.51,8.83;9,397.86,511.11,59.54,8.83;9,398.88,521.13,60.48,8.83;9,402.06,531.15,56.21,8.83;9,399.00,541.11,56.38,8.83;9,396.96,561.15,61.55,8.83;9,399.36,571.11,55.05,8.83;9,400.32,581.13,57.99,8.83;9,400.74,591.15,56.64,8.83;9,398.10,601.11,59.53,8.83;9,396.90,611.13,64.46,8.83;9,396.78,621.15,61.27,8.83;9,398.16,641.13,56.14,8.83;9,397.08,651.15,63.12,8.83;9,400.20,671.13,56.18,8.83;9,395.46,681.15,65.31,8.83;9,398.76,691.11,62.87,8.83;9,399.06,711.15,59.48,8.83;9,395.46,721.11,64.88,8.83;9,455.22,194.38,63.99,8.91;9,457.02,203.92,57.96,8.91;9,455.10,245.89,16.88,7.83;9,456.42,258.20,59.37,9.96;9,463.44,268.22,50.85,9.96;9,458.40,278.24,53.88,9.96;9,458.46,288.20,58.49,9.96;9,457.38,298.22,57.00,9.96;9,455.10,308.24,57.18,9.96;9,456.72,318.20,60.11,9.96;9,456.96,328.22,60.71,9.96;9,455.52,338.24,61.81,9.96;9,459.78,348.20,55.47,9.96;9,453.72,358.22,66.47,9.96;9,455.94,368.24,61.53,9.96;9,456.18,378.20,55.02,9.96;9,457.08,424.22,59.25,9.96;9,461.76,434.24,55.31,9.96;9,455.22,444.20,59.21,9.96;9,456.36,454.22,60.01,9.96;9,457.56,464.24,59.25,9.96"><head></head><figDesc>Having verifi er our approach thermore, our ap n of different do vation stations, s future, we pla n to support NetC imate studies. Se o compare the Zhuang Cai, Me We are also g ful comments th . This work was lications " projec </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_0" validated="false" coords="1,54.06,43.83,513.12,681.88"><figDesc coords="1,54.36,643.35,63.10,11.70;1,63.00,654.51,51.50,8.83;1,54.36,663.81,63.57,11.70;1,63.01,674.97,53.03,8.83;1,87.00,129.03,9.32,8.83">@BULLET Kang Zhang is w Texas at Dallas, @BULLET Zhao-peng Meng China. E-mail: z (a)</figDesc><table coords="1,54.06,43.83,513.12,681.88">A 
+w 
+a 
+
+@BULLET 
+
+@BULLET 
+
+@BULLET 
+
+Vi 
+
+Fig. 1. Vis 
+Radial Ma 
+rings repre 
+in (a) and 
+several ob 
+based on P 
+
+Abstract— 
+characteris 
+as in the tr 
+state of cl 
+same time 
+detecting a 
+have been 
+
+Index Term 
+
+1 INTRODUCT 
+
+As an important 
+with almost ever 
+assessment repor 
+
+@BULLET Jie Li is with Sch 
+
+University, and N 
+vassilee@tju.edu 
+
+smate: 
+
+Ob 
+
+ualizing the clim 
+p used to visual 
+esent the spatial, 
+formed by multi 
+bvious warm colo 
+PCA for finding a 
+
+—We present a 
+stics. Our approa 
+raditional model-
+imate changes a 
+e. Other two vis 
+abnormal cases, 
+n conducted, thro 
+
+ms—Climate cha 
+
+TION 
+
+t part of natural 
+ry aspect of our 
+rt [4], global me 
+
+hool of Computer 
+National Ocean Te 
+u.cn. 
+with Department of 
+USA. E-mail: kzh 
+g is with School of 
+zpmeng@tju.edu.c 
+
+Interact 
+
+bservati 
+
+Jie Li, 
+
+ate change in C 
+lize the overall s 
+, temporal and c 
+iple triangular He 
+ored rings on ea 
+abnormal cases r 
+
+new approach 
+ach integrates th 
+-based analysis m 
+and provide use 
+sualization techn 
+, which are two 
+ough which the ef 
+
+anges, spatiotem 
+
+l environment, c 
+r life. Accordin 
+ean air temperatu 
+
+Science and Techn 
+Technology Center, 
+
+of Computer Scienc 
+hang@utdallas.edu 
+f Computer Softwa 
+cn. 
+
+tive Visu 
+
+ion Data 
+
+Kang Zhan 
+
+hina during the p 
+state. From the c 
+clustered informa 
+eatMaps. Time s 
+ach disc, indicat 
+represented by o 
+
+h to visualizing 
+ree new highly i 
+methods. As the 
+ers with a compa 
+niques, providing 
+important analys 
+ffectiveness and 
+
+mporal visualizati 
+
+climate is assoc 
+ng to the IPCC's 
+ure greatly incre 
+
+nology, Tianjin 
+Tianjin, China. E-
+
+ce, The University 
+u. 
+are, Tianjin Univer 
+
+ual Ana 
+
+a on Cli 
+
+ng, and Zha 
+
+period of 1975 -
+center: a map, a 
+ation respectively 
+sequence is form 
+ting continously 
+outliers. 
+
+the climate da 
+nterrelated visua 
+main visualizatio 
+act and intuitive 
+g complementar 
+sis tasks in any 
+scalability of the 
+
+on, station-based 
+
+ciated 
+s 4th 
+eased 
+
+after the 
+in the 
+activitie 
+climate 
+extreme 
+balance 
+attentio 
+mostly b 
+Altho 
+differen 
+long-ter 
+prerequ 
+paramet 
+velocity 
+located 
+data in 
+
+-mail: 
+
+of 
+
+rsity, 
+
+(c) 
+
+(b) 
+
+C 
+
+Clust 
+
+Cluste 
+
+lysis of 
+
+mate C 
+
+ao-Peng Me 
+
+1989 based on 
+a sector-based r 
+y. (b) Time Series 
+med by different 
+rising tempretur 
+
+ata of multi-dim 
+alization techniqu 
+on view, Global R 
+view for analyzi 
+ry views, are s 
+climate change 
+e proposed appro 
+
+d observation da 
+
+e 1950s, which 
+discharge of t 
+es. A series of 
+change have t 
+e weather even 
+e is under thre 
+on recently, and 
+by international 
+ough climate st 
+nt domain expert 
+rm and large-ar 
+uisite for all stu 
+ters, such as air 
+y/direction, are 
+in representativ 
+ntrinsically are 
+
+Cluster 6 is selecte 
+
+ter 0 
+Cluste 
+
+ter 4 
+Cluster 
+
+Station 
+
+hanges 
+
+eng 
+
+the surface obse 
+ing-band and m 
+s Discs, each re 
+concentric rings 
+re in the selecte 
+
+mensional, time-s 
+ues, and uses th 
+Radial Map is us 
+ing spatial and t 
+pecialized in an 
+study. Case stu 
+oach has been c 
+
+ata, radial layout, 
+
+was most likely 
+the greenhouse 
+environmental d 
+taken place, for 
+nts occur more 
+eat. Climate ch 
+d related studie 
+collaborative ef 
+tudies are inhe 
+rts have different 
+rea observation 
+udies [52]. Clim 
+temperature, rai 
+usually generate 
+ve regions at re 
+multi-dimensio 
+
+ed 
+
+er 1 
+Cluster 
+
+r 5 
+Cluster 
+
+-Based 
+
+ervation data. (a 
+ultiple concentric 
+epresenting a clu 
+s on the disc. Th 
+ed years. (c) Sc 
+
+series, and geo 
+he same input da 
+sed to identify the 
+temporal pattern 
+nalysing time tre 
+dies and expert 
+confirmed. 
+
+, visual analytics 
+
+y because of the 
+e gases generat 
+degradation eve 
+r example, ocea 
+e frequently, a 
+hanges have re 
+es are conducte 
+fforts. 
+erently multi-dis 
+t views, obtainin 
+data on land 
+mate data contai 
+infall, sunshine 
+ed by meteorolo 
+egular time inter 
+onal, time-orien 
+
+r 2 
+Cluster 
+
+r 6 
+Cluster 
+
+a) Global 
+c cluster 
+ster ring 
+here are 
+atterPlot 
+
+o-related 
+ata types 
+e overall 
+ns at the 
+end and 
+reviews 
+
+rapid increase 
+ted in human 
+ents caused by 
+an level rises, 
+and ecological 
+eceived much 
+ed worldwide, 
+
+sciplinary and 
+ng continuous, 
+surface is the 
+ining multiple 
+duration, wind 
+ogical stations 
+rvals, thus the 
+nted and geo-related. As the advance of observation techniques, a surface 
+observation network consisting of thousands of stations has been 
+established by the World Meteorological Organization (WMO) and 
+the Global Climate Observation System (GCOS) for climate studies. 
+Though the techniques used in climate change studies, such as 
+differential equations, could </table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_4" validated="false" coords="5,110.28,49.70,122.45,689.22"><figDesc coords="5,186.30,231.74,45.07,9.96">and Y. The s</figDesc><table coords="5,110.28,49.70,122.45,689.22">t1 t2 t3 t4 
+
+Station B 
+
+Station C 
+
+poral mapping re 
+ual example with 
+legend. 
+
+Usage Scena 
+approach, the u 
+Radial Map. A 
+ntains six parame 
+h checkbox is c 
+dataset, otherwis 
+mber of the clus 
+according to 
+ain view, the sy 
+system can resp 
+erlying data stru 
+ing procedures h 
+
+ons and Alter 
+ualization design 
+os and applicati 
+erent application 
+ons increases, an 
+mber of stations 
+each station. To 
+ur mapping rule 
+gular coordinate 
+the points on a 
+
+(b 
+
+tering, to be di 
+ive and rational 
+se a Chinese me 
+or codes of mul 
+
+xperiencing sim 
+udes multiple 
+ions, as in Fig. 1 
+and negative ave 
+'s thickness rep 
+ear regression li 
+bute. To suppor 
+the climate ch 
+e the set of time p 
+, y N } be the set 
+ponding time p 
+he X </table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_5" validated="false" coords="5,167.22,49.70,238.83,689.22"><figDesc coords="5,340.62,49.70,60.95,9.96;5,341.52,59.72,55.54,9.96;5,340.08,69.74,60.56,9.96;5,347.04,79.70,54.39,9.96;5,341.10,89.72,61.30,9.96;5,341.04,99.74,60.40,9.96;5,342.06,109.70,58.79,9.96;5,341.58,119.72,62.57,9.96;5,339.54,129.74,63.23,9.96;5,340.02,139.70,61.77,9.96;5,342.90,149.72,52.50,9.96;5,346.86,159.74,54.45,9.96;5,341.34,169.70,60.59,9.96;5,343.08,179.72,58.24,9.96;5,342.84,189.74,59.17,9.96;5,341.88,199.70,63.93,9.96;5,342.78,209.72,62.85,9.96;5,340.02,219.74,66.03,9.96;5,339.60,229.70,60.53,9.96;5,343.08,239.72,57.37,9.96;5,341.76,249.74,55.35,9.96;5,345.12,259.70,57.17,9.96;5,343.86,269.72,56.93,9.96;5,339.54,291.62,62.33,10.04;5,340.86,305.72,61.06,9.96;5,341.58,315.74,60.41,9.96">s of the group on g the GHCN modate about 7 the Global Ra re of three level r of the countri es enable each ference. Consequ p of stations in th es of the points e shown in Fig. the overall sta n be replaced by as, such as cont climate changes Zone, North Tem and Antarctic Z phere, since clim e. When the m onding area wil nother possible average temper state more clear M E SERIES DIS pport more det ized visual analy</figDesc><table coords="5,167.22,49.70,237.63,689.22">Time 
+
+4 years 
+
+epresented by a 
+h 10 cluster rings 
+
+ario 
+user should first 
+s shown in Figu 
+eters, such as the 
+hecked, the Glo 
+se the year data 
+sters can also b 
+the study req 
+stem also activa 
+pond to user op 
+ucture is careful 
+have been perform 
+
+rnative Repres 
+n in Vismate m 
+ons, but could b 
+n requirements. 
+ngular intervals 
+s, angular interv 
+o solve this scal 
+es in two aspec 
+to each station, 
+cluster ring ind 
+
+b) 
+
+iscussed in the 
+l color legend i 
+teorological ind 
+ltiple meteorolo 
+
+milar climate chan 
+cluster rings, 
+a and Fig. 5b. W 
+erage change rat 
+presents the abs 
+ine between time 
+rt clustering, we 
+hange condition 
+points in the sele 
+of a meteorolo 
+points, and ̅ an 
+slope is calculat 
+
+10 clusters 
+
+s 
+
+sector-based ri 
+s spanning 4 yea 
+
+t input paramete 
+ure 9a, the param 
+e start year, end 
+obal Radial Map 
+aset will be use 
+e selected throu 
+quirements. Ha 
+ates other two vi 
+perations on-the 
+lly designed and 
+med. 
+
+sentations 
+may not best su 
+be easily adapte 
+For example, a 
+decrease. There 
+vals are too sma 
+lability problem 
+ts. First, rather 
+we can assign it 
+dicate the numb 
+
+next 
+s the 
+dustry 
+ogical 
+
+nges, 
+each 
+Warm 
+tes of 
+olute 
+e and 
+e first 
+of a 
+ected 
+ogical 
+nd 
+ed as 
+
+(1) 
+
+ng-
+ars. 
+
+ers to 
+meter 
+year, 
+p will 
+ed by 
+ugh a 
+aving 
+iews. 
+e-fly, 
+d the 
+
+uit all 
+ed or 
+s the 
+efore, 
+all to 
+m, we 
+than 
+t to a 
+er of 
+
+stations 
+Using 
+accomm 
+modify 
+structur 
+number 
+countrie 
+circumf 
+a group 
+the size 
+(to be s 
+display 
+plot can 
+sub area 
+global c 
+Arctic Z 
+Zone, a 
+Hemisp 
+latitude 
+correspo 
+12b. An 
+on the 
+overall 
+
+5 TIM 
+
+To sup 
+speciali 
+
+5.1 
+The bas 
+as show 
+pre-defi 
+end yea 
+rectangl 
+comput 
+year (y 
+could c 
+Fig. 6(b 
+specific 
+
+1981 
+
+Fig. 6. 
+marked 
+
+@BULLET Row 
+yea 
+
+(b) R 
+
+Basic Triangu 
+sic component o 
+wn in Fig. 6a. Ea 
+fined time interv 
+ar, while the y 
+le in the triang 
+ted by Equation 
+y coordinate). C 
+convey interestin 
+b-e) shows four 
+c slice of the tria 
+
+</table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_6" validated="false" coords="5,339.78,49.70,121.73,685.08"><figDesc coords="5,419.08,69.74,39.25,9.96;5,397.68,79.70,57.61,9.96;5,400.14,89.72,59.81,9.96;5,399.18,99.74,62.33,9.96;5,396.60,109.70,57.93,9.96;5,399.90,119.72,59.08,9.96;5,398.52,129.74,59.75,9.96;5,398.04,139.70,61.79,9.96;5,399.54,149.72,61.47,9.96;5,397.56,159.74,63.53,9.96;5,397.68,169.70,62.21,9.96;5,399.06,179.72,60.21,9.96;5,398.76,189.74,54.90,9.96;5,399.06,199.70,60.81,9.96;5,400.38,209.72,59.39,9.96;5,399.30,219.74,59.73,9.96;5,393.36,229.70,66.35,9.96;5,398.16,239.72,60.35,9.96;5,400.32,249.74,58.19,9.96;5,399.54,259.70,57.95,9.96;5,398.04,269.72,12.27,9.96">stations th adial Map. We ls: station, coun ies in the world h group to be uently, the point hat cluster for th encode the numb 12b). To facilita ate more conven y the station sear tinent, country a s, we also add mperate Zone, T Zone of Easter mate changes a mouse hovers on ll be highlighted change is to sor rature change r rly.</figDesc><table coords="5,339.78,49.70,120.89,685.08">Start Time 
+
+A triangular com 
+triangle. (b-e) F 
+
+w -each row en 
+ar. A similar c 
+
+Row 
+(c) Co 
+
+(a) 
+
+n this cluster. 
+data (see Fig 
+7000 SCS 
+
+tailed time ser 
+ytical tool, called 
+
+ular Compone 
+of a Time Series 
+ach triangle repr 
+val. The x-axis 
+y-axis represent 
+gle is colored t 
+1, from a start 
+Color distributio 
+ng patterns amo 
+r important usa 
+angle: 
+
+</table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_7" validated="false" coords="5,397.80,59.72,169.39,675.06"><figDesc coords="5,398.64,679.54,62.93,8.91;5,400.32,689.02,59.57,8.91;5,398.28,714.86,62.75,9.96;5,398.70,724.82,61.13,9.96;5,397.80,660.51,21.78,8.83;5,443.64,659.91,17.02,8.83;5,456.24,59.72,56.59,9.96;5,453.90,69.74,64.03,9.96;5,459.84,79.70,51.89,9.96;5,455.52,89.72,59.81,9.96;5,457.08,99.74,57.36,9.96;5,460.20,109.70,56.03,9.96;5,456.54,119.72,59.73,9.96;5,453.84,129.74,62.33,9.96;5,455.40,139.70,61.43,9.96;5,457.08,149.72,60.27,9.96;5,456.66,159.74,58.24,9.96;5,456.96,169.70,57.85,9.96;5,455.34,179.72,62.75,9.96;5,457.50,189.74,58.18,9.96;5,454.44,199.70,64.31,9.96;5,456.84,209.72,56.46,9.96;5,455.10,219.74,60.64,9.96;5,455.28,229.70,56.99,9.96;5,454.08,239.72,59.47,9.96;5,455.58,249.74,58.18,9.96;5,454.56,259.70,62.44,9.96;5,455.82,305.72,63.31,9.96;5,455.58,315.74,60.22,9.96;5,455.22,334.58,13.45,10.04;5,458.40,347.72,59.09,9.96;5,454.86,357.74,61.07,9.96;5,458.76,367.70,53.39,9.96;5,455.22,377.72,59.49,9.96;5,456.30,387.74,60.21,9.96;5,459.18,397.70,56.69,9.96;5,453.36,407.72,61.35,9.96;5,454.56,417.74,61.17,9.96;5,453.78,427.70,61.23,9.96;5,455.58,584.61,24.36,6.21;5,455.58,456.57,8.82,6.04;5,485.46,578.63,24.36,7.16;5,457.20,679.54,56.34,8.91;5,455.52,689.02,61.85,8.91;5,456.60,714.86,56.99,9.96;5,455.40,724.82,59.89,9.96">mponent of Time our important wa ncodes the chang color distributio olumn (d) B g. 12) as an hroughout the w first construct ntry, and contin d is about 200 clearly display ts on each cluste he corresponding ber of the station ate spatial searc niently, the sec rch bins represe and province. To 10 radial bins t Tropic Zone, Sou rn Hemisphere are often associ n one bin, the d in the map, as rt all the cluster rates, and thus t ries analysis, w d Time Series Di ent Disc is a triangu resents a station' of the triangle ts the start yea to represent the year (x coordin ons along a spe ong multiple sm ages, each corre 989 1990 989 End Time e Series Discs. ays for reading th ges from a year on in one row</figDesc><table coords="5,455.40,59.72,111.79,609.02">(e) Hyp 
+Block 
+
+example, to 
+world, we can 
+a hierarchical 
+nent. Since the 
+, grouping on 
+yed along the 
+er ring indicate 
+g countries and 
+ns of the group 
+ch and clearly 
+ctor-based ring 
+enting different 
+o visualize the 
+to indicate the 
+uth Temperate 
+and Western 
+iated with the 
+points in the 
+shown in Fig. 
+rings outward 
+to display the 
+
+we provide a 
+iscs. 
+
+</table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_8" validated="false" coords="6,45.42,49.70,75.07,689.70"><figDesc coords="6,61.26,93.74,53.25,9.96;6,61.26,103.70,52.52,9.96;6,61.26,113.72,55.31,9.96;6,61.26,123.74,54.81,9.96;6,61.26,133.70,53.74,9.96;6,61.26,143.72,54.21,9.96;6,61.26,153.74,50.33,9.96;6,61.26,163.70,53.20,9.96;6,61.26,173.72,52.07,9.96;6,61.26,187.70,56.03,9.96;6,61.26,197.72,52.29,9.96;6,61.26,207.74,54.16,9.96;6,61.26,217.70,59.23,9.96;6,61.26,227.72,53.75,9.96;6,61.26,237.74,57.47,9.96;6,61.26,247.70,54.47,9.96;6,61.26,257.72,50.05,9.96;6,61.26,267.74,54.04,9.96;6,61.26,281.72,52.97,9.96;6,61.26,291.74,52.87,9.96;6,61.26,301.70,53.92,9.96;6,61.26,311.72,54.35,9.96;6,61.26,321.74,55.31,9.96;6,61.26,331.70,56.19,9.96;6,61.26,341.72,56.15,9.96;6,61.26,351.74,54.29,9.96;6,61.26,361.70,57.35,9.96;6,61.26,371.72,56.57,9.96;6,61.26,381.74,55.95,9.96;6,61.26,391.70,55.21,9.96;6,61.26,401.72,53.49,9.96;6,61.26,411.74,54.64,9.96;6,61.26,421.70,56.49,9.96;6,52.98,450.32,4.99,10.04;6,74.28,450.32,44.49,10.04;6,57.00,463.46,22.48,9.96">Column -ea previous years the " row " , a co minima year (c 6c, the overall the small recta and 1984 had the change rat those from the Block -a block similar colors, conditions in t sub triangles, w the covered y temperatures in change rates fr same (see the that the overall Hypotenuse incremental tri multiple hypot the longest for year-to-year ch the hypotenuse (longest) hypo temperature ch indicates the y rates. As the in period are ave clearer. The s indicates the a 6e reveals that while average c 2 Rotating T hough</figDesc><table coords="6,45.42,49.70,74.57,689.70">Alth 
+patt 
+cha 
+by 
+cen 
+clim 
+with 
+regr 
+regr 
+Use 
+Che 
+eac 
+with 
+and 
+deg 
+hom 
+solu 
+inte 
+regr 
+stat 
+with 
+our 
+use 
+
+6 
+
+Apa 
+also 
+
+continuous and 
+as in Fig. 6b. R 
+when multiple 
+Section 5.2). 
+
+</table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_9" validated="false" coords="6,53.46,49.70,124.95,689.70"><figDesc coords="6,111.62,503.48,3.99,9.96;6,54.54,513.44,59.81,9.96;6,57.00,523.46,57.35,9.96;6,57.00,533.48,59.47,9.96;6,57.00,543.44,58.13,9.96;6,55.44,553.46,61.79,9.96;6,55.98,563.48,59.63,9.96;6,53.52,573.44,63.51,9.96;6,57.00,583.46,56.03,9.96;6,54.00,593.48,57.25,9.96;6,54.00,603.44,60.53,9.96;6,54.48,613.46,60.69,9.96;6,55.98,623.48,59.55,9.96;6,55.02,633.44,61.00,9.96;6,57.00,643.46,57.56,9.96;6,55.50,653.48,62.51,9.96;6,57.00,663.44,58.35,9.96;6,54.48,673.46,57.06,9.96;6,53.46,683.48,61.49,9.96;6,59.70,705.32,55.79,10.04;6,56.46,719.48,61.37,9.96;6,55.50,729.44,59.57,9.96;6,112.50,49.70,59.55,9.96;6,113.88,59.72,55.32,9.96;6,116.04,69.74,56.39,9.96;6,110.40,93.74,63.15,9.96;6,116.10,103.70,55.38,9.96;6,111.96,113.72,60.05,9.96;6,111.96,123.74,65.13,9.96;6,112.38,133.70,60.93,9.96;6,111.36,143.72,61.30,9.96;6,114.66,153.74,59.79,9.96;6,114.30,163.70,60.77,9.96;6,115.44,173.72,56.98,9.96;6,112.68,187.70,61.89,9.96;6,116.34,197.72,55.90,9.96;6,112.80,207.74,59.11,9.96;6,113.88,217.70,58.42,9.96;6,110.40,227.72,64.59,9.96;6,114.12,237.74,60.89,9.96;6,112.62,247.70,57.99,9.96;6,114.24,257.72,59.27,9.96;6,112.68,267.74,62.93,9.96;6,118.56,281.72,59.85,9.96;6,114.00,291.74,57.65,9.96;6,112.56,301.70,63.05,9.96;6,112.50,311.72,61.25,9.96;6,111.96,321.74,59.63,9.96;6,113.34,331.70,54.11,9.96;6,112.80,341.72,59.49,9.96;6,110.94,351.74,62.39,9.96;6,114.00,361.70,57.43,9.96;6,113.22,371.72,59.27,9.96;6,113.10,381.74,61.43,9.96;6,112.86,391.70,62.39,9.96;6,110.64,401.72,62.99,9.96;6,113.28,411.74,62.73,9.96;6,113.64,421.70,58.72,9.96">) mate changes of h each station. ression analysis ression line is d ers can also add eckBoxes under ch individual inte h 4 breakpoints d the end years grees of the regr mogeneity of ea ution having the eractive support ression analysis tions and manipu h traditional tim r method could ers quickly grasp ANOMALY DE art from the glob o the research h d consistent cha Rows offer the triangles are bu ach column enc to the year repr onsistent color d cool color) or a m l temperature ha angles in the col the minimal yea es from 1984 to previous years t k refers to severa the rectangles i the years repres which represent years. The exam n 1987 and 198 rom other years small block), an l warming started each triangle m angles started fr tenuses. The hyp r the entire trian hange of N-year e's ordinal, as otenuse represe hange from 1981 year-to-year ch ncrease of the o eraged out such shortest hypoten average change r t the overall tem change rates in t</figDesc><table></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_10" validated="false" coords="6,167.46,49.70,182.37,689.70"><figDesc coords="6,168.78,653.48,60.58,9.96;6,169.98,663.44,58.83,9.96;6,171.30,673.46,58.09,9.96;6,167.46,683.48,62.21,9.96">eries plot (see Fi s methods for m ow the analysis nds of any tempo</figDesc><table coords="6,168.00,49.70,181.83,689.70">TTERPLOT 
+
+nge trend, local a 
+ample, though th 
+
+year to later yea 
+view, particular 
+to form a disc (s 
+
+nges from all t 
+column. Similar 
+column indicates 
+arm color). In F 
+1980s, because 
+re in warm colo 
+mperature, becau 
+s are positive a 
+egative. 
+
+gles. When havi 
+ate similar clima 
+al type of block 
+nsistent changes 
+d reveals that t 
+equal, because t 
+ears are almost t 
+sub triangle show 
+80s. 
+
+ered a number 
+tangle and thus h 
+ses from inside 
+otenuse indicates 
+ge rate, where N 
+example, the 
+uous year-to-ye 
+he 2nd hypotenu 
+s average chan 
+nal changes in th 
+rall state becom 
+nly one rectang 
+ntire 10 years. F 
+isen in the 1980 
+about 0.2~0.3. 
+
+detect the tempo 
+o know the over 
+l layout like a di 
+stations around 
+serve and compa 
+e a time series p 
+triangle, a line 
+d station, and t 
+shown in Fig. 7 
+s by selecting t 
+regression line 
+e of regression li 
+d 1990 as the st 
+bserving the fitti 
+mediately view t 
+e accurate divisi 
+intervals. Such 
+the precision 
+r the user to sele 
+ig. 7a). Compari 
+eteorological da 
+s process and he 
+oral intervals. 
+
+abnormal cases a 
+he air temperatu 
+
+ars, 
+rly 
+see 
+
+the 
+to 
+s a 
+ig. 
+all 
+ors, 
+use 
+and 
+
+ing 
+ate 
+is 
+in 
+the 
+the 
+the 
+ws 
+
+of 
+has 
+to 
+s a 
+N is 
+1st 
+ear 
+use 
+nge 
+hat 
+mes 
+gle 
+ig. 
+0s, 
+
+ral 
+rall 
+isc 
+d a 
+are 
+lot 
+ear 
+the 
+7c. 
+the 
+of 
+ine 
+art 
+ing 
+the 
+ion 
+an 
+of 
+ect 
+ing 
+ata, 
+elp 
+
+are 
+ure 
+
+in China h 
+significan 
+interests. 
+abonorma 
+on a flexib 
+
+Fig. 7. (a) 
+(not show 
+Series Dis 
+
+Since a 
+temporal p 
+triangular 
+foundation 
+matrix to 
+each trian 
+a high-di 
+Analysis a 
+triangles t 
+reveal the 
+projection 
+Global Ra 
+the Scatte 
+could easi 
+changes am 
+
+</table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_11" validated="false" coords="6,307.56,49.70,97.23,686.88"><figDesc coords="6,341.22,49.70,59.20,9.96;6,338.94,59.72,62.93,9.96;6,343.44,69.74,60.17,9.96;6,339.90,79.70,61.59,9.96;6,341.94,89.72,61.47,9.96;6,341.64,217.12,59.19,8.91;6,337.68,226.60,60.82,8.91;6,340.38,236.08,59.92,8.91;6,344.46,254.90,55.82,9.96;6,342.54,264.92,60.71,9.96;6,349.38,274.94,52.51,9.96;6,342.48,284.90,58.91,9.96;6,343.50,294.92,59.87,9.96;6,339.06,304.94,63.49,9.96;6,342.36,314.90,58.95,9.96;6,342.90,324.92,58.87,9.96;6,343.02,334.94,61.75,9.96;6,341.88,344.90,61.29,9.96;6,339.96,354.92,63.03,9.96;6,341.76,364.94,63.03,9.96;6,340.26,374.90,61.37,9.96;6,342.00,384.92,59.14,9.96;6,339.18,394.94,62.51,9.96;6,357.42,417.36,31.28,7.86">has been increas nt downward tr Therefore we n al cases among a ble anomaly dete ) Toolbar for sel wn here) and for sc. (c) The intera matrix illustrati points of a statio matrix), it is nal data structur detect the tempo ngle, such as row imensional vec algorithm (PCA to a point in tw e correlation be n, we provide a adial Map autom erPlot, as shown ily identify outli among nearby po D1 D2</figDesc><table coords="6,307.56,119.85,37.55,616.73">China sur 
+observatio 
+throughou 
+network, t 
+23 types o 
+covers 19 
+
+Pan 
+
+(b) 
+
+(a) 
+
+</table></figure>
+
+			<note place="foot" n="3"> 7 133 IEEE Symposium on Visual Analytics Science and Technology 2014 November 9-14, Paris, France 978-1-4799-6227-3/14/$31.00 ©2014 IEEE</note>
+
+			<note place="foot">es, the Global R ented by other ths and weakne ever, impossible e changes for or promote low-ca plays a positiv ted studies and imate changes, l n of visual analy ed for such a vi public, which observation da stations (see Fig Thousands of m world, operated wn in Fig. 2b hese stations, hu continuously We directly use t ferent numbers o nal Climate a Meteorological ) websites. on framework, w nge studies into g climate change zone, country, a termining the c hting key turnin based on the pat he areas that ar their neighboring visualization ta hange visualizati out including a m Means clustering divide all the s milar change rate me-series triangu a disc, as in F hange rate betw defined time inte climate experts t ant temporal p – a slice of a tri d be selected to normal cases, on be projected int Radial Map offer two modules. T esses, specialize e to feel and rdinary people. arbon life, and ve role in this projects have little effort has ytics in climate sual analytical h is the main ata, generated . 2a), and used meteorological d by different . Due to the uge amounts of transferred to two datasets of of stations and Data Center l Data Sharing we classify the o three major es at different areas, province limate change ng points, and tterns observed re changed in g areas. asks, we have ion framework map shows the g algorithm is stations into a es. ular HeatMaps Fig. 1b. Each ween every pair erval. Aligning to compare the patterns across iangle, such as form a multine could select to a scatterplot rs the primary These modules ed in different</note>
+
+			<note place="foot" n="5"> warming and stributions on ea onger in Asia th n China are all r west of America a al warming start ion in China. Mo icating a strong change, as in F Hemisphere we rating that hum ee [45]. Howev tations had cooli re Analysis syste in and uch end nal ate ate 11- on ate ina n to hat int the e ure the om rld, 10. ew our lso ges of of ade as d 4 ach han red are ted ost ger ig. ere man ver, ing em [55] of G verify our model-bas as in Fig.</note>
+
+			<note place="foot">ColorBrewer 2.0: Penn State Unive adarTrees: Visua ics Forum, 27(3):8 Spatio-temporal D Synthesis Report. the Fourth Asse Change (IPCC&apos;200 Assessment Rep 2007. (in Chinese nfeld. A survey of Trans. Vis. Compu votes for what? ans. Vis. Comput T. Murray, S. I. Boundary-based G Graphics Forum, on of Temporal Sim h. 18(12): 2023-20 SS) Surface anges as in ation approach visualization our approach. face Data for ed the patterns to be effective pproach can be omain datasets such as ocean, an to improve CDF grid data econd, we will ocean climate eng-Yao Chen, grateful to the at have helped s supported by ct. color advice for ersity, 2009. alizing dynamic 823–830, 2008. Data. John Wiley Contribution of essment Report. 7), 2007. port on Climate e) f radial methods ut. Graph. 15(5): a visual query t. Graph. 14(6): Bevan, and M. Geo-information 30(3): 981-990, milarity in Field 032, 2012.</note>
+		</body>
+		<back>
+			<div type="references">
+
+				<listBibl>
+
+<biblStruct coords="10,63.36,50.55,232.24,8.83;10,63.36,60.57,232.22,8.83;10,63.36,70.59,232.19,8.83;10,63.36,80.55,44.71,8.83"  xml:id="b0">
+	<monogr>
+		<title level="m" type="main">Spatio-temporal Data Mining for Climate Data: Advances, Challenges, and Opportunities. Data mining and knowledge discovery for big data</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">H</forename>
+				<surname>Faghmous</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">V</forename>
+				<surname>Kumar</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2014" />
+			<publisher>Springer</publisher>
+			<biblScope unit="page" from="83" to="116" />
+			<pubPlace>Berlin Heidelberg</pubPlace>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,63.36,90.57,232.10,8.83;10,63.36,100.59,221.63,8.83"  xml:id="b1">
+	<analytic>
+		<title level="a" type="main">Visual Human+Machine Learning</title>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Fuchs</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Waser</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<forename type="middle">E</forename>
+				<surname>Groller</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Trans. Vis. Comput. Graph</title>
+		<imprint>
+			<biblScope unit="volume">15</biblScope>
+			<biblScope unit="issue">6</biblScope>
+			<biblScope unit="page" from="1327" to="1334" />
+			<date type="published" when="2009" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,63.36,110.55,232.24,8.83;10,63.36,120.57,232.26,8.83;10,63.36,130.59,38.05,8.83"  xml:id="b2">
+	<analytic>
+		<title level="a" type="main">Climate change impacts on hydropower management</title>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<surname>Gaudard</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Gilli</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<surname>Romerio</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Water Resources Management</title>
+		<imprint>
+			<biblScope unit="volume">27</biblScope>
+			<biblScope unit="issue">15</biblScope>
+			<biblScope unit="page" from="5143" to="5156" />
+			<date type="published" when="2013" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,63.36,140.55,232.12,8.83;10,63.36,150.57,118.91,8.83"  xml:id="b3">
+	<analytic>
+		<title level="a" type="main">Global surface temperature change</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Hansen</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Ruedy</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Sato</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Reviews of Geophysics</title>
+		<imprint>
+			<biblScope unit="volume">48</biblScope>
+			<biblScope unit="issue">4</biblScope>
+			<date type="published" when="2010" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,63.36,160.59,232.10,8.83;10,63.36,170.55,232.24,8.83;10,63.36,180.57,18.07,8.83"  xml:id="b4">
+	<analytic>
+		<title level="a" type="main">Perception of climate change</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Hansen</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Sato</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Ruedy</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the National Academy of Sciences</title>
+		<meeting>the National Academy of Sciences</meeting>
+		<imprint>
+			<date type="published" when="2012" />
+			<biblScope unit="page" from="2415" to="2423" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,63.36,190.59,232.28,8.83;10,63.36,200.55,232.20,8.83;10,63.36,210.57,232.26,8.83;10,63.36,220.59,34.03,8.83"  xml:id="b5">
+	<analytic>
+		<title level="a" type="main">Lost in translation? Interpretations of the probability phrases used by the Intergovernmental Panel on Climate Change in China and the UK</title>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<forename type="middle">J L</forename>
+				<surname>Harris</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Corner</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Xu</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Climatic change</title>
+		<imprint>
+			<biblScope unit="volume">121</biblScope>
+			<biblScope unit="issue">2</biblScope>
+			<biblScope unit="page" from="415" to="425" />
+			<date type="published" when="2013" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,63.36,230.55,232.15,8.83;10,63.36,240.57,232.24,8.83;10,63.36,250.58,48.73,8.83"  xml:id="b6">
+	<analytic>
+		<title level="a" type="main">Themeriver: Visualizing theme changes over time</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Havre</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Hetzler</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<surname>Nowell</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the IEEE InfoVis&apos;2000</title>
+		<meeting>the IEEE InfoVis&apos;2000</meeting>
+		<imprint>
+			<date type="published" when="2000" />
+			<biblScope unit="page" from="115" to="123" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,63.36,260.54,232.11,8.83;10,63.36,270.56,234.14,8.83;10,63.36,280.58,122.44,8.83"  xml:id="b7">
+	<analytic>
+		<title level="a" type="main">ThemeRiver: Visualizing thematic changes in large document collections</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Havre</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<surname>Hetzler</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Whitney</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<surname>Nowell</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Trans. Vis. Comput. Graph</title>
+		<imprint>
+			<biblScope unit="volume">8</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="9" to="20" />
+			<date type="published" when="2002" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,63.36,290.54,232.14,8.83;10,63.36,300.56,232.18,8.83;10,63.36,310.58,186.73,8.83"  xml:id="b8">
+	<analytic>
+		<title level="a" type="main">Visual exploration of climate variability changes using wavelet analysis</title>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Janicke</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Bottinger</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">U</forename>
+				<surname>Mikolajewicz</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Scheuermann</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Trans. Vis. Comput. Graph</title>
+		<imprint>
+			<biblScope unit="volume">15</biblScope>
+			<biblScope unit="issue">6</biblScope>
+			<biblScope unit="page" from="1375" to="1382" />
+			<date type="published" when="2009" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,63.36,320.54,234.48,8.83;10,63.36,330.56,232.25,8.83;10,63.36,340.58,232.23,8.83;10,63.36,350.54,48.73,8.83"  xml:id="b9">
+	<analytic>
+		<title level="a" type="main">Evaluating climate visualization: an information visualization approach</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Johansson</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<forename type="middle">S</forename>
+				<surname>Neset</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<forename type="middle">O</forename>
+				<surname>Linner</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the International Conference on Information Visualization (IV&apos;2010)</title>
+		<meeting>the International Conference on Information Visualization (IV&apos;2010)</meeting>
+		<imprint>
+			<date type="published" when="2010" />
+			<biblScope unit="page" from="156" to="161" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,63.36,360.56,232.24,8.83;10,63.36,370.58,232.27,8.83;10,63.36,380.54,232.28,8.83;10,63.36,390.56,121.17,8.83"  xml:id="b10">
+	<analytic>
+		<title level="a" type="main">GeoAnalytics visual inquiry and filtering tools in parallel coordinates plots</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Johansson</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Jern</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 15th Annual ACM International Symposium on Advances in Geographic Information Systems</title>
+		<meeting>the 15th Annual ACM International Symposium on Advances in Geographic Information Systems</meeting>
+		<imprint>
+			<date type="published" when="2007" />
+			<biblScope unit="page">33</biblScope>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,63.36,400.58,232.21,8.83;10,63.36,410.54,210.47,8.83"  xml:id="b11">
+	<analytic>
+		<title level="a" type="main">Dimension reduction by local principal component analysis</title>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Kambhatla</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<forename type="middle">K</forename>
+				<surname>Leen</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Neural Computation</title>
+		<imprint>
+			<biblScope unit="volume">9</biblScope>
+			<biblScope unit="issue">7</biblScope>
+			<biblScope unit="page" from="1493" to="1516" />
+			<date type="published" when="1997" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,63.36,420.56,232.30,8.83;10,63.36,430.58,232.17,8.83;10,63.36,440.54,161.06,8.83"  xml:id="b12">
+	<analytic>
+		<title level="a" type="main">Visualization of Geospatial Time Series from Environmental Modeling Output</title>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Koethur</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Sips</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Kuhlmann</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Dransch</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the EuroVis</title>
+		<meeting>the EuroVis</meeting>
+		<imprint>
+			<date type="published" when="2012" />
+			<biblScope unit="page" from="115" to="119" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,63.36,450.56,232.23,8.83;10,63.36,460.58,229.32,8.83"  xml:id="b13">
+	<monogr>
+		<title level="m" type="main">Exceptions in computing: understanding climate change – a data driven method</title>
+		<author>
+			<persName>
+				<forename type="first">V</forename>
+				<surname>Kumar</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2010" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,63.36,470.54,232.21,8.83;10,63.36,480.56,232.26,8.83;10,63.36,490.59,202.01,8.83"  xml:id="b14">
+	<analytic>
+		<title level="a" type="main">Visual analytics methods for categoric spatio-temporal data</title>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Von Landesberger</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Bremm</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Andrienko</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Andrienko</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Tekusov</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the IEEE VAST&apos;2012</title>
+		<meeting>the IEEE VAST&apos;2012</meeting>
+		<imprint>
+			<date type="published" when="2012" />
+			<biblScope unit="page" from="183" to="192" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,63.36,500.55,232.24,8.83;10,63.36,510.57,232.16,8.83;10,63.36,520.59,232.18,8.83;10,63.36,530.55,75.86,8.83"  xml:id="b15">
+	<analytic>
+		<title level="a" type="main">An overview of the Global Historical Climatology Network monthly mean temperature data set, version 3</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">H</forename>
+				<surname>Lawrimore</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<forename type="middle">J</forename>
+				<surname>Menne</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<forename type="middle">E</forename>
+				<surname>Gleason</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Journal of Geophysical Research: Atmospheres</title>
+		<imprint>
+			<biblScope unit="issue">D19</biblScope>
+			<biblScope unit="page">116</biblScope>
+			<date type="published" when="1984" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,63.36,540.57,232.15,8.83;10,63.36,550.59,232.23,8.83;10,63.36,560.55,78.31,8.83"  xml:id="b16">
+	<analytic>
+		<title level="a" type="main">Sparkclouds: Visualizing trends in tag clouds</title>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Lee</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<forename type="middle">H</forename>
+				<surname>Riche</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<forename type="middle">K</forename>
+				<surname>Karlson</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Carpendale</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Trans. Vis. Comput. Graph</title>
+		<imprint>
+			<biblScope unit="volume">16</biblScope>
+			<biblScope unit="issue">6</biblScope>
+			<biblScope unit="page" from="1182" to="1189" />
+			<date type="published" when="2010" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,63.36,570.57,232.19,8.83;10,63.36,580.59,232.16,8.83;10,63.36,590.55,125.12,8.83"  xml:id="b17">
+	<analytic>
+		<title level="a" type="main">A correlative analysis process in a visual analytics environment</title>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Malik</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Maciejewskiet</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Y</forename>
+				<surname>Jang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Huang</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the IEEE VAST&apos;2012</title>
+		<meeting>the IEEE VAST&apos;2012</meeting>
+		<imprint>
+			<date type="published" when="2012" />
+			<biblScope unit="page" from="33" to="42" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,63.36,600.57,232.21,8.83;10,63.36,610.59,232.15,8.83;10,63.36,620.55,92.24,8.83"  xml:id="b18">
+	<analytic>
+		<title level="a" type="main">Comparative Visualization for Parameter Studies of Dataset Series</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<forename type="middle">M</forename>
+				<surname>Malik</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Heinzl</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<forename type="middle">E</forename>
+				<surname>Groeller</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Trans. Vis. Comput. Graph</title>
+		<imprint>
+			<biblScope unit="volume">16</biblScope>
+			<biblScope unit="issue">5</biblScope>
+			<biblScope unit="page" from="829" to="840" />
+			<date type="published" when="2010" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,63.36,630.57,232.19,8.83;10,63.36,640.59,232.17,8.83;10,63.36,650.55,232.24,8.83;10,63.36,660.57,50.05,8.83"  xml:id="b19">
+	<analytic>
+		<title level="a" type="main">Taggram: Exploring geo-data on maps through a tag cloud-based visualization</title>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<forename type="middle">Q</forename>
+				<surname>Nguyen</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Schumann</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the International Conference on Information Visualization (IV&apos;2010)</title>
+		<meeting>the International Conference on Information Visualization (IV&apos;2010)</meeting>
+		<imprint>
+			<date type="published" when="2010" />
+			<biblScope unit="page" from="322" to="328" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,63.36,670.59,232.23,8.83;10,63.36,680.55,227.19,8.83"  xml:id="b20">
+	<analytic>
+		<title level="a" type="main">Methods for the visualization of clustered climate data</title>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Nocke</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Schumann</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">U</forename>
+				<surname>Bohm</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">In Computational Statistics</title>
+		<imprint>
+			<biblScope unit="volume">19</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="75" to="94" />
+			<date type="published" when="2004" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,63.36,690.57,232.26,8.83;10,63.36,700.58,232.15,8.83;10,63.36,710.54,132.71,8.83"  xml:id="b21">
+	<analytic>
+		<title level="a" type="main">Visualization of climate and climate change data: An overview</title>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Nocke</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Sterzel</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Bottinger</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Wrobel</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Digital Earth Summit on Geoinformatics</title>
+		<imprint>
+			<date type="published" when="2008" />
+			<biblScope unit="page" from="226" to="232" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,63.36,720.56,232.11,8.83;10,63.36,730.58,232.24,8.83;10,325.80,50.54,234.23,8.83;10,325.80,60.56,84.26,8.83"  xml:id="b22">
+	<analytic>
+		<title level="a" type="main">Anthropogenic greenhouse gas contribution to flood risk in England and Wales in autumn</title>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Pall</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Aina</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<forename type="middle">A</forename>
+				<surname>Stone</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<forename type="middle">A</forename>
+				<surname>Stott</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Nozawa</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<forename type="middle">G J</forename>
+				<surname>Hilberts</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Lohmann</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<forename type="middle">R</forename>
+				<surname>Allen</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Nature</title>
+		<imprint>
+			<biblScope unit="issue">7334</biblScope>
+			<biblScope unit="page" from="470382" to="385" />
+			<date type="published" when="2000" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,325.80,70.58,232.23,8.83;10,325.80,80.54,232.32,8.83;10,325.80,90.56,232.20,8.83;10,325.80,100.58,135.40,8.83"  xml:id="b23">
+	<analytic>
+		<title level="a" type="main">The impacts of climate change on water resources and agriculture in China</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Piao</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Ciais</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Y</forename>
+				<surname>Huang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Z</forename>
+				<surname>Shen</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Peng</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Li</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<surname>Zhou</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Liu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Y</forename>
+				<surname>Ma</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Y</forename>
+				<surname>Ding</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Friedlingstein</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Liu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Tan</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Y</forename>
+				<surname>Yu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Zhang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Fang</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Nature</title>
+		<imprint>
+			<biblScope unit="issue">7311</biblScope>
+			<biblScope unit="page" from="467" to="510" />
+			<date type="published" when="2010" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,325.80,110.54,232.16,8.83;10,325.80,120.56,232.15,8.83;10,325.80,130.58,103.56,8.83"  xml:id="b24">
+	<analytic>
+		<title level="a" type="main">Visual analysis of the air pollution problem in Hong Kong</title>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Qu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<forename type="middle">Y</forename>
+				<surname>Chan</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Xu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<forename type="middle">L</forename>
+				<surname>Chung</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Guo</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Trans. Vis. Comput. Graph</title>
+		<imprint>
+			<biblScope unit="volume">13</biblScope>
+			<biblScope unit="issue">6</biblScope>
+			<biblScope unit="page" from="1408" to="1415" />
+			<date type="published" when="2007" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,325.80,140.54,232.07,8.83;10,325.80,150.56,226.63,8.83"  xml:id="b25">
+	<analytic>
+		<title level="a" type="main">Fall 2011 national survey of American public opinion on climate change</title>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<forename type="middle">G</forename>
+				<surname>Rabe</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<forename type="middle">P</forename>
+				<surname>Borick</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Issues in Governance Studies</title>
+		<imprint>
+			<date type="published" when="2012" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,325.80,160.58,232.17,8.83;10,325.80,170.54,232.26,8.83;10,325.80,180.56,64.69,8.83"  xml:id="b26">
+	<analytic>
+		<title level="a" type="main">Increase of extreme events in a warming world</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Rahmstorf</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Coumou</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the National Academy of Sciences</title>
+		<meeting>the National Academy of Sciences</meeting>
+		<imprint>
+			<date type="published" when="2011" />
+			<biblScope unit="page" from="17905" to="17909" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,325.80,190.58,232.15,8.83;10,325.80,200.54,232.14,8.83;10,325.80,210.56,177.92,8.83"  xml:id="b27">
+	<analytic>
+		<title level="a" type="main">Recent progress in studies of climate change in China</title>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Ren</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Y</forename>
+				<surname>Ding</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Z</forename>
+				<surname>Zhao</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Z</forename>
+				<surname>Zheng</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Wu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Tang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Y</forename>
+				<surname>Xu</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Advances in Atmospheric Sciences</title>
+		<imprint>
+			<biblScope unit="volume">29</biblScope>
+			<biblScope unit="page" from="958" to="977" />
+		</imprint>
+	</monogr>
+	<note>In. Chinese</note>
+</biblStruct>
+
+<biblStruct coords="10,325.80,220.58,232.09,8.83;10,325.80,230.54,185.58,8.83"  xml:id="b28">
+	<analytic>
+		<title level="a" type="main">NetCDF: an interface for scientific data access</title>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Rew</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Davis</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Computer Graphics and Applications</title>
+		<imprint>
+			<biblScope unit="volume">10</biblScope>
+			<biblScope unit="issue">4</biblScope>
+			<biblScope unit="page" from="76" to="82" />
+			<date type="published" when="1990" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,325.80,240.56,232.26,8.83;10,325.80,250.58,232.28,8.83;10,325.80,260.54,234.30,8.83;10,325.80,270.56,18.07,8.83"  xml:id="b29">
+	<analytic>
+		<title level="a" type="main">Media attention for climate change around the world: A comparative analysis of newspaper coverage in 27 countries</title>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Schmidt</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<forename type="middle">S</forename>
+				<surname>Schafer</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Global Environmental Change</title>
+		<imprint>
+			<biblScope unit="volume">23</biblScope>
+			<biblScope unit="page" from="1233" to="1248" />
+			<date type="published" when="2013" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,325.80,280.58,232.18,8.83;10,325.80,290.54,232.20,8.83;10,325.80,300.56,232.26,8.83;10,325.80,310.59,140.66,8.83"  xml:id="b30">
+	<analytic>
+		<title level="a" type="main">Public perception of climate change: voluntary mitigation and barriers to behavior change</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">C</forename>
+				<surname>Semenza</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<forename type="middle">E</forename>
+				<surname>Hall</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<forename type="middle">J</forename>
+				<surname>Wilson</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<forename type="middle">D</forename>
+				<surname>Bontempo</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<forename type="middle">J</forename>
+				<surname>Sailor</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<forename type="middle">A</forename>
+				<surname>George</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">American Journal of Preventive Medicine</title>
+		<imprint>
+			<biblScope unit="volume">35</biblScope>
+			<biblScope unit="issue">5</biblScope>
+			<biblScope unit="page" from="479" to="487" />
+			<date type="published" when="2008" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,325.80,320.55,232.14,8.83;10,325.80,330.57,232.24,8.83;10,325.80,340.59,54.52,8.83"  xml:id="b31">
+	<monogr>
+		<title level="m" type="main">Thematic Cartography and Geographic Visualization</title>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<forename type="middle">A</forename>
+				<surname>Slocum</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<forename type="middle">B</forename>
+				<surname>Mcmaster</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<forename type="middle">C</forename>
+				<surname>Kessler</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<forename type="middle">H</forename>
+				<surname>Howard</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2009" />
+		</imprint>
+	</monogr>
+	<note>3nd. Ed. Pearson Education</note>
+</biblStruct>
+
+<biblStruct coords="10,325.80,350.55,232.22,8.83;10,325.80,360.57,232.19,8.83;10,325.80,370.59,18.07,8.83"  xml:id="b32">
+	<monogr>
+		<title level="m" type="main">Map projections—a working manual (US geological survey professional paper 1395) United States Government Printing</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">P</forename>
+				<surname>Snyder</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="1987" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,325.80,380.55,232.18,8.83;10,325.80,390.57,124.04,8.83"  xml:id="b33">
+	<analytic>
+		<title level="a" type="main">Necklace maps</title>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Speckmann</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<surname>Verbeek</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Trans. Vis. Comput. Graph</title>
+		<imprint>
+			<biblScope unit="volume">16</biblScope>
+			<biblScope unit="issue">6</biblScope>
+			<biblScope unit="page" from="881" to="889" />
+			<date type="published" when="2010" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,325.80,400.59,232.25,8.83;10,325.80,410.55,232.21,8.83;10,325.80,420.57,232.20,8.83;10,325.80,430.59,130.76,8.83"  xml:id="b34">
+	<analytic>
+		<title level="a" type="main">Complex Networks in Climate Science: Progress, Opportunities and Challenges</title>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Steinhaeuser</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<forename type="middle">V</forename>
+				<surname>Chawla</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<forename type="middle">R</forename>
+				<surname>Ganguly</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the Conference on Intelligent Data Understanding</title>
+		<meeting>the Conference on Intelligent Data Understanding<address><addrLine>San Francisco, CA, NASA</addrLine></address></meeting>
+		<imprint>
+			<date type="published" when="2010" />
+			<biblScope unit="page" from="16" to="26" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,325.80,440.55,232.25,8.83;10,325.80,450.57,232.25,8.83;10,325.80,460.59,232.24,8.83;10,325.80,470.55,208.51,8.83"  xml:id="b35">
+	<analytic>
+		<title level="a" type="main">Climate change 2013: the physical science basis. Working group I contribution to the fifth assessment report of the intergovernmental panel on climate change</title>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<forename type="middle">F</forename>
+				<surname>Stocker</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Q</forename>
+				<surname>Dahe</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<forename type="middle">K</forename>
+				<surname>Plattner</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Intergovernmental Panel on Climate Change (IPCC&apos;2013)</title>
+		<imprint>
+			<date type="published" when="2013" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,325.80,480.57,232.16,8.83;10,325.80,490.59,232.17,8.83;10,325.80,500.55,196.33,8.83"  xml:id="b36">
+	<analytic>
+		<title level="a" type="main">Decadal variability of the extreme hot event in China and its association with atmospheric circulations</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">Q</forename>
+				<surname>Sun</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<forename type="middle">J</forename>
+				<surname>Wang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Yuan</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Climatic and Environmental Research</title>
+		<imprint>
+			<biblScope unit="volume">16</biblScope>
+			<biblScope unit="issue">2</biblScope>
+			<biblScope unit="page" from="199" to="208" />
+			<date type="published" when="2011" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,325.80,510.57,232.29,8.83;10,325.80,520.58,232.08,8.83;10,325.80,530.54,179.65,8.83"  xml:id="b37">
+	<analytic>
+		<title level="a" type="main">Axes-based visualizations with radial layouts</title>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Tominski</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Abello</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Schumann</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 2004 ACM Symposium on Applied Computing (SAC&apos;04)</title>
+		<meeting>the 2004 ACM Symposium on Applied Computing (SAC&apos;04)</meeting>
+		<imprint>
+			<date type="published" when="2004" />
+			<biblScope unit="page" from="1242" to="1247" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,325.80,540.56,232.27,8.83;10,325.80,550.58,232.15,8.83;10,325.80,560.54,190.17,8.83"  xml:id="b38">
+	<analytic>
+		<title level="a" type="main">Information visualization in climate research</title>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Tominski</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">F</forename>
+				<surname>Donges</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Nocke</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the International Conference on Information Visualization (IV&apos;2011)</title>
+		<meeting>the International Conference on Information Visualization (IV&apos;2011)</meeting>
+		<imprint>
+			<date type="published" when="2011" />
+			<biblScope unit="page" from="298" to="305" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,325.80,570.56,160.45,8.83"  xml:id="b39">
+	<monogr>
+		<title/>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<forename type="middle">F</forename>
+				<surname>Watson</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<surname>Contouring</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="1992" />
+			<publisher>Pergamon Press</publisher>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,325.80,580.58,232.12,8.83;10,325.80,590.54,232.23,8.83;10,325.80,600.56,170.74,8.83"  xml:id="b40">
+	<analytic>
+		<title level="a" type="main">OpinionSeer: interactive visualization of hotel customer feedback</title>
+		<author>
+			<persName>
+				<forename type="first">Y</forename>
+				<surname>Wu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<surname>Wei</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Liu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Au</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Cui</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Zhou</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Qu</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Trans. Vis. Comput. Graph</title>
+		<imprint>
+			<biblScope unit="volume">16</biblScope>
+			<biblScope unit="issue">6</biblScope>
+			<biblScope unit="page" from="1109" to="1118" />
+			<date type="published" when="2010" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,325.80,610.58,232.14,8.83;10,325.80,620.54,232.21,8.83;10,325.80,630.56,135.20,8.83"  xml:id="b41">
+	<analytic>
+		<title level="a" type="main">Using haptics to convey cause-and-effect relations in climate visualization</title>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Yannier</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Basdogan</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Tasiran</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">O</forename>
+				<forename type="middle">L</forename>
+				<surname>Sen</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Trans. Vis. Comput. Graph</title>
+		<imprint>
+			<biblScope unit="volume">1</biblScope>
+			<biblScope unit="issue">2</biblScope>
+			<biblScope unit="page" from="130" to="141" />
+			<date type="published" when="2008" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,325.80,640.58,232.15,8.83;10,325.80,650.54,232.25,8.83;10,325.80,660.56,141.25,8.83"  xml:id="b42">
+	<analytic>
+		<title level="a" type="main">Climate change trend in China, with improved accuracy</title>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<forename type="middle">X</forename>
+				<surname>Yue</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Zhao</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<forename type="middle">D</forename>
+				<surname>Ramsey</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<forename type="middle">L</forename>
+				<surname>Wang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Z</forename>
+				<forename type="middle">M</forename>
+				<surname>Fan</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<forename type="middle">F</forename>
+				<surname>Chen</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Y</forename>
+				<forename type="middle">M</forename>
+				<surname>Lu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<forename type="middle">L</forename>
+				<surname>Li</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Climatic Change</title>
+		<imprint>
+			<biblScope unit="volume">120</biblScope>
+			<biblScope unit="page" from="1" to="15" />
+			<date type="published" when="2013" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,325.80,670.58,232.14,8.83;10,325.80,680.54,196.82,8.83"  xml:id="b43">
+	<analytic>
+		<title level="a" type="main">Color code for products of weather forecast and service GB</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Zhang</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Chinese meteorological industry standard Chinese)</title>
+		<imprint>
+			<date type="published" when="2009" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,325.80,690.56,232.13,8.83;10,325.80,700.58,232.17,8.83;10,325.80,710.54,232.16,8.83;10,325.80,720.56,107.57,8.83"  xml:id="b44">
+	<analytic>
+		<title level="a" type="main">The Five W&apos;s for Information Visualization with application to healthcare informatics</title>
+		<author>
+			<persName>
+				<forename type="first">Z</forename>
+				<surname>Zhang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Wang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<surname>Ahmed</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">I</forename>
+				<forename type="middle">V</forename>
+				<surname>Ramakrishnan</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Zhao</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Viccellio</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Mueller</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Trans. Vis. Comput. Graph</title>
+		<imprint>
+			<biblScope unit="volume">19</biblScope>
+			<biblScope unit="issue">11</biblScope>
+			<biblScope unit="page" from="1895" to="1910" />
+			<date type="published" when="2013" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+				</listBibl>
+			</div>
+		</back>
+	</text>
+</TEI>

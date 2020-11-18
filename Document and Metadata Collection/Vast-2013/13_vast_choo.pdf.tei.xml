@@ -1,0 +1,1381 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.tei-c.org/ns/1.0 /home/pisenberg/grobid/grobid-home/schemas/xsd/Grobid.xsd"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+	<teiHeader xml:lang="en">
+		<encodingDesc>
+			<appInfo>
+				<application version="0.4.1" ident="GROBID" when="2016-09-09T13:47+0000">
+					<ref target="https://github.com/kermitt2/grobid">GROBID - A machine learning software for extracting information from scholarly documents</ref>
+				</application>
+			</appInfo>
+		</encodingDesc>
+		<fileDesc>
+			<titleStmt>
+				<title level="a" type="main">UTOPIAN: User-Driven Topic Modeling Based on Interactive Nonnegative Matrix Factorization</title>
+			</titleStmt>
+			<publicationStmt>
+				<publisher/>
+				<availability status="unknown"><licence/></availability>
+			</publicationStmt>
+			<sourceDesc>
+				<biblStruct>
+					<analytic>
+						<author>
+							<persName>
+								<forename type="first">Jaegul</forename>
+								<surname>Choo</surname>
+							</persName>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Changhyun</forename>
+								<surname>Lee</surname>
+							</persName>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Chandan</forename>
+								<forename type="middle">K</forename>
+								<surname>Reddy</surname>
+							</persName>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Haesun</forename>
+								<surname>Park</surname>
+							</persName>
+						</author>
+						<author>
+							<affiliation>
+								<orgName>Fig.</orgName>
+							</affiliation>
+						</author>
+						<title level="a" type="main">UTOPIAN: User-Driven Topic Modeling Based on Interactive Nonnegative Matrix Factorization</title>
+					</analytic>
+					<monogr>
+						<imprint>
+							<date/>
+						</imprint>
+					</monogr>
+				</biblStruct>
+			</sourceDesc>
+		</fileDesc>
+		<profileDesc>
+			<abstract/>
+		</profileDesc>
+	</teiHeader>
+	<text xml:lang="en">
+		<body>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1">INTRODUCTION</head><p> Due to an ever increasing amount of document data and complexities involved with analyzing them in practice, revealing meaningful insights and thus guiding users in their decision-making processes has long been an active area of research. Among various approaches to tackle these problems, a topic modeling approach, which discovers semantically meaningful topics from a document corpus, has been gaining popularity in both the fields of data mining/machine learning and visual analytics. Similar to many other techniques dealing with document data, most of these topic modeling approaches take an input in the form of a term-document matrix representation of documents via a bag-ofwords model. Different kinds of definitions about topic modeling may exist, but from a practical standpoint, the topic modeling approaches typically give two types of outputs: (1) a representation of each topic in terms of a weighted combination of keywords, or a keyword-wise topic representation in short, and (2) a representation of each document in terms of a weighted combination of topics, or a topic-wise document representation in short. In the two representations, the weight indicates how closely a particular keyword is related to the corresponding topic/document and how closely a particular topic is related to the corresponding document, respectively. From this perspective, topic modeling is related to soft clustering where the documents are represented as weighted combinations of clusters in terms of their proximity to each cluster, which essentially play the same role of the second output of topic modeling. However, soft clustering typically tends to focus only on how closely a particular document is related to each cluster while topic modeling deals with both types of outputs including the semantic meaning of each cluster/topic on its own. The work presented in this paper deals with the latter case, and we primarily present our system in the context of topic modeling. Allowing some relaxation on topic modeling definitions by involving possibly negative weights on the topic modeling output, the history of topic modeling approaches traces back to a well-known traditional technique called latent semantic indexing (LSI) <ref type="bibr" coords="2,201.63,254.41,13.75,8.12" target="#b10">[11]</ref> . However, researchers and end-users have had difficulties in making sense out of negative weights on keywords or topics, which prevent LSI from being used in real-world domains. Alternatively, more recent methods have focused on probabilistic models that have nice interpretation properties in their outputs since both of the above-mentioned outcomes are all non-negative and are summed up to one under a probabilistic framework . These probabilistic topic modeling methods, such as probabilistic latent semantic indexing (p-LSI) <ref type="bibr" coords="2,150.53,334.10,14.94,8.12" target="#b16">[17] </ref>and latent Dirichlet allocation (LDA) <ref type="bibr" coords="2,48.56,344.07,9.52,8.12" target="#b3">[4]</ref>, have become popular in various domains. Especially, LDA has also been widely applied in visual analytics domain primarily due to its excellent performances compared to most of the previous ap- proaches. However, when applied in visual analytics, LDA has several practical shortcomings in terms of consistency from multiple runs and empirical convergence. As will be described in Section 6, the former indicates how stable the algorithm output remains from multiple runs with the same setting while the latter indicates how early the algorithm converges from a user's point of view compared to algorithmic convergence. Furthermore, due to the complicatedness in the formulation and the algorithm, incorporating various types of user feedback with LDA is relatively difficult. In order to overcome these drawbacks, we propose a reliable and flexible topic modeling visual analytics system called UTOPIAN (User-driven Topic modeling based on Interactive Nonnegative Matrix Factorization). Nonnegative matrix factorization (NMF) <ref type="bibr" coords="2,229.33,505.33,14.20,8.12" target="#b28">[30,</ref><ref type="bibr" coords="2,246.25,505.33,11.96,8.12" target="#b23"> 25] </ref>has been one of the most active research areas in data mining and machine learning fields, and it has been applied in the context of topic modeling mainly from a computational perspective <ref type="bibr" coords="2,170.17,535.22,9.53,8.12" target="#b2">[3]</ref>. As an approach for topic modeling, NMF works similar to LSI in that they both solve a matrix decomposition problem given a particular rank value corresponding to the number of topics. However, as the name suggests, NMF imposes non-negativity constraints on every element of the resulting matrices so that it can maintain interpretability. The advantage of UTOPIAN is that NMF does not suffer from the previously raised issues while providing results with comparable quality to those of LDA. In other words, although NMF is non-convex similar to LDA, its algorithm usually generates a consistent result from multiple runs for a given document corpus (Section 6). Moreover, the NMF algorithm is deterministic. Thus, unless the user modifies an initial specification, she will obtain the same result from the algorithm. These desirable behaviors of NMF serve as important grounds to make UTOPIAN practically useful and interactive in real-world visual analytics by enabling the user to progressively improve a particular result by interactively changing the algorithm specifications, etc. More importantly, another notable advantage of UTOPIAN is that it can easily incorporate more active user interactions that are beyond changing parameters, initial values, etc., via various forms of semi-supervisions on NMF. Thus, UTOPIAN provides these flexible interaction capabilities of NMF in improving the topic modeling result in a user-driven manner. The manner in which the adopted semisupervised NMF method takes the user interventions into account is intuitive because the semi-supervision will be in the same form as the two above-described topic modeling outputs which the user is already familiar with throughout his/her analysis. This characteristic removes any additional need for transforming the user interventions back to the algorithm parameters or constraints in an ambiguous way. Based on the semi-supervised NMF method, UTOPIAN provides a wide variety of interaction capabilities for improving topic modeling. UTOPIAN visualizes the NMF topic modeling result mainly in a nodelink diagram by using a variant of one of the state-of-the-art dimension reduction methods called t-distributed stochastic neighborhood embedding (t-SNE) <ref type="bibr" coords="2,360.15,183.32,13.75,8.12" target="#b32">[34]</ref>. The provided interaction forms primarily two types of semi-supervisions to the algorithm: keyword-based and document-based ones, each of which can also be flexibly generated in either a top-down or a bottom-up manner (Section 4). Furthermore, in order to support real-time interactions with the topic modeling algorithm , UTOPIAN visualizes its intermediate outputs even before its convergence, (Section 5.2). Finally, by using UTOPIAN, we show several interesting usage scenarios where the topic modeling results are interactively improved. The main contributions of UTOPIAN are summarized as follows: </p><p>@BULLET Proposing NMF as a better alternative topic modeling method in visual analytics compared to LDA. @BULLET Developing a visual analytics system called UTOPIAN equipped with various user interaction capabilities based on the semisupervised NMF. </p><p>@BULLET Presenting various usage scenarios using real-world data in which the topic modeling result is improved via various user in- teractions. </p><p> The rest of this paper is organized as follows. Section 2 discusses related work. Section 3 introduces NMF in the context of topic modeling . Section 4 presents the user interactions for improving topic modeling using NMF. Section 5 describes UTOPIAN supporting these user interactions. Section 6 shows detailed quantitative results about the algorithm behaviors of LDA and NMF. Section 7 presents several usage scenarios with UTOPIAN. Finally, Section 8 concludes the paper with some future work. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2">RELATED WORK</head><p>The primary goal of discovering topics in document collections is to provide the user with a summary of a document corpus in terms of, for example, keyword summaries of computed topics and a group of documents closely related to each topic. Hence, topic modeling can be viewed as a (soft) clustering in the sense that clustering also gives groups of semantically coherent documents where the semantic meaning of each cluster can be represented as the most frequent keywords in the document group. Therefore, our discussion in this section encompasses previous studies involving topic modeling as well as document clustering in visual analytics. A well-known visual document analysis system, IN-SPIRE <ref type="bibr" coords="2,518.32,606.82,13.75,8.12" target="#b34">[36]</ref>, shows the summaries of the topic clusters using standard clustering and dimensionality algorithms such as k-means and principal component analysis (PCA) <ref type="bibr" coords="2,361.71,636.70,13.75,8.12" target="#b20">[21]</ref>, respectively, to compute topic summaries. However, IN-SPIRE does not support substantial interactions for improving topic clusters. Another widely-used system, Jigsaw <ref type="bibr" coords="2,501.15,656.63,13.75,8.12" target="#b31">[33]</ref> , provides various capabilities such as summarizing document cluster views and allows several basic interactions such as changing the number of clusters and initializing seed documents of clusters. More recently, various visual analytics systems involving an advanced topic modeling method, LDA, have been proposed. TIARA <ref type="bibr" coords="2,446.27,706.44,13.74,8.12" target="#b33">[35]</ref> , one of the first systems that applied LDA in visual analytics, has utilized a ThemeRiverstyle visualization to show the temporal trend of topic evolution. Other work such as ParallelTopics <ref type="bibr" coords="2,389.31,736.33,14.94,8.12" target="#b11">[12] </ref>and TextFlow <ref type="bibr" coords="2,459.33,736.33,14.94,8.12" target="#b9">[10] </ref>have also aimed A mask/weight value for w l M </p><p>(i) H A mask/weight value for h i at capturing the topic changes and understanding the document characteristics based on LDA. Specifically, TextFlow handles merging and splitting topics over time as well as detects emerging/diminishing topics . In most of these studies, however, the main focus lies in how effectively the LDA results can be utilized in their applications, but not the interactions with a topic modeling itself for improving its result . As noted in recent work in the machine learning domain <ref type="bibr" coords="3,255.58,324.92,9.72,8.12" target="#b0">[1,</ref><ref type="bibr" coords="3,267.69,324.92,10.65,8.12" target="#b19"> 20]</ref>, incorporating domain knowledge into topic modeling via user interactions can be a cumbersome process. On the other hand, there have been many studies that have tried to improve clustering or topic modeling results in document analysis through user interactions. Such interactive clustering approaches go well beyond the standard document analysis <ref type="bibr" coords="3,195.67,385.41,14.20,8.12" target="#b17">[18,</ref><ref type="bibr" coords="3,212.67,385.41,11.21,8.12" target="#b27"> 29,</ref><ref type="bibr" coords="3,226.69,385.41,6.47,8.12" target="#b4"> 5]</ref> . The importance and the need for an interactive visual exploration for text document collection have also been gaining a lot of interest in recent years <ref type="bibr" coords="3,31.50,415.30,14.19,8.12" target="#b12">[13,</ref><ref type="bibr" coords="3,48.98,415.30,11.21,8.12" target="#b15"> 16,</ref><ref type="bibr" coords="3,63.48,415.30,10.65,8.12" target="#b14"> 15]</ref>. Similar to our approach, several studies have actively used node-link diagrams, which visualize documents along with their clusters, allowing users to interactively create a hierarchical structure of topic clusters <ref type="bibr" coords="3,91.03,445.19,14.19,8.12" target="#b25">[27,</ref><ref type="bibr" coords="3,107.48,445.19,10.65,8.12" target="#b29"> 31]</ref>. iCluster <ref type="bibr" coords="3,155.11,445.19,14.94,8.12" target="#b13">[14] </ref>lets the user manually perform clustering from scratch based on the recommended documents computed by the system. Although it may be inefficient in large-scale data, the user can maintain semantically meaningful topic clusters, and the system can reflect user feedback at every step of performing clustering for individual documents. iVisClustering <ref type="bibr" coords="3,217.66,495.01,14.94,8.12" target="#b24">[26] </ref> is another visual analytics system for document clustering using LDA. It provides a few capabilities to directly interact with LDA, such as manipulating the topical keyword weights and merging/splitting topic clusters, etc. However, most of these LDA-based systems suffer from the previously discussed problems, and due to the significant running time of LDA, most computations are done off-line, and real-time interactions with LDA is difficult. In contrast, NMF, which does not suffer from these problems, has never been systematically explored in the context of visual analytics. In this regard, UTOPIAN is one of the first such systems based on NMF for document topic modeling that supports various user interactions in real-time visual environments. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3">NONNEGATIVE MATRIX FACTORIZATION (NMF) FOR TOPIC MODELING</head><p>In this section, we introduce NMF in the context of topic modeling and compare it with widely-used probabilistic topic modeling. The notations used in the paper is summarized in <ref type="figure" coords="3,193.37,670.64,25.31,8.12" target="#tab_1">Table 1</ref>. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.1">Formulation</head><p>Given a nonnegative matrix X ∈ R m×n + , and an integer k ≪ min (m, n), NMF finds a lower-rank approximation given by </p><formula>X ≈ W H, </formula><formula>(1) </formula><p>where W ∈ R m×k + and H ∈ R k×n + are nonnegative factors. NMF is typically formulated in terms of the Frobenius norm as min </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>W, H≥0 </head><p>X −W H 2 F . </p><formula>(2) </formula><p> where ′ ≥ ′ applies to every element of the given matrix in the lefthand side. In the topic modeling context, x i ∈ R m×1 + , the i-th column of X, corresponds to the bag-of-words representation of document i with respect to m keywords, possibly with some pre-processing, e.g., inverse-document frequency weighting and column-wise l 2 -norm normalization . k corresponds to the number of topics. w l ∈ R m×1 + , the l-th nonnegative column vector of W , represents the l-th topic as a weighted combination of m keywords. A large value indicates a close relationship of the topic to the corresponding keyword. h i ∈ R k×1 + , the i-th column vector of H, represents document i as a weighted combination of k topics. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.2">NMF for Topic Modeling</head><p>Compared to standard topic modeling methods such as p-LSI and LDA, NMF essentially gives the same output types, (1) a keywordwise topic representation, e.g., w l , and (2) a topic-wise document representation , e.g., h i . The only difference, however, is that w l and h i are not necessarily column-normalized (meaning summing up to one) unlike the p-LSI and LDA outputs. Nonetheless, such a difference is negligible in that Eq. (1) can be manipulated via diagonal scaling matrices as </p><formula>X ≈ W H = (W D W ) D −1 W H = ˆ W ˆ H </formula><p>where the (l, l)-th entry of the diagonal matrix D w ∈ R k×k + corresponds to the sum of w l . Now the new matrixˆWmatrixˆ matrixˆW is column-normalized, giving an equivalent output to the first outputs from p-LSI and LDA, but the second outputˆHoutputˆ outputˆH is still not column-normalized. The column normalization onˆHonˆ onˆH does not affect the interpretation of each document in terms of its relative relationships to topics. In this sense, NMF can be used as an alternative to standard topic modeling methods. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4">USER INTERACTIONS VIA SEMI-SUPERVISED NMF</head><p>In this section, we first describe a semi-supervised NMF (SS-NMF) that can flexibly support various user interactions in UTOPIAN. We then propose a set of user interactions and describe how they are performed via SS-NMF formulations. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.1">Semi-supervised NMF (SS-NMF)</head><p> In addition to the original NMF inputs, X and k, SS-NMF takes additional inputs as reference matrices, </p><formula>V ∈ R m×k + and G ∈ R k×n + for W and H, respectively, and diagonal matrices M W ∈ R k×k + and M H ∈ R n×n + , </formula><p>which assign weights on the columns of V and G, respectively. Given these inputs, SS-NMF includes additional terms that penalize the difference between G and H (up to row-wise scaling via D H ) and that between V and W as </p><formula>min W, H, D H ≥0 X −W H 2 F + (W −V ) M W 2 F + (H − GD H ) M H 2 F (3) </formula><p>for nonnegative factors W ∈ R m×k + and H ∈ R k×n + and a diagonal </p><formula>trix D H ∈ R n×n + . </formula><p>Basically, Eq. (3) regularizes/supervises the resulting W and H to be as close as possible to V and G, respectively, while still approximating the input matrix X as W H. More specifically, w l and h i are enforced to be close to v l ∈ R m×1 , the l-th column vector of V , and g i ∈ R k×1 , the i-th column vector of G, respectively. The diagonal matrix D H plays a role of automatically adjusting the scales between h i 's and g i 's. Note that as discussed in Section 3, D H does not change the relative topical weight values, and thus the effect of D H can be ignored when interpreting the topic modeling results of SS-NMF. M W and M H enable such supervision to be applied selectively on a subset of columns of W and H when the corresponding diagonal entries of M W and M H are set to zeros. In other words, when M (l) W , the (l, l)-th entry of M W , is set to zero, no supervision on w l is imposed. Likewise, when M </p><p>(i) H , the (i, i)-th entry of M H , is set to zero, no supervision on h i is imposed. On the other hand, larger diagonal values of M W and M H supervise more strongly the corresponding columns of W and H, respectively. When used in interactive topic modeling, the reference information represented in V and G represents the prior knowledge the user wants to impose in the topic modeling output. On the one hand, by setting only a few nonzero entries in M W and M H for partial supervision, the user can selectively regularize particular topics instead of the entire topics. On the other hand, by setting relatively small nonzero values in M W and M H , the user can weakly supervise his/her knowledge into the formulation in case she is not completly sure about what a topic should look like. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.2">Supported User Interactions</head><p> Even though the SS-NMF formulation provides a natural way to impose the user's prior knowledge in topic modeling processes, it is nontrivial to design a semantically meaningful set of user interactions for improving topic modeling. In this section, we propose a variety of such user interactions based on SS-NMF as follows: </p><p>(i) keyword refinement of an existing topic, (ii) topic splitting/merging for interactive adjustment of the number of topics, and (iii) keyword-induced/documentinduced topic creation. The proposed user interactions are mostly on an individual topic or document basis by generating an appropriate v l or g i , respectively, with its corresponding nonzero weight values for M </p><formula>(l) W and M (i) H . </formula><p>In the following, we describe each of the supported user interactions. Topic keyword refinement. This interaction enables the user to change keyword weights so that she can directly refine the semantic meaning of a topic. That is, starting from w l , the user can increase/decrease or even remove the weights of particular keywords and set the modified vector to v l along with a nonzero M </p><formula>(l) </formula><p>W . For instance, suppose w l represents the distribution over three keywords, 'apple,' 'orange,' and 'banana,' as (1.3, 0.6, 0.1). If the user wants to completely remove the term 'banana' from the meaning of this topic, she can set v l to (1.3, 0.6, 0). On the other hand, if she wants this topic to be more closely related to 'orange,' then she may set v l to (1.3, 1.6, 0.1). Such reference information affects the subsequent running of SS-NMF. Topic merging. This interaction allows the user to merge similar topics into a single one. Our approach to achieve this interaction is to generate g i from h i as follows. We first identify the documents related most closely to either of the merged topics, which are essentially the documents that are hard-clustered to the merged topics. For these documents , we obtain their h i 's and merge the values corresponding to the two merged topics by adding them up to a single value, and set g i 's to the resulting h i 's. For instance, suppose two documents, whose h i 's are represented as (0.7, 0.2, 0.1) and (0.3, 0.5, 0.2), respectively, in terms of the three topics. When merging topic 1 and 2, the corresponding g i 's would be set to (0.7+0.2, 0.1) and (0.3+0.5, 0.2), respectively, in terms of the merged topic and topic 3. Notice that even though our merging algorithm is document-based, the keywords associated with the representation of the merged topics in terms of keywords are adjusted accordingly, which could potentially make the merged topic bring new documents in and/or exclude existing documents out. Topic splitting. In this interaction, we provide a capability to split a topic into two in a user-driven way. In this interaction, we assume the user expect the two split topics share a common semantic meaning at a high level but with minor differences in their details. More specifically, suppose the user wants to split a particular topic w l , into two topics w a and w b . We first initialize the reference vectors v a and v b for the two split topics as w l . Afterwards, we let users manipulate these two topic vectors via the topic keyword refinement interaction so that the splitting process can reflect the user's intention. For instance, given the same keyword-wise representations of two split topics, the user might want to increase the weight of a particular keyword in the first one while decreasing/removing the weight of the same keyword in the second one. Based on the reference information v a and v b generated in this manner, the subsequent running of SS-NMF performs the topic splitting process. Document-induced topic creation. This interaction constructs a topic based on a small number of exemplar documents of the user's choice. In this interaction, for those documents specified as exemplars by the user, the corresponding g i 's are initialized to zero vectors but are set to one for the value corresponding to the newly created topic. For instance, when the current number of topics is k, g i 's are set to a (k + 1)-dimensional vector where the first k entries are zeros but the last entry is set to one, assuming the (k + 1)-th topic is the newly created one. Such a process enforces the exemplar documents to be related purely to the newly created topic. Using this reference information, SS-NMF forms a new keyword-wise topic representation for a new topic, and accordingly the relevant documents to the exemplars. Keyword-induced topic creation. This interaction provides a way to create a topic based on a small set of keywords of the user's interest . In this interaction, we assume that the user is given the topic summaries in terms of the keywords with the largest weight in the keyword-wise topic representation w l . With this interaction, the user can select several interesting keywords and create a topic based on them. For its formulation using SS-NMF, we initialize the reference information v l of a newly created topic as a zero vector. Then, for the user-selected keywords, we set their corresponding values as ones in v l . In this manner, the resulting w l is enforced to be related mainly to these keywords. As a result, the documents closely related to these keywords are included in this topic. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.3">Perspectives of Supported User Interactions</head><p>So far, we have mainly presented various user interactions in terms of how they can be formulated as the reference information about the topic modeling outputs in SS-NMF. Depending on how we generate such reference information, we discuss the above-described user interactions from the following perspectives. The user interactions can be formulated using the reference information for either the keywordwise topic representation or the topic-wise document representation. Keyword-based interactions refer to those manipulating the reference information v l about the keyword-wise topic representation w l of a particular topic. On the other hand, document-based interactions refer to those manipulating the reference information g i about the topicwise document representation h i of a particular document. From this perspective, topic keyword refinement, topic splitting, and keywordinduced topic creation are keyword-based while topic merging and document-induced topic creation are document-based. Nonetheless, in most topic modeling methods including NMF, the two main outputs of topic modeling are interdependent. In other words, a change of any one of them affects the other. Therefore, some interactions can be formulated in the other way. For example, topic splitting can be performed based on the user interaction of splitting the documents in one topic into two groups, which would then be a document-based formulation. In addition, topic merging may also be formulated as an averaged keyword-wise topic representation of the two, which would be keyword-based. However, after experimenting all these various options, we found the proposed approaches for the above interactions reflect the user intention properly in terms of the SS-NMF algorithm behavior. ). The user interactions can also be characterized in terms of how we form the reference information about the topic modeling output. Template-based interactions refer to those starting from a current topic modeling output w l or h i (as a template) and manipulating it to generate the reference information v l or g i . On the other hand, from-scratchbased interactions refer to those starting from a completely zero vector of the reference information v l or g i and putting nonzero values only in the entries that the user specifies. From this perspective, topic keyword refinement, topic merging, and topic splitting are template-based while document-induced topic creation and keyword-induced topic creation are document-based. In general, these two methods contrast in terms of the quality and the efficiency when generating the reference information via a user interaction . That is, the template-based approach has an advantage of being able to efficiently create the reference information by using the already-built topic modeling output, which would contain most keywords and topics with nonzero weight values in w l and h i , respectively. After doing so, the user can gradually refine the reference information. This approach, however, may suffer from the poor quality of an initial topic modeling output. On the other hand, the from-scratch-based method does not have this problem since the reference information do not involve any information from the topic modeling output. Instead, the reference information starts from a completely zero vector, and it is created entirely as what the user specifies. For instance, from the perspective of the SS- NMF algorithm, topic keyword refinement and keyword-induced topic creation has no difference in that both of them create the reference information v l about w l . However, the latter, which is a from-scratchbased method, does not allow any keywords to be involved other than the user-specified keywords because we set nonzero values in v l only for the corresponding keywords. In this sense, the from-scratch-based method can maintain the quality of the reference information based on the user intention, but it may be inefficient to involve a large number of keywords or documents in the reference information since the user has to manually go through all the processes. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5">UTOPIAN</head><p> UTOPIAN 1 visually presents the SS-NMF result in a node-link diagram in which the displayed points represent individual documents with color-coding their (hard-clustered) topic cluster labels. Additionally , we provide the summary of topic clusters in terms of their most representative keywords. Given a visualization created in this manner, the user can perform the above-described interactions to improve the topic modeling result. UTOPIAN has three key features: @BULLET Modified t-distributed stochastic neighborhood embedding (t- SNE) as a layout algorithm for proper visualization of documents and their topics @BULLET Visualization of the intermediate algorithm outputs for real-time visualization and responsive interaction with NMF @BULLET Animated visualization of explicit topic cluster changes for tracking the progression of the topic modeling outputs </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head> 5.1 Modified t-distributed Stochastic Neighborhood Embedding (t-SNE) </head><p>In a visual analytics approach, it is important for the user to be able to visually understand and interact with the topic modeling results. As our main visual layout algorithm to visualize documents along with their topic modeling outputs in a node-link diagram form, we have chosen one of the state-of-the-art methods called t-distributed stochastic neighborhood embedding (t-SNE) <ref type="bibr" coords="5,171.41,600.87,13.75,8.12" target="#b32">[34]</ref>. Given high-dimensional vectors of data items or their pairwise similarity values, t-SNE computes a 2D layout that reflects the high-dimensional relationships or the given pairwise similarities in terms of their 2D Euclidean distances . When applied in document data, their bag-of-words representations or their cosine similarity measures are typically used as an input to t-SNE. The main reason we have chosen t-SNE rather than other standard techniques such as principal component analysis <ref type="bibr" coords="5,205.83,680.70,14.94,8.12" target="#b20">[21] </ref> and multidimensional scaling <ref type="bibr" coords="5,82.41,690.67,14.94,8.12" target="#b21">[23] </ref>is that t-SNE has shown its outstanding capabilities in revealing the implicit groupings of data items in visualization ap- plications <ref type="bibr" coords="5,68.68,710.59,13.75,8.12" target="#b32">[34]</ref> . However, we found that t-SNE often generate a nodelink diagram for document data where different topic clusters severely <ref type="figure" coords="5,294.12,181.41,20.56,8.12">Fig. 2</ref>. A comparison between the original and the modified t-SNE. The modified t-SNE (b) with a shrinkage parameter value of 0.4 shows a much clearer structure of topic clusters than the original t-SNE (a). UTOPIAN provides a slider interface to control the shrinkage parameter value. In addition, the edges have been drawn for the pairs of data points whose distances are closer than a user-specified threshold. 515 documents of the InfoVis-VAST data set have been used. overlap, as shown in <ref type="figure" coords="5,369.52,266.99,19.76,8.12">Fig. 2</ref> (a), making it difficult to analyze the topicvs-topic and/or topic-vs-document relationships. To overcome this problem, we adopted a supervision idea in dimension reduction, such as linear discriminant analysis <ref type="bibr" coords="5,406.10,296.88,13.75,8.12" target="#b18">[19]</ref>, which tries to represent the clear cluster structure in dimension reduction results. Although this kind of behavior may distort the original relationships of data items, it has been shown to be useful in visualization applications in various do- mains <ref type="bibr" coords="5,317.78,336.73,9.71,8.12" target="#b5">[6,</ref><ref type="bibr" coords="5,329.73,336.73,6.47,8.12" target="#b6"> 7]</ref>. In detail, we have modified the original t-SNE algorithm so that they can better show the cluster structure in noisy data sets such as documents . Suppose d i j denotes the pairwise distance between documents i and j to be used as an input to t-SNE. Given a topic cluster index obtained by applying hard-clustering to the topic modeling result, if these two documents belong to the same topic cluster, then we decrease their pairwise distance by a factor of α, i.e., αd i j where α is a pre-defined parameter value between zero and one. By default, the shrinking parameter α is set to 0.4, but the user can interactively change it via a slider interface in UTOPIAN. In this manner, the pairwise distance input to t-SNE now represents each cluster more compactly, resulting in a clearer visualization of the cluster structure. <ref type="figure" coords="5,476.07,456.35,20.81,8.12">Fig. 2</ref>(b) shows an example visualization when applying the proposed modification to t- SNE. As we can see, the topic clusters are shown much better than <ref type="figure" coords="5,294.12,486.24,19.78,8.12">Fig. 2</ref>(a). </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.2">Visualization of the Intermediate Algorithm Outputs for Real-time Interactive Visualization</head><p>The real-time interaction capability is crucial in making continuous interactions efficiently based on highly exploratory nature in visual analytics. To achieve this goal, UTOPIAN is designed to reflect the intermediate algorithm outputs of NMF and t-SNE as soon as they are available <ref type="bibr" coords="5,341.72,566.91,9.53,8.12" target="#b8">[9]</ref> . Furthermore, once the user performs a particular interaction , the algorithm responds immediately to the user interaction from the immediate next iterations. In this manner, she can obtain its effects of the algorithm in real time. However, one potential drawback of this approach is that the visualization/rendering process may be burdensome since it has to be performed repetitively over the iterations instead of only once after the final iteration. To overcome this issue, we adopt a multi-threading approach to separate computational and visualization processes into different threads that can be efficiently executed simultaneously. However, it is not straightforward to adopt this idea because UTOPIAN involves two computational modules and one of them (t- SNE) is dependent on the other (SS-NMF) due to the modification described in Section 5.1. Therefore, we further develop this idea so that it can handle two dependent computational modules simultaneously. Basically, we now have two separate threads for SS-NMF and t-SNE and another for visualization/rendering. Between the t-SNE and the visualization threads, the iteration-wise computational visualization  method is applied in a straightforward manner. That is, when an intermediate output of t-SNE, which is a set of 2D representations of the documents, is available, the visualization thread updates the node-link diagram view. In addition, once an intermediate output of SS-NMF is generated, it causes the t-SNE module to restart because of the new input distance information due to the topic cluster membership changes. During this process, the latest output of t-SNE from the previous run of t-SNE is used as an initial value for the next run of t-SNE in order to avoid a significant change in the view. </p><p> While the view updates continuously based on the intermediate outputs of t-SNE as well as SS-NMF, the user can perform any supported user interactions, which will essentially restart SS-NMF using the newly created reference information. Similar to the restarting process of t-SNE, we set the initial value of the new run of SS-NMF as the latest output of the previous run of SS-NMF. Afterwards, the intermediate results of SS-NMF from iterations will immediately affect the t-SNE module and then the visualization module. In this manner , the SS-NMF module can be responsive due to user interactions in real-time. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.3">Animated Visualization of Explicit Topic cluster Changes</head><p>During a sequence of user interactions, documents often change their topic cluster memberships. In UTOPIAN, such changes assign different colors to data points (representing new topic cluster indices), and their 2D coordinates computed by our modified t-SNE often change significantly. In order to preserve the user's mental map to track these changes <ref type="bibr" coords="6,53.66,413.18,9.52,8.12" target="#b1">[2]</ref> , UTOPIAN visualizes their smooth transitions via animation . Furthermore, we explicitly encode the topic cluster changes of a data point by filling the left half of the point circle as the original cluster index and the right half as the new cluster index. 2 </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.4">Implementation Details</head><p>UTOPIAN is primarily implemented in JAVA for front-end UI's and rendering modules, which are mainly based on the FODAVA testbed system <ref type="bibr" coords="6,49.89,517.78,9.52,8.12" target="#b7">[8]</ref>. NetBeans Rich Client Platform and IDE 3 have been used for a flexible window management. The back-end computational modules of SS-NMF and t-SNE are written in MATLAB, and they interface with the front-end JAVA module via the 'matlabcontrol' library. 4 For animation effects, we have used the 'trident' library. 5 </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6">QUANTITATIVE ANALYSIS</head><p>We present quantitative comparisons between the LDA and the NMF algorithms from the two practical viewpoints: (1) consistency from multiple runs and (2) empirical convergence (as opposed to the algorithmic convergence). By the former, we mean how consistent results the algorithm generates among multiple runs while by the latter, we mean how fast the algorithm converges from a human's practical view- point. </p><p>In terms of the algorithm implementation, we use a widely-accepted LDA implementation called Mallet <ref type="bibr" coords="6,157.26,696.48,14.94,8.12" target="#b26">[28] </ref>the algorithm of which is based on a Gibbs sampling method <ref type="bibr" coords="6,158.20,706.44,13.75,8.12" target="#b30">[32]</ref>. For NMF, we have used one of the fastest and numerically reliable implementation based on an active set type of a least squares method <ref type="bibr" coords="6,182.02,726.37,13.75,8.12">[22]</ref>. 6 For both methods, random initialization provided by each algorithm has been used. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6.1">Data Sets</head><p>We have chosen four document data sets: the InfoVis-VAST, the Car Reviews, the TV Reviews, and the 20News data sets. The InfoVis- VAST data set 7 is a collection of academic papers published in IEEE <ref type="bibr" coords="6,285.12,97.44,50.64,8.12">InfoVis (1995</ref><ref type="bibr" coords="6,339.83,97.44,16.30,8.12">InfoVis ( -2010</ref>) and VAST (2006-2010) conferences. The Car Reviews data set contains a set of reviews about 2009 Hyundai Genesis car collected from Edmunds.com, and the TV Reviews data set is another product review document set about a particular Samsung TV collected from Amazon.com. Finally, the 20News data set 8 is a collection of newsgroup documents composed of 20 topics. Notice that the 20News data set is relatively well clustered with pre-defined topic cluster labels. The size of these data sets are summarized in <ref type="figure" coords="6,506.44,167.17,25.70,8.12" target="#tab_2">Table 2</ref>. After the data sets are encoded using a bag-of-words representation, we pre-processed them using tf-idf and unit L 2 -norm normalization. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6.2">Consistency from Multiple Runs</head><p>In this experiment, we have run the LDA and the NMF algorithms multiple times on the four data sets. After obtaining ten sets of the topic modeling results from each algorithm, for each pair of the result sets within a particular algorithm, we have measured the number of the topic cluster memberships of individual documents that did not agree and averaged such a measure over 45 pairs out of ten sets. To this end, we have applied the Hungarian algorithm <ref type="bibr" coords="6,456.51,281.33,14.94,8.12" target="#b22">[24] </ref>to match the two independently generated cluster index sets. <ref type="figure" coords="6,295.08,301.84,21.93,8.12">Fig. 3</ref> shows the relative number of averaged topic cluster membership changes out of the total number of documents depending on the number of topics for each data set. In the first three data sets, it is shown that using NMF, about 10-25% of the entire documents changed their topic cluster memberships while using LDA, the corresponding value was much high, e.g., around 60-85%. It indicates that the user will observe significant topic cluster membership changes each time running LDA whereas the changes are relatively minor in the case of NMF. Compared to the first three data sets, however, in the 20News data set, the number of topic cluster membership changes in LDA decreases to around 30%. NMF also performs better than the previous data sets, but the performance improvement is not significant compared to LDA. Interestingly, this observation tells us that LDA tends to give more consistent results for the data sets composed of clear topics such as the 20News data set. However, in many real-world data sets, the topics are often not clearly defined due to the presence of a significant amount of noise, which makes NMF more viable for analyzing the real-world data in a visual analytic environment. Such inconsistent behaviors of LDA can also be shown by the topic summary that each algorithm generates. For example, <ref type="figure" coords="6,483.88,502.27,26.80,8.12" target="#tab_2">Table 2</ref>shows the topic summaries from the two result sets from the InfoVis-VAST data set. In the case of NMF, the topic summaries are shown to be exactly the same, but LDA varies significantly for some topics. For example , topic 2 is shown to have completely different topic summaries ('knowledge, edge' vs. 'analysts, scatterplot'), and so is topic 4 ('social , tree' vs. 'text, document'). These experimental results implies important practical concerns about LDA when used in visual analytics domains since the user cannot assure that the LDA result at hand is the best one for his/her analysis . For example, one LDA result may fail to reveal a particular topic of interest while some other ones can. To overcome this issue, the user could run LDA multiple times and see if any interesting differences arise, but this process could become time-consuming due to a significant running time of LDA and a nontrivial task of comparing between different LDA results. (d) The 20News data set <ref type="figure" coords="7,31.50,178.02,19.80,8.12">Fig. 3</ref>. The relative topic cluster membership changes with respect to the total number of documents. The presented results are averaged values among the sets of cluster membership results from running each algorithm ten times with different numbers of clusters. (b) NMF <ref type="figure" coords="7,31.50,432.37,20.93,8.12">Fig. 4</ref>. The relative topic cluster membership changes between the two consecutive iterations on the InfoVis-VAST data set using LDA and NMF. The number of topics is set to seven. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6.3">Empirical Convergence</head><p>Now, we have analyzed the convergence behavior of each algorithm using a practically meaningful measure to a human's perception rather than the algorithm's own objective or criterion values. As the measure , we have used the relative number of topic cluster membership changes between iterations out of the entire documents. In the case of NMF, we computed this measure until the NMF algorithm converges based on its own convergence criteria that are well designed from their theoretical and numerical analysis. In the case of the LDA algorithm implemented in Mallet, we did not find any convergence or stopping criteria other than a fixed number of iterations. By default, Mallet is set to run 2,000 iterations, but in our experiments, we have run 20,000 iterations, which we think of as a sufficiently large number of itera- tions. <ref type="figure" coords="7,41.46,619.72,20.80,8.12">Fig. 4</ref> shows the relative number of averaged topic cluster membership changes between the two consecutive iterations for the InfoVis- VAST data set. 9 Surprisingly, even after numerous iterations (20,000), it is shown that around 10-15% of the total documents change their topic cluster memberships at every iteration, showing practically no convergence at all. This is partly because of the Randomness nature of the sampling-based LDA algorithm, which we briefly mentioned in Section . In other words, each iteration is mainly performed by drawing samples from a particular distribution, which is expected to converge or to be stable as iterations go on. However, the result indicates </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="7.1">The TV Reviews Data</head><p>As shown in <ref type="figure" coords="8,72.40,66.60,20.83,8.12">Fig. 5</ref>, we performed several user interactions to have better understanding about the data. First, we have initially run the NMF topic modeling with five topics. As shown in <ref type="figure" coords="8,204.36,86.52,19.44,8.12">Fig. 5</ref>(a), the initial result from the NMF topic modeling reveals interesting topic clusters from the data set. For example, the topic labeled as 'delivery, service, amazon' mainly talks about the delivery service from 'Amazon.com.' Another one labeled as 'money, worth, spent' generally mentions that people are satisfied with the price, e.g., " Well worth the money spent! " . Now, we focused on the cluster labeled as 'television, excellent, product,' which would likely contain positive reviews about the product . However, the keyword such as 'television' is not much meaningful in this data set. Therefore, we performed topic keyword refinement for removing this keyword but instead increasing the weight of the keyword 'recommended' originally ranked as the 11-th keyword. As seen in <ref type="figure" coords="8,32.19,206.14,20.35,8.12">Fig. 5</ref>(b), the resulting topic is now labeled as 'excellent, product, recommended' reflecting this refinement process. More interestingly, we found one document that has moved from this topic cluster to another labeled as 'dvd, problem, sound.' After reading this review, we found that this document, which starts by saying " Do not buy this TV!! " , indeed discussed mostly the negative features of the product. Now, we decide to study and understand the negative aspects of this product, and thus, we have performed documentinduced topic creation with this document. As seen in <ref type="figure" coords="8,225.18,285.90,20.40,8.12">Fig. 5</ref>(c), the newly created topic labeled as 'repair, problem, stopped' cluster has been created, and in this topic, we have found three new documents that mainly mention about the problematic issues such as the lengthy time taken during a warranty repair, a loud noise from speakers, pinkand green-colored dead pixels, a connectivity issue with a Verizon FIOS set-top box. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="7.2">The Car Reviews Data</head><p>Using this data set, we describe the use cases of keyword-induced topic creation and topic splitting. Given the initial result shown in <ref type="figure" coords="8,239.88,386.49,19.66,8.12">Fig. 6</ref>(a), an interesting topic cluster is the one labeled as 'problem, shift, gears' that could imply that this car largely has an issue with gear shifting. As reading a few documents in this topic cluster, we found that many reviews complain about the transmission/gear shifting system, e.g., " Rattling/grinding sound when driving at lower gears " , " The transmission clunks. " , " The Transmission shifting is a Nightmare and very embarrassing! " . Next, we wanted to see if there is any suspension-related problems, and thus we have performed keyword-induced topic creation, by using the keywords 'problem' and 'suspension' (black circles in <ref type="figure" coords="8,236.34,486.18,20.15,8.12">Fig. 6</ref>(a)). As a result, a new topic labeled as 'suspension, problem, design' has now contained multiple documents (black circles in <ref type="figure" coords="8,220.32,506.10,31.89,8.12">Fig. 6(c)</ref>) that mentions about the suspension issue, e.g., " Jittery suspension. " , " Redesign the whole suspension system. " , " Suspension ruins the whole car comfortability. " . In addition, we performed topic splitting on an unclear topic labeled as 'seats, mileage, passengers' (a black triangle in <ref type="figure" coords="8,227.39,555.98,20.14,8.12">Fig. 6</ref>(a)) by manipulating the keywords as shown in <ref type="figure" coords="8,170.67,565.94,20.59,8.12">Fig. 6</ref> (b). Due to this interaction , UTOPIAN properly split the clusters by isolating the reviews mentioning the gas mileage, e.g., " great mileage for a 3.8L " , " I like the gas mileage of the v6. hwy 28 mpg and 23-24 mixed driving. " vs. the features about the seat, e.g., " add programmable front passenger seat " , " cooled seats " . </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="7.3">The InfoVis-VAST Data</head><p> In this scenario, we utilize topic merging, topic splitting, and keywordinduced topic creation for the InfoVis-VAST data set. As can be seen in <ref type="figure" coords="8,32.21,666.53,20.27,8.12">Fig. 7</ref> (a), the initial result computed by NMF is quite comprehensive , revealing an overview about the research topics in information visualization and visual analytics fields. For instance, the topic labeled as 'document, text, collections' is shown to be mainly about text visualization , and the one labeled as 'networks, traffic, social' is shown to be about social network visualization. Among these clusters, several topic clusters such as the ones labeled as 'treemaps, layout, hierarchical' and 'trees, hierarchy, node' are shown to be similar, and thus we have merged these topics (black circles in <ref type="figure" coords="8,320.91,63.26,30.36,8.12">Fig. 7(b)</ref> ). On the other hand, we have split the topic cluster labeled as 'dimensions, multivariate, parallel' in order to further look into the specific research about 'dimension reduction' and that about 'cluster analysis.' After performing such interactions, we have found the topics have been properly merged/split as expected. For instance , the papers such as 'Interactive Visual Clustering of Large Collections of Trajectories' and 'ClusterSculptor: A Visual Analytics Tool for High-Dimensional Data' have been clustered to the 'cluster analysis' topic while the papers such as 'A Rank-by-Feature Framework for Unsupervised Multidimensional Data Exploration Using Low Dimensional Projections' and 'Interactive Dimensionality Reduction through User-defined Combinations of Quality Metrics' have been clustered to the 'dimension reduction' topic. It should be noted that although we manipulated only the keywords 'dimension,' 'reduction,' 'cluster,' the relevant documents without these specific keywords have been properly clustered. Next, we have focused on the cluster labeled as 'graph, layout, edge' (a black rectangle in <ref type="figure" coords="8,381.89,232.62,29.77,8.12">Fig. 7(b)</ref>). We performed keyword-induced topic creation based on the keyword 'edge' to look into the research about 'edge' in the context of graph visualization. Interestingly, the result has shown the topic labeled as 'edge, bundled, adjacencies,' which implies that the edges in the graph are mainly used to represent the adjacencies and edge bundling is one of the main research topics. Although not reported, another keyword 'crossings' has been highly ranked as the fifth one, which also makes sense in that edge crossings are one of the main issues in graph visualization. The example papers from this topic cluster include 'Hierarchical Edge Bundles: Visualization of Adjacency Relations in Hierarchical Data' and 'Edgelens: An Interactive Method for Managing Edge Congestion in Graphs.' </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="8">CONCLUSIONS AND FUTURE WORK</head><p>In this work, we presented an NMF-based interactive visual topic modeling system called UTOPIAN. Compared to a widely-used topic modeling method, LDA, NMF has many practical advantages from the perspectives of consistency from multiple runs and early empirical convergence. In addition, NMF can incorporate the user input based on the semi-supervised formulation of it in an intuitive way. By utilizing the semi-supervised NMF, we provided five useful interaction capabilities, topic keyword refinement, topic merging, topic splitting, document-induced topic creation, and keyword-induced topic creation. Next, we presented several key advantages of UTOPIAN such as the modified t-SNE algorithm, the iteration-wise visualization of NMF and t-SNE for supporting various user interactions in real-time. Finally , we demonstrated the capabilities of UTOPIAN by flexibly applying the supported interactions in several real-world data sets. Beyond document analysis, UTOPIAN can be flexibly extended in visual analytics for various other domains, such as bioinformatics, network analysis, etc., owing to the its easy interpretation and interaction capabilities. As our future work, we plan to extend UTOPIAN for dealing with streaming document data. In addition, instead of simple keyword summaries, we plan to strengthen summarization capabilities showing semantically meaningful phrases or representative sentences, which would give the user much more comprehensive understanding about the resulting topics. Finally, we plan to improve UTOPIAN for handling a large-scale data based on a parallelized distributed NMF algorithm. </p><p>(a) The initial visualization (b) The visualization after topic keyword refinement (c) The visualization after document-induced topic creation <ref type="figure" coords="9,31.50,219.06,20.43,8.12">Fig. 5</ref>. The usage scenario with the TV Reviews data set. Given the initial visualization (a), we performed topic keyword refinement on the highlighted topic containing the term 'excellent' by removing the term 'TV' and by increasing the weights of the term 'recommended.' Due to this interaction, a single document (pointed by an arrow) has moved from this cluster to the other containing a keyword 'problem' (b). After reading it, this document is shown to mostly complain about the product. Now, we performed document-induced topic creation by using this document. As a result, three more documents that contain mostly negative reviews have joined this topic cluster, which is also reflected in the keyword summary containing 'repair' and 'stopped.' </p><p>(a) The initial visualization (b) The visualization after topic keyword refinement (c) The visualization after keyword-induced topic creation and topic splitting <ref type="figure" coords="9,31.50,441.77,19.70,8.12">Fig. 6</ref>. The usage scenario with the Car Reviews data set. Given the initial visualization (a), we have performed keyword-induced topic creation and topic splitting. For the former, in order to look into any suspension issues, we have chosen the keywords 'suspension' and 'problem' (black circles) for a newly created topic (a). For the latter, we have split the unclear topic labeled as 'seats, mileage, passengers' (a black triangle) to the two where we have excluded the keywords 'seats' and 'passengers' but increased the weights of 'mileage' and 'gas' in the left while doing the opposite in the right (b). The result shows the newly created topic cluster about 'suspension, problem' and also the two well separated clusters (c). </p><p>(a) The initial visualization (b) The visualization after topic keyword refinement (c) The visualization after keyword-induced topic creation and topic splitting <ref type="figure" coords="9,31.50,678.70,20.07,8.12">Fig. 7</ref>. The usage scenario with the InfoVis-VAST data set. Given the initial visualization (a), we performed topic merging and topic splitting and (b) and then keyword-induced topic creation (c). First, we merged the two topic clusters commonly dealing with hierarchical data (black circles) and split the topic cluster about 'multivariate data visualization' (a triangle) to the one about 'dimension reduction' and the other about 'clustering' by increasing the weights for the corresponding terms (b). Afterwards, we performed keyword-induced topic creation based on a keyword 'edge' in the cluster about 'graph visualization' (a rectangle). The final result reveals a newly created topic labeled as 'edge, bundled, adjacencies' (c), revealing the relevant sub-topics such as edge bundling, edge crossing, etc. </p></div><figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_0" coords="4,295.08,436.55,141.69,8.07"><head></head><figDesc>Keyword-based vs. document-based. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_1" coords="4,295.08,666.54,240.42,8.07;4,285.12,676.50,7.60,8.07"><head></head><figDesc> Template-based (top-down) vs. from-scratch-based (bottom- up</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_1" validated="false" coords="3,43.06,50.31,227.25,198.76"><figDesc coords="3,99.95,50.31,111.25,8.12;3,48.79,63.43,31.37,8.12;3,164.17,63.43,41.83,8.12;3,61.24,75.83,6.47,7.98;3,141.54,75.79,87.08,8.12;3,62.24,86.19,4.48,7.98;3,139.38,86.14,91.39,8.12;3,62.41,96.55,3.98,7.98;3,148.10,96.50,73.96,8.12;3,45.89,107.06,22.75,9.86;3,68.64,105.36,13.94,6.21;3,68.64,110.96,5.42,6.97;3,134.53,107.62,101.11,8.12;3,44.68,118.92,25.00,9.86;3,69.68,117.21,13.55,6.21;3,69.68,122.81,5.42,6.97;3,143.24,119.47,83.67,8.12;3,46.40,130.77,23.54,9.86;3,69.95,129.07,12.13,6.21;3,69.95,134.67,5.42,6.97;3,133.79,131.32,102.60,8.12;3,44.66,142.49,25.20,9.89;3,69.87,140.79,13.94,6.21;3,69.87,146.38,5.42,6.97;3,99.85,143.04,170.47,8.12;3,46.49,154.34,23.36,9.86;3,69.86,152.64,12.13,6.21;3,69.86,158.24,5.42,6.97;3,109.50,154.90,151.15,8.12;3,45.65,166.19,23.05,9.86;3,68.71,164.49,13.55,6.21;3,68.71,170.08,5.42,6.97;3,113.92,166.75,141.22,8.12;3,46.72,178.04,22.91,9.86;3,69.63,176.34,12.13,6.21;3,69.63,181.93,5.42,6.97;3,105.28,178.59,159.60,8.12;3,45.66,189.75,23.20,9.89;3,68.87,188.05,13.94,6.21;3,68.87,193.65,5.42,6.97;3,139.94,190.31,89.44,9.33;3,46.49,201.61,23.36,9.86;3,69.86,199.91,12.13,6.21;3,69.86,205.51,5.42,6.97;3,140.87,202.16,87.93,9.05;3,43.06,213.46,30.49,9.86;3,73.56,211.76,11.74,6.21;3,73.56,217.36,5.42,6.97;3,105.69,214.02,157.69,8.12;3,43.19,224.58,29.69,9.86;3,72.89,222.87,12.40,6.21;3,72.89,228.47,5.42,6.97;3,106.20,225.13,157.14,8.12;3,56.47,238.62,7.47,7.98;3,64.30,234.69,7.71,6.97;3,63.36,242.86,5.81,6.21">Table 1. Notations in the Paper Notation Description m the number of keywords n the number of documents k the number of topics X ∈ R m×n + A term-by-document matrix W ∈ R m×k + A term-by-topic matrix H ∈ R k×n + A topic-by-document matrix w l ∈ R m×1 + A keyword-wise representation of the l-th topic h i ∈ R k×1 + A topic-wise representation of document i V ∈ R m×k + A reference term-by-topic matrix for W G ∈ R k×n + A reference topic-by-document matrix for G v l ∈ R m×1 + A reference vector for w l g i ∈ R k×1 + A reference vector for h i M W ∈ R k×k + A mask/weight matrix for the columns of W M H ∈ R n×n + A mask/weight matrix for the columns of H M (l) W</figDesc><table></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_2" validated="false" coords="6,29.69,50.31,235.98,47.56"><figDesc coords="6,44.00,50.31,207.36,8.12">Table 2. The Summary of the Data Sets Used in the Paper</figDesc><table coords="6,29.69,67.03,235.98,30.84">InfoVis-VAST 
+
+Car Reviews TV Reviews 20News 
+#docs 
+515 
+231 
+110 
+2,211 
+#words 
+5,935 
+3,142 
+1,624 
+23,604 
+
+</table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_3" validated="false" coords="7,37.48,202.69,504.35,95.55"><figDesc coords="7,171.74,202.69,232.52,8.12">Table 3. Topic Summaries from the Two Runs of NMF and LDA</figDesc><table coords="7,281.03,216.50,17.27,7.22">NMF 
+</table></figure>
+
+			<note place="foot" n="1"> http://fodava.gatech.edu/UTOPIAN (a) The original t-SNE (b) The modified t-SNE</note>
+
+			<note place="foot" n="2"> For more details, please refer to the accompanying video. 3 http://netbeans.org/features/platform/index.html 4 https://code.google.com/p/matlabcontrol 5 https://kenai.com/projects/trident/pages/Home 6 http://www.cc.gatech.edu/ ˜ hpark/nmfsoftware.php. 7 http://www.cc.gatech.edu/gvu/ii/jigsaw/datafiles. html 8 http://qwone.com/ ˜ jason/20Newsgroups</note>
+
+			<note place="foot" n="9"> Due to a page limit, we omitted the results of the other data sets. The overall behaviors of them were similar to the InfoVis-VAST data set. it is not the case. This Randomness nature of the LDA algorithm basically gives the user no control over the algorithm process. To be specific, suppose the user obtained one LDA result from a particular run, but she wants to improve the result by slightly modifying an initial specification of the LDA algorithm, such as an initialization and a parameter of LDA. However, such a user intervention may yield a completely different result from what the user previously had since the sampling-based LDA algorithm is affected not only by an initial specification but also by the samples randomly generated at each iteration. In contrast, in most deterministic algorithms such as the NMF one we used, as long as the user fixes the initial specification, the result can be replicated, and thus the user can isolate and control the effects of his/her intervention while running an algorithm. Now let us discuss about the behavior of the NMF algorithm shown in Fig. 4(b). When converged (at 389 iterations), NMF does not show such undesirable behaviors of LDA, giving a stable result with no topic cluster membership changes. More importantly, using NMF, the number of cluster membership changes decreases quite quickly to almost zero at early iterations, e.g., around 60 iterations out of 389 in total. It indicates that the user can get most information from NMF at a much shorter period of time than that required for a full convergence of the NMF algorithm. This behavior justifies the usefulness of the adopted iteration-wise visualization framework (Section 5.2) so that the user can immediately analyze the NMF result and perform various interactions in real-time. 6.4 Running Time We will now briefly present the running time taken in the experiments shown in Fig. 4. While LDA has taken about 10 minutes for 20,000 iterations , NMF has taken 48 seconds until the convergence. In the case of LDA, if the number of iterations is set to a smaller value, the running time linearly decreases, but in general, we found that the running time of NMF is still much faster than LDA, which gives another practical advantage of NMF over LDA especially in the context of visual analytics. 7 USAGE SCENARIOS In this section, we present several usage scenarios showing the user interaction capabilities of UTOPIAN, which is based on SS-NMF (Section 4), for improving the topic modeling result in a user-driven man- ner.</note>
+		</body>
+		<back>
+
+			<div type="acknowledgement">
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="9">ACKNOWLEDGMENTS</head><p>The work of these authors was supported in part by the National Science Foundation (NSF) grants CCF-0808863, IIS-1242304, and IIS-1231742, and the Defense Advanced Research Projects Agency (DARPA) XDATA program grant FA8750-12-2-0309. Any opinions, findings and conclusions or recommendations expressed in this material are those of the authors and do not necessarily reflect the views of NSF and DARPA. Finally, we would like to thank Juwon Drake and Jaewon Drake for their significant help in improving the manuscript and the video material. </p></div>
+			</div>
+
+			<div type="references">
+
+				<listBibl>
+
+<biblStruct coords="10,40.76,74.50,232.12,7.22;10,40.76,83.97,232.11,7.22;10,40.76,93.43,232.12,7.22;10,40.76,102.90,232.13,7.22;10,40.76,112.36,37.87,7.22"  xml:id="b0">
+	<analytic>
+		<title level="a" type="main">A framework for incorporating general domain knowledge into latent dirichlet allocation using first-order logic</title>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Andrzejewski</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">X</forename>
+				<surname>Zhu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Craven</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Recht</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. the Twenty-Second International Joint Conference on Artificial Intelligence -Volume Volume Two</title>
+		<meeting>. the Twenty-Second International Joint Conference on Artificial Intelligence -Volume Volume Two</meeting>
+		<imprint>
+			<date type="published" when="2011" />
+			<biblScope unit="page" from="1171" to="1177" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,121.82,232.12,7.22;10,40.76,131.29,232.12,7.22;10,40.76,140.75,232.14,7.22;10,40.76,150.22,17.94,7.22"  xml:id="b1">
+	<analytic>
+		<title level="a" type="main">Animation, small multiples , and the effect of mental map preservation in dynamic graphs</title>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Archambault</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Purchase</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Pinaud</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Visualization and Computer Graphics</title>
+		<imprint>
+			<biblScope unit="volume">17</biblScope>
+			<biblScope unit="issue">4</biblScope>
+			<biblScope unit="page" from="539" to="552" />
+			<date type="published" when="2011" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,159.69,232.12,7.22;10,40.76,169.14,232.12,7.22;10,40.76,178.61,113.56,7.22"  xml:id="b2">
+	<analytic>
+		<title level="a" type="main">Learning topic models – going beyond svd</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Arora</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Ge</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Moitra</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. IEEE 53rd Annual Symposium on Foundations of Computer Science (FOCS)</title>
+		<meeting>. IEEE 53rd Annual Symposium on Foundations of Computer Science (FOCS)</meeting>
+		<imprint>
+			<date type="published" when="2012" />
+			<biblScope unit="page" from="1" to="10" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,188.07,232.12,7.22;10,40.76,197.54,174.59,7.22"  xml:id="b3">
+	<analytic>
+		<title level="a" type="main">Latent dirichlet allocation</title>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<forename type="middle">M</forename>
+				<surname>Blei</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<forename type="middle">Y</forename>
+				<surname>Ng</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<forename type="middle">I</forename>
+				<surname>Jordan</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Journal of Machine Learning Research</title>
+		<imprint>
+			<biblScope unit="volume">3</biblScope>
+			<biblScope unit="page" from="993" to="1022" />
+			<date type="published" when="2003" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,207.01,232.12,7.22;10,40.76,216.47,232.10,7.22;10,40.76,225.93,95.27,7.22"  xml:id="b4">
+	<analytic>
+		<title level="a" type="main">ivibrate: Interactive visualization-based framework for clustering large datasets</title>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Chen</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<surname>Liu</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">ACM Transactions on Information Systems (TOIS)</title>
+		<imprint>
+			<biblScope unit="volume">24</biblScope>
+			<biblScope unit="issue">2</biblScope>
+			<biblScope unit="page" from="245" to="294" />
+			<date type="published" when="2006" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,235.40,232.11,7.22;10,40.76,244.86,232.11,7.22;10,40.76,254.33,199.15,7.22"  xml:id="b5">
+	<analytic>
+		<title level="a" type="main">Two-stage framework for visualization of clustered high dimensional data</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Choo</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Bohn</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Park</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. IEEE Symposium on Visual Analytics Science and Technology (VAST)</title>
+		<meeting>. IEEE Symposium on Visual Analytics Science and Technology (VAST)</meeting>
+		<imprint>
+			<date type="published" when="2009" />
+			<biblScope unit="page" from="67" to="74" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,263.79,232.11,7.22;10,40.76,273.26,232.12,7.22;10,40.76,282.72,232.13,7.22;10,40.76,292.18,102.38,7.22"  xml:id="b6">
+	<analytic>
+		<title level="a" type="main">iVisClassifier: An interactive visual analytics system for classification based on supervised dimension reduction</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Choo</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Lee</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Kihm</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Park</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">IEEE Conference on Visual Analytics Science and Technology (VAST)</title>
+		<imprint>
+			<date type="published" when="2010" />
+			<biblScope unit="page" from="27" to="34" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,301.65,232.11,7.22;10,40.76,311.11,232.13,7.22;10,40.76,320.58,232.11,7.22;10,40.76,330.05,94.68,7.22"  xml:id="b7">
+	<analytic>
+		<title level="a" type="main">An interactive visual testbed system for dimension reduction and clustering of large-scale highdimensional data</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Choo</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Lee</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Z</forename>
+				<surname>Liu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Stasko</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Park</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. SPIEVDA)</title>
+		<meeting>. SPIEVDA)</meeting>
+		<imprint>
+			<date type="published" when="2013-02" />
+			<biblScope unit="page" from="1" to="15" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,339.51,232.11,7.22;10,40.76,348.97,232.11,7.22;10,40.76,358.44,61.33,7.22"  xml:id="b8">
+	<analytic>
+		<title level="a" type="main">Customizing computational methods for visual analytics with big data</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Choo</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Park</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Computer Graphics and Applications</title>
+		<imprint>
+			<biblScope unit="volume">33</biblScope>
+			<biblScope unit="issue">4</biblScope>
+			<biblScope unit="page" from="22" to="28" />
+			<date type="published" when="2013" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,367.90,232.12,7.22;10,40.76,377.37,232.12,7.22;10,40.76,386.83,232.14,7.22;10,40.76,396.30,17.94,7.22"  xml:id="b9">
+	<analytic>
+		<title level="a" type="main">TextFlow: Towards better understanding of evolving topics in text</title>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Cui</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Liu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<surname>Tan</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Shi</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Y</forename>
+				<surname>Song</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Z</forename>
+				<surname>Gao</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Qu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">X</forename>
+				<surname>Tong</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Visualization and Computer Graphics</title>
+		<imprint>
+			<biblScope unit="volume">17</biblScope>
+			<biblScope unit="page" from="2412" to="2421" />
+			<date type="published" when="2011" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,405.76,232.12,7.22;10,40.76,415.22,232.12,7.22;10,40.76,424.69,88.33,7.22"  xml:id="b10">
+	<analytic>
+		<title level="a" type="main">Indexing by latent semantic analysis</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Deerwester</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Dumais</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Furnas</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Landauer</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Harshman</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Journal of the Society for Information Science</title>
+		<imprint>
+			<biblScope unit="volume">41</biblScope>
+			<biblScope unit="page" from="391" to="407" />
+			<date type="published" when="1990" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,434.15,232.13,7.22;10,40.76,443.62,232.13,7.22;10,40.76,453.09,232.13,7.22;10,40.76,462.54,33.88,7.22"  xml:id="b11">
+	<analytic>
+		<title level="a" type="main">Paralleltopics: A probabilistic approach to exploring document collections</title>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Dou</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">X</forename>
+				<surname>Wang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Chang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Ribarsky</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. IEEE Conference on Visual Analytics Science and Technology (VAST)</title>
+		<meeting>. IEEE Conference on Visual Analytics Science and Technology (VAST)</meeting>
+		<imprint>
+			<date type="published" when="2011" />
+			<biblScope unit="page" from="231" to="240" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,472.01,232.11,7.22;10,40.76,481.47,232.12,7.22;10,40.76,490.94,232.13,7.22;10,40.76,500.41,131.20,7.22"  xml:id="b12">
+	<analytic>
+		<title level="a" type="main">Leadline: Interactive visual analysis of text data through event identification and exploration</title>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Dou</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">X</forename>
+				<surname>Wang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Skau</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Ribarsky</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<forename type="middle">X</forename>
+				<surname>Zhou</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. IEEE Conference on Visual Analytics Science and Technology (VAST)</title>
+		<meeting>. IEEE Conference on Visual Analytics Science and Technology (VAST)</meeting>
+		<imprint>
+			<date type="published" when="2012" />
+			<biblScope unit="page" from="93" to="102" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,509.87,232.11,7.22;10,40.76,519.33,232.12,7.22;10,40.76,528.84,232.12,7.09;10,40.76,538.26,146.56,7.22"  xml:id="b13">
+	<analytic>
+		<title level="a" type="main">Helping users sort faster with adaptive machine learning recommendations</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<forename type="middle">M</forename>
+				<surname>Drucker</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Fisher</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Basu</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. the 13th IFIP TC 13 International Conference on Human-computer Interaction (INTER- ACT) -Volume Part III</title>
+		<meeting>. the 13th IFIP TC 13 International Conference on Human-computer Interaction (INTER- ACT) -Volume Part III</meeting>
+		<imprint>
+			<date type="published" when="2011" />
+			<biblScope unit="page" from="187" to="203" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,547.73,232.12,7.22;10,40.76,557.19,232.12,7.22;10,40.76,566.66,225.19,7.22"  xml:id="b14">
+	<analytic>
+		<title level="a" type="main">Visual analysis of document triage data</title>
+		<author>
+			<persName>
+				<forename type="first">Z</forename>
+				<surname>Geng</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<forename type="middle">S</forename>
+				<surname>Laramee</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<surname>Loizides</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Buchanan</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. International Conference on Information Visualization Theory and Applications (IVAPP)</title>
+		<meeting>. International Conference on Information Visualization Theory and Applications (IVAPP)</meeting>
+		<imprint>
+			<date type="published" when="2011" />
+			<biblScope unit="page" from="151" to="163" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,576.12,232.11,7.22;10,40.76,585.58,232.12,7.22;10,40.76,595.05,232.13,7.22;10,40.76,604.51,108.44,7.22"  xml:id="b15">
+	<analytic>
+		<title level="a" type="main">Topicnets: Visual analysis of large text corpora with topic modeling</title>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Gretarsson</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Odonovan</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Bostandjiev</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Höllerer</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Asuncion</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Newman</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Smyth</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">ACM Transactions on Intelligent Systems and Technology (TIST)</title>
+		<imprint>
+			<biblScope unit="volume">3</biblScope>
+			<biblScope unit="issue">2</biblScope>
+			<biblScope unit="page">23</biblScope>
+			<date type="published" when="2012" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,613.98,232.13,7.22;10,40.76,623.49,232.12,7.09;10,40.76,632.90,188.04,7.22"  xml:id="b16">
+	<analytic>
+		<title level="a" type="main">Probabilistic latent semantic indexing</title>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Hofmann</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. the 22nd Annual International ACM SIGIR conference on Research and Development in Information Retrieval (SIGIR)</title>
+		<meeting>. the 22nd Annual International ACM SIGIR conference on Research and Development in Information Retrieval (SIGIR)</meeting>
+		<imprint>
+			<date type="published" when="1999" />
+			<biblScope unit="page" from="50" to="57" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,642.37,232.12,7.22;10,40.76,651.83,232.12,7.22;10,40.76,661.30,232.11,7.22;10,40.76,670.77,162.61,7.22"  xml:id="b17">
+	<analytic>
+		<title level="a" type="main">Scatter/gather clustering: Flexibly incorporating user feedback to steer clustering results</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<forename type="middle">S</forename>
+				<surname>Hossain</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<forename type="middle">K R</forename>
+				<surname>Ojili</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Grimm</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Muller</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<forename type="middle">T</forename>
+				<surname>Watson</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Ramakrishnan</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Visualization and Computer Graphics</title>
+		<imprint>
+			<biblScope unit="issue">12</biblScope>
+			<biblScope unit="page" from="182829" to="2838" />
+			<date type="published" when="2012" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,680.23,232.12,7.22;10,40.76,689.70,232.11,7.22;10,40.76,699.16,187.53,7.22"  xml:id="b18">
+	<analytic>
+		<title level="a" type="main">Generalizing discriminant analysis using the generalized singular value decomposition</title>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Howland</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Park</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Pattern Analysis and Machine Intelligence</title>
+		<imprint>
+			<biblScope unit="volume">26</biblScope>
+			<biblScope unit="issue">8</biblScope>
+			<biblScope unit="page" from="995" to="1006" />
+			<date type="published" when="2004" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,708.62,232.12,7.22;10,40.76,718.09,228.36,7.22"  xml:id="b19">
+	<analytic>
+		<title level="a" type="main">Interactive topic modeling</title>
+		<author>
+			<persName>
+				<forename type="first">Y</forename>
+				<surname>Hu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Boyd-Graber</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Satinoff</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. Association for Computational Linguistics</title>
+		<meeting>. Association for Computational Linguistics</meeting>
+		<imprint>
+			<date type="published" when="2011" />
+			<biblScope unit="page" from="248" to="257" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,727.55,232.12,7.22;10,40.76,737.02,17.94,7.22;10,285.12,53.98,250.37,7.22;10,303.38,63.45,232.12,7.22;10,303.38,72.91,77.27,7.22"  xml:id="b20">
+	<analytic>
+		<title level="a" type="main">Principal Component Analysis Fast nonnegative matrix factorization: An active-setlike method and comparisons</title>
+		<author>
+			<persName>
+				<forename type="first">I</forename>
+				<forename type="middle">T</forename>
+				<surname>Jolliffe</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">SIAM Journal on Scientific Computing</title>
+		<editor>22] J. Kim and H. Park</editor>
+		<imprint>
+			<publisher>Springer-Verlag</publisher>
+			<biblScope unit="volume">33</biblScope>
+			<biblScope unit="issue">6</biblScope>
+			<biblScope unit="page" from="3261" to="3281" />
+			<date type="published" when="1986" />
+			<publisher>Springer-Verlag</publisher>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,82.37,232.12,7.22;10,303.38,91.83,172.51,7.22"  xml:id="b21">
+	<analytic>
+		<title level="a" type="main">Multidimensional scaling by optimizing goodness of fit to a nonmetric hypothesis</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Psychometrika</title>
+		<imprint>
+			<biblScope unit="volume">29</biblScope>
+			<biblScope unit="page" from="1" to="27" />
+			<date type="published" when="1964" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,101.30,232.12,7.22;10,303.38,110.77,161.34,7.22"  xml:id="b22">
+	<analytic>
+		<title level="a" type="main">The hungarian method for the assignment problem</title>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<forename type="middle">W</forename>
+				<surname>Kuhn</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Naval Research Logistics Quarterly</title>
+		<imprint>
+			<biblScope unit="volume">2</biblScope>
+			<biblScope unit="issue">12</biblScope>
+			<biblScope unit="page" from="83" to="97" />
+			<date type="published" when="1955" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,120.23,232.14,7.22;10,303.38,129.70,157.68,7.22"  xml:id="b23">
+	<analytic>
+		<title level="a" type="main">Learning the parts of objects by non-negative matrix factorization</title>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<forename type="middle">D</forename>
+				<surname>Lee</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<forename type="middle">S</forename>
+				<surname>Seung</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Nature</title>
+		<imprint>
+			<biblScope unit="volume">401</biblScope>
+			<biblScope unit="page" from="788" to="791" />
+			<date type="published" when="1999" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,139.16,232.12,7.22;10,303.38,148.62,232.12,7.22;10,303.38,158.09,123.14,7.22"  xml:id="b24">
+	<analytic>
+		<title level="a" type="main">iVisClustering: An interactive visual document clustering via topic modeling</title>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Lee</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Kihm</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Choo</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Stasko</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Park</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Computer Graphics Forum</title>
+		<imprint>
+			<biblScope unit="issue">3pt3</biblScope>
+			<biblScope unit="page" from="311155" to="1164" />
+			<date type="published" when="2012" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,167.55,232.12,7.22;10,303.38,177.02,224.94,7.22"  xml:id="b25">
+	<analytic>
+		<title level="a" type="main">Visual text mining using association rules</title>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Lopes</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Pinho</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<surname>Paulovich</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Minghim</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Computers &amp; Graphics</title>
+		<imprint>
+			<biblScope unit="volume">31</biblScope>
+			<biblScope unit="issue">3</biblScope>
+			<biblScope unit="page" from="316" to="326" />
+			<date type="published" when="2007" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,186.49,232.12,7.22;10,303.38,195.95,146.25,7.22"  xml:id="b26">
+	<monogr>
+		<title level="m" type="main">MALLET: A machine learning for language toolkit</title>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<forename type="middle">K</forename>
+				<surname>Mccallum</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2002" />
+		</imprint>
+	</monogr>
+	<note>mallet. .cs.umass.edu</note>
+</biblStruct>
+
+<biblStruct coords="10,303.38,205.41,232.11,7.22;10,303.38,214.87,232.12,7.22;10,303.38,224.34,232.12,7.22;10,303.38,233.81,41.85,7.22"  xml:id="b27">
+	<analytic>
+		<title level="a" type="main">Clustersculptor: A visual analytics tool for high-dimensional data</title>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<forename type="middle">J</forename>
+				<surname>Nam</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Y</forename>
+				<surname>Han</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Mueller</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Zelenyuk</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Imre</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. IEEE Symposium on Visual Analytics Science and Technology (VAST)</title>
+		<meeting>. IEEE Symposium on Visual Analytics Science and Technology (VAST)</meeting>
+		<imprint>
+			<date type="published" when="2007" />
+			<biblScope unit="page" from="75" to="82" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,243.27,232.14,7.22;10,303.38,252.74,232.11,7.22;10,303.38,262.20,108.47,7.22"  xml:id="b28">
+	<analytic>
+		<title level="a" type="main">Positive matrix factorization: a non-negative factor model with optimal utilization of error estimates of data values</title>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Paatero</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">U</forename>
+				<surname>Tapper</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Environmetrics</title>
+		<imprint>
+			<biblScope unit="volume">5</biblScope>
+			<biblScope unit="page" from="111" to="126" />
+			<date type="published" when="1994" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,271.66,232.12,7.22;10,303.38,281.13,232.12,7.22;10,303.38,290.59,232.11,7.22;10,303.38,300.06,77.27,7.22"  xml:id="b29">
+	<analytic>
+		<title level="a" type="main">Hipp: A novel hierarchical point placement strategy and its application to the exploration of document collections</title>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<surname>Paulovich</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Minghim</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Visualization and Computer Graphics</title>
+		<imprint>
+			<biblScope unit="volume">14</biblScope>
+			<biblScope unit="issue">6</biblScope>
+			<biblScope unit="page" from="1229" to="1236" />
+			<date type="published" when="2008" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,309.52,232.12,7.22;10,303.38,318.99,232.11,7.22;10,303.38,328.45,232.13,7.22;10,303.38,337.91,158.65,7.22"  xml:id="b30">
+	<analytic>
+		<title level="a" type="main">Fast collapsed gibbs sampling for latent dirichlet allocation</title>
+		<author>
+			<persName>
+				<forename type="first">I</forename>
+				<surname>Porteous</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Newman</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Ihler</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Asuncion</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Smyth</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Welling</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. the 14th ACM SIGKDD international conference on Knowledge discovery and data mining</title>
+		<meeting>. the 14th ACM SIGKDD international conference on Knowledge discovery and data mining</meeting>
+		<imprint>
+			<date type="published" when="2008" />
+			<biblScope unit="page" from="569" to="577" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,347.38,232.11,7.22;10,303.38,356.85,232.13,7.22;10,303.38,366.31,33.88,7.22"  xml:id="b31">
+	<analytic>
+		<title level="a" type="main">Jigsaw: supporting investigative analysis through interactive visualization</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Stasko</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Görg</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Z</forename>
+				<surname>Liu</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Information Visualization</title>
+		<imprint>
+			<biblScope unit="volume">7</biblScope>
+			<biblScope unit="issue">2</biblScope>
+			<biblScope unit="page" from="118" to="132" />
+			<date type="published" when="2008" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,375.77,232.12,7.22;10,303.38,385.23,166.39,7.22"  xml:id="b32">
+	<analytic>
+		<title level="a" type="main">Visualizing data using t-SNE</title>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<surname>Van Der Maaten</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Hinton</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Journal of Machine Learning Research</title>
+		<imprint>
+			<biblScope unit="volume">9</biblScope>
+			<biblScope unit="page" from="2579" to="2605" />
+			<date type="published" when="2008" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,394.70,232.12,7.22;10,303.38,404.17,232.12,7.22;10,303.38,413.67,232.10,7.09;10,303.38,423.10,126.19,7.22"  xml:id="b33">
+	<analytic>
+		<title level="a" type="main">TIARA: a visual exploratory text analytic system</title>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<surname>Wei</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Liu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Y</forename>
+				<surname>Song</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Pan</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<forename type="middle">X</forename>
+				<surname>Zhou</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Qian</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<surname>Shi</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<surname>Tan</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Q</forename>
+				<surname>Zhang</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. the 16th ACM SIGKDD international conference on Knowledge discovery and data mining</title>
+		<meeting>. the 16th ACM SIGKDD international conference on Knowledge discovery and data mining</meeting>
+		<imprint>
+			<date type="published" when="2010" />
+			<biblScope unit="page" from="153" to="162" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,432.56,232.12,7.22;10,303.38,442.02,218.94,7.22"  xml:id="b34">
+	<analytic>
+		<title level="a" type="main">The ecological approach to text visualization</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">A</forename>
+				<surname>Wise</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Journal of the American Society for Information Science</title>
+		<imprint>
+			<biblScope unit="volume">50</biblScope>
+			<biblScope unit="issue">13</biblScope>
+			<biblScope unit="page" from="1224" to="1233" />
+			<date type="published" when="1999" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+				</listBibl>
+			</div>
+		</back>
+	</text>
+</TEI>

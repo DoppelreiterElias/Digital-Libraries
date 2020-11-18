@@ -1,0 +1,739 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.tei-c.org/ns/1.0 /home/pisenberg/grobid/grobid-home/schemas/xsd/Grobid.xsd"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+	<teiHeader xml:lang="en">
+		<encodingDesc>
+			<appInfo>
+				<application version="0.4.1" ident="GROBID" when="2016-09-09T13:39+0000">
+					<ref target="https://github.com/kermitt2/grobid">GROBID - A machine learning software for extracting information from scholarly documents</ref>
+				</application>
+			</appInfo>
+		</encodingDesc>
+		<fileDesc>
+			<titleStmt>
+				<title level="a" type="main">Model Space Visualization for Multivariate Linear Trend Discovery</title>
+			</titleStmt>
+			<publicationStmt>
+				<publisher/>
+				<availability status="unknown"><licence/></availability>
+			</publicationStmt>
+			<sourceDesc>
+				<biblStruct>
+					<analytic>
+						<author>
+							<persName>
+								<forename type="first">Zhenyu</forename>
+								<surname>Guo</surname>
+							</persName>
+							<affiliation>
+								<orgName type="department">Computer Science Department Worcester Polytechnic Institute</orgName>
+							</affiliation>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Matthew</forename>
+								<forename type="middle">O</forename>
+								<surname>Ward</surname>
+							</persName>
+							<affiliation>
+								<orgName type="department">Computer Science Department Worcester Polytechnic Institute</orgName>
+							</affiliation>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Elke</forename>
+								<forename type="middle">A</forename>
+								<surname>Rundensteiner</surname>
+							</persName>
+							<affiliation>
+								<orgName type="department">Computer Science Department Worcester Polytechnic Institute</orgName>
+							</affiliation>
+						</author>
+						<title level="a" type="main">Model Space Visualization for Multivariate Linear Trend Discovery</title>
+					</analytic>
+					<monogr>
+						<imprint>
+							<date/>
+						</imprint>
+					</monogr>
+				</biblStruct>
+			</sourceDesc>
+		</fileDesc>
+		<profileDesc>
+			<textClass>
+				<keywords>
+					<term>Knowledge Discovery, visual analysis, multivariate</term>
+					<term>linear model construction, model space visualization</term>
+					<term>Index Terms: H52 [Information Interfaces and Presentation]:</term>
+					<term>User Interfaces—Graphical user interfaces</term>
+				</keywords>
+			</textClass>
+			<abstract>
+				<p>Discovering and extracting linear trends and correlations in datasets is very important for analysts to understand multivariate phenomena. However, current widely used multivariate visualization techniques , such as parallel coordinates and scatterplot matrices, fail to reveal and illustrate such linear relationships intuitively, especially when more than 3 variables are involved or multiple trends coex-ist in the dataset. We present a novel multivariate model parameter space visualization system that helps analysts discover single and multiple linear patterns and extract subsets of data that fit a model well. Using this system, analysts are able to explore and navigate in model parameter space, interactively select and tune patterns, and refine the model for accuracy using computational techniques. We build connections between model space and data space visually , allowing analysts to employ their domain knowledge during exploration to better interpret the patterns they discover and their validity. Case studies with real datasets are used to investigate the effectiveness of the visualizations.</p>
+			</abstract>
+		</profileDesc>
+	</teiHeader>
+	<text xml:lang="en">
+		<body>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1">INTRODUCTION</head><p>Discovering and extracting useful insights in a dataset are basic tasks in data analysis. The insights may include clusters, classifications , trends, outliers and so on. Among these, linear trends are one of the most common features of interest. For example, when users attempt to build a model to represent how horsepower x 0 and engine size x 1 influence the retail price y for predicting the price for a given car, a simple estimated linear trend model (</p><formula>y = k 0 x 0 + k 1 x 1 + b) </formula><p>could be helpful and revealing. Many computational approaches for constructing linear models have been developed, such as linear regression <ref type="bibr" coords="1,93.00,513.55,10.43,8.12" target="#b5">[6] </ref>and response surface analysis <ref type="bibr" coords="1,213.84,513.55,9.51,8.12" target="#b2">[3]</ref> . However, the procedure and results are not always useful for the following reasons: </p><p>@BULLET Lack of efficiency: When discovering trends in a large dataset, users are often only concerned with a subset of the data that matches a given pattern, so only these data should be used for the computation procedure rather than the whole dataset. Furthermore , locating a good estimation of the trend as an initial input for the regression analysis could expedite the convergence , especially for high dimensional datasets. </p><p> @BULLET Lack of accuracy: Computational results are often not as accurate as the user expects because users are unable to apply their own domain knowledge and perceptual ability during and after discovering models. User-driven modeling and tuning may be required. * This work is supported under NSF grant IIS-0812027. <ref type="figure" coords="1,318.00,255.33,28.41,7.64">Figure 1</ref> : A dataset with a simple linear trend: y = 3x 1 − 4x 2 is displayed with parallel coordinates . The axes from left to right are y, x 1 and x 2 respec- tively.  @BULLET Parameter setting problem: Most model estimation techniques require users to specify parameters, such as the minimum percentage of data points the model includes, maximum error tolerance and iteration count. These are often particular to a concrete dataset, application, and task, but users often don't know conceptually how to set them. </p><p>@BULLET Multiple model problem: If multiple phenomena coexist in the same dataset, many analytic techniques will extract poor models. Locating patterns in a multivariate dataset via visualization techniques is very challenging. Parallel coordinates <ref type="bibr" coords="1,498.60,444.79,14.99,8.12" target="#b9">[10] </ref>is a widely used approach for revealing high-dimensional geometry and analyzing multivariate datasets. However, parallel coordinates often performs poorly when used to discover linear trends. In <ref type="figure" coords="1,525.12,474.67,29.50,8.12">Figure 1</ref>, a simple three dimensional linear trend is visualized in parallel coordinates . The trend is hardly visible even though no outliers are involved. Scatterplot matrices, on the other hand, can intuitively reveal linear correlations between two variables. However, if the linear trend involves more than two dimensions, it is very difficult to directly recognize the trend. When two or more models coexist in the data (<ref type="figure" coords="1,352.73,544.51,28.37,8.12" target="#fig_0">Figure 2</ref>), scatterplot matrices tend to fail to differentiate them. Given a multivariate dataset, one question is how to visualize the model space for users to discern whether there are clear linear trends or not. If there are, is there a single trend or multiple trends? Are the variables strongly linearly correlated or they just spread loosely in a large space between two linear hyperplane boundaries? How can we visually locate the trend efficiently and measure the trend accurately? How can we adjust arbitrarily the computational model estimation result based on user knowledge? Can users identify outliers and exclude them to extract the subset of data that fits the trend with a user indicated tolerance? How can we partition the dataset into different subsets fitting different linear trends? We seek to develop a system focusing on these questions. Specifically , we have designed a visual interface allowing users to navigate in the model space to discover multiple coexisting linear trends, extract subsets of data fitting a trend, and adjust the computational result visually. The user is able to select and tune arbitrary high-dimensional linear patterns in a direct and intuitive manner. We provide a sampled model space measurement map that helps users quickly locate interesting exploration areas. While navigating in the model space, the related views that provide metrics for the current selected trend, along with the status of data space, are dynamically displayed and changed, which gives users an accurate estimation to evaluate how well the subset of data fits the trend. The primary contributions of this paper include: @BULLET Linear trend dataset extraction and management: We present a line graph trend tolerance selection for users to decide the tolerance (maximum distance error tolerance from a point to the regression line) for the current model. Users can refine the model using a computational modeling technique after finding a subset of linearly correlated data points. We also allow the user to extract and save data subsets to facilitate further adjustment and examination of their discovery. </p><p>The remainder of this paper is organized as follows: In Section 2 existing techniques for model space visualization, user exploration, and visual linear trend discovery are reviewed. In Section 3 we introduce our model space visualization method and how to navigate in the model space via our proposed pattern selection panel. The related views that provide metrics for the chosen pattern are then presented. Section 4 describes the sample model space map that guides user in exploring model space efficiently, and also discusses the power of this map for revealing multiple trends. Section 5 is dedicated to the discussion of a case study involving the analysis of a real dataset. We conclude this paper in Section 6 with a summary and possible future research directions. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2">RELATED WORK</head><p>Visual data mining techniques <ref type="bibr" coords="2,165.48,584.35,14.24,8.12" target="#b19">[20,</ref><ref type="bibr" coords="2,182.16,584.35,7.55,8.12" target="#b4"> 5] </ref>suggest that a more efficient and powerful data mining strategy should involve users in the visual analytical processes rather than being carried out completely by machines. Recently, numerous visual analytics based systems have been presented to solve knowledge discovery tasks. Schreck et al. <ref type="bibr" coords="2,73.80,634.15,14.99,8.12" target="#b17">[18] </ref>propose a user-supervised SOM clustering algorithm that enables users to control and monitor the computation process visually to leverage their domain knowledge. ClusterSculptor <ref type="bibr" coords="2,265.08,654.07,14.87,8.12" target="#b14">[15] </ref>describes a framework to assist users in extracting clusters directly in N-D data space, allowing them to tune the parameters interactively based on visual presentation of data characteristics. Savikhin et al. <ref type="bibr" coords="2,54.00,693.91,14.99,8.12" target="#b16">[17] </ref> created a system for helping subjects improve decision making through the use of an interactive visual analytics program. The Nugget Management System (NMS) <ref type="bibr" coords="2,186.96,713.83,14.99,8.12" target="#b20">[21] </ref>provides a framework for analysis-guided visual exploration of multivariate data for users to manage their discoveries from range queries. Model space visualization and model-driven analytics have been studied for many years. The Hough Transform, widely used in image processing and computer vision, builds a connection between data space patterns and model space representations for detecting arbitrary shapes, such as lines, circles and ellipses <ref type="bibr" coords="2,501.12,117.67,9.51,8.12" target="#b6">[7]</ref>. The GGobi package <ref type="bibr" coords="2,350.16,127.63,14.99,8.12" target="#b18">[19] </ref>provides a Grand Tour <ref type="bibr" coords="2,453.24,127.63,10.43,8.12" target="#b0">[1] </ref> method for viewing multivariate data via orthogonal projections onto a sequence of twodimensional subspaces (scatter plots). Garg et al. <ref type="bibr" coords="2,510.60,147.55,10.43,8.12" target="#b7">[8] </ref>present a visual high-dimensional data navigation and pattern painting system that enables users to construct models and study relationships present in the dataset. These techniques, however, are not designed to reveal linear models within multi-dimensions effectively and do not provide metrics for the patterns users discovered and measurement of the model space they explored. Model estimation and selection is a very important task for understanding multivariate characteristics, attributes and correlations . Numerous computational approaches and algorithms have been proposed and discussed. Cherkassky and Ma <ref type="bibr" coords="2,506.28,247.27,10.43,8.12" target="#b3">[4] </ref>introduced a constructive support vector machine (SVM)-based approach for multiple regression estimation. Li et al. <ref type="bibr" coords="2,462.24,267.19,14.87,8.12" target="#b10">[11] </ref>present a new class of variable-structure (VS) algorithms for multiple-model estimation. D2MS <ref type="bibr" coords="2,344.40,287.11,10.43,8.12" target="#b8">[9] </ref> is a research system for knowledge discovery with support for model selection and visualization, providing the user with the ability to try various alternatives of algorithm combinations and their settings. MVE <ref type="bibr" coords="2,395.04,316.99,10.43,8.12" target="#b1">[2] </ref>is a multivariate visual system that helps user interactively construct models and analyze multi-dimensional relationships. These techniques are primarily directed toward automatic or unsupervised model discovery. We will not only propose a novel approach for model space visualization for the purpose of linear trend discovery, but also present a system that assists users in applying their domain knowledge for customized linear pattern detection. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3">MODEL SPACE VISUALIZATION 3.1 Linear Trend Nugget Definition</head><p>We define a nugget as a pattern within a dataset that can be used for reasoning and decision making <ref type="bibr" coords="2,454.68,441.91,13.79,8.12" target="#b20">[21]</ref> . A linear trend in ndimensional space can be represented as (w, X) − b = 0, where X i ∈ R n denotes a combination of independent variable vector x i (x i ∈ R n−1 ) and a dependent target value y (y ∈ R). Here w and b are respectively a coefficient vector and a constant value (w ∈ R n , b ∈ R). The data points located on this hyperplane construct the center of the trend. A data point x that fits the trend should satisfy the constraint </p><formula>|(w, x) − b| &lt; ε </formula><p> Considering that noise could exist in all variables (not just the dependent variable), it may be appropriate to use the Euclidean distance from the regression hyperplane in place of the vertical distance error used above <ref type="bibr" coords="2,400.56,578.11,13.70,8.12" target="#b11">[12]</ref>. We define a linear trend nugget (LTN) as a subset of the data near the trend center, whose distance from the model hyperplane is less than a certain threshold E: </p><formula>LT N(X) = {x| |(w, x) − b| w &lt; E} </formula><p>Here E is the maximum distance error, which we call tolerance, for a point to be classified as within the trend. If the distance from a data point to the linear trend hyperplane is less than E, it is covered and thus should be included in this nugget. Otherwise it is considered as an outlier or a point that does not fit this trend very well. The two hyperplanes whose offsets from the trend equal E and −E construct the boundaries of this trend. The goal of our approach is to help users conveniently discover a good linear model, denoted by a small tolerance and, at the same time, covering a high percentage of the data points. As the range of the values in the coefficient vector could be very large and even infinite, we transform this linear equation into a normal form to make w = 1 and then represent this vector as S n , a unit vector in hypersphere coordinates <ref type="bibr" coords="3,193.56,337.27,14.87,8.12" target="#b13">[14] </ref>as described in <ref type="bibr" coords="3,266.28,337.27,9.70,8.12" target="#b6">[7]</ref>: </p><formula>w 0 = cos(θ 1 ) </formula><formula>w 1 = sin(θ 1 ) cos(θ 2 ) · · · w n−2 = sin(θ 1 ) · · · sin(θ n−2 ) cos(θ n−1 ) w n−1 = sin(θ 1 ) · · · sin(θ n−2 ) sin(θ n−1 ) </formula><p>Now our multivariate linear expression can be expressed as: </p><formula>y cos(θ 1 ) + x 1 sin(θ 1 ) cos(θ 2 ) + · · · + x n−2 sin(θ 1 ) sin(θ 2 ) · · · sin(θ n−2 ) cos(θ n−1 )+ x n−1 sin(θ 1 ) sin(θ 2 ) · · · sin(θ n−2 ) sin(θ n−1 ) = r </formula><p>The last angle θ n−1 has a range of 2π and others have a range of π. The range of r, the constant value denoting the distance from the origin to the trend hyperplane, is (0, √ n) after normalizing all dimensions. An arbitrary linear trend can now be represented by a single data </p><formula>point (θ 1 , θ 2 , · · · , θ n−1 , r) </formula><p>in the model parameter space. Users can select and adjust any linear pattern in data space by clicking and tuning a point in the model space. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.2">System Overview</head><p>We now briefly introduce the system components and views. The overall interface is depicted in <ref type="figure" coords="3,170.88,614.23,34.96,8.12" target="#fig_1">Figures 3</ref>and 4. The user starts from a data space view displayed with a scatterplot matrix. To explore in the linear model space, the user first indicates the dependent variable and independent variables via clicking several plots in one row. The clicked plots are marked by blue margins; clicking the selected plot again undoes the selection. The selected row is the dependent variable and the columns clicked indicate the independent variables. After the user finishes selecting the dependent and independent variables, he/she clicks the " model space " button to show and navigate in the model space. The points in the data space scatterplot matrix are now colored based on their distance to the currently selected linear trend and dynamically change when the user tunes the trend in the model space. As shown in <ref type="figure" coords="3,511.92,297.43,29.26,8.12" target="#fig_1">Figure 3</ref>, the selected dependent variable is " Dealer Cost " and the two independent variables are " Hp " and " Weight " . The points are color-coded based on the currently selected trend: dark red means near the center and lighter red means further from the center; blue means the points do not fit the trend. <ref type="figure" coords="3,414.96,347.23,30.28,8.12" target="#fig_2">Figure 4</ref>is the screen shot of the model space view. Each view in the model space is labeled indicating the components, as described in the following sections. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.3">Linear Trend Selection Panel</head><p>We employ Parallel Coordinates (PC), a common visualization method for displaying multivariate datasets <ref type="bibr" coords="3,475.44,410.95,13.70,8.12" target="#b9">[10]</ref>, for users to select and adjust any linear trend pattern. Each poly-line, representing a single point, describes a linear trend in data space. PC was chosen for its ability to display multiple trends at the same time, along with the metrics for each trend. For example, average residual and outlier percentage are easily mapped to poly-line attributes, such as line color and line width. Users can add new trends, delete trends and select trends via buttons in the model space interaction control panel. Users can drag up and down in each dimension axis to adjust parameter values. During dragging, the poly-line attributes (color and width) dynamically change, providing users easy comprehension of pattern metrics. The parameter value of the current axis is highlighted beside the cursor. This direct selection and exploration allows users to intuitively tune linear patterns in model space, sensing the distance from hyperplane to origin as well as the orientations rotated from the axes. Because the parameters in hypersphere coordinates can be difficult to interpret, the familiar formula in the form of </p><formula>y = k 0 x 0 + k 1 x 1 + · · · + k n−1 x n−1 + b </formula><p>is calculated and displayed in the interface. In <ref type="figure" coords="3,390.60,590.35,29.74,8.12" target="#fig_3">Figure 5</ref>, three linear trends for a 3-D dataset are displayed. The percentage of data each trend covers (with the same model tolerance) is mapped to the line width and the average residual is mapped to color (dark brown means a large value and light yellow means small). </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.4">Views for Linear Trend Measurement</head><p> When the user tunes a trend in model space, it is necessary to provide detailed information in data space related to the currently selected trend. Based on this the user can differentiate datasets having linear trends from non-linear trends or without any clear trends, as well as discover a good model during tuning. We provide users three related views for discovering trends and deciding the proper </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Line Graph: Model Tolerance vs. Percent Coverage </head><p> For any multi-dimensional linear trend, there is a positive correlation between the tolerance of the model (the distance between the trend hyperplane and the furthest point considered belonging to the trend) and the percentage of data points this model covers: the larger the model tolerance is, the higher the percentage it covers . There is a trade-off between these two values, because users generally search for models with small tolerance that cover a high percentage of the data. The users expect to find the answer to the following two questions when deciding the model tolerance and percentage it covers: (a) If the model tolerance is decreased, will it lose a large amount of the data? (b) If this trend is expected to cover a greater percentage of the data, will it significantly increase the model tolerance? To answer these questions, we introduce an interactive line graph for the currently selected model. Model Tolerance vs. Percent Coverage is provided for users to evaluate this model and choose the best model tolerance. It is clear that the line graph curve always goes from (0, 0) to (1, 1), after normalizing. This line graph also indicates whether this model is a good fit or not. If this curve passes the region near the (0, 1) point, there is a strong linear trend existing in the dataset, with a small tolerance and covering a high percentage of the data. This interactive graph also provides a selection function for the model tolerance. The user can drag the point position (marked as a red filled circle in <ref type="figure" coords="4,166.68,432.91,29.27,8.12" target="#fig_4">Figure 6</ref>) along the curve to enlarge or decrease the tolerance to include more or fewer points. <ref type="figure" coords="4,63.96,452.95,30.64,8.12" target="#fig_4">Figure 6</ref>shows an example of how to use this view to discover a good model. The line graph for a linear trend with about 9 percent outliers is shown. The red point on the curve indicates the current status of model tolerance and percentage. From the curve of the line graph, it is easy to confirm that when dragging the point starting from (0, 0) and moving towards (1, 1), the model tolerance increases slowly as the percentage increases, meaning that a strong linear trend exists. After moving across 0.90 percent, the model tolerance increases dramatically while the included point percentage hardly increases, indicating that the enlarged model tolerance is mostly picking up outliers. So for this dataset, the user could claim that a strong trend is discovered covering 90 percent of the data points because the model tolerance is very small (0.07). The corresponding Orthogonal Projection Plane view and Histogram view showing the distribution of data points are displayed in <ref type="figure" coords="4,249.48,592.39,29.80,8.12" target="#fig_5">Figure 7</ref>and <ref type="figure" coords="4,54.00,602.35,30.16,8.12" target="#fig_6">Figure 8</ref>(described next). </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Projection on the Orthogonal Plane </head><p>Given an n-dimensional dataset and an n-dimensional linear trend hyperplane, if the user wants to know whether the dataset fits the plane (the distance from points to the hyperplane is nearly 0), a direct visual approach is to project each data point onto an orthogonal hyperplane and observe whether the result is nearly a straight line. In particular, we project each high-dimensional data point to a 2- dimensional space and display it in the form of a scatterplot, similar to the Grand Tour <ref type="bibr" coords="4,119.40,703.87,9.60,8.12" target="#b0">[1]</ref>. Two projection vectors are required: the first vector v 0 is the normal vector of the trend plane, i.e. the unit vector w described before; the second vector v 1 , which is orthogonal to v 0 , can be formed similar to v 0 , simply by setting θ 1 = θ 1 + π/2. The positions of data points in the scatterplot are generated by the dot products between the data points and the two projection vectors , denoting the distance from the points to the trend hyperplane and another orthogonal plane, respectively. This view presents the position of each point based on their distance to the current trend, which provides users not only a detailed distribution view based on the current trend, but also the capability of discovering the relative positions of ouliers. <ref type="figure" coords="4,393.00,312.07,30.40,8.12" target="#fig_5">Figure 7</ref>shows the projection plane. The two blue vertical lines denote the two model boundaries. Data points are color-coded based on their distance to the trend center (not displayed ). The red points are data points covered by this trend; darker red means near the center and lighter red means further from the center. The blue points are data that are outliers or ones that do not fit this trend very well. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Linear Distribution Histogram </head><p>The histogram view displays the distribution of data points based on their distance to the current model. As shown in <ref type="figure" coords="4,493.08,417.67,29.02,8.12" target="#fig_6">Figure 8</ref> , the middle red line represents the trend center and the right half represents the points above the trend hyperplane; and the left half are those below the trend hyperplane. Users can set the number of bins; the data points included in the trend are partitioned into that number of bins based on their distance to the trend center. The two blue lines represent the boundary hyperplanes. The trend covered bars are red and color-coded according to their distance. The color-mapping scheme is the same as the projection plane view so the user can easily compare these two views. The two blue bars represent the data outside the trend; the right bar is for the data whose position is beyond the upper boundary and the left bar is for the data whose position is beyond the lower boundary. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.5">Nugget Refinement and Management</head><p>After finding a good model covering a larger number of data points, the analyst can use a refinement function to tune the model using a computational technique. We employ Least Median Squares <ref type="bibr" coords="4,540.84,683.95,13.70,8.12" target="#b15">[16]</ref>, a robust regression technique, to compute the regression line based only on the points covered in the current trend, so it is more efficient than basing it on the whole dataset and more accurate because <ref type="figure" coords="5,167.52,207.91,30.16,8.12" target="#fig_7">Figure 9</ref>shows the user-discovered trend before refinement and <ref type="figure" coords="5,154.56,217.87,34.36,8.12" target="#fig_8">Figure 10</ref>shows the refinement results. A linear trend nugget is a subset of data points that lie within trend boundaries. Assuming the user has discovered a trend within several dimensions, it is useful to save it to a file and reload it to examine, adjust and distribute it to other users. After the users find a strong trend, they can extract the points in the trend by saving it as a nugget file. This model selection method is similar to brushing techniques and provides a convenient way for users to identify and exclude outliers that deviate from the trend. This data selection technique is also useful if multiple phenomena are present in the dataset, since the user can save and manage them separately. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4">NAVIGATION IN MODEL SPACE AND LINEAR TREND MODEL DISCOVERY</head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.1">Sampled Measurement Map Construction</head><p>Even with the metrics of a linear pattern mapped to the poly-line attributes and with the related views for single model measurement mentioned in Section 3, the user may still feel challenged when searching for good linear trends by tuning the parameter space values , due to the large search area associated with multiple data dimensions . We introduce a sampled model space measurement map for users to view the high dimensional model measurement distribution and navigate in the model space directly and efficiently. The basic idea is that we sample some points in the model space and calculate the measurements for each point (linear pattern), so the user can tune the patterns starting from good parameter sets. This map is constructed via the following three steps: (a) We first partition each parameter space variable into several bins. The points in model space located in the center of each combination of bins are selected as sample patterns and the metrics are calculated for model measuring. (b) Then we eliminate the patterns with low measurement values and project a high dimensional sampled pattern set to a series of two dimensional pairs. Specifically, for each paired bin position in two dimensions, only the largest measurement (assume larger measurement values denote better models) with the same bin position of these two dimensions is kept as the map value. For example, the bottom left bin in one plot corresponds to the two first bin position in that dimensional pair, say, bin position 1 for dimension i and bin position 1 for dimension j (the bin number starts from 1). The map value for this position of this dimension pair is selected as the largest measurement in all the sampled patterns whose bin position in the ith dimension and the jth dimension are both 1. (c) The map values are color-coded based on the metrics. All the pairwise measurement maps are displayed in a matrix view. The initial parameter values are set at the center of the bin with the best measurement, i.e. the minimum tolerance or the maximum percent coverage when fixing the other, which generally provides a good linear pattern for users to start tuning. The complexity of construction is </p><formula>PrP 1 P 2 · · · P n−1 N</formula><p>, where N is the size of dataset;Pr is the number of patitions for r and P i is the number of patitions for θ i . Two alternative modes are associated with this view, fixed percent coverage and fixed model tolerance, corresponding to the two measurements for the trends. As mentioned before, the user could change the model tolerance and coverage together in the line graph view. For the first mode, with model tolerance as the measurement , each bin on the map represents a model tolerance with a user-indicated fixed coverage. When the user changes the percentage , this map is dynamically re-calculated and changed (<ref type="figure" coords="5,519.29,314.95,31.61,8.12" target="#fig_9">Figure 11</ref>). For each pairwise bin position in the two dimensional pair, the minimum model tolerance is selected as map value and mapped to color. In this mode, the percentage of points the user wants to include in the trend is designated and users can search for the smallest model tolerances. The second mode is similar to the first one (<ref type="figure" coords="5,497.33,374.71,33.17,8.12" target="#fig_0">Figure 12</ref>). The difference is we change the measurement to coverage, with a userindicated fixed model tolerance. This mode is designed for users to specify the maximum model tolerance and search for models that cover a high percentage of points. For the two modes of measurement map, we use two unambiguous color-coding schemes: (a) Model tolerance is mapped from dark red to light pink, with dark red meaning small model tolerance . (b) The coverage is mapped to color from yellow to blue, with blue meaning large coverage. When the user moves the cursor over each bin, the map value is shown. The bin in which the current model resides is highlighted by a colored boundary. The parameter values are dynamically changed to the bin center, with the largest measurement value as mentioned before, when the user clicks or drags to a certain bin position. This map indicates roughly where good models can be found before tuning the model in the parallel coordinates view. <ref type="figure" coords="5,496.80,534.07,35.68,8.12" target="#fig_0">Figure 12</ref>shows the coverage distribution map in a 3 dimensional linear trend display . Users can easily find interesting hot spots and drag or click the current selected bin into a dark blue area. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.2">Color Space Interactions</head><p>It is common that several bins with similar values of interest are shown at the same time in the sampled map near the local maximum , making it hard to locate the best settings. To solve this problem , we provide two interactions in color space: (a) Scale the map value to employ the whole color range. Because the values are normalized to (0, 1) and then mapped to color, it is possible that all map values are in a small range; for example, all the coverage values in the map might be located in (0.7, 1) for a very large tolerance in the second mode. In other words, the color map range is not fully used. We allow the user to scale the value range to (0, 1) to use the whole color map. (b) Color map base-point adjustment. For the sampled measurement map, the user is only concerned with the high metric values, so a " filter " function to map values less than a threshold to 0 is useful for users to locate the local maximum. In particular, we provide a function for users to change the color map base-point as the threshold . After filtering out the uninteresting areas with low metrics, users can more easily find the positions of good models. The color space interactions are illustrated from Figures 18 to 21 and described in Section 5. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.3">Multiple Coexisting Trends Discovery</head><p> This map is also designed to reveal when multiple linear trends coexist in the dataset, which is very hard to find without visualization. <ref type="figure" coords="6,54.00,498.79,30.28,8.12" target="#fig_0">Figure 2</ref>shows an example where two linear trends, </p><formula>y = 3x 1 − 4x 2 and y = 3x 2 − 4x 1 coexist </formula><p>in the three dimension dataset mentioned earlier. Each trend has 50 percent of the data points. When the user fixes the percentage at 0.50, there are clearly two separate hot spot regions indicating two linear trends coexist. <ref type="figure" coords="6,217.68,538.63,35.20,8.12" target="#fig_1">Figure 13</ref>shows two different hot spots in the sampled map with one of them selected (colored bin). The corresponding subset of data that fit this trend are colored as shown in <ref type="figure" coords="6,145.68,568.51,34.05,8.12" target="#fig_2">Figure 14</ref>. Red means the point fits the model and blue means it doesn't. The other trend and fitting data are shown in <ref type="figure" coords="6,101.88,588.43,34.48,8.12" target="#fig_3">Figure 15</ref>and 16. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5">CASE STUDY</head><p> In this section, we discuss case studies showing how to discover single or multiple linear trends and construct models for real datasets. The dataset was obtained from the Mn/DOT Traveler Information <ref type="bibr" coords="6,54.00,653.47,13.79,8.12" target="#b12">[13]</ref>, that collects traffic data on the freeway system throughout the Twin Cities Metro area. Each data point is the traffic information collected by detectors every 30 seconds. The information includes the following variables: a vehicle. (c) Speed: the average speed of all vehicles passing the detector during the 30 second sample period. We collected the traffic information for a whole day and added another variable based on the index order to represent the time stamp. <ref type="figure" coords="6,345.96,562.27,35.08,8.12" target="#fig_5">Figure 17</ref> shows the dataset displayed in a scatterplot matrix . Assume a user wants to analyze the correlations between dependent variable occupancy and independent variables speed and volume and construct linear models for these three variables. The aim of this study is to analyze how the average speed and vehicle numbers interactively influence the occupancy. The result is helpful for detecting anomalies, dealing with missing data points and predicting traffic conditions, which can be used for traffic surveillance and control. If the user wants to build a single linear model to explain the correlations, the first step is to select the view mode and adjust the point on the line graph view to indicate the model tolerance or coverage . Here we use the first mode to discover a model and indicate 85 percent of the data to be covered by the trend, and then search for models with small tolerances. For further analysis, users can navigate in sampled measurement map and model selection panel alternately to observe the orthogonal projection plane and histogram to decide whether the current model is a good estimation. To narrow down the search area, the user explores first in the sampled measurement map to drag or click a bin with a good estimation of the model parameters. Notice that the user is only concerned with dark red bins indicating a small tolerance; the user could interact with the color space to fully use the color map and then adjust the color map base-point until the uninteresting areas are eliminated and only red areas remain. Figures 18 to 21 show the manipulation details for locating the local maximum value in the sampled measurement map. <ref type="figure" coords="7,259.32,441.31,34.72,8.12" target="#fig_6">Figure 18</ref>shows the map with the original color range and <ref type="figure" coords="7,233.88,451.27,35.08,8.12" target="#fig_7">Figure 19</ref>shows the map after fuller use of the color range. Figures 20 and 21 show the process of adjusting the base point from 0.86 to 0.46 and then 0.11 (shown in the color bar legend). If the map value (tolerance) is larger than this base point, then it will be set to 1 and then mapped to color. From <ref type="figure" coords="7,107.16,501.07,32.85,8.12" target="#fig_0">Figure 22</ref>, the user can easily locate the approximate position of good models and then tune them in the model selection panel. <ref type="figure" coords="7,63.96,532.15,34.72,8.12" target="#fig_0">Figure 22</ref>shows the model metric views for the trend in the bin center (model tolerance is 0.07); its corresponding data space view is shown in <ref type="figure" coords="7,96.72,552.07,33.09,8.12" target="#fig_0">Figure 23</ref>. <ref type="figure" coords="7,136.32,552.07,34.60,8.12" target="#fig_0">Figure 24</ref>shows the adjusted model that fits the data better (model tolerance is 0.05) via tuning the parameter values in the parallel coordinate view; <ref type="figure" coords="7,195.60,571.99,34.96,8.12" target="#fig_0">Figure 25</ref>displays the data space view. After refining the model, a good linear estimation for the three variables is constructed: a trend with small tolerance (0.05) covering more than 85 percent of the data points (y = −0.29x 0 + 1.4x 1 + 25.3, y: Occupancy, x 0 : Speed, x 1 : Volume). From the linear equation, we notice that occupancy is negatively correlated with car speed and positively correlated with volume. This three dimensional linear trend plane could also be observed after projection to a two dimensional plane in the data space view displayed by scatterplot matrices. From this we conclude that the more vehicles and the lower speed of the vehicles, the higher percentage of time the detector sensed vehicles, which is fairly intuitive. Can we use this model to estimate occupancy when we know the speed and vehicle numbers? When we look at the data space view in which the data points are colored according to their distance to the trend, we found this model estimates occupancy well for most of the data points, except the data collected at noon and night. Therefore, a single linear trend could not fit all the data points well, except by increasing the model tolerance to a larger value. If users want to explain the phenomenon by a single linear trend, the slope of the trend line of occupancy vs. speed does not change for different volume numbers (only the intercept changes). If users want to construct a more complex model with several trends to estimate the occupancy more accurately, multiple linear trends considering different levels of volume can be discovered. For multiple trend modeling, each trend is not required to cover a large percentage of data points. Conversely, each trend needs to be a strong linear trend represented by a very small tolerance. Therefore , we chose the second mode, i.e. fixed tolerance, and adjust the tolerance to a very small value and then explore in model space as mentioned before. Notice that the value of volume is a discrete number, so it is easy to observe from the Orthogonal Projection Plane view that each subset of data with the same volume value is nearly a straight line in three-dimensional space and the lines are nearly parallel. Thus we adjust the parameter values until each subset of data with a similar volume value aligns to the trend center (<ref type="figure" coords="7,321.77,693.91,31.97,8.12" target="#fig_0">Figure 32</ref>). Adjust the first parameter value (the distance from the hyperplane to the origin) from zero to maximum to extract the data points with different volume values (3 different levels: low volume, median volume and high volume, colored by purple, yellow and red respectively). We can observe from the data space view that different subsets of data reveal different linear trends in the plot of speed vs. occupancy. We then select two dimensional correlation with occupancy as the dependent variable and speed as the independent variable. We color-code the third dependent variable volume with three levels in the orthogonal projection plane view and adjust the parameters to fit different subsets of data with different levels of volume. <ref type="figure" coords="8,259.20,300.67,34.84,8.12" target="#fig_0">Figure 26</ref> to 31 show the three subsets of data fit to different discovered linear trends after refinement in the orthogonal projection plane view and data space view. We can observe from the data space view that as the number of vehicles passing the detector changes, the trend for speed and occupancy alters: the more vehicles passing through, the higher the trend line is and, also the steeper the slope of the trend line. If the volume and speed are known for estimating the occupancy, the user can classify the volume into three bins: low, medium and high, and use different trend lines of speed vs. occupancy to estimate the occupancy value. How can one explain this model with multiple linear trends for different volumes? If it is ensured that when the detector senses a vehicle, there is only a single car (without any overlapping) passing the detector, then the occupancy is mainly influenced by volume (also influenced a little by speed, but not significantly when volume number changes); it is also clear that low volume indicates low occupancy , which is demonstrated by the lower and less steep trend for speed vs. occupancy when volume is low. But sometimes, especially when volume is large, several vehicles pass the detector together: consider that when two overlapping vehicles pass the detector together, the volume increases but occupancy doesn't. As the volume increases, the occupancy increases, and meanwhile, the degree of vehicle overlapping increases. When the volume is large, meaning that several vehicles pass the detector together with overlapping , the occupancy is not as predictable just based on volume as it is when volume is small. This suggests the average speed will be more helpful for estimating occupancy. A steeper and higher trend for speed vs. occupancy when volume is large means that occupancy depends more on speed than on volume. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6">CONCLUSION</head><p> In this paper, we describe a novel model space visualization technique to support users in discovering linear trends among multiple variables. Using this system, analysts can discover linear patterns and extract subsets of the data that fit the trend well by navigating in the model space and building connections between model space and data space visually. The case studies show how our system can be used effectively to reveal single and multiple linear trends and to build explanation models for multivariate datasets. In the future, we plan to expand our system to support constructing more complex and generalized models other than linear ones, such as quadratic and logarithmic correlations among variables. In addition, we believe many of the same techniques can be applied to the design of linear classifiers, which we are actively pursuing. </p></div><figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_0" coords="1,447.36,272.85,110.41,7.64;1,447.36,282.26,71.75,8.48;1,521.52,282.26,6.20,13.63;1,529.32,282.33,28.43,8.41;1,447.36,291.74,23.75,8.48;1,472.80,291.74,6.20,13.63;1,480.12,291.81,77.63,8.41;1,447.36,301.29,63.06,7.64"><head>Figure 2: </head><figDesc> Figure 2: A dataset with two linear trends: y = 3x 1 − 4x 2 and y = 4x 2 − 3x 1 is displayed with a scatterplot matrix. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_1" coords="3,100.32,253.53,159.42,7.64"><head>Figure 3: </head><figDesc>Figure 3: The Data Space interface overview. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_2" coords="3,354.60,256.05,164.34,7.64"><head>Figure 4: </head><figDesc>Figure 4: The Model Space interface overview. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_3" coords="4,82.08,140.25,183.90,7.64"><head>Figure 5: </head><figDesc>Figure 5: The Model Space Pattern Selection Panel. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_4" coords="4,318.00,170.49,110.34,7.64;4,318.00,179.97,110.34,7.64;4,318.00,189.45,36.18,7.64"><head>Figure 6: </head><figDesc>Figure 6: The Line Graph of Model Tolerance vs. Percent Coverage. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_5" coords="4,447.36,169.77,110.29,7.64;4,447.36,179.25,47.70,7.64"><head>Figure 7: </head><figDesc> Figure 7: The Orthogonal Projection Plane. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_6" coords="4,384.24,615.81,107.46,7.64"><head>Figure 8: </head><figDesc>Figure 8: The Histogram View. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_7" coords="5,54.00,166.77,110.39,7.64;5,54.00,176.25,82.38,7.64"><head>Figure 9: </head><figDesc>Figure 9: The Projection Plane view before refinement. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_8" coords="5,183.36,163.41,110.39,7.64;5,183.36,172.89,98.58,7.64"><head>Figure 10: </head><figDesc>Figure 10: The Projection Plane view after refinement. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_9" coords="5,318.00,170.85,110.34,7.64;5,318.00,180.33,100.50,7.64"><head>Figure 11: </head><figDesc>Figure 11: The Measurement Map: mode is " fix coverage " . </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_10" coords="5,441.60,167.25,110.34,7.64;5,441.60,176.73,110.41,7.64;5,441.60,186.21,22.14,7.64"><head>Figure 12: </head><figDesc>Figure 12: The Measurement Map: mode is " fix model tolerance " . </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_11" coords="6,54.00,179.97,110.43,7.64;6,54.00,189.45,110.34,7.64;6,54.00,198.93,42.06,7.64"><head>Figure 13: </head><figDesc>Figure 13: The first hot spot is selected representing the first linear trend. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_12" coords="6,179.04,159.09,110.46,7.64;6,179.04,168.57,110.51,7.64;6,179.04,178.05,41.34,7.64"><head>Figure 14: </head><figDesc>Figure 14: The data points that fit the first trend are highlighted in red color. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_13" coords="6,54.00,334.29,110.46,7.64;6,54.00,343.77,110.39,7.64;6,54.00,353.25,71.34,7.64"><head>Figure 15: </head><figDesc>Figure 15: The second hot spot is selected representing another linear trend. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_14" coords="6,179.04,311.61,110.46,7.64;6,179.04,321.09,110.53,7.64;6,179.04,330.57,67.02,7.64"><head>Figure 16: </head><figDesc>Figure 16: The data points that fit the second trend are highlighted in red color. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_15" coords="6,63.96,693.91,229.96,8.12;6,54.00,703.87,239.99,8.12;6,54.00,713.83,239.92,8.12"><head></head><figDesc>(a) Volume: the number of vehicles passing the detector during the 30 second sample period. (b) Occupancy: the percentage of time during the 30 second sample period that the detector sensed </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_16" coords="6,328.92,173.49,217.97,7.64"><head>Figure 17: </head><figDesc>Figure 17: Traffic dataset data space view (scatterplot matrix). </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_17" coords="6,318.00,323.37,110.34,7.64;6,318.00,332.73,110.41,7.64;6,318.00,342.21,22.38,7.64"><head>Figure 18: </head><figDesc>Figure 18: The measurement map with the original color range. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_18" coords="6,447.60,327.81,110.39,7.64;6,447.60,337.29,36.90,7.64"><head>Figure 19: </head><figDesc>Figure 19: After full use of the color map. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_19" coords="6,318.00,478.41,110.39,7.64;6,318.00,487.89,65.46,7.64"><head>Figure 20: </head><figDesc>Figure 20: Adjust the color map base point to 0.46. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_20" coords="6,447.36,478.41,110.39,7.64;6,447.36,487.89,65.46,7.64"><head>Figure 21: </head><figDesc>Figure 21: Adjust the color map base point to 0.11. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_21" coords="7,54.00,154.05,110.39,7.64;7,54.00,163.41,110.39,7.64;7,54.00,172.89,51.90,7.64"><head>Figure 22: </head><figDesc>Figure 22: The model space view: a discovered linear trend in a bin center. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_22" coords="7,177.72,147.93,110.39,7.64;7,177.72,157.41,58.74,7.64"><head>Figure 23: </head><figDesc>Figure 23: The corresponding data space view. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_23" coords="7,54.00,279.93,110.39,7.64;7,54.00,289.41,110.29,7.64;7,54.00,298.89,110.29,7.64;7,54.00,308.37,61.02,7.64"><head>Figure 24: </head><figDesc>Figure 24: The model space view: a better linear trend after user adjustment and computational refinement. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_24" coords="7,177.72,278.73,110.39,7.64;7,177.72,288.09,58.74,7.64"><head>Figure 25: </head><figDesc>Figure 25: The corresponding data space view. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_25" coords="7,318.00,153.45,84.95,7.64;7,318.00,162.93,84.97,7.64;7,318.00,172.41,17.58,7.64"><head>Figure 26: </head><figDesc>Figure 26: Trend fit the data points with low vol- ume. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_26" coords="7,414.72,156.09,141.59,7.64;7,414.72,165.50,83.72,7.97;7,499.92,165.50,23.82,13.63;7,524.64,165.50,31.74,7.97;7,414.72,175.05,78.54,7.64"><head>Figure 27: </head><figDesc>Figure 27: Data Space view. The two dimensional trend is y = −0.11x + 13.8 (y: Occupancy, x: speed). </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_27" coords="7,318.00,282.57,84.95,7.64;7,318.00,292.05,85.00,7.64;7,318.00,301.53,27.54,7.64"><head>Figure 28: </head><figDesc>Figure 28: Trend fit the data points with medium volume. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_28" coords="7,414.72,286.89,141.59,7.64;7,414.72,296.30,83.72,7.97;7,499.92,296.30,23.82,13.63;7,524.64,296.30,31.74,7.97;7,414.72,305.85,78.54,7.64"><head>Figure 29: </head><figDesc>Figure 29: Data Space view. The two dimensional trend is y = −0.17x + 29.7 (y: Occupancy, x: speed). </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_29" coords="7,318.00,414.33,84.95,7.64;7,318.00,423.81,85.07,7.64;7,318.00,433.17,27.54,7.64"><head>Figure 30: </head><figDesc>Figure 30: Trend fit the data points with high volume. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_30" coords="7,414.72,417.93,141.59,7.64;7,414.72,427.34,83.72,7.97;7,499.92,427.34,23.82,13.63;7,524.64,427.34,31.74,7.97;7,414.72,436.89,78.54,7.64"><head>Figure 31: </head><figDesc>Figure 31: Data Space view. The two dimensional trend is y = −0.38x + 60.2 (y: Occupancy, x: speed). </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_31" coords="8,54.00,210.09,239.99,7.64;8,54.00,219.57,240.06,7.64;8,54.00,229.05,240.11,7.64;8,54.00,238.41,125.70,7.64"><head>Figure 32: </head><figDesc>Figure 32: The Orthogonal Projection Plane view after adjusting so that data points with similar volume align to the linear trend center. Color coding: purple points are low volume; yellow points are median volume; red points are high volume. </figDesc></figure>
+		</body>
+		<back>
+			<div type="references">
+
+				<listBibl>
+
+<biblStruct coords="8,336.24,109.12,221.59,7.22;8,336.24,118.60,154.03,7.22"  xml:id="b0">
+	<analytic>
+		<title level="a" type="main">The grand tour: a tool for viewing multidimensional data</title>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Asimov</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">SIAM J. Sci. Stat. Comput</title>
+		<imprint>
+			<biblScope unit="volume">6</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="128" to="143" />
+			<date type="published" when="1985" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.24,128.08,221.22,7.22;8,336.24,137.56,221.51,7.22;8,336.24,147.04,150.67,7.22"  xml:id="b1">
+	<analytic>
+		<title level="a" type="main">Multivariate visual explanation for high dimensional datasets</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Barlowe</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Zhang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Y</forename>
+				<surname>Liu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Yang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Jacobs</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">IEEE Symposium on Proc. VAST &apos;08</title>
+		<imprint>
+			<date type="published" when="2008-10" />
+			<biblScope unit="page" from="147" to="154" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.24,156.40,221.70,7.22;8,336.24,165.88,198.79,7.22"  xml:id="b2">
+	<monogr>
+		<title level="m" type="main">Empirical model-building and response surface</title>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<forename type="middle">E P</forename>
+				<surname>Box</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<forename type="middle">R</forename>
+				<surname>Draper</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="1986" />
+			<publisher>John Wiley &amp; Sons, Inc</publisher>
+			<pubPlace>New York, NY, USA</pubPlace>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.24,175.36,221.65,7.22;8,336.24,184.84,203.95,7.22"  xml:id="b3">
+	<analytic>
+		<title level="a" type="main">Multiple model regression estimation</title>
+		<author>
+			<persName>
+				<forename type="first">V</forename>
+				<surname>Cherkassky</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Y</forename>
+				<surname>Ma</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Neural Networks IEEE Transactions on</title>
+		<imprint>
+			<biblScope unit="volume">16</biblScope>
+			<biblScope unit="issue">4</biblScope>
+			<biblScope unit="page" from="785" to="798" />
+			<date type="published" when="2005-07" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.24,194.32,221.67,7.22;8,336.24,203.80,221.65,7.22;8,336.24,213.28,109.63,7.22"  xml:id="b4">
+	<analytic>
+		<title level="a" type="main">From visual data exploration to visual data mining: A survey</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<forename type="middle">C F</forename>
+				<surname>De Oliveira</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Levkowitz</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Journal of Computational and Graphical Statistics</title>
+		<imprint>
+			<biblScope unit="volume">4</biblScope>
+			<biblScope unit="issue">6</biblScope>
+			<biblScope unit="page" from="113" to="122" />
+			<date type="published" when="1996" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.24,222.76,221.59,7.22;8,336.24,232.12,110.35,7.22"  xml:id="b5">
+	<monogr>
+		<title level="m" type="main">An Introduction to Generalized Linear Models</title>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<forename type="middle">A</forename>
+				<surname>Dobson</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<forename type="middle">J</forename>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2008" />
+			<publisher>Chapman and Hall</publisher>
+			<pubPlace>London</pubPlace>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.24,241.60,221.46,7.22;8,336.24,251.08,205.99,7.22"  xml:id="b6">
+	<analytic>
+		<title level="a" type="main">Use of the hough transformation to detect lines and curves in pictures</title>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<forename type="middle">O</forename>
+				<surname>Duda</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<forename type="middle">E</forename>
+				<surname>Hart</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Commun. ACM</title>
+		<imprint>
+			<biblScope unit="volume">15</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="11" to="15" />
+			<date type="published" when="1972" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.24,260.56,221.30,7.22;8,336.24,270.04,221.59,7.22;8,336.24,279.52,33.31,7.22"  xml:id="b7">
+	<analytic>
+		<title level="a" type="main">Model-driven visual analytics</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Garg</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Nam</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">I</forename>
+				<surname>Ramakrishnan</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Mueller</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">IEEE Symposium on Proc. VAST &apos;08</title>
+		<imprint>
+			<date type="published" when="2008-10" />
+			<biblScope unit="page" from="19" to="26" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.24,289.00,221.43,7.22;8,336.24,298.48,221.70,7.22;8,336.24,307.88,221.23,7.09;8,336.24,317.32,85.39,7.22"  xml:id="b8">
+	<analytic>
+		<title level="a" type="main">Visualization support for user-centered model selection in knowledge discovery in databases</title>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<forename type="middle">B</forename>
+				<surname>Ho</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<forename type="middle">D</forename>
+				<surname>Nguyen</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 13th International Conference on Tools with Artificial Intelligence</title>
+		<meeting>the 13th International Conference on Tools with Artificial Intelligence</meeting>
+		<imprint>
+			<date type="published" when="2001-11" />
+			<biblScope unit="page" from="228" to="235" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.24,326.80,221.53,7.22;8,336.24,336.28,221.70,7.22;8,336.24,345.76,156.31,7.22"  xml:id="b9">
+	<analytic>
+		<title level="a" type="main">Parallel coordinates: a tool for visualizing multi-dimensional geometry</title>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Inselberg</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Dimsdale</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">VIS &apos;90: Proceedings of the 1st Conference on Visualization &apos;90</title>
+		<imprint>
+			<biblScope unit="page" from="361" to="378" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.24,355.24,221.53,7.22;8,336.24,364.72,212.23,7.22"  xml:id="b10">
+	<analytic>
+		<title level="a" type="main">Multiple-model estimation with variable structure</title>
+		<author>
+			<persName>
+				<forename type="first">X</forename>
+				<forename type="middle">R</forename>
+				<surname>Li</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">V</forename>
+				<forename type="middle">P</forename>
+				<surname>Jilkov</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Ru</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Trans. Automatic Control</title>
+		<imprint>
+			<biblScope unit="volume">41</biblScope>
+			<biblScope unit="page" from="478" to="493" />
+			<date type="published" when="1996" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.24,374.08,221.70,7.22;8,336.24,383.56,221.47,7.22;8,336.24,393.04,77.11,7.22"  xml:id="b11">
+	<analytic>
+		<title level="a" type="main">The fitting of straight lines when both variables are subject to error</title>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Madansky</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Journal of the American Statistical Association</title>
+		<imprint>
+			<biblScope unit="volume">54</biblScope>
+			<biblScope unit="issue">285</biblScope>
+			<biblScope unit="page" from="173" to="205" />
+			<date type="published" when="1959" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.24,402.52,221.66,7.22;8,336.24,412.00,221.55,7.22;8,336.24,421.48,55.39,7.22"  xml:id="b12">
+	<monogr>
+		<title level="m" type="main">Mn/DOT traveler information</title>
+		<imprint>
+			<date type="published" when="2009" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.24,430.96,221.67,7.22;8,336.24,440.44,89.47,7.22"  xml:id="b13">
+	<monogr>
+		<title level="m" type="main">Experiencing geometry: on plane and sphere</title>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<surname>Moura</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<forename type="middle">G</forename>
+				<surname>Henderson</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="1996" />
+			<publisher>Prentice Hall</publisher>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.24,449.80,221.65,7.22;8,336.24,459.28,221.83,7.22;8,336.24,468.76,221.71,7.22"  xml:id="b14">
+	<analytic>
+		<title level="a" type="main">Clustersculptor: A visual analytics tool for high-dimensional data</title>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<forename type="middle">J</forename>
+				<surname>Nam</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Y</forename>
+				<surname>Han</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Mueller</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Zelenyuk</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Imre</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">IEEE Symposium on Proc. VAST 2007</title>
+		<imprint>
+			<date type="published" when="2007-11-30" />
+			<biblScope unit="page" from="75" to="82" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.24,478.24,221.70,7.22;8,336.24,487.72,185.23,7.22"  xml:id="b15">
+	<analytic>
+		<title level="a" type="main">Least median of squares regression</title>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<forename type="middle">J</forename>
+				<surname>Rousseeuw</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Journal of the American Statistical Association</title>
+		<imprint>
+			<biblScope unit="volume">79</biblScope>
+			<biblScope unit="issue">388</biblScope>
+			<biblScope unit="page" from="871" to="880" />
+			<date type="published" when="1984" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.24,497.20,221.38,7.22;8,336.24,506.68,221.71,7.22;8,336.24,516.16,85.27,7.22"  xml:id="b16">
+	<analytic>
+		<title level="a" type="main">Applied visual analytics for economic decision-making</title>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Savikhin</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Maciejewski</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Ebert</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">IEEE Symposium on Proc. VAST &apos;08</title>
+		<imprint>
+			<date type="published" when="2008-10" />
+			<biblScope unit="page" from="107" to="114" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.24,525.52,221.65,7.22;8,336.24,535.00,221.83,7.22;8,336.24,544.48,142.39,7.22"  xml:id="b17">
+	<analytic>
+		<title level="a" type="main">Visual cluster analysis of trajectory data with interactive kohonen maps</title>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Schreck</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Bernard</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Tekusova</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Kohlhammer</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">IEEE Symposium on VAST &apos;08</title>
+		<imprint>
+			<date type="published" when="2008" />
+			<biblScope unit="page" from="3" to="10" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.24,553.96,221.54,7.22;8,336.24,563.44,221.53,7.22;8,336.24,572.92,221.47,7.22;8,336.24,582.40,17.83,7.22"  xml:id="b18">
+	<analytic>
+		<title level="a" type="main">Ggobi: evolving from xgobi into an extensible framework for interactive data visualization</title>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<forename type="middle">F</forename>
+				<surname>Swayne</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<forename type="middle">T</forename>
+				<surname>Lang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Buja</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Cook</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Computational statistics and data analysis</title>
+		<imprint>
+			<biblScope unit="volume">43</biblScope>
+			<biblScope unit="issue">4</biblScope>
+			<biblScope unit="page" from="423" to="444" />
+			<date type="published" when="2003" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.24,591.88,221.53,7.22;8,336.24,601.24,80.71,7.22"  xml:id="b19">
+	<analytic>
+		<title level="a" type="main">Visual data mining</title>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Wong</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Computer Graphics and Applications</title>
+		<imprint>
+			<biblScope unit="volume">19</biblScope>
+			<biblScope unit="issue">5</biblScope>
+			<biblScope unit="page" from="20" to="21" />
+			<date type="published" when="1999" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.24,610.72,221.58,7.22;8,336.24,620.20,221.87,7.22;8,336.24,629.68,83.83,7.22"  xml:id="b20">
+	<analytic>
+		<title level="a" type="main">Analysis guided visual exploration of multivariate data</title>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Yang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<forename type="middle">A</forename>
+				<surname>Rundensteiner</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<forename type="middle">O</forename>
+				<surname>Ward</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">IEEE Symposium on Proc. VAST 2007</title>
+		<imprint>
+			<date type="published" when="2007" />
+			<biblScope unit="page" from="83" to="90" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+				</listBibl>
+			</div>
+		</back>
+	</text>
+</TEI>

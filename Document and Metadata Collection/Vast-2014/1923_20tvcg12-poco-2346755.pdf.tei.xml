@@ -1,0 +1,1761 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.tei-c.org/ns/1.0 /home/pisenberg/grobid/grobid-home/schemas/xsd/Grobid.xsd"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+	<teiHeader xml:lang="en">
+		<encodingDesc>
+			<appInfo>
+				<application version="0.4.1" ident="GROBID" when="2016-09-09T13:51+0000">
+					<ref target="https://github.com/kermitt2/grobid">GROBID - A machine learning software for extracting information from scholarly documents</ref>
+				</application>
+			</appInfo>
+		</encodingDesc>
+		<fileDesc>
+			<titleStmt>
+				<title level="a" type="main">Visual Reconciliation of Alternative Similarity Spaces in Climate Modeling</title>
+			</titleStmt>
+			<publicationStmt>
+				<publisher/>
+				<availability status="unknown"><licence/></availability>
+			</publicationStmt>
+			<sourceDesc>
+				<biblStruct>
+					<analytic>
+						<author>
+							<persName>
+								<forename type="first">Jorge</forename>
+								<surname>Poco</surname>
+							</persName>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Aritra</forename>
+								<surname>Dasgupta</surname>
+							</persName>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Yaxing</forename>
+								<surname>Wei</surname>
+							</persName>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">William</forename>
+								<surname>Hargrove</surname>
+							</persName>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Christopher</forename>
+								<forename type="middle">R</forename>
+								<surname>Schwalm</surname>
+							</persName>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Deborah</forename>
+								<forename type="middle">N</forename>
+								<surname>Huntzinger</surname>
+							</persName>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Robert</forename>
+								<surname>Cook</surname>
+							</persName>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Enrico</forename>
+								<surname>Bertini</surname>
+							</persName>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Cí</forename>
+								<surname>Audio</surname>
+							</persName>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">T</forename>
+								<surname>Silva</surname>
+								<roleName>Fellow Ieee</roleName>
+							</persName>
+						</author>
+						<title level="a" type="main">Visual Reconciliation of Alternative Similarity Spaces in Climate Modeling</title>
+					</analytic>
+					<monogr>
+						<imprint>
+							<date/>
+						</imprint>
+					</monogr>
+					<idno type="DOI">10.1109/TVCG.2014.2346755</idno>
+					<note>1923</note>
+				</biblStruct>
+			</sourceDesc>
+		</fileDesc>
+		<profileDesc>
+			<textClass>
+				<keywords>
+					<term>Index Terms—Similarity</term>
+					<term>clustering</term>
+					<term>matrix</term>
+					<term>optimization</term>
+					<term>climate model</term>
+				</keywords>
+			</textClass>
+			<abstract>
+				<p>Fig. 1: Iterative visual reconciliation of groupings based on climate model structure and model output. Visual inspection of similarity coupled with an underlying computation model facilitates iterative refinement of the groups and flexible exploration of the importance of the different parameters. Abstract— Visual data analysis often requires grouping of data objects based on their similarity. In many application domains researchers use algorithms and techniques like clustering and multidimensional scaling to extract groupings from data. While extracting these groups using a single similarity criteria is relatively straightforward, comparing alternative criteria poses additional challenges. In this paper we define visual reconciliation as the problem of reconciling multiple alternative similarity spaces through visualization and interaction. We derive this problem from our work on model comparison in climate science where climate modelers are faced with the challenge of making sense of alternative ways to describe their models: one through the output they generate, another through the large set of properties that describe them. Ideally, they want to understand whether groups of models with similar spatio-temporal behaviors share similar sets of criteria or, conversely, whether similar criteria lead to similar behaviors. We propose a visual ana-lytics solution based on linked views, that addresses this problem by allowing the user to dynamically create, modify and observe the interaction among groupings, thereby making the potential explanations apparent. We present case studies that demonstrate the usefulness of our technique in the area of climate science.</p>
+			</abstract>
+		</profileDesc>
+	</teiHeader>
+	<text xml:lang="en">
+		<body>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2">MOTIVATION</head><p> Why do we need a new visual analytics technique? Reconciling alternative similarity spaces is challenging on several counts: i) Data descriptors can comprise of different attribute types. From a human cognition point-of-view, reconciling the similarity of climate models across two different visual representations is challenging. There needs to be explicit encoding of similarity <ref type="bibr" coords="2,185.31,674.44,14.94,10.80" target="#b10">[11] </ref>that helps in efficient visual comparison and preserve the mental model about similarity. Adaptation of similarity needs to be reflected by dynamic linking between views without causing change blindness; ii) For aligning two different similarity spaces, say computed by two clustering algorithms, we will in most cases get an approximate result. The result will need to be iterated upon with subsequent parameter tuning to achieve higher accuracy . This necessitates iteration, and therefore a human-in-the-loop approach; iii) Domain experts need to trust the methodology working at the back-end and interact with parameters for understanding their importance. Fully automated methods do not allow that flexibility. Thereby, a transparent representation with minimal abstraction is necessary where parameters in similarity computation can be influenced by user selections and filters. As mentioned before, the technique is not restricted to climate models , but for simplifying our discussion in this paper we specifically discuss the applicability of the visual reconciliation technique in the context of climate modeling. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.1">Problem Characterization</head><p>Climate models, specifically Terrestrial Biosphere Models (TBM) are now an important tool for understanding land-atmosphere carbon exchange across the globe. TBMs can be used to attribute carbon sources (e.g., fires, farmlands) and sinks (e.g., forests, oceans) to explicit ecosystem processes. Each TBM is defined by the different input parameters for characterizing these processes and outputs that quantify the dependency between the carbon cycle and the ecosystem processes . In the context of this work, each model has a dual representation of a weighted collection of criteria or descriptive parameters, and time-series for different outputs, for different regions. Model Structure: Model structure refers to the types of processes considered (e.g., nutrient cycling, lateral transport of carbon), and how these processes are represented through different criteria (e.g., photosynthetic formulation, temperature sensitivity, etc.) in the models. A model simulation algorithm can have different implementations of these processes. These implementations are different from each other due to the presence or absence of the different criteria, that control the specific process. For example, if a model simulates photosynthesis, a group of criteria like simulating carbon pools, influence of soil moisture, and stomatal conductance can be either present or absent. Currently, climate scientists do not have an objective way of choosing one set of criteria over other, that can influence the output. A model structure is a function of these criteria. If there are n criteria, there can be 2 n combinations of this function. In our data, there are 4 different classes of criteria, for energy, carbon, vegetation , and respiration; with each class comprising of criteria, which are about 20 to 30 in number. Model Output: Model simulation outputs are ecosystem variables that help climate scientists predict the rates of carbon dioxide increases and changes in the atmosphere. For example, Gross Primary Productivity (GPP) is arguably the most important ecosystem variable, indicating the total amount of energy that is fixed from sunlight, before respiration and decomposition. Climate scientists need to understand patterns of GPP in order to predict rates of carbon dioxide increases and changes in atmospheric temperature. Relationship between model structure and output: In previous work, we had developed the SimilarityExplorer tool <ref type="bibr" coords="2,508.29,544.13,14.94,10.80" target="#b26">[28] </ref> for analyzing similarity and differences among multifaceted model outputs. Despite the standardized protocol used to derive initial conditions, models show a high degree of variation for GPP, which can be attributed to differences in model structural information <ref type="bibr" coords="2,481.05,583.97,13.74,10.80" target="#b15">[16]</ref>. Therefore, one of the open research questions in the TBM domain is how similarity or differences in model output can be correlated with that in model structures. The heterogeneity of model structure and model output data makes it complex to derive one-to-one relationships among them. Currently, in absence of an effective analysis technique, scientists manually browse through the theoretically exponential number of model structure combinations, and analyze their output. This process is inefficient and also ineffective due to the large parameter space which can easily cause important patterns to be missed. In the visual reconciliation technique, we provide a conceptual framework that enable scientists to reconcile model structural similarity with output similarity. We focus on using visual analytics methods for addressing the following high-level analysis questions: i) given all other factors are constant, analyze how different combination of parameters within model structure cause similarity or difference in model output, and ii) by examining time-varying model outputs at different regions, understand which combination of parameters cause the same clusters or groups in model structure. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.2">Visual Reconciliation Goals</head><p>As illustrated in <ref type="figure" coords="3,105.38,102.23,19.69,10.80" target="#fig_0">Fig. 2</ref> , the visual reconciliation technique enables climate scientists to: i) analyze model structure and use that as feedback for reconciling similarity or differences in model output, and ii) analyze model output and use that as a feedback for comparing similarity or differences in model structure. The reconciliation model focuses on three key goals: Similarity encoding and linking: For providing guidance on choosing the starting points of analysis, the visual representations of both structure and output encode similarity functions. Subsequently, scientists can use those initial seed points for reconciling structure characteristics with output data, or conversely, for reconciling output data with structure characteristics. Flexible exploration of parameters: The visual feedback and interaction model adapts to the analysts' workflow. Scientists can choose different combinations of parameters, customize clusters on model structure and model output side and accordingly the visual representations change, different indicators of similarity are highlighted. Iterative refinement of groups: By incorporating user feedback in conjunction with a computation model, the reconciliation technique allows users to explore different group parameters in both data spaces and iteratively refine the groupings. The key goal here is to understand, which criteria in model structures are most important in determining how the outputs are similar or different over time. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3">RELATED WORK</head><p>We discuss the related work in the context of the following threads of research: i) automated clustering methods for handling different data descriptors, and visual analytics approaches towards user-driven clustering , ii) integration of user feedback for handling distance functions in the context of high-dimensional data, and iii) visual analytics solutions for similarity analysis of climate models. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.1">Clustering Methods</head><p> Different clustering methods have been proposed for dealing with alternative similarity spaces. Pfitzner et al. proposed a theoretical framework for evaluating the quality of clusterings through pairwise estimation of similarity <ref type="bibr" coords="3,109.30,473.99,13.74,10.80" target="#b25">[27]</ref>. The area of multi-view clustering <ref type="bibr" coords="3,252.83,473.99,10.45,10.80" target="#b3">[4] </ref>analyzes cases when data can be split into two independent subsets. In that case either subset is conditionally independent of each other and can be used for learning. Similarly, authors have proposed approaches towards combining multiple clustering results into one clustered output, using similarity graphs <ref type="bibr" coords="3,130.18,523.80,13.74,10.80" target="#b21">[23]</ref> . Although we are also dealing with multiple similarity functions, the goal is to reconcile one with respect to the other. In this context, the most relevant research in data mining community looks into learning the relationship between different data descriptor sets. The reconciliation idea is similar, in principle, to redescription mining which looks at binary feature spaces and uses automated algorithms for reconciling those spaces <ref type="bibr" coords="3,188.78,593.93,14.19,10.80" target="#b27">[29,</ref><ref type="bibr" coords="3,205.19,593.93,10.65,10.80" target="#b24"> 26]</ref>. While redescriptions mostly deal with binary data, we handle both binary data and timevarying data in our technique. Our work is also inspired by the consensus clustering concept, which attempts to find the consensus among multiple clustering al- gorithms <ref type="bibr" coords="3,80.40,644.15,14.94,10.80" target="#b22">[24] </ref> in the context of gene expression data. Consensus clustering has also been applied in other applications in biology and chem- istry <ref type="bibr" coords="3,64.80,664.07,9.71,10.80" target="#b8">[9,</ref><ref type="bibr" coords="3,77.17,664.07,6.47,10.80" target="#b6"> 7]</ref> . In our case, while we are interested in the consensus between similarity of model structure and model output, we also aim at quantifying and communicating the contribution of the different parameters towards that consensus or the lack thereof. We adopt a human-in-the-loop approach, as automated methods do not provide adequate transparency with respect to the clustering parameters, and also in most cases, iteration is necessary to present reconciliation results. Iterative refinement strategies for user-driven clustering have been proposed for interacting with the intermediate clustering results <ref type="bibr" coords="3,373.87,61.13,14.94,10.80" target="#b28">[30] </ref> for tuning parameters of the underlying algo- rithms <ref type="bibr" coords="3,334.19,71.09,13.74,10.80" target="#b31">[33]</ref>, and for making sense of dimension space and item space of data <ref type="bibr" coords="3,335.55,81.06,13.74,10.80" target="#b37">[39]</ref>. Dealing with diverse similarity functions and at the same time providing a high fidelity visual representation to domain experts which can be interactively refined, are the key differentiators of our work. The reconciliation workflow follows an adaptive process, where the groupings on the model output side are used as an input to the model structure side for: i) providing guidance to the scientists towards finding similar groups with respect to diverse descriptors or criteria , and ii) understanding the importance of criteria, which is handled by an underlying optimization algorithm. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.2">User Feedback for Adaptive Distance Functions</head><p> Recently, there has been a lot of interest in the visual analytics community for investigating how computation and tuning of distance functions can be steered by user interaction and feedback. Gleicher proposed a system called Explainers that attempts to alleviate the problem of multidimensional projection, where the axes have no semantics, by providing named axes based on experts' input <ref type="bibr" coords="3,484.63,242.03,13.74,10.80" target="#b9">[10]</ref> . Eli et al. presented a system that allows an expert to interact directly with a visual representation of the data to define an appropriate distance function, without having to modify different parameters <ref type="bibr" coords="3,482.74,271.92,9.52,10.80" target="#b4">[5]</ref>. In our case, the parameter space is of key interest to the user; therefore we create a visual representation of the parameters, and allow direct user interaction with them. Our user feedback mechanism based weighted optimization method is inspired by the work on manipulating distance functions by Hu et al. <ref type="bibr" coords="3,351.27,321.72,13.74,10.80" target="#b13">[14]</ref> . However, the interactivity and conceptual implementation is different, since we are working with two different data spaces, without using multidimensional projections. The modification of distance functions have also been used for spatial clustering, where user selected groups are given as input to the algorithm <ref type="bibr" coords="3,489.06,361.57,13.74,10.80" target="#b23">[25]</ref> . Our reconciliation method is similar, in principle to this approach, where the system suggests grouping in one data space, based on the same in other space, by a combination of user selection and computation. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.3">Visual Analytics for Climate Modeling</head><p>Similarity analysis of model simulations is an emerging problem in climate science. While visual analysis of simulation models and their spatio-temporal variance have received attention in other domains<ref type="bibr" coords="3,336.89,452.81,12.03,10.80" target="#b0">[1,</ref><ref type="bibr" coords="3,352.11,452.81,10.65,10.80"> 22]</ref>, current visual analytics solutions for climate model analysis <ref type="bibr" coords="3,340.67,462.77,14.94,10.80" target="#b18">[19] </ref>mostly focus on addressing the problem at the level of a single model and understanding its spatio-temporal characteristics. For example, Steed et al. introduced EDEN <ref type="bibr" coords="3,466.03,482.70,13.74,10.80" target="#b34">[36]</ref> , a tool based on visualizing correlations in an interactive parallel coordinates plot, focused on multivariate analysis. Recently, UV-CDAT <ref type="bibr" coords="3,473.43,502.62,14.94,10.80" target="#b38">[40] </ref>has been developed which is a provenance-enabled framework for climate data analysis. However, like most other tools, UV-CDAT does not support multimodel analysis <ref type="bibr" coords="3,367.20,532.51,13.74,10.80" target="#b30">[32]</ref> . To fill this gap, we recently developed Simi- larityExplorer <ref type="bibr" coords="3,361.95,542.47,14.94,10.80" target="#b26">[28] </ref>for analyzing multi-model similarity with respect to model outputs. In this case, we are not only comparing multiple models, but also comparing two different data spaces: model structure and model output. Climate scientists have found that different combinations of model structure criteria can potentially throw light into different simulation output behavior <ref type="bibr" coords="3,460.78,592.28,13.74,10.80" target="#b15">[16]</ref>. However, to the best of our knowledge, no visual analytics solution currently exists in climate science to address this problem. For developing a solution, formulating an analysis paradigm precedes tool development because of the complexities involved in handling multiple descriptor spaces. Although there has been some work on hypothesis generation <ref type="bibr" coords="3,528.48,642.08,14.94,10.80" target="#b16">[17] </ref>and task characterization <ref type="bibr" coords="3,386.57,652.05,14.94,10.80" target="#b32">[34] </ref>for climate science, they are not sufficient for handling the reconciliation problem involving alternative similarity spaces. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4">COORDINATED MULTIPLE VIEWS</head><p>An important component of the visual reconciliation technique is the interaction between multiple views <ref type="bibr" coords="3,439.51,714.29,14.94,10.80" target="#b29">[31] </ref>of similarity spaces. In this case we have binary model structure data and time-varying model output data. As we had shown in <ref type="figure" coords="3,414.99,734.21,19.46,10.80" target="#fig_0">Fig. 2</ref>, the goal is to let domain scientists <ref type="figure" coords="4,52.80,218.61,19.73,10.80">Fig. 3</ref> : Matrix view for model structure data: Rows represent models and columns represent criteria. The variation of average implementation of a criterion for all models is shown by a color gradient from light yellow to red, with red signifying higher implementation. In the default view, all criteria have equal importance or weights, indicated by the heights of the bars. Connectors help visually link the columns and bars when they are reordered independently. create and visualize groups on both sides, and understand the importance of the different criteria in creating those groups. In this section we provide an overview of the different views and describe the basic interactions between those. Matrix View: To display the model structure data, which is a twodimensional matrix of 0's and 1's, we use a color-coded matrix <ref type="figure" coords="4,280.07,351.16,19.74,10.80">Fig. 3</ref>, which serves as a presence/absence representation of the different criteria for the model structure. This is inspired from Bertin's reorderable matrix <ref type="bibr" coords="4,78.45,381.04,10.45,10.80" target="#b1">[2] </ref>and the subsequent interactive versions of the matrix <ref type="bibr" coords="4,281.91,381.04,13.74,10.80" target="#b33">[35]</ref>. Since the data is binary, we use two color hues: purple for denoting presence and gray for absence. Visual salience of a matrix depends on the order of the rows and columns and numerous techniques have been developed till data fore reordering <ref type="bibr" coords="4,198.63,421.29,9.71,10.80" target="#b5">[6,</ref><ref type="bibr" coords="4,210.96,421.29,11.95,10.80" target="#b39"> 41] </ref>and seriation <ref type="bibr" coords="4,274.61,421.29,13.74,10.80" target="#b19">[20]</ref>. In this case, the main motivation is to let the scientists visually separate the criteria which have high average non-implementation (indicated by 0's) and those with high average implementation. For providing visual cues on potential groups within the data, we reorder the rows and columns, based on a function that puts the criteria, that are present, to the upper left of the matrix; and pushes those that are absent, to the bottom right. The colored bars on top of the matrix serve a dual purpose. The heights of the bars indicate the importance or weight of each criteria for creating groups in model structure. The colors of the bars, with a light yellow to red gradient indicate the average implementation of a criterion. For example, as indicated in <ref type="figure" coords="4,192.17,541.24,19.88,10.80">Fig. 3</ref>, the yellow bar indicates that only three models have implemented that criterion. This gives a quick overview of which criteria are most implemented, and which ones, the least. The grey connectors preserve link among bars and columns during reordering. This is important, especially when criteria bars and the data columns in the matrix are reordered independently. Groups can be created by selecting the different criteria. For a single criterion, there can be two groups of models: those which do not implement the criteria and have a value 0, and those which implement criteria, and have a value 1. With multiple selections, there can be 2 c combinations, with c being a criterion. In most practical cases, only a subset of these combinations exist in the data. Time Series View: The model output data, which comprises of a time series for each model, is displayed using a line chart comprising of multiple time series (<ref type="figure" coords="4,130.92,684.40,23.41,10.80" target="#fig_1">Fig. 4a</ref> ). But effective visual comparison of similarity among multiple groups is difficult using this view because of two reasons. First, due to similar trajectory of the series, there is a a lot of overlap, leading to clutter. Second, we are unable to show the degree of clustering using this approach. To resolve these design problems, we use small multiples. Small multiples <ref type="bibr" coords="4,247.76,734.21,14.94,10.80" target="#b36">[38] </ref>have been used extensively in visualization, one problem with them is when there are a large number of them, it becomes difficult to group them visually without any additional cues. To prevent this, we create a small multiple for each group. When there are time series for different region, a small multiple can also be created for each region to compare groupings across different regions. </p><p>Interaction: An overview of the steps in the interactive workflows between the matrix view and the time series view are shown in <ref type="figure" coords="4,542.60,124.88,19.82,10.80" target="#fig_0">Fig. 2</ref>. These actions and operations are described below: Create Groups: While reconciling model structure with model output, scientists can first observe similarity among the models based on their criteria, and accordingly create groups. This is part of the reconciliation workflow described in Section 5.1. In the matrix view, groups can be created on interaction. In the time-series view, groups are either suggested by the system or selected by the user through direct manipulation. This is part of the reconciliation workflow described in Section 5.2. Reflect: Creation of groups triggers reflection of the groups in both views. On the matrix side, this is through grouping of the rows. On the time series side, this is done by color coding the lines. Split: In the time series view, groups can be reflected by splitting the models into small multiples of model groups. Optimize: While reconciling model output with structure, to handle the variable importance of the criteria, an optimization step is necessary . This workflow starts with the scientist selecting groups in the output, which get reflected in the matrix view. Next they can choose to optimize the importance or the weights, which leads to subsequent iteration. This reconciliation workflow is described in detail in Section 5.2. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5">RECONCILIATION WORKFLOWS</head><p>In this section we describe how we instantiate the conceptual model of visual reconciliation described in <ref type="figure" coords="4,451.19,380.54,21.93,10.80" target="#fig_0">Fig. 2</ref> by incorporating the coordinated multiple views, user interaction and an underlying computational model. The following workflows provide a step-by-step analysis of how the views and interactions can be leveraged by climate scientists for getting insight into structure similarity and output similarity. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.1">Reconcile Structure Similarity with Output Similarity</head><p>In <ref type="figure" coords="4,324.90,454.46,20.71,10.80" target="#fig_1">Fig. 4</ref>we show the different steps in the workflow when the starting point of analysis is the model structure. This workflow relies on visual inspection of structure similarity by using matrix manipulation, and observing the corresponding patterns in output by creation of small multiples. The steps are described as follows: </p><p> Create groups: For reconciling model structure with output, it is necessary to first provide visual cues about which models are more similar with respect to the different criteria. For this the default layout of the matrix is sorted from left to right, by high to low average implementation of the different criteria. This is indicated in <ref type="figure" coords="4,527.98,544.52,26.01,10.80" target="#fig_1">Fig. 4b</ref>by the transition of the importance bars from red to yellow. This gives the scientists an idea of which criteria create more evenly sized groups with 0's and 1's. The criteria which are colored dark red and light yellow will create groups which are skewed: either too many models implement the criteria or they do not. Selecting criteria which are deep yellow and orange, gives more balanced clusters, with around 50 per cent implementation. The highlighted column indicates the criterion with the highest percentage of implementation. The selected columns are indicated in <ref type="figure" coords="4,467.03,634.58,24.27,10.80" target="#fig_1">Fig. 4c</ref>. These two criteria create four groups. For showing groups of models within the matrix, we introduce vertical gaps between groups, and then draw colored borders around each group. Reordering by columns is also allowed for each group independently as shown in <ref type="figure" coords="4,473.36,674.43,24.44,10.80" target="#fig_1">Fig. 4c</ref>. In that case, the weighted ordering of the bars is kept fixed. For visually indicating the change in ordering we link the criteria by lines. Lines that are parallel indicate that those criteria have not moved due to reordering and share the same position for different groups. Since too many crossing lines can cause clutter, we render the lines with varying opacity. For indicating movement of criteria, we render those lines with higher opacity. To highlight where a certain criterion is within a group, on selection we highlight the line by coloring it red as shown in the <ref type="figure" coords="5,244.23,256.18,23.16,10.80">figure.</ref>If columns in each group are reordered independently, that shows the average implementation patterns for each group clearly. But it becomes difficult to compare the implementations of a set of criteria across the different groups. To enable this comparison, user can select a specific group which will be reordered column-wise, and the columns in other groups will be sorted by that order. This is shown in <ref type="figure" coords="5,56.29,326.32,24.80,10.80" target="#fig_1">Fig. 4d</ref>, where the first group from the top is reordered based on the columns, and other groups are aligned relative to that group. As observed, this enables more efficient comparison relative all the implemented and non-implemented criteria in the first group. For example, we can easily find that the rightmost criteria are not implemented by the first group of models, but is implemented by all other groups. Reflect: The creation of groups in the structure is reflected in the output by the color of the groups. Users can see the names of the models on interaction. Split: Small multiples can be created for each group (<ref type="figure" coords="5,246.82,416.78,23.81,10.80" target="#fig_1">Fig. 4d</ref>). The range of variability of models in each small multiple group reflects how similar or different they are. This comparison is difficult to achieve in a time series overloaded with too many lines. This also enables a direct reconciliation of the quality of grouping in model structure with that of the output. For example, as shown in the figure, only the orange group has low variability across models, denoting that the groups based on the criteria in model structure do not create groups where models produce similar output behavior. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.2">Reconcile Output Similarity with Structure Similarity</head><p>To reconcile output with structure and complete the loop, we need to account for the fact that different criteria can have different weights or importance in the creation of groups. One of the goals of the reconciliation models is to enable scientists explore different combinations of these criteria that can create groups similar to those in the corresponding model output. However, naive visual inspection is inefficient to analyze all possible combinations without any guidance from the system . For this, we developed a weighted optimization algorithm that complements the human interaction. We describe the algorithm, provide an outline of its validation, and the corresponding workflow, as follows. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.2.1">Weighted Optimization</head><p> Using the model structure data and the model output data, we can create two distance matrices. The eventual goal is to learn a similarity function from the output distance matrix and modify the weights of the criteria in the structure distance function for adapting to the output similarity matrix. We describe the problem formulation below. LetˆMLetˆ LetˆM be a matrix representing the model output with size n × p and˜M and˜ and˜M represents the model structure with size n × q. Similarity in model output is computed by the functionˆdfunctionˆ functionˆd : R p × R p → R. This function can be any specialized distance function such as Euclidean, Cosine, etc. For the model structure we use weighted euclidean distance˜ddistance˜ distance˜d w : </p><formula>R q × R q → R = ∑ q k=1 w k (y k i − y k j ) 2 </formula><p>, where w k is a weight assigned to each dimension oñ M. UsingˆdUsingˆ Usingˆd we encode the similarity information of the model output in a distance matrixˆDmatrixˆ matrixˆD. Our goal would be to find the weights' vector w = {w 1 , ..., w q } which could create a distance matrix for the model structure˜Dstructure˜ structure˜D containing approximately the same similarity information as the model output. This problem can be formulated as the minimization of the square error of the two distance functions: </p><formula>minimize w n ∑ i=1 n ∑ j=1˜d j=1˜ j=1˜d w (x i , x j ) 2 − ˆ d(y i , y j ) 2 2 subject to w k ≥ 0, k = 1</formula><p>,...,q. </p><formula>(1) </formula><p>where . is the L 2 norm. Using this vector w we can define which criteria are important in the model structure to recreate the same similarity information from the model output. Note that in the previous formulation we have not taken into account the user's feedback. The weights computation step is similar to the one used in weighted metric multidimensional scal- ing <ref type="bibr" coords="5,322.53,469.35,14.94,10.80" target="#b11">[12] </ref>technique. If we want to incorporate user's feedback into our formulation we can multiply the square errors in Eq. 1 by a coefficient r i, j . This number represents the importance of each pair of elements in the minimization problem. In our approach we allow the user to define groups on the model output, then r i, j will be almost zero or zero for all the elements i, j in a group. Now, we need to minimize: </p><formula>minimize w n ∑ i=1 n ∑ j=1 r i, j ˜ d w (x i , x j ) 2 − ˆ d(y i , y j ) 2 2 subject to w k ≥ 0, k = 1</formula><p>,...,q. </p><formula>(2) </formula><p>Both equations above can be converted into quadratic problems and solved using any quadratic programming solvers, such as JOp- timizer <ref type="bibr" coords="5,336.47,614.26,14.94,10.80" target="#b35">[37] </ref>for Java or quadprog in MATLAB. Our approach of incorporating user feedback for computation of the weights is similar to the cognitive feedback model, namely V2PI- MDS <ref type="bibr" coords="5,331.01,644.55,13.74,10.80" target="#b14">[15]</ref> . Mathematically the approaches are similar but conceptually they are different on two counts. First, in V2PI-MDS, the highdimensional data space is represented by the projected data space, and the algorithm attempts to reconcile the two spaces. In our case however , the underlying data spaces are entirely different. We handle this problem by using interactive visualization as a means to preserve the mental model of the scientists about the characteristics of the different data spaces. We could also have used multidimensional projections . But as found in previous work, domain scientists tend not to trust the information loss caused by the dimensionality reduction and prefer transparent visualizations, where the raw data is represented in- stead <ref type="bibr" coords="6,73.46,61.14,9.52,10.80" target="#b7">[8]</ref>. Second, the interaction mechanism for providing feedback to the computation model in the reconciliation model is also different than the V2PI-MDS model. We allow users to define groups within the data, as opposed to direct manipulation and movement of data points in a projection; which is not applicable in our case. Our focus is on the relationship between the weights of the dimensions and the similarity perception they induce. As a result, we let users explore different groupings by using the sorted weights and let them modify the views accordingly. This results in a rich iterative analysis for reconciling the two similarity spaces. </p><formula>0.8 1 m 1 m 2 m 3 m 4 m 5 m 6 m 7 m 8 m 9 m 10 </formula><p>(a) Model Output (b) Model Structure <ref type="figure" coords="6,52.80,341.80,20.08,10.80">Fig. 5</ref>: Synthetic data for validating weighted optimization. Using the model output data in (a) and model structure data in (b), we validate the accuracy of the optimization algorithm. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.2.2">Validation</head><p>To validate our optimization, we use two synthetic datasets, one for model output and the other one for model structure. The purpose of this validation is to demonstrate the accuracy of the algorithm in the best case scenario, i.e., when a perfect grouping based on some criteria exists in the data. In most real-world cases, however the optimization will only create an approximation of the input groups. Our model output is a two-dimensional dataset and we use a scatter plot to visualize it (<ref type="figure" coords="6,126.21,464.42,23.64,10.80">Fig. 5a</ref>). We can notice that we have three well <ref type="figure" coords="6,52.80,484.35,27.63,10.80">Fig. 5b</ref>shows our synthetic model structure data which contains boolean values. Each row represents a different model (m i ) and each column a different criterion. The first two criteria were chosen specifically to split the dataset into the same three groups as the model output . For instance when criterion 1 = 0 and criterion 2 = 0 we can create the group </p><formula>defined groups {m 1 , m 2 , m 3 , m 4 }, {m 5 , m 6 , m 7 , m 8 } and {m 9 , m 10 }. </formula><formula>{m 1 , m 2 , m 3 , m 4 }.</formula><p>The next three columns are random values (zero or one). First, we solve the Eq. 1 using our synthetic dataset and Euclidean distance for the model output; and we get w = {1.00, 0.14, 0.06, 0.08, 0.10}. We use the classical multidimensional scaling algorithm to project the model structure data using the Weighted Euclidean distance. We normalized the weights between zero and one for visualization purpose, but the weighted Euclidean distance uses the unnormalized weights. <ref type="figure" coords="6,213.95,614.26,26.94,10.80">Fig. 6a</ref> shows the twodimensional data. Our vector w was able to capture the similarity information from the model output. For example, </p><formula>{m 1 , m 2 , m 3 , m 4 } is a well defined group. Even though {m 5 , m 6 , m 7 , m 8 } and {m 9 , m 10 } </formula><p>are not mixed, they are not well defined groups. Next, we incorporate user feedback and set the coefficient r i, j to zero for all pair combinations in the groups </p><formula>{m 1 , m 2 , m 3 , m 4 }, {m 5 , m 6 , m 7 , m 8 } and {m 9 , m 10 }</formula><p>. Solving Eq. 2 we get the vector w = {1.00, 0.77, 0.07, 0.08, 0.10}. <ref type="figure" coords="6,177.76,694.36,25.40,10.80">Fig. 6b</ref>shows the two-dimensional projection of the model structure using the weighted Euclidean distance and w. We notice that now the three groups are well defined . Our algorithm gave the highest weights to the first two criteria (criterion 1 = 1.0 and criterion 2 = 0.7) which we already knew to have the best combination to split the model structure in the same groups as the model output. </p><formula>m 1 m 2 m 3 m 4 m 5 m 6 m 7 m 8 m 9 m 10 1</formula><p>.00 0.10 0.08 0.06 0.14 </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>(a) Automatic optimization </head><formula>m 1 m 2 m 3 m 4 m 5 m 6 m 7 m 8 m 9 m 10 1</formula><p>.00 0.10 0.08 0.07 </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="0.77"></head><p> (b) Optimization based on user feed- back <ref type="figure" coords="6,315.42,217.24,19.81,10.80">Fig. 6</ref>: Validation of user feedback based optimization in the MDS plots. As we can observe in (b), optimization based on user's feedback gives highest weights to the two criteria which are splitting the models into three groups. These two experiments show that our formulation accurately gives the highest weights to the most relevant criteria for splitting models into groups, and this can be used to guide the user during the exploration process. In Section 6 we will show how this approach works with real data; where in most cases, an approximation of the output group is produced by the algorithm. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.2.3">Workflow</head><p>In <ref type="figure" coords="6,324.84,343.27,20.65,10.80">Fig. 7</ref> we show how the complete loop starting from output to structure , and back, is executed by user interaction and the optimization algorithm described above. This workflow relies on human inspection of structure similarity through manipulation of the matrix view and observation of the corresponding output in the small multiples of time series. The steps are described as follows: </p><p>Create groups in output: For suggesting groups of similar outputs, the system uses clustering of time series by Euclidean distance or correlation (<ref type="figure" coords="6,348.24,423.37,22.60,10.80">Fig. 7a</ref>). While other metrics are available for clustering time series, for this case scientists were only interested in these two. Accordingly , the clusters are updated in the output view. Reflect in structure: These clusters are reflected in the model structure side by reordering the matrix based on the groups (<ref type="figure" coords="6,519.57,463.62,23.54,10.80">Fig. 7b</ref>). All the criteria are given equal weights by default, as indicated by the uniform height of the bars. The two views are linked by the color of the groups. Users can also select groups through direct manipulation of the time series in the output view. Optimize weights: Next on observing the system-defined clusters, one can choose to optimize the weights for the criteria on the structure side. As shown in <ref type="figure" coords="6,403.45,533.76,24.37,10.80">Fig. 7c</ref>, the columns are reordered from left to right based on weights. These weights serve as hints to the user for creating groups on the structure side. The groups are not immediately created to prevent change blindness. The system needs the user to intervene to select the criteria, based on which the groups can be created. The underlying optimization algorithm as described earlier creates an approximate grouping based on the input. In many cases, as shown in the figure, the highest weight may not give a perfect grouping. By perfect grouping we mean, the optimization algorithm is able to create the exact same groups as the input from the output side. In most cases, the weights for an exact solution might not even exist. By using the optimization, all we get is a group of structure clusters which are as closely aligned with the output as possible. Create groups in structure: Based on the suggested weights, a user can select the two highest weights and create groups, as shown in <ref type="figure" coords="6,315.42,693.95,25.53,10.80">Fig. 7d</ref> . There are four possible combinations of these two criteria (with 0's and 1's) and all of them are shown in their own group. In many cases all possible combinations might not exist. Reflect/Split in output:The creation of the groups are also reflected on the output side by indicating the group membership of each model <ref type="figure" coords="7,46.20,311.71,19.77,10.80">Fig. 7</ref>: Workflow for reconciling output with structure through feedback: This iterative workflow relies on weighted optimization based on Equations 1 and 2, and human initiated parameter tuning and selection for reconciling model structure similarity with model output similarity and vice versa. by color-coding or by creation of small multiples (<ref type="figure" coords="7,228.32,343.29,22.90,10.80">Fig. 7e</ref>), the output groups created are not perfect, as they do not exactly match with the output groups in the previous step. From this however, the scientists can judge the effect of the two criteria on model output. For example, if for the selected criteria, the presence or absence does not have an impact on the output, that will be reflected in the time series, by their spread or lack of any significant correlation. For inspecting if combining other criteria can give a more perfect grouping on the structure side, that matches with the output, scientists need to continue the iteration and repeat the previous steps. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6">CASE STUDY</head><p>We collaborated with 3 climate scientists from the Oak Ridge National Laboratory and from the USDA Forest Service, as part of the Multi- Scale Synthesis and Terrestrial Model Inter-comparison Project (MsT- MIP). Each of them have at least ten years of experience in climate modeling and model inter-comparison. MsTMIP is a formal multiscale synthesis, with prescribed environmental and meteorological drivers shared among model teams, and simulations standardized to facilitate comparison with other model results and observations through an integrated evaluation framework <ref type="bibr" coords="7,178.53,544.52,13.74,10.80" target="#b15">[16]</ref>. One key goal of MsTMIP is to understand the sources and sinks of the greenhouse gas carbon dioxide, the evolution of those fluxes with time, and their interaction with climate change. To accomplish these goals, inter-annual and seasonal variability of models need to be examined using multiple timeseries . Early results from MsTMIP have shown that variation in model outputs could be traced to the same in model structure. Using visual reconciliation, climate scientists wanted to further understand whether similarity or differences in model structure play a role in the interannual variability of Gross Primary Productivity (GPP) for different regions. Inclusion of particular combinations of simulated processes may exaggerate GPP or its timing more than any component in isolation . Inclusion of a patently incorrect model structure could dramatically sour model output by itself. We provided our collaborators with an executable, which they used for a month and reported back to us on their findings, as reported below. Then we conducted face-to-face interviews about the usage of the technique and got positive feedback on how the technique is a first step towards solving the problem of reconciling model structure with output. We describe two cases where our collaborators could find relationships between model structure and model output using a prototype implementation of the visual reconciliation technique . The model structure data is segmented into four classes: energy , carbon, vegetation, and respiration. In this case the scientists wanted to understand the relationship between criteria belonging to energy and vegetation, and their GPP variability in Polar and North American Temperate regions. Each of the model structure datasets consist of about 15 models and about 20 to 30 criteria. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6.1">Reconciling seasonal cycle similarity with structural similarity</head><p>The seasonal cycle of a climate model is given by the trajectory of the time series and the peaks and crests for the different months in a year. Exploring the impact of seasonal cycles for different models with respect to GPP is an important goal in climate science, since the amount and timing of energy fixation provides a baseline for almost all other ecosystem functions. Models must accurately capture this behavior for all regions and conditions before other, more subtle ecosystem processes, can be accurately modeled. The motivation for this scenario was to find if there is any dependency between regional seasonal cycles of models and included model structures with respect to the overarching energy criteria. The scientists started their analysis in the Polar region by selecting the M9 and M10 models which appeared to be similar with respect to both their GPP values and the timing of their seasonal cycles, as shown in <ref type="figure" coords="7,343.41,594.30,23.55,10.80" target="#fig_3">Fig. 8a</ref>. Their intent was to observe which energy parameter causes M9 and M10 to behave similarly in one group, and the rest in another. They optimized the matrix view to find the most important criterion, which was found to be Stomatal conductance. After this step they chose to select this criterion to split the models into two groups, shown in <ref type="figure" coords="7,371.75,644.11,25.19,10.80" target="#fig_3">Fig. 8b</ref>and reflected in <ref type="figure" coords="7,455.81,644.11,23.36,10.80" target="#fig_3">Fig. 8c</ref> . The underlying optimization algorithm thus gave a perfect grouping, with the models that implement Stomatal conductance in the orange group, while the rest are in another group. The climate scientists were already able to infer that Stomatal conductance has strong impact on the seasonal cycles of M9 and M10. Next the scientists selected the M6 and M7 models in the North American Temperate (NAT) region, which appear to be similar with respect to their seasonal cycle and GPP output (<ref type="figure" coords="7,528.72,724.21,23.40,10.80" target="#fig_3">Fig. 8d</ref>). This grouping is already intuitive and inspires confidence, because of its consistency with the known genealogical relationship of these two models as siblings. With the same goal as the previous case, they optimized the matrix view, and found that Prognostic change was the most important structural criterion to approximately create the two groups. This structural criterion provided a near-perfect segmentation , except for the M1 model, which also implements this parameter , as shown in <ref type="figure" coords="8,120.88,402.94,25.03,10.80" target="#fig_3">Fig. 8e</ref> . In an attempt to get the exact segmentation , they selected the next two most important criteria, which are prescribed leaf index and RTS2-stream. M6 and M7 implement both of these criteria and are in one output group, while the other green output group is split into three sub-groups based on their implementation of these three criteria. The implementation of these three criteria thus has a significant effect on the grouping of these two models with respect to their GPP. The scientists could continue in this way to find more inferences from the implementation or nonimplementation of these three structural criteria, by further observing their output in small multiples, as shown in <ref type="figure" coords="8,214.64,502.56,23.51,10.80" target="#fig_3">Fig. 8f</ref>. This shows that the blue group, none of which implement Prognostic change, but all of which implemented the other two, show a greater spread of GPP output values than any other group. In this way, the scientists could reconcile the impact of different energy criteria on the seasonal cycle and regional variability of GPP. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6.2">Iterative exploration of structure-output dependency</head><p>In this case, the scientists started by looking at the model structure data for discovering structure criteria that could explain model groups having high and low GPP values across both Polar and NAT regions. A simple sequential search for criteria is inefficient for reconciliation. To start their analysis, as shown in <ref type="figure" coords="8,167.95,624.59,23.75,10.80">Fig. 9a</ref>, the matrix view is first sorted from left to right by the columns having high numbers of implementations . The sorting enabled the scientists to group using a criterion that would cause balanced clusters, i.e., divide the models into equal groups. In this view, these criteria would lie in the center, having orange or deep yellow color. In course of this exploration, they found that the canopy/stomatal conductance whole canopy structural criterion splits the group into nearly equal halves. These clusters are represented in the output by green, i.e., not implementing that criterion, and orange, i.e., implementing that criterion. Further , looking at the output, as shown in <ref type="figure" coords="8,199.11,724.21,24.50,10.80">Fig. 9b</ref>, scientists found that the orange group has higher GPP values and the green group has lower values. In other words, the models that have implemented stomatal conductance have higher GPP values than the ones that have not implemented this criterion. This grouping is consistent for the North American Temperate region, with the exception of the M1 model, as shown in <ref type="figure" coords="8,422.59,382.98,23.58,10.80">Fig. 9c</ref>. Next, the scientists wanted to verify whether by performing optimization , they can get the same criterion to be the most important for the behavior of GPP within the Polar region, which represents a different, extreme combination of ecological conditions. They selected the green group, as shown in <ref type="figure" coords="8,495.92,433.20,26.79,10.80">Fig. 9d</ref>, and then chose to optimize the matrix view. They found the same criterion (canopy/stomatal conductance whole canopy) to have the highest weight, reinforcing the reconciling power of this same group of model structures for explaining differences in GPP across two extreme eco-regions. Thus, the criterion that they discovered interactively could be verified algorithmically. Note that, as shown in <ref type="figure" coords="8,538.46,492.97,23.60,10.80">Fig. 9d</ref>, only one of the models is classified in a different group than the userselected group. For the NAT region, the scientists wanted to drill-down to determine what was causing M1 to behave differently, as was found during the initial exploration. They defined two groups, with one of them only having M1 as shown in <ref type="figure" coords="8,485.91,553.14,26.52,10.80">Fig. 9g</ref>. Once they chose to optimize the matrix, they found that no single criterion could produce the same output groups. However, by combining the two most important criteria, which are vegetation heat and canopy-stomatal sunlit shaded (<ref type="figure" coords="8,497.72,592.99,25.80,10.80">Fig. 9h</ref>), M1 was put in a separate group by itself. It was the only model that implemented both of these criteria. Additionally, the scientists also saw that the models in the green group, which did not implement any of these criteria, had a larger range of GPP variability than the other model groups (<ref type="figure" coords="8,463.56,642.79,24.87,10.80">Fig. 9i</ref>). They concluded that,by allowing both more-and less-productive sunlit and shaded canopy leaves, respectively, models which implement these differential processes seem to stabilize the production of GPP, even across extremely different eco-regions, possibly accurately reflecting the actual effect of these processes in nature. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="7">CONCLUSION AND FUTURE WORK</head><p>We have presented a novel visual reconciliation technique, using which climate scientists can understand the relationships between <ref type="figure" coords="9,46.20,407.02,20.35,10.80">Fig. 9</ref>: Iterative exploration of structure-output dependency using a combination of the two workflows for reconciliation. (a) Initial user creation of groups; (b,c) Corresponding groups in regions; (d,e,f) workflow for verifying user-defined groups; (g,h,i) workflow for finding the criteria that can potentially cause M1 to be an outlier, and then looking at range of variability in small multiple outputs. model structure similarity and model output similarity. Impact: By exploiting visual linking and user-steered optimization, we are able to communicate to the scientists, the effects of different groups of criteria on the variability of model output. Using this technique , scientists could form and explore hypotheses about reconciling the two different similarity spaces, which was not possible before, yet which is crucial for refining climate models; which is reflected in the following comment by one of our collaborators: " Due to imperfect knowledge, understanding, and modeling, correlations in the climate modeling domain may be weakly exhibited at best. This inherent weakness poses the greatest challenge to recognition and reconciliation of such correlations; yet, it is only through the reconciliation of such correlations upon which progress in improving climate models rests. " Regarding the effectiveness of the reconciliation technique, another collaborator observed that: " One of the most valuable functions of the technique is to effectively remove from consideration the complications created from model structures, that have little to no effect on outputs, and to effortlessly show and rank the differential effects on output created by seemingly related or unrelated model structures. " Challenges: There are several challenges that need to be addressed. First, we are using about 15 models and not more than 30 criteria. To make the reconciliation workflow more scalable, we plan to work on making the matrix and the small multiples more optimized with respect to the similarity metrics. For extending the matrix to a more general case with continuous data, we will use clustering algorithms and row reordering operations <ref type="bibr" coords="9,156.48,691.28,9.71,10.80" target="#b5">[6,</ref><ref type="bibr" coords="9,168.42,691.28,11.95,10.80" target="#b39"> 41] </ref>for visual display of the groups. For handling the scalability issue, we also want to focus on dynamic filtering strategies for letting users focus on a subset of groups or parameters and drive the optimization process with more flexibility. Second , we currently use a simple time model. The success of our approach will lead us to extend this framework to more complex models of time, where more sophisticated brushing and querying <ref type="bibr" coords="9,520.98,451.37,14.94,10.80" target="#b12">[13] </ref>needs to be applied. Finally, we are handling only two types of descriptors. Increasing diversity of descriptor data will pose challenges for a high granularity visual representation, and also for reducing the visual complexity in how the views interact. We plan to address these challenges in future research with data from various application domains. Generalization: As observed before, the visual reconciliation technique is not restricted to the climate science domain. As a next step, we will apply this technique in the healthcare domain, where the goal is to reconcile patient similarity with drug similarity for personalized medicine development <ref type="bibr" coords="9,394.42,551.39,13.74,10.80" target="#b40">[42]</ref>. Another potential application is in the product design domain. For example in the automotive market, car models can be qualified by multitude of features. It will be of interest to automotive companies to reconcile similarity of car models based on their descriptors, with the similarity based on transaction data. In short, we posit that visual reconciliation can potentially serve as an important analytics paradigm for making sense of the ever-growing variety of available data and their diverse similarity criteria. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="8">ACKNOWLEDGEMENT</head><p>This work was supported by: the DataONE project (NSF Grant number OCI-0830944), NSF CNS-1229185, NASA ROSES 10- BIOCLIM10-0067, and DOE Office of Science Biological and Environmental Research (BER). The data was acquired through the MAST-DC (NASA Grant NNH10AN68I) and MsTMIP (NASA Grant NNH10AN68I) projects funded by NASA's Terrestrial Ecology Program . We extend our gratitude to members of the Scientific Exploration , Visualization, and Analysis working group (EVA) for their feedback and support. </p></div><figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_0" coords="2,52.80,139.32,250.39,11.67;2,52.80,149.60,250.38,10.80;2,52.80,159.56,250.38,10.80;2,52.80,169.53,250.38,10.80;2,52.80,179.49,169.85,10.80"><head>Fig. 2: </head><figDesc>Fig. 2: Conceptual model of visual reconciliation between binary model structure data and time-varying model output data. Iterative creation of groups and derivations of relationship between output similarity and importance of the different model structure criteria. Blue and orange indicate different groups of models. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_1" coords="5,46.20,221.45,513.00,11.67;5,46.20,231.73,308.30,10.80"><head>Fig. 4: </head><figDesc>Fig. 4: Workflow for reconciling model structure with model output: This linear workflow relies on matrix manipulation techniques and visual inspection of similarity patterns in the matrix view and the small multiple view. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_3" coords="8,52.80,308.44,513.00,11.67;8,52.80,318.72,513.00,10.80;8,52.80,328.68,370.86,10.80"><head>Fig. 8: </head><figDesc>Fig. 8: Reconciling seasonal cycle with model structure similarity using the workflow described in Section 5.1. (a) Initial user selection in Polar region output. (b) Weighted optimization, (c) Corresponding output; (d) Initial user selection in North American Temperate region, (e) Creating groups based on the first three criteria after optimization. (f) Small multiple groups of models. </figDesc></figure>
+		</body>
+		<back>
+			<div type="references">
+
+				<listBibl>
+
+<biblStruct coords="10,71.05,64.79,232.12,9.60;10,71.05,74.26,232.12,9.60;10,71.05,83.72,71.06,9.60"  xml:id="b0">
+	<analytic>
+		<title level="a" type="main">Tools for visual comparison of spatial development scenarios</title>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Andrienko</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Andrienko</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Gatalsky</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Information Visualization</title>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2003" />
+			<biblScope unit="page" from="237" to="244" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,71.05,93.19,232.12,9.60;10,71.05,102.65,174.69,9.60"  xml:id="b1">
+	<monogr>
+		<title level="m" type="main">Semiology of Graphics: Diagrams, Networks, Maps. Central Asia book series</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Bertin</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="1983" />
+			<publisher>University of Wisconsin Press</publisher>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,71.05,112.12,232.12,9.60;10,71.05,121.58,232.12,9.60;10,71.05,131.05,232.12,9.52;10,71.05,140.51,120.02,9.60"  xml:id="b2">
+	<analytic>
+		<title level="a" type="main">Surveying the complementary role of automatic data analysis and visualization in knowledge discovery</title>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<surname>Bertini</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Lalanne</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the ACM SIGKDD Workshop on Visual Analytics and Knowledge Discovery</title>
+		<meeting>the ACM SIGKDD Workshop on Visual Analytics and Knowledge Discovery</meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="2009" />
+			<biblScope unit="page" from="12" to="20" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,71.05,149.98,232.12,9.60;10,71.05,159.44,61.98,9.60"  xml:id="b3">
+	<analytic>
+		<title level="a" type="main">Multi-view clustering</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Bickel</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Scheffer</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">ICDM</title>
+		<imprint>
+			<date type="published" when="2004" />
+			<biblScope unit="page" from="19" to="26" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,71.05,168.90,232.12,9.60;10,71.05,178.37,232.12,9.60;10,71.05,187.83,142.51,9.60"  xml:id="b4">
+	<analytic>
+		<title level="a" type="main">Dis-function: Learning distance functions interactively</title>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<forename type="middle">T</forename>
+				<surname>Brown</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Liu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<forename type="middle">E</forename>
+				<surname>Brodley</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Chang</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">IEEE Conference on Visual Analytics Science and Technology</title>
+		<imprint>
+			<date type="published" when="2012" />
+			<biblScope unit="page" from="83" to="92" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,71.05,197.29,232.12,9.60;10,71.05,206.76,232.12,9.60;10,71.05,216.22,187.87,9.60"  xml:id="b5">
+	<analytic>
+		<title level="a" type="main">Matrix visualization and information mining</title>
+		<author>
+			<persName>
+				<forename type="first">C.-H</forename>
+				<surname>Chen</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H.-G</forename>
+				<surname>Hwu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">W.-J</forename>
+				<surname>Jang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C.-H</forename>
+				<surname>Kao</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Y.-J</forename>
+				<surname>Tien</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Tzeng</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H.-M</forename>
+				<surname>Wu</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings in Computational Statistics</title>
+		<meeting>in Computational Statistics</meeting>
+		<imprint>
+			<publisher>Springer</publisher>
+			<date type="published" when="2004" />
+			<biblScope unit="page" from="85" to="100" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,71.05,225.69,232.12,9.60;10,71.05,235.15,232.12,9.60;10,71.05,244.62,149.53,9.60"  xml:id="b6">
+	<analytic>
+		<title level="a" type="main">Combining multiple classifications of chemical structures using consensus clustering</title>
+		<author>
+			<persName>
+				<forename type="first">C.-W</forename>
+				<surname>Chu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">D</forename>
+				<surname>Holliday</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Willett</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Bioorganic &amp; medicinal chemistry</title>
+		<imprint>
+			<biblScope unit="volume">20</biblScope>
+			<biblScope unit="issue">18</biblScope>
+			<biblScope unit="page" from="5366" to="5371" />
+			<date type="published" when="2012" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,71.05,254.08,232.12,9.60;10,71.05,263.55,232.12,9.60;10,71.05,273.01,232.12,9.52;10,71.05,282.48,91.78,9.60"  xml:id="b7">
+	<analytic>
+		<title level="a" type="main">Interpretation and trust: Designing model-driven visualizations for text analysis</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Chuang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Ramage</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Manning</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Heer</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the SIGCHI Conference on Human Factors in Computing Systems</title>
+		<meeting>the SIGCHI Conference on Human Factors in Computing Systems</meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="2012" />
+			<biblScope unit="page" from="443" to="452" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,71.05,291.94,232.12,9.60;10,71.05,301.41,232.12,9.60;10,71.05,310.87,80.93,9.60"  xml:id="b8">
+	<analytic>
+		<title level="a" type="main">Heterogeneous data integration with the consensus clustering formalism</title>
+		<author>
+			<persName>
+				<forename type="first">V</forename>
+				<surname>Filkov</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Skiena</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Data Integration in the Life Sciences</title>
+		<imprint>
+			<publisher>Springer</publisher>
+			<date type="published" when="2004" />
+			<biblScope unit="page" from="110" to="123" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,71.05,320.34,232.12,9.60;10,71.05,329.80,232.12,9.60;10,71.05,339.27,81.25,9.60"  xml:id="b9">
+	<analytic>
+		<title level="a" type="main">Explainers: Expert explorations with crafted projections</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Gleicher</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Visualization and Computer Graphics</title>
+		<imprint>
+			<biblScope unit="volume">19</biblScope>
+			<biblScope unit="issue">12</biblScope>
+			<biblScope unit="page" from="2042" to="2051" />
+			<date type="published" when="2013" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,71.05,348.73,232.12,9.60;10,71.05,358.19,232.12,9.60;10,71.05,367.65,114.76,9.60"  xml:id="b10">
+	<analytic>
+		<title level="a" type="main">Visual comparison for information visualization</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Gleicher</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Albers</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Walker</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">I</forename>
+				<surname>Jusufi</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<forename type="middle">D</forename>
+				<surname>Hansen</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">C</forename>
+				<surname>Roberts</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Information Visualization</title>
+		<imprint>
+			<biblScope unit="volume">10</biblScope>
+			<biblScope unit="issue">4</biblScope>
+			<biblScope unit="page" from="289" to="309" />
+			<date type="published" when="2011" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,71.05,377.12,232.12,9.60;10,71.05,386.58,232.12,9.60;10,71.05,396.05,232.12,9.60;10,71.05,405.51,17.93,9.60"  xml:id="b11">
+	<monogr>
+		<title level="m" type="main">Weighted metric multidimensional scaling In New Developments in Classification and Data Analysis, Studies in Classification, Data Analysis, and Knowledge Organization</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Greenacre</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2005" />
+			<publisher>Springer</publisher>
+			<biblScope unit="page" from="141" to="149" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,71.05,414.98,232.12,9.60;10,71.05,424.44,232.12,9.60;10,71.05,433.91,98.82,9.60"  xml:id="b12">
+	<analytic>
+		<title level="a" type="main">Dynamic query tools for time series data sets: timebox widgets for interactive exploration</title>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Hochheiser</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Shneiderman</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Information Visualization</title>
+		<imprint>
+			<biblScope unit="volume">3</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="1" to="18" />
+			<date type="published" when="2004" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,71.05,443.37,232.12,9.60;10,71.05,452.84,232.12,9.60;10,71.05,462.30,162.60,9.60"  xml:id="b13">
+	<analytic>
+		<title level="a" type="main">Semantics of directly manipulating spatializations</title>
+		<author>
+			<persName>
+				<forename type="first">X</forename>
+				<surname>Hu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<surname>Bradel</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Maiti</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<surname>House</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>North</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Visualization and Computer Graphics</title>
+		<imprint>
+			<biblScope unit="volume">19</biblScope>
+			<biblScope unit="issue">12</biblScope>
+			<biblScope unit="page" from="2052" to="2059" />
+			<date type="published" when="2013" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,71.05,471.77,232.12,9.60;10,71.05,481.23,232.12,9.60;10,71.05,490.70,176.99,9.60"  xml:id="b14">
+	<analytic>
+		<title level="a" type="main">Semantics of directly manipulating spatializations</title>
+		<author>
+			<persName>
+				<forename type="first">X</forename>
+				<surname>Hu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<surname>Bradel</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Maiti</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<surname>House</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>North</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Leman</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Visualization and Computer Graphics</title>
+		<imprint>
+			<biblScope unit="volume">19</biblScope>
+			<biblScope unit="issue">12</biblScope>
+			<biblScope unit="page" from="2052" to="2059" />
+			<date type="published" when="2013" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,71.05,500.16,232.12,9.60;10,71.05,509.63,232.12,9.60;10,71.05,519.09,232.12,9.60;10,71.05,528.56,232.12,9.60;10,71.05,538.02,17.93,9.60"  xml:id="b15">
+	<analytic>
+		<title level="a" type="main">The north american carbon program multi-scale synthesis and terrestrial model intercomparison project -part 1: Overview and experimental design</title>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<forename type="middle">N</forename>
+				<surname>Huntzinger</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Schwalm</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<forename type="middle">M</forename>
+				<surname>Michalak</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Schaefer</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Geoscientific Model Development Discussions</title>
+		<imprint>
+			<biblScope unit="volume">6</biblScope>
+			<biblScope unit="issue">3</biblScope>
+			<biblScope unit="page" from="3977" to="4008" />
+			<date type="published" when="2013" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,71.05,547.48,232.12,9.60;10,71.05,556.94,232.12,9.60;10,71.05,566.41,232.12,9.60;10,71.05,575.87,77.26,9.60"  xml:id="b16">
+	<analytic>
+		<title level="a" type="main">Hypothesis generation in climate research with interactive visual data exploration</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Kehrer</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<surname>Ladstadter</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Muigg</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Doleisch</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Steiner</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Hauser</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Visualization and Computer Graphics</title>
+		<imprint>
+			<biblScope unit="volume">14</biblScope>
+			<biblScope unit="issue">6</biblScope>
+			<biblScope unit="page" from="1579" to="1586" />
+			<date type="published" when="2008" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,71.05,585.34,232.12,9.60;10,71.05,594.80,232.12,9.60;10,71.05,604.27,91.31,9.60"  xml:id="b17">
+	<analytic>
+		<title level="a" type="main">Visual analytics: how much visualization and how much analytics?</title>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<forename type="middle">A</forename>
+				<surname>Keim</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<surname>Mansmann</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Thomas</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">ACM SIGKDD Explorations Newsletter</title>
+		<imprint>
+			<biblScope unit="volume">11</biblScope>
+			<biblScope unit="issue">2</biblScope>
+			<biblScope unit="page" from="5" to="8" />
+			<date type="published" when="2010" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,71.05,613.73,232.13,9.60;10,71.06,623.20,232.12,9.60;10,71.06,632.66,232.12,9.60;10,71.06,642.13,125.47,9.60"  xml:id="b18">
+	<analytic>
+		<title level="a" type="main">Exploration of climate data using interactive visualization</title>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<surname>Ladstädter</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<forename type="middle">K</forename>
+				<surname>Steiner</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<forename type="middle">C</forename>
+				<surname>Lackner</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Pirscher</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Kirchengast</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Kehrer</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Hauser</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Muigg</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Doleisch</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Journal of Atmospheric and Oceanic Technology</title>
+		<imprint>
+			<biblScope unit="volume">27</biblScope>
+			<biblScope unit="issue">4</biblScope>
+			<biblScope unit="page" from="667" to="679" />
+			<date type="published" when="2010-04" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,71.06,651.59,232.12,9.60;10,71.06,661.06,175.57,9.60"  xml:id="b19">
+	<monogr>
+		<title level="m" type="main">Seriation and matrix reordering methods: An historical overview. Statistical analysis and data mining</title>
+		<author>
+			<persName>
+				<forename type="first">I</forename>
+				<surname>Liiv</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2010" />
+			<biblScope unit="page" from="70" to="91" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,71.06,670.53,232.12,9.60;10,71.06,679.99,88.05,9.60;10,315.43,52.10,250.38,9.60;10,333.69,61.56,225.54,9.60"  xml:id="b20">
+	<analytic>
+		<title level="a" type="main">Climate model genealogy Interactive visual analysis and exploration of injection systems simulations</title>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Masson</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Knutti</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Matkovic</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Jelovic</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Juric</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Z</forename>
+				<surname>Konyha</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Gracanin</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Geophysical Research Letters</title>
+		<imprint>
+			<biblScope unit="volume">38</biblScope>
+			<biblScope unit="issue">8</biblScope>
+			<date type="published" when="2005" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,333.69,71.03,232.12,9.60;10,333.69,80.49,178.81,9.60"  xml:id="b21">
+	<analytic>
+		<title level="a" type="main">Combining multiple clusterings using similarity graph</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Mimaroglu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<surname>Erdil</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Pattern Recognition</title>
+		<imprint>
+			<biblScope unit="volume">44</biblScope>
+			<biblScope unit="issue">3</biblScope>
+			<biblScope unit="page" from="694" to="703" />
+			<date type="published" when="2011" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,333.69,89.96,232.12,9.60;10,333.69,97.70,232.12,9.60;10,333.69,107.16,223.76,9.60"  xml:id="b22">
+	<analytic>
+		<title level="a" type="main">Consensus clustering: a resampling-based method for class discovery and visualization of gene expression microarray data</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Monti</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Tamayo</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Mesirov</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Golub</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Machine learning</title>
+		<imprint>
+			<biblScope unit="volume">52</biblScope>
+			<biblScope unit="issue">12</biblScope>
+			<biblScope unit="page" from="91" to="118" />
+			<date type="published" when="2003" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,333.69,116.63,232.12,9.60;10,333.69,126.09,232.12,9.60;10,333.69,135.56,232.12,9.60;10,333.69,145.02,81.25,9.60"  xml:id="b23">
+	<analytic>
+		<title level="a" type="main">Visual analytics for spatial clustering: Using a heuristic approach for guided exploration</title>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<surname>Packer</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Bak</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Nikkila</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">V</forename>
+				<surname>Polishchuk</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<forename type="middle">J</forename>
+				<surname>Ship</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Visualization and Computer Graphics</title>
+		<imprint>
+			<biblScope unit="volume">19</biblScope>
+			<biblScope unit="issue">12</biblScope>
+			<biblScope unit="page" from="2179" to="2188" />
+			<date type="published" when="2013" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,333.69,154.49,232.12,9.60;10,333.69,163.95,186.01,9.60"  xml:id="b24">
+	<analytic>
+		<title level="a" type="main">Redescription mining: Structure theory and algorithms</title>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<surname>Parida</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Ramakrishnan</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">AAAI</title>
+		<imprint>
+			<date type="published" when="2005" />
+			<biblScope unit="page" from="837" to="844" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,333.69,173.42,232.12,9.60;10,333.69,182.88,232.12,9.60;10,333.69,192.34,138.58,9.60"  xml:id="b25">
+	<analytic>
+		<title level="a" type="main">Characterization and evaluation of similarity measures for pairs of clusterings</title>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Pfitzner</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Leibbrandt</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Powers</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Knowledge and Information Systems</title>
+		<imprint>
+			<biblScope unit="volume">19</biblScope>
+			<biblScope unit="issue">3</biblScope>
+			<biblScope unit="page" from="361" to="394" />
+			<date type="published" when="2009" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,333.69,201.81,232.12,9.60;10,333.69,211.27,232.12,9.60;10,333.69,220.73,232.11,9.60;10,333.69,230.20,66.86,9.60"  xml:id="b26">
+	<analytic>
+		<title level="a" type="main">Similarityexplorer: A visual intercomparison tool for multifaceted climate data</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Poco</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Dasgupta</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Y</forename>
+				<surname>Wei</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Hargrove</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Schwalm</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Cook</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<surname>Bertini</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Silva</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Computer Graphics Forum</title>
+		<imprint>
+			<publisher>In Publication</publisher>
+			<date type="published" when="2014" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,333.69,239.66,232.12,9.60;10,333.69,249.13,232.12,9.60;10,333.69,258.59,232.12,9.60;10,333.69,268.06,218.25,9.60"  xml:id="b27">
+	<analytic>
+		<title level="a" type="main">Turning cartwheels: an alternating algorithm for mining redescriptions</title>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Ramakrishnan</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Kumar</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Mishra</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Potts</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<forename type="middle">F</forename>
+				<surname>Helm</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the tenth ACM SIGKDD international conference on Knowledge discovery and data mining</title>
+		<meeting>the tenth ACM SIGKDD international conference on Knowledge discovery and data mining</meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="2004" />
+			<biblScope unit="page" from="266" to="275" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,333.69,277.52,232.12,9.60;10,333.69,286.99,232.12,9.60;10,333.69,296.45,193.79,9.60"  xml:id="b28">
+	<analytic>
+		<title level="a" type="main">Visually driven analysis of movement data by progressive clustering</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Rinzivillo</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Pedreschi</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Nanni</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<surname>Giannotti</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Andrienko</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Andrienko</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Information Visualization</title>
+		<imprint>
+			<biblScope unit="volume">7</biblScope>
+			<biblScope unit="page" from="3" to="4225" />
+			<date type="published" when="2008" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,333.69,305.92,232.12,9.60;10,333.69,315.38,232.12,9.60;10,333.69,324.85,232.12,9.52;10,333.69,334.31,232.12,9.60;10,333.69,343.78,25.38,9.60"  xml:id="b29">
+	<analytic>
+		<title level="a" type="main">State of the art: Coordinated &amp; multiple views in exploratory visualization</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">C</forename>
+				<surname>Roberts</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the Fifth International Conference on Coordinated and Multiple Views in Exploratory Visualization, CMV &apos;07</title>
+		<meeting>the Fifth International Conference on Coordinated and Multiple Views in Exploratory Visualization, CMV &apos;07<address><addrLine>Washington, DC, USA</addrLine></address></meeting>
+		<imprint>
+			<publisher>IEEE Computer Society</publisher>
+			<date type="published" when="2007" />
+			<biblScope unit="page" from="61" to="71" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,333.69,353.24,232.12,9.60;10,333.69,362.71,232.12,9.60;10,333.69,372.17,165.59,9.60"  xml:id="b30">
+	<analytic>
+		<title level="a" type="main">UV-CDAT: Analyzing climate datasets from a user&apos;s perspective</title>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<surname>Santos</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Poco</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Y</forename>
+				<surname>Wei</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Liu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Cook</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Williams</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Silva</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Computing in Science Engineering</title>
+		<imprint>
+			<biblScope unit="volume">15</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="94" to="103" />
+			<date type="published" when="2013" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,333.69,381.63,232.12,9.60;10,333.69,391.09,232.12,9.60;10,333.69,400.56,126.94,9.60"  xml:id="b31">
+	<analytic>
+		<title level="a" type="main">Visual cluster analysis of trajectory data with interactive kohonen maps</title>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Schreck</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Bernard</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<forename type="middle">Von</forename>
+				<surname>Landesberger</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Kohlhammer</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Information Visualization</title>
+		<imprint>
+			<biblScope unit="volume">8</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="14" to="29" />
+			<date type="published" when="2009" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,333.69,410.02,232.12,9.60;10,333.69,419.49,232.12,9.60;10,333.69,428.95,114.78,9.60"  xml:id="b32">
+	<analytic>
+		<title level="a" type="main">A design space of visualization tasks</title>
+		<author>
+			<persName>
+				<forename type="first">H.-J</forename>
+				<surname>Schulz</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Nocke</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Heitzler</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Schumann</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Visualization and Computer Graphics</title>
+		<imprint>
+			<biblScope unit="volume">19</biblScope>
+			<biblScope unit="issue">12</biblScope>
+			<biblScope unit="page" from="2366" to="2375" />
+			<date type="published" when="2013" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,333.69,438.42,232.12,9.60;10,333.69,447.88,232.12,9.52;10,333.69,457.35,69.95,9.60"  xml:id="b33">
+	<analytic>
+		<title level="a" type="main">Interaction with the reorderable matrix</title>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Siirtola</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Information Visualization Proceedings. 1999 IEEE International Conference on</title>
+		<imprint>
+			<date type="published" when="1999" />
+			<biblScope unit="page" from="272" to="277" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,333.69,466.81,232.12,9.60;10,333.69,476.28,232.12,9.60;10,333.69,485.74,214.80,9.60"  xml:id="b34">
+	<analytic>
+		<title level="a" type="main">Practical application of parallel coordinates for climate model analysis</title>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<forename type="middle">A</forename>
+				<surname>Steed</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Shipman</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Thornton</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Ricciuto</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Erickson</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Branstetter</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Procedia Computer Science</title>
+		<imprint>
+			<biblScope unit="volume">9</biblScope>
+			<biblScope unit="issue">0</biblScope>
+			<biblScope unit="page" from="877" to="886" />
+			<date type="published" when="2012" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,333.69,495.21,209.39,9.60"  xml:id="b35">
+	<monogr>
+		<title/>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Tivellato</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<surname>Joptimizer</surname>
+			</persName>
+		</author>
+		<imprint/>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,333.69,504.68,232.12,9.60;10,333.69,514.14,104.57,9.60"  xml:id="b36">
+	<monogr>
+		<title level="m" type="main">The Visual Display of Quantitative Information</title>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<forename type="middle">R</forename>
+				<surname>Tufte</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="1986" />
+			<publisher>Graphics Press</publisher>
+			<pubPlace>Cheshire, CT, USA</pubPlace>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,333.69,523.61,232.12,9.60;10,333.69,533.07,232.12,9.60;10,333.69,542.53,232.12,9.60;10,333.69,552.00,114.78,9.60"  xml:id="b37">
+	<analytic>
+		<title level="a" type="main">Representative factor generation for the interactive visual analysis of highdimensional data</title>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Turkay</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Lundervold</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<forename type="middle">J</forename>
+				<surname>Lundervold</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Hauser</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Visualization and Computer Graphics</title>
+		<imprint>
+			<biblScope unit="volume">18</biblScope>
+			<biblScope unit="issue">12</biblScope>
+			<biblScope unit="page" from="2621" to="2630" />
+			<date type="published" when="2012" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,333.69,561.46,232.12,9.60;10,333.69,570.92,232.12,9.60;10,333.69,580.39,232.12,9.60;10,333.69,589.85,232.12,9.60;10,333.69,599.32,232.12,9.60;10,333.69,608.78,149.42,9.60"  xml:id="b38">
+	<analytic>
+		<title level="a" type="main">Ultrascale visualization of climate data</title>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<forename type="middle">N</forename>
+				<surname>Williams</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Bremer</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Doutriaux</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Patchett</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Williams</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Shipman</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Miller</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<forename type="middle">R</forename>
+				<surname>Pugmire</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Smith</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<forename type="middle">W</forename>
+				<surname>Steed</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Bethel</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Childs</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Krishnan</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Prabhat</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<forename type="middle">T</forename>
+				<surname>Wehner</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<surname>Silva</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Santos</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Koop</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<surname>Ellqvist</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Computer</title>
+		<editor>J. Poco, B. Geveci, A. Chaudhary, A. Bauer, A. Pletzer , D. Kindig, G. L. Potter, and T. P. Maxwell</editor>
+		<imprint>
+			<biblScope unit="issue">9</biblScope>
+			<biblScope unit="page" from="4668" to="76" />
+			<date type="published" when="2013" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,333.69,618.25,232.12,9.60;10,333.69,627.71,232.12,9.60;10,333.69,637.18,118.22,9.60"  xml:id="b39">
+	<analytic>
+		<title level="a" type="main">Gap: A graphical environment for matrix visualization and cluster analysis</title>
+		<author>
+			<persName>
+				<forename type="first">H.-M</forename>
+				<surname>Wu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Y.-J</forename>
+				<surname>Tien</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Chen</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Computational Statistics &amp; Data Analysis</title>
+		<imprint>
+			<biblScope unit="volume">54</biblScope>
+			<biblScope unit="issue">3</biblScope>
+			<biblScope unit="page" from="767" to="778" />
+			<date type="published" when="2010" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,333.69,646.64,232.12,9.60;10,333.69,656.11,232.12,9.60;10,333.69,665.57,168.82,9.60"  xml:id="b40">
+	<analytic>
+		<title level="a" type="main">Towards personalized medicine: Leveraging patient similarity and drug similarity analytics</title>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Zhang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<surname>Wang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Hu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Sorrentino</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">AMIA Joint Summits on Translational Science</title>
+		<imprint>
+			<date type="published" when="2014" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+				</listBibl>
+			</div>
+		</back>
+	</text>
+</TEI>

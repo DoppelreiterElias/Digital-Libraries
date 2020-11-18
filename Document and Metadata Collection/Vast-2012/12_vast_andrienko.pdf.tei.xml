@@ -1,0 +1,1155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.tei-c.org/ns/1.0 /home/pisenberg/grobid/grobid-home/schemas/xsd/Grobid.xsd"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+	<teiHeader xml:lang="en">
+		<encodingDesc>
+			<appInfo>
+				<application version="0.4.1" ident="GROBID" when="2016-09-09T13:44+0000">
+					<ref target="https://github.com/kermitt2/grobid">GROBID - A machine learning software for extracting information from scholarly documents</ref>
+				</application>
+			</appInfo>
+		</encodingDesc>
+		<fileDesc>
+			<titleStmt>
+				<title level="a" type="main">Visual Analytics Methodology for Eye Movement Studies</title>
+			</titleStmt>
+			<publicationStmt>
+				<publisher/>
+				<availability status="unknown"><licence/></availability>
+			</publicationStmt>
+			<sourceDesc>
+				<biblStruct>
+					<analytic>
+						<author>
+							<persName>
+								<forename type="first">Gennady</forename>
+								<surname>Andrienko</surname>
+							</persName>
+							<affiliation>
+								<orgName type="department">Computer Society</orgName>
+							</affiliation>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Natalia</forename>
+								<surname>Andrienko</surname>
+							</persName>
+							<affiliation>
+								<orgName type="department">Computer Society</orgName>
+							</affiliation>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Michael</forename>
+								<surname>Burch</surname>
+							</persName>
+							<affiliation>
+								<orgName type="department">Computer Society</orgName>
+							</affiliation>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Daniel</forename>
+								<surname>Weiskopf</surname>
+								<roleName>Member, Ieee</roleName>
+							</persName>
+							<affiliation>
+								<orgName type="department">Computer Society</orgName>
+							</affiliation>
+						</author>
+						<title level="a" type="main">Visual Analytics Methodology for Eye Movement Studies</title>
+					</analytic>
+					<monogr>
+						<imprint>
+							<date/>
+						</imprint>
+					</monogr>
+				</biblStruct>
+			</sourceDesc>
+		</fileDesc>
+		<profileDesc>
+			<textClass>
+				<keywords>
+					<term>Index Terms—Visual analytics</term>
+					<term>eye tracking</term>
+					<term>movement data</term>
+					<term>trajectory analysis</term>
+				</keywords>
+			</textClass>
+			<abstract>
+				<p>Fig. 1. Summary maps of eye movements by time clusters. The temporal positions and extents of the clusters are shown on a timeline at the bottom. Abstract—Eye movement analysis is gaining popularity as a tool for evaluation of visual displays and interfaces. However, the existing methods and tools for analyzing eye movements and scanpaths are limited in terms of the tasks they can support and effectiveness for large data and data with high variation. We have performed an extensive empirical evaluation of a broad range of visual analytics methods used in analysis of geographic movement data. The methods have been tested for the applicability to eye tracking data and the capability to extract useful knowledge about users&apos; viewing behaviors. This allowed us to select the suitable methods and match them to possible analysis tasks they can support. The paper describes how the methods work in application to eye tracking data and provides guidelines for method selection depending on the analysis tasks.</p>
+			</abstract>
+		</profileDesc>
+	</teiHeader>
+	<text xml:lang="en">
+		<body>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1">INTRODUCTION</head><p>Eye tracking is the process of measuring and recording gaze positions and eye movements of an individual. This technology is being increasingly used in visualization and human-computer interaction sciences for evaluation of visual displays and user interfaces. Researchers employ eye tracking to understand how their designs are actually used and, possibly, even obtain insights into users' ways of reasoning and problem solving. In evaluating one design, researchers want to check if users' behaviors correspond to the supposed ways of use, see where the users may have difficulties, and understand how the design can be improved. In evaluating two or more alternative designs, researchers want to know not only which design is better in terms of task completion times and error rates but also why it is better: How does the use of this design differ from the use of the others? What is more difficult, confusing, or inconvenient in the other designs? Eye tracking produces large amounts of data that are quite hard to analyze. The standard tools and methods have rather limited capabilities. They do not support studying of the spatio-temporal structure of eye scanpaths, in particular, how the movements change over time while the user carries out a given task. Eye tracking data have the same structure as data about movements of discrete objects in the geographic space, further referred to as geographic movement data. Considerable progress in methodological and technological support for analyzing geographic movement data has been recently made in the areas of data management <ref type="bibr" coords="1,342.81,498.98,13.76,9.96" target="#b16">[18]</ref>, machine learning <ref type="bibr" coords="1,428.57,498.98,13.76,9.96" target="#b15">[17]</ref>, GIScience <ref type="bibr" coords="1,489.02,498.98,15.01,9.96" target="#b19">[21] </ref>and visual analytics <ref type="bibr" coords="1,332.64,508.94,9.52,9.96" target="#b1">[3]</ref>. Some of the methods designed for geographic movement data can also be useful in analyzing eye tracking data; positive examples of such use already exist. However, not all methods may be relevant since the movement properties and the possible questions of interest are not the same for eye movements and for road or sea traffic, human mobility, or animal migration. From the methods developed in different research areas, visual analytics methods are most appropriate for employing in eye tracking analysis. Visual analytics approaches may involve methods developed in statistics, machine learning, and other analytical disciplines, but they are specially designed to be used by human analysts. The main goal is to enable human understanding, and this is what eye tracking analysts need: understanding of eye movements and insight into the underlying cognitive processes. We have performed an extensive empirical study of existing visual analytics methods used for geographical movement data to assess their suitability for eye movement analysis. Most of these methods are described in the literature, but their application to eye tracking data has not been investigated yet. For the study, we used the following methodology. Two groups of researchers, further called 'technology group' and 'evaluation group', had different roles according to their major areas of expertise. The technology group, consisting of two experts in geographic visualization and analysis, <ref type="bibr" coords="1,40.32,643.47,205.09,8.83">IAIS, e-mails: {gennady|natalia}.andrienko@iais.fraunhofer.de. </ref>@BULLET Michael <ref type="bibr" coords="1,68.56,654.27,211.24,8.83;1,40.32,663.99,185.39,8.83;1,31.50,676.95,122.02,8.83">Burch and Daniel Weiskopf are with University Stuttgart, e-mails: {Michael.Burch|Daniel.Weiskopf}@visus.uni-stuttgart.de. Manuscript received 31 March 2012;</ref><ref type="bibr" coords="1,156.14,676.95,81.25,8.83"> accepted 1 August 2012;</ref><ref type="bibr" coords="1,240.05,676.95,43.52,8.83;1,31.50,686.13,56.97,8.83"> posted online 14 October 2012;</ref><ref type="bibr" coords="1,90.37,686.13,82.51,8.83"> mailed on 5 October 2012</ref>applied various methods to data provided by the evaluation group and created illustrated reports about the results. The evaluation group, consisting of four experts in information visualization and evaluation of visual displays and user interfaces, posed their questions about users' viewing behaviors, studied the reports, interpreted the results based on their expertise, and evaluated the utility of the methods. New questions often arose from studying the reports and discussions. The technology group tried to find answers also to these questions by means of the available methods. The groups had one half-day and one full-day face-to-face meetings. In the remaining time frame of about four months they regularly communicated through electronic channels. From about 30 generic methods relevant to movement data <ref type="bibr" coords="2,260.32,169.64,9.52,9.96" target="#b1">[3]</ref>, 23 method realizations were available for the study and have been tested. From these, 6 methods have been found ineffective and the rest judged as useful. Here, we describe by examples the selected methods and the eye movement analysis procedures in which these methods are used. The methods and procedures combine computational techniques for data transformation and analysis, visual displays, and interactive operations. The paper ends with guidelines for method selection depending on the analysis tasks. Hence, our research contribution is the systematic evaluation of movement analysis methods for the applicability to eye tracking data and the development of guidelines for selecting appropriate methods depending on analysis goals. The size of the material we want to convey to the visualization research community does not permit presenting it in the paper in a detailed form. This paper gives brief descriptions of the methods for acquainting the reader with the methodology and showing its potential. For the readers interested in more details and for those who wish to employ the methodology for their own studies, we provide supplementary materials <ref type="bibr" coords="2,113.33,359.66,10.49,9.96" target="#b2">[4] </ref>with the following contents: @BULLET a more detailed description of the methodology of the empirical study and the eye movement data that were used for it; @BULLET enlarged figures from the paper with extended explanations; @BULLET detailed illustrated guidelines for selecting eye tracking analysis methods depending on analysis tasks; @BULLET list of methods that have been judged as insufficiently effective; @BULLET link to the software that was used for the study. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>@BULLET Gennady Andrienko and Natalia Andrienko are with Fraunhofer Institute </head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2">STRUCTURE AND PROPERTIES OF EYE TRACKING DATA</head><p>Eye tracking data consist of records about the positions and times of gaze fixations. Each record includes the following components: user identifier, time, position in the display space (x-and y-coordinates), and fixation duration. The records may also include other attributes, e.g., stimulus identifier when different stimuli are used in the data collection. The temporally ordered sequence of records of one user referring to one stimulus is further called eye trajectory or scanpath, as in the literature on eye tracking. Geographical movement data have the same structure: moving object identifier, time, and position (in geographical space) defined by coordinates; additional attributes may also be present. The structural similarity suggests that both classes of data may be analyzed using the same methods. However, there is a significant difference between eye movements and movements of physical objects governed by inertia: eye movements include instantaneous jumps (saccades) over relatively long distances <ref type="bibr" coords="2,233.20,615.68,13.77,9.96" target="#b12">[14]</ref>. The intermediate points between the start and end positions of a jump are not meaningful; it cannot be assumed that there exists a straight or curved line between two fixation positions such that the eye focus travels along it attending all intermediate points. This prohibits the use of methods involving interpolation between positions, as in creating movement density surfaces <ref type="bibr" coords="2,158.74,675.68,13.78,9.96" target="#b30">[33]</ref>. Hence, not all movement analysis methods are valid for eye trajectories. Another concern is whether the tasks for which a method was developed are relevant to eye movement analysis. For example, the methods intended to analyze collective simultaneous movements of multiple objects can hardly be useful in analyzing eye trajectories since simultaneous eye movements of two or more users viewing the same image are usually not tracked. Even if such data were collected, the eye foci of different users are unlikely to interact in the screen space similarly to interactions of material moving objects. Hence, not all movement analysis methods are meaningful for eye trajectories. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3">TYPES OF EYE MOVEMENT ANALYSIS TASKS</head><p>We use the term 'analytical task' to denote possible interests of eye movement analysts, i.e., the questions they may seek to answer. The possible types of tasks have been in part extracted and generalized from the eye tracking-related literature and in part generated during the study, when the evaluation group posed their questions and the technology group, from their side, applied the methods to the data and looked what could be learned. The possible tasks can be divided into two major categories: tasks focusing on areas of interest (AOIs) and tasks focusing on movements. The first category deals with the distribution of the user's attention over a display. It can be subdivided into several task types according to the following aspects: @BULLET whether the AOIs are predefined (e.g., certain targets the users are supposed to search for) or need to be extracted from the data (e.g., elements/parts of an image attracting more attention); @BULLET whether the evolution of the attention over time is of interest; @BULLET whether the analyst needs general results for the entire set of users or looks for essential differences between individuals or groups (e.g., experts versus novices); @BULLET whether the study is focused on a single display or compares two or more displays. Common for these tasks is that only the fixations are analyzed and not the saccades or transitions between the AOIs. For example, Çöltekin et al. <ref type="bibr" coords="2,344.05,358.64,15.03,9.96" target="#b9">[11] </ref>compare two interfaces by analyzing fixation durations and fixation counts for predefined AOIs. In the second task category, the movements are of primary interest. AOIs are important, but the focus is on transitions between them and their temporal order. Analysts want to discover the users' strategies in visual exploration, search, and performing given tasks. They also want to understand whether and where the users have difficulties. Movement-focused tasks are indispensable in evaluation of information displays and user interfaces. This task category can be subdivided as follows: @BULLET Examine the general characteristics of the movements, e.g., prevalence of long or short movements, presence of sharp turns, path complexity, etc. @BULLET Examine the spatial patterns of the movements, e.g., jumps across large areas or gradual scanning, spatial clustering or dispersion, radial or circular moves, etc. @BULLET Study the relation of the movements to the display content and/or structure, e.g., correspondence to the arrangement of the display elements, movements along available lines or figure boundaries, connections and transitions between the AOIs, etc. @BULLET Understand individual viewing or searching strategies, compare to expected or theoretically optimal strategies. @BULLET Understand general viewing or searching strategies of multiple users, find and interpret different types of activities. @BULLET Find typical paths, e.g., as frequent sequences of attended AOIs. @BULLET Detect and investigate indications of possible users' difficulties: returns to previous points, repeated movements, and cyclic scanning behaviors. Like the AOI-focused tasks, the movement-focused tasks can be additionally classified according to the following aspects: @BULLET whether the evolution of the eye movements over time is of interest; @BULLET whether different users or groups are compared; @BULLET whether different displays are compared. Analysis of eye tracking data usually involves many tasks that may require several analysis methods. The next section briefly reviews the methods that have been previously applied to eye tracking data. It shows that AOI-focused tasks are better supported by the standard methods than movement-focused tasks, which are therefore given more attention in our paper. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4">RELATED WORK</head><p>There are many statistical metrics that can be derived from eye tracking data. Poole and Ball <ref type="bibr" coords="3,141.72,115.64,14.94,9.96" target="#b25">[28] </ref>systemize these metrics and their possible interpretations. For example, high saccade/fixation ratio indicates more processing, large saccade amplitudes indicate more meaningful cues (as attention is drawn from a distance), etc. However, eye movements cannot be fully understood just from those numbers. Visual analysis is essential for further insight. The most popular tool to visually analyze eye tracking data is the attention heatmap <ref type="bibr" coords="3,102.10,185.66,10.50,9.96" target="#b6">[8] </ref>showing the distribution of users' attention over the display space. Heatmaps can be easily generated using standard eye tracking software. They can visualize counts of fixations, counts of different users who fixated on different areas, absolute gaze duration, and relative gaze duration (percentage to the total time spent). Attention heatmaps may be useful for AOI-focused tasks. In comparative studies (different time intervals, different users, or different images) several heatmaps are compared. Eye tracking analysts also try to determine users' search strategies by analyzing series of heatmaps generated for consecutive time intervals <ref type="bibr" coords="3,249.47,275.66,14.28,9.96" target="#b24">[27]</ref><ref type="bibr" coords="3,263.74,275.66,14.28,9.96" target="#b25">[28]</ref>, which show how the users' attention foci change over time. However, the characteristics of the eye movements, the links between the attention foci, and the paths followed during the search remain unclear. Another visualization technique provided by standard software is the gaze plot, which represents fixations by circles with sizes proportional to the fixation durations and connects consecutive fixations by lines. Eye movement analysts usually admit that this method is not suitable for large data due to enormous overplotting <ref type="bibr" coords="3,31.50,375.68,14.53,9.96" target="#b8">[10]</ref>[22]<ref type="bibr" coords="3,60.57,375.68,14.53,9.96" target="#b22">[25]</ref>. A common method suitable for movement-focused tasks is scanpath comparison <ref type="bibr" coords="3,117.78,395.66,15.00,9.96" target="#b13">[15] </ref>based on computing the degree of dissimilarity between two scanpaths. The latter are represented as strings where the symbols designate the AOIs and are arranged in the order of attending the AOIs; then a distance function based on string editing is used <ref type="bibr" coords="3,98.68,435.68,14.32,9.96" target="#b13">[15]</ref><ref type="bibr" coords="3,113.00,435.68,14.32,9.96" target="#b26">[29]</ref>. The function computes the cost of transforming one string into another by means of deletions, insertions, and substitutions. This can be extended to account for the fixation durations and distances between the AOIs <ref type="bibr" coords="3,216.99,465.68,13.76,9.96" target="#b21">[23]</ref>. In analyzing multiple scanpaths, pairwise distances may be averaged <ref type="bibr" coords="3,241.06,475.64,14.99,9.96" target="#b13">[15]</ref><ref type="bibr" coords="3,256.05,475.64,14.99,9.96" target="#b26">[29] </ref>or used to cluster the paths by similarity <ref type="bibr" coords="3,175.76,485.66,13.77,9.96" target="#b8">[10]</ref>. The matrix of pairwise distances can be fed to a projection algorithm, e.g., multidimensional scaling <ref type="bibr" coords="3,59.39,505.64,15.02,9.96" target="#b10">[12] </ref>(MDS), and the projection can be visualized <ref type="bibr" coords="3,238.92,505.64,14.97,9.96" target="#b8">[10]</ref><ref type="bibr" coords="3,253.89,505.64,14.97,9.96" target="#b21">[23] </ref>for finding groups of similar scanpaths. Opach and Nossum <ref type="bibr" coords="3,118.29,525.68,15.03,9.96" target="#b22">[25] </ref>admit that scanpath comparison may be ineffective in case of large variance among eye trajectories. The authors even conclude that the method requires the visual stimuli to be specially designed to minimize the possibilities of different viewing strategies. Thus, this method works well enough in text reading studies <ref type="bibr" coords="3,91.68,575.66,15.00,9.96" target="#b21">[23] </ref>and psychological tests <ref type="bibr" coords="3,202.05,575.66,15.00,9.96" target="#b13">[15] </ref>where the AOIs (words, numbers, letters, etc.) are predefined and supposed to be viewed in a particular order. Çöltekin et al. <ref type="bibr" coords="3,193.10,595.64,15.03,9.96" target="#b8">[10] </ref>represent scanpaths in a generalized way: the possible AOIs are assigned to classes according to their semantics or function; the scanpaths are transformed to sequences of class labels and thereby become more comparable; the analysis is based on these sequences. The scanpath comparison methodology does not provide a way to see the original scanpaths. The analyst has to deal with the strings, which may be not easy to understand, especially when the symbols represent automatically extracted AOIs and therefore lack semantics. Çöltekin and Kraak <ref type="bibr" coords="3,104.73,685.64,15.01,9.96" target="#b20">[22] </ref>suggest that the space-time cube (STC) <ref type="bibr" coords="3,266.61,685.64,15.07,9.96" target="#b17">[19] </ref>can be used to visualize eye trajectories. It is good for detailed exploration of a single trajectory and even for multiple trajectories when there is not much diversity among them <ref type="bibr" coords="3,221.69,715.64,13.75,9.96" target="#b20">[22]</ref>. When the variance among the trajectories is high, STCs may be used for looking at previously identified clusters of similar trajectories or for comparing two selected trajectories. Eye trajectories have also been analyzed using the movement summarization method originally developed for geographic data <ref type="bibr" coords="3,293.94,89.65,14.31,9.96" target="#b14">[16]</ref><ref type="bibr" coords="3,308.25,89.65,14.31,9.96">[24]</ref>. The successful uses of this method and STC show that geographic movement analysis methods can also be useful in eye movement analysis. However, no systematic investigation of the potential of these and other techniques for eye movement studies has been done earlier. Our research is aimed at filling this gap. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5">VISUAL ANALYTICS METHODS AND PROCEDURES</head><p>The movement analysis methods have been tested on a quite challenging eye tracking dataset reflecting the use of node-link tree diagrams. The experiment in which the data were collected is described elsewhere <ref type="bibr" coords="3,372.91,195.68,9.53,9.96" target="#b7">[9]</ref>. 37 participants were given different tree diagrams and asked to find the least common ancestor of three or more marked leaf nodes. The stimuli differed in the complexity of the trees (i.e., number of the nodes, links, and hierarchy levels), number of the marked leaves, and layout. Here, the goal is not to describe the analysis of this particular dataset and report its results but to present the relevant analysis methods and show what kinds of insights can be gained by means of them. Still, it is worth noting that the findings obtained during the current study extend the previous analysis results <ref type="bibr" coords="3,351.05,285.68,10.44,9.96" target="#b7">[9] </ref>while being consistent with them. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.1">List of the Analysis Methods</head><p>The following analysis methods have been judged as useful in eye movement analysis and will be described in the paper: </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.2">Data Transformations</head><p>Various transformations of movement data <ref type="bibr" coords="3,464.35,602.66,10.44,9.96" target="#b1">[3] </ref>may precede the analysis or be involved in it as an integral part. The following transformations are meaningful for eye tracking data. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.2.1">Adjustment of Time References</head><p>Adjustment of time references replaces the original time stamps in the trajectories by new references derived in a certain way from the original ones. There are two classes of time transformations <ref type="bibr" coords="3,531.23,672.68,9.72,9.96" target="#b0">[2]</ref>: projecting onto temporal cycles and aligning the start and/or end times of multiple trajectories. Only the second class is applicable to eye tracking data. Aligning either the start or end times means shifting the timelines of the trajectories to a common origin or a common end without changing the time units and durations of the trajectories. Aligning both the start and end times means that the trajectories are equalized in duration and the time is no more measured in the original absolute time units but in fractions of the trajectory duration. Aligning the start times of eye trajectories is always reasonable. Aligning the end times may be useful when all users are supposed to come at the end to a certain target. Aligning both the start and end times allows the analysts to disregard individual differences in the viewing/searching speed and focus on the strategies used. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.2.2">Spatial Generalization</head><p>Spatial generalization means replacement of the original spatial positions in the trajectories by coarser space units, e.g., points by areas. Multiple trajectories are easier to compare after the transformation when the same set of space units is used for the generalization of each trajectory. The units may be obtained by means of space tessellation. Arbitrary regular grids may distort the spatial patterns and introduce geometric artifacts. Tessellation based on the spatial distribution of characteristic trajectory points may be more appropriate <ref type="bibr" coords="4,87.49,239.66,9.51,9.96" target="#b4">[6]</ref>. Another approach is to use areas (convex hulls or buffer zones) enclosing dense clusters of fixation points, which can be found by means of density-based clustering. Such areas can also be created interactively. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.2.3">Spatio-Temporal Aggregation</head><p>The type of spatial aggregation that is valid for eye movement data is discrete aggregation <ref type="bibr" coords="4,105.46,309.68,10.51,9.96" target="#b4">[6] </ref>using a finite set of places, such as compartments of space tessellation or previously defined AOIs. Trajectories are transformed into sequences consisting of visits of the places and moves (transitions) between them; hence, spatial generalization is involved. Then, for each place, various statistics of the visits are computed: count of visits, count of different visitors (users), total and/or average time spent in the place, etc. For each pair of places, statistics of the moves from the first to the second place are computed such as count of the moves and count of different users. By dividing the first count by the second the average number of moves per user is obtained. Aggregated moves are often called flows and the respective counts of the individual moves or objects (users) that moved are called flow magnitudes. In spatio-temporal aggregation, time is divided into intervals and the statistics are computed by these intervals. As a result, each place receives one or more time series of visit statistics and each connection (i.e., ordered pair of places for which at least one move exists) receives one or more time series of move statistics. Adjustment of the time references in the trajectories may be reasonable to do before performing spatio-temporal aggregation. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.3">Exploring and Comparing Individual Trajectories</head><p>Trajectories can be shown as lines on a map display MT where the visual stimulus serves as a background. Reducing the opacity of the lines decreases display clutter and exposes concentrations of movements (<ref type="figure" coords="4,73.41,561.68,28.39,9.96" target="#fig_1">Fig. 2A</ref>; the data subset represented here will be henceforth used as a running example). This display may be useful for examining one selected trajectory when its shape is relatively simple (<ref type="figure" coords="4,53.98,591.68,26.51,9.96" target="#fig_1">Fig. 2B</ref>) or for comparing two simple trajectories, but the effectiveness quickly decreases as the shape complexity increases (<ref type="figure" coords="4,26.31,611.66,27.36,9.96" target="#fig_1">Fig. 2C</ref>). A space-time cube STC can partly " disentangle " a complex trajectory (<ref type="figure" coords="4,97.04,621.68,24.56,9.96" target="#fig_1">Fig. 2D</ref>), but the spatial positions of the fixation points are not immediately clear and may only be identified using special interaction techniques. Eye movement analysts usually deal with many scanpaths. It is unfeasible to examine each in detail. However, it can be useful to look at selected trajectories, e.g., the fastest or shortest ones. For these purposes, the map and STC displays are appropriate. Exploration and comparison of many trajectories can be done using computational estimation of the degrees of dissimilarity (distances) between them. Before comparing trajectories, it may be useful to apply generalization to remove minor fluctuations. Some of the distance functions developed for comparison of geographic trajectories can also be useful for eye trajectories. Particularly, we suggest the route similarity function <ref type="bibr" coords="4,495.90,527.42,9.52,9.96">[1]</ref>, which repeatedly searches for the next pair of closest points from two trajectories and computes the mean distance between the matching points plus the sum of the deviations of the unmatched points from the matching parts of the trajectories normalized by the lengths of the matching parts. Unlike the commonly used string editing function, the route similarity function does not require encoding of trajectories by sequences of symbols and naturally accounts for the spatial distances between the fixation points. One possible use of the distance function for path similarity analysis PSA is to compute the distances of all trajectories to one selected trajectory (e.g., the fastest one) or a hypothetical optimal trajectory and then analyze how the other trajectories differ from it. Another possibility is to create a matrix of pairwise distances between the trajectories and use it for obtaining a two-dimensional projection of the set of scanpaths by means of MDS or Sammon's mapping <ref type="bibr" coords="4,320.07,687.44,13.76,9.96" target="#b28">[31]</ref>. The projection can expose one or a few outliers, as the point in the lower left corner of the projection plot in <ref type="figure" coords="4,504.69,697.40,26.42,9.96" target="#fig_2">Fig. 3A</ref>, which lies far apart from all others (the point represents the trajectory shown in <ref type="figure" coords="4,321.73,717.44,58.28,9.96" target="#fig_1">Figs. 2C and 2D</ref>). It is reasonable to filter out the outliers and apply the projection to the remaining trajectories. Then, the trajectories are grouped according to their proximity in the projection space. One of the possible ways to do this is by Voronoi tessellation of the projection space (<ref type="figure" coords="5,134.99,69.68,28.04,9.96" target="#fig_2">Fig. 3B</ref>); the seeds may be chosen automatically and/or interactively. The projection is also used to assign different colors to the groups. Then, the groups are chosen for viewing in an STC (<ref type="figure" coords="5,109.10,99.68,26.47,9.96" target="#fig_2">Fig. 3D</ref> ) and on a map. In this way, the intraand inter-group variation is estimated. <ref type="figure" coords="5,43.74,119.66,39.50,9.96" target="#fig_2">Figure 3D</ref>shows a group of three trajectories that is rather compact in the projection space (it is located on the top right in <ref type="figure" coords="5,267.51,129.68,14.29,9.96;5,31.50,139.64,8.00,9.96" target="#fig_2">Fig.  3B</ref>); one trajectory is highlighted in black (the corresponding points are also highlighted in the projection plots). Time adjustment to the common start and end has been applied to the trajectories to facilitate the comparison. The scanpaths are similar in that the eyes first moved from the center to the right, then to the left, then again to the right, and returned to the center. Yet, there is also much diversity, which is even higher in the other groups. The differences between the groups are also high. The projection stress coefficient may also be indicative of the level of variation. In our example, the coefficients are very high (0.346 in projection A and 0.312 in projection B), indicating high variation. The groups can be further explored using other displays. Thus, <ref type="figure" coords="5,31.50,259.64,29.48,9.96" target="#fig_2">Fig. 3C</ref>shows a table lens display of the scanpath lengths and durations; the rows are sorted by increasing duration. The dark row corresponds to the highlighted trajectory. We see that the upper right corner of the projection B (colored in shades of red) includes shorter and faster trajectories than the lower left corner (cyan). The white bar at the bottom of the table represents the aforementioned outlying trajectory. It is much longer and slower than all others. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.4">Investigating Overall Spatial Patterns</head><p>When eye trajectories are highly diverse, the analysis at the level of individual scanpaths may be ineffective for gaining a general understanding of the display use. The movements need to be analyzed at a higher abstraction level using discrete spatial and spatio-temporal aggregation. The space needs to be generalized to a finite set of places, e.g., by means of space tessellation (<ref type="figure" coords="5,253.97,401.66,21.31,9.96" target="#fig_3">Fig. 4</ref>), which is done automatically on the basis of the spatial distribution of the fixation points <ref type="bibr" coords="5,103.33,421.64,9.52,9.96" target="#b4">[6]</ref>. In <ref type="figure" coords="5,130.81,421.64,21.30,9.96" target="#fig_3">Fig. 4</ref>, the fixation points are shown by green hollow circles. The black circles represent the generating seeds for the Voronoi tessellation. The cell sizes, which are regulated by a method parameter, determine to what extent the data will be generalized and aggregated. It is advisable to try several parameter values to obtain a suitable level of abstraction and good conformity to the content of the visual stimulus. <ref type="figure" coords="5,43.74,491.66,30.77,9.96" target="#fig_4">Figure 5</ref>provides an example of a summary map (a combination of flow map FM and attention distribution map AM) resulting from spatial aggregation of multiple scanpaths. As Section 5.2.3 explains, aggregation produces two sets of summary attributes: related to places (i.e., generalized positions) and related to connections between the places. In an AM, one or more place-related attributes are visualized by coloring of the places or by symbols or charts. In <ref type="figure" coords="5,31.50,561.68,19.97,9.96" target="#fig_4">Fig. 5</ref>, the total time spent in each place by all users is represented by the size of the green circle. In an FM, connection-related attributes are visualized using flow symbols connecting the places. The symbols may have the shape of a half of an arrow pointing in the direction of the movement <ref type="bibr" coords="5,139.47,601.64,13.80,9.96" target="#b29">[32]</ref>, to enable representing opposite flows. They vary in widths proportionally to the attribute values <ref type="bibr" coords="5,264.46,611.66,13.77,9.96" target="#b18">[20]</ref>, e.g., to the counts of moves between the places, as in <ref type="figure" coords="5,240.70,621.68,21.37,9.96" target="#fig_4">Fig. 5</ref>. For better legibility, the flows representing fewer than 3 moves have been filtered out. Still, there are many intersections among the flow symbols, which clutter the display. This is a consequence of the discontinuous, inertialess character of eye movements: the flows reflect eye jumps from place to place without attending intermediate places. Unfortunately, clutter reduction by means of edge bundling (e.g., <ref type="bibr" coords="5,56.94,691.64,14.35,9.96" target="#b23">[26]</ref>) would introduce much distortion, which can be misleading. The view can be made clearer by focusing on subsets of flows selected according to the magnitude, length, origin, destination, and/or direction. Flow maps can support many of the movement-focused analysis tasks, including comparative analyses. Given below are examples of observations that can be made. General character of the movement: There are short and long movements; the shorter ones are more frequent. Repeated moves are detected by visualizing the average number of moves per user. Spatial patterns of the movements: The movements are spatially dispersed rather than clustered. There are both jumps across large areas and short moves indicating gradual scanning. Relation of the movements to the display content and/or structure: Many of the moves follow the links of the tree diagram. There are also moves along the diagram perimeter. Generally, the spatial pattern of the movements corresponds to the tree structure. Relation of the movements to particular AOIs: In our example, there are predefined AOIs: the marked leaf nodes, the tree root, and the target node (solution), which was initially unknown to the users and needed to be found. These three classes of AOIs are represented by red, blue, and green dots, respectively. The FM shows that the eyes moved between the marked leaves and the target node following the tree structure. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.5">Exploring Eye Movement Patterns over Time</head><p>Using spatio-temporal aggregation, eye movement summaries for different time intervals can be obtained. This allows analysts to see how the process of viewing or searching proceeded over time and, possibly, discover a common strategy or ascertain the absence of such a strategy. The exploration is best supported by small multiple flow maps MFM, i.e., several juxtaposed flow maps each representing one time interval. This technique is limited in the number of intervals that can be represented on the same display. However, an alternative technique, animated map, does not support comparisons between different time intervals. <ref type="figure" coords="6,35.10,290.30,31.82,9.96" target="#fig_6">Figure 6</ref>shows a temporal sequence of flow maps. Before the aggregation, the trajectories were aligned to the same start and end times. The maps correspond to 10 relative time intervals each representing 10% of the task completion time. For clutter reduction, only the flows representing at least two moves are shown. The maps tell us that in the first 10% of the time the users mostly moved their eyes from the display center towards the periphery and along the perimeter. Peripheral movements also prevailed in interval 2. In the next two intervals, the users explored the subtrees containing the marked leaves (red dots). In intervals 5-7, much movement between the marked nodes and the solution (green dot) occurred. Many movements were related to the two marked nodes in the center of the tree. Being spatially close, these nodes belong to different branches. Evidently, some effort was needed to figure out where each node belongs and to trace the branches to their common origin. In intervals 8-9, the users focused on the side branches, also the ones on the top right having no marked nodes. The users might check if any marked node was there. In the last 10% of the time, most moves were to and from the target node. Note that moves to and from the root (blue dot) occurred only in the first 10% of the time. The MFM by large time intervals give us a rough overview of the task fulfillment process. We see indications of different types of activities that might be performed by the users. Now we want to refine our preliminary findings. The idea is to aggregate the data by small time intervals and then cluster these intervals by similarity of the flows of eye movements. In this way, we expect to see more clearly the activity types and when they occurred. For the clustering of time intervals by similarity of the flows CTF <ref type="bibr" coords="6,45.00,570.32,9.54,9.96" target="#b5">[7]</ref>, the combination of aggregate attribute values (e.g., eye move counts) associated with all connections in each interval is taken as a feature vector of this interval. A clustering algorithm is applied to the feature vectors of all time intervals. When several consecutive intervals have similar feature vectors, the algorithm will unite them into longer intervals. Non-continuous time clusters can also be obtained. This may mean that different activities are not performed in a strict order or in the same order by all users. The time clustering approach is illustrated in <ref type="figure" coords="6,211.00,650.30,21.78,9.96">Fig. 1</ref>. The data were aggregated by intervals of 1% of the task completion time. The k-means clustering algorithm was applied to the resulting vectors of the eye move counts. After summarizing the data by the time clusters <ref type="bibr" coords="6,22.86,690.32,9.54,9.96" target="#b5">[7]</ref>, MFM representing the average counts were created. We tested different values of the parameter k (number of clusters) for obtaining well discriminable and interpretable spatial patterns. <ref type="figure" coords="6,216.88,710.30,30.87,9.96">Figure 1</ref>shows the results for k = 9. Lower values of k merge some of the patterns observable in <ref type="figure" coords="6,79.27,730.28,23.87,9.96">Fig. 1</ref>@BULLET tracing the tree perimeter: 5% (blue); @BULLET exploring subtrees (the movements do not necessarily follow the tree links but rather cross or encircle the subtrees): 8+4+6=18% (light cyan, bright cyan, and bright green); @BULLET tracing tree branches (by following the links): 8+14+31=53% (orange, yellow, and lettuce green); @BULLET checking the candidate solution (by moving from it in different directions): 20% (pink). We can also better recognize the prevailing movement directions. Thus, in tracing the tree perimeter and partly in exploring subtrees (clusters in light and bright cyan) clockwise movements prevail. Branches are mostly traced from lower tree levels upward. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.6">Exploring Patterns of Users' Attention</head><p>Spatial patterns of users' attention can be explored analogously to the flows. Aggregate attributes related to the places (e.g., cells of space division) and time intervals are visualized on small multiple attention distribution maps MAM by area coloring or by diagrams placed in the areas. It is possible to use clustering of time intervals by similarity of the attention distribution CTA: a clustering algorithm is applied to the feature vectors composed of the aggregate attribute values referring to the places and small time intervals. The results are visualized on MAM representing summaries (e.g., attribute means) for the time clusters. When the analyst is interested in users' attention with respect to particular AOIs, the techniques of proximity-based visualization <ref type="bibr" coords="6,520.54,641.78,14.93,9.96" target="#b11">[13] </ref>and event extraction <ref type="bibr" coords="6,361.15,651.80,10.52,9.96" target="#b3">[5] </ref>can be used as exemplified below. In Figs. 6 and 7, we have noticed much scanning related to the two marked leaves in the center of the tree diagram. Examining these nodes and their links was not needed for the task fulfillment. An optimal strategy would be to trace the paths from the leftmost and rightmost marked leaves upward and ignore the marked nodes between them. To investigate how much attention was given to the two taskirrelevant nodes, we use the temporal view of trajectories TVT (<ref type="figure" coords="6,521.72,721.76,13.75,9.96;6,285.30,731.78,8.12,9.96" target="#fig_7">Fig.  7A</ref>). The horizontal dimension represents time. The times in the </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>trajectories </head><p>are aligned to common starts and ends; the units are per mille (i.e., thousandths) of the task completion time. The trajectories are represented by stacked segmented bars; each bar corresponds to one user. The bars are ordered from top to bottom by ascending task completion time. The bar segments are colored according to the distances of the corresponding trajectory points to the selected AOIs (i.e., to the nearest of the two marked leaves in the center). The range of the distances is interactively divided into intervals, which are assigned distinct colors. Note that the intervals in our example are unequal and, hence, the color coding is non-linear. Dark blue segments, which represent distances up to 100 pixels, occur almost in all trajectories, often several times. Hence, almost all users attended the selected AOIs and their vicinity, mostly in the beginning and middle of the task completion time. For a more precise investigation, we apply extraction of events from trajectories TEE as follows. The active legend on the left of the TVT (<ref type="figure" coords="7,56.49,209.66,27.14,9.96" target="#fig_7">Fig. 7A</ref>) enables interactive filtering of trajectory segments TSF. By clicking on the colored rectangles, we filter out the segments where the distances are over 100 pixels. This affects the map of trajectories MT: it shows only the points and segments that satisfy the filter (<ref type="figure" coords="7,94.96,249.68,24.55,9.96" target="#fig_7">Fig. 7B</ref>); this variant of MT is referred to as MTF. By decreasing or increasing the distance threshold value (the interval break 100 in the TVT is moved to the left or to the right), we can regulate the extent of the area around the selected AOIs to be considered as their neighborhood. The segments satisfying the filter can be treated as events <ref type="bibr" coords="7,134.28,299.66,9.54,9.96" target="#b3">[5]</ref>. Statistics of these events can be computed and attached to the trajectories: event count, total duration, start time of the first event, and end time of the last event. The statistics show us that only four users did not attend the neighborhood of the selected AOIs. The scatterplot in <ref type="figure" coords="7,251.73,339.68,30.02,9.96" target="#fig_7">Fig. 7C</ref>exhibits a positive correlation between the event count (vertical axis) and the task completion time (horizontal axis). We iteratively select the trajectories that had no events of coming close to the selected AOIs to check whether the users employed the theoretically optimal strategy. The trajectory highlighted in black in <ref type="figure" coords="7,31.50,399.68,28.39,9.96" target="#fig_7">Fig. 7D</ref>(as well as in <ref type="figure" coords="7,116.07,399.68,21.14,9.96" target="#fig_2">Fig. 3</ref>) is the closest to the optimal path and has the second best task completion time. The highlighted trajectory includes a jump from the vicinity of the rightmost marked leaf to the left side of the tree without attending the marked nodes in between. Later the user moved from the leftmost marked leaf to the target node, from there to the rightmost marked leaf, and then returned to the target. These moves comply with the optimal strategy. Several moves at the beginning can be interpreted as familiarization with the tree: center – root – top right corner – along the perimeter towards the rightmost marked leaf. However, the user did not come directly to this leaf but first made a couple of moves in the vicinity, which may indicate visual search. Similar behavior is observed at the left side of the tree. The attendance of the second and third marked leaves from the left was not needed for task completion. Probably, the two closely located marks were more prominent than the leftmost mark and thus attracted user's spontaneous attention before the relevant leaf could be found. Hence, it is quite probable that this user did try to apply the optimal strategy but had to search for the relevant marked nodes. The other scanpaths do not exhibit the triangular shape of the optimal strategy. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.7">Determining User's Difficulties</head><p>To understand what difficulties the users might encounter while performing the tasks, it is reasonable to compare the scanpaths of unsuccessful users with those of successful users or the scanpaths of slow users with those of fast users. In our dataset, all users successfully completed the tasks, but the completion times greatly vary. We divide the users into four equal-size groups according to the task fulfillment time. The movement and attention patterns of the groups can be explored and compared using multiple flow and attention maps MFM and MAM. These can be complemented by maps of differences FMD and AMD where the connection-and/or place-related values for one of the groups are subtracted from the corresponding values for the other groups. As an example, <ref type="figure" coords="7,259.10,731.66,22.63,9.96">Fig. 8</ref>presents a combined flow and attention map of differences between the user groups 1 (the fastest) and 2 (the second fastest). The flow symbols represent the counts of moves between the places and the circles represent the counts of place visits (i.e., eye fixations in the places). The counts for group 1 were subtracted from the respective counts for group 2. The positive and negative differences are shown by symbols in different (opposite) colors. For the flows, the positive differences are shown in violet and negative ones in green. The widths of the flow symbols are proportional to the absolute values of the differences. The flows where the absolute differences are less than 2 are hidden for better display legibility. For the circles, the positive differences are shown in red and negative in cyan and the sizes are proportional to the absolute values of the differences. The flow symbols in violet and circles in red tell us that the users from group 2 made more eye moves and fixations in the middle part of the tree diagram than the users from group 1. As said earlier, the middle part of the tree is not relevant to fulfilling the users' task. The fastest user group paid less attention to this task-irrelevant part, which can explain their better performance. The flow symbols in green and circles in cyan tell us that the users from group 1 paid more attention to the tree branches on the top right, which do not contain marked leaves and therefore are also not relevant to the task. It is interesting that the flows are directed from the center or root of <ref type="figure" coords="7,293.58,228.94,19.37,8.91">Fig. 8</ref>. The map shows the positive and negative differences between the counts of eye moves (violet and green arrows, respectively) and area visits (red and cyan circles, respectively) for user groups 2 and 1. <ref type="figure" coords="7,293.58,441.16,20.75,8.91">Fig. 9</ref>. Repeated visits of the same places for two equivalent tree diagrams with a traditional top-down layout (A, C) and a radial layout (B, D). A, B: In the temporal views of the eye trajectories, the distances to previous trajectory points are represented by colorcoding . C, D: The maps show only the parts of the trajectories where the distances to previous points are below 25 pixels. the tree to the top right and clockwise from the top right corner along the tree periphery. This may signify a systematic overview of the tree diagram and/or systematic search for the marked leaves. In a similar way, we compare the other two groups to the fastest group. We find that the three slower groups attended almost all places more frequently than the fastest group; the slower the group is, the higher are the place visit counts. The same holds for the move counts, except that the fast group has higher counts of long moves across several tree layers and/or several branches. The longer saccades may mean that the faster users had a better overall view of the tree and could move their attention foci more freely than the slower users, who were more constrained by the tree structure and moved mostly along the links. Judging from the place visit counts, the slower users attended some of the places repeatedly. To see in more detail how often the users returned to previous fixation points, we use the temporal view of trajectories TVT, in which we visualize the distances to the nearest of the previous trajectory points such that the travelled path from these points is not shorter than a chosen threshold (e.g., 100 pixels). <ref type="figure" coords="8,55.25,239.66,40.14,9.96">Figure 9A</ref>shows these distances for the tree diagram considered so far. For comparison, <ref type="figure" coords="8,165.66,249.68,39.39,9.96">Figure 9B</ref>shows the same information for an equivalent tree diagram with radial layout. The bars representing the trajectories are ordered by increasing task completion time. Dark blue encodes distances below 25 pixels. In <ref type="figure" coords="8,22.86,289.64,25.80,9.96">Fig. 9A</ref>, dark blue is rare at the top of the display, but its proportion increases toward the bottom. With the radial layout (<ref type="figure" coords="8,220.25,299.66,24.85,9.96">Fig. 9B</ref>), even the fastest users returned quite often to previous points and the bars become almost completely blue at the bottom of the display. We set the segment filter TSF to the value range 0-25 and look at the filtered segments in the corresponding maps MTF (Figs. 9C and 9D; the lines connect consecutive points satisfying the filter). The concentrations of the points reveal the areas to which the users returned. By matching the tree structures in the two stimuli, we find out that the hierarchy positions of the frequently re-visited nodes are the same in both diagrams except that there were no returns to the root in the traditional diagram and many returns to the root in the radial diagram. The density of the return points and connecting segments is much higher in the radial diagram. The high density of the segments means that not only the same nodes were re-visited, but also the same moves repeatedly made. The repetitions indicate high users' difficulties. Our next question is whether the users repeatedly moved their eyes forth and back between two nodes or made many longer paths passing through the same pair or group of nodes. We apply a computational method for discovery of frequent sequences of area visits FSD. A suitable method is TEIRESIAS <ref type="bibr" coords="8,215.00,509.66,13.78,9.96" target="#b27">[30]</ref>, originally developed for the discovery of frequent subsequences (motifs) in biological sequences. When eye trajectories are generalized by replacing points by areas, they receive additional representations as strings consisting of the area identifiers and suitable for FSD. We demonstrate the use of FSD by example of the data for the radial tree diagram shown in <ref type="figure" coords="8,91.12,569.66,25.84,9.96">Fig. 9D</ref>. Given the minimum motif length of four and minimum support (number of occurrences) of five, the method finds 230 repeated sequences of length 4 to 10, of which 88 do not contain wildcards, 129 include one wildcard, and 13 two wildcards. A wildcard is a special symbol (dot) indicating that any symbol may occur in the corresponding position in the sequence. Twelve most frequent sequences are shown in a fragment of a tabular display in <ref type="figure" coords="8,22.86,639.68,32.53,9.96" target="#fig_8">Fig. 10A</ref>. We see that there were many moves forth and back between areas 01 and 02. To facilitate the interpretation of the sequences with regard to the display content, they are represented as trajectories in the diagram space; the positions in the trajectories are the areas whose identifiers appear in the sequences. All trajectories receive the same start time and equal time intervals between the positions. This approach works well for sequences without wildcards, but it is unclear what spatial position could represent a wildcard. Our current provisional solution is duplicating the previous position. The STC in <ref type="figure" coords="8,349.15,296.05,33.98,9.96" target="#fig_8">Fig. 10B</ref>shows the trajectories representing the sequences without wildcards (the lines connect the centers of the areas). The line thickness is proportional to the frequency (number of occurrences). The trajectories are drawn with 20% opacity; hence, darker shades indicate overlapping of many trajectories. In <ref type="figure" coords="8,501.55,336.01,29.69,9.96" target="#fig_8">Fig. 10C</ref>, all sequences are summarized in a flow map. The width of the flow symbols is proportional to the number of sequences in which the corresponding moves appear. The area identifiers are shown by labels. The move from area 01 to area 02 appears in 126 sequences and the opposite move in 114 sequences. Such a cyclic scanning behavior can indicate search problems due to the lack of user training or bad interface layout <ref type="bibr" coords="8,371.45,406.04,13.77,9.96" target="#b25">[28]</ref>. By taking a closer look at the diagram, we detect an intersection of links, which could cause users' confusion. We have also applied FSD to the equivalent tree diagram with the traditional layout. TEIRESIAS found a quite small number of sequences, of which six were related to the two marked leaves in the diagram center considered earlier (<ref type="figure" coords="8,412.05,466.04,19.50,9.96" target="#fig_7">Fig. 7</ref>). No cycling forth and back between two areas occurred, but there were returns to the area above the two central marked leaves. Evidently, some users had difficulties in determining their positions in the hierarchy. <ref type="figure" coords="8,285.30,532.04,27.83,9.96" target="#tab_1">Table 1</ref>matches the previously described methods with the types of eye movement analysis tasks defined in Section 3 and thus can be used for selecting suitable methods depending on the task (see also <ref type="bibr" coords="8,285.30,562.04,10.50,9.96" target="#b2">[4] </ref>for more details). Brief summaries of the methods along with possible variants of their use are given below as a reminder. MT: map display of trajectories or frequent area sequences represented as trajectories. Visual encoding: user or user group by coloring; sequence frequency by line width. Interaction: zooming and panning; changing the opacity level; highlighting and filtering to select individual trajectories or subsets. Variant: map of trajectory segments satisfying a filter MTF. STC: space-time cube display of trajectories or frequent AOI sequences represented as trajectories. Visual encoding: same as in MT. Interaction: rotation and shifting; changing the opacity level; highlighting and filtering to select trajectories or subsets. PSA: path similarity analysis, consisting of computation of pairwise distances between trajectories, projection, and grouping of trajectories by similarity. Visual encoding: position in the projection space by color. Interaction: semi-automatic tessellation of the projection space; interactive modification of the existing division. The results are viewed using MT and STC. FM: flow map of summarized eye movements. Visual encoding: aggregate attributes (count of moves, count of different users, average number of moves per user) by line thickness or color coding. Interaction: zooming and panning; filtering of flows by attribute values; filtering of trajectories resulting in dynamic re-computing of the aggregate attributes and subsequent map update to reflect the changes. Variants: (a) small multiple flow maps MFM, showing movements in different time intervals or time clusters or movements of different users or user groups; (b) flow maps of differences FMD between time intervals, time clusters, users, or user groups; (c) juxtaposed flow maps JFM showing movements on different displays. AM: summary map of spatial distribution of users' attention; may be combined with FM. Visual encoding: one or more aggregate attributes (count of fixations, count of different users, average number of fixations per user, total fixation time, average fixation time per user) by area shading, proportionally sized symbols, or diagrams; time series of attribute values by diagrams. Interaction: zooming and panning; filtering of areas by attribute values; filtering of trajectories resulting in dynamic re-computing of the aggregate attributes and subsequent map update to reflect the changes. Variants: (a) small multiple attention maps MAM, showing attention distribution in different time intervals or time clusters or for different users or user groups; (b) maps of differences AMD between time intervals, time clusters, users, or user groups; (c) juxtaposed attention maps JAM, showing attention distribution on different displays. CTF: clustering of time intervals by similarity of the spatial patterns of flows and aggregation of the moves between areas by the time clusters. Visual encoding: color assignment to the clusters, which may be done using projection of the cluster centers to a color space. The results are viewed using MFM. CTA: clustering of time intervals by similarity of the spatial patterns of attention distribution and aggregation of the attentionrelated attributes of the areas by the time clusters. Visual encoding: same as CTF. The results are viewed using MAM. TVT: temporal view of trajectories. Visual encoding: attributes of trajectory segments by color coding. The attributes may be computed on demand, e.g., distance to selected AOIs, distance to nearest previous point. Interaction: zooming and panning; changing interval breaks; changing color scale; segment filtering. TSF: filtering of trajectory segments; may be done within TVT. The results are viewed using MTF. TEE: extraction of events from trajectories based on TSF. Event statistics for the trajectories is automatically computed: event count, total duration, start time of the first event, end time of the last event. The resulting events may be represented as points on a map or in STC <ref type="bibr" coords="9,52.94,509.66,9.73,9.96" target="#b3">[5]</ref>; the statistics are visualized and analyzed as trajectory attributes. FSD: discovery of frequent sequences of area visits. The results can be represented as trajectories and viewed using MT and STC. Time adjustment is recommended to use with STC, TVT, TEE, CTF, CTA, and with MFM and MAM showing time intervals or time clusters. Spatial generalization and spatial aggregation are required for CTF, CTA, and all variants of FM and AM. Spatiotemporal aggregation is involved in CTF, CTA, and in MFM and MAM showing time intervals or time clusters. FSD is based on spatial generalization; spatio-temporal aggregation may be applied to the results. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6">GUIDELINES FOR METHOD SELECTION</head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="7">CONCLUSION</head><p>Based on available literature on eye movement analysis, we have studied the methods and tools that are currently used and assessed their capabilities and limitations. We have also learned the types of research questions (tasks) involved in eye movement analysis. We have found that the current repertoire of tools and methods is too limited to fully satisfy the needs of eye movement researchers regarding the variety of possible tasks and effectiveness for large datasets and data with high variation. At the same time, the state-ofthe-art in methods for analyzing movements of discrete objects in geographical space is now quite advanced. However, the applicability and usefulness of these methods for eye movement analysis has not been systematically studied. We have undertaken an empirical evaluation of these methods for the possibilities of employing them to analyze eye movements. We have checked the methods for the applicability with regard to the data structure and properties and investigated their capacity to bring insights to users' viewing or searching behavior. Based on our experiments, we have chosen a subset of potentially useful methods and method combinations and matched them to possible types of tasks in eye movement analysis. The results of our work can be helpful for researchers analyzing eye movements, in particular, for evaluation of visual displays and interfaces. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>ACKNOWLEDGMENTS </head></div><figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_0" coords="3,293.94,340.64,250.32,9.96;3,302.46,350.66,85.47,9.96;3,293.94,360.68,163.03,9.96;3,293.94,370.64,250.26,9.96;3,302.46,380.66,241.70,9.96;3,302.46,390.68,90.26,9.96;3,293.94,400.64,250.23,9.96;3,302.46,410.66,241.71,9.96;3,302.46,420.68,241.67,9.96;3,302.46,430.64,194.65,9.96;3,293.94,440.66,250.19,9.96;3,302.46,450.68,241.70,9.96;3,302.46,460.64,241.71,9.96;3,302.46,470.66,215.05,9.96;3,293.94,480.68,250.29,9.96;3,302.46,490.64,32.01,9.96;3,293.94,500.66,250.28,9.96;3,302.46,510.68,87.27,9.96;3,293.94,520.64,250.16,9.96;3,302.46,530.66,241.79,9.96;3,302.46,540.68,110.05,9.96;3,293.94,550.64,134.79,9.96;3,293.94,560.66,158.07,9.96;3,293.94,570.68,187.99,9.96"><head></head><figDesc>MT: map display of trajectories. Variant: map of trajectory segments satisfying a filter MTF. STC: space-time cube display of trajectories. PSA: path similarity analysis consisting of computation of pairwise distances between trajectories, projection, and grouping of the trajectories by similarity. FM: flow map of summarized eye movements. Variants: (a) small multiple flow maps MFM; (b) flow maps of differences FMD, e.g., between time intervals or user groups; (c) juxtaposed flow maps JFM showing movements on different displays. AM: summary map of spatial distribution of users' attention. Variants: (a) small multiple attention maps MAM; (b) maps of differences AMD, e.g., between time intervals or user groups; (c) juxtaposed attention maps JAM for different visual stimuli. CTF: clustering of time intervals by similarity of the spatial patterns of flows. CTA: clustering of time intervals by similarity of the spatial patterns of attention distribution. TVT: temporal view of trajectories showing attributes of trajectory segments, such as the distance to a selected AOI, the distance to the nearest previous point, etc. TSF: filtering of trajectory segments. TEE: extraction of events from trajectories. FSD: discovery of frequent sequences of area visits. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_1" coords="4,285.30,204.82,250.13,8.91;4,285.30,214.30,250.14,8.91;4,285.30,223.78,81.27,8.91"><head>Fig. 2. </head><figDesc>Fig. 2. A: a map display of multiple trajectories shown with 20% opacity. B,C: map displays of selected trajectories. D: space-time cube with a single trajectory. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_2" coords="4,285.30,441.88,250.17,8.91;4,285.30,451.36,250.22,8.91;4,285.30,460.84,250.11,8.91;4,285.30,470.38,250.11,8.91;4,285.30,479.86,250.05,8.91;4,285.30,489.34,247.59,8.91"><head>Fig. 3. </head><figDesc>Fig. 3. Projection and clustering of eye trajectories by similarity. A: A Sammon's projection of the whole set of trajectories. B: The set is reprojected after removing the outlier. The projection space is divided into Voronoi polygons, which define clusters. C: A " table lens " view of trajectory attributes; the colors represent the cluster membership. D: A selected cluster of trajectories in an STC; one trajectory is highlighted. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_3" coords="5,293.94,206.20,250.09,8.91;5,293.94,215.68,41.33,8.91"><head>Fig. 4. </head><figDesc>Fig. 4. Space tessellation for generalization and aggregation of eye trajectories. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_4" coords="5,293.94,370.48,250.11,8.91;5,293.94,379.96,250.18,8.91;5,293.94,389.44,250.12,8.91;5,293.94,398.98,93.78,8.91"><head>Fig. 5. </head><figDesc>Fig. 5. A summary map of eye movements and attention distribution. The sizes of the circles represent the total time spent in the areas. The widths of the violet arrow symbols are proportional to the counts of eye moves between the areas. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_5" coords="6,35.10,290.30,238.02,9.96;6,22.86,300.32,250.29,9.96;6,22.86,310.28,250.30,9.96;6,22.86,320.30,250.24,9.96;6,22.86,330.32,250.24,9.96;6,22.86,340.28,250.35,9.96;6,22.86,350.30,250.21,9.96;6,22.86,360.32,250.22,9.96;6,22.86,370.28,250.20,9.96;6,22.86,380.30,250.33,9.96;6,22.86,390.32,250.11,9.96;6,22.86,400.28,250.19,9.96;6,22.86,410.30,250.16,9.96;6,22.86,420.32,250.25,9.96;6,22.86,430.28,250.31,9.96;6,22.86,440.30,250.21,9.96;6,22.86,450.32,250.13,9.96;6,22.86,460.28,250.22,9.96;6,22.86,470.30,250.25,9.96;6,22.86,480.32,205.69,9.96;6,35.10,490.28,238.01,9.96;6,22.86,500.30,250.09,9.96;6,22.86,510.32,250.24,9.96;6,22.86,520.28,250.18,9.96;6,22.86,530.30,250.18,9.96;6,22.86,540.32,250.23,9.96;6,22.86,550.28,178.86,9.96;6,35.10,560.30,238.12,9.96;6,22.86,570.32,250.34,9.96;6,22.86,580.28,250.23,9.96;6,22.86,590.30,250.23,9.96;6,22.86,600.32,250.27,9.96;6,22.86,610.28,250.25,9.96;6,22.86,620.30,250.27,9.96;6,22.86,630.32,250.29,9.96;6,22.86,640.28,214.26,9.96;6,35.10,650.30,238.08,9.96;6,22.86,660.32,250.20,9.96;6,22.86,670.28,250.19,9.96;6,22.86,680.30,250.28,9.96;6,22.86,690.32,250.31,9.96;6,22.86,700.28,250.15,9.96;6,22.86,710.30,250.25,9.96;6,22.86,720.32,250.26,9.96;6,22.86,730.28,250.22,9.96;6,285.30,269.78,250.29,9.96;6,285.30,279.80,250.16,9.96;6,285.30,289.76,250.24,9.96;6,285.30,299.78,250.24,9.96;6,285.30,309.80,250.24,9.96;6,285.30,319.76,250.24,9.96;6,285.30,329.78,67.17,9.96;6,297.54,339.80,238.05,9.96;6,285.30,349.76,250.28,9.96;6,285.30,359.78,157.32,9.96;6,285.30,369.26,250.22,11.70;6,294.12,379.76,118.50,9.96;6,285.30,389.24,142.61,11.70;6,285.30,399.26,250.26,11.70;6,294.12,409.76,241.39,9.96;6,294.12,419.78,153.00,9.96;6,285.30,429.26,250.23,11.70;6,294.12,439.76,127.93,9.96;6,285.30,449.24,250.25,11.70;6,294.12,459.79,86.30,9.96;6,285.30,469.76,250.25,9.96;6,285.30,479.78,250.19,9.96;6,285.30,489.80,250.14,9.96;6,285.30,499.76,210.79,9.96"><head></head><figDesc>Figure 6 shows a temporal sequence of flow maps. Before the aggregation, the trajectories were aligned to the same start and end times. The maps correspond to 10 relative time intervals each representing 10% of the task completion time. For clutter reduction, only the flows representing at least two moves are shown. The maps tell us that in the first 10% of the time the users mostly moved their eyes from the display center towards the periphery and along the perimeter. Peripheral movements also prevailed in interval 2. In the next two intervals, the users explored the subtrees containing the marked leaves (red dots). In intervals 5-7, much movement between the marked nodes and the solution (green dot) occurred. Many movements were related to the two marked nodes in the center of the tree. Being spatially close, these nodes belong to different branches. Evidently, some effort was needed to figure out where each node belongs and to trace the branches to their common origin. In intervals 8-9, the users focused on the side branches, also the ones on the top right having no marked nodes. The users might check if any marked node was there. In the last 10% of the time, most moves were to and from the target node. Note that moves to and from the root (blue dot) occurred only in the first 10% of the time. The MFM by large time intervals give us a rough overview of the task fulfillment process. We see indications of different types of activities that might be performed by the users. Now we want to refine our preliminary findings. The idea is to aggregate the data by small time intervals and then cluster these intervals by similarity of the flows of eye movements. In this way, we expect to see more clearly the activity types and when they occurred. For the clustering of time intervals by similarity of the flows CTF [7], the combination of aggregate attribute values (e.g., eye move counts) associated with all connections in each interval is taken as a feature vector of this interval. A clustering algorithm is applied to the feature vectors of all time intervals. When several consecutive intervals have similar feature vectors, the algorithm will unite them into longer intervals. Non-continuous time clusters can also be obtained. This may mean that different activities are not performed in a strict order or in the same order by all users. The time clustering approach is illustrated in Fig. 1. The data were aggregated by intervals of 1% of the task completion time. The k-means clustering algorithm was applied to the resulting vectors of the eye move counts. After summarizing the data by the time clusters [7], MFM representing the average counts were created. We tested different values of the parameter k (number of clusters) for obtaining well discriminable and interpretable spatial patterns. Figure 1 shows the results for k = 9. Lower values of k merge some of the patterns observable in Fig. 1 and higher values reveal unimportant fine differences. The colored caption of each map indicates the time cluster represented by the map (the colors were obtained by projecting the cluster centers onto a 2D color space as illustrated on the right). The horizontal segmented bar below the maps shows the relative temporal positions and extents of the time clusters. The sizes (i.e., total durations) of the time clusters are shown in the table in the lower right corner. Figure 1 demonstrates clearer spatial patterns than Fig. 6. We see the different activities performed by the users and can estimate the relative time spent for each type of activity: @BULLET initial familiarization (finding the root and following the branches descending from it): 4% (violet); @BULLET tracing the tree perimeter: 5% (blue); @BULLET exploring subtrees (the movements do not necessarily follow the tree links but rather cross or encircle the subtrees): 8+4+6=18% (light cyan, bright cyan, and bright green); @BULLET tracing tree branches (by following the links): 8+14+31=53% (orange, yellow, and lettuce green); @BULLET checking the candidate solution (by moving from it in different directions): 20% (pink). We can also better recognize the prevailing movement directions. Thus, in tracing the tree perimeter and partly in exploring subtrees (clusters in light and bright cyan) clockwise movements prevail. Branches are mostly traced from lower tree levels upward. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_6" coords="6,22.86,262.30,250.15,8.91;6,22.86,271.24,181.83,8.91"><head>Fig. 6. </head><figDesc>Fig. 6. Summary maps of eye movements by relative time intervals each representing 10% of the task completion time. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_7" coords="6,285.30,204.22,250.17,8.91;6,285.30,213.70,250.08,8.91;6,285.30,223.24,250.16,8.91;6,285.30,232.72,250.26,8.91;6,285.30,242.20,250.03,8.91;6,285.30,251.74,248.98,8.91"><head>Fig. 7. </head><figDesc>Fig. 7. Analysis of attendance of particular AOIs. A: The trajectories are represented in a temporal view by horizontal segmented bars. The colors encode distances to selected AOIs. B: Only trajectory segments satisfying a filter are visible on a map. C: A scatterplot of the counts of the visits of the selected AOIs against the task completion times. D: The shape of the highlighted trajectory is close to theoretically optimal. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_8" coords="8,285.30,250.06,250.14,8.91;8,285.30,259.06,250.16,8.91;8,285.30,268.06,250.19,8.91;8,285.30,277.00,85.36,8.91"><head>Fig. 10. </head><figDesc>Fig. 10. A: Frequent subsequences discovered by TEIRESIAS are shown in a table view. B: The frequent subsequences are represented as trajectories in a space-time cube. C: A flow map summarizes the frequent subsequences. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_2" validated="true" coords="9,299.04,50.44,244.20,161.69"><figDesc coords="9,320.16,50.44,202.72,8.91">Table 1. Method Selection Depending on Analysis Tasks.</figDesc><table coords="9,299.04,69.68,244.20,142.44">Tasks 
+N of users 
+Methods 
+Overall spatial pattern of movements; 
+relation to display content or structure 
+
+multiple 
+MT 
+FM 
+General character of movements; 
+individual spatial pattern of movements; 
+relation to display content or structure; 
+individual search strategy 
+
+1 – few 
+MT 
+STC 
+FM 
+
+Spatial pattern of attention distribution; 
+relation of attention foci to display 
+content or structure; repeated visits 
+
+1 – 
+multiple 
+AM 
+
+Relation of movements to particular 
+AOIs; 
+returns to previous points; places where 
+users have difficulties </table></figure>
+
+			<note place="foot">ANDRIENKO ET AL: VISUAL ANALYTICS METHODOLOGY FOR EYE MOVEMENT STUDIES</note>
+
+			<note place="foot" n="1"> – multiple TVT TSF MTF TEE Connections between AOIs; presence and frequency of repeated moves 1 – multiple FM Comparison of trajectories few MT,STC multiple PSA Comparison of spatial patterns of movements of different users or user groups few users or few groups MFM FMD Comparison of spatial patterns of attention of different users or user groups few users or few groups MAM AMD Comparison of spatial patterns of movements on different displays 1 – multiple users; few displays JFM Comparison of attention distributions on different displays 1 – multiple users; few displays JAM Evolution of eye movements over time; general search strategy; types of activities and their temporal order 1 – multiple MFM CTF Changes of attention distribution over time 1 – multiple MAM CTA Frequent/typical sequences of attending AOIs; cyclic scanning behaviors multiple FSD</note>
+		</body>
+		<back>
+			<div type="references">
+
+				<listBibl>
+
+<biblStruct coords="10,40.86,50.55,232.22,8.83;10,40.86,60.57,232.35,8.83;10,40.86,70.59,145.02,8.83"  xml:id="b0">
+	<analytic>
+		<title level="a" type="main">Poster: Dynamic time transformation for interpreting clusters of trajectories with space-time cube</title>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Andrienko</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Andrienko</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of IEEE VAST 2010</title>
+		<meeting>IEEE VAST 2010</meeting>
+		<imprint>
+			<date type="published" when="2010-10" />
+			<biblScope unit="page" from="213" to="214" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.86,80.55,232.24,8.83;10,40.86,90.57,232.25,8.83;10,40.86,100.59,232.25,8.83;10,40.86,110.55,83.36,8.83"  xml:id="b1">
+	<analytic>
+		<title level="a" type="main">A conceptual framework and taxonomy of techniques for analyzing movement</title>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Andrienko</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Andrienko</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Bak</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Keim</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Kisilevich</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Wrobel</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Journal of Visual Languages and Computing</title>
+		<imprint>
+			<biblScope unit="volume">22</biblScope>
+			<biblScope unit="issue">3</biblScope>
+			<biblScope unit="page" from="213" to="223" />
+			<date type="published" when="2011-06" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.86,120.57,232.25,8.83;10,40.86,130.59,225.68,8.83"  xml:id="b2">
+	<monogr>
+		<title level="m" type="main">Supplementary materials to this paper</title>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Andrienko</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Andrienko</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Burch</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Weiskopf</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2012" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.86,140.55,232.29,8.83;10,40.86,150.57,232.15,8.83;10,40.86,160.59,190.45,8.83"  xml:id="b3">
+	<analytic>
+		<title level="a" type="main">An event-based conceptual model for context-aware movement analysis</title>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Andrienko</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Andrienko</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Heurich</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">International Journal on Geographical Information Science</title>
+		<imprint>
+			<biblScope unit="volume">25</biblScope>
+			<biblScope unit="issue">9</biblScope>
+			<biblScope unit="page" from="1347" to="1370" />
+			<date type="published" when="2011" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.86,170.55,232.24,8.83;10,40.86,180.57,232.29,8.83;10,40.86,190.59,151.12,8.83"  xml:id="b4">
+	<analytic>
+		<title level="a" type="main">Spatial generalization and aggregation of massive movement data</title>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Andrienko</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Andrienko</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Visualization and Computer Graphics</title>
+		<imprint>
+			<biblScope unit="volume">17</biblScope>
+			<biblScope unit="issue">2</biblScope>
+			<biblScope unit="page" from="205" to="219" />
+			<date type="published" when="2011-02" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.86,200.55,232.18,8.83;10,40.86,210.57,232.21,8.83;10,40.86,220.59,160.36,8.83"  xml:id="b5">
+	<analytic>
+		<title level="a" type="main">Visual analytics for understanding spatial situations from episodic movement data</title>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Andrienko</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Andrienko</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Stange</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Liebig</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Hecker</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Künstliche Intelligenz</title>
+		<imprint>
+			<biblScope unit="volume">26</biblScope>
+			<biblScope unit="issue">3</biblScope>
+			<biblScope unit="page" from="241" to="251" />
+			<date type="published" when="2012" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.86,230.55,232.20,8.83;10,40.86,240.57,232.16,8.83;10,40.86,250.58,102.22,8.83"  xml:id="b6">
+	<analytic>
+		<title level="a" type="main">Informative or misleading? Heatmaps deconstructed Human-Computer Interaction, Part I, HCII</title>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Bojko</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">LNSC</title>
+		<editor>J.A. Jacko</editor>
+		<imprint>
+			<publisher>Springer</publisher>
+			<biblScope unit="volume">5610</biblScope>
+			<biblScope unit="page" from="30" to="39" />
+			<date type="published" when="2009" />
+			<publisher>Springer</publisher>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.86,260.54,232.18,8.83;10,40.86,270.56,232.25,8.83;10,40.86,280.58,232.15,8.83;10,40.86,290.54,129.98,8.83"  xml:id="b7">
+	<analytic>
+		<title level="a" type="main">Evaluation of traditional, orthogonal, and radial tree diagrams by an eye tracking study</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Burch</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Konevtsova</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Heinrich</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Höferlin</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Weiskopf</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Visualization and Computer Graphics</title>
+		<imprint>
+			<biblScope unit="volume">17</biblScope>
+			<biblScope unit="issue">12</biblScope>
+			<biblScope unit="page" from="2440" to="2448" />
+			<date type="published" when="2011-12" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.86,300.56,232.25,8.83;10,40.86,310.58,232.09,8.83;10,40.86,320.54,232.22,8.83;10,40.86,330.56,164.88,8.83"  xml:id="b8">
+	<analytic>
+		<title level="a" type="main">Exploring the efficiency of users&apos; visual analytics strategies based on sequence analysis of eye movement recordings</title>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Çöltekin</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<forename type="middle">I</forename>
+				<surname>Fabrikant</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Lacayo</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">International Journal on Geographical Information Science</title>
+		<imprint>
+			<biblScope unit="volume">24</biblScope>
+			<biblScope unit="issue">10</biblScope>
+			<biblScope unit="page" from="1559" to="1575" />
+			<date type="published" when="2010-10" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.86,340.58,232.28,8.83;10,40.86,350.54,232.20,8.83;10,40.86,360.56,232.20,8.83;10,40.86,370.58,192.90,8.83"  xml:id="b9">
+	<analytic>
+		<title level="a" type="main">Evaluating the effectiveness of interactive map interface designs: A case study integrating usability metrics with eye-movement analysis</title>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Çöltekin</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Heil</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Garlandini</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<forename type="middle">I</forename>
+				<surname>Fabrikant</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Cartography and Geographic Information Science</title>
+		<imprint>
+			<biblScope unit="volume">36</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="5" to="17" />
+			<date type="published" when="2009-01" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.86,380.54,232.18,8.83;10,40.86,390.56,16.05,8.83"  xml:id="b10">
+	<analytic>
+		<title/>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<forename type="middle">F</forename>
+				<surname>Cox</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<forename type="middle">A A</forename>
+				<surname>Cox</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Multidimensional Scaling. Chapman and Hall</title>
+		<imprint>
+			<date type="published" when="2001" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.86,400.58,232.16,8.83;10,40.86,410.54,232.23,8.83;10,40.86,420.56,86.21,8.83"  xml:id="b11">
+	<analytic>
+		<title level="a" type="main">Proximity-based visualization of movement trace data</title>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Crnovrsanin</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Muelder</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Correa</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">K.-L</forename>
+				<surname>Ma</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of IEEE VAST 2009</title>
+		<meeting>IEEE VAST 2009</meeting>
+		<imprint>
+			<date type="published" when="2009-10" />
+			<biblScope unit="page" from="11" to="18" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.86,430.58,232.24,8.83;10,40.86,440.54,232.24,8.83;10,40.86,450.56,232.16,8.83;10,40.86,460.58,64.43,8.83"  xml:id="b12">
+	<analytic>
+		<title level="a" type="main">Revealing the physics of movement: Comparing the similarity of movement characteristics of different types of moving objects</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Dodge</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Weibel</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<surname>Forootan</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Computers, Environment and Urban Systems</title>
+		<imprint>
+			<biblScope unit="volume">33</biblScope>
+			<biblScope unit="issue">6</biblScope>
+			<biblScope unit="page" from="419" to="434" />
+			<date type="published" when="2009-11" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.86,470.54,232.04,8.83;10,40.86,480.56,232.25,8.83;10,40.86,490.58,232.23,8.83;10,40.86,500.54,76.06,8.83"  xml:id="b13">
+	<analytic>
+		<title level="a" type="main">Scanpath comparison revisited</title>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<forename type="middle">T</forename>
+				<surname>Duchowski</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Driver</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Tan</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Robbins</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<forename type="middle">N</forename>
+				<surname>Ramey</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Jolaoso</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the Symposium on Eye Tracking Research &amp; Applications</title>
+		<meeting>the Symposium on Eye Tracking Research &amp; Applications</meeting>
+		<imprint>
+			<date type="published" when="2010-03" />
+			<biblScope unit="page" from="219" to="226" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.86,510.56,232.22,8.83;10,40.86,520.58,232.22,8.83;10,40.86,530.54,232.23,8.83;10,40.86,540.56,153.35,8.83"  xml:id="b14">
+	<analytic>
+		<title level="a" type="main">Novel method to measure inference affordance in static small-multiple map displays representing dynamic processes</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<forename type="middle">I</forename>
+				<surname>Fabrikant</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Rebich-Hespanha</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Andrienko</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Andrienko</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<forename type="middle">R</forename>
+				<surname>Montello</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">The Cartographic Journal</title>
+		<imprint>
+			<biblScope unit="volume">45</biblScope>
+			<biblScope unit="issue">3</biblScope>
+			<biblScope unit="page" from="201" to="215" />
+			<date type="published" when="2008" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.86,550.58,232.18,8.83;10,40.86,560.55,164.68,8.83"  xml:id="b15">
+	<monogr>
+		<title level="m" type="main">Mobility, Data Mining, and Privacy: Geographic Knowledge Discovery</title>
+		<editor>F. Giannotti, D. Pedreschi</editor>
+		<imprint>
+			<date type="published" when="2008" />
+			<publisher>Springer</publisher>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.86,570.57,232.15,8.83;10,40.86,580.59,55.78,8.83"  xml:id="b16">
+	<monogr>
+		<title level="m" type="main">Moving Objects Databases</title>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Gueting</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Schneider</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2005" />
+			<publisher>Morgan Kaufmann</publisher>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.86,590.55,232.22,8.83;10,40.86,600.57,232.19,8.83;10,40.86,610.59,199.05,8.83"  xml:id="b17">
+	<analytic>
+		<title level="a" type="main">The space-time cube revisited from a geovisualization perspective</title>
+		<author>
+			<persName>
+				<forename type="first">M.-J</forename>
+				<surname>Kraak</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 21st International Cartographic Conference</title>
+		<meeting>the 21st International Cartographic Conference<address><addrLine>Durban, South-Africa</addrLine></address></meeting>
+		<imprint>
+			<date type="published" when="2003-08" />
+			<biblScope unit="page" from="1988" to="1995" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.86,620.55,232.22,8.83;10,40.86,630.57,158.83,8.83"  xml:id="b18">
+	<monogr>
+		<title level="m" type="main">Cartography: Visualization of Spatial Data</title>
+		<author>
+			<persName>
+				<forename type="first">M.-J</forename>
+				<surname>Kraak</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<surname>Ormeling</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2003" />
+		</imprint>
+	</monogr>
+	<note>Second. edition. Pearson Education Limited</note>
+</biblStruct>
+
+<biblStruct coords="10,40.86,640.59,232.20,8.83;10,40.86,650.55,232.26,8.83;10,40.86,660.57,51.76,8.83"  xml:id="b19">
+	<analytic>
+		<title level="a" type="main">Progress in movement pattern analysis</title>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Laube</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Behaviour Monitoring and Interpretation – BMI -Smart Environments</title>
+		<imprint>
+			<publisher>IOS Press</publisher>
+			<date type="published" when="2009" />
+			<biblScope unit="page" from="43" to="71" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.86,670.59,232.10,8.83;10,40.86,680.55,232.17,8.83;10,40.86,690.57,78.29,8.83"  xml:id="b20">
+	<analytic>
+		<title level="a" type="main">Visual exploration of eye movement data using the space-time cube</title>
+		<author>
+			<persName>
+				<forename type="first">X</forename>
+				<surname>Li</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Çöltekin</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M.-J</forename>
+				<surname>Kraak</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of GIScience 2010</title>
+		<meeting>GIScience 2010</meeting>
+		<imprint>
+			<publisher>Springer</publisher>
+			<date type="published" when="2010" />
+			<biblScope unit="page" from="295" to="309" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.86,700.59,232.28,8.83;10,40.86,710.55,232.36,8.83;10,40.86,720.57,33.82,8.83;10,285.31,50.55,250.18,8.83;10,303.31,60.57,232.22,8.83;10,303.31,70.58,232.32,8.83;10,303.31,80.54,36.03,8.83"  xml:id="b21">
+	<analytic>
+		<title level="a" type="main">What is the scanpath signature of syntactic reanalysis Analysing the spatial dimension of eye movement data using a visual analytic approach</title>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Der Malsburg</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Vasishth ] K</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Ooms</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Andrienko</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Andrienko</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">V</forename>
+				<surname>De Maeyer</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<surname>Fack</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Journal of Memory and Language Expert Systems with Applications</title>
+		<imprint>
+			<biblScope unit="volume">65</biblScope>
+			<biblScope unit="issue">21</biblScope>
+			<biblScope unit="page" from="109" to="12739" />
+			<date type="published" when="2011-08-24" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.31,90.56,232.31,8.83;10,303.31,100.58,232.18,8.83;10,303.31,110.54,176.78,8.83"  xml:id="b22">
+	<analytic>
+		<title level="a" type="main">Evaluating the usability of cartographic animations with eye-movement analysis</title>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Opach</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Nossum</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 25th International Cartographic Conference</title>
+		<meeting>the 25th International Cartographic Conference<address><addrLine>Paris</addrLine></address></meeting>
+		<imprint>
+			<date type="published" when="2011-07" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.31,120.56,232.27,8.83;10,303.31,130.58,232.22,8.83;10,303.31,140.54,124.01,8.83"  xml:id="b23">
+	<analytic>
+		<title level="a" type="main">Flow map layout</title>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Phan</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<surname>Xiao</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Yeh</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Hanrahan</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Winograd</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the IEEE Symposium on Information Visualization</title>
+		<meeting>the IEEE Symposium on Information Visualization</meeting>
+		<imprint>
+			<date type="published" when="2005-10" />
+			<biblScope unit="page" from="219" to="224" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.31,150.56,232.19,8.83;10,303.31,160.58,232.24,8.83;10,303.31,170.54,232.11,8.83;10,303.31,180.56,141.62,8.83"  xml:id="b24">
+	<analytic>
+		<title level="a" type="main">Comparing the readability of graph layouts using eye tracking and task-oriented analysis</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Pohl</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Schmitt</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Diehl</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of Computational Aesthetics in Graphics, Visualization, and Imaging</title>
+		<editor>O. Deussen, P. Hall</editor>
+		<meeting>Computational Aesthetics in Graphics, Visualization, and Imaging</meeting>
+		<imprint>
+			<date type="published" when="2009" />
+			<biblScope unit="page" from="49" to="56" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.31,190.58,232.26,8.83;10,303.31,200.54,232.20,8.83;10,303.31,210.56,232.25,8.83;10,303.31,220.58,40.70,8.83"  xml:id="b25">
+	<analytic>
+		<title level="a" type="main">Eye tracking in human-computer interaction and usability research: current status and future prospects</title>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Poole</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<forename type="middle">J</forename>
+				<surname>Ball</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Encyclopedia of Human-Computer Interaction</title>
+		<editor>C. Ghaoui</editor>
+		<imprint>
+			<date type="published" when="2006" />
+			<biblScope unit="page" from="211" to="219" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.31,230.54,232.24,8.83;10,303.31,240.56,232.29,8.83;10,303.31,250.58,203.15,8.83"  xml:id="b26">
+	<analytic>
+		<title level="a" type="main">Algorithms for defining visual regions-ofinterest: comparison with eye fixations</title>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<forename type="middle">M</forename>
+				<surname>Privitera</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<forename type="middle">W</forename>
+				<surname>Stark</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Pattern Analysis and Machine Intelligence</title>
+		<imprint>
+			<biblScope unit="volume">22</biblScope>
+			<biblScope unit="issue">9</biblScope>
+			<biblScope unit="page" from="970" to="982" />
+			<date type="published" when="2000-09" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.31,260.54,232.21,8.83;10,303.31,270.56,232.32,8.83;10,303.31,280.58,16.05,8.83"  xml:id="b27">
+	<analytic>
+		<title level="a" type="main">Combinatorial pattern discovery in biological sequences: the TEIRESIAS algorithm</title>
+		<author>
+			<persName>
+				<forename type="first">I</forename>
+				<surname>Rigoutsos</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Floratos</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Bioinformatics</title>
+		<imprint>
+			<biblScope unit="volume">14</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="55" to="67" />
+			<date type="published" when="1998" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.31,290.54,232.18,8.83;10,303.31,300.56,178.21,8.83"  xml:id="b28">
+	<analytic>
+		<title level="a" type="main">A nonlinear mapping for data structure analysis</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">W</forename>
+				<surname>Sammon</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Computers</title>
+		<imprint>
+			<biblScope unit="volume">18</biblScope>
+			<biblScope unit="issue">5</biblScope>
+			<biblScope unit="page" from="401" to="409" />
+			<date type="published" when="1969-03" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.31,310.58,232.24,8.83;10,303.31,320.54,150.05,8.83"  xml:id="b29">
+	<monogr>
+		<title level="m" type="main">Experiments in migration mapping by computer. The American Cartographer</title>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Tobler</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="1987" />
+			<biblScope unit="page" from="155" to="163" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.31,330.56,232.31,8.83;10,303.31,340.58,216.47,8.83"  xml:id="b30">
+	<analytic>
+		<title level="a" type="main">Visualization of vessel movements</title>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Willems</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Van De Wetering</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">J</forename>
+				<surname>Van Wijk</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Computer Graphics Forum</title>
+		<imprint>
+			<biblScope unit="volume">28</biblScope>
+			<biblScope unit="issue">3</biblScope>
+			<biblScope unit="page" from="959" to="966" />
+			<date type="published" when="2009-06" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+				</listBibl>
+			</div>
+		</back>
+	</text>
+</TEI>

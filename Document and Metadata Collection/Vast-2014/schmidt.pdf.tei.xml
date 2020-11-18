@@ -1,0 +1,1381 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.tei-c.org/ns/1.0 /home/pisenberg/grobid/grobid-home/schemas/xsd/Grobid.xsd"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+	<teiHeader xml:lang="en">
+		<encodingDesc>
+			<appInfo>
+				<application version="0.4.1" ident="GROBID" when="2016-09-09T13:52+0000">
+					<ref target="https://github.com/kermitt2/grobid">GROBID - A machine learning software for extracting information from scholarly documents</ref>
+				</application>
+			</appInfo>
+		</encodingDesc>
+		<fileDesc>
+			<titleStmt>
+				<title level="a" type="main">YMCA – Your Mesh Comparison Application</title>
+			</titleStmt>
+			<publicationStmt>
+				<publisher/>
+				<availability status="unknown"><licence/></availability>
+			</publicationStmt>
+			<sourceDesc>
+				<biblStruct>
+					<analytic>
+						<author>
+							<persName>
+								<forename type="first">Johanna</forename>
+								<surname>Schmidt</surname>
+							</persName>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Reinhold</forename>
+								<surname>Preiner</surname>
+							</persName>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Thomas</forename>
+								<surname>Auzinger</surname>
+							</persName>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Michael</forename>
+								<surname>Wimmer</surname>
+							</persName>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">M</forename>
+								<forename type="middle">Eduard</forename>
+								<surname>Gröllergr¨gröller</surname>
+								<roleName>Member, Ieee Cs</roleName>
+							</persName>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Stefan</forename>
+								<surname>Bruckner</surname>
+								<roleName>Member, Ieee Cs</roleName>
+							</persName>
+						</author>
+						<title level="a" type="main">YMCA – Your Mesh Comparison Application</title>
+					</analytic>
+					<monogr>
+						<imprint>
+							<date/>
+						</imprint>
+					</monogr>
+				</biblStruct>
+			</sourceDesc>
+		</fileDesc>
+		<profileDesc>
+			<textClass>
+				<keywords>
+					<term>Index Terms—Visual analysis</term>
+					<term>comparative visualization</term>
+					<term>3D data exploration</term>
+					<term>focus+context</term>
+					<term>mesh comparison</term>
+				</keywords>
+			</textClass>
+			<abstract>
+				<p>d e a Alg. 01 Alg. 02 Alg. 03 Alg. 03 Alg. 01 c Alg. 02 b Fig. 1: Visual analysis for mesh comparison. We propose YMCA, a system that combines explicit encoding, juxtaposition and quantitative measures to allow the user to compare multiple meshes. YMCA conveys an overview of the available data (a, b), points to interesting features in the data (c) and allows for the inspection of local areas of interest (d,e). Abstract—Polygonal meshes can be created in several different ways. In this paper we focus on the reconstruction of meshes from point clouds, which are sets of points in 3D. Several algorithms that tackle this task already exist, but they have different benefits and drawbacks, which leads to a large number of possible reconstruction results (i.e., meshes). The evaluation of those techniques requires extensive comparisons between different meshes which is up to now done by either placing images of rendered meshes side-by-side, or by encoding differences by heat maps. A major drawback of both approaches is that they do not scale well with the number of meshes. This paper introduces a new comparative visual analysis technique for 3D meshes which enables the simultaneous comparison of several meshes and allows for the interactive exploration of their differences. Our approach gives an overview of the differences of the input meshes in a 2D view. By selecting certain areas of interest, the user can switch to a 3D representation and explore the spatial differences in detail. To inspect local variations, we provide a magic lens tool in 3D. The location and size of the lens provide further information on the variations of the reconstructions in the selected area. With our comparative visualization approach, differences between several mesh reconstruction algorithms can be easily localized and inspected.</p>
+			</abstract>
+		</profileDesc>
+	</teiHeader>
+	<text xml:lang="en">
+		<body>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1">INTRODUCTION</head><p> Polygonal meshes are one of the most commonly used surface representations in 3D computer graphics. Their explicit description of the surface location in 3D together with local connectivity information enables memory-efficient storage and provides a convenient data structure for a wide range of applications (e.g., in geometric processing). For many tasks related to mesh creation and/or editing, a multitude of proposed methods exist. Polygonal meshes may serve both as input and output for a majority of such techniques. As a consequence, the characteristics and capabilities of different approaches for a common task have to be evaluated on the basis of their results, which inevitably leads to the need to compare an – often large – number of similar meshes. While formal geometric prop@BULLET Johanna Schmidt, Vienna University of Technology, Austria. E-mail: jschmidt@cg.tuwien.ac.at. @BULLET Reinhold Preiner, Vienna University of Technology, Austria. E-mail: rp@cg.tuwien.ac.at. @BULLET Thomas Auzinger, Vienna University of Technology, Austria. E-mail: auzinger@cg.tuwien.ac.at. @BULLET Michael Wimmer, Vienna University of Technology, Austria. E-mail: wimmer@cg.tuwien.ac.at. @BULLET M. Eduard Gröller, Vienna University of Technology, Vienna, Austria. E-mail: groeller@cg.tuwien.ac.at. @BULLET Stefan Bruckner, University of Bergen, Norway. E-mail: stefan.bruckner@uib.no. erties (e.g., polygon areas) can be evaluated by purely mathematical methods, aesthetic considerations almost always require a human in the loop. The pleasantness of the final form is of major importance for several geometric processing tasks such as mesh resampling, mesh denoising, and mesh reconstruction from point clouds. Especially the last example is currently a hot topic in research <ref type="bibr" coords="1,493.22,492.89,9.52,8.02" target="#b5">[6]</ref>, as the advent of affordable scanners has made the creation of virtual representations of real-world objects a commodity. Beyond computer graphics, other fields that deal with 3D objects, like CAD or biomolecular modeling, would also benefit from new trends for multi-mesh comparison. As an exemplary use case, we further concentrate on mesh reconstruction , which refers to extracting meshes from point clouds as accurately as possible. A wide variety of techniques has already been developed, and these algorithms differ (more or less) subtly in their reconstruction behavior – especially in the presence of noise, outliers or other errors in the input data <ref type="bibr" coords="1,419.19,594.73,9.52,8.02" target="#b6">[7]</ref> . Furthermore, with almost every technique the output depends on several, partly very sensitive, parameters with varying suitability for different kinds of data. All these facts create a large space of possible results when reconstructing a mesh from a point cloud. Especially the evaluation of a new technique currently requires extensive laborious comparisons, not only between samples of the approach in its own parameter space, but also to existing state-ofthe-art methods. Such comparison tasks are additionally complicated by the fact that the desired outcomes can be highly task-dependent and difficult to quantify, which makes visual inspection unavoidable. Comparative visualization refers to the process of visually depicting differences and similarities in two or more datasets <ref type="bibr" coords="1,520.68,706.53,13.74,8.02" target="#b22">[23]</ref>. Within the last years various comparative visualization systems have been developed , which demonstrate that there is a strong demand for the support of comparison tasks in various domains. According to <ref type="bibr" coords="1,527.64,736.42,30.87,8.02">Gleicher </ref><ref type="figure" coords="2,45.00,207.68,20.10,8.02">Fig. 2</ref>: Common mesh comparison approaches. Current tools employ either statistical evaluation (a), juxtaposition (b) or explicit encoding by color (c) to show differences between meshes (Section 2). al. <ref type="bibr" coords="2,55.60,260.42,14.94,8.02" target="#b15">[16] </ref>there are three main approaches to compare data: juxtaposition (i.e., side-by-side comparison), superposition (i.e., blending), and explicit encoding (i.e., difference encoding by some abstract parameter). Up to now, the tool-set for visual comparisons of mesh reconstructions is limited to statistical evaluation (e.g., global error), simple juxtaposition , or explicit encoding by color (<ref type="figure" coords="2,197.17,310.23,28.56,8.02">Figure 2</ref> ). The existing approaches do not scale well with the number of instances, and basically support only pairwise comparisons. Color-coding of differences only partially characterizes the behavior of the underlying algorithm (e.g., whether the data is smoothed). We believe that a combination of explicit encoding, juxtaposition and quantitative measures can support mesh comparison tasks and provide more insight into the underlying data. We propose YMCA, a new comparative visual analysis approach which allows users to compare several meshes against each other. Our application, on the one hand, helps to identify areas in the data where reconstruction algorithms produce different results, and also allows for a detailed exploration of local variations. On the other hand, our system supports users in gaining insight into the characteristics of different mesh reconstruction algorithms . The main features of our approach are: @BULLET Comparison of multiple entities: Our visual analysis methods are designed to overcome the problems of previous approaches that do not scale well with a larger number of meshes. With our approach users are able to get an overview of all studied algorithm results. It is also possible to evaluate the performance of individual algorithms against others. @BULLET Focus+context: As a starting point of the analysis process, we provide an overview of the comparison results. Users can then further concentrate on local variations and explore them in more detail without losing the context information. @BULLET Flexibility: The proposed visual analysis tools can be applied to different mesh comparison tasks, e.g., comparing meshes after mesh simplification, as well as comparing different reconstructed meshes. The approach is neither tied to certain type of mesh (e.g., watertight mesh), nor to a certain mesh comparison metric. </p><p>The paper is organized as follows: Section 2 contains a survey of previous work related to the topics of comparative visualization, mesh reconstruction, and focus+context interaction techniques. Section 3 provides an overview of the tasks and challenges we address. In Section 4, the process of identifying mesh differences is described, and our interactive visualization tools are introduced. Implementation details are discussed in Section 5 and results are presented in Section 6. We also collected feedback which is described in Section 7 to evaluate our approach. In Section 8 we discuss the advantages and limitations of our approach and an outlook on future work is given. The paper is concluded in Section 9. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2">RELATED WORK</head><p> The work presented in this paper is located in the field of comparative visualization. In the last years a great variety of systems and approaches for comparative visualization have already been developed, which are discussed in this section. Since we compare several meshes in 3D, we included a comparison of our approach to existing techniques in the area of mesh comparison. The meshes we use have been reconstructed from point clouds, and here we revert to well-studied findings from the field of surface reconstruction. Our work makes use of several well-known interaction concepts (i.e., focus+context and linking and brushing), which are also discussed in this section. </p><p>Comparative visualization. Some approaches from the field of comparative visualization deal with comparing 2D data (e.g., im- ages <ref type="bibr" coords="2,326.09,192.07,13.44,8.02" target="#b32">[33]</ref>), but there is also a representative group of systems used to compare 3D data. Some of these approaches analyze multiple 3D data structures (e.g., shapes or volumes) by comparing 2D representations of the data <ref type="bibr" coords="2,348.87,221.96,14.19,8.02" target="#b13">[14,</ref><ref type="bibr" coords="2,365.70,221.96,10.65,8.02" target="#b23"> 24]</ref>. Malik et al. <ref type="bibr" coords="2,428.33,221.96,14.94,8.02" target="#b20">[21] </ref>proposed a method to compare different volume datasets by analyzing 2D slices. Other methods concentrate on the comparison of data in 3D, similar to our approach. Masuda et al. <ref type="bibr" coords="2,345.25,251.85,14.94,8.02">[22] </ref>visually analyzed 3D shapes of ancient Chinese bronze mirrors by color-coding their differences. Watashiba et al. <ref type="bibr" coords="2,523.77,261.81,14.94,8.02" target="#b30">[31] </ref>used critical point graphs to depict similarities in volume datasets. Alabi et al. <ref type="bibr" coords="2,318.95,281.74,10.45,8.02" target="#b0">[1] </ref>presented a method for side-by-side comparison of surfaces in 3D. All together, these systems show the demand for tools that explicitly support comparison tasks in 2D as well as in 3D. </p><p>Mesh comparison. Due to the need to evaluate mesh editing tools (e.g., for mesh simplification), many approaches have been developed that support mesh comparison. Various techniques focused on the mathematical background and established metrics which can be used to compare meshes. Aspert et al. <ref type="bibr" coords="2,464.31,356.92,10.45,8.02" target="#b3">[4] </ref>proposed an approach to measure differences between two meshes by using the Hausdorff distance. Roy et al. <ref type="bibr" coords="2,381.85,376.84,14.94,8.02" target="#b25">[26] </ref>introduced a new mesh comparison method using an attribute deviation metric. MeshLab, by Cignoni et al. <ref type="bibr" coords="2,545.31,386.81,9.52,8.02" target="#b8">[9]</ref>, was implemented to combine mesh comparison as well as mesh editing tools. In our work we focus on visual support for mesh comparison , and some interesting approaches have already been developed in this area. Cignoni et al. <ref type="bibr" coords="2,393.46,426.66,14.94,8.02" target="#b10">[11] </ref>presented Metro, a system that allows for pairwise comparison of surfaces. A similar approach was later proposed by Silva et al. <ref type="bibr" coords="2,385.49,446.58,13.74,8.02" target="#b27">[28]</ref>. Their system, which is called PolyMeCo, allowed users to compare meshes against a reference mesh. Existing approaches for mesh comparison use color to encode the differences and present the results by juxtaposition. Therefore, they are limited to a small number of meshes. Apart from zooming, the systems also do not provide means to inspect local areas. In our approach we extend these ideas to provide means to compare multiple meshes, and to inspect local regions in more detail. Surface reconstruction. The acquisition of virtual representations of scanned real-world objects from point clouds is referred to as surface reconstruction. In contrast to point-set surface- representations <ref type="bibr" coords="2,364.15,561.61,9.71,8.02" target="#b1">[2,</ref><ref type="bibr" coords="2,376.12,561.61,6.47,8.02" target="#b2"> 3]</ref>, this paper focuses on mesh reconstruction from point clouds. Meshes are reconstructed according to different formulations of implicit surfaces defined on the input points, ranging from locally fitted tangent planes <ref type="bibr" coords="2,408.46,591.50,13.74,8.02" target="#b17">[18]</ref>, radial basis functions <ref type="bibr" coords="2,506.06,591.50,9.52,8.02" target="#b7">[8]</ref>, to Poisson reconstruction <ref type="bibr" coords="2,361.47,601.46,13.74,8.02" target="#b19">[20]</ref> . All these techniques exhibit their own characteristic reconstruction behavior in terms of robustness and accuracy, and require various parameters which influence the result. Berger et al. <ref type="bibr" coords="2,547.54,621.39,10.45,8.02" target="#b5">[6] </ref>present a benchmark tool for surface reconstruction algorithms, where the user can test different algorithms on different point cloud datasets. When presenting the results, they use juxtaposition where rendered models are placed side by side. This way the complex task of finding relevant differences in the data is shifted to the user. Linking-and-brushing. The concept of linking-and-brushing is well-known in visualization. It refers to the connection of two or more views in a way that a change to the representation in one view affects the representation in the other one as well <ref type="bibr" coords="2,459.35,716.50,13.74,8.02" target="#b29">[30]</ref>. Linking-and-brushing is a very flexible concept that can be applied to many different data representations, like 2D data (e.g., scatter plots <ref type="bibr" coords="2,488.64,736.42,10.08,8.02" target="#b4">[5]</ref>) as well as 3D <ref type="figure" coords="3,54.00,141.38,20.12,8.02">Fig. 3</ref>: Overview of our visual analysis approach. The input data consists of a set of n meshes and one reference mesh. The surface deviations of the meshes are calculated to get the corresponding variance map (Section 4.1). Afterwards high-variance regions are located in the data (Section 4.2). The results are finally presented in an interactive visualization as described in Section 4.3 and Section 4.4. data <ref type="bibr" coords="3,72.09,194.18,13.74,8.02" target="#b14">[15]</ref> . We use linking-and-brushing to keep track of user selections . Elements in our summary representations can be selected, which will mark them as selected also in the detailed view (and vice versa). Focus+context. The strength of focus+context and in-place interaction techniques is that they give an overview of the available data, but also allow us to further inspect details on demand. Several focus+context approaches can be found in the literature <ref type="bibr" coords="3,248.42,260.46,13.74,8.02" target="#b11">[12]</ref>. Similar to linking-and-brushing, focus+context is a very flexible concept which has already been applied in many different visualization approaches (e.g., scatter plots <ref type="bibr" coords="3,123.88,290.34,14.94,8.02" target="#b24">[25] </ref>or sets of images <ref type="bibr" coords="3,210.18,290.34,13.44,8.02" target="#b26">[27]</ref>). To locally explore data in 3D, Zhao et al. <ref type="bibr" coords="3,137.41,300.31,14.94,8.02" target="#b31">[32] </ref>employed focus+context with local shape preservation by using conformal mapping. Cignoni et al. <ref type="bibr" coords="3,265.22,310.27,14.94,8.02" target="#b9">[10] </ref>established a 3D magic lens tool with user-specific content (e.g., different rendering techniques or the result of filtering operations). In our system we use a magic lens tool, which is similar to the two latter approaches . The user can employ this tool to make selections, which will provide more detailed insights into certain data parts. The selection is made on the 3D representation of the data, whereby the context of the selection is always preserved. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>+ </head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3">CHALLENGES OF MULTI-MESH COMPARISON</head><p>The need to compare different meshes can be the result of various geometric operations. As an exemplary use case, we focus on the reconstruction of meshes from point clouds. Several meshes can be constructed from the same point cloud with different algorithms. The algorithms differ in their reconstruction behavior <ref type="bibr" coords="3,228.19,454.43,9.52,8.02" target="#b6">[7]</ref>, which means that the resulting meshes exhibit subtle differences. The analysis of such datasets poses interesting challenges. We therefore introduce Your Mesh Comparison Application (YMCA) of choice, which addresses the challenges of multi-mesh comparison, as discussed below: Notion of quality. When reconstructing a point cloud, the user is interested in surfaces that match the shape of the original specimen as accurately as possible. In practice, users often face a trade-off between the preservation of geometric detail and the robust removal of scanning artifacts like noise or holes. From a statistical point of view, the quality of a reconstruction is defined by the residual distances of each surface point from the reference shape. However, a statistical evaluation alone hardly communicates a full understanding of a technique's strengths and weaknesses on different types of data. For example, it might happen that algorithms with a low overall error rate smooth certain features in the data, which might not be desired by the user. YMCA presents a general error measurement to the user, and also allows to judge the visual quality of the resulting shapes. Giving the user insights into the results and providing him/her the possibility to compare them against each other, also supports understanding the behavior of the different reconstruction algorithms. For example, users will identify undesired characteristics like over-smoothing or sensitivity to noise. YMCA provides means to quickly eliminate algorithms from further comparisons if they do not show a desired behavior, which can help to narrow down the search space quite fast. Complexity and scalability. Current mesh comparison methods provide means to inspect the shape and error of a mesh sample individ- ually <ref type="bibr" coords="3,74.06,736.42,9.52,8.02" target="#b5">[6]</ref>, or allow for mostly pairwise comparisons among the sample set <ref type="bibr" coords="3,328.95,194.18,9.71,8.02" target="#b8">[9,</ref><ref type="bibr" coords="3,341.03,194.18,10.65,8.02" target="#b27"> 28]</ref> . These methods quickly become unsuitable for larger sample sets, e.g., when using multiple samples in the parameter spaces of different reconstruction algorithms. YMCA provides a compact visual overview that presents individual quality information (e.g., reconstruction error) in the appropriate context and that shows the most relevant differences at a glance. It is no longer necessary to scan/rotate/zoom into several 3D meshes one after another, since the mesh elements can now be explored at once. </p><p>Evaluation. For newly developed reconstruction techniques, a common task is their evaluation and classification with respect to existing methods. So far these required a tedious exploration of the high dimensional space spanned by the input data (e.g., shape, or amount of noise) and the algorithm parameters (e.g., kernel functions or bandwidth ). With YMCA it is possible to quickly extract the regions on the mesh where the algorithm of interest shows better/worse results than the other ones it is compared to. YMCA can extract the most problematic regions of the mesh, which are those where the reconstruction results have a high variance. None of the existing methods used for mesh comparison accommodate the above aspects so far (Section 2). YMCA allows for an intuitive , guided and flexible visual analysis of a scalable set of similar meshes to explore the differences among them. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4">YMCA – YOUR MESH COMPARISON APPLICATION</head><p> YMCA combines explicit encoding, juxtaposition, parallel coordinates , and interaction techniques (i.e., linking-and-brushing and focus+context ) to convey an overview of mesh differences, and to allow the user to inspect local areas of interest. As mentioned in Section 3, we focus on triangular mesh data produced by different mesh reconstruction algorithms. The data has been created by the surface reconstruction benchmark tool implemented by Berger et al. <ref type="bibr" coords="3,361.34,514.87,9.52,8.02" target="#b5">[6]</ref>. The meshes are already registered. No pre-processing (e.g., filtering) has been applied to the meshes. In addition, a reference mesh is assumed to be available for every point cloud. See the discussion in Section 8 for our strategy, if such a reference is not available. To provide a condensed representation of all differences in the data, we propose to project the variances of the mesh deviations onto the reference mesh. The calculation of the variances is described in Section 4.1. In addition, we locate problematic regions (i.e., regions of high variance) in the model to provide additional guidance to the user when exploring the data. The detection of such regions is outlined in Section 4.2. The problematic regions are used to build a parallel coordinates plot to visualize the performance of the reconstruction algorithms (Section 4.3). The inspection of local areas provides interesting insights into the behavior of the reconstruction algorithms. The visual analysis tools of YMCA are described in Section 4.4. The whole pipeline of YMCA is outlined in <ref type="figure" coords="3,459.83,664.55,29.02,8.02">Figure 3</ref>. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.1">Calculation of Error Variances</head><p> The visual analysis of variations in multiple meshes requires the computation of mesh differences. For the mesh comparison we use an attribute deviation metric as described by Roy et al. <ref type="bibr" coords="3,509.65,716.50,13.74,8.02" target="#b25">[26]</ref> . This metric compares meshes in a pairwise manner and calculates point-wise deviations from a reference mesh to another mesh. The deviation is <ref type="figure" coords="4,45.00,176.28,19.74,8.02">Fig. 4</ref>: Surface-aware Mean-Shift. Instead of using an isotropic kernel (a), we employ a surface-aware Mean-Shift with an anisotropic kernel (b) around the current mean x i . This prevents the means from moving away from the model surface (x c ). Instead, by considering the normal vector N, the means stay close to the intrinsic surface (x j ). defined as the distance between a vertex of the reference mesh and the nearest point on the surface of the other mesh. Our approach is not tied to a certain type of metric. In this paper we concentrate primarily on the calculation of the regions of high variance (Section 4.2) and the visual analysis of the mesh differences (Section 4.3 and 4.4). The metric to calculate the mesh differences may be exchanged, as it is outlined in Section 8. Given n input meshes M 1 , . . . , M n , the mesh comparison results in a set of n surface deviation values (in the following simply denoted by errors) for every vertex in the reference mesh M ref . We then calculate the per-vertex error variances (based on the n error values) for all vertices in M ref . In YMCA, we call this discrete distribution of variances the variance map. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.2">Automatic High Variance Localization</head><p>To guide the user in the comparative analysis and exploration process, we provide an overview of the surface regions showing the h highest error variances. These are assumed to be the most interesting areas for comparison due to the high disagreement between the reconstruction methods. To this end, we use the variance map computed in the previous section to locate local maxima in the distribution of per-vertex variances on the surface. These maxima are found by employing a weighted Mean-Shift <ref type="bibr" coords="4,122.92,466.31,14.94,8.02" target="#b12">[13] </ref>algorithm in R 3 on the set of mesh vertices, where the per-vertex variances define the weights. This is done once in a pre-processing step, directly after the variance map computation. A set of initially random samples x i , i = 1 . . . N of mesh vertices are iteratively shifted toward modes in the variance distribution using a smooth kernel θ (r) = e −4(r/s) 2 of finite support s. One iteration step is given as </p><formula>x i = ∑ j θ (δ i j )σ 2 j p j ∑ j θ (δ i j )σ 2 j (1) </formula><p>where σ 2 j gives the variance at vertex j, while p j is its location in R 3 and δ i j denotes its distance to the sample x i . However, an isotropic kernel might let samples move away from the intrinsic surface described by the local neighborhood of vertices (<ref type="figure" coords="4,48.77,612.91,32.05,8.02">Figure 4a</ref>). Thus, we need to constrain the sample movements close to the local surface around x i (<ref type="figure" coords="4,153.61,622.87,31.78,8.02">Figure 4b</ref>). We employ a surface-aware distance metric δ i j , which incorporates the surface normal n i into the weighting kernel as given by </p><formula>δ i j = p j − x i + n i , p j − x i . </formula><formula>(2) </formula><p>After the samples converged to different high-variance modes on the surface, similar points are discarded, and the remaining ones sorted by their amplitude. This gives a list of hot-spots that we use in the consecutive visual analysis procedure (Section 4.4). Besides the positions p i of the hot-spots, we are also interested in their extent, which is given by the weighted sample standard deviation σ of variance values at every hot-spot. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.3">Parallel Coordinates Plot</head><p>The list of hot-spots created in the previous section can be used to span a multi-dimensional feature space. The space is defined by the number of hot-spots h and the error values e n for every input mesh at the hot-spot positions. We propose to use the high-dimensional visualization technique of parallel coordinates <ref type="bibr" coords="4,463.72,107.07,14.94,8.02" target="#b18">[19] </ref> to analyze this multidimensional feature space. Every hot-spot defines one axis in the parallel coordinates plot, and the dimensions of the axes are given by the global minimum and maximum error values. The input meshes are represented as lines in the plot (<ref type="figure" coords="4,422.46,146.92,28.10,8.02" target="#fig_2">Figure 5</ref>). The axes in the plot are initially sorted according to the hot-spots' weighted sample standard deviation σ of variance values. The sorting of the axes can be interactively changed by the user. The parallel coordinates plot gives an overview of the error rate of the reconstruction algorithms in regions of high variance. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.4">Visual Analysis</head><p>YMCA provides interactive tools to explore the results of the mesh comparison analysis. The main elements of the user interface are illustrated in <ref type="figure" coords="4,349.96,249.87,29.02,8.02">Figure 1</ref>. </p><p>Overview image. To provide an overview of the differences in the data, we propose a rendering of the reference mesh (<ref type="figure" coords="4,510.09,275.62,31.74,8.02">Figure 1a</ref>). A heat map is projected onto the mesh according to the current variance map. The default heat-map colors range from blue (low variance) to red (high variance). If necessary, the color scale can be changed by the user by selecting different colors for the minimum and maximum variance values. The reference mesh rendering allows the user to inspect differences in the data without having to inspect all individual meshes, because the relevant information is aggregated in one view. An example for an overview image can be seen in <ref type="figure" coords="4,488.76,355.32,29.02,8.02">Figure 6</ref>. Hot-spots and parallel coordinates. In the user interface, the hot-spots are arranged in a parallel coordinates plot as described in Section 4.3. The parallel coordinates plot, where the hot-spots are embedded in, represents the input meshes as lines, indicating their local error value at the hot-spot positions (<ref type="figure" coords="4,456.72,410.97,32.45,8.02">Figure 1b</ref>). To interact with the data, the users can change the ordering of the axes and also eliminate individual hot-spots by mouse interaction. It is also possible to create new hot-spots during the analysis (see below). To give the user an idea about the position and size of the hot-spots, they are represented by thumbnail images of the mesh displayed at the corresponding parallel coordinates axes (<ref type="figure" coords="4,418.55,470.74,32.39,8.02">Figure 1c</ref>). The thumbnail images are created when a hot-spot is created in the system. The reference mesh is used to generate the images, and the viewports are given by the corresponding hot-spots' locations. The images can be activated by mouse interaction in the interface. When clicking on one of them, the  reference mesh with a projected heat map according to the variances in the data is shown (a), as well as some mesh regions in more detail (b). overview is automatically rotated to the location of the hot-spot. The optimal viewing angle is calculated by aligning the viewing direction with the normal vector of the hot-spot and centering it in the viewport. To emphasize the hot-spot locations, we use a focus+context approach in the rendering of the mesh. We employ opaque rendering only to the hot-spot area, while the rest of the mesh is depicted with high translucency (Section 4.5). The user can use the parallel coordinates plot and the hot-spots to quickly depict input meshes containing undesired results and eliminate them from further analysis. </p><formula>e min e max m 1 m n . . . t 1 t h </formula><p>Magic lens. Besides providing an overview of the data, YMCA also supports means to further inspect local variations. We propose a magic lens tool (<ref type="figure" coords="5,114.75,412.46,32.33,8.02">Figure 1d</ref>) which can be used to select a certain region of the mesh. The magic lens is circular, because drawing a circle is a very intuitive way of selecting objects. A colored circle drawn over the mesh indicates the current location of the lens. The size can be dynamically adjusted. Since the circle is transparent, the selected part of the reference mesh is also shown. Analyzing local variations. The current location and size of the magic lens tool is used to present more detailed information about the local behavior of the mesh reconstruction algorithms in a detail view (<ref type="figure" coords="5,78.09,507.28,32.36,8.02">Figure 1e</ref>). To provide quantitative information, a ranking of the mesh algorithms is provided. The reconstruction algorithms are sorted according to their corresponding accumulated error at the current lens position. For every algorithm a rectangle is placed at the corresponding position along an error scale. The scale ranges from the global minimum to the global maximum error. The user can activate rectangles by mouse interaction to reveal the name of the algorithm at this position. In addition to the ranking, further visual information is needed for the analysis of the meshes, for which we added a data summarization view. Here the meshes are classified according to their accumulated error at the current lens position (Section 4.6 for further information). This summary gives an overview of the variance and possible problems at the current lens position. According to feedback from domain experts, besides having an overview, it still is necessary to have access to the individual meshes. Therefore, we allow the user to see close-up views of the reconstructed meshes. If more than one mesh is selected, we place the close-up views side-by-side according to the concept of Small Multiples <ref type="bibr" coords="5,178.48,676.65,13.74,8.02" target="#b28">[29]</ref> . The meshes inside the closeup views are color-coded according to the accumulated error at the current lens position. Here we use a different heat map than the one projected onto the reference mesh to make a clear distinction between the variance and the local error values. All interface items are updated every time the magic lens is moved or resized. An example of how a detail view may look like can be seen in <ref type="figure" coords="5,199.87,736.42,29.02,8.02">Figure 7</ref>. Additional user controls. We provide some additional controls which can be used to adapt the system's interface elements according to individual preferences. As mentioned above, the color scales of the overview image and the close-up views of the reconstructed meshes can be customized by the user. In addition, the upper and lower bound of the color heat map in the overview image can also be adjusted, which allows the user to concentrate on different variance ranges. The render mode can be changed from hot-spot rendering to heat-map rendering at any time. In the detail view, the user can decide whether he/she wants to see the global ranking as well, and whether he/she wants to concentrate on the data summarization, on the individual meshes, or both. Furthermore, it is possible to replace the reference mesh by some other input mesh. Then all differences and variances are re-computed and the data is re-loaded. This option allows the user to compare one mesh against all others in the dataset. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.5">Hot-Spot Rendering</head><p> The hot-spots in YMCA can be dynamically activated in the user interface by selecting a hot-spot thumbnail in the parallel coordinates view (Section 4.3). This automatically rotates the overview to an optimal viewing angle to uncover the region of interest on the reference mesh. However, in many cases the hot-spots are located in concavities of the surface, which are often occluded by other parts of the mesh. Thus, a clear view onto the hot-spot may be prevented, and the user might lose the focus if he/she rotates the model. We therefore use a visualization technique that removes any occlusions of the interesting surface region by increasing the transparency with the distance to the hot-spot. Given a pre-computed hot-spot position p and its extent σ , we employ a smooth transparency kernel K(x) = e −4x−p 4 /σ 4 to put the hot-spot into focus (full opacity) while removing occluding surface parts and at the same time providing background context (high transparency). This is done by ray casting, using two render passes: First, in an accumulation pass, the whole mesh is drawn into a texture using accumulative blending. Every fragment with corresponding surface position x is weighted by the kernel K(x). This way, the resulting texture stores for each pixel the weighted sum of surface colors along the respective ray, as well as the sum of all weights. Then, in the normalization pass, the accumulated values in the texture are normalized by the sum of their weights and drawn onto the screen (<ref type="figure" coords="5,465.43,444.87,28.10,8.02" target="#fig_4">Figure 8</ref>). Fig. 7: Detail view. When using the magic lens tool, the user can hover over the reference mesh and inspect parts of it in more detail. The global error value of the input meshes (a) and the local error at the lens position (b) are displayed at the top. The meshes are classified according to their local error value at the current position of the lens (c). It is also possible to view individual mesh renderings (d). </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.6">Data Summarization in the Detail View</head><p>To deal with scalability, and to provide a condensed overview of the data, we decided to integrate a data summarization into the detail view (<ref type="figure" coords="6,48.77,238.90,32.48,8.02">Figure 7c</ref>). When hovering with the magic lens over the mesh, the user should details about the underlying data, as well as a combined summary. The purpose of the summary is to quickly inform the user about the variability of the data at the current lens position, and indicate whether further inspection would be necessary. We propose to classify the reconstructions according to their accumulated error at the current lens position. The variance at the current lens position indicates the number of classes which are needed. After detailed discussions with our collaborators we came to the conclusion that dividing the data into three classes (best/middle/worst) is a very intuitive way of presenting a summary of the data. Therefore, a maximum of three classes is allowed. We use two fixed thresholds that define the final number of classes. An average image is used as class representative to display the data. <ref type="figure" coords="6,54.96,385.27,31.24,8.02" target="#fig_5">Figure 9</ref>gives an example of how the data summarization could look like. If the variance at the current lens position is low, only one class is created containing all meshes (<ref type="figure" coords="6,191.36,405.20,32.82,8.02" target="#fig_5">Figure 9a</ref>). This shows that all reconstruction algorithms produced the same result at this position. The higher the variance, the more classes are created (<ref type="figure" coords="6,236.22,425.12,31.50,8.02" target="#fig_5">Figure 9b</ref>). Such positions on the mesh, where the reconstruction algorithms produced very different results, might need further inspection by the user. The proposed data summarization provides a good overview of the data, where the user can quickly decide about a further local inspection of the data. In addition to this level of abstraction, the average images representing the classes still reveal the underlying information. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5">IMPLEMENTATION</head><p>The pre-processing step, consisting of comparing the meshes and calculating the variances, was implemented in C++. We used MeshDev <ref type="bibr" coords="6,345.74,86.55,14.94,8.02" target="#b25">[26] </ref> to calculate the differences. The cost of the preprocessing step, consisting of the calculation of the variance map and the location of the hot-spots, depends on the number of meshes in the input data set. No user input is required during the pre-processing step. The interaction itself, which works in real-time, has been implemented in C++ and OpenGL/GLSL. The application was tested on a machine with an Intel i7 CPU, 12 GB of RAM and an NVIDIA GeForce GTX 580 graphics card. A comparison of the computation times and memory requirements during the analysis can be found in <ref type="figure" coords="6,499.13,166.25,25.36,8.02" target="#tab_1">Table 1</ref>. A more detailed description of the datasets can be found in Section 6. <ref type="figure" coords="6,307.62,197.14,25.96,8.02" target="#tab_1">Table 1</ref><ref type="figure" coords="6,365.93,467.71,34.14,8.02" target="#fig_7">Figure 10</ref>shows renderings of the reference meshes of the three datasets and further information about the mesh dimensions. Different reconstruction algorithms perform with different accuracy on different parts of a surface. The parallel coordinates plot in conjunction with the hot-spot thumbnails (Section 4.3) enables the user to understand the relative performance of different algorithms on a particular part of a surface, and at the same time allows him/her to visually inspect the reconstructed surface and its quality. In <ref type="figure" coords="6,488.80,537.47,36.61,8.02">Figure 11a</ref>, YMCA visualizes an automatically identified artifact in the Daratech dataset produced by the Wavelet algorithm (wrong mesh vertices highlighted red), and clearly classifies this algorithm as an individual outlier on the 1 0 RBF <ref type="figure" coords="7,54.00,258.87,24.46,8.02">Fig. 11</ref>: Outlier detection. The visual analysis tools of YMCA allow users to quickly detect outliers, which might be caused by noise in the data (a) or by a certain algorithm behavior like over-smoothing (b). parallel coordinate axis, with relatively high reconstruction error. At a different part of the model, the RBF algorithm stands out by falsely closing a hole, where all remaining algorithms perform correctly (<ref type="figure" coords="7,290.03,334.67,14.35,8.02;7,54.00,344.63,24.50,8.02">Fig- ure 11b</ref>). By giving this integrated overview of the algorithms' relative performance on different surfaces areas (statistically and visually), the hot-spot localization and the parallel coordinates plot allow the users to quickly classify algorithms and judge their eligibility. A manual comparison of all meshes is far more tedious and leads to particular artifacts being easily missed. In all three datasets, parts of the variance map exhibit rectangularshaped artifacts. We used the overview image and the magic lens (Section 4.4) to further inspect those areas. With our tools we could find out that these artifacts are always produced by the Poisson reconstruction algorithm (<ref type="figure" coords="7,112.30,445.80,32.57,8.02" target="#fig_8">Figure 12</ref>). Apparently, this artifact is caused by the limited resolution of the octree employed by the Poisson algorithm for reconstruction. With the visual analysis tools of YMCA, this artifact could quickly be related to the Poisson algorithm and explored visually . It is clearly visible in which part of the model the octree resolution has to be adjusted to guarantee a smooth reconstruction. With the data summarization used in the detail view (Section 4.6), differences at the reconstructed mesh boundaries can be explored. Blending the lens view of meshes of the same class allows a direct comparison and visualization of the geometric variance of their boundaries . In <ref type="figure" coords="7,85.75,546.96,33.14,8.02" target="#fig_10">Figure 13</ref>, two examples of different boundaries can be seen. <ref type="figure" coords="7,442.91,260.88,35.75,8.02" target="#fig_10">Figure 13a</ref>), whereas in other parts the boundaries of the reconstructed meshes differ more strongly (<ref type="figure" coords="7,552.65,270.85,14.35,8.02;7,316.62,280.81,25.10,8.02" target="#fig_10">Fig- ure 13b</ref>). The differences in the boundaries become visible as a color band in the images. Different reconstructions may produce different boundaries, due to different approaches to fit a surface to the point cloud data. With YMCA it is now possible to explore these effects in detail. The regions where boundaries differ are clearly visible when inspecting the mesh with the magic lens. This helps the user to judge which reconstruction would better represent the data. The parallel coordinates plot of YMCA also proved to be very helpful in the analysis of large datasets. If such datasets shall be inspected, it is very important to quickly narrow down the search space to suitable reconstructions. Reconstruction algorithms that perform either generally very good, or very bad, in most cases can be identified. It is also possible to eliminate algorithms from further analysis, if they do not meet certain reconstruction requirements. An example is given by the inspection of the Dancing-Children dataset, consisting of 100 meshes. The resulting parallel coordinates plot can be seen in <ref type="figure" coords="7,509.38,431.67,33.26,8.02" target="#fig_12">Figure 14</ref>. Here it was possible to, for example, identify one algorithms (Fourier-3) with a low error rate, and one algorithm with a high error rate (SPSS- 7) in all hot-spot regions. We also found one algorithm (Scattered-2) that exhibits a varying error rate. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="7">EVALUATION</head><p>To evaluate our approach, we have collected qualitative feedback from users experienced in working with meshes. From this feedback we wanted to find out how useful the proposed visual analysis is for the users, and we also discussed possible applications for future work. Every feedback session lasted between 30 and 45 minutes. First the motivation and the technique itself were explained to every participant. Then they got a training dataset where they could test the interaction possibilities. Afterwards they were presented a new dataset, and were asked to name one or more reconstruction algorithms that produce appropriate results for the given point cloud. They were also asked to explain their decision. For this task they had ten minutes time. At the end, we asked them to fill in a questionnaire with four questions (described in <ref type="figure" coords="8,93.80,186.50,34.62,8.02" target="#fig_2">Figure 15</ref>and <ref type="figure" coords="8,145.85,186.50,32.75,8.02">Figure 16</ref>). We asked seven participants (six men, one woman) to participate in our feedback study. Three of the participants have been working in the field of point-cloud reconstruction for years, and therefore have a lot of experience. Two other participants are experienced computer scientists in the rendering field, where they are working with mesh operations like filtering or simplification. Two participants are students from the field of computer graphics. All participants agreed that analyzing point cloud reconstructions is an important task, and that existing methods do not provide sufficient assistance for this. Six out of seven participants had no problem to solve the task of finding an appropriate reconstruction algorithm for the given point cloud. One participant ran out of time while solving the task. We compared the results with reconstructions that were previously selected by domain experts. It turned out that participants selected the most suitable reconstruction algorithms in all cases. With the first three questions in the questionnaire we wanted to find out more about the practicability of the system: 1. Does the system help to spot point cloud regions which are problematic for reconstruction? 2. Does the system help to decide which reconstruction algorithm should be used? </p><p>3. Does the system help to better understand the strengths and weaknesses of certain reconstruction algorithms? </p><p>The answers to these three questions can be seen in <ref type="figure" coords="8,238.78,451.75,33.88,8.02" target="#fig_2">Figure 15</ref>. The participants agreed that YMCA helps to spot the most problematic regions in the reconstruction from a point cloud (Question 1). <ref type="figure" coords="8,45.00,673.66,25.14,8.02" target="#fig_2">Fig. 15</ref>: Evaluating the practicability of YMCA. Question 1: Does the system help to spot point cloud regions which are problematic for reconstruction? Question 2: Does the system help to decide which reconstruction algorithm should be used? Question 3: Does the system help to better understand the strengths and weaknesses of certain reconstruction algorithms? YMCA proved to be very helpful for evaluating point clouds and finding the most suitable reconstruction. also largely agreed that the system can help to identify the most appropriate reconstruction algorithms for a given point cloud (Question 2). However, they were discordant about whether YMCA helps to better understand how the reconstruction algorithms work (Question 3). Some participants stated that algorithms can be judged in a visual way, but for a detailed analysis additional information about the point cloud (i.e., noise level) would be necessary. For future work, it would be interesting to analyze the algorithms' pipelines in more detail, and to also take into account the influence of different parameter settings. The fourth question in the questionnaire concerned which elements of the user interface the participants found helpful during the analysis. We asked which of the following elements they used the most: @BULLET Variance map (i.e., overview image) @BULLET Parallel coordinates (i.e., visualization of reconstruction results in the parallel coordinates plot) </p><p>@BULLET Hot-spot localization (i.e., the possibility to click on hot-spot thumbnails in the parallel coordinates plot and the hot-spot rendering mode) </p><p> @BULLET Detail view and data summarization (i.e., detail view with closeup views and ranking, and data summarization) </p><p>The answers to this question can be found in <ref type="figure" coords="8,469.39,282.36,33.09,8.02">Figure 16</ref>. The overview image showing the variance map was rated to be the most helpful interface element for the users. This is not surprising, since at the one hand this is the central interaction element of the system, and on the other hand most users are already familiar with interpreting color heat maps on 3D models. The parallel coordinates plot was very helpful for the participants to compare the overall and local performance of individual algorithms. They used this interface element especially to eliminate reconstructions from further analysis. Although all users were convinced about the fact that a list of hot-spots is already prepared when starting the analysis, some of them did not like the hot-spot rendering technique. They stated that it is confusing at the beginning and needs more experience to be interpreted in the right way. The participants also used the detail view to judge the local behavior of the algorithms. Only one participant stated that the data summarization is sometimes hard to interpret and would need a longer training period. We also asked the participants about suggestions for future work. During these discussions it turned out that the system inspired the users quite a lot, and they had many suggestions for additional features and applications. For the overview image, one participant stated that it  would be helpful to see the reference mesh rendered in colors according to the algorithms which perform best at certain points. This could be a valuable hint in the analysis. Having a very colorful model means that algorithms differ a lot, whereas having large uniformly colored parts means that one algorithm performs better than all others in those areas. For the data summarization in the detail view, the participants suggested that sometimes it would be useful to be able to manually adjust the class borders, or even do a classification by themselves (by manually selecting algorithms). The participants experienced with point cloud reconstruction also stated that they liked the data summarization in the detail view, because it quickly provides an overview of the data at the current local position. They also pointed out that summarization alone is not helpful for them. To be able to judge which algorithm performs better than the others, they still need to be able to access the individual input meshes. Therefore, they also liked the possibility to depict all close-up views of all meshes from one class in a Small Multiples display. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="8">DISCUSSION</head><p>YMCA operates on a set of meshes which are compared to a reference mesh and analyzes similarities and differences among them. Not many suitable tool-sets exist that allow the efficient comparison of multiple meshes. With YMCA it is now possible to quickly and visually analyze mesh reconstruction results and depict the appropriate solution for the given point cloud data. The system also provides an overview of the critical areas in the available point cloud data, with respect to different reconstruction approaches. Our system nonetheless has some limitations, which point to interesting directions for future work. For the data in this paper, reference meshes were given which could be used to calculate the differences in the meshes. However, often this is not the case when analyzing point cloud data (e.g., when scanning real-world objects). In this case we propose to create an average mesh out of the input meshes, and to compare the meshes against this average . This provides an initial overview of the differences in the data. If the user is not satisfied with comparing the meshes against the average , he/she can exchange the reference and use some other input mesh instead, e.g., the mesh that delivers the best reconstruction of certain parts of the input data. YMCA already provides controls for exchanging the reference mesh. We used an attribute deviation metric <ref type="bibr" coords="9,198.04,445.97,14.94,8.02" target="#b25">[26] </ref> to calculate the mesh differences . This paper is primarily about the visual depiction of mesh differences, which means that the calculation of the differences is decoupled from the visual representation. The metric can be exchanged with any other mesh difference calculation (e.g., curvature measurements ). We tested this by using geometric deviation <ref type="bibr" coords="9,247.22,495.78,13.74,8.02" target="#b25">[26]</ref>, which can be seen in <ref type="figure" coords="9,92.10,505.74,33.12,8.02">Figure 17</ref>. The variance map of YMCA gives an overview of the regions in the point cloud where the reconstructions produce different results. However, for some applications it might be interesting to see the global error instead (i.e., regions where all reconstructions fail). To test this, we used the mean squared error to aggregate the different errors into one value per vertex. YMCA already provides means for exchanging the metric, which can be also applied to using the error values for b a <ref type="figure" coords="9,54.00,713.51,23.88,8.02">Fig. 17</ref> : Changing the metric from point distances (a) to geometric deviations (b) results in an alternative overview image as well as different hot-spot locations. visualization instead of the variances. At present this means that the system has to be initialized with either the one or the other settings. The user can only explore the results of one metric at a time. This is something that we want to change in the future. We would also like to work on possibilities where the metric can be changed during analysis, while the settings (like selections in the parallel coordinates plot) are still preserved for all metrics. This way it will be possible to select a list of hot-spots (calculated by different metrics) and use them for further analysis. As pointed out during the evaluation, YMCA provides limited support in understanding the strengths and weaknesses of individual reconstruction algorithms. Our approach enables the user to visually compare the results and therefore judge them, but domain experts stated that additional information about the input data (e.g., noise level) would be helpful. We plan to integrate this into the system in the future. Berger et al. <ref type="bibr" coords="9,374.56,213.08,10.45,8.02" target="#b5">[6] </ref>implemented a surface reconstruction benchmark tool which can be used to test several reconstruction algorithms against one point cloud dataset. Additionally, the benchmark tool provides scanning simulations which can produce different point clouds of the same model with different quality (e.g., add more or less noise to the data). Then the benchmark tool can be used to apply the reconstruction algorithms to different point cloud versions. This would span a parameter space for every reconstruction algorithm showing its strengths and weaknesses (e.g., in the presence of noise). We also would like to apply YMCA to other mesh datasets, for example created by different mesh re-sampling or simplification algorithms . It would also be interesting to explore other 3D datasets. One possibility could be to explore differences in algorithms for isosurface construction. In the user interface we would like to add more complex shading models with the possibility to change the lighting by user-defined parameters. For the analysis we would like to provide means that the user can define a new reference (e.g., a specific corner or shape) the input meshes should be compared to. During the evaluation, the domain experts also brought up another promising idea for future work. For them it would be very helpful to be able to export a 2D flattened or unrolled representation of the current model showing all, or at least the most important, hot-spots in one image, together with samples of the reconstructed meshes. Up to now such illustrations are generated manually by rotating the model and producing close-up views. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="9">CONCLUSION</head><p>In this paper we presented Your Mesh Comparison Application (YMCA), a new visual analysis application for the comparative visualization of multiple 3D meshes. Interactive tools are provided to present an overview of the differences in the data, and to explore local areas of interest in more detail. Our visualization approach combines explicit encoding, juxtaposition, and parallel coordinates. It further addresses the scalability problem of previous mesh comparison tools. We applied our approach to meshes coming from different mesh reconstruction algorithms that were applied to point clouds. With our method, differences between several resulting meshes can be quickly identified, and it is also helpful to explore individual characteristics of the different mesh reconstruction algorithms. In the future, it will be interesting to investigate other possible interaction techniques. Especially for large datasets, we would like to improve the interaction possibilities in the parallel coordinates plot (e.g., by angular brushing <ref type="bibr" coords="9,412.66,634.45,13.44,8.02" target="#b16">[17]</ref> ). We would also like to combine several mesh comparison metrics into one system. Another direction for further research is the fine-grained analysis of the parameter space of the available mesh reconstruction algorithms. With our tool it could be possible to identify strengths and weaknesses of the algorithms when applied to different point clouds. </p></div><figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_2" coords="4,307.62,693.58,250.38,8.02;4,307.62,703.54,250.38,8.02;4,307.62,713.36,250.38,9.31;4,307.62,723.47,250.38,8.02;4,307.62,733.29,180.53,9.31"><head>Fig. 5: </head><figDesc> Fig. 5: Parallel coordinates plot. We can use the hot-spots (Section 4.2) to create a multi-dimensional feature space, defined by the number of hot-spots t 1 ...t h and the error values e at those positions for all input meshes. The hot-spots are represented as thumbnail images, and the input meshes m 1 ...m n are defined by lines. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_4" coords="6,45.00,139.83,250.38,8.02;6,45.00,149.79,250.38,8.02;6,45.00,159.76,111.20,8.02"><head>Fig. 8: </head><figDesc>Fig. 8: Hot-spot exploration. This figure shows a model rendered in hot-spot mode (Section 4.5) with three different hot-spot examples (different position and extend). </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_5" coords="6,45.00,713.51,250.38,8.02;6,45.00,723.47,250.38,8.02;6,45.00,733.43,78.46,8.02"><head>Fig. 9: </head><figDesc>Fig. 9: Data summarization. This figure shows two examples for data summarization in the detail view when hovering over areas of low (a) and high (b) variance. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_6" coords="6,333.58,197.14,224.42,8.02;6,307.62,207.10,250.38,8.02;6,307.62,217.07,250.38,8.02;6,307.62,227.03,250.38,8.02;6,307.62,236.99,250.38,8.02;6,307.62,246.95,125.50,8.02;6,323.41,265.77,28.88,8.06;6,400.11,265.77,142.11,8.06;6,323.41,280.85,33.11,8.02;6,409.82,280.85,8.97,8.02;6,459.33,280.85,19.18,8.02;6,512.21,280.85,27.15,8.02;6,323.41,290.81,64.75,8.02;6,407.58,290.81,13.45,8.02;6,459.33,290.81,19.18,8.02;6,509.96,290.81,31.63,8.02;6,323.41,300.77,32.36,8.02;6,409.82,300.77,8.97,8.02;6,459.33,300.77,19.18,8.02;6,509.96,300.77,31.63,8.02;6,307.84,334.49,51.18,8.42;6,307.62,348.13,250.38,8.02;6,307.62,358.09,250.38,8.02;6,307.62,368.05,250.38,8.02;6,307.62,378.02,250.38,8.02;6,307.62,387.98,250.38,8.02;6,307.62,397.94,250.38,8.02;6,317.58,407.93,240.42,8.02;6,307.62,417.89,250.38,8.02;6,307.62,427.86,250.38,8.02;6,307.62,437.82,250.38,8.02;6,307.62,447.78,250.38,8.02;6,307.62,457.74,250.38,8.02;6,307.62,467.71,55.69,8.02"><head></head><figDesc>: Runtime and memory requirements. The first column gives the name of the dataset. The second column shows the number of meshes in this dataset. The next column contains the runtime for the pre-processing, which consists of the calculation of the variances and the localization of the hot-spots. The last column shows the amount of memory used on the graphics card. We used data from the field of point-cloud reconstruction to test our approach (see also Section 4). The data was produced by different algorithms , for example Poisson Surface Reconstruction (Poisson), Algebraic Point Set Surfaces (APSS) and Multi-level Partition of Unity Implicits (MPU). The reader is referred to the survey by Berger et al. [6] for a more detailed description of the reconstruction algorithms. We applied our approach to three different datasets. The first dataset, called Gargoyle, comprises ten mesh reconstructions from a virtual point cloud scan of a carved stone figure. The second dataset, called Dancing-Children, consists of 100 mesh reconstructions from a virtual point cloud scan of an ornament. The third dataset, called Daratech, comprises 15 mesh reconstructions from a scan of an industrial workpiece. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_7" coords="6,307.62,703.54,250.38,8.02;6,307.62,713.51,250.38,8.02;6,307.62,723.47,250.38,8.02;6,307.62,733.43,125.48,8.02"><head>Fig. 10: </head><figDesc>Fig. 10: Datasets used to evaluate YMCA. All datasets consist of mesh reconstructions from point cloud scans. The first one (a) is called Gargoyle , the second dataset (b) is called Dancing-Children, and the name of the third dataset (c) is Daratech. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_8" coords="7,54.00,703.54,250.38,8.02;7,54.00,713.51,250.38,8.02;7,54.00,723.47,250.38,8.02;7,54.00,733.43,103.35,8.02"><head>Fig. 12: </head><figDesc>Fig. 12: Artifact analysis. In all datasets rectangular-shaped artifacts could be identified in the overview image (a). With the magic lens tool it is possible to find out that these artifacts are caused by the Poisson reconstruction algorithm (b). </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_10" coords="7,316.62,185.30,250.38,8.02;7,316.62,195.26,250.38,8.02;7,316.62,205.23,250.38,8.02;7,316.62,215.19,78.93,8.02"><head>Fig. 13: </head><figDesc> Fig. 13: Mesh boundaries. The summary view in the detail view enables users to identify regions where the reconstruction algorithms produce almost the same (a) or different (b) mesh boundaries, indicated by a color band. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_12" coords="7,316.62,693.58,250.38,8.02;7,316.62,703.54,250.38,8.02;7,316.62,713.51,250.38,8.02;7,316.62,723.47,250.38,8.02;7,316.62,733.43,82.71,8.02"><head>Fig. 14: </head><figDesc>Fig. 14: Analyzing large datasets. The parallel coordinates plot is a very helpful tool when analyzing large datasets. One algorithm with a low error rate (Fourier-3), one with a high error rate (SPSS-7) and one with a varying error rate (Scattered-2) in the hot-spot regions could be identified very quickly. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_1" validated="false" coords="3,55.65,76.64,505.75,55.33"><figDesc coords="3,229.89,76.64,18.32,10.92;3,221.11,87.55,35.88,10.92;3,534.99,77.57,22.18,10.92;3,530.76,88.47,30.65,10.92;3,134.55,120.96,55.26,8.94;3,55.65,120.96,47.96,8.94;3,284.48,120.97,41.64,8.94;3,436.48,120.97,67.11,8.94">Error Variances Visual Analysis reference mesh m meshes m ... m variance map high-variance regions</figDesc><table coords="3,88.28,77.30,335.08,54.66">High Variance 
+Localization 
+
+1 
+
+n 
+ref 
+
+</table></figure>
+		</body>
+		<back>
+
+			<div type="acknowledgement">
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>ACKNOWLEDGMENTS </head><p>The work presented in this paper has been partially supported by the ViMaL project (FWF – Austrian Research Fund, no. P21695) and by the AKTION project (Aktion OE/CZ grant number 68p11). </p></div>
+			</div>
+
+			<div type="references">
+
+				<listBibl>
+
+<biblStruct coords="10,63.26,74.58,232.12,7.13;10,63.26,84.05,232.12,7.13;10,63.26,93.51,232.12,7.13;10,63.26,102.97,173.13,7.13"  xml:id="b0">
+	<analytic>
+		<title/>
+		<author>
+			<persName>
+				<forename type="first">O</forename>
+				<forename type="middle">S</forename>
+				<surname>Alabi</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">X</forename>
+				<surname>Wu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">M</forename>
+				<surname>Harter</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Phadke</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<surname>Pinto</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Petersen</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Bass</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Keifer</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Zhong</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<forename type="middle">G</forename>
+				<surname>Healey</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<forename type="middle">M</forename>
+				<surname>Taylor</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Comparative Visualization of Ensembles Using Ensemble Surface Slicing. Visualization and Data Analytics</title>
+		<imprint>
+			<date type="published" when="2012-01" />
+			<biblScope unit="page" from="1" to="12" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,63.26,112.44,232.12,7.13;10,63.26,121.90,232.12,7.13;10,63.26,131.37,192.79,7.13"  xml:id="b1">
+	<analytic>
+		<title level="a" type="main">Computing and Rendering Point Set Surfaces</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Alexa</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Behr</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Cohen-Or</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Fleishman</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Levin</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<forename type="middle">T</forename>
+				<surname>Silva</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Visualization and Computer Graphics</title>
+		<imprint>
+			<biblScope unit="volume">9</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="3" to="15" />
+			<date type="published" when="2003-01" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,63.26,140.83,232.12,7.13;10,63.26,150.30,113.67,7.13"  xml:id="b2">
+	<analytic>
+		<title level="a" type="main">Defining Point-Set Surfaces</title>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Amenta</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Y</forename>
+				<forename type="middle">J K</forename>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">ACM Trans. Graph</title>
+		<imprint>
+			<biblScope unit="volume">23</biblScope>
+			<biblScope unit="issue">3</biblScope>
+			<biblScope unit="page" from="264" to="270" />
+			<date type="published" when="2004-08" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,63.26,159.76,232.12,7.13;10,63.26,169.23,232.12,7.13;10,63.26,178.69,232.12,7.13;10,63.26,188.16,221.58,7.13"  xml:id="b3">
+	<analytic>
+		<title level="a" type="main">MESH: Measuring Error between Surfaces using the Hausdorff Distance</title>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Aspert</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Santa-Cruz</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Ebrahimi</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the IEEE International Conference on Multimedia and Expo of ICME &apos;02</title>
+		<meeting>the IEEE International Conference on Multimedia and Expo of ICME &apos;02<address><addrLine>Lausanne, Switzerland</addrLine></address></meeting>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2002-08" />
+			<biblScope unit="page" from="705" to="708" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,63.26,197.62,232.12,7.13;10,63.26,207.08,85.89,7.13"  xml:id="b4">
+	<analytic>
+		<title/>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<forename type="middle">A</forename>
+				<surname>Becker</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<forename type="middle">S</forename>
+				<surname>Cleveland</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Brushing Scatterplots. Technometrics</title>
+		<imprint>
+			<biblScope unit="volume">29</biblScope>
+			<biblScope unit="issue">2</biblScope>
+			<biblScope unit="page" from="127" to="142" />
+			<date type="published" when="1987-03" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,63.26,216.55,232.12,7.13;10,63.26,226.01,232.12,7.13;10,63.26,235.48,93.65,7.13"  xml:id="b5">
+	<analytic>
+		<title level="a" type="main">A Benchmark for Surface Reconstruction</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Berger</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">A</forename>
+				<surname>Levine</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<forename type="middle">G</forename>
+				<surname>Nonato</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Taubin</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<forename type="middle">T</forename>
+				<surname>Silva</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">ACM Transactions on Graphics</title>
+		<imprint>
+			<biblScope unit="volume">3220</biblScope>
+			<biblScope unit="issue">2</biblScope>
+			<biblScope unit="page" from="1" to="2017" />
+			<date type="published" when="2013-04" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,63.26,244.94,232.12,7.13;10,63.26,254.41,232.12,7.13;10,63.26,263.87,232.12,7.13;10,63.26,273.34,232.12,7.13;10,63.26,282.80,168.09,7.13"  xml:id="b6">
+	<analytic>
+		<title level="a" type="main">State of the Art in Surface Reconstruction from Point Clouds</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Berger</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Tagliasacchi</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<forename type="middle">M</forename>
+				<surname>Seversky</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Alliez</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">A</forename>
+				<surname>Levine</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Sharf</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<forename type="middle">T</forename>
+				<surname>Silva</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the Eurographics 2014, Eurographics STARs</title>
+		<editor>S. Lefebvre and M. Spagnuolo</editor>
+		<meeting>the Eurographics 2014, Eurographics STARs<address><addrLine>Strasbourg, France</addrLine></address></meeting>
+		<imprint>
+			<publisher>Eurographics Association</publisher>
+			<date type="published" when="2014" />
+			<biblScope unit="page" from="161" to="185" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,63.26,292.26,232.12,7.13;10,63.26,301.73,232.12,7.13;10,63.26,311.19,232.12,7.13;10,63.26,320.74,232.12,6.86;10,63.26,330.12,219.29,7.13"  xml:id="b7">
+	<analytic>
+		<title level="a" type="main">Reconstruction and Representation of 3D Objects with Radial Basis Functions</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">C</forename>
+				<surname>Carr</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<forename type="middle">K</forename>
+				<surname>Beatson</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">B</forename>
+				<surname>Cherrie</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<forename type="middle">J</forename>
+				<surname>Mitchell</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<forename type="middle">R</forename>
+				<surname>Fright</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<forename type="middle">C</forename>
+				<surname>Mccallum</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<forename type="middle">R</forename>
+				<surname>Evans</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 28th Annual Conference on Computer Graphics and Interactive Techniques, SIGGRAPH &apos;01</title>
+		<meeting>the 28th Annual Conference on Computer Graphics and Interactive Techniques, SIGGRAPH &apos;01<address><addrLine>Los Angeles, CA, USA</addrLine></address></meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="2001" />
+			<biblScope unit="page" from="67" to="76" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,63.26,339.59,232.12,7.13;10,63.26,349.05,183.18,7.13"  xml:id="b8">
+	<analytic>
+		<title level="a" type="main">MeshLab: an Open-Source 3D Mesh Processing System</title>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Cignoni</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Corsini</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Ranzuglia</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">ERCIM News</title>
+		<imprint>
+			<biblScope unit="issue">73</biblScope>
+			<date type="published" when="2008" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,63.26,358.52,232.12,7.13;10,63.26,367.98,232.12,7.13;10,63.26,377.45,17.93,7.13"  xml:id="b9">
+	<analytic>
+		<title level="a" type="main">Magicsphere: an insight tool for 3D data visualization</title>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Cignoni</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Montani</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Scopigno</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Compututer Graphics Forum</title>
+		<imprint>
+			<biblScope unit="volume">13</biblScope>
+			<biblScope unit="issue">3</biblScope>
+			<biblScope unit="page">317328</biblScope>
+			<date type="published" when="1994" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,63.26,386.91,232.12,7.13;10,63.26,396.37,232.12,7.13"  xml:id="b10">
+	<analytic>
+		<title/>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Cignoni</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Rocchini</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Scopigno</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Metro: Measuring Error on Simplified Surfaces. Compututer Graphics Forum</title>
+		<imprint>
+			<biblScope unit="volume">17</biblScope>
+			<biblScope unit="issue">2</biblScope>
+			<biblScope unit="page" from="167" to="174" />
+			<date type="published" when="1998" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,63.26,405.84,232.12,7.13;10,63.26,415.30,232.12,7.13;10,63.26,424.77,118.52,7.13"  xml:id="b11">
+	<analytic>
+		<title level="a" type="main">A review of Overview+Detail, Zooming, and Focus+Context Interfaces</title>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Cockburn</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Karlson</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<forename type="middle">B</forename>
+				<surname>Bederson</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">ACM Comput . Surv</title>
+		<imprint>
+			<biblScope unit="volume">41</biblScope>
+			<biblScope unit="issue">12</biblScope>
+			<biblScope unit="page" from="1" to="231" />
+			<date type="published" when="2008-01" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,63.26,434.23,232.12,7.13;10,63.26,443.70,232.12,7.13;10,63.26,453.16,50.47,7.13"  xml:id="b12">
+	<analytic>
+		<title level="a" type="main">Mean Shift: A Robust Approach Toward Feature Space Analysis</title>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Comaniciu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Meer</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Trans. Pattern Anal. Mach. Intell</title>
+		<imprint>
+			<biblScope unit="volume">24</biblScope>
+			<biblScope unit="issue">5</biblScope>
+			<biblScope unit="page" from="603" to="619" />
+			<date type="published" when="2002-03" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,63.26,462.63,232.12,7.13;10,63.26,472.09,232.12,7.13;10,63.26,481.63,232.12,6.86;10,63.26,491.02,207.65,7.13"  xml:id="b13">
+	<analytic>
+		<title level="a" type="main">Visualizing the Differences between Diffusion Tensor Volume Images</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Dasilva</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Zhang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Demiralp</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<forename type="middle">H</forename>
+				<surname>Laidlaw</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the ISMRM Workshop on Diffusion MRI: What Can We Measure?, ISMRM &apos;02</title>
+		<meeting>the ISMRM Workshop on Diffusion MRI: What Can We Measure?, ISMRM &apos;02<address><addrLine>St. Malo, France</addrLine></address></meeting>
+		<imprint>
+			<date type="published" when="2002-12" />
+			<biblScope unit="page" from="237" to="238" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,63.26,500.48,232.12,7.13;10,63.26,509.95,232.12,7.13;10,63.26,519.41,232.12,7.13;10,63.26,528.88,66.32,7.13"  xml:id="b14">
+	<analytic>
+		<title level="a" type="main">Smooth Brushing for Focus+Context Visualization of Simulation Data in 3D</title>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Doleisch</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Hauser</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the Winter School of Computer Graphics, WSCG &apos;02</title>
+		<meeting>the Winter School of Computer Graphics, WSCG &apos;02<address><addrLine>Plzen-Bory, Czech Republic, Feb</addrLine></address></meeting>
+		<imprint>
+			<date type="published" when="2002" />
+			<biblScope unit="page" from="147" to="154" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,63.26,538.34,232.12,7.13;10,63.26,547.81,232.12,7.13;10,63.26,557.27,130.25,7.13"  xml:id="b15">
+	<analytic>
+		<title level="a" type="main">Visual Comparison for Information Visualization</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Gleicher</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Albers</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Walker</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">I</forename>
+				<surname>Jusufi</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<forename type="middle">D</forename>
+				<surname>Hansen</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">C</forename>
+				<surname>Roberts</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Information Visualization</title>
+		<imprint>
+			<biblScope unit="volume">10</biblScope>
+			<biblScope unit="issue">4</biblScope>
+			<biblScope unit="page" from="289" to="309" />
+			<date type="published" when="2011-10" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,63.26,566.74,232.12,7.13;10,63.26,576.20,232.12,7.13;10,63.26,585.66,232.12,7.13;10,63.26,595.13,113.93,7.13"  xml:id="b16">
+	<analytic>
+		<title level="a" type="main">Angular Brushing of Extended Parallel Coordinates</title>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Hauser</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<surname>Ledermann</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Doleisch</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the IEEE Symposium on Information Visualization, INFOVIS &apos;02</title>
+		<meeting>the IEEE Symposium on Information Visualization, INFOVIS &apos;02<address><addrLine>Boston, MA, USA</addrLine></address></meeting>
+		<imprint>
+			<publisher>IEEE Computer Society</publisher>
+			<date type="published" when="2002-10" />
+			<biblScope unit="page">127</biblScope>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,63.26,604.59,232.12,7.13;10,63.26,614.06,232.12,7.13;10,63.26,623.60,232.12,6.86;10,63.26,632.99,202.24,7.13"  xml:id="b17">
+	<analytic>
+		<title level="a" type="main">Surface Reconstruction from Unorganized Points</title>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Hoppe</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Derose</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Duchamp</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Mcdonald</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Stuetzle</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 19th Annual Conference on Computer Graphics and Interactive Techniques, SIGGRAPH &apos;92</title>
+		<meeting>the 19th Annual Conference on Computer Graphics and Interactive Techniques, SIGGRAPH &apos;92<address><addrLine>Chicago, IL, USA</addrLine></address></meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="1992" />
+			<biblScope unit="page" from="71" to="78" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,63.26,642.45,232.12,7.13;10,63.26,651.92,232.12,7.13;10,63.26,661.38,232.12,7.13;10,63.26,670.84,98.44,7.13"  xml:id="b18">
+	<analytic>
+		<title level="a" type="main">Parallel Coordinates: A Tool for Visualizing Multi-dimensional Geometry</title>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Inselberg</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Dimsdale</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 1st Conference on Visualization, VIS &apos;90</title>
+		<meeting>the 1st Conference on Visualization, VIS &apos;90<address><addrLine>San Francisco, CA, USA</addrLine></address></meeting>
+		<imprint>
+			<publisher>IEEE Computer Society</publisher>
+			<date type="published" when="1990" />
+			<biblScope unit="page" from="361" to="378" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,63.26,680.31,232.12,7.13;10,63.26,689.77,232.12,7.13;10,63.26,699.24,232.12,7.13;10,63.26,708.70,84.12,7.13"  xml:id="b19">
+	<analytic>
+		<title level="a" type="main">Poisson Surface Reconstruction</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Kazhdan</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Bolitho</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Hoppe</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the Fourth Eurographics Symposium on Geometry Processing</title>
+		<meeting>the Fourth Eurographics Symposium on Geometry Processing<address><addrLine>Cagliari, Sardinia, Italy</addrLine></address></meeting>
+		<imprint>
+			<publisher>Eurographics Association</publisher>
+			<date type="published" when="2006" />
+			<biblScope unit="page" from="61" to="70" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,63.26,718.17,232.12,7.13;10,63.26,727.63,232.12,7.13;10,63.26,737.10,157.29,7.13"  xml:id="b20">
+	<analytic>
+		<title level="a" type="main">Comparative Visualization for Parameter Studies of Dataset Series</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<forename type="middle">M</forename>
+				<surname>Malik</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Heinzl</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<forename type="middle">E</forename>
+				<surname>Gröller</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Visualization and Computer Graphics</title>
+		<imprint>
+			<biblScope unit="volume">16</biblScope>
+			<biblScope unit="page" from="829" to="840" />
+			<date type="published" when="2010-09" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,307.62,54.06,250.38,7.13;10,325.88,63.52,232.12,7.13;10,325.88,72.99,232.12,7.13;10,325.88,82.45,95.42,7.13"  xml:id="b21">
+	<analytic>
+		<title level="a" type="main">Shape difference Visualization for ancient bronze Mirrors through 3D range images</title>
+		<author>
+			<persName>
+				<forename type="first">]</forename>
+				<forename type="middle">T</forename>
+				<surname>Masuda</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Imazu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Auethavekiat</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Furuya</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Kawakami</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Ikeuchi</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Journal of Visualization and Computer Animation</title>
+		<imprint>
+			<biblScope unit="volume">14</biblScope>
+			<biblScope unit="issue">4</biblScope>
+			<biblScope unit="page" from="183" to="196" />
+			<date type="published" when="2003" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,325.88,91.92,232.12,7.13;10,325.88,101.38,235.43,7.13;10,325.88,110.85,232.12,7.13;10,325.88,120.31,45.38,7.13"  xml:id="b22">
+	<monogr>
+		<title level="m" type="main">Comparative Visualization: Approaches and Examples</title>
+		<author>
+			<persName>
+				<forename type="first">H.-G</forename>
+				<surname>Pagendarm</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<forename type="middle">H</forename>
+				<surname>Post</surname>
+			</persName>
+		</author>
+		<editor>In: Visualization in scientific computing (H. Göbel and H. Müller and B. Urban</editor>
+		<imprint>
+			<date type="published" when="1995" />
+			<publisher>Springer-Verlag</publisher>
+			<biblScope unit="page" from="95" to="108" />
+			<pubPlace>Vienna, Austria</pubPlace>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,325.88,129.78,232.12,7.13;10,325.88,139.24,203.85,7.13"  xml:id="b23">
+	<monogr>
+		<title level="m" type="main">Methods for comparing 3D Surface Attributes. Visual Data Exploration and Analysis III</title>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Pang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Freeman</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="1996" />
+			<biblScope unit="page" from="58" to="64" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,325.88,148.70,232.12,7.13;10,325.88,158.17,232.12,7.13;10,325.88,167.71,232.12,6.86;10,325.88,177.10,222.72,7.13"  xml:id="b24">
+	<analytic>
+		<title level="a" type="main">Interactive Focus+Context Visualization with linked 2D/3D Scatterplots</title>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Piringer</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Kosara</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Hauser</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 2nd International Conference on Coordinated &amp; Multiple Views in Exploratory Visualization, CMV &apos;04</title>
+		<meeting>the 2nd International Conference on Coordinated &amp; Multiple Views in Exploratory Visualization, CMV &apos;04</meeting>
+		<imprint>
+			<publisher>IEEE Computer Society</publisher>
+			<date type="published" when="2004" />
+			<biblScope unit="page" from="49" to="60" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,325.88,186.56,232.12,7.13;10,325.88,196.03,232.12,7.13;10,325.88,205.49,79.92,7.13"  xml:id="b25">
+	<analytic>
+		<title level="a" type="main">Mesh Comparison using Attribute Deviation Metric</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Roy</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Foufou</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<surname>Truchetet</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">International Journal of Image and Graphics</title>
+		<imprint>
+			<biblScope unit="volume">4</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="127" to="140" />
+			<date type="published" when="2004-01" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,325.88,214.96,232.12,7.13;10,325.88,224.42,232.12,7.13;10,325.88,233.88,131.59,7.13"  xml:id="b26">
+	<analytic>
+		<title level="a" type="main">VAICo: Visual Analysis for Image Comparison</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Schmidt</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<forename type="middle">E</forename>
+				<surname>Gröller</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Bruckner</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Visualization and Computer Graphics</title>
+		<imprint>
+			<biblScope unit="volume">19</biblScope>
+			<biblScope unit="issue">12</biblScope>
+			<biblScope unit="page" from="2090" to="2099" />
+			<date type="published" when="2013-12" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,325.88,243.35,232.12,7.13;10,325.88,252.81,232.12,7.13;10,325.88,262.28,232.12,7.13;10,325.88,271.74,98.44,7.13"  xml:id="b27">
+	<analytic>
+		<title level="a" type="main">PolyMeCo -A Polygonal Mesh Comparison Tool</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Silva</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Madeira</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<forename type="middle">S</forename>
+				<surname>Santos</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 9th International Conference on Information Visualisation, IV &apos;05</title>
+		<meeting>the 9th International Conference on Information Visualisation, IV &apos;05<address><addrLine>London, UK</addrLine></address></meeting>
+		<imprint>
+			<publisher>IEEE Computer Society</publisher>
+			<date type="published" when="2005-07" />
+			<biblScope unit="page" from="842" to="847" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,325.88,281.21,232.12,7.13;10,325.88,290.67,104.57,7.13"  xml:id="b28">
+	<monogr>
+		<title level="m" type="main">The visual display of quantitative information</title>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<forename type="middle">R</forename>
+				<surname>Tufte</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="1986" />
+			<publisher>Graphics Press</publisher>
+			<pubPlace>Cheshire, CT, USA</pubPlace>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,325.88,300.14,232.12,7.13;10,325.88,309.60,140.13,7.13"  xml:id="b29">
+	<analytic>
+		<title level="a" type="main">Linking and Brushing</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<forename type="middle">O</forename>
+				<surname>Ward</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Encyclopedia of Database Systems</title>
+		<imprint>
+			<publisher>Springer US</publisher>
+			<date type="published" when="2009" />
+			<biblScope unit="page" from="1623" to="1626" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,325.88,319.07,232.12,7.13;10,325.88,328.53,232.12,7.13;10,325.88,337.99,232.12,7.13;10,325.88,347.46,100.27,7.13"  xml:id="b30">
+	<analytic>
+		<title level="a" type="main">Visualizing Similarities between Volume Datasets by Using Critical Point Graph and Character Recognition Technique</title>
+		<author>
+			<persName>
+				<forename type="first">Y</forename>
+				<surname>Watashiba</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Sakai</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Koyamada</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Kanazawa</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">The Journal of the Society for Art and Science</title>
+		<imprint>
+			<biblScope unit="volume">5</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="11" to="17" />
+			<date type="published" when="2006-01" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,325.88,356.92,232.12,7.13;10,325.88,366.39,232.12,7.13;10,325.88,375.85,232.12,7.13;10,325.88,385.32,109.71,7.13"  xml:id="b31">
+	<analytic>
+		<title level="a" type="main">Conformal Magnifier: A Focus+Context Technique with Local Shape Preservation</title>
+		<author>
+			<persName>
+				<forename type="first">X</forename>
+				<surname>Zhao</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Zeng</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">X</forename>
+				<forename type="middle">D</forename>
+				<surname>Gu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<forename type="middle">E</forename>
+				<surname>Kaufman</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Xu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Mueller</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Visualization and Computer Graphics</title>
+		<imprint>
+			<biblScope unit="volume">18</biblScope>
+			<biblScope unit="issue">11</biblScope>
+			<biblScope unit="page" from="1928" to="1941" />
+			<date type="published" when="2012-02" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,325.88,394.78,232.12,7.13;10,325.88,404.25,232.12,7.13;10,325.88,413.71,232.12,7.13;10,325.88,423.17,214.91,7.13"  xml:id="b32">
+	<analytic>
+		<title level="a" type="main">Comparative evaluation of visualization and experimental results using image comparison metrics</title>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Zhou</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Chen</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<forename type="middle">F</forename>
+				<surname>Webster</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the Conference on Visualization, VIS &apos;02</title>
+		<meeting>the Conference on Visualization, VIS &apos;02<address><addrLine>Boston, MA, USA</addrLine></address></meeting>
+		<imprint>
+			<publisher>IEEE Computer Society</publisher>
+			<date type="published" when="2002-11-01" />
+			<biblScope unit="page" from="315" to="322" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+				</listBibl>
+			</div>
+		</back>
+	</text>
+</TEI>

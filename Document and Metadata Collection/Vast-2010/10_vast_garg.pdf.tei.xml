@@ -1,0 +1,602 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.tei-c.org/ns/1.0 /home/pisenberg/grobid/grobid-home/schemas/xsd/Grobid.xsd"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+	<teiHeader xml:lang="en">
+		<encodingDesc>
+			<appInfo>
+				<application version="0.4.1" ident="GROBID" when="2016-09-09T13:41+0000">
+					<ref target="https://github.com/kermitt2/grobid">GROBID - A machine learning software for extracting information from scholarly documents</ref>
+				</application>
+			</appInfo>
+		</encodingDesc>
+		<fileDesc>
+			<titleStmt>
+				<title level="a" type="main">A Visual Analytics Approach to Model Learning</title>
+			</titleStmt>
+			<publicationStmt>
+				<publisher/>
+				<availability status="unknown"><licence/></availability>
+			</publicationStmt>
+			<sourceDesc>
+				<biblStruct>
+					<analytic>
+						<author>
+							<persName>
+								<forename type="first">Supriya</forename>
+								<surname>Garg</surname>
+							</persName>
+							<affiliation>
+								<orgName type="department">Computer Science Department</orgName>
+								<orgName type="institution">Stony Brook University</orgName>
+							</affiliation>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">I</forename>
+								<forename type="middle">V</forename>
+								<surname>Ramakrishnan</surname>
+							</persName>
+							<affiliation>
+								<orgName type="department">Computer Science Department</orgName>
+								<orgName type="institution">Stony Brook University</orgName>
+							</affiliation>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Klaus</forename>
+								<surname>Mueller</surname>
+							</persName>
+							<affiliation>
+								<orgName type="department">Computer Science Department</orgName>
+								<orgName type="institution">Stony Brook University</orgName>
+							</affiliation>
+						</author>
+						<title level="a" type="main">A Visual Analytics Approach to Model Learning</title>
+					</analytic>
+					<monogr>
+						<imprint>
+							<date/>
+						</imprint>
+					</monogr>
+				</biblStruct>
+			</sourceDesc>
+		</fileDesc>
+		<profileDesc>
+			<textClass>
+				<keywords>
+					<term>Visual Knowledge Discovery, Visual Knowledge Representation, Data Clustering, Human-Computer Interaction INDEX TERMS: H52 [Information Interfaces and Presentation]: User Interfaces—Graphical user interfaces</term>
+					<term>I26 [Artificial Intelligence]: Learning—Concept Learning</term>
+					<term>I53 [Pattern Recognition]: Clustering—Similarity Measures</term>
+				</keywords>
+			</textClass>
+			<abstract>
+				<p>The process of learning models from raw data typically requires a substantial amount of user input during the model initialization phase. We present an assistive visualization system which greatly reduces the load on the users and makes the process of model initialization and refinement more efficient, problem-driven, and engaging. Utilizing a sequence segmentation task with a Hidden Markov Model as an example, we assign each token in the sequence a feature vector based on its various properties within the sequence. These vectors are then clustered according to similarity, generating a layout of the individual tokens in form of a node link diagram where the length of the links is determined by the feature vector similarity. Users may then tune the weights of the feature vector components to improve the segmentation, which is visualized as a better separation of the clusters. Also, as individual clusters represent different classes, the user can now work at the cluster level to define token classes, instead of labelling one entry at time. Inconsistent entries visually identify themselves by locating at the periphery of clusters, and the user then helps refine the model by resolving these inconsistencies. Our system therefore makes efficient use of the knowledge of its users, only requesting user assistance for non-trivial data items. It so allows users to visually analyse data at a higher, more abstract level, improving scalability.</p>
+			</abstract>
+		</profileDesc>
+	</teiHeader>
+	<text xml:lang="en">
+		<body>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2">RELATED WORK</head><p>This work follows the general Visual Analytics idea of combining human domain knowledge with automatic data analysis techniques by providing users with interactive visual interfaces, whereby ‗interactive' means that users can actively participate in the analytical process as it evolves. Though our main focus is on allowing users to facilitate the process of model learning, visually guided data clustering is an integral part of it. There has been some work related to this field, including some in Visual Analytics. The approach described by Schreck et al. <ref type="bibr" coords="2,252.29,317.11,14.98,9.96" target="#b9">[17] </ref>allows users to leverage existing domain knowledge and user preferences, arriving at improved cluster maps. Zhang et al. <ref type="bibr" coords="2,279.05,337.03,15.10,9.96" target="#b11">[19] </ref>present a paradigm for visual exploration of clusters. Further, to make sense of the cluster results, visual representations are necessary. Projection-based approaches as presented in <ref type="bibr" coords="2,259.73,367.03,9.80,9.96">[8,</ref><ref type="bibr" coords="2,272.69,367.03,7.44,9.96"> 4] </ref>are common. We use a Multidimensional Scaling (MDS) approach in this paper. Learning models from patterns is an active research topic in various branches of computer vision. But there the pattern examples in most cases originate directly from image analysis, promoting unsupervised learning where subtle anomalies (the unexpected data) or new families of patterns which the model parameters cannot capture often go undetected. Visual analytics, on the other hand, aims to be more flexible in the data constellations encountered, appealing to the complex pattern recognition apparatus of humans and their intuition, creativity, and expert knowledge to point out unusual configurations for further testing and model refinement. Papers recognizing this are currently emerging. Janoos et al. <ref type="bibr" coords="2,188.78,511.05,10.44,9.96">[9] </ref>used a visual analytics approach to learn models of pedestrian motion patterns from video surveillance data, in order to distinguish typical from unusual behavior in order to flag security breaches in outdoor environments. Their semi-supervised learning approach in which users interact with video stream data improves upon the standard unsupervised learning schemes that are typically used in these scenarios. There has been little work in the field of visually assisted machine learning. The last few years at VAST has seen some papers in this domain. Our own work on Model-Driven Visual Analytics <ref type="bibr" coords="2,94.58,624.96,10.66,9.96">[6] </ref> describes a visual analytics system for highdimensional data analysis. In this system, users visually explore the data in a high-dimensional space, and mark example patterns to iteratively learn rules using Logic Programming. The paper on LSAView <ref type="bibr" coords="2,93.02,666.36,10.55,9.96">[3] </ref>provides a visual analytic framework to analyze the model parameters in Latent Semantic Analysis, hence promoting model learning and debugging. Andrienko et al. <ref type="bibr" coords="2,241.01,687.00,10.67,9.96">[1] </ref>present an approach to extracting meaningful clusters from large databases by combining clustering and classification, which are driven by a human analyst through a visual interface. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3">THEORY</head><p>We shall use a text segmentation application as an example to illustrate our work. Important here are the concepts of document and token. In text segmentation we then have a collection of documents that contain the text and the tokens are the words appearing in these text items (each token is composed of a collection of letters). But we may just as well perceive a set of images (or even videos) as a collection of documents and coherent image regions as tokens (which are then further composed into individual pixels). So we see that these concepts are quite general. The data segmentation task involves working on multiple documents, which are further divided into tokens to do any processing and calculations. A document is the unit which is subject to either classification or segmentation. For text, it can be a single string (an address), a story (news entry), or an entire web page. A token is usually the smallest semantically meaningful unit in the document, and can vary depending on your approach. For text, it is usually a word; for images, it can be a pixel, or a contiguous iso-value region. For video, the natural unit is a frame. We observe that if there is a well-known boundary, then it is easy to extract tokens. In cases where such boundaries are missing, a multi-scale approach can work well. Given the tokenized dataset, we often need to start with a coarse segmentation. This segmentation gets refined as we apply the learning algorithm, and possibly involve the user in the loop. This windowing approach has been used in the segmentation of audio broadcast news into stories <ref type="bibr" coords="2,419.11,356.59,13.90,9.96" target="#b10">[18]</ref>. In the absence of a numeric way to define data tokens, these windows provide a simple way to define a feature vector. Segmentation is the process of converting the data in a raw stream of information into structured records. Given a schema consisting of n attributes and an input string, the problem of segmenting the input string involves partitioning the string into contiguous sub-strings and assigning each sub-string a unique attribute from the n attributes. For example, given the address schema consisting of the five attributes &lt;COMPANY, STREET, CITY, STATE, PHONE&gt; and the input string ―Adieu Travel 117 Franklin St Dansville NY (716) 335-2222‖, the task of segmentation is to convert the string into the address record: &lt;Adieu Travel, 117 Franklin St, Dansville, NY, (716) 335-2222&gt;. Further difficulties may emerge when the records appear in different order in different strings. The running example in our paper uses the BigBook business address dataset <ref type="bibr" coords="2,519.50,522.21,10.66,9.96">[3] </ref>which contains approximately 3000 business addresses from New York State. Information on the web (such as product listings, audio/video collections, or newscast) exists in an unstructured format. Segmentation into structured records is necessary to facilitate efficient query processing and analysis. The same goes for images and video for content-based image retrieval. Segmentation techniques either use rules for identifying attributes or employ statistical models. Rule-based approaches require domain experts to create and maintain a set of rules for each application domain. It is difficult to anticipate all possible variations in the documents to be segmented and design rules accordingly. Further, noise in the data can compound the difficulty. Therefore rule-based approaches are neither scalable nor robust. In contrast, statistical approaches automatically learn a statistical model for each application domain. The variability and noise in the input text data are elegantly dealt with by the statistical characteristics inherent in such approaches. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.1">Hidden Markov Models</head><p>Without loss of generality, we use a Hidden Markov Model (HMM) <ref type="bibr" coords="3,86.66,223.36,14.99,9.96" target="#b7">[15] </ref>to learn the segmentation model. The HMM is a widely used statistical model used for data segmentation. It is a generative model since it captures the probability distribution of observations (e.g. the input strings in case of text segmentation). HMMs are commonly used to represent a wide range of phenomena in text, speech, and even images (using 2D HMM <ref type="bibr" coords="3,54.00,285.43,13.53,9.96" target="#b2">[10,</ref><ref type="bibr" coords="3,67.53,285.43,10.15,9.96" target="#b4">12]</ref>.). An HMM consists of a set of states S, a set of observations (in our case words or tokens) W, a transition model specifying P(s t |s t−1 ), the probability of transitioning from state s t−1 to state s t , and an emission model specifying P(w|s) the probability of emitting word w while in state s. To compute hidden state expectations efficiently, we use the Baum Welch algorithm. Emission models are initialized using the approximate classification done using the visual interface. The transition model consists of a completely connected graph with uniform probabilities. Finally, we use the Viterbi algorithm with the learned parameters to label the test data. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.2">Overall Concept</head><p>The main idea behind this project is that humans with specific domain knowledge can easily spot the pattern in data, something which is very difficult for a machine to do. However, to make use of this expert knowledge, the data should be displayed such that the task for the user becomes easier. A good approach is to identify terms that exhibit similar characteristics, and display them together. This essentially means that we need to find appropriate feature vectors for each term and then cluster them together. In data segmentation and classification tasks, the location and neighborhood of a word has a great bearing on its classification. We observe two distinct cases: I. Data belonging to the same class appears together within documents (e.g. when they belong to the same news topic), or II. Data belonging to the same class appears in similar locations across documents (e.g. city names appearing in addresses). </p><p>We propose to treat each document as a sequence of tokens. For the case where each document contains one topic, the feature vector for the tokens is simply a binary vector with a 1 representing presence, and a 0 absence. </p><p>An example is shown in <ref type="figure" coords="3,424.03,54.14,30.54,9.96" target="#tab_1">Table 1</ref>where each column is a document, and each row is a token. Here our vocabulary contains the letters (A,B,C,D,E,F), and we can clearly see the three clusters (A,B), (C,D) and (E,F). A better way to see patterns in a large dataset is to calculate the similarity between the feature vector of the tokens (using the dot product, or some other well-known method), and laying them out in 2D using Multidimensional Scaling (MDS) <ref type="bibr" coords="3,375.19,126.64,13.90,9.96" target="#b3">[11]</ref>. When tokens belong to exactly one topic, the classification task is quite simple. However the fact that most tokens belong to multiple topics makes the task harder, and often impossible to solve for the machine. In <ref type="figure" coords="3,337.15,168.04,29.79,9.96" target="#fig_0">Figure 1</ref>, we show an example to illustrate the value of this approach. In <ref type="figure" coords="3,366.54,178.36,29.72,9.96" target="#fig_0">Figure 1</ref>(a), the tokens from our dataset are laid out randomly. Briefly looking at it makes it clear that these nodes represent male first names. However, in <ref type="figure" coords="3,466.90,199.00,30.00,9.96" target="#fig_0">Figure 1</ref>(b) which shows the points laid out using the windowed approach, a user can see the further pattern that these names belong to different nationalities, and in fact this property (same nationality) causes nodes to be laid out close by. <ref type="figure" coords="3,425.71,240.40,29.52,9.96" target="#fig_0">Figure 1</ref>(c) shows the words colored and circled according to their classification by the user. This task could not be done automatically since even though tokens in the same class occur close by, tokens belonging to different classes are also at a similar distance in multiple instances. Only the domain knowledge of a user can help resolve such ambiguities. For case II, i.e. when tokens in the same class appear in similar locations across documents, we need to capture the locations they appear within all documents. To do so, we divide the tokens in each document into equal numbers of windows (N w ), i.e. each token is assigned a window according to its relative position within the document. Given document d i , token tok j , number of tokens in the document num(d i ) and the location of the token loc(tok j ), its window number is: </p><formula>( ) ( ) ) ) (1) (e.g.) </formula><p>The above example shows how a document with 6 tokens is divided into 3 windows. We construct the feature vector of each token as the histogram summarizing the frequency with which a token has appeared in different windows. An ideal window size is data and task dependent, and is best chosen while interacting with the visual layout of the data. For visualization, we can again calculate token similarity by taking a dot product between feature vectors, and display them in 2D using MDS. An example of using windows for the initial segmentation of data is shown in <ref type="figure" coords="4,115.10,182.80,29.31,9.96">Figure 2</ref>. Here our task is to segment the colored image into its constituent blocks (<ref type="figure" coords="4,177.88,193.12,26.91,9.96">Fig 2(c)</ref>). Initially we divide the image into 44 sub-images. This starts off the learning algorithm, and after a few iterations gives the required result. Note that the window sizes are at a similar scale to the final segments. If we start off with windows too large (larger than the largest segment), then the results might not be even close to expected. On the other hand, windows that are too small increase the problem size, making it longer (and harder) to solve. This windowing approach is similar to the one used in <ref type="bibr" coords="4,543.10,85.24,14.99,9.96" target="#b6">[14] </ref>which use bigrams and trigrams as basic units for document visualization. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4">IMPLEMENTATION</head><p>The basic approach of our system is as follows: we take tokenized data documents, calculate the relevant feature vectors, and allow the user to help initialize and refine models to cluster the data. As mentioned, we use HMMs as an example of a learning approach. An overview of our system is shown in the flowchart in <ref type="figure" coords="4,520.78,180.64,29.07,9.96">Figure 3</ref>. Initially the data is preprocessed, and tokenized. So each document will contain a sequence of tokens which need to be labeled. We consider all identical tokens to be instances of the same entity, and our feature vector calculations are based on these entities. Observing the datasets led us to the realization that there are three important properties which can help us classify a token – (a) Its structure. For text this includes – is it a word, is it a number, its length etc. </p><p>(b) Its context, e.g. the tokens that appear before and after it, (c) Its location in the document. Structure and context can also include information beyond the information contained in the tokens themselves. This includes meta-data which comes attached. Webpage data though not necessarily machine readable already exhibits some structure via html meta-data. The non-visual web browser presented in <ref type="bibr" coords="5,279.17,289.63,14.98,9.96" target="#b5">[13] </ref>uses the meta-data to segment webpages into semantically related regions. We numerically capture the above properties in each entity's feature vector. This means that a feature vector contains multiple high-dimensional vectors. When we calculate the similarity between any two entities, we need to calculate similarities based on each property separately, and then combine them into a final value. A survey on cluster data mining techniques <ref type="bibr" coords="5,227.09,382.75,10.44,9.96">[2] </ref>concludes that data specific attribute selection has yet to be invented. Recent work on unsupervised feature learning <ref type="bibr" coords="5,204.05,403.39,13.90,9.96" target="#b8">[16]</ref>, confirms that user interaction can greatly reduce the learning time. To help alleviate this problem to some extent, we give the power of assigning the weights of the feature vector elements to the user. The similarities due to different elements are all normalized to ranges between <ref type="bibr" coords="5,284.33,444.81,9.92,9.96">[0,</ref><ref type="bibr" coords="5,54.00,455.13,6.54,9.96"> 1]</ref>. Given two entities x and y, and similarity values sim i (x, y) and weights w i due to the three properties, the final similarity between them is: </p><formula>) ∑ ) ∑ (2) </formula></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.1">Initialization Stage</head><p> The entities are displayed as a node-link diagram using a forcedirected layout algorithm <ref type="bibr" coords="5,414.31,150.64,9.61,9.96">[7]</ref> . This algorithm considers a springlike force for every pair of nodes (x, y) where the ideal length δ xy of each spring is proportional to the graph-theoretic distance between nodes x and y. Minimizing the difference between Euclidean and ideal distances between nodes is equivalent to a metric multidimensional scaling problem. Here we use the dissimilarity between nodes as the ideal distance between two nodes. The dissimilarity is simply the inverse of similarity: <ref type="figure" coords="5,326.59,264.67,30.42,9.96" target="#fig_3">Figure 4</ref>shows the graph evolution, and finally patterns emerge showing the overall structure of the dataset. At this stage, the user can modify the weights of the feature vectors. This updates the node similarities as well as the graph layout. Note that any pair of nodes will have a similarity measure, but keeping all the edges will give us an extremely dense graph with no discernible structure. Removing edges between nodes with low similarity (&lt; 0.5) helps this structure to emerge better. The optimal cutoff value depends on the data density and the feature vector selection (i.e. weights). We allow the user to select this cutoff value to find the appropriate optimal value. <ref type="figure" coords="5,502.42,368.23,30.66,9.96">Figure 5</ref>shows an illustration of how the graph layout changes with the removal of edges representing low similarity. The one disadvantage is that some nodes become isolated, i.e. are not connected to any other node. We can handle this by either allowing the user to assign them to a cluster after we call the clustering algorithm. Else, the HMM can classify them during the learning stage, and they get displayed in the corresponding cluster during the refinement stage. Users can affect the graph layout, and the clustering using the following inputs: (a) Modifying the weights of the feature vector elements (b) Modifying the similarity cutoff – this removes the edges representing low similarity, and also reveals a clearer structure of the dataset. </p><formula>) ) (3) </formula><p>(c) Modifying the frequency cutoff of the data points. This leaves only the most prominent nodes behind, which act as representative nodes, and give the users a good idea of the classes present in the dataset. </p><p>(d) Modifying the ―fineness‖ level of clustering – this controls how many clusters the data gets split into. Getting the most appropriate number of clusters will reduce the load on the user during the sculpting stage. (Step 6 in <ref type="figure" coords="6,228.79,188.68,29.03,9.96">Figure 3</ref>). Further, we notice that the visualization reveals more structure when we display entities from the entire dataset, rather than from a smaller subset. This is because in the smaller dataset most low frequency entities do not cluster well. As we increase the number of documents, some of these frequencies improve, and the entities become better defined. When the various settings work together to produce a semantically meaningful structure, the user can call the clustering algorithm. A good choice of weights at this early stage will minimize the work required from the user at later stages – especially at the cluster sculpting stage, and relabeling the tokens at the refinement stage. In most cases, a range of values gives decent results, hence carefully updating the weights and observing the visualization can take care of this problem. We use the Markov Cluster Algorithm (MCL), an unsupervised cluster algorithm for graphs based on the simulation of stochastic flow in graphs <ref type="bibr" coords="6,109.22,370.63,9.70,9.96">[5]</ref>. Only those similarity values that are above the cutoff specified by the user are passed to the clustering algorithm. This has a similar effect as it has on the visualization – it helps segment the data better, i.e. divides them into more classes. Once the clusters are calculated, they are displayed by forming a convex-hull boundary around the data points they contain. Further, we relax the strength of edges across clusters to reduce their spatial overlap. (See <ref type="figure" coords="6,412.27,116.20,29.43,9.96" target="#fig_4">Figure 6</ref>) The physical boundaries between clusters, might lead the user to discover some semantic discrepancies – this usually occurs due to entities which are ambiguous and can occur in multiple classes, or in cases where the feature vector is not able to classify an entity correctly. In this case, a user can visually sculpt the clusters – this involves splitting and merging clusters, dragging nodes from one cluster to another, or duplicating nodes into different clusters (for example, the token ‗York' may appear in ‗Street', ‗State', ‗City', and even ‗Company' depending on context). The visualization assists the user at this stage by highlighting the nodes that have more than 99% of edges to nodes within the same cluster. At the end of this stage, the number of states in the HMM is assumed to be the number of clusters in our visualization. Further, the emission probabilities are calculated based on these clusters – entities with a higher frequency in the original dataset have a higher emission probability. To allow the model learning algorithm to assign a word to a different class from that in the above cluster, we assign a small emission probability value to all the words in all the states other than the one they appear in. This approach also allows the Baum-Welch algorithm to learn fairly accurately for words which appear in multiple classes. We go through the first round of HMM training to learn our initial model, and then use Viterbi algorithm to segment the strings. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.2">Refinement Stage</head><p>At this stage the user can help resolve inconsistencies in the segmentation, and help debug the model. To make this more intuitive, we first need the user to give the clusters semantic names. This is done by highlighting the nodes in all clusters which has a very low similarity to nodes in other clusters. In case the presence of some entity makes the identity of the class ambiguous, the user can choose to see some strings where the entity appears. For e.g. if Washington appears in a cluster with what mostly appears to be street names, seeing it in context will help the user be sure that the given cluster indeed contains street names, not cities or states. Two examples are given below: At this stage, we have named clusters and a trained HMM. Now, we can involve multiple users in the refinement stage. Just as interaction with users can quickly help define models, misclassifications at any stage can slow the process down. Hence involving multiple users at the refinement stage can help remove mistakes made by a user due to either lack of knowledge, or uncertainty. We pick documents that contain tokens that did not cluster well – i.e. had a lot of highly similar nodes in other clusters. These are the entities which belong to multiple classes in a dataset. The user resolves this inconsistency, and if such a token is indeed classified into more than one class by the user, we duplicate it to represent various identities of a single entity. This also reduces the edges across clusters, making the model better defined. We ask the user to reclassify a few documents at a time, and then retrain the HMM to reflect these changes. During this debugging stage, the user can highlight the consecutive tokens in the graph layout. When a specific token is selected, the corresponding node(s) in the graph are highlighted. Also, the cluster to which it has been classified is also highlighted. This helps the user see the possible classes the token could belong to. The user can traverse forwards and backwards along a given document to establish if there is any misclassification. The visualization where the clusters are marked often excludes entities with low frequency – either because they were filtered out by the user, or they were not assigned a cluster due to low similarity to any cluster. However, after the HMM is trained, all the entities in the dataset will be assigned emission probability values. Further, if we want to display duplicates for entities belonging to multiple clusters, the visualization will become too dense. To overcome this problem, after the initialization stage, we only display the entities which have very few high similarity edges to nodes in other clusters. These are called the inner nodes, and are the representatives of their classes. When a certain token is selected during debugging, its corresponding node(s) are also visualized. The user can still use our interface to display more nodes if required. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5">RESULTS</head><p>The system we described can help in the classification of varied types of datasets. As a starting step, we worked with text-based datasets since they require minimal preprocessing, and can show the utility of our method. In this section we will see a running example of learning a model (HMM) for the business address dataset. The BigBook business address dataset contains approximately 3000 business addresses from New York State. This dataset contains a large number of distinct integers, and each separate integer does not have a special meaning, but usually just represents a street or building number or is a part of a business name. To make sure that the HMM is able to learn well, and apply the model to addresses with new tokens, we replace each integer with the term DIGIT-&lt;i&gt; where " i " is the length of the integer. After the initial preprocessing, we calculate feature vectors based on the three properties of structure, context and location:  The feature vector on structure contains the following information: does it contain a letter, does it contain a digit, does it contain a non-alphanumeric symbol, does it begin with a capital letter, is it all caps, and its length. Except for the last element, the others are binary.  The feature vector on context contains a summary (i.e. histogram) of the structure based feature vectors of the tokens that appear immediately before and after the given entity in all the documents. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head> </head><p>Finally, for the feature vector on location, we use the windowing approach as presented in Section 3.2. Initially, if we know the number of classes (N c ) in the dataset, we use its multiples as the number of windows. In the absence of this information, the window size is decided by the document lengths (i.e. number of tokens in the document). Now the data is displayed on the screen, and as the user plays with the similarity cutoff slider, the graph goes from being one main cluster with all nodes interconnected, to one which shows the inbuilt structure of the data. At this point, the user clusters the dataset. Since there is a lot of overlap between the terms in ADDRESS and CITY (see Figures 4 and 6), there is an extra cluster which contains these common tokens. The user organizes and splits this cluster to the best of his knowledge, and merges the corresponding halves with the two clusters. Next we highlight the inner nodes in the dataset, which shows the user the representative terms for each cluster, and he is able to name them. <ref type="figure" coords="7,362.23,439.05,30.27,9.96" target="#fig_5">Figure 7</ref>shows an example of these inner nodes. Now we initialize the emission probabilities for all states based on the clusters. If an entity belongs to a cluster, its emission probability is the ratio between frequency of the entity and the total frequency of the entities in the cluster. As mentioned in Section 4.1, we assign a small probability value to all the entities not belonging to the cluster. At this stage the Baum-Welch algorithm is called to learn an initial model. Now the user is shown strings with one token that has high similarity to nodes in multiple clusters. Given that the token has high similarity to entities in classes c 1 and c 2 , we: (a) Assign a positive value if the classification was correct (b) If the classification in class c i is deemed incorrect, and reclassified to class c j , then we assign a heavy penalty to c i and a heavy bonus value to c j . </p><p>The accumulated values at the end of a reclassifying round are used to modify the emission tables learned by the Baum-Welch. Further, based on this, we also split the nodes if they are classified into different classes in the cluster. The user helps in the debugging process till the clusters become better defined, as shown in <ref type="figure" coords="8,90.73,236.08,29.96,9.96" target="#fig_4">Figure 6</ref>. After four rounds of refinement based on the tokens with high presence in multiple clusters, we get a good model for classification. The time taken between iterations depends on the complexity and implementation of the algorithms used to learn the model, and segment the strings – in this case the Baum Welch, and Viterbi algorithm respectively. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6">CONCLUSIONS</head><p>In this paper we have presented a general approach to visualization-assisted model learning for data segmentation and classification tasks. The driving motivation for our approach is that the typical manual tagging of data is very resource intensive. Further, even if one uses just a small dataset for tagging to bootstrap the learning process, if the chosen subset is not a good representative of the entire dataset, then the models learnt might not be robust. On the other hand, completely automated methods which take a brute force approach by using large feature vectors for classification have the drawback of being very time intensive, and small misclassifications can cause the model learnt to be less than ideal. In this case user interaction at various stages can help the machine stay on track, and so will improve the speed as well. As part of our future work, we aim to extend this approach to varied data types and with different clustering and classification algorithms. This promises to give further insight into semiautomatic design of feature vectors for other domains. In this paper, we have demonstrated the use of our system for a fairly constrained problem – the segmentation of business addresses using HMMs. Work is currently underway that extends the use of our system to other model building tasks, such as classifiers, using the categorization of large image collections and documents as a driving application. In future work, we plan to optimize the usability aspects if the system by ways of focused user studies. In particular, we would like to study and precisely quantify how much faster a model of equal quality can be derived with our framework, as opposed to more traditional non-interactive approaches. Further, we also wish to study if the visual analytics approach we have proposed here allows domain experts to produce models that are more accurate than those derived automatically since the user is actively involved in the model-sculpting task. </p></div><figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_0" coords="3,177.98,687.50,373.69,8.96;3,177.98,698.96,373.55,7.44;3,177.98,708.92,176.29,7.44"><head>Figure 1: </head><figDesc>Figure 1: This image shows the layout of points representing people's names (a) randomly, and (b) based on the window based approach. The user interacts with the graph in (b), and marks people who belong together (here based on nationality), giving us (c). </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_2" coords="4,63.02,154.09,233.73,7.44;4,63.02,163.33,202.39,7.44;4,77.90,127.50,30.04,8.90;4,71.54,136.62,42.64,8.90"><head>Figure 2: Figure 3: </head><figDesc>Figure 2: An example of using a coarse segmentation (windowing) to initialize the image segmentation process. (a) Initial segmentation </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_3" coords="5,67.22,152.41,217.77,7.44;5,67.22,161.53,85.11,7.44"><head>Figure 4: </head><figDesc>Figure 4: Graph evolution based on node dissimilarities (as shown along the edges) </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_4" coords="6,65.54,715.64,491.35,7.44;6,65.54,725.72,184.50,7.44"><head>Figure 6: </head><figDesc>Figure 6: Result. The four panels show the evolution of the clusters as the user reclassifies the segmentation of some address entries, and the HMM relearns the model taking this into account </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_5" coords="7,329.71,689.24,221.92,7.44;7,329.71,698.48,222.14,7.44;7,329.71,707.84,153.33,7.44"><head>Figure 7: </head><figDesc>Figure 7: Graph showing the inner entities/nodes in green. These nodes help the user both during the cluster sculpting stage, and during the cluster naming stage. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_0" validated="false" coords="3,60.60,59.27,221.07,25.94"><figDesc coords="3,60.60,59.27,221.04,7.44;3,60.60,68.51,221.07,7.44;3,60.60,77.77,204.06,7.44">Table 1: Feature vector table. Each matrix entry represents the presence or absence of a token in a document. Each row represents the feature vector for the corresponding token.</figDesc><table></table></figure>
+		</body>
+		<back>
+
+			<div type="acknowledgement">
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>ACKNOWLEDGEMENTS </head><p>This research was supported by NSF grants CCF-0702699 and CNS-0627447. We also thank all reviewers for their useful suggestions. </p></div>
+			</div>
+
+			<div type="references">
+
+				<listBibl>
+
+<biblStruct coords="8,317.93,68.08,9.39,8.90;8,343.15,68.08,214.77,8.90;8,343.15,77.20,214.64,8.90;8,343.15,86.46,215.00,8.90;8,343.15,95.70,156.09,8.90;8,317.93,104.82,9.39,8.90;8,343.15,104.82,214.85,8.90;8,343.15,114.06,165.70,8.90;8,317.93,123.30,9.39,8.90;8,343.15,123.30,214.98,8.90;8,343.15,132.42,215.01,8.90;8,343.15,141.66,214.32,8.90;8,317.93,150.90,9.39,8.90;8,343.15,150.90,214.73,8.90;8,343.15,160.02,215.01,8.90;8,343.15,169.26,159.58,8.90;8,317.93,178.50,9.40,8.90;8,343.15,178.50,214.99,8.90;8,343.15,187.62,147.45,8.90;8,317.93,196.86,9.39,8.90;8,343.15,196.86,214.76,8.90;8,343.15,206.10,214.88,8.90;8,343.15,215.22,119.60,8.90;8,317.93,224.46,9.39,8.90"  xml:id="b0">
+	<analytic>
+		<title level="a" type="main">Interactive visual clustering of large collections of trajectories A survey of clustering data mining techniques. Grouping Multidimensional Data LSAView: A Tool for Visual Exploration of Latent Semantic Modeling Class visualization of high-dimensional data with applications Graph clustering by flow simulation</title>
+		<author>
+			<persName>
+				<forename type="first">]</forename>
+				<forename type="middle">G</forename>
+				<surname>Andrienko</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Andrienko</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Rinzivillo</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Nanni</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Pedreschi</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<surname>Giannotti ] P</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Berkhin</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Crossno</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Dunlavy</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<forename type="middle">V</forename>
+				<surname>Shead</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<surname>Dongen</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. IEEE Symp. Visual Analytics Science and Technology (VAST) Proc. IEEE Symp. Visual Analytics Science and Technology (VAST) Model-Driven Visual Analytics. Proc. IEEE Symp. Visual Analytics Science and Technology (VAST)</title>
+		<editor>I.S. Dhillon, D.S. Modha and W.S. Spangler S. Garg, J.E. Nam, I.V. Ramakrishnan, K. Mueller</editor>
+		<meeting>. IEEE Symp. Visual Analytics Science and Technology (VAST) . IEEE Symp. Visual Analytics Science and Technology (VAST) Model-Driven Visual Analytics. . IEEE Symp. Visual Analytics Science and Technology (VAST)</meeting>
+		<imprint>
+			<date type="published" when="2000" />
+			<biblScope unit="page" from="3" to="10" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,343.15,224.46,215.04,8.90;8,343.15,233.70,214.86,8.90;8,343.15,242.82,164.13,8.90;8,317.93,252.06,9.39,8.90;8,343.15,252.06,215.11,8.90;8,343.15,261.33,214.89,8.90;8,343.15,270.45,110.10,8.90;8,317.93,279.69,9.39,8.90;8,343.15,279.69,215.01,8.90;8,343.15,288.93,214.77,8.90;8,343.15,298.05,214.98,8.90;8,343.15,307.29,156.09,8.90"  xml:id="b1">
+	<analytic>
+		<title level="a" type="main">Prefuse: a toolkit for interactive information visualization HD-Eye: Visual mining of high-dimensional data Activity Analysis Using Spatio-Temporal Trajectory Volumes in Surveillance Applications</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Heer</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Card</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">A</forename>
+				<surname>Landay</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Hinneburg</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Keim</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Wawryniuk</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<surname>Janoos</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Singh</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">O</forename>
+				<surname>Irfanoglu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Machiraju</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Parent</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. SIGCHI Conference on Human Factors in Computing Systems Proc. IEEE Symp. Visual Analytics Science and Technology (VAST)</title>
+		<meeting>. SIGCHI Conference on Human Factors in Computing Systems . IEEE Symp. Visual Analytics Science and Technology (VAST)</meeting>
+		<imprint>
+			<date type="published" when="1999" />
+			<biblScope unit="page" from="421" to="430" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,343.15,316.41,214.84,8.90;8,343.15,325.65,214.94,8.90;8,343.15,334.89,104.95,8.90"  xml:id="b2">
+	<monogr>
+		<title level="m" type="main">Semantic Image Segmentation with a Multidimensional Hidden Markov Model Advances in Multimedia Modeling</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Jiten</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Merialdo</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2007" />
+			<biblScope unit="page" from="616" to="624" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,343.15,344.01,215.02,8.90;8,343.15,353.25,75.73,8.90"  xml:id="b3">
+	<monogr>
+		<title level="m" type="main">Multidimensional scaling</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">B</forename>
+				<surname>Kruskal</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Wish</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="1978" />
+			<publisher>Sage Publications, Inc</publisher>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,343.15,362.49,214.99,8.90;8,343.15,371.61,214.99,8.90;8,343.15,380.85,113.22,8.90"  xml:id="b4">
+	<analytic>
+		<title level="a" type="main">Image classification by a twodimensional hidden Markov model</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Li</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Najmi</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Gray</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Trans. on Signal Processing</title>
+		<imprint>
+			<biblScope unit="volume">48</biblScope>
+			<biblScope unit="issue">2</biblScope>
+			<biblScope unit="page" from="517" to="533" />
+			<date type="published" when="2000" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,343.15,390.09,214.99,8.90;8,343.15,399.21,214.98,8.90;8,343.15,408.45,160.29,8.90"  xml:id="b5">
+	<analytic>
+		<title level="a" type="main">Csurf: a contextdriven non-visual web-browser</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">U</forename>
+				<surname>Mahmud</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Y</forename>
+				<surname>Borodin</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">I</forename>
+				<forename type="middle">V</forename>
+				<surname>Ramakrishnan</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. 16th International Conference on World Wide Web</title>
+		<meeting>. 16th International Conference on World Wide Web</meeting>
+		<imprint>
+			<date type="published" when="2007" />
+			<biblScope unit="page" from="31" to="40" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,343.15,417.69,214.89,8.90;8,343.15,426.83,214.80,8.90;8,343.15,436.07,114.05,8.90"  xml:id="b6">
+	<analytic>
+		<title level="a" type="main">Sequential Document Visualization</title>
+		<author>
+			<persName>
+				<forename type="first">Y</forename>
+				<surname>Mao</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">G</forename>
+				<surname>Dillon</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<surname>Lebanon</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Trans. on Visualization and Computer Graphics</title>
+		<imprint>
+			<biblScope unit="volume">13</biblScope>
+			<biblScope unit="issue">6</biblScope>
+			<biblScope unit="page" from="1208" to="1215" />
+			<date type="published" when="2007" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,343.15,445.31,214.64,8.90;8,343.15,454.43,215.04,8.90;8,343.15,463.67,73.61,8.90"  xml:id="b7">
+	<analytic>
+		<title level="a" type="main">A tutorial on hidden Markov models and selected applications in speech recognition</title>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<forename type="middle">R</forename>
+				<surname>Rabiner</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the IEEE</title>
+		<meeting>the IEEE</meeting>
+		<imprint>
+			<date type="published" when="1989" />
+			<biblScope unit="page" from="257" to="286" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,343.15,472.91,215.01,8.90;8,343.15,482.03,214.98,8.90;8,343.15,491.27,202.53,8.90"  xml:id="b8">
+	<analytic>
+		<title level="a" type="main">Self-taught learning: transfer learning from unlabeled data</title>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Raina</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Battle</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Lee</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Packer</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Ng</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. 24th International Conference on Machine Learning</title>
+		<meeting>. 24th International Conference on Machine Learning</meeting>
+		<imprint>
+			<date type="published" when="2007" />
+			<biblScope unit="page">766</biblScope>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,343.15,500.51,214.96,8.90;8,343.15,509.63,214.76,8.90;8,343.15,518.87,214.91,8.90;8,343.15,528.11,77.60,8.90"  xml:id="b9">
+	<analytic>
+		<title level="a" type="main">Visual cluster analysis of trajectory data with interactive Kohonen maps</title>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Schreck</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Bernard</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Tekusova</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Kohlhammer</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. IEEE Symp. Visual Analytics Science and Technology (VAST)</title>
+		<meeting>. IEEE Symp. Visual Analytics Science and Technology (VAST)</meeting>
+		<imprint>
+			<date type="published" when="2008" />
+			<biblScope unit="page" from="3" to="10" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,343.15,537.23,214.82,8.90;8,343.15,546.47,215.04,8.90;8,343.15,555.71,210.93,8.90"  xml:id="b10">
+	<analytic>
+		<title level="a" type="main">Broadcast News Story Segmentation using Social Network Analysis and Hidden Markov Models</title>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Vinciarelli</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Favre</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. 15th International Conference on Multimedia</title>
+		<meeting>. 15th International Conference on Multimedia</meeting>
+		<imprint>
+			<date type="published" when="2007" />
+			<biblScope unit="page" from="264" to="267" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,343.15,564.83,214.90,8.90;8,343.15,574.07,215.00,8.90;8,343.15,583.31,215.02,8.90;8,343.15,592.43,50.10,8.90"  xml:id="b11">
+	<analytic>
+		<title level="a" type="main">A Visual Method for High-Dimensional Data Cluster Exploration</title>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<forename type="middle">B</forename>
+				<surname>Zhang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Huang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Orgun</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Q</forename>
+				<surname>Nguyen</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc.16th International Conference on Neural Information Processing</title>
+		<meeting>.16th International Conference on Neural Information essing</meeting>
+		<imprint>
+			<date type="published" when="2009" />
+			<biblScope unit="page" from="699" to="709" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,343.15,601.70,214.88,8.90;8,343.15,610.94,61.87,8.90"  xml:id="b12">
+	<monogr>
+		<title level="m" type="main">Semi-Supervised Learning Literature Survey</title>
+		<author>
+			<persName>
+				<forename type="first">X</forename>
+				<surname>Zhu</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2005" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+				</listBibl>
+			</div>
+		</back>
+	</text>
+</TEI>

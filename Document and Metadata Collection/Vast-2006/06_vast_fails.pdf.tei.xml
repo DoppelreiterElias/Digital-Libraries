@@ -1,0 +1,947 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.tei-c.org/ns/1.0 /home/pisenberg/grobid/grobid-home/schemas/xsd/Grobid.xsd"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+	<teiHeader xml:lang="en">
+		<encodingDesc>
+			<appInfo>
+				<application version="0.4.1" ident="GROBID" when="2016-09-09T13:35+0000">
+					<ref target="https://github.com/kermitt2/grobid">GROBID - A machine learning software for extracting information from scholarly documents</ref>
+				</application>
+			</appInfo>
+		</encodingDesc>
+		<fileDesc>
+			<titleStmt>
+				<title level="a" type="main">A Visual Interface for Multivariate Temporal Data: Finding Patterns of Events across Multiple Histories</title>
+			</titleStmt>
+			<publicationStmt>
+				<publisher/>
+				<availability status="unknown"><licence/></availability>
+			</publicationStmt>
+			<sourceDesc>
+				<biblStruct>
+					<analytic>
+						<author>
+							<persName>
+								<forename type="first">Jerry</forename>
+								<forename type="middle">Alan</forename>
+								<surname>Fails</surname>
+							</persName>
+							<affiliation>
+								<orgName type="department">Department of Computer Science &amp; Human-Computer Interaction</orgName>
+								<orgName type="laboratory" key="lab1">Information Systems]: Information Search and Retrieval — query formulation</orgName>
+								<orgName type="laboratory" key="lab2">A.V. Williams Building, College Park</orgName>
+								<orgName type="institution">Lab University of Maryland</orgName>
+								<address>
+									<postCode>20742</postCode>
+									<settlement>Maryland</settlement>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Amy</forename>
+								<surname>Karlson</surname>
+							</persName>
+							<affiliation>
+								<orgName type="department">Department of Computer Science &amp; Human-Computer Interaction</orgName>
+								<orgName type="laboratory" key="lab1">Information Systems]: Information Search and Retrieval — query formulation</orgName>
+								<orgName type="laboratory" key="lab2">A.V. Williams Building, College Park</orgName>
+								<orgName type="institution">Lab University of Maryland</orgName>
+								<address>
+									<postCode>20742</postCode>
+									<settlement>Maryland</settlement>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Layla</forename>
+								<surname>Shahamat</surname>
+							</persName>
+							<affiliation>
+								<orgName type="department">Department of Computer Science &amp; Human-Computer Interaction</orgName>
+								<orgName type="laboratory" key="lab1">Information Systems]: Information Search and Retrieval — query formulation</orgName>
+								<orgName type="laboratory" key="lab2">A.V. Williams Building, College Park</orgName>
+								<orgName type="institution">Lab University of Maryland</orgName>
+								<address>
+									<postCode>20742</postCode>
+									<settlement>Maryland</settlement>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Ben</forename>
+								<surname>Shneiderman</surname>
+							</persName>
+							<affiliation>
+								<orgName type="department">Department of Computer Science &amp; Human-Computer Interaction</orgName>
+								<orgName type="laboratory" key="lab1">Information Systems]: Information Search and Retrieval — query formulation</orgName>
+								<orgName type="laboratory" key="lab2">A.V. Williams Building, College Park</orgName>
+								<orgName type="institution">Lab University of Maryland</orgName>
+								<address>
+									<postCode>20742</postCode>
+									<settlement>Maryland</settlement>
+								</address>
+							</affiliation>
+						</author>
+						<title level="a" type="main">A Visual Interface for Multivariate Temporal Data: Finding Patterns of Events across Multiple Histories</title>
+					</analytic>
+					<monogr>
+						<imprint>
+							<date/>
+						</imprint>
+					</monogr>
+				</biblStruct>
+			</sourceDesc>
+		</fileDesc>
+		<profileDesc>
+			<textClass>
+				<keywords>
+					<term>CR Categories: H52 [Information Interfaces and Presentation]:</term>
+					<term>User Interfaces; H52 [</term>
+					<term>Keywords: Temporal query, information visualization, user</term>
+					<term>interface</term>
+				</keywords>
+			</textClass>
+			<abstract>
+				<p>Finding patterns of events over time is important in searching patient histories, web logs, news stories, and criminal activities. This paper presents PatternFinder, an integrated interface for query and result-set visualization for search and discovery of temporal patterns within multivariate and categorical data sets. We define temporal patterns as sequences of events with inter-event time spans. PatternFinder allows users to specify the attributes of events and time spans to produce powerful pattern queries that are difficult to express with other formalisms. We characterize the range of queries PatternFinder supports as users vary the specificity at which events and time spans are defined. Pattern Finder&apos;s query capabilities together with coupled ball-and-chain and tabular visualizations enable users to effectively query, explore and analyze event patterns both within and across data entities (e.g. patient histories, terrorist groups, web logs, etc.).</p>
+			</abstract>
+		</profileDesc>
+	</teiHeader>
+	<text xml:lang="en">
+		<body>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>INTRODUCTION </head><p>Finding patterns of events is fundamental to understanding and reasoning in many domains. For example, in the medical field, time plays a critical role in assessing individual treatments based on personal medical history, as well as broader treatment success rates based on aggregate analysis of multiple case histories. Time also plays an important role in analyzing financial events that guide investment and in tracking travel events that could direct police intervention of terrorists. Despite a pervasive presence of temporal data, traditional database management systems support only SQL queries which are not convenient for temporal pattern search. Some research systems provide temporal access languages to support limited visual queries from end-users <ref type="bibr" coords="1,235.74,542.36,6.75,9.96" target="#b0">[1]</ref><ref type="bibr" coords="1,242.49,542.36,3.38,9.96" target="#b1">[2]</ref><ref type="bibr" coords="1,242.49,542.36,3.38,9.96" target="#b2">[3]</ref><ref type="bibr" coords="1,245.87,542.36,6.75,9.96" target="#b3">[4]</ref>, but many of these suffer the same accessibility difficulties of SQL, namely that the languages are not known by nor are they welcoming to practitioners or they require an understanding of the underlying database structure. Simply stated, to many practitioners these query languages are obtuse. In contrast to some systems that support time-series data <ref type="bibr" coords="1,268.69,604.46,9.52,9.96" target="#b4">[5]</ref>, we consider the multivariate and categorical nature of events. We define a temporal pattern as a sequence of point events separated by time spans. We describe PatternFinder and the types of temporal patterns it supports. A representative task supported by PatternFinder would be finding and displaying patients who had high blood sugar on two consecutive blood tests within ten days. A pattern such as this would be challenging for average users to formulate using a query language, or to interpret as a text-based tabular result. Combining temporal query specification and visualization, PatternFinder enables exploration and discovery of patterns in temporal data. We approach this problem by focusing on query and exploration of visual temporal patterns within medical histories. Although our prototype and examples are grounded in the medical domain, these techniques apply equally well to other domains such as historical records (e.g., education registration, business), transaction-based data sets (e.g., web logs, finance), and police or intelligence investigation (e.g. money laundering, terror planning). </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2">RELATED WORK</head><p>We divide the large body of related work into three general areas: time theory, databases, and visualizations. There is considerable overlap between these areas. Related research is vast, so only a few highlights are expressed along with their relevance to our work. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.1">Time theory</head><p>Much of the seminal work in computer science relating to time stems from artificial intelligence, time reasoning, and early natural language processing <ref type="bibr" coords="1,393.37,446.84,6.74,9.96" target="#b5">[6]</ref><ref type="bibr" coords="1,400.11,446.84,3.37,9.96" target="#b6">[7]</ref><ref type="bibr" coords="1,403.48,446.84,6.74,9.96" target="#b7">[8]</ref>. Time can be characterized by point or interval events. Snodgrass defines instance events as being absolute and intervals as being relative distances between two instances <ref type="bibr" coords="1,519.83,477.92,9.52,9.96" target="#b8">[9]</ref>. Allen introduces time intervals as the primitive for automated reasoning over temporally structured data <ref type="bibr" coords="1,436.32,498.62,9.47,9.96" target="#b6">[7]</ref>. He argues that all seemingly instantaneous events can be decomposed and thus all events can be modelled uniformly as intervals. He defines 13 mutually exclusive relations that hold between any two intervals: Equal, Before, After, During, Contains, Overlaps, Overlapped-by, Meets, Met-by, Starts, Started by, Finishes, and Finished-by. Allen also discusses how these can be hierarchically composed, however he does not implement an interface. PatternFinder supports intervals, including: start/stop event pairs, and as sets of events that share a user-defined characteristic, which together span an extent of time. Although overlapping queries are possible, PatternFinder supports temporal sequence patterns more directly. PatternFinder currently does not allow for hierarchical or recursive query definitions as Allen described, but it does implement a powerful interval-based query system. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.2">Databases</head><p>Over the years databases have progressed from theory, to small text files, to visual representations, to presently include research in spatial-temporal databases. In situating our work, this section focuses on visual interfaces and how databases deal with time. A.V. Williams Building, College Park, Maryland 20742 {fails, akk, laylas, ben}@cs.umd.edu 2.2.1 Visual Query Interfaces to Relational Databases Traditional access to databases has been via SQL <ref type="bibr" coords="2,267.37,67.16,13.80,9.96" target="#b9">[10]</ref>, a language designed specifically to create, organize and query databases. Due to the complexity of formulating SQL queries, several approaches have made database query more accessible to a broader spectrum of users. Query By Example (QBE) presents the structure of the database as skeleton tables, and is the visual query mechanism used in Microsoft's Access <ref type="bibr" coords="2,220.55,129.26,13.80,9.96" target="#b10">[11]</ref>. Simple queries in QBE are formulated by users placing a mark in the data column they wish to be returned. Users enter constants to specify desired attribute values and variables to bind results across columns. Although visual query languages facilitate database query by avoiding SQL syntax, users must still understand the relational tables and formulate queries, using variables and other difficult concepts. PatternFinder presents users with visual constructs for querying the temporal relationships among events. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.2.2">Time and Databases</head><p>Numerous extensions to the relational model have been proposed to incorporate time, such as TSQL2 <ref type="bibr" coords="2,223.30,252.74,9.57,9.96" target="#b3">[4]</ref>, an extension to the SQL-92 <ref type="bibr" coords="2,100.15,263.06,15.00,9.96" target="#b9">[10] </ref>language standard. TSQL2 provides a surrogate data type which can be used to support history identity and generalized range variables. A hybrid between QBE and Extended Entity-Relationship diagrams (EER) represents queries visually as EER objects for which attributes and variables can be instantiated <ref type="bibr" coords="2,54.00,314.84,13.77,9.96" target="#b11">[12]</ref>. In order to support temporal databases, each EER object and relation is associated with a temporal object describing its valid times (when the event happened) and transaction times (when it was recorded). Temporal queries are supported by temporal operator objects in the diagram including the qualifiers: before, during, after, start and end. This work was expanded by a conceptually equivalent approach which allows users to manipulate EER type objects and specify time constraints using a rich set of menus and toolbars <ref type="bibr" coords="2,173.69,397.64,13.76,9.96" target="#b12">[13]</ref>. This hybrid system allows users to look at snapshots (data representing a given time) or slices (data over time). Although both QBE-EER and hybrid approaches support queries over temporal events using a visual, direct-manipulation language, the temporal operators are an extension to a generalpurpose database query language. Thus, neither attempt to visually encode temporal aspects and relationships in a succinct or orderly way to take advantage of the strictly ordered nature of time. MQuery is another approach for visual query via entityrelation style specification <ref type="bibr" coords="2,153.85,501.08,13.75,9.96" target="#b13">[14]</ref>. MQuery targets various types of streaming data, such as video footage and medical histories. Temporal features can be captured by before/after date specifications and left to right positioning of query objects, but it does not provide a higher level representation of the temporal aspects of the data or the query itself. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.3">Related Visualizations</head><p>This section discusses three different aspects of related visualization: visual query by time intervals, other temporal visualizations, and other related work. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.3.1">Visual Query by Time Interval</head><p>Chittaro and Combi proposed three alternative visual metaphors for querying temporal intervals <ref type="bibr" coords="2,182.29,646.58,13.76,9.96" target="#b14">[15]</ref>. The authors based the expressivity of their visual language on Allen's 13 relations between two intervals. Three semantically equivalent representations (elastic bands, springs and paint strips) depict horizontal bars whose ends can be constrained in such a way as to capture Allen's interval relationships. Hibino and Rudensteiner introduced a direct manipulation Temporal Visual Query Language (TVQL) for specifying interval endpoint constraints <ref type="bibr" coords="2,403.01,74.84,15.01,9.96" target="#b15">[16] </ref>to support Allen's 13 relational primitives. Four double-sided sliders allow users to express the relationship between each pair of endpoints among two intervals. Users interact exclusively with the sliders, while a visual representation of the interval interaction is dynamically updated to provide users feedback on the meaning of the defined query. Although both of the above systems implement all 13 of Allen's temporal relationships, the interfaces are difficult to conceptualize. We believe the simple timeline layout of queries and visualizations implemented in PatternFinder enable users to more readily create, understand and discover temporal patterns. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.3.2">Visualizing Temporal Patterns</head><p>Interestingly, none of these proposals address the visualization of the returned results. However, applications such as TimeSearcher <ref type="bibr" coords="2,371.43,229.40,9.55,9.96" target="#b4">[5]</ref>, Spirals <ref type="bibr" coords="2,415.40,229.40,13.79,9.96" target="#b16">[17]</ref>, DataJewel <ref type="bibr" coords="2,476.35,229.40,13.78,9.96" target="#b17">[18]</ref>, KNAVE <ref type="bibr" coords="2,531.27,229.40,10.55,9.96" target="#b1">[2] </ref>and LifeLines <ref type="bibr" coords="2,359.91,239.72,15.00,9.96" target="#b18">[19] </ref>offer visualizations that cluster results and highlight temporal patterns. TimeSearcher allows users to explore ordinal data by specifying queries using TimeBoxes, rectangular query operators that specify the regions in which the users are interested. Spirals uses each ring of the spiral to represent a periodic section of a time series. Color and line thickness are used to distinguish the data values. DataJewel tightly couples a familiar calendar visualization with database and algorithmic components for exploring temporal data patterns. Each calendar day displays the frequency of events using horizontal histograms such that month views offer a compact representation for users to visually detect patterns. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.3.3">Other Related Work</head><p>In health care, patients may be assessed individually by nurses and physicians, or en masse by clinical researchers, public health officials, auditors, etc. LifeLines provides a compact hierarchical timeline visualization for personal histories organized by facets, such as doctor visits, lab tests, and medications <ref type="bibr" coords="2,502.00,425.30,13.77,9.96" target="#b18">[19]</ref>. LifeLines supports zooming, adjusting the time scale, filtering records and accessing details on demand. LifeLines supports both discrete time events, displayed as icons, and interval events, displayed as lines. Line thickness and color encode event attributes such as significance and relationship to other events. Lifelines primarily supports directed browsing with textual search, but does not offer a higher-level query mechanism for discovery across multiple records. Many systems have built on LifeLines. Bade et. al. presented different temporal visualizations for medical data including a temporal mural that captures high-frequency data while still allowing browsing of time and data <ref type="bibr" coords="2,452.76,549.50,13.76,9.96" target="#b19">[20]</ref>. Another patient history system, CareView, used enhanced visualizations with the goal of increasing the visibility of temporal trends in clinical narratives <ref type="bibr" coords="2,317.88,580.52,13.76,9.96" target="#b20">[21]</ref>. While both of these systems contribute informative new temporal visualizations, neither allow for temporal query nor provide views of multiple entities (i.e. patients). Although not directly related to the medical field a set of visualizations that build along the same vein as PatternFinder are those of Chen et. al <ref type="bibr" coords="2,399.13,632.30,13.78,9.96" target="#b21">[22]</ref> . Chen et. al. presented STV (Spatio- Temporal Visualization) and CAN (Criminal Activities Network). STV uses coordinated visualizations including a geo-spatial representation (a map), a timeline, and a spiral periodic visualization, all of which change as a time slider is adjusted. CAN provides a visualization for network changes over time using spring-embedded block algorithms. Both systems incorporate time and use coordinated views as does PatternFinder, but do not allow query of temporal patterns. Shahar proposes a Knowledge Based Temporal Abstraction model RÉSUMÉ <ref type="bibr" coords="3,120.48,85.16,15.00,9.96" target="#b22">[23] </ref>to enable domain knowledge sharing and summarization in a context sensitive manner. Knowledge-based Navigation of Abstraction for Visualization and Explanation (KNAVE) is the visualization and navigation module that operates over RÉSUMÉ to support physician decisions about treatment protocols. KNAVE offers semantic navigation for three types of tasks: domain ontology traversal, presentation adaptation according to changes in temporal granularity (e.g., aggregating daily blood sugar outcomes when viewed by year versus day), and context switching. While KNAVE supports clinicians by summarizing individual patient conditions in a disease protocol, it does not provide cross-patient query and discovery within a specified protocol nor context-free record overview or exploration. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3">PATTERNFINDER: QUERY AND RESULTS VISUALIZATION</head><p>We emphasize that none of the systems discussed above enable query or visualizations of patterns across multiple entities (e.g. cross-patient query). This is one of the major contributions of PatternFinder, the combined power of temporal queries with graphical visualizations. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.1">Data Set Description</head><p>In the tradition of LifeLines, we created a mock data set of over 26,000 medical events for 950 patients. Each event has a type and a value. The type supports up to three levels of a hierarchy. For example a visit to the doctor's office for a check-up would be specified by the three level hierarchy: Visit → Doctor Office → Checkup. Event values can be numeric, such as for a systolic blood pressure reading, or categorical, such as normal/abnormal blood sugar. For simplicity, in this version events are point events at the day granularity. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.2">Temporal Patterns</head><p>We define a temporal pattern as a sequence of events separated by time spans (<ref type="figure" coords="3,113.06,452.30,29.35,9.96" target="#fig_0">Figure 1</ref>). In PatternFinder, users define patterns by setting constraints on Events and Time Spans. PatternFinder's query interface maps Events and TimeSpans to form-fill-in elements that support a rich set of pattern queries, presented formally in Section 4. Pattern matches are then displayed for visual exploration. To support pattern discovery, the PatternFinder interface is divided into two main panels: the pattern design panel and the results visualization panel. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.3">Pattern Design</head><p>The top half of the PatternFinder interface supports pattern design and specification (<ref type="figure" coords="3,415.73,191.12,29.83,9.96" target="#fig_1">Figure 2</ref>). Users consider elements of the pattern design panel from left to right. Because patterns are applied within individual patient histories, the leftmost panel allows users to restrict the types of patients in the results set in the Person/People panel. Users can restrict patients by name, by selecting from a list of patients, or by entering a text string. Users can also restrict patient age range and sex. Changes to the Patient/People panel are dynamic queries <ref type="bibr" coords="3,472.80,263.60,15.01,9.96" target="#b23">[24] </ref>that update results immediately in the results visualization panel (<ref type="figure" coords="3,502.12,273.92,30.73,9.96" target="#fig_3">Figure 4</ref>). The number of patients that meet the current patient selection criteria and design pattern (if specified) is also displayed in the panel. All double-sliders not only allow adjustments via the mouse, but clicking on the end buttons (or using key strokes to select it) allows for rapid textual entry of precise data values. The temporal pattern panel lies to the right of the Person/People panel, and allows users to chain Events together to form a pattern query. The timeline constraints and the left-to-right layout of Event boxes echoes cultural intuition that time flows in a left to right manner (e.g. Event Box 1 specifies an Event that occurs before the one in Event Box 2). Absolute start and end dates can be specified for the temporal query; by default the absolute dates reflect the maximal TimeSpan of Events in the underlying data set. Event Boxes initially present only the widgets for setting non-temporal attributes. As users select attributes from top to bottom, they define increasingly strict constraints on the types and values of related Events. Pull-down lists contain the labels that define a three level type hierarchy: the Event Type, Event Classification, and Event Name as defined within the underlying data set. By default only a top level Event Type is selected. If users select a specific Event Name, such as Systolic Blood Pressure, the values associated with that Event will be made available for further selection and query specificity. Once all three event levels are specified, events with numeric values are presented with a double ended slider that defaults to the complete Event value range, while Events with categorical values are presented with a checkbox for each category. By default no Event boxes are displayed – only an " Add Constraints " widget, which adds a new Event to the right of the chain when clicked. Users can delete Events by selecting the delete button. Also, by default, each Event is assigned a unique color marker, shown as a circular color chip in the Event Box. This allows users to visually map each Event in the results visualization to the associated Event in the pattern definition panel. Users can customize the assigned color by clicking on the color chip. Event Box 2 (<ref type="figure" coords="4,117.67,219.74,30.08,9.96" target="#fig_1">Figure 2</ref>) is an example of an EventSet, which provides users the ability to define constraints on multiple events of the same type. To define an EventSet, users select the " More &gt;&gt; " tab, which opens to reveal widgets for setting window, cardinality and relative value constraints. Selecting the Span checkbox between two Event Boxes places a time restriction between adjacent Events. The minimum TimeSpan in days is positioned at the upper left of the TimeSpan bar that connects Events, with the maximum span in days positioned at the lower right of the bar. For example, by opening the " More &gt;&gt; " tab a user could easily specify the following query: three blood pressure tests occurring within a one month period, each time the systolic pressure increase by at least 10 points. Another example query is: all patients who were prescribed decreasing dosages of the heart medication Plaxin over a six month period and later had a heart attack. For more details on the types of queries that can be specified and how to specify them in PatternFinder, see Section 4. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.4">Result Visualization</head><p>Although others have explored temporal query interfaces, most have ignored the display of the resulting matches. Conversely, medical systems <ref type="bibr" coords="4,119.42,438.38,9.75,9.96" target="#b2">[3,</ref><ref type="bibr" coords="4,133.37,438.38,12.00,9.96" target="#b18"> 19] </ref>have provided interfaces for browsing temporal patient data, but have rarely provided support for querying patient patterns, nor for comparison of patterns across patients. PatternFinder provides both pattern formulation and result exploration. The lower half of the interface (<ref type="figure" coords="4,259.04,479.78,31.37,9.96" target="#fig_3">Figure 4</ref>) shows result visualization, designed according to the wellestablished information-seeking mantra: overview first, zoom and filter, then details-on-demand <ref type="bibr" coords="4,166.42,510.80,13.77,9.96" target="#b24">[25]</ref>. Although the visualization is not unique, its coupling with the pattern specification panel along with other features described below, make for a powerful combination enabling temporal pattern discovery. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.4.1">Overview</head><p>PatternFinder's results visualization (<ref type="figure" coords="4,478.24,362.66,34.06,9.96" target="#fig_3">Figure 4</ref>) shows a graphical table of pattern matches. Each row represents a single pattern match for a single patient. Rows are ordered first by patient, then within a patient in order by earliest Event. A patient for whom the pattern has matched multiple times will be associated with multiple rows. To distinguish one patient's results from another's, the row background alternates between white and light gray from one patient to the next and row headings display the name of the patient for whom the row is associated. Rows which do not fit within the vertical constraints of the display can be accessed by scrolling the display panel. Columns represent days. Pattern matches are depicted as a timeline in a ball-and-chain fashion, with Event points represented by circles and TimeSpans by blue bars between the circles. The color of an Event point within the visualization corresponds to the color assignment of the associated Event in the pattern query definition. The Event point colors can be especially helpful for distinguishing Events from two or more EventSets, or comprehending the pattern match when constraint specifications allow the order of events in the match to differ from the left-to-right layout of Event Boxes in the pattern definition. By default, the " Show All Events " checkbox is selected, which displays the matched patterns in the context of the patients' entire event histories; each event is shown as a light gray rectangle and numbered if multiple events occurred on the same day. Event context can be useful for identifying interesting patterns or suggesting pattern causality. As an alternative to the pattern visualization, a <ref type="figure" coords="5,257.34,126.56,36.90,9.96">Table tab</ref>(<ref type="figure" coords="5,57.79,136.94,29.95,9.96" target="#fig_4">Figure 5</ref>) displays the result set as a table, aggregating data by person, which users can expand to see the individual matches. This view supports rapid sorting, allowing users to quickly discover minimum and maximum values, dominant event types, event names, patient characteristics, and number of matches per patient. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.4.2">Coordinated Views</head><p>The table view (<ref type="figure" coords="5,136.65,219.02,33.57,9.96" target="#fig_4">Figure 5</ref>) is tightly coupled with the visualization view (<ref type="figure" coords="5,130.06,229.40,30.85,9.96" target="#fig_3">Figure 4</ref>) allowing users to view a tabular summary by person, perform a sort by the number of matches and return to the visualization to view the matches in order of the number of matches per person. This coupling adds yet another approach for interactively finding the most important and relevant trends and for testing a wider range of hypotheses. As an example, a user might specify a pattern query, go to the table view, sort by age and return to the default graphical visualization to explore effects correlated to patient age. <ref type="figure" coords="5,90.84,416.08,41.82,8.91">Table result</ref>view, each row represents a person with one or more pattern matches. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.4.3">Zoom and Filter</head><p>Initially all pattern matches for a patient are scaled to fit horizontally within the window, providing an overview of the results. A double ended query slider below the visualization indicates the endpoints of the time period displayed. Either end of the slider may be manipulated to change the time period presented in the visualization, in effect zooming the display area, and filtering out uninteresting time periods. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.4.4">Details-on-Demand</head><p>Visually distinguishing Events from the TimeSpans between Events has two main benefits. The first is that the distinct objects present distinct targets for tool tips. Placing the cursor over any Event or TimeSpan triggers details-on-demand in the form of a tooltip (as shown in <ref type="figure" coords="5,134.47,589.28,30.76,9.96" target="#fig_3">Figure 4</ref>). Another advantage to depicting Events and TimeSpans separately is that short TimeSpans can be more easily compared. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.5">Implementation</head><p>PatternFinder was developed in Visual C# .NET with the Piccolo.NET development toolkit for scalable and zoomable user interfaces <ref type="bibr" coords="5,91.71,663.02,13.78,9.96" target="#b25">[26]</ref>. Queries are evaluated using a sequential scan of a memory-resident data set. We do not use a relational database nor SQL to perform query evaluation. The queries we support could conceivably be issued using standard SQL, however, our emphasis on supporting arbitrarily long patterns in which Events can be specified by time window, cardinality and/or relative value constraints, are extremely difficult to express in SQL. <ref type="figure" coords="5,524.57,64.46,30.15,9.96" target="#fig_2">Figure 3</ref>, shows an example that will return only the patient's names that fit a temporal pattern — not the actual events. We believe that PatternFinder's visual query interface provides simplicity not accessible in SQL and a level of power beyond that which can be offered by a tabular or EER-based representation. PatternFinder may be considered a specialized, mixed visual and form-fill-in approach to temporal query specification and visualization. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4">PATTERN LANGUAGE</head><p>The interface elements of our query language were designed to support a rich set of patterns which we formalize here using a modified Bachus Naur Form (BNF): optional constructs are enclosed in brackets <ref type="bibr" coords="5,393.73,201.32,5.47,9.96">[]</ref>, constructs repeated zero or more times are in braces {}, and constructs repeated one or more times are in braces followed by a plus {}+. A pattern is bounded by a global time frame – a minimum and maximum calendar date (AbsoluteDate) between which an event sequence is defined. As a base case, a pattern can be a single Event. More interestingly, however, patterns are specified as an Event, E1, followed by at least one additional Event, E2, where E1 and E2 are separated by a TimeSpan. This structure allows for the composition of chains of Events related to one another by time constraints, which together form a Pattern. This basic template for a pattern is displayed graphically in <ref type="figure" coords="5,452.07,362.54,29.67,9.96" target="#fig_0">Figure 1</ref>, and is supported in PatternFinder as the ability to add an arbitrary number of Event Boxes and intervening TimeSpan definitions. When forming patterns, there is a trade-off between the specificity of the pattern description and the generalizability of the result set. While assigning values to all attributes of a pattern can be useful for some tasks ( " Find all patients who had cholesterol above 200 and who were later hospitalized for a heart attack " ), it can also be overly restrictive, and fail to return results that are of general interest. By relaxing constraints systematically across Events and TimeSpans in the pattern, users can tailor their pattern-finding to support different types of tasks. Hochheiser &amp; Shneiderman outline types of temporal queries that are of interest for single-attribute time series within the financial domain <ref type="bibr" coords="5,385.56,507.44,9.52,9.96" target="#b4">[5]</ref>. We propose a complementary taxonomy (Tables 1 and 2) of temporal patterns for multivariate and categorical temporal data, cast in terms of the Events and TimeSpans of our pattern model. The taxonomy is hierarchical in the sense that each pattern, other than the root Events (E) pattern, can be defined in terms of another pattern which has been modified in one of three ways: the constraints on the Event have been relaxed, the constraints on the TimeSpan have been relaxed, or the values of one or more events have been constrained to depend on one or more other events. By systematically applying these rules, we define a taxonomy of increasingly complex patterns supported by PatternFinder (Tables 1 and 2). </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.1">E Pattern Queries</head><p> As a base case, E patterns require users to specify all nontemporal attributes of Events (E) — the three type levels and a value. Numeric Event values are specified as an inclusive range with a MinValue and MaxValue to support exactly, above, below, and between constraints. Setting MinValue=MaxValue enforces an exact value, while setting MinValue to the lowest value in the data set or MaxValue to the highest value in the data set is equivalent to &gt;=MinValue or &lt;=MaxValue. One or more items in a categorical enumeration can also be specified. Event = EventType EventClass EventName <ref type="bibr" coords="6,226.82,87.88,41.39,10.31">[ValueSpec] </ref>ValueSpec = (MinValue MaxValue | {EnumVal}+) Using PatternFinder, E patterns are formed by specifying values for all graphical elements of a single unexpanded Event Box (see Event Box 2 of <ref type="figure" coords="6,111.02,132.56,29.04,9.96" target="#fig_1">Figure 2</ref>). </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.2">E-FT and E-VT Pattern Queries</head><p>An E-FT pattern has two Events, related by a relative TimeSpan of fixed (FT) length, while an E-VT pattern allows a TimeSpan of variable (VT) length between Events. Relaxing the TimeSpan constraint from fixed to variable allows matches to be retuned that agree in the number, type and order of Events, but which have bounded variability in time between Events. Especially in the medical field, precise time constraints between Events may be impractical since, for example, medication response and surgery recovery times vary widely across patients. E-FT and E-VT patterns are both supported by defining TimeSpans. </p><formula>EventSeq = Event {[TimeSpan] EventSeq} TimeSpan = MinDays MaxDays </formula><p>To describe a TimeSpan, users specify a minimum number of days (MinDays) and a maximum number of days (MaxDays) between two Events. To construct an E-FT-Pattern, users specify that MinDays = MaxDays, and for an E-VT-Pattern, that MinDays &lt; MaxDays. Leaving MinDays and MaxDays unspecified places no constraints on the TimeSpan between Events except that for any pair of Events, the left Event occurs before the right Event. In PatternFinder, no span is defined initially between events. If desired, users can click on the Span checkbox to activate it, then use the tab button to move between the min and max day specifications or use the mouse to click on them and change them. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.3">E*–VT Pattern Queries</head><p>E*-VT patterns lift the restriction that all non-temporal attributes be specified, effectively allowing wildcard query (*) on event attributes. Our hierarchical event structure makes this pattern especially powerful. Users can query by event type, by event classification (restricting the event type), by event name (restricting the event type and classification) or by event outcome (restricting all levels). Thus, E*-VT patterns allow users to describe events at four levels of specificity: Event = EventType <ref type="bibr" coords="6,419.69,213.41,41.42,10.31">[ClassSpec] </ref>ClassSpec = EventClass <ref type="bibr" coords="6,438.96,223.73,41.83,10.31">[DetailSpec] </ref>DetailSpec = EventName <ref type="bibr" coords="6,440.56,234.05,41.43,10.31">[ValueSpec] </ref>ValueSpec = MinValue MaxValue | {EnumVal}+ </p><p>The advantage of E*-VT-Patterns over other patterns is that they allow discovery of interactions between classes of events rather than only specific outcomes. Our faceted Event architecture enforces structure upon the pattern matches, even as specificity constraints are lifted. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.4">E*WC-VT Pattern Queries</head><p>PatternFinder's pattern language allows users to construct Event patterns of arbitrary length and specificity. While this approach supports queries of the form " Find patients who had a These simple additions greatly increase the power of PatternFinder and the types of queries supported. Now, queries of the form " Find patients whose Cholesterol was above 240 for a week " can be compactly specified as a single EventSet by constraining the event window to a Total of MinDays=MaxDays=7 to denote that the tests must fall within a window of exactly 7 days and the cardinality criterion to " all " ; these settings translate to finding patients for whom all cholesterol tests within a week's time frame were above 240. Note that " All " is a special case. Instead of users committing to a specific number or range of events, " All " translates to " For any events that meet the window criteria, all must meet the Event attribute criteria in order to be considered a match " . Perhaps more importantly, E*WC–VT patterns support a type of trend query and discovery, in which event sets that share local characteristics can be compared to one another, such as to discover that a particular medication had a positive or negative impact. Without window and cardinality constraints for an event set, only weaker queries would be possible. For example, without such patterns one might be able to say that a patient's cholesterol was above 240 on a single day and below 200 on another day two months later, but would now be able to make the stronger statement that a patient's cholesterol remained above 240 for a period and then remained below 200 for a subsequent period, which is more convincing evidence of the efficacy of a cholesterol-lowering medication. Support for E*WC-VT patterns allows users to specify other helpful queries, such as finding patients that have had at least 2 heart attacks in the last year (returning all that occurred), or patients with chronic high cholesterol who have had no heart attacks. The astute reader will notice that our definition of E*WC- VT patterns can lead to a multiple Cartesian products representing an explosion in the size of the search space and the resulting pattern matches, negatively impacting system response time and user comprehension of results. We suspect, however, that many such queries do not reflect realistic user tasks. We can easily constrain our query interface in subsequent iterations to prevent pathological queries, but refrain from doing so until we better understand typical usage scenarios. At present, our visualization displays a pattern match (row) for every pair of events that satisfy the E*WC-VT. In the future we envision that matches could be collapsed into a single row to simplify user comprehension. Event: Specify a subset of non-temporal attributes of one or more event sets. The elements of an event set are defined by a relative time window during which all events in the set must occur, as well as cardinality -the number of events that must occur within the window. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.5">f(E*WC)–VT Pattern Queries f(E*WC)-VT patterns</head><p>follow directly from E*WC-VT patterns. Since E*WC-VT patterns define event sets, it is natural to impose functional (f) constraints among the elements of the set, which leads to f(E*WC)-VT patterns. For example, instead of requesting all cholesterol events within a week to have a value above 240, a user might request that all cholesterol events within a week fall within some 20 point range above 240. This differs from specifying a value range with a double slider, since we do not care which 20 point range above 240, but we do care that no event has a value that is more than 20 points different than any other event in the set. This is a constraint among all matching Events. Rather than specifying a range of values that EventSet elements must satisfy, we might specify other functional relationships among values, such as monotonically increasing or decreasing, which would be a constraint between consecutive matching Events. This type of query is analogous to interval trending <ref type="bibr" coords="8,228.35,222.38,9.47,9.96" target="#b4">[5]</ref>. Both types of event set value constraints can be captured as follows: PatternFinder 1.0 supports only the " Between " constraint. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5">EVALUATION</head><p>A class project <ref type="bibr" coords="8,122.62,303.08,15.01,9.96" target="#b26">[27] </ref>conducted a usability test with 6 college students and 2 physicians performing 9 tasks each using a portion of a hospital's patient data containing 24,819 events for 552 patients. One physician was a practitioner, the other a researcher. The physician practitioner expected he would mostly use the simpler Event-only queries, while the physician researcher anticipated using the expanded EventSet queries more frequently. All users were successful with simple queries, but had some difficulty using the Span feature as well as formulating queries with more than 3 events, leading to suggestions for redesign and improved training. These changes have been made and a trial deployment is planned for the Washington Hospital Center, supporting both physician practitioners and researchers. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6">CONCLUSION</head><p>We extend early systems for visual temporal query languages and navigable visualizations of temporal data sets. Our query taxonomy and interface offer ad hoc search and discovery of temporal patterns within multivariate categorical data sets. The taxonomy describes temporal patterns as sequences of Events and the TimeSpans which separate them. PatternFinder 1.0's visual query interface allows users to define powerful patterns. The resulting pattern matches for all patients are shown in a single, dynamic overview to facilitate both within-patient and betweenpatient discoveries. The same techniques illustrated in PatternFinder with medical history data are applicable to the numerous domains that deal with temporal data. We believe that the taxonomy and initial implementation are major contributions in an important topic. This paper is designed to promote further work by others and gain feedback as we move on to implementation and algorithmic refinements, user testing, and validation in diverse application domains. </p></div><figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_0" coords="3,330.78,143.38,214.21,8.91"><head>Figure 1: </head><figDesc>Figure 1: A Pattern is a sequence of events and time spans. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_1" coords="3,69.90,671.74,472.19,8.91;3,56.94,681.76,498.04,8.91;3,79.68,697.78,452.54,8.91;3,194.40,707.74,223.14,8.91"><head>Figure 2: </head><figDesc>Figure 2: Pattern query panel. The Person/People panel at the left allows users to specify the types of patients to consider. The white temporal pattern panel on the right allows an arbitrary number of Events and TimeSpans to be defined (Section 4 discusses patterns details). This pattern specification is any patient who received increasing dosages of Remeron followed by a heart attack within 180 days (along with the events constituting the temporal pattern match). </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_2" coords="4,321.36,306.04,228.43,8.91;4,318.66,316.06,233.68,8.91;4,313.32,326.08,244.49,8.91"><head>Figure 3: </head><figDesc>Figure 3: Limited SQL version of query in Figure 2, patients who received one or two increasing dosages of Remeron followed by a heart attack within 180 days (corresponding events are not returned). </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_3" coords="4,60.60,684.52,490.80,8.91;4,113.16,694.54,385.62,8.91;4,75.48,710.50,461.00,8.91"><head>Figure 4: </head><figDesc>Figure 4: Pattern Result Visualization. Each row represents a single pattern match for a patient. Gray blocks indicate an event occurred on that day, with numbers indicating that multiple events occurred. Mouse over provides details about all events. The results show four matches of people who received increasing dosages of Remeron followed by a heart attack within 180 days. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_4" coords="5,54.90,416.08,238.20,8.91;5,129.36,426.04,89.38,8.91"><head>Figure 5: </head><figDesc>Figure 5: Table result view, each row represents a person with one or more pattern matches. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_5" coords="5,433.95,222.02,124.08,9.96;5,317.88,232.40,240.07,9.96;5,317.88,242.72,67.47,9.96;5,353.88,255.83,160.11,10.31;5,353.88,266.15,144.12,10.31"><head></head><figDesc>Parentheses () are used to enclose groups of alternative items, each separated by a |. Non-terminals are shown in bold. Pattern = AbsoluteDate EventSeq AbsoluteDate EventSeq = Event {[TimeSpan] EventSeq} </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_6" coords="6,207.19,373.96,220.55,8.91;6,84.30,385.38,41.33,13.39;6,199.80,385.38,69.30,13.39;6,415.08,385.38,49.31,13.39;6,102.00,432.92,6.00,10.04;6,79.02,443.24,52.07,10.04;6,159.42,413.11,123.29,10.49;6,159.42,424.03,123.05,10.49;6,159.42,440.95,128.82,10.49;6,159.42,451.87,123.25,10.49;6,159.42,462.79,42.72,10.49;6,317.40,471.85,236.22,10.49;6,93.96,533.96,22.00,10.04;6,67.98,544.34,74.03,10.04;6,159.42,519.67,123.29,10.49;6,159.42,530.59,122.91,10.49;6,159.42,547.51,130.18,10.49;6,159.42,558.43,38.97,10.49;6,321.72,577.93,236.10,10.49;6,396.12,588.85,78.66,10.49;6,93.72,650.96,22.50,10.04;6,62.22,661.34,85.53,10.04;6,159.42,642.13,90.29,10.49;6,159.42,659.05,130.18,10.49;6,159.42,669.97,50.07,10.49"><head>1: </head><figDesc>Temporal Query Taxonomy: Simple Events and TimeSpans Pattern Restrictions Example E Events Only Event: Specify all non-temporal attributes of one or more events. TimeSpan: No span. Left to right ordering implicitly denotes " any time later " . Find patients who have had at least 2 emergency doctor visits. E–FT Fixed TimeSpans Event: Specify all non-temporal attributes of two or more events. TimeSpan: Relative TimeSpan of fixed size. Find patients whose cholesterol was above 240 but two weeks later was below 200. E–VT Variable TimeSpans Events: Same as E–FT. TimeSpan: Relative TimeSpan of variable size. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_7" coords="6,322.80,694.93,234.02,10.49;6,395.10,705.85,80.74,10.49"><head>Find </head><figDesc>patients whose cholesterol was above 240 but fell below 200 within 2 months. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_8" coords="7,191.52,399.16,228.86,8.91;7,82.02,410.58,41.33,13.39;7,197.46,410.58,69.30,13.39;7,415.08,410.58,49.31,13.39;7,89.70,450.74,26.00,10.04;7,69.18,461.06,67.03,10.04;7,85.20,471.44,34.99,10.04;7,78.72,481.76,48.00,10.04;7,149.28,452.96,146.27,9.96;7,149.28,463.28,116.60,9.96;7,149.28,479.66,98.28,9.96;7,331.74,496.10,216.06,9.96;7,372.66,506.42,125.62,9.96;7,82.20,547.40,40.96,10.04;7,67.68,557.72,70.06,10.04;7,81.24,568.10,42.94,10.04"><head>Table 2: </head><figDesc>Temporal Query Taxonomy: EventSets and TimeSpans Pattern Restrictions Example E*–VT Variable Events Variable TimeSpans Event: Specify a subset of non-temporal attributes of one or more events. TimeSpan: Same as E–VT Find patients who had an emergency doctor's visit followed by a hospitalization within a week. E*WC–VT Linked EventSet and Event </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_9" coords="7,149.28,602.12,100.57,9.96;7,331.38,587.24,216.85,9.96;7,330.96,597.62,209.08,9.96;7,422.76,608.54,25.35,9.96;7,77.70,657.56,50.00,10.04;7,83.46,667.88,38.47,10.04;7,149.28,644.24,123.71,9.96;7,149.28,654.56,151.35,9.96;7,149.28,664.94,81.72,9.96;7,149.28,681.26,98.28,9.96;7,327.60,692.18,224.37,9.96;7,387.24,703.10,96.33,9.96"><head></head><figDesc>TimeSpan: Same as E–VT. Find patients who had 3 or more hospitalizations within two months followed by a heart attack hospitalization within a month. f(E*WC)–VT EventSet Event: Same as E*WC–VT plus a functional condition that must hold across all members of the set. TimeSpan: Same as E–VT Find patients whose cholesterol increased by at least 20 points each reading for 3 months. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_10" coords="8,72.00,245.81,208.93,10.31;8,72.00,256.13,190.01,10.31"><head></head><figDesc>EventSetSpec = [WindowSpec] [Cardinality] [RelativeRange] RelativeRange = (Among | Between) MinValue MaxValue </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_1" validated="false" coords="6,184.14,373.96,20.83,8.91"><figDesc coords="6,184.14,373.96,20.83,8.91">Table</figDesc><table></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_2" validated="false" coords="7,54.00,54.14,240.24,209.60"><figDesc coords="7,54.00,54.14,240.16,9.96;7,54.00,64.46,240.12,9.96;7,54.00,74.84,240.14,9.96;7,54.00,85.16,240.06,9.96;7,54.00,95.54,240.14,9.96;7,54.00,105.86,240.24,9.96;7,54.00,116.24,225.21,9.96">Hemoglobin Test between 25 and 50 during January 2004 " and " Find patients who had two Heart Attacks within 6 months of each other " , it does not scale well to pattern queries of the form " Find patients whose Cholesterol was above 240 for a week " , which would require chaining 7 identical Events together with a TimeSpan of 1 day between each pair. The query might be further complicated for events with finer granularity than a day.</figDesc><table coords="7,54.00,116.24,240.22,147.50">To 
+address this problem, we extend the pattern model to include 
+E*WC–VT patterns, which define pattern EventSets whose non-
+temporal attributes are identically constrained but whose temporal 
+attributes vary within a specified time window (W). A time 
+window can be defined to contain all Events in the EventSet using 
+the Total constraint, or instead between pairs of consecutive 
+Events in the EventSet using the Between constraint. The 
+EventSets are also constrained by the number of elements that 
+must be present in the set, or its cardinality (C): 
+Event = EventType [ClassSpec] [EventSetSpec] 
+EventSetSpec = [WindowSpec] [Cardinality] 
+WindowSpec = (Total | Between) MinDays MaxDays 
+Cardinality = (All | MinNumEvents MaxNumEvents) 
+
+</table></figure>
+		</body>
+		<back>
+			<div type="references">
+
+				<listBibl>
+
+<biblStruct coords="8,71.93,659.55,222.19,8.83;8,72.00,668.79,222.10,8.83;8,72.00,677.97,122.42,8.83"  xml:id="b0">
+	<analytic>
+		<title level="a" type="main">Visual query systems for databases: a survey</title>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Catarci</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<forename type="middle">F</forename>
+				<surname>Costabile</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Levialdi</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Batini</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Journal of Visual Languages and Computing</title>
+		<imprint>
+			<biblScope unit="volume">8</biblScope>
+			<biblScope unit="page" from="215" to="260" />
+			<date type="published" when="1997" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,71.94,687.15,222.21,8.83;8,72.00,696.33,222.17,8.83;8,335.88,54.15,222.11,8.83;8,335.88,63.33,38.06,8.83"  xml:id="b1">
+	<monogr>
+		<title level="m" type="main">Navigation and visualization of abstractions of time-oriented clinical data &quot; Stanford University Section on medical informatics technical report SMI-97- 0688</title>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Cheng</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Y</forename>
+				<surname>Shahar</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Puerta</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Stites</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="1997" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,335.82,72.57,222.21,8.83;8,335.88,81.75,222.13,8.83;8,335.88,90.93,124.70,8.83"  xml:id="b2">
+	<analytic>
+		<title level="a" type="main">Intelligent visualization and exploration of time-oriented clinical data</title>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Cheng</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Y</forename>
+				<surname>Shahar</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Topics in Health Information Management</title>
+		<imprint>
+			<biblScope unit="volume">20</biblScope>
+			<biblScope unit="page" from="15" to="31" />
+			<date type="published" when="1999" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,335.85,100.17,222.07,8.83;8,335.88,109.35,222.14,8.83;8,335.88,118.53,52.70,8.83"  xml:id="b3">
+	<analytic>
+		<title level="a" type="main">Temporal data management</title>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<forename type="middle">S</forename>
+				<surname>Jensen</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<forename type="middle">T</forename>
+				<surname>Snodgrass</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Knowledge and Data Engineering</title>
+		<imprint>
+			<biblScope unit="volume">11</biblScope>
+			<biblScope unit="page" from="36" to="44" />
+			<date type="published" when="1999" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,335.84,127.77,222.14,8.83;8,335.88,136.95,222.18,8.83;8,335.88,146.13,157.40,8.83"  xml:id="b4">
+	<analytic>
+		<title level="a" type="main">Dynamic query tools for time series data sets: Timebox widgets for interactive exploration</title>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Hochheiser</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Shneiderman</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Information Visualization</title>
+		<imprint>
+			<biblScope unit="volume">3</biblScope>
+			<biblScope unit="page" from="1" to="18" />
+			<date type="published" when="2004" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,335.84,155.37,222.21,8.83;8,335.88,164.55,222.14,8.83;8,335.88,173.73,18.08,8.83"  xml:id="b5">
+	<analytic>
+		<title level="a" type="main">A model for temporal references and its application in a question answer program</title>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<forename type="middle">C</forename>
+				<surname>Bruce</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Artificial Intelligence</title>
+		<imprint>
+			<biblScope unit="volume">3</biblScope>
+			<biblScope unit="page" from="1" to="25" />
+			<date type="published" when="1972" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,335.85,182.91,222.17,8.83;8,335.88,192.15,183.99,8.83"  xml:id="b6">
+	<analytic>
+		<title level="a" type="main">Maintaining knowledge about temporal intervals</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">F</forename>
+				<surname>Allen</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Communications of the ACM</title>
+		<imprint>
+			<biblScope unit="volume">26</biblScope>
+			<biblScope unit="page" from="832" to="843" />
+			<date type="published" when="1983" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,335.85,201.33,222.13,8.83;8,335.88,210.51,151.58,8.83"  xml:id="b7">
+	<analytic>
+		<title level="a" type="main">Mechanizing temporal knowledge</title>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<forename type="middle">M</forename>
+				<surname>Kahn</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<forename type="middle">G</forename>
+				<surname>Gorry</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Artificial Intelligence</title>
+		<imprint>
+			<biblScope unit="volume">9</biblScope>
+			<biblScope unit="page" from="87" to="108" />
+			<date type="published" when="1977" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,335.85,219.75,222.24,8.83;8,335.88,228.93,199.00,8.83"  xml:id="b8">
+	<monogr>
+		<title level="m" type="main">Developing time-oriented database applications in SQL</title>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<forename type="middle">T</forename>
+				<surname>Snodgrass</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="1999" />
+			<publisher>Morgan Kauffman Publishers, Inc</publisher>
+			<pubPlace>San Francisco</pubPlace>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,335.83,238.11,222.19,8.83;8,335.88,247.35,18.08,8.83"  xml:id="b9">
+	<analytic>
+		<title level="a" type="main">The database language SQL: Document ANSI X3</title>
+	</analytic>
+	<monogr>
+		<title level="j">ANSI</title>
+		<imprint>
+			<biblScope unit="page" from="135" to="1992" />
+			<date type="published" when="1986" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,335.85,256.53,157.33,8.83"  xml:id="b10">
+	<monogr>
+		<title level="m" type="main">Microsoft Access</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Corporation</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2000" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,335.84,265.71,222.20,8.83;8,335.88,274.95,222.15,8.83;8,335.88,284.13,193.98,8.83"  xml:id="b11">
+	<analytic>
+		<title level="a" type="main">A graphical query language for temporal databases</title>
+		<author>
+			<persName>
+				<forename type="first">V</forename>
+				<surname>Kouramajian</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Gertz</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. of Object-Oriented and Entity Relationship Modeling</title>
+		<meeting>. of Object-Oriented and Entity Relationship Modeling</meeting>
+		<imprint>
+			<publisher>Springer-Verlag</publisher>
+			<date type="published" when="1995" />
+			<biblScope unit="page" from="388" to="399" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,335.82,293.31,222.20,8.83;8,335.88,302.55,222.22,8.83;8,335.88,311.73,154.88,8.83"  xml:id="b12">
+	<analytic>
+		<title level="a" type="main">Visual query operators for temporal databases</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<forename type="middle">F</forename>
+				<surname>Silva</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">U</forename>
+				<surname>Schiel</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Catarci</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">International Workshop on Temporal Representation and Reasoning</title>
+		<imprint>
+			<date type="published" when="1997" />
+			<biblScope unit="page" from="46" to="53" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,335.82,320.91,222.16,8.83;8,335.88,330.15,222.11,8.83;8,335.88,339.34,196.09,8.83"  xml:id="b13">
+	<analytic>
+		<title level="a" type="main">MQuery: A visual query language for multimedia timeline and simulation data</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">D N</forename>
+				<surname>Dionisio</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<forename type="middle">F</forename>
+				<surname>Cardenas</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Journal of Visual Languages and Computing</title>
+		<imprint>
+			<biblScope unit="volume">7</biblScope>
+			<biblScope unit="page" from="377" to="401" />
+			<date type="published" when="1996" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,335.81,348.52,222.22,8.83;8,335.88,357.76,222.16,8.83;8,335.88,366.94,168.50,8.83"  xml:id="b14">
+	<analytic>
+		<title level="a" type="main">Visualizing queries on databases of temporal histories: new metaphors and their evaluation</title>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<surname>Chittaro</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Combi</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Data and Knowledge Engineering</title>
+		<imprint>
+			<biblScope unit="volume">44</biblScope>
+			<biblScope unit="page" from="239" to="264" />
+			<date type="published" when="2003" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,335.82,376.12,222.16,8.83;8,335.88,385.36,222.05,8.83;8,335.88,394.54,138.91,8.83"  xml:id="b15">
+	<analytic>
+		<title level="a" type="main">User interface evaluation of a direct manipulation temporal visual query language</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Hibino</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<forename type="middle">A</forename>
+				<surname>Rundensteiner</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">ACM Multimedia</title>
+		<imprint>
+			<publisher>ACM Press</publisher>
+			<date type="published" when="1997" />
+			<biblScope unit="page" from="99" to="107" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,335.85,403.72,222.13,8.83;8,335.88,412.90,222.09,8.83;8,335.88,422.14,69.61,8.83"  xml:id="b16">
+	<analytic>
+		<title level="a" type="main">Visualizing time series on spirals</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Weber</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Alexa</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Muller</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">IEEE Symposium on Information Visualization</title>
+		<imprint>
+			<publisher>IEEE Press</publisher>
+			<date type="published" when="2001" />
+			<biblScope unit="page" from="7" to="14" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,335.83,431.32,222.16,8.83;8,335.88,440.50,222.12,8.83;8,335.88,449.74,130.04,8.83"  xml:id="b17">
+	<analytic>
+		<title level="a" type="main">DataJewel: Tightly integrating visualization with temporal data mining</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Ankerst</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<forename type="middle">H</forename>
+				<surname>Jones</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Kao</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Wang</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">ICDM Workshop on Visual Data Mining</title>
+		<imprint>
+			<date type="published" when="2003" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,335.81,458.92,222.19,8.83;8,335.88,468.10,222.19,8.83;8,335.88,477.34,81.61,8.83"  xml:id="b18">
+	<monogr>
+		<title level="m" type="main">LifeLines: Visualizing personal histories</title>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Plaisant</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Milash</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Rose</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Widoff</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Shneiderman</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="1996" />
+			<publisher>ACM Press</publisher>
+			<biblScope unit="page" from="221" to="227" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,335.84,486.51,222.17,8.83;8,335.88,495.69,222.08,8.83;8,335.88,504.93,122.08,8.83"  xml:id="b19">
+	<monogr>
+		<title level="m" type="main">Connecting time-oriented data and information to a coherent interactive visualization</title>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Bade</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Schlechtweg</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Miksch</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2004" />
+			<publisher>ACM Press</publisher>
+			<biblScope unit="page" from="105" to="112" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,335.84,514.11,222.05,8.83;8,335.88,523.29,222.13,8.83;8,335.88,532.53,186.26,8.83"  xml:id="b20">
+	<analytic>
+		<title level="a" type="main">CareView: Analyzing nursing narratives for temporal trends</title>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<surname>Mamykina</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Goose</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Hedqvist</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<forename type="middle">V</forename>
+				<surname>Beard</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Extended Abstracts of CHI</title>
+		<imprint>
+			<publisher>ACM Press</publisher>
+			<date type="published" when="2004" />
+			<biblScope unit="page" from="1147" to="1150" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,335.84,541.71,222.09,8.83;8,335.88,550.89,222.16,8.83;8,335.88,560.13,222.13,8.83;8,335.88,569.31,68.72,8.83"  xml:id="b21">
+	<analytic>
+		<title level="a" type="main">Visualization in law enforcement</title>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Chen</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Atabakhsh</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Tseng</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Marshall</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Kaza</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Eggers</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Gowda</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Shah</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Petersen</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Violette</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Extended Abstracts of CHI 2005</title>
+		<imprint>
+			<publisher>ACM Press</publisher>
+			<date type="published" when="2005" />
+			<biblScope unit="page" from="1268" to="1271" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,335.87,578.49,222.06,8.83;8,335.88,587.73,222.14,8.83;8,335.88,596.91,72.74,8.83"  xml:id="b22">
+	<analytic>
+		<title level="a" type="main">Dynamic temporal interpretation contexts for temporal abstraction</title>
+		<author>
+			<persName>
+				<forename type="first">Y</forename>
+				<surname>Shahar</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Annals of Mathematics and Artificial Intelligence</title>
+		<imprint>
+			<biblScope unit="volume">22</biblScope>
+			<biblScope unit="page" from="159" to="192" />
+			<date type="published" when="1998" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,335.84,606.09,222.29,8.83;8,335.88,615.33,222.11,8.83;8,335.88,624.51,80.72,8.83"  xml:id="b23">
+	<analytic>
+		<title level="a" type="main">Visual information seeking: Tight coupling of dynamic query filters with starfield displays</title>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Ahlberg</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Shneiderman</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">CHI 1994</title>
+		<imprint>
+			<date type="published" when="1994" />
+			<biblScope unit="page" from="313" to="317" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,335.83,633.69,222.19,8.83;8,335.88,642.93,222.19,8.83;8,335.88,652.11,75.88,8.83"  xml:id="b24">
+	<monogr>
+		<title level="m" type="main">Designing the user interface: Strategies for effective human-computer interaction</title>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Shneiderman</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Plaisant</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2005" />
+			<publisher>Addison-Wesley</publisher>
+		</imprint>
+	</monogr>
+	<note>4th. ed</note>
+</biblStruct>
+
+<biblStruct coords="8,335.84,661.29,222.19,8.83;8,335.88,670.47,71.15,8.83"  xml:id="b25">
+	<analytic>
+		<title/>
+	</analytic>
+	<monogr>
+		<title level="j">Piccolo.NET</title>
+		<imprint>
+			<date type="published" when="2006" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,335.82,679.71,222.20,8.83;8,335.88,688.89,222.10,8.83;8,335.88,698.07,222.06,8.83;8,335.88,707.31,38.90,8.83"  xml:id="b26">
+	<monogr>
+		<title level="m" type="main">Hippocrates archive comprehensive patient history search system interface design report</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Brennan</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Song</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Negahban</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2005" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+				</listBibl>
+			</div>
+		</back>
+	</text>
+</TEI>

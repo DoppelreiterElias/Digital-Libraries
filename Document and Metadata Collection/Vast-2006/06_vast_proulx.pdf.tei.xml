@@ -1,0 +1,653 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.tei-c.org/ns/1.0 /home/pisenberg/grobid/grobid-home/schemas/xsd/Grobid.xsd"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+	<teiHeader xml:lang="en">
+		<encodingDesc>
+			<appInfo>
+				<application version="0.4.1" ident="GROBID" when="2016-09-09T13:36+0000">
+					<ref target="https://github.com/kermitt2/grobid">GROBID - A machine learning software for extracting information from scholarly documents</ref>
+				</application>
+			</appInfo>
+		</encodingDesc>
+		<fileDesc>
+			<titleStmt>
+				<title level="a" type="main">Avian Flu Case Study with nSpace and GeoTime</title>
+			</titleStmt>
+			<publicationStmt>
+				<publisher/>
+				<availability status="unknown"><licence/></availability>
+			</publicationStmt>
+			<sourceDesc>
+				<biblStruct>
+					<analytic>
+						<author>
+							<persName>
+								<forename type="first">Pascale</forename>
+								<surname>Proulx</surname>
+							</persName>
+							<affiliation>
+								<orgName type="institution">Oculus Info Inc</orgName>
+							</affiliation>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Sumeet</forename>
+								<surname>Tandon</surname>
+							</persName>
+							<affiliation>
+								<orgName type="institution">Oculus Info Inc</orgName>
+							</affiliation>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Adam</forename>
+								<surname>Bodnar</surname>
+							</persName>
+							<affiliation>
+								<orgName type="institution">Oculus Info Inc</orgName>
+							</affiliation>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">David</forename>
+								<surname>Schroh</surname>
+							</persName>
+							<affiliation>
+								<orgName type="institution">Oculus Info Inc</orgName>
+							</affiliation>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Robert</forename>
+								<surname>Harper</surname>
+							</persName>
+							<affiliation>
+								<orgName type="institution">Oculus Info Inc</orgName>
+							</affiliation>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">William</forename>
+								<surname>Wright</surname>
+							</persName>
+							<affiliation>
+								<orgName type="institution">Oculus Info Inc</orgName>
+							</affiliation>
+						</author>
+						<title level="a" type="main">Avian Flu Case Study with nSpace and GeoTime</title>
+					</analytic>
+					<monogr>
+						<imprint>
+							<date/>
+						</imprint>
+					</monogr>
+				</biblStruct>
+			</sourceDesc>
+		</fileDesc>
+		<profileDesc>
+			<textClass>
+				<keywords>
+					<term>CR Categories: H52 [Information Interfaces &amp; Presentations]:</term>
+					<term>User Interfaces – Graphical User Interfaces (GUI); I36</term>
+					<term>[Methodology and Techniques]: Interaction Techniques</term>
+					<term>Keywords: visual analytics, information visualization, human</term>
+					<term>information interaction, sense making, geo-spatial information</term>
+					<term>systems, temporal analysis, user centered design</term>
+				</keywords>
+			</textClass>
+			<abstract>
+				<p>GeoTime and nSpace are new analysis tools that provide innovative visual analytic capabilities. This paper uses an epidemiology analysis scenario to illustrate and discuss these new investigative methods and techniques. In addition, this case study is an exploration and demonstration of the analytical synergy achieved by combining GeoTime&apos;s geo-temporal analysis capabilities, with the rapid information triage, scanning and sense-making provided by nSpace. A fictional analyst works through the scenario from the initial brainstorming through to a final collaboration and report. With the efficient knowledge acquisition and insights into large amounts of documents, there is more time for the analyst to reason about the problem and imagine ways to mitigate threats. The use of both nSpace and GeoTime initiated a synergistic exchange of ideas, where hypotheses generated in either software tool could be cross-referenced, refuted, and supported by the other tool.</p>
+			</abstract>
+		</profileDesc>
+	</teiHeader>
+	<text xml:lang="en">
+		<body>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1">INTRODUCTION</head><p>GeoTime and nSpace are two novel visual analytic applications that have been developed in collaboration with analysts to support the investigation of large and complex datasets. nSpace is used for triaging massive data and for analytical sense-making <ref type="bibr" coords="1,256.55,458.51,13.74,8.35" target="#b9">[12]</ref>, <ref type="bibr" coords="1,276.96,458.51,13.73,8.35" target="#b18">[22]</ref>, and is currently undergoing experimental evaluation and pilot deployment. GeoTime supports the visualization and analysis of entities and events over time and geography <ref type="bibr" coords="1,219.11,488.51,15.05,8.35" target="#b10">[13] </ref>and is currently in transition to deployment for analysts to use on a day-to-day basis. The epidemiology dataset was created by the authors' for the purposes of investigating the analytic process and evaluating nSpace and GeoTime using an ecologically valid scenario. This dataset is based on real news reports detailing the current outbreak of avian flu. The analyst used for the evaluation was experienced with both nSpace and GeoTime, but had no formal training in the art of intelligence analysis. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1.1">nSpace -A Unified Analytical Workspace</head><p>nSpace combines several interactive visualization techniques to create a unified workspace that supports the analytic process. One technique, called TRIST (The Rapid Information Scanning Tool), uses multiple linked views to support rapid and efficient scanning and triaging of thousands of search results in one display. The other technique, called the Sandbox, supports both ad-hoc and formal sense making within a flexible free thinking environment. Additionally, nSpace makes use of multiple advanced computational linguistic functions using a web services interface and protocol <ref type="bibr" coords="1,365.27,248.03,9.72,8.35" target="#b5">[6,</ref><ref type="bibr" coords="1,377.51,248.03,6.32,8.35" target="#b2"> 3]</ref>. 1.1.1 TRIST TRIST, as seen in <ref type="figure" coords="1,389.02,298.19,30.21,8.35" target="#fig_0">Figure 1</ref>, uses advanced information retrieval methods to support rapid scanning and exploration of large datasets. The design of TRIST was informed by recent research into information retrieval <ref type="bibr" coords="1,424.58,328.19,10.21,8.35" target="#b3">[4,</ref><ref type="bibr" coords="1,434.79,328.19,6.80,8.35" target="#b6">7,</ref><ref type="bibr" coords="1,441.59,328.19,10.21,8.35" target="#b14">17]</ref>, the development of the cognitive dimensions framework <ref type="bibr" coords="1,453.89,338.27,9.45,8.35" target="#b4">[5]</ref>, and the idea of an information-seeking environment <ref type="bibr" coords="1,440.88,348.35,9.45,8.35" target="#b7">[8]</ref>. TRIST supports multiple analytical processes, including query planning, rapid scanning of large corpus of documents, and result characterization across multiple dimensions <ref type="bibr" coords="1,481.43,378.35,13.76,8.35" target="#b9">[12]</ref>. Analysts work with TRIST to triage their massive data and to extract information into the Sandbox evidence marshalling environment. An evaluation of TRIST conduced over a two day period by The National Institute of Standards and Technology (NIST), found that analyst productivity and quality of analysis increased when using the tool <ref type="bibr" coords="1,390.95,692.75,13.73,8.35" target="#b15">[18]</ref>. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1.1.2">Sandbox</head><p>The Sandbox is a flexible and expressive environment for working with evidence and generating hypotheses. While concept maps <ref type="bibr" coords="2,75.36,98.75,15.04,8.35">[11,</ref><ref type="bibr" coords="2,90.40,98.75,11.28,8.35" target="#b12">15] </ref>and link analysis tools <ref type="bibr" coords="2,186.45,98.75,15.05,8.35">[10,</ref><ref type="bibr" coords="2,201.50,98.75,11.29,8.35" target="#b16">19] </ref>aim to support similar activates, their node-link representations can be limiting, and readability and usability decrease as the volume of data increases. The Sandbox supports both ad-hoc and more formal analytical sense making though the use of fluid gestures for interaction. Additionally, the Sandbox supports automated process model templates, layers for managing multiple dimensions of data, assertions with evidence templates, and scalability mechanisms to support larger analytic tasks <ref type="bibr" coords="2,157.67,178.91,13.73,8.35" target="#b18">[22]</ref>. An evaluation of the Sandbox was conducted by the NIST Visualization and Usability Group in 2005 <ref type="bibr" coords="2,219.40,199.07,13.73,8.35" target="#b13">[16]</ref>. Four analysts participated in the experiment consisting of three hours of training and eight hours of work on an intelligence analysis task. Results indicated that the Sandbox enabled the analysts to work quickly and efficiently, and perform a higher level of analysis when compared to other tools. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1.2">GeoTime -Concurrent Temporal and Spatial Analysis</head><p>GeoTime improves perception and understanding of entity movements, events, relationships, and interactions over time within a geospatial context. As seen in <ref type="figure" coords="2,216.25,308.51,31.40,8.35" target="#fig_1">Figure 2</ref>, events are represented within an X,Y,T coordinate space, in which the X,Y plane represents geographic space, and the T axis represents time. In addition to providing spatial context, the ground plane marks the instant of focus between past and future, meaning that events along the timeline 'occur' when they meet the surface. Several other visualization techniques for analyzing complex event interactions only display information along a single dimension, typically one of time, geography or network connectivity. An evaluation of GeoTime found that its unified geo-temporal representation increased analysts' understanding of entity relationships and behaviors <ref type="bibr" coords="2,154.79,428.99,13.92,8.35" target="#b10">[13]</ref>. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1.3">Epidemiology Analysis</head><p>Epidemiology is the study of the distribution and determinants of health and diseases, morbidity, injuries, disability and mortality in populations <ref type="bibr" coords="2,101.55,631.07,13.73,8.35" target="#b11">[14]</ref>. In this context, an epidemiologist can be thought of as a disease detective</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.1">Thinking without Borders</head><p>Lynn has just received the assignment to analyze the distribution, determinants, and potential impacts of the recent avian flu outbreak. She begins by brainstorming in the Sandbox using her prior and tacit knowledge to generate hypotheses about the possible causes and effects of the recent outbreaks. She notes key questions and outlines her analytical strategy for further investigation. The fluid gestural interaction within the Sandbox supports the early stages of analysis, which are often unconstrained to enable the generation of new ideas and concepts. Lynn simply points and clicks to create annotations. She draws circles to create groups and draw links to connect related ideas. Using these techniques, Lynn's thoughts flow freely, and are quickly organized with drag and drop and semi-automatic layout. Emphasis can also be added to create visual structure. Alternative scenarios are sketched out and the resulting empty assertions become explicit reminders to find supporting and refuting evidence, as shown in <ref type="figure" coords="2,399.08,520.19,29.12,8.35" target="#fig_2">Figure 3</ref>. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.2">Acquiring Analytical Awareness</head><p>With several avenues to investigate, Lynn turns to TRIST where she can follow a deductive process and find answers to questions, as well as and evidence to evaluate each of her assertions and hypotheses. As nSpace does not restrict the analyst to a specific workflow, Lynn is able to adjust her analytic process based on her current task. Rather that continue her analysis with pointed queries, Lynn decides to use TRIST to immerse herself in the data and favor a more inductive type of reasoning. Lynn's goal is to avoid or delay time investment in a particular scenario, which has the potential of introducing analytic bias. At this point, Lynn could point TRIST exclusively to the Health Department internal database, but believes that could also introduce some bias due to its narrow focus. At this early stage, Lynn might miss some signs of new outbreaks or key contextual cues available on the web. The web however poses a significant challenge to the epidemiologist attempting to perform public health surveillance. The signal to noise ratio is very high in this particular case. The potential gravity of the avian flu threat and its global reach generates a massive amount of information, in constant flux, from sources of variable reliability. TRIST allows her to evaluate the relevance and source credibility of thousands of search results at a time, by revealing various attributes and content without having to open and read results. Lynn opts for this iterative analytical technique, rather than relying only on reports sent to the Health Department. Starting with general queries that she refines iteratively, Lynn uses the TRIST launch queries pane, to examine documents from the web using Google with the query " Bird flu " . Rather than overwhelm Lynn with the several million query results, TRIST presents the first 100 documents. Instead of starting with this result set, Lynn decides to launch a few variations such as " Avian flu " , and " H5N1 outbreaks " . Using TRIST's difference visualization capabilities, she can quickly compare and determine what is unique or common within each result set without having to open a single document. An example is shown in <ref type="figure" coords="3,207.10,416.99,29.12,8.35" target="#fig_3">Figure 4</ref>. Using this process, Lynn can close the feedback loop on the query refinement process while increasing the precision and recall of her information retrieval process. Looking in the entities pane, as seen in <ref type="figure" coords="3,233.50,628.67,32.63,8.35" target="#fig_4">Figure 5</ref>, Lynn discovers that there seems to be a significant number of documents on particular countries that are affected by avian flu. She drags these entities into the sandbox and unrolls them into a group so she can add information on the current situation in each entity group later on. As she clicks on the entities in the sandbox, all the documents that contain each entity become visible, and the entity terms are highlighted in green. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.3">Discovering Trends and Themes</head><p>To establish the existence of an outbreak, categorized as a sudden increase in the incidence of disease, Lynn performs a rough trend analysis using the Country and Time dimensions in TRIST, which automatically sort all query results into each dimension. Without opening a search result, the categorization hints at various observations that can be investigated further at a later time. For example, Lynn notices that the disease was first identified in Hong Kong in 1997 and that most human fatalities seem to have occurred in Asia and in the Middle East. Considering a query result as a unit of incidence, the length of each row in each dimension bin reveals some trends. More observations are available by selecting rows in one dimension and analyzing the highlighted results in a different dimension, as shown in <ref type="figure" coords="3,525.10,397.31,29.49,8.35" target="#fig_5">Figure 6</ref>. For example, Lynn can focus on the evolution of the disease per country or get a sense of the propagation of the disease over time. Lynn captures these quick observations, either as snippets, whole documents, or sets of documents, in the Sandbox. She notices that the World Heath Organization's website was recurring across TRIST's country and time dimensions. This indicates the availability of comprehensive data within a narrow source, and on closer inspection, Lynn sees that it contains spatiotemporal data of interest. Before moving on to examine that spatiotemporal data, Lynn opens the Automatic Categories dimension to see if any novel or unexpected themes are detected in the data. The default generation of three themes doesn't show her anything new, so she asks for four more categories to be generated. One of those, 'animals' seems potentially interesting, so she asks that it be further broken down into four categories. The results come back as 'chickens', 'turkeys', 'cats' and 'swans' (<ref type="figure" coords="4,169.43,155.87,29.90,8.35" target="#fig_6">Figure 7</ref>). Lynn is reminded that while she tends to associate avian flu primarily with domesticated birds (probably because of a large number of recent news stories about that issue), it also affects wild birds, which could certainly affect the chances of it being contained. She was also interested to see cats detected as a theme in quite a few of the results, since she hasn't heard much about outbreaks in cats. She wonders how much of an affect the disease is having on this non-avian, mammalian population. She'll keep these issues in mind as she continues her analysis. Having gained a better overview of the situation, as well as some hypotheses regarding trends and issues, Lynn turns to GeoTime to gain a different perspective on the scenario. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.4">Disambiguating Spatial and Temporal Patterns</head><p>At the core of GeoTime is the concept of an event, which is loosely based on Davidsonian semantics <ref type="bibr" coords="4,208.60,494.03,9.63,8.35" target="#b1">[2]</ref>. An event binds an action or occurrence to a location, a time, and the entity or target involved. It links the what, the where, the when, and the who to a single entity. Each event can have a description or type, a location, and a temporal context. Lynn structures the avian flu data within GeoTime as follows: </p><p>(1) each event represents one or more human cases of disease within a local area, labeled by age/sex of the victim and, in the case of a multi-victim outbreak, the number of people infected, (2) each event is associated with the strain of avian flu involved and those strains are the 'targets' in this scenario, and (3) other potentially relevant information, such as method of exposure, is saved with each event. To import the data into GeoTime, an Excel plug-in is used which translates tabular data into places, events, and targets in GeoTime. When working with data sets in which the targets represent actual moving entities, such as vehicles, shipments, or in this case, a strain of flu, the target trail represents the targets movement, and depending on the accuracy and granularity of the data, can be fairly accurate and used for analysis. In this case, each target represents a disease strain, which we know can exist in multiple discrete populations at the same time and move in more than one direction at once. Rapid movements of this target are therefore indicative of simultaneous and widespread occurrences in an area encompassed by the visible target trails. These trails thus provide an idea of the magnitude of global disease activity for a particular strain. Removing the trails from view gives the analyst a view only of individual disease events. With the dataset imported into GeoTime, geo-spatial and temporal patterns are immediately evident, as shown in <ref type="figure" coords="4,519.08,125.87,29.15,8.35" target="#fig_7">Figure 8</ref>. Geographically, the bulk of disease activity is clustered in Asia, with some occurrences in the Middle East and a few in Northern Europe and Western Canada. Temporally, disease activity appears sporadic between 1997 and 2003. Target trails, one per strain, indicate substantial increases in disease activity in 2004, continuing through the end of the dataset in early 2006. A particular strain, H5N1, is clearly predominant, and is present in Asia and the Middle East. Africa has no reported cases of avian flu, while Europe and the Western Hemisphere appear to have each had a brief and isolated incident with a strain not seen elsewhere. Using GeoTime, Lynn develops hypotheses about why disease events and patterns occur. These hypotheses require further investigation to assert or refute their validity, but the generation of these hypotheses is necessary in understanding the spread of disease on a global scale. Since Asia is a hotspot for disease activity, Lynn decides to investigate this region more closely, as seen in <ref type="figure" coords="4,500.83,605.39,30.83,8.35" target="#fig_8">Figure 9</ref>. Lynn notices that the concentration of three different strains, shown as three distinct colors, in this geographic area is apparent, which may imply that mutations have taken place within this region. <ref type="figure" coords="4,317.76,645.47,30.98,8.35" target="#fig_8">Figure 9</ref>also reveals that disease events in Asia seem to occur in clusters by location, with time gaps in between outbreaks. The absence of the disease from nearby countries like Laos and Korea are also interesting observations. Indonesia is not connected to mainland Asia, yet somehow disease events later occur there, suggesting avian flu was somehow brought over from the mainland, perhaps due to bird migration or poultry exports. Lynn quickly creates new assertions in the Sandbox to capture these thoughts and drags a thumbnail of this GeoTime view to place next to them so that she can quickly jump back to it from the Sandbox in the future, as seen in <ref type="figure" coords="5,194.62,85.79,36.01,8.35" target="#fig_0">Figure 10</ref>. Clicking on a GeoTime thumbnail in the Sandbox invokes that context in GeoTime. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3">STRUCTURING AND CATALOGUING DATA</head><p>As Lynn finds relevant information in TRIST and GeoTime, she integrates it with her existing hypotheses in the Sandbox. As the Sandbox does not force the analyst into a particular model or mode for the layout of their thoughts and evidence, Lynn is free to arrange information as she sees to encode meaning. For example, she places supporting details with higher level concepts, while related issues are placed next to each other. She emphasizes items more important to her by increasing their relative size. All these sense making interactions are achieved through direct manipulation using gestures. Drawing a circle around objects selects them for moving. Drawing a second circle around selected objects groups them. Items or groups can be moved and dropped on other groups. Groups can also be moved with collision detection active and will then knock other groups out of the way when the group is placed. Editor gestures insert and delete Sandbox space by animating objects out of the way or bringing them closer together. As Lynn moves between information retrieval and analysis, a diagram of the situation and assessment begins to emerge, as shown in <ref type="figure" coords="5,353.04,125.87,34.80,8.35" target="#fig_0">Figure 11</ref>with details in <ref type="figure" coords="5,443.29,125.87,33.12,8.35" target="#fig_0">Figure 12</ref>. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.1">Generating and Testing Hypothesis</head><p>Lynn uses assertions to keep track of the arguments for and against the proposed measures to control the propagation of the disease. Assertions have evidence gates that encode the object dragged in as supporting or refuting evidence in a single gesture, as shown in <ref type="figure" coords="6,103.68,330.59,34.85,8.35" target="#fig_0">Figure 14</ref>. Assertions can also be nested to create inference networks. An at-a-glance indicator on top of each assertion provides quick assessment of the quantity and type of evidence retrieved so far. : An Assertion with Evidence Gates. As the analyst drags evidence through the left refuting gate of an assertion, the gate flashes red, the evidence is tagged with a minus sign and the red visual indicator on top of the assertion grows. A corresponding supporting gate, on the right side, flashes green, adds a plus sign and updates the green bar of the assertion score when used. </p><p>The explicit visual thinking supported by the Sandbox helps counter natural human tendencies to only look for evidence that supports the hypothesis. These tendencies highlight evidence which sounds more plausible in the analyst's mind or the cognitive bias. This has the negative effect of giving more strength to certain arguments based on how recently they were processed. Assertions can be combined into an analysis of competing hypotheses (ACH) framework <ref type="bibr" coords="6,206.18,645.95,9.63,8.35" target="#b8">[9]</ref>. Visual cues indicate diagnosticity of the ACH evidence. An evidence item used in many alternatives is blurred while an item uniquely supporting one alternative hypothesis has a sharp icon. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.2">Exploring Alternative Perspectives</head><p>Analytical models that encapsulate expert knowledge and best practices can be quickly applied and un-applied to a situation to provide an alternative point-of-view. To reduce the cognitive biases associated with a particular mindset, exploring different perspectives is key to successful analysis of a scenario. Trying to fit the collected evidence to different models might reveal gaps or different interpretations of the evidence. Lynn takes advantage of her colleague's knowledge captured in a model he created during his investigation of the AIDS epidemic in Africa. The cycle of poverty and hunger applied to her assertion about the threat of the disease propagating faster once in Africa provides new insight, which suggests that impoverished people often live in close proximity to poultry, and are unwilling to kill their livestock due to their reliance on them for food and income. Another model, which structures evidence as a process diagram, highlights the fact that as long as the virus does not propagate between humans the risks are low. These steps are highlighted in <ref type="figure" coords="6,480.47,236.27,33.14,8.35" target="#fig_0">Figure 15</ref>. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.3">Filling in Gaps</head><p>Zooming out to review her overall analytic progress, Lynn realizes that her assertion regarding the disease being propagated by the migrating birds is under-developed. She decides to investigate migration routes in GeoTime as a possible cause of disease transmission. Lynn augments her original GeoTime view with additional information animal migratory routes, and color codes events by outbreak type. She organizes each animal type in a layer so that the events associated with each type of animal can be easily toggled on or off. Lynn focuses her analysis on the most widespread strain of avian flu, H5N1, which was localized to the eastern hemisphere. She adjusts the visualization configuration to include human and bird cases only, as shown in <ref type="figure" coords="6,491.99,674.51,33.14,8.35" target="#fig_0">Figure 16</ref>. It becomes visually apparent that the reported migratory and wild bird cases do not frequently coincide with farmed bird or human cases. This analysis lends credibility to the hypothesis that migratory birds have not been a significant factor in the spread of the disease. She annotates and drags this view in the corresponding assertion in the Sandbox, entering through the left gate, which tags the observation as refuting evidence and recalculates the overall strength of this assertion, all in one simple gesture. However, Lynn notes that wild bird testing is a relatively recent procedure, which suggests that true wild and migratory bird infections may be far greater than reported. Since it has already been established that avian flu occurs naturally in certain waterfowl, she decides to further evaluate the role of migratory birds by overlaying migration routes in the existing visualization.. She quickly finds open source information on migration routes using TRIST and uses inking functionality in GeoTime to sketch these routes in the same context as the event data, as seen in <ref type="figure" coords="7,54.00,445.79,33.37,8.35" target="#fig_0">Figure 17</ref>. The resulting view in GeoTime reveals two distinct outbreak regions, each constrained within a migration route. The hotspot events of <ref type="figure" coords="7,89.99,685.07,30.74,8.35" target="#fig_8">Figure 9</ref>are entirely contained within the bounds of the East/Asian Australian flyway. This may also provide an explanation of how H5N1 reached Indonesia, an area isolated from mainland Asia. The European and Middle Eastern outbreaks appear within the Black Sea/Mediterranean flyway, and disease could be spreading due to this migration route. The overlap of the zones display a possibility that the H5N1 could spread to different flyways, although the distribution of events, as seen in GeoTime, suggest this has not happened yet. A single bird outbreak in India is the only outlier, existing in a flyway otherwise unaffected by H5N1. Investigation of the source of the Indian outbreak is therefore of interest to Lynn. Unlike <ref type="figure" coords="7,355.17,146.03,34.59,8.35" target="#fig_0">Figure 16</ref>, <ref type="figure" coords="7,396.96,146.03,36.27,8.35" target="#fig_0">Figure 17</ref>provides strong evidence linking bird migration to the distribution of H5N1. Examining the temporal dimension, Lynn can see that the disease was restricted to the core of the migration routes, until more recently, when disease events occur in regions overlapping with other migration routes. H5N1 has just begun to enter into these previously untouched routes, and may therefore spread within the new routes in the coming season as a result of spring migration. Monitoring of wild and migratory birds along these routes in the future would be advisable. More careful examination of the East Asian/Australian flyway reveals that this route covers an area of Alaska. This provides a way for H5N1 to enter into North America, as shown in <ref type="figure" coords="7,398.15,266.51,33.14,8.35" target="#fig_0">Figure 18</ref>. Since Alaska is socially isolated from the core North American population, and from poultry trade, an Alaskan H5N1 outbreak which precedes any other North American outbreak would be strong evidence that H5N1 is spreading via bird migration. The results of this analysis might effectively be used to persuade Alaskan authorities to conduct sentinel surveillance of wild birds to monitor for the presence of the virus. The United States Fish and Wildlife Service already have a strong presence in Alaska, and their services can be requested to conduct periodic testing of wild birds. Lynn decides to also setup a monitoring query in TRIST to keep an eye on Alaska. At this stage of the analysis process, Lynn feels that her assessment is clear enough to invite her colleagues to review it. Since the work and the results are readily accessible in their visual form, the presentation yields productive results by affording complimentary feedback. Lynn's final report does not require very much attention until the last minute since she knows it can quickly be generated by moving selected elements from the Sandbox to MS Word or PowerPoint, which also automatically formats the document and generates appropriate references. Lynn may also use the Sandbox itself to create an interactive final report. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4">DISCUSSION</head><p>This case study is an attempt to investigate and validate approaches to visual analytics that support the analysis of complex, real-world scenarios. Our aim in conducting this case study is to gain a deeper understanding of the analytic process, and how our tools support this process, so that future tools may benefit from the insights generated through our study. It is clear from the results of the case study that visual analytic tools that aim to support an analytic workflow must be flexible in order to enable the freeform representations of thoughts, hypotheses, and unstructured data. Providing the analyst with a flexible workspace enables the free-thinking necessary for effective analysis. It is also important that these tools support uncertainty and ambiguity, as often there is no single correct answer or interpretation of evidence. Furthermore, we believe that it is beneficial for the analyst to observe and understand uncertainty within the context of hypotheses and findings, thus enabling quick interpretation in order to make reliable assessments. Finally, we believe that visual analytic tools should enable quick and easy export to existing applications, such as MS Word and PowerPoint, in order to fit within existing analytic workflows and make the process of generating a report or presentation seamless. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5">FUTURE WORK</head><p>In the future, we plan on examining how data can be more seamlessly transferred from one analytic environment to another. A difficult problem involves transforming unstructured data accumulated in a freeform environment, such as nSpace, to a more structured environment, such as GeoTime. We are currently investigating mixed-initiative techniques for semi-automated event extraction, along with other techniques to facilitate fluid data transfer. Future work also includes building on the best of nSpace as a unified analyst environment and as an open integration platform to implement a distributed infrastructure in which analytic components can interoperate and provide capabilities to each other as well as to applications for analysts. One example of ongoing work in this area is an effort to integrate components that will support analysts that work with information in multiple languages. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6">CONCLUSIONS</head><p>This case study illustrates how nSpace and GeoTime can be combined to create a powerful analytic setting that supports the analysis of complex, real-world scenarios. While the synergy created though the integration of these tools enabled Lynn to quickly understand the scenario, generate meaningful hypotheses, and present her results, there remain several avenues for improvement, specifically the transfer of data between different analytic environments. Nevertheless, the benefits of analytic tool integration cannot be contested, and based on the results of this case study, we believe that supporting a fluid, non-sequential workflow will lead to performance benefits for the analyst. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>7</head></div><figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_0" coords="1,325.20,615.87,224.98,8.84;1,334.56,625.95,205.98,8.84;1,322.56,635.79,230.18,8.84;1,398.40,645.87,78.53,8.84"><head>Figure 1: </head><figDesc>Figure 1: TRIST interface. Left column: Launch Queries, Query History, and Dimensions panes. Middle column: Displayed dimensions with categorized results and Document Viewer. Right column: Entities pane. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_1" coords="2,54.48,555.15,239.13,8.84;2,99.60,565.23,148.81,8.84"><head>Figure 2: </head><figDesc>Figure 2: Individual views of movement in time are translated into a continuous spatiotemporal representation. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_2" coords="2,366.24,665.55,142.83,8.84"><head>Figure 3: </head><figDesc>Figure 3: Brainstorming in the Sandbox. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_3" coords="3,66.72,571.95,214.66,8.84;3,65.52,581.79,216.77,8.84"><head>Figure 4: </head><figDesc>Figure 4: TRIST difference visualization. Grey icons indicate previously retrieved results, while white ones are new results. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_4" coords="3,321.60,210.99,232.39,8.84;3,333.84,221.07,208.16,8.84;3,324.96,231.15,225.18,8.84"><head>Figure 5: </head><figDesc>Figure 5: Extracted entities can be used to browse results or help determine relevance. Entities of interest are dragged to the Sandbox where they stay linked to results containing that entity. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_5" coords="3,334.80,610.59,205.80,8.84;3,329.04,620.43,217.21,8.84;3,325.44,630.51,224.40,8.84;3,326.40,640.59,222.82,8.84;3,326.40,650.43,222.78,8.84;3,328.08,660.51,219.37,8.84"><head>Figure 6: </head><figDesc>Figure 6: Results from multiples queries are automatically organized in any dimension of interest created by the analyst. Selection-highlighting across dimensions reveals trends without requiring the analyst to open a single document. In the Country dimension, Nigeria results are selected in blue and those same results are highlighted in the '2006' bin of the Time dimension. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_6" coords="4,64.08,397.95,219.91,8.84;4,86.40,408.03,174.99,8.84"><head>Figure 7: </head><figDesc>Figure 7: Themes contained within the results, located by and displayed in the Automatic Categories dimension. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_7" coords="4,320.64,377.79,233.86,8.84;4,322.08,387.87,231.45,8.84;4,326.64,397.95,221.82,8.84;4,322.32,407.79,230.49,8.84;4,394.80,417.87,85.71,8.84"><head>Figure 8: </head><figDesc>Figure 8: Initial view of the data, showing worldwide human cases of avian flu. Sporadic localized activity seen in Asia until 2003 (1). H5N1 cases increased in frequency in 2004 (2) with the bulk of disease activity in Asia. Isolated incidents of strain H7N7 found in Canada and Europe (3). </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_8" coords="5,59.52,332.91,228.74,8.84;5,55.68,342.75,236.42,8.84;5,56.40,352.83,234.81,8.84;5,104.64,362.91,138.52,8.84"><head>Figure 9: </head><figDesc>Figure 9: View of Asia, providing high detail of disease hotspots. Local disease events occur in clusters, separated by time gaps (1). Possible H5N1 route to Indonesia from mainland (2). Three strains are concentrated in Southeast Asia (3). </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_9" coords="5,78.24,548.43,191.64,8.84"><head>Figure 10: </head><figDesc>Figure 10: Linked GeoTime thumbnail in the Sandbox </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_10" coords="5,332.88,366.75,209.77,8.84"><head>Figure 11: </head><figDesc>Figure 11: The emerging analysis diagram in the Sandbox. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_11" coords="5,372.24,617.79,131.10,8.84;5,327.12,634.43,230.87,8.35;5,317.76,644.51,240.18,8.35;5,317.76,654.59,240.26,8.35;5,317.76,664.67,240.26,8.35;5,317.76,674.75,240.28,8.35;5,317.76,684.83,46.44,8.35"><head>Figure 12: </head><figDesc>Figure 12: Analysis diagram in detail While Lynn collects various types of information pertinent to her analysis, she notices a general hypothesis among experts that the virus might be spread by migrating birds. Lynn makes a group in the sandbox and saves all the relevant links in this subject into the group so she can come back to the topic in the future, as seen in Figure 13. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_12" coords="6,73.44,244.59,200.76,8.84"><head>Figure 13: </head><figDesc>Figure 13: Important links related to a single hypotheses </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_13" coords="6,54.96,508.83,237.70,8.84;6,62.88,518.91,222.33,8.84;6,59.04,528.99,229.72,8.84;6,63.84,538.83,220.39,8.84;6,58.32,548.91,230.95,8.84;6,66.24,558.99,215.54,8.84"><head>Figure 14</head><figDesc>Figure 14: An Assertion with Evidence Gates. As the analyst drags evidence through the left refuting gate of an assertion, the gate flashes red, the evidence is tagged with a minus sign and the red visual indicator on top of the assertion grows. A corresponding supporting gate, on the right side, flashes green, adds a plus sign and updates the green bar of the assertion score when used. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_14" coords="6,317.76,318.22,179.84,7.25;6,317.76,410.86,202.12,7.25;6,317.76,495.34,240.17,7.25;6,317.76,504.22,179.86,7.25"><head>Step 1. </head><figDesc>Exploration workspace, in this case an assertion. Step 2. Process Template on the Stages of Pandemic Influenza. Step 3. Applying the Pandemic template automatically placed the evidence from the exploration workspace in this new perspective. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_15" coords="6,321.12,518.19,233.29,8.84"><head>Figure 15: </head><figDesc>Figure 15: Using analytical templates for alternative perspectives. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_16" coords="7,78.96,338.67,190.12,8.84"><head>Figure 16: </head><figDesc>Figure 16: H5N1 outbreaks colored by outbreak type. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_17" coords="7,61.92,638.19,224.24,8.84;7,137.52,648.27,72.75,8.84"><head>Figure 17: </head><figDesc>Figure 17: Bird and human cases and migration patterns of the eastern hemisphere. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_18" coords="7,333.60,348.03,208.34,8.84"><head>Figure 18: </head><figDesc>Figure 18: Migration route linking Asia with North America. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_1" validated="true" coords="2,335.76,250.35,216.11,77.31"><figDesc coords="2,385.20,250.35,104.99,8.84">Table 1. Analysis Objectives</figDesc><table coords="2,335.76,268.91,216.11,58.75">Investigate and characterize the avian flu outbreaks 
+Identify and analyze trends 
+Identify key issues and threats 
+Develop, support or refute, and refine hypotheses about 
+cause and effects 
+Propose options for mitigating future risk 
+
+</table></figure>
+		</body>
+		<back>
+
+			<div type="acknowledgement">
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>ACKNOWLEDGEMENTS </head><p>This study was supported and monitored by the Advanced Research and Development Activity (ARDA) and the National Geospatial-Intelligence Agency (NGA) under Contract Number NMA 401-02-C-0032 and NMA 401-02-C-0015. The views, opinions, and findings in this report are those of the authors and should not be construed as an official DOD position, policy, or decision, unless so designated by other official documentation. The authors wish to thank all ARDA / DTO staff for their support and encouragement. </p></div>
+			</div>
+
+			<div type="references">
+
+				<listBibl>
+
+<biblStruct coords="8,72.00,655.66,204.06,7.25;8,72.00,665.50,172.11,7.25"  xml:id="b0">
+	<monogr>
+		<title level="m" type="main">Epi Info Features</title>
+		<author>
+			<persName>
+				<forename type="first">Disease</forename>
+				<surname>Center</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<surname>Control</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<surname>Prevention</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2006-03" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,72.00,675.58,213.75,7.25;8,72.00,685.66,38.95,7.25"  xml:id="b1">
+	<monogr>
+		<title level="m" type="main">Essays on Actions and Events</title>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Davidson</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="1980" />
+			<publisher>Clarendon Press</publisher>
+			<pubPlace>Oxford</pubPlace>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,72.00,695.50,215.71,7.25;8,72.00,705.58,204.52,7.25;8,335.76,56.38,177.54,7.25;8,335.76,66.46,136.13,7.25"  xml:id="b2">
+	<analytic>
+		<title level="a" type="main">A Workbench for Rapid Development of Extraction Capabilities</title>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Freitag</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Blume</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Byrnes</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Calmbach</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Rohwer</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">2005 International Conference on Intelligence Analysis (analysis.mitre.org)</title>
+		<meeting><address><addrLine>McLean, VA</addrLine></address></meeting>
+		<imprint>
+			<date type="published" when="2005" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,335.76,76.30,203.29,7.25;8,335.76,86.38,103.01,7.25"  xml:id="b3">
+	<monogr>
+		<title level="m" type="main">Visualizing the Semantic Web</title>
+		<author>
+			<persName>
+				<forename type="first">V</forename>
+				<surname>Geroimenko</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Chen</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2003" />
+			<publisher>Springer-Verlag</publisher>
+			<pubPlace>London</pubPlace>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,335.76,96.46,220.34,7.25;8,335.76,106.30,217.72,7.25"  xml:id="b4">
+	<analytic>
+		<title level="a" type="main">Cognitive Dimensions of Notations</title>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<forename type="middle">R G</forename>
+				<surname>Green</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceeding of the HCI &apos;89 Conference on People and Computers</title>
+		<meeting>eeding of the HCI &apos;89 Conference on People and Computers</meeting>
+		<imprint>
+			<date type="published" when="1989" />
+			<biblScope unit="page" from="443" to="460" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,335.76,116.38,205.03,7.25;8,335.76,126.46,205.66,7.25;8,335.76,136.30,207.75,7.25;8,335.76,146.38,205.24,7.25"  xml:id="b5">
+	<analytic>
+		<title level="a" type="main">Employing Two Question Answering Systems in TREC</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Harabagiu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Moldovan</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Clark</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Bowden</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Hickl</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Wang</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the Fourteenth Text REtrieval Conference</title>
+		<meeting>the Fourteenth Text REtrieval Conference<address><addrLine>Gaithersburg, Maryland</addrLine></address></meeting>
+		<imprint>
+			<date type="published" when="2005-11-15" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,335.76,156.46,198.86,7.25;8,335.76,166.30,211.82,7.25;8,335.76,176.38,142.64,7.25"  xml:id="b6">
+	<analytic>
+		<title level="a" type="main">User Interfaces and Visualization</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Hearst</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Chapter Modern Information Retrieval</title>
+		<imprint>
+			<publisher>Addison-Wesley-Longman</publisher>
+			<date type="published" when="1999" />
+			<publisher>Addison-Wesley-Longman</publisher>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,335.76,186.46,198.35,7.25;8,335.76,196.30,204.14,7.25;8,335.76,206.38,114.29,7.25"  xml:id="b7">
+	<analytic>
+		<title level="a" type="main">An Informal Information-Seeking Environment</title>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<forename type="middle">G</forename>
+				<surname>Hendry</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<forename type="middle">J</forename>
+				<surname>Harper</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Journal of the American Society for Information Science</title>
+		<imprint>
+			<biblScope unit="volume">48</biblScope>
+			<biblScope unit="page" from="11" to="1036" />
+			<date type="published" when="1999" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,335.76,216.46,201.33,7.25;8,335.76,226.30,204.52,7.25;8,317.76,236.38,127.63,7.25;8,317.76,246.46,238.80,7.25;8,335.76,256.30,108.99,7.25"  xml:id="b8">
+	<analytic>
+		<title level="a" type="main">Psychology of Intelligence Analysis</title>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<forename type="middle">J</forename>
+				<surname>Heuer</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<surname>Jr</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Central Intelligence Agency: Center for the Study of Intelligence</title>
+		<imprint>
+			<date type="published" when="1999" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,335.76,266.38,182.46,7.25;8,335.76,276.46,219.28,7.25;8,335.76,286.30,99.87,7.25"  xml:id="b9">
+	<analytic>
+		<title level="a" type="main">Information Triage with TRIST</title>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Jonker</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Wright</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Schroh</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Proulx</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Cort</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. International Conference on Intelligence Analysis</title>
+		<meeting>. International Conference on Intelligence Analysis</meeting>
+		<imprint>
+			<date type="published" when="2005" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,335.76,296.38,209.76,7.25;8,335.76,306.46,198.28,7.25;8,335.76,316.30,78.06,7.25"  xml:id="b10">
+	<analytic>
+		<title level="a" type="main">GeoTime Information Visualization</title>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Kapler</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Wright</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Information Visualization Journal</title>
+		<imprint>
+			<publisher>Palgrave Macmillan</publisher>
+			<biblScope unit="volume">4</biblScope>
+			<biblScope unit="issue">2</biblScope>
+			<biblScope unit="page" from="136" to="146" />
+			<date type="published" when="2005" />
+			<publisher>Palgrave Macmillan</publisher>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,335.76,326.38,177.07,7.25;8,335.76,336.46,221.84,7.25;8,335.76,346.30,101.32,7.25"  xml:id="b11">
+	<monogr>
+		<title level="m" type="main">An Overview of Public Health Preparedness Epidemiology</title>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Ladd</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2005" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,335.76,356.38,120.19,7.25"  xml:id="b12">
+	<monogr>
+		<title/>
+		<author>
+			<persName>
+				<forename type="first">Mindjet</forename>
+				<surname>Inc</surname>
+			</persName>
+		</author>
+		<imprint/>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,335.76,366.46,176.99,7.25;8,335.76,376.30,192.36,7.25;8,335.76,386.38,201.37,7.25"  xml:id="b13">
+	<analytic>
+		<title level="a" type="main">Metrics and Methodologies for Evaluating Technologies for Intelligence Analysts</title>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<surname>Morse</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Potts Steves</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Scholtz</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. Conference on Intelligence Analysis</title>
+		<meeting>. Conference on Intelligence Analysis</meeting>
+		<imprint>
+			<date type="published" when="2005" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,335.76,396.46,217.67,7.25;8,335.76,406.30,117.90,7.25"  xml:id="b14">
+	<analytic>
+		<title level="a" type="main">Information Foraging</title>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Pirolli</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Card</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Psychology Review</title>
+		<imprint>
+			<biblScope unit="volume">106</biblScope>
+			<biblScope unit="issue">4</biblScope>
+			<biblScope unit="page" from="643" to="675" />
+			<date type="published" when="1980" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,335.76,416.38,192.20,7.25;8,335.76,426.46,110.47,7.25"  xml:id="b15">
+	<analytic>
+		<title level="a" type="main">Pilot Evaluation of TRIST</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Scholtz</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Internal NIST Technical Report</title>
+		<imprint>
+			<date type="published" when="2004-02" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,335.76,436.30,173.43,7.25;8,317.76,446.38,233.60,7.25;8,335.76,456.46,74.57,7.25;8,335.76,466.30,214.62,7.16"  xml:id="b16">
+	<monogr>
+		<title level="m" type="main">20] World Health OrganizationAvian Influenza Timeline</title>
+		<imprint>
+			<date type="published" when="2006" />
+			<publisher>Visual Analytics Inc</publisher>
+		</imprint>
+	</monogr>
+	<note>Retrieved. 22 February</note>
+</biblStruct>
+
+<biblStruct coords="8,335.76,476.38,219.92,7.25;8,335.76,486.46,166.09,7.25"  xml:id="b17">
+	<monogr>
+		<title level="m" type="main">World Health OrganizationDisease Outbreak News</title>
+		<imprint>
+			<date type="published" when="2006-02" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,335.76,496.30,213.97,7.25;8,335.76,506.38,211.99,7.25"  xml:id="b18">
+	<analytic>
+		<title level="a" type="main">The Sandbox for Analysis – Concepts and Methods</title>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Wright</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Schroh</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Proulx</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Skaburskis</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Cort</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">ACM CHI</title>
+		<imprint>
+			<date type="published" when="2006" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+				</listBibl>
+			</div>
+		</back>
+	</text>
+</TEI>

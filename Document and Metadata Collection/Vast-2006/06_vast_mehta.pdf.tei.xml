@@ -1,0 +1,1012 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.tei-c.org/ns/1.0 /home/pisenberg/grobid/grobid-home/schemas/xsd/Grobid.xsd"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+	<teiHeader xml:lang="en">
+		<encodingDesc>
+			<appInfo>
+				<application version="0.4.1" ident="GROBID" when="2016-09-09T13:36+0000">
+					<ref target="https://github.com/kermitt2/grobid">GROBID - A machine learning software for extracting information from scholarly documents</ref>
+				</application>
+			</appInfo>
+		</encodingDesc>
+		<fileDesc>
+			<titleStmt>
+				<title level="a" type="main">Visual Exploration of Spatio-temporal Relationships for Scientific Data</title>
+			</titleStmt>
+			<publicationStmt>
+				<publisher/>
+				<availability status="unknown"><licence/></availability>
+			</publicationStmt>
+			<sourceDesc>
+				<biblStruct>
+					<analytic>
+						<author>
+							<persName>
+								<forename type="first">Sameep</forename>
+								<surname>Mehta</surname>
+							</persName>
+							<affiliation>
+								<orgName type="department" key="dep1">Computer Science &amp; Engineering</orgName>
+								<orgName type="department" key="dep2">Computer Science &amp; Engineering</orgName>
+								<orgName type="department" key="dep3">Computer Science &amp; Engineering</orgName>
+								<orgName type="institution" key="instit1">The Ohio State University</orgName>
+								<orgName type="institution" key="instit2">The Ohio State University</orgName>
+								<orgName type="institution" key="instit3">The Ohio State University</orgName>
+							</affiliation>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Srinivasan</forename>
+								<surname>Parthasarathy</surname>
+							</persName>
+							<affiliation>
+								<orgName type="department" key="dep1">Computer Science &amp; Engineering</orgName>
+								<orgName type="department" key="dep2">Computer Science &amp; Engineering</orgName>
+								<orgName type="department" key="dep3">Computer Science &amp; Engineering</orgName>
+								<orgName type="institution" key="instit1">The Ohio State University</orgName>
+								<orgName type="institution" key="instit2">The Ohio State University</orgName>
+								<orgName type="institution" key="instit3">The Ohio State University</orgName>
+							</affiliation>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Raghu</forename>
+								<surname>Machiraju</surname>
+							</persName>
+							<affiliation>
+								<orgName type="department" key="dep1">Computer Science &amp; Engineering</orgName>
+								<orgName type="department" key="dep2">Computer Science &amp; Engineering</orgName>
+								<orgName type="department" key="dep3">Computer Science &amp; Engineering</orgName>
+								<orgName type="institution" key="instit1">The Ohio State University</orgName>
+								<orgName type="institution" key="instit2">The Ohio State University</orgName>
+								<orgName type="institution" key="instit3">The Ohio State University</orgName>
+							</affiliation>
+						</author>
+						<title level="a" type="main">Visual Exploration of Spatio-temporal Relationships for Scientific Data</title>
+					</analytic>
+					<monogr>
+						<imprint>
+							<date/>
+						</imprint>
+					</monogr>
+				</biblStruct>
+			</sourceDesc>
+		</fileDesc>
+		<profileDesc>
+			<textClass>
+				<keywords>
+					<term>Knowledge Discovery, Scientific Analytics, Trajec- tory Analysis, Feature Extraction, Spatio-temporal Predicates, Vi- sual Analytics Index Terms: D22 [Design Tools and Techniques]: User Interfaces</term>
+					<term>H28 [Database Applications]: Data Mining</term>
+					<term>H28 [Database Applications]: Scientific Databases</term>
+				</keywords>
+			</textClass>
+			<abstract>
+				<p>Spatio-temporal relationships among features extracted from temporally-varying scientific datasets can provide useful information about the evolution of an individual feature and its interactions with other features. However, extracting such useful relationships without user guidance is cumbersome and often an error prone process. In this paper, we present a visual analysis system that interactively discovers such relationships from the trajectories of derived features. We describe analysis algorithms to derive various spatial and spatio-temporal relationships. A visual interface is presented using which the user can interactively select spatial and temporal extents to guide the knowledge discovery process. We show the usefulness of our proposed algorithms on datasets originating from computational fluid dynamics. We also demonstrate how the derived relationships can help in explaining the occurrence of critical events like merging and bifurcation of the vortices.</p>
+			</abstract>
+		</profileDesc>
+	</teiHeader>
+	<text xml:lang="en">
+		<body>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1">INTRODUCTION</head><p>The physical and engineering sciences are interested in the study of large, time varying scientific datasets to capture and understand the underlying physical process exhibited by intrinsic features present in the datasets. The features often evolve and interact with other features resulting in important phenomena and critical events. For example, interactions among the anomalous structures in molecular dynamics simulation result in long extended defects structures <ref type="bibr" coords="1,276.86,475.61,13.74,8.21" target="#b17">[18]</ref>, which affect the electrical and mechanical properties of the semiconductor in an undesirable fashion. To mitigate this effect, the doping process and the associated parameters should be chosen carefully. Similarly, studying the interactions among the vortices in computational fluid dynamics help in better design of airplane wings. In this paper, we employ various spatial and spatio-temporal relationships to capture and understand the evolution of an individual feature and the interactions among several features. The information provided by various spatio-temporal relationships can be used to understand the effect of initial simulation parameters on the behavior of the features and can help select the parameters carefully to steer the simulations. Additionally, the simulation parameters can be changed in a controlled fashion. By observing the corresponding changes in different relationships, the effect of the parameters on the behavior of the features can be studied in a systematic fashion. These relationships also help in overall knowledge mining process from such datasets. For example, the (most likely) process resulting in critical events like merging, bifurcation etc can * {mehtas,srini,raghu}@cse.ohio-state.edu be easily understood. Furthermore, important components of the data which require more detailed analysis can be easily identified, resulting in huge reduction in time and computational power. The overall goal of efficiently deriving meaningful relationships among scientific features is hindered by two challenges i) finding an useful representation for the evolving features and ii) effectively selecting the spatial region and temporal interval to be used in establishing the relationships. Next, we discuss these challenges in detail and also highlight the proposed solutions to address these issues. A fundamental property of spatio-temporal features is that: the spatial positions of the features change over time. This change in position can be characterized by motion parameters including linear velocity and angular velocity. Moreover, in scientific datasets, the extent and the shape of the features also change frequently. This information is very important to precisely describe the evolution of the feature and should be taken into account in the analysis. We capture the change in the size of the feature by using scaling parameters . The change in these spatial properties can lead to interesting phenomena like dissipation and creation of new features. For example , a shrinking feature may cease to exist at some later time instant. The evolution of the individual features can also induce changes in the relationships among features e.g. two far apart features moving toward each other will most likely interact at some future time instant. These interactions result in the occurrence of the critical events including merging and bifurcation <ref type="bibr" coords="1,510.59,395.16,13.74,8.21" target="#b24">[25]</ref>. We use the following attributes to represent the trajectory of a scientific feature: i) position, ii) change in position over time, iii) extent and iv) change in extent over time. Interested readers are referred to our previous work <ref type="bibr" coords="1,372.86,435.01,14.94,8.21" target="#b18">[19] </ref>for a complete description of the representation scheme. Our analysis component makes use of this representation to precisely identify the spatial and spatio-temporal relationships. Another important characteristic of the objects 1 is that most of the time they interact exclusively with other objects present in the neighboring spatial region(s). Correct identification of such regions is an extremely important step toward deriving meaningful spatiotemporal relationships. There are infinite possibilities for selecting the size and position of such region(s). Choosing a large region will result in deriving non-existent relationships. Similarly, choosing a small region will result in missing important interactions. The size and position of these regions differ not only across datasets but also varies across different features present in the same dataset. The problem becomes even more intricate when the features are moving and changing extents. In such cases, one single method to define the neighborhood for all the features can produce sub-optimal or even wrong results. Similarly, determining a useful time interval for the analysis poses yet another challenge to the knowledge mining process . Incorrect intervals can potentially lead to incomplete results, e.g., a very interesting phenomenon will be missed if it occurs just after or before the selected time interval. Therefore, we contend that each feature in the dataset requires individual attention while selecting meaningful regions and time intervals to be used for further analysis. Therefore, there is strong need for a visual interface though which the user can interactively select the extents based on the characteristics of other features and the final goal. The trajectories of different features often overlap therefore, the user should 1 In this article we use feature and object interchangeably  also possess the capability to focus on a smaller part of the trajectory while hiding the other parts. Finally, as discussed earlier, the extent of the object plays a very important role in the analysis process. However, displaying the extents of all the objects for the whole time span of the simulation will result in a highly cluttered visual representation. It will be extremely difficult to glean any useful information from such a cluttered view. Therefore, the extents are displayed only on the user's request. These features together with the interactive selections form the visualization component of the proposed system. To summarize, we describe a visual reasoning and knowledge mining system to understand the spatial and spatio-temporal relationships among evolving features. In this article, we focus on vortices extracted from CFD data. Both the, analysis and visualization , components help the users to discover useful information from the datasets efficiently by making the search process and reasoning more focused and goal driven. The visualization component enables the user to interactively select meaningful spatial and temporal extents to perform the analysis on. The analysis results provide useful information about the behavior of features w.r.t. the selected extents. This process is repeated till the user discovers the information he or she is seeking or finds new information. To summarize, the key contribution of this article are: 1. We present an interactive visual interface allowing the users to select spatial and temporal extents. The interface also supports the zoom, filter and details on demand paradigm <ref type="bibr" coords="2,269.68,315.87,9.52,8.21" target="#b2">[3]</ref>. 2. We present algorithms for automatically deriving various spatial and spatio-temporal relationships including the topological relationships proposed by Egenhofer <ref type="bibr" coords="2,220.60,354.64,9.52,8.21" target="#b4">[5]</ref>. 3. We empirically demonstrate the usefulness of our algorithms on datasets originating from CFD. We also discuss the use of domain knowledge coupled with our system to derive useful information from these trajectories. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="11"></head><p>The rest of the article is structured as follows: In Section 2 we review some of the existing research that is related to this work. Section 3 presents the important components of the proposed system . Section 4 describes our motion representation, analysis and visualization algorithms in details. Results on simulation datasets are shown in Section 5. Finally, we discuss some of our ongoing and planned initiatives for this problem in Section 6 </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2">RELATED WORK</head><p> Our motion estimation algorithm is closely related to the trajectory representation schemes present in the existing literature of data mining and databases. These schemes can be divided into two broad categories i) native (xyz) space representation and ii) parametric space representation. For an excellent survey on most popular native space representation techniques the readers are referred to Mokbel et al. <ref type="bibr" coords="2,116.23,574.28,13.74,8.21" target="#b19">[20]</ref>. Techniques which exploit one dimensional time series including those based on DFT <ref type="bibr" coords="2,209.32,584.24,9.71,8.21" target="#b0">[1,</ref><ref type="bibr" coords="2,221.51,584.24,6.47,8.21" target="#b8"> 9]</ref>, DWT <ref type="bibr" coords="2,256.39,584.24,13.74,8.21" target="#b20">[21]</ref>, SVD <ref type="bibr" coords="2,54.00,594.19,14.94,8.21" target="#b15">[16] </ref>are not directly applicable in this context. Kollios et al. <ref type="bibr" coords="2,276.86,594.19,13.75,8.21" target="#b14">[15]</ref>, Saltenis et al. <ref type="bibr" coords="2,106.20,604.16,14.93,8.21" target="#b23">[24] </ref>and Tao et al. <ref type="bibr" coords="2,176.52,604.16,13.74,8.21" target="#b25">[26]</ref>, represented the trajectories by sub-segments such that the object moved with same velocity in a sub-segment. Storing the linear velocities instead of object locations result in efficient query processing and low overheads in maintaining and updating the index structure. All these approaches abstract the object by a point (typically center of mass). This simplification produce highly efficient algorithms. However, it misses crucial information. A extent-and shape-aware based distance calculation between 2 objects is much more meaningful than the one based on just the center of mass. Moreover, given the center of mass of an object at two successive time instants, the translation matrix (and hence the linear velocity) which optimally maps one point to another can be derived. Estimation of both angular and linear velocity from two points is an ill-posed problem. Additionally, since only points are considered, object scaling is not defined. Therefore, by using point based representation we cannot completely characterize the motion. Egenhofer <ref type="bibr" coords="2,369.71,108.19,9.52,8.21" target="#b4">[5]</ref>, presented a 9-intersection model to establish topological relationships like meet, inside, overlap between 2D objects . The model finds the relationships by considering 9 possibilities between boundary, interior and exterior of one object with the corresponding parts of the other object. Erwig and Schneider <ref type="bibr" coords="2,545.30,148.04,9.52,8.21" target="#b7">[8]</ref>, extended these ideas to describe spatio-temporal predicates. The authors described 8 basic spatio-temporal predicates like disjoint, inside, meets. Recently, Erwig and Schneider also presented some guidelines on the representation of a sequence of spatio-temporal predicates <ref type="bibr" coords="2,357.13,197.86,9.52,8.21" target="#b6">[7]</ref>. The authors assumed that the spatial and temporal extents which can result in useful relationships are available. The focus of their work was on defining the relationships not on choosing the extents. Recently, we <ref type="bibr" coords="2,376.74,238.37,14.19,8.21" target="#b26">[27,</ref><ref type="bibr" coords="2,393.33,238.37,10.64,8.21" target="#b27"> 28]</ref>, presented algorithms for mining frequent spatial patterns from scientific datasets. The main goal of that work was to find spatial patterns and use that information to reason about the critical events. Study of the motion of individual objects was not performed. Additionally, navigational, topological, directional and interaction analysis was not discussed in this previous work. Hochheiser and Shneiderman <ref type="bibr" coords="2,443.58,298.81,13.74,8.21" target="#b10">[11]</ref> , presented a tool TIME- SEARCHER for visualizing and interactively querying time series datasets. Recently Lin et al. <ref type="bibr" coords="2,419.90,318.73,13.74,8.21" target="#b16">[17]</ref> , proposed VizTree for pattern discovery , anomaly detection and querying in large scale time series datasets. Chittaro and Combi <ref type="bibr" coords="2,431.28,338.66,9.52,8.21" target="#b3">[4]</ref>, presented different approaches for representing temporal relations. However, these tools were developed for primarily for analyzing time series data. Hamarneh and Gustavsson <ref type="bibr" coords="2,378.01,368.54,13.75,8.21" target="#b9">[10]</ref> , presented algorithms for modeling and segmenting 2d time varying shapes. However, no explicit modeling of motion parameters was performed. Eickhorst et al. <ref type="bibr" coords="2,526.35,388.46,9.52,8.21" target="#b5">[6]</ref> , proposed spatio-temporal helix to model the trajectory of the object. The authors demonstrated the use of this representation for comparing two trajectories. However, visualization and analyzing relationships among objects was not the focus of that work <ref type="bibr" coords="2,517.51,428.31,14.19,8.21" target="#b9">[10,</ref><ref type="bibr" coords="2,533.94,428.31,6.47,8.21" target="#b5"> 6]</ref>. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3">OVERVIEW AND BACKGROUND</head><p>Figure 1 schematically describes our proposed system. The main components of the system are: </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>@BULLET Analysis1 -Data Transformation: </head><p> This component primarily deals with transforming the simulation data into a format which can be used for visualization and knowledge discovery . The process starts by extracting meaningful features (regions of interest) from scientific datasets. The trajectory of each temporally varying feature is represented by a set of nonoverlapping temporal segments. Within each segment important motion parameters including linear velocity v, angular ve- locity ω and scaling parameters s are estimated <ref type="bibr" coords="2,516.17,573.63,13.74,8.21" target="#b18">[19]</ref>. More details on parameter estimation and segmentation algorithms can be found in <ref type="bibr" coords="2,393.62,593.55,13.74,8.21" target="#b18">[19]</ref>. Apart from being physically meaningful, this representation also reduces memory overheads. Moreover , important characteristics about the motion of a feature can also be ascertained by analyzing the motion parameters. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>@BULLET Visualization -User Interface: </head><p>The segmented trajectories are then visualized for further analysis. The user can interactively define spatial and temporal extents. The selected extents are used for establishing various spatial and spatiotemporal relationships. The user can zoom and filter the trajectories to focus on the most interesting and important parts. Finally, more details about the objects can be accessed, if needed. The user iterates through components 2 and 3, reducing the search space in each iteration to obtain more detailed information about the feature. Our previous research efforts have largely focused on the first component of the system <ref type="bibr" coords="3,179.90,394.95,14.19,8.21" target="#b11">[12,</ref><ref type="bibr" coords="3,197.06,394.95,11.21,8.21" target="#b12"> 13,</ref><ref type="bibr" coords="3,211.24,394.95,10.64,8.21" target="#b17"> 18]</ref>. Therefore, in this work, we concentrate on the other components. However, to make this paper self-contained, we briefly describe our previous work as it is related to this work. Jiang et al. <ref type="bibr" coords="3,182.71,424.84,14.94,8.21" target="#b11">[12] </ref> presented a general framework for feature extraction from scientific datasets. We showed the usefulness of the framework on datasets originating from computational fluid dynamics and computational molecular dynamics. In this paper we use the algorithms presented by Jiang et al. <ref type="bibr" coords="3,265.28,464.69,14.19,8.21" target="#b11">[12,</ref><ref type="bibr" coords="3,282.09,464.69,11.95,8.21" target="#b12"> 13] </ref>for extracting vortices from temporally varying fluid flow datasets. Recently, we proposed a parametric scheme for representing the motion of evolving features <ref type="bibr" coords="3,161.02,494.58,13.74,8.21" target="#b18">[19]</ref>. Our representation scheme is based on estimating important motion parameters including linear velocity and angular velocity. The change in the size of the object is characterized by scale parameters. All these parameters together are referred to as Motion Parameter Vector (MPV). Least square error was minimized to estimate the parameters between every two consecutive frames in the dataset. Next, the trajectories were segmented into piecewise smooth sub-trajectories using a clustering algorithm. The clustering algorithm uses the estimated MPV as a feature vector. We use weighted Euclidean distance as the distance metric in the clustering algorithm. Each sub-trajectory is represented by a single MPV. We strongly believe that this representation is physically meaningful. The representation also results in high compression ratio which makes it useful for large scale simulation datasets. Additionally, the representation also lends itself for prediction algorithms. We showed the effectiveness of this representation for prediction and analysis for datasets originating from various domains. Please note that in the previous work <ref type="bibr" coords="3,253.67,663.95,13.74,8.21" target="#b18">[19]</ref> , no visual component was presented. The focus there was to motivate the need and evaluation of this representation. Most of the analysis reported in <ref type="bibr" coords="3,89.44,693.83,14.94,8.21" target="#b18">[19] </ref></p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4">ALGORITHMS</head><p>In this section we present the last two components of the above mentioned system in detail. First, the basic notation used in the paper is presented. Basic Notation: S denotes a time varying dataset with N steps monitoring the movement of </p><formula>m objects O = {O 1 , O 2 ,...,O m }. An object O r </formula><p>is represented by K points (landmarks) sampled from the surface of O <ref type="bibr" coords="3,383.98,349.32,14.19,8.21" target="#b26">[27,</ref><ref type="bibr" coords="3,401.25,349.32,10.65,8.21" target="#b21"> 22]</ref>. At the i th time step the state of O r is represented by O r,</p><formula>i = [{x 1 r,i , y 1 r,i , z 1 r,i } ...,{x k r,i , y k r,i , z k r,i }]</formula><p>. The position of the j th landmark at the i th time step is denoted by O j r,i . The time between two successive time steps is denoted by δ . After determining motion parameter vectors (MPV) and segmentation, the j th sub-trajectory of O r is denoted by O r, j and is represented by the following feature vector </p><formula>{[t j r,1 ,t j r,2 ], [{x 1 r,t j 1 , y 1 r,t j 1 , z 1 r,t j 1 } ...,{x k r,t j 1 , y k r,t j 1 , z k r,t j 1 }], {P 1 r, j , P 2 r, j ...P M r, j }} where {P 1 r, j , P 2 r, j ...P M r, j } represents </formula><p> the MPV of the j th subtrajectory of O r . The time interval of the j th segment is </p><formula>[t j r,1 ,t j r,2 ]. </formula><p>The stored {x, y, z} points are landmarks describing the shape of the object at start of the segment i.e at time t j r,1 . Description of the feature anywhere else in j th segment is obtained by simply applying the motion parameters v, ω and s to the shape descriptor. Next, we describe the main analysis tasks and relationships. For expository simplicity, we present the analysis component first so that the motivation behind the design of visual component and user interactions can be explained clearly. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.1">Analysis2 -Deriving Relationships</head><p>The set of m objects is denoted by </p><formula>O = {O 1 , O 2 ,...,O m }. The time interval is denoted as t = [ t s ,t e ] </formula><p>where t s ≤ t e . A single time instant is denoted by t l . Furthermore, R represents a spatial region with </p><formula>[R lx , R ly , R ux , R uy ] </formula><p>denoting the lower (l) and upper (u) co-ordinates (x, y) of R. In this section we focus on the deriving the following spatial and spatio-temporal relationships. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>@BULLET Directional Relationships -These relationships provide </head><p>information about the spatial location of an object with respect to the other objects in  is used to understand the motion characteristics of the objects. First the user selects a spatial region and time interval and all the motion parameters of the trajectories are displayed. Important characteristics of the features can be easily ascertained by inspecting the associated MPVs. For example, positive trend in speed implies accelerating object. Similarly, the angular velocity helps to check if the object is rotating in the clockwise or counter clockwise direction. Similarly, scaling parameters is less that 1 implies a shrinking feature. Next, we use the follow operator described by Roddick et al. <ref type="bibr" coords="4,86.30,634.04,13.74,8.21" target="#b22">[23]</ref>. Given a spatial region R (and a time interval), the operator established if within R a feature demonstrates similar motion to itself or to other features. Using our representation , we first find the motion parameters for each connected trajectory. Next, the distance between these parameters is calculated . If the distance is less than a user de f ined threshold, then the trajectories are said to follow each other. Please note establishing this relationship is very similar to the problem of finding matching sub-trajectory in database community <ref type="bibr" coords="4,274.91,713.74,10.26,8.11" target="#b8">[9]</ref>. </p><p> The results of the analysis can also be viewed in form of a animation , which provides more details about the behavior of the object at each time step. We discuss this aspect in detail in Section 5. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.2">Visualization -User Interface</head><p> Although the analysis component appears to be self-sufficient to understand the evolutionary behavior of the object, however the main problem is how to select potentially useful spatial and temporal extents? Without any visual aids, this problem requires a brute force algorithm. For example, assume that we want to find the largest region R such that no object entered R in <ref type="bibr" coords="4,465.45,156.28,4.76,11.66;4,470.21,161.27,2.71,6.30;4,473.42,156.29,5.76,11.66;4,479.18,161.27,3.10,6.30;4,482.76,156.29,2.37,11.66">[t s ,t e ]</ref> . Such an R can provide valuable information about the underlying physical parameters which makes R unconducive for any object's movement through it. The region R can be found by performing an exhaustive search over the whole space changing the size, orientation and position of R in every iteration. This process is computationally prohibitive. However , with a visual interface the user can start by defining a coarse region first and refine it by changing the size and orientation to find an appropriate R. Therefore, the user can identify the potential regions very quickly making the search process more focused, efficient , and meaningful. In this section we describe the visual representation we use. Specifically, we employ two graphs i) spatial graphs (SG) and ii) temporal graphs (TG) for representing spatial and temporal information of the trajectories respectively. Next, we explain each of the graphs and associated user interactions in detail and also point to the use of these graphs for visual analysis and reasoning. <ref type="bibr" coords="4,502.51,466.29,13.75,8.21" target="#b18">[19]</ref>. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>@BULLET User Interactions: </head><p> For the analysis tasks we need a spatial region R and a time interval </p><formula>[t s ,t e ]</formula><p>. The user interactively selects the spatial region R and temporal extents </p><formula>[t s ,t e ]</formula><p>. The parts of the trajectory that lie inside R and are active during </p><formula>[t s ,t e ] </formula><p>are highlighted in real time. The user can then choose to zoom all the sub trajectories within R. The user also has the capability to hide some of the trajectories and focus on the visually more interesting trajectories. Once the user is satisfied with spatio-temporal extents, he or she can start the analysis by invoking function calls to the backend engine. The results of the analysis are visually presented to the user. The results can be displayed either statically or as a animation. Based on the results, the user refines the search space and again engages the analysis tools. This iterative process is continued until the final desired information is extracted. The user can not only iterate between the visualization and analysis components, but also can switch among various analysis components. For example, combining results from topological relations and navigational relations can help to predict if the objects will start interacting in the near future. This can be done by finding two spatially proximate objects which are moving toward each other. Spatial proximity is ascertained by topological relationships and the direction of the movement is found using the navigational relationships.  Now, we present an overview of our visual interface, highlighting the use of the major parts of the interface. <ref type="figure" coords="5,226.22,407.26,30.65,8.21" target="#fig_3">Figure 2</ref>show one snapshot of the visual system. The top two graphs are Spatial Graph (SG) and Temporal Graph (T G) respectively. The same color is used for the objects in all the graphs to establish correspondence. The markers on T G indicate the segment boundaries. Please note that the length of some intervals seems to be 1, however this is not the case. These intervals are small and represent large change in the motion. The black rectangle shows the user specified Spatial Region (R). The sliders shown in <ref type="figure" coords="5,196.06,486.97,30.96,8.21" target="#fig_3">Figure 2</ref>are used to select the Temporal Extent (<ref type="bibr" coords="5,134.55,496.92,7.88,9.03;5,142.91,494.67,5.76,11.66;5,148.67,499.65,3.10,6.30;5,152.25,494.67,2.37,11.66">[t s ,t e ]</ref>. If the relationships are defined only for a single time instant either both the sliders are set to the same value or the second slider is simply ignored. The Zoom operation is handled by the lower right frame. This frame also supports Filter operations. The user can select object(s) and choose to hide (show) them. Similarly, more Details are accessed by displaying the extents of the objects. The lower right frame shows all the operations which our system currently supports. The Result Window (RW ) visually displays the results of the analysis. These results, along with more information, are displayed in plain text format in the Analysis Result (AR) window. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5">RESULTS</head><p>In this section we demonstrate the use of our system on datasets originating from computational fluid dynamics. We used the simulation model proposed by Kim and Machiraju <ref type="bibr" coords="5,222.88,653.97,14.94,8.21" target="#b13">[14] </ref>to generate the datasets. The features (vortices) are detected by using the algorithms proposed by Jiang et al. <ref type="bibr" coords="5,169.19,673.89,13.74,8.21" target="#b12">[13]</ref>. Each vortex is approximated by an ellipse. Next, 10 points (landmarks) are sampled from the boundary of the ellipse. Finally, MPVs are estimated and the trajectory is segmented. This representation is the input for visualization and analysis components. <ref type="figure" coords="5,450.67,397.29,29.46,8.21" target="#fig_4">Figure 3</ref>(b) shows the derived topological relationships. Since this class of relationships is defined only for a single time instance, we only consider the first slider. RW shows the selected region R and the position of the features at t l = 154. AR displays the computed relationships. Objects 1 and 4 are determined to be outside R whereas objects 2 and 3 are inside R. Object 5 overlaps R. <ref type="figure" coords="5,486.42,470.84,29.63,8.21" target="#fig_3">Figure 2</ref> is an example of spatio-temporal topological analysis. The RW (Result Window ) displays the parts of trajectories which are active during the selected time interval. In the SG the parts of trajectory which are active during time interval and lie in the selected spatial region R are highlighted. Similarly, the time interval is highlighted in T G (Temporal Graph). The derived relationships are shown in AR (Analysis Result) window. For example, objects 1 and 3 crossed R. Similarly, object 4 is disjoint with R and objects 2 and 5 entered R. <ref type="figure" coords="5,422.32,564.31,30.46,8.21" target="#fig_4">Figure 3</ref> (a) shows the derived directional relationships. In this case, we decided to concentrate only on objects 3, 4 and 5. Other two objects are hidden. Since this class of relationships is defined only for a single time instance, only first slider is considered. Additionally, R is not needed for directional relationships. Please note absence of R is consistent with our definition of directional analysis. R can be easily accommodated by considering only the features which are inside R. Such features can be identified using spatial topological relationships. RW shows the position and orientation of vortices at selected time instant (t l = 179). AR displays the computed relationships. For example , object 3 (blue color) is to the LEFT and BOTTOM of other two objects (4 and 5). Please note that if object 1 is to the left of object 2 then, object 2 is to the right of object 1. Due to this property, we report only one relation between two objects. The other relation is trivially derived.  Explain <ref type="figure" coords="7,118.11,57.71,31.66,8.21" target="#fig_5">Figure 4</ref>(a) shows an example of the explain mode. This functionality is added to extract detailed information, if needed, from the analysis. RW shows the selected trajectories. Different markers are used to highlight the entrance (exit) of features in R. The information along with time instances is shown in AR. Spatio-temporal analysis provides the information by deriving relations like enter, inside etc. These relationships are established by just checking the location of the object at the start and the end of the time interval. Although the relationships are derived very efficiently, they can sometimes provide incomplete results, e.g. in <ref type="figure" coords="7,54.00,157.34,27.56,8.21" target="#fig_5">figure 4</ref> (a) object 2 started inside R and ended inside R, topological analysis will return contain as the relationship. However, by using the explain feature we can easily determine that the object moved outside at t = 218 and moved back in at t = 263. This mode is intended to be used in conjunction with topological analysis to provide more detailed answers. The user first performs topological analysis, hides the uninteresting objects (objects 4 and 5 in this example ) and refines the extents. When the user is satisfied with the extents, more information about the interesting objects is obtained by using this mode. The information can then be used to construct temporal rules. For example, the rules generated for objects 1 and 2 are: </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head> Spatial Topological </head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head> Spatio-Temporal Topological </head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head> Directional </head><p>Object 1 is Inside between <ref type="bibr" coords="7,205.03,283.61,18.43,11.66">[200,</ref><ref type="bibr" coords="7,224.46,285.86,15.94,8.21"> 215] </ref>Object 1 is Outside between <ref type="bibr" coords="7,208.03,293.57,18.43,11.66">[216,</ref><ref type="bibr" coords="7,227.46,295.82,15.94,8.21"> 262] </ref>Object 2 is Inside between <ref type="bibr" coords="7,205.03,303.54,18.43,11.66">[200,</ref><ref type="bibr" coords="7,224.46,305.79,15.94,8.21"> 218] </ref>Object 2 is Outside between <ref type="bibr" coords="7,208.03,313.50,18.43,11.66">[219,</ref><ref type="bibr" coords="7,227.46,315.75,15.94,8.21"> 262] </ref>Object 2 is Inside between <ref type="bibr" coords="7,205.03,323.46,18.43,11.66">[263,</ref><ref type="bibr" coords="7,224.46,325.71,15.94,8.21"> 272] </ref>These rules can be used to mine temporal relations among different objects by using Allen's temporal algebra <ref type="bibr" coords="7,206.76,354.35,9.52,8.21" target="#b1">[2]</ref>. Allen <ref type="bibr" coords="7,247.76,354.35,10.46,8.21" target="#b1">[2] </ref>describes 13 relationships including before, after, contained by etc which can exist among temporal intervals. An example of such a rule will be Object 1 inside during Object 2 inside, implying that whenever object 1 was inside object 2 was also inside. We are currently investigating algorithms for efficient mining of all such rules. Additionally , the explain mode redraws the plot at every time step making it relatively slower. Therefore, using it instead of topological analysis is not recommended. Navigational <ref type="figure" coords="7,143.42,444.27,29.87,8.21" target="#fig_5">Figure 4</ref> (b) demonstrates the use of navigational analysis. We only need to define a spatial region for these relationships. RW shows the zoomed view of the trajectories in the selected spatial region. AR displays the final relationships. Please note that object 4 is hidden. Object 5 is found to follow itself i.e. the object shows a similar motion which it displayed in some other time interval. Similarly, object 1 is following itself and object 3. Please note that follows is a symmetric relation between two objects . Therefore, the relationship is displayed only once. Discovering Interesting Spatial Regions-Our system can be used to interactively discover interesting regions in the dataset. We present one such example in <ref type="figure" coords="7,164.09,554.10,30.26,8.21" target="#fig_6">Figure 5</ref>(a). The goal here was to find the largest spatial region R such that no vortex was present in R given a time interval. If the interval covers the entire span of the simulation, then presence of such an area suggests that the initial simulation parameters does not allow any vortex to enter this re- gion. <ref type="figure" coords="7,77.64,603.92,30.15,8.21" target="#fig_6">Figure 5</ref>(a) shows such an area and also the extents of the objects. The initial selection was made by observing the empty space in SG. We ran our analysis algorithms on the selected region . In first few attempts, we found that even though no object entered R (spatio-temporal topological analysis), but some objects were overlapping (through spatial topological operations). Based on these results we successively refined the area, until no object entered or overlapped with R. We were able to find R after 5 iterations of refinement. <ref type="figure" coords="7,163.93,693.83,30.44,8.21" target="#fig_6">Figure 5</ref>(b) show the output of our system on another dataset. First of all, from the T G we can learn that object 2 ceases to exist at t = 70 and objects 5 and 6 are created at t = 75. Most likely, object 2 bifurcates into objects 5 and 6. Next, we tried to understand the the process which can explain this event. We selected an R around object 2 and the time interval is selected as <ref type="bibr" coords="7,317.96,85.35,13.95,11.66">[55,</ref><ref type="bibr" coords="7,332.90,87.60,10.27,8.21"> 80]</ref>. By using the spatio-temporal analysis and explain mode, we found that object 1 entered R at t= 58 and started interacting with object 2. At t = 64, the distance between objects 1 and 2 was very small, indicating stronger interactions. Finally, at t = 70, object 2 splits into object 5 and 6. The whole process of bifurcation takes place in interval <ref type="bibr" coords="7,381.51,135.17,13.95,11.66">[68,</ref><ref type="bibr" coords="7,396.46,137.42,10.27,8.21"> 75]</ref>. During the interval <ref type="bibr" coords="7,490.70,135.17,13.95,11.66">[71,</ref><ref type="bibr" coords="7,505.65,137.42,10.27,8.21"> 74]</ref>, the shape of the object 2 was deformed in such a fashion that it cannot be precisely represented by an ellipse. Therefore, in SG we see a large variation in the position of the center of mass of object 2 (green color). This also explains why we don't see a single curve splitting into two curves clearly. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head> Explaining Critical </head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6">CONCLUSIONS AND DISCUSSION</head><p>In this article we presented a visual analysis system for knowledge discovery from time varying scientific datasets. Motion parameters are used to represent the trajectories of the features. The parametric trajectories are presented visually to the user. The user interacts with the visual interface and invokes the analysis engine to extract spatial and spatio-temporal relationships of interest. Currently, we are extending the framework to incorporate a prediction module which will predict not only the positions of the objects but also the most likely interactions among the objects. We are also investigating efficient algorithms to derive temporal relations <ref type="bibr" coords="7,317.95,321.33,10.45,8.21" target="#b1">[2] </ref>and convert them to visual representation. The other aspect we would like to address is to handle streaming datasets. Most of our analysis algorithms are fast enough to obtain real time performance. Therefore, we believe that it should not be too difficult to extend our framework for applications requiring analysis of streaming data. Although the analysis algorithms can be trivially implemented to handle 3D trajectories, it is not straightforward to extend the interactive part of visual component to do the same. The main challenge is to select a 3D region by using the 2D display and mouse in an efficient and user friendly manner. We have identified two different approaches to address this issue. The first method is via projections, i.e., the 3D data can be projected onto xy, yz and xz planes and the region can be selected by using two of the three views. The second method uses rotation. First, two dimensional region R is selected using the current approach. Next, the display is rotated by 90 degrees and a spatial extent is selected in the third dimension. Finally, a 3D region can be constructed by using the two dimensional region and the spatial extent in the third dimension. In the future, we plan to incorporate both these methods in the toolkit and perform a user study to select the most viable option. </p></div><figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_0" coords="3,155.56,233.82,298.67,7.37"><head>Figure 1: </head><figDesc>Figure 1: Overview of the System for Understanding Trajectories of Scientific Objects </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_1" coords="4,328.29,336.12,229.70,11.66;4,337.88,348.34,220.11,8.21;4,337.88,358.29,220.11,8.21;4,337.88,368.25,220.11,8.21;4,337.88,378.22,220.12,8.21;4,337.88,388.18,220.11,8.21;4,337.88,398.14,129.11,8.21"><head>@BULLET </head><figDesc>Spatial Graphs (SG): This graph displays the trajectories in xy space. Different colors are used for different trajectories. For clarity, SG only shows the point trajectory of the objects. These point trajectories are computed by recording the position of center of mass of the object at each time step. The user can access more details by requesting the system to display the extents and shape of the objects. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_2" coords="4,328.29,414.22,229.69,11.66;4,337.88,426.44,220.12,8.21;4,337.88,436.40,220.11,8.21;4,337.88,446.36,220.10,8.21;4,337.88,456.33,220.10,8.21;4,337.88,466.29,160.15,8.21"><head>@BULLET </head><figDesc>Temporal Graphs (TG): This graph describes the temporal behavior of the objects. For each object the life time (the time for which the object existed) is divided into subsegments. The length of the subsegments is again specified by the temporal range of each sub-trajectory. The sub-trajectories are obtained by MPV estimation and clustering algorithm </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_3" coords="5,232.83,356.22,146.32,7.37"><head>Figure 2: </head><figDesc>Figure 2: Overview of the Visual Interface </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_4" coords="6,172.67,346.45,264.44,7.37"><head>Figure 3: </head><figDesc>Figure 3: (a) Directional Relationships (b) Spatial Topological Relationships </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_5" coords="6,212.81,683.41,184.17,7.37"><head>Figure 4: </head><figDesc>Figure 4: (a) Explain Mode (b) Navigational Analysis </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_6" coords="8,133.82,327.26,344.36,7.37"><head>Figure 5: </head><figDesc>Figure 5: (a) Finding a region where no vortex entered (b) Explaining the critical event: Bifurcation </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_2" validated="false" coords="3,337.88,693.82,220.13,28.14"><figDesc coords="3,420.73,693.82,137.27,8.21;3,337.88,703.78,220.13,9.42;3,337.88,713.75,220.12,8.21;4,73.93,57.71,220.10,8.21;4,73.93,67.67,220.12,8.21;4,73.93,77.64,220.12,8.21;4,73.93,87.60,153.82,8.21;4,64.33,102.68,229.71,11.66;4,73.93,114.90,219.46,9.04;4,73.93,124.86,220.11,9.42;4,73.93,134.82,220.12,8.21;4,73.93,144.79,220.11,9.42;4,73.92,154.75,220.12,8.21;4,73.92,164.71,219.62,9.42;4,73.93,174.67,220.11,9.42;4,73.93,184.64,220.12,8.21;4,75.27,194.60,218.75,8.21;4,73.93,204.56,167.43,9.42;4,241.87,202.31,14.36,11.67;4,256.72,202.31,15.55,11.66;4,272.78,202.31,21.27,11.66;4,73.93,214.53,220.11,8.21;4,73.93,224.49,67.65,8.21;4,101.17,242.67,123.74,11.67;4,222.98,249.37,5.97,6.30;4,229.79,242.67,37.02,11.66;4,96.42,255.86,128.23,11.67;4,222.71,262.56,5.97,6.30;4,229.53,255.86,42.03,11.66;4,100.59,269.05,124.89,11.67;4,223.54,275.75,5.97,6.30;4,230.36,269.05,37.02,11.66;4,73.93,293.29,220.11,8.21;4,73.93,303.25,220.10,8.21;4,73.93,313.21,220.11,8.21;4,73.93,323.17,220.12,9.04;4,73.93,330.89,137.41,11.66;4,211.34,335.87,2.71,6.30;4,214.54,330.89,5.76,11.66;4,220.30,335.87,3.10,6.30;4,223.88,330.89,70.16,11.66;4,73.93,343.10,220.11,9.04;4,73.93,353.06,219.62,9.04;4,73.93,363.03,220.10,9.04;4,73.93,372.99,220.11,8.21;4,73.93,382.95,220.11,9.04;4,73.93,392.92,220.10,8.21;4,73.93,402.88,220.11,8.21;4,73.93,412.84,15.95,8.21;4,73.93,433.62,48.61,9.07;4,122.53,437.80,1.94,4.50;4,124.96,433.62,4.48,9.07;4,129.43,437.80,2.21,4.50;4,132.14,433.62,110.08,9.07;4,73.93,449.78,36.86,9.07;4,110.78,453.97,1.94,4.50;4,113.21,449.78,4.48,9.07;4,117.68,453.97,2.21,4.50;4,120.39,449.78,110.09,9.07;4,73.93,465.95,56.04,9.07;4,129.96,470.14,1.94,4.50;4,132.39,465.95,4.48,9.07;4,136.86,470.14,2.21,4.50;4,139.57,465.95,106.60,9.07;4,73.93,482.12,148.35,9.07;4,222.27,486.30,1.94,4.50;4,224.70,482.12,4.48,9.07;4,229.18,486.30,2.21,4.50;4,231.89,482.12,44.28,9.07;4,73.93,498.28,158.56,9.07;4,232.49,502.47,1.94,4.50;4,234.92,498.28,4.48,9.07;4,239.39,502.47,2.21,4.50;4,242.10,498.28,41.37,9.07;4,64.33,518.52,173.09,11.66">O. A typical query in this scenario is where is object O r,l located wrt to O s,l at time t l ? We use four operators left, right, top and bottom to characterize this relationship. The actual relations are established by comparing the K landmark points (explained in last section). These simple operators are then combined to derive advanced relationships like top-left and bottom-right etc. @BULLET Topological Relationships -Topological relationships help identify the connection between a region R and the object O r at a time instant t l (denoted by O r,l ). We characterize these relationships by inside, outside and overlaps operators. The object O r,l is said to be inside (outside) R if the whole object is enclosed (not included) in R. The overlap is defined if some part of O r,l is inside R. In our representation, we check the K landmark points of O r,l against R. Let IO(p, R) be an Inside- Outside test which returns true if the point p lies inside R, f alse otherwise. This function can be trivially implemented by checking the x and y value of p against [R lx , R ly , R ux , R uy ]. Given this function, various topological relationships can be derived as follows: O r,l is inside R if ∀i ∈ [1, K] IO(O i r,l , R) = true O r,l is outside R if ∀i ∈ [1, K] IO(O i r,l , R) = f alse O r,l overlaps R if ∃i ∈ [1, K] IO(O i r,l , R) = true The above described topological relationships are defined only for a single time instant. In case of an evolving feature, we characterize the spatio-temporal topological relationships by five events enter, leave, disjoint, cross and contain. O r is said to have entered (left) R between [t s ,t e ] if O r,s was outside and O r,e was inside, i.e., we check the location of O r at the start and the end of the time interval. Similarly, if both O r,s and O r,e are inside R, then the contain relationship is identified . However, to distinguish disjoint and cross events we need to process every time step because O r,s and O r,e will be outside R, in both the cases. These relations are derived by using the above described inside, outside and overlap opera- tors: O r entered R in [t s ,t e ] if O r,s is outside R &amp;&amp; O r,e is inside R O r left R in [t s ,t e ] if O r,s is inside R &amp;&amp; O r,e is outside R O r contain in R in [t s ,t e ] if O r,s is inside R &amp;&amp; O r,e is inside R O r crossed R if O r,s and O r,e are outside R &amp;&amp; ∃i ∈ [t s ,t e ] O r,i is inside R O r is disjoint with R if O r,s and O r,e outside R &amp;&amp; ∀i ∈ [t s ,t e ] O r,i outside R @BULLET Navigational Relationships -This analysis</figDesc><table></table></figure>
+		</body>
+		<back>
+
+			<div type="acknowledgement">
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="7">ACKNOWLEDGMENTS</head><p>This work is funded by the following NSF grants NGS-0326386, ACI-0234273 and Career Award IIS-0347662. The authors would like to thank Professor David Thompson and Monika Jankun-Kelly from Department of Aerospace Engineering, Mississippi State University , Dr. Ming Jiang from Livermore National Labs and Dr. Yootai Kim, Samsung Research, Korea for providing the code for CFD simulations and vortex extraction. </p></div>
+			</div>
+
+			<div type="references">
+
+				<listBibl>
+
+<biblStruct coords="7,336.21,638.73,221.78,7.30;7,336.21,648.20,221.80,7.30;7,336.21,657.65,221.78,7.30;7,336.21,667.12,85.60,7.30"  xml:id="b0">
+	<analytic>
+		<title level="a" type="main">Fast Similarity Search in the Presence of Noise, Scaling, and Translation in Time-Series Databases</title>
+		<author>
+			<persName>
+				<forename type="first">Rakesh</forename>
+				<surname>Agrawal</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">King-Ip</forename>
+				<surname>Lin</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Harpreet</forename>
+				<forename type="middle">S</forename>
+				<surname>Sawhney</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Kyuseok</forename>
+				<surname>Shim</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Very Large Data Bases (VLDB) Conference</title>
+		<imprint>
+			<date type="published" when="1995" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="7,336.21,676.59,221.78,7.30;7,336.21,686.05,221.78,7.30;7,336.21,695.52,17.94,7.30"  xml:id="b1">
+	<analytic>
+		<title level="a" type="main">An interval-based representation of temporal knowledge</title>
+		<author>
+			<persName>
+				<forename type="first">James</forename>
+				<forename type="middle">F</forename>
+				<surname>Allen</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">International Joint Conference on Artificial Intelligence</title>
+		<imprint>
+			<date type="published" when="1981" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="7,336.21,704.97,221.78,7.30;7,336.21,714.44,221.80,7.30"  xml:id="b2">
+	<monogr>
+		<title level="m" type="main">Information Visualization: Using Vision to Think</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<forename type="middle">K</forename>
+				<surname>Card</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">D</forename>
+				<surname>Mackinlay</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Schneiderman</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="1999" />
+			<publisher>Morgan Kauffman Publishers</publisher>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,72.26,369.02,221.80,7.30;8,72.26,378.49,221.77,7.30;8,72.26,387.96,221.79,7.30;8,72.26,397.42,32.11,7.30"  xml:id="b3">
+	<analytic>
+		<title level="a" type="main">Representation of temporal intervals and relations: Information visualization aspects and their evaluation</title>
+		<author>
+			<persName>
+				<forename type="first">Luca</forename>
+				<surname>Chittaro</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Carlo</forename>
+				<surname>Combi</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">International Symposium on Temporal Representation and Reasoning</title>
+		<imprint>
+			<date type="published" when="2001" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,72.26,406.89,221.79,7.30;8,72.26,416.35,149.07,7.30"  xml:id="b4">
+	<analytic>
+		<title level="a" type="main">Reasoning about binary topological relations</title>
+		<author>
+			<persName>
+				<forename type="first">Max</forename>
+				<forename type="middle">J</forename>
+				<surname>Egenhofer</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Symposium on Large Spatial Databases</title>
+		<imprint>
+			<date type="published" when="1991" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,72.26,425.81,221.80,7.30;8,72.26,435.28,221.78,7.30;8,72.26,444.74,127.02,7.30"  xml:id="b5">
+	<analytic>
+		<title level="a" type="main">Modeling and comparing spatiotemporal events</title>
+		<author>
+			<persName>
+				<forename type="first">Kristin</forename>
+				<surname>Eickhorst</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Peggy</forename>
+				<surname>Agouris</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Anthony</forename>
+				<surname>Stefanidis</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">DG.O National Conference on Digital Government Research</title>
+		<imprint>
+			<date type="published" when="2004" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,72.26,454.21,221.77,7.30;8,72.26,463.67,221.78,7.30;8,72.26,473.13,17.94,7.30"  xml:id="b6">
+	<analytic>
+		<title level="a" type="main">Visual specification of spatiotemporal developments</title>
+		<author>
+			<persName>
+				<forename type="first">Martin</forename>
+				<surname>Erwig</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Markus</forename>
+				<surname>Schneider</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">IEEE Symposium on Visual Languages</title>
+		<imprint>
+			<date type="published" when="1999" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,72.26,482.60,221.76,7.30;8,72.26,492.06,221.79,7.30;8,72.26,501.53,33.88,7.30"  xml:id="b7">
+	<analytic>
+		<title level="a" type="main">Spatio-temporal predicates</title>
+		<author>
+			<persName>
+				<forename type="first">Martin</forename>
+				<surname>Erwig</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Markus</forename>
+				<surname>Schneider</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Knowledge and Data Engineering</title>
+		<imprint>
+			<biblScope unit="volume">14</biblScope>
+			<biblScope unit="issue">4</biblScope>
+			<biblScope unit="page" from="881" to="901" />
+			<date type="published" when="2002" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,72.26,511.00,221.79,7.30;8,72.26,520.45,221.79,7.30;8,72.26,529.92,45.08,7.30"  xml:id="b8">
+	<analytic>
+		<title level="a" type="main">Fast Subsequence Matching in Time-Series Databases</title>
+		<author>
+			<persName>
+				<forename type="first">Christos</forename>
+				<surname>Faloutsos</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Ranganathan</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Yannis</forename>
+				<surname>Manolopoulos</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">SIGMOD Conference</title>
+		<imprint>
+			<date type="published" when="1994" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,72.25,539.38,221.78,7.30;8,72.26,548.85,221.76,7.30;8,72.26,558.32,144.04,7.30"  xml:id="b9">
+	<analytic>
+		<title level="a" type="main">Deformable spatiotemporal shape models: extending active shape models to 2d+time</title>
+		<author>
+			<persName>
+				<forename type="first">Ghassan</forename>
+				<surname>Hamarneh</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Tomas</forename>
+				<surname>Gustavsson</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Image Vision Comput</title>
+		<imprint>
+			<biblScope unit="volume">22</biblScope>
+			<biblScope unit="issue">6</biblScope>
+			<biblScope unit="page" from="461" to="470" />
+			<date type="published" when="2004" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,72.26,567.78,221.80,7.30;8,72.26,577.24,221.79,7.30;8,72.26,586.70,132.26,7.30"  xml:id="b10">
+	<analytic>
+		<title level="a" type="main">Dynamic query tools for time series data sets: Timebox widgets for interactive exploration</title>
+		<author>
+			<persName>
+				<forename type="first">Harry</forename>
+				<surname>Hochheiser</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Ben</forename>
+				<surname>Shneiderman</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Information Visualization</title>
+		<imprint>
+			<biblScope unit="volume">3</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="1" to="18" />
+			<date type="published" when="2004" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,72.26,596.17,221.80,7.30;8,72.26,605.64,221.78,7.30;8,72.26,615.10,221.76,7.30;8,72.26,624.56,221.77,7.30;8,72.26,634.03,89.43,7.30"  xml:id="b11">
+	<analytic>
+		<title level="a" type="main">Feature mining paradigms for scientific data</title>
+		<author>
+			<persName>
+				<forename type="first">Ming</forename>
+				<surname>Jiang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Tat-Sang</forename>
+				<surname>Choy</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Sameep</forename>
+				<surname>Mehta</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Matt</forename>
+				<surname>Coatney</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Steve</forename>
+				<surname>Barr</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Kaden</forename>
+				<surname>Hazzard</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">David</forename>
+				<surname>Richie</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Srinivasan</forename>
+				<surname>Parthasarathy</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Raghu</forename>
+				<surname>Machiraju</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">David</forename>
+				<surname>Thompson</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">John</forename>
+				<surname>Wilkins</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Boyd</forename>
+				<surname>Gatlin</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">SIAM International Conference on Data Mining</title>
+		<imprint>
+			<date type="published" when="2003" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,72.26,643.49,221.80,7.30;8,72.26,652.96,221.79,7.30;8,72.26,662.42,110.03,7.30"  xml:id="b12">
+	<analytic>
+		<title level="a" type="main">Geometric verification of swirling features in flow fields</title>
+		<author>
+			<persName>
+				<forename type="first">Ming</forename>
+				<surname>Jiang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Raghu</forename>
+				<surname>Machiraju</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">David</forename>
+				<surname>Thompson</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of IEEE conference on Visualization</title>
+		<meeting>IEEE conference on Visualization</meeting>
+		<imprint>
+			<date type="published" when="2002" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,72.26,671.88,221.79,7.30;8,72.26,681.35,58.01,7.30"  xml:id="b13">
+	<analytic>
+		<title level="a" type="main">Swirling Images</title>
+		<author>
+			<persName>
+				<forename type="first">Yootai</forename>
+				<surname>Kim</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Raghu</forename>
+				<surname>Machiraju</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">OSU-CISRC- 1/06-TR03</title>
+		<imprint>
+			<date type="published" when="2006" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,72.25,690.81,221.78,7.30;8,72.26,700.28,209.96,7.30"  xml:id="b14">
+	<analytic>
+		<title level="a" type="main">On indexing mobile objects</title>
+		<author>
+			<persName>
+				<forename type="first">George</forename>
+				<surname>Kollios</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Dimitrios</forename>
+				<surname>Gunopulos</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Vassilis</forename>
+				<forename type="middle">J</forename>
+				<surname>Tsotras</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Principles of database systems</title>
+		<imprint>
+			<date type="published" when="1999" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,72.25,709.74,221.78,7.30;8,336.21,369.02,221.79,7.30;8,336.21,378.48,60.37,7.30"  xml:id="b15">
+	<analytic>
+		<title level="a" type="main">Efficiently supporting ad hoc queries in large datasets of time sequences</title>
+		<author>
+			<persName>
+				<forename type="first">Flip</forename>
+				<surname>Korn</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<forename type="middle">V</forename>
+				<surname>Jagadish</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Christos</forename>
+				<surname>Faloutsos</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">SIGMOD Conference</title>
+		<imprint>
+			<date type="published" when="1997" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.21,387.95,221.78,7.30;8,336.21,397.41,221.79,7.30;8,336.21,406.88,126.95,7.30"  xml:id="b16">
+	<analytic>
+		<title level="a" type="main">Visualizing and discovering non-trivial patterns in large time series databases</title>
+		<author>
+			<persName>
+				<forename type="first">Jessica</forename>
+				<surname>Lin</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Eamonn</forename>
+				<forename type="middle">J</forename>
+				<surname>Keogh</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Stefano</forename>
+				<surname>Lonardi</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Information Visualization</title>
+		<imprint>
+			<biblScope unit="volume">4</biblScope>
+			<biblScope unit="issue">2</biblScope>
+			<biblScope unit="page" from="61" to="82" />
+			<date type="published" when="2005" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.21,416.34,221.78,7.30;8,336.21,425.80,221.77,7.30;8,336.21,435.27,221.78,7.30;8,336.21,444.73,184.12,7.30"  xml:id="b17">
+	<analytic>
+		<title level="a" type="main">Dynamic classification of defect structures in molecular dynamics simulation data</title>
+		<author>
+			<persName>
+				<forename type="first">Sameep</forename>
+				<surname>Mehta</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Steve</forename>
+				<surname>Barr</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Alex</forename>
+				<surname>Choy</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Hui</forename>
+				<surname>Yang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Srinivasan</forename>
+				<surname>Parthasarathy</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Raghu</forename>
+				<surname>Machiraju</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">John</forename>
+				<surname>Wilkins</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">SIAM International Conference on Data Mining</title>
+		<imprint>
+			<date type="published" when="2005" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.20,454.20,221.79,7.30;8,336.21,463.67,221.78,7.30;8,336.21,473.13,86.80,7.30"  xml:id="b18">
+	<analytic>
+		<title level="a" type="main">Towards Object based Trajectory Representation and Analysis</title>
+		<author>
+			<persName>
+				<forename type="first">Sameep</forename>
+				<surname>Mehta</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Raghu</forename>
+				<surname>Machiraju</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Srinivasan</forename>
+				<surname>Parthasarathy</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">OSU- CISRC-03</title>
+		<imprint>
+			<date type="published" when="2006" />
+			<biblScope unit="page" from="6" to="30" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.21,482.59,221.77,7.30;8,336.21,492.05,213.40,7.30"  xml:id="b19">
+	<analytic>
+		<title level="a" type="main">Spatiotemporal Access Methods</title>
+		<author>
+			<persName>
+				<forename type="first">Mohamed</forename>
+				<forename type="middle">F</forename>
+				<surname>Mokbel</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Thanaa</forename>
+				<forename type="middle">M</forename>
+				<surname>Ghanem</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Walid</forename>
+				<forename type="middle">G</forename>
+				<surname>Aref</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Data Engineering Bulletin</title>
+		<imprint>
+			<date type="published" when="2003" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.21,501.52,221.80,7.30;8,336.21,510.99,221.79,7.30"  xml:id="b20">
+	<analytic>
+		<title level="a" type="main">Efficient Time Series Matching by Wavelets</title>
+		<author>
+			<persName>
+				<forename type="first">Kin</forename>
+				<surname>Pong</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Chan</forename>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Ada Wai-Chee</forename>
+				<surname>Fu</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">International Conference of Data Engineering</title>
+		<imprint>
+			<date type="published" when="1999" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.21,520.45,221.80,7.30;8,336.21,529.91,213.69,7.30"  xml:id="b21">
+	<analytic>
+		<title level="a" type="main">Statistical analysis of shape of objects based on landmark data</title>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<forename type="middle">R</forename>
+				<surname>Rao</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Suryawanshi</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc Natl Acad Sci</title>
+		<meeting>Natl Acad Sci<address><addrLine>USA</addrLine></address></meeting>
+		<imprint>
+			<date type="published" when="1996" />
+			<biblScope unit="page">93</biblScope>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.21,539.37,221.79,7.30;8,336.21,548.84,59.78,7.30"  xml:id="b22">
+	<monogr>
+		<title level="m" type="main">Paradigms for spatial and spatio-temporal data mining</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Roddick</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Lees</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2001" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.21,558.31,221.79,7.30;8,336.21,567.77,221.79,7.30;8,336.21,577.24,109.12,7.30"  xml:id="b23">
+	<analytic>
+		<title level="a" type="main">Indexing the positions of continuously moving objects</title>
+		<author>
+			<persName>
+				<forename type="first">Simonas</forename>
+				<surname>Saltenis</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Christian</forename>
+				<forename type="middle">S</forename>
+				<surname>Jensen</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Scott</forename>
+				<forename type="middle">T</forename>
+				<surname>Leutenegger</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Mario</forename>
+				<forename type="middle">A</forename>
+				<surname>Lopez</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">SIGMOD Rec</title>
+		<imprint>
+			<biblScope unit="volume">29</biblScope>
+			<biblScope unit="issue">2</biblScope>
+			<date type="published" when="2000" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.21,586.69,221.80,7.30;8,336.21,596.16,221.78,7.30;8,336.21,605.63,35.20,7.30"  xml:id="b24">
+	<analytic>
+		<title level="a" type="main">Tracking and visualizing turbulent 3d features</title>
+		<author>
+			<persName>
+				<forename type="first">Deborah</forename>
+				<surname>Silver</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Xin</forename>
+				<surname>Wang</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Visualization and Computer Graphics</title>
+		<imprint>
+			<biblScope unit="volume">3</biblScope>
+			<biblScope unit="issue">2</biblScope>
+			<date type="published" when="1997" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.21,615.09,221.80,7.30;8,336.21,624.57,221.77,7.30;8,336.21,634.04,127.73,7.30"  xml:id="b25">
+	<analytic>
+		<title level="a" type="main">The tpr*-tree: An optimized spatio-temporal access method for predictive queries</title>
+		<author>
+			<persName>
+				<forename type="first">Yufei</forename>
+				<surname>Tao</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Dimitris</forename>
+				<surname>Papadias</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Jimeng</forename>
+				<surname>Sun</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Very Large Database Conference</title>
+		<imprint>
+			<date type="published" when="2003" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.20,643.50,221.79,7.30;8,336.21,652.96,221.77,7.30;8,336.21,662.42,157.47,7.30"  xml:id="b26">
+	<analytic>
+		<title level="a" type="main">A generalized framework for mining spatio-temporal patterns in scientific data</title>
+		<author>
+			<persName>
+				<forename type="first">Hui</forename>
+				<surname>Yang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Srinivasan</forename>
+				<surname>Parthasarathy</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Sameep</forename>
+				<surname>Mehta</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Knowledge Discovery and Data Mining</title>
+		<imprint>
+			<date type="published" when="2005" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.20,671.89,221.79,7.30;8,336.21,681.36,221.79,7.30;8,336.21,690.82,109.25,7.30"  xml:id="b27">
+	<analytic>
+		<title level="a" type="main">Towards association-based spatio-temporal reasoning</title>
+		<author>
+			<persName>
+				<forename type="first">Hui</forename>
+				<surname>Yang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Srinivasan</forename>
+				<surname>Parthasarathy</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Sameep</forename>
+				<surname>Mehta</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">IJCAI: Workshop on Spatio-temporal Reasoning</title>
+		<imprint>
+			<date type="published" when="2005" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+				</listBibl>
+			</div>
+		</back>
+	</text>
+</TEI>

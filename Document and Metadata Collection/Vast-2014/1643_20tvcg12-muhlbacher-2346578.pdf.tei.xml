@@ -1,0 +1,2029 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.tei-c.org/ns/1.0 /home/pisenberg/grobid/grobid-home/schemas/xsd/Grobid.xsd"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+	<teiHeader xml:lang="en">
+		<encodingDesc>
+			<appInfo>
+				<application version="0.4.1" ident="GROBID" when="2016-09-09T13:49+0000">
+					<ref target="https://github.com/kermitt2/grobid">GROBID - A machine learning software for extracting information from scholarly documents</ref>
+				</application>
+			</appInfo>
+		</encodingDesc>
+		<fileDesc>
+			<titleStmt>
+				<title level="a" type="main">Opening the Black Box: Strategies for Increased User Involvement in Existing Algorithm Implementations</title>
+			</titleStmt>
+			<publicationStmt>
+				<publisher/>
+				<availability status="unknown"><licence/></availability>
+			</publicationStmt>
+			<sourceDesc>
+				<biblStruct>
+					<analytic>
+						<author>
+							<persName>
+								<forename type="first">Thomas</forename>
+								<forename type="middle">M</forename>
+							</persName>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Harald</forename>
+								<surname>Piringer</surname>
+							</persName>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Samuel</forename>
+								<surname>Gratzl</surname>
+							</persName>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Michael</forename>
+								<surname>Sedlmair</surname>
+							</persName>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Marc</forename>
+								<surname>Streit</surname>
+							</persName>
+						</author>
+						<title level="a" type="main">Opening the Black Box: Strategies for Increased User Involvement in Existing Algorithm Implementations</title>
+					</analytic>
+					<monogr>
+						<imprint>
+							<date/>
+						</imprint>
+					</monogr>
+					<idno type="DOI">10.1109/TVCG.2014.2346578</idno>
+					<note>1643</note>
+				</biblStruct>
+			</sourceDesc>
+		</fileDesc>
+		<profileDesc>
+			<abstract>
+				<p>— An increasing number of interactive visualization tools stress the integration with computational software like MATLAB and R to access a variety of proven algorithms. In many cases, however, the algorithms are used as black boxes that run to completion in isolation which contradicts the needs of interactive data exploration. This paper structures, formalizes, and discusses possibilities to enable user involvement in ongoing computations. Based on a structured characterization of needs regarding intermediate feedback and control, the main contribution is a formalization and comparison of strategies for achieving user involvement for algorithms with different characteristics. In the context of integration, we describe considerations for implementing these strategies either as part of the visualization tool or as part of the algorithm, and we identify requirements and guidelines for the design of algorithmic APIs. To assess the practical applicability, we provide a survey of frequently used algorithm implementations within R regarding the fulfillment of these guidelines. While echoing previous calls for analysis modules which support data exploration more directly, we conclude that a range of pragmatic options for enabling user involvement in ongoing computations exists on both the visualization and algorithm side and should be used. Index Terms—Visual analytics infrastructures, integration, interactive algorithms, user involvement, problem subdivision 1 INTRODUCTION A tight interplay between visualization, interaction, and analytical computation is the core aspect of Visual Analytics [25, 45]. The motivation is to combine cognitive and perceptual capabilities of human analysts with computational capabilities for tasks like statistical mod-eling, planning, and decision making [43]. In addition to intelligent visualization and interaction concepts, involving the user in the analysis process implies delivering results and visual feedback within at most a few seconds [9] and ideally less than 100 ms [42]. Particularly for large data, this requirement contradicts the computational effort of many advanced algorithms like clustering or dimension reduction. As a compromise, a growing number of systems apply strategies like early visual feedback of partial results [17, 23], cancellation on arrival of new input [36], or active steering of a computation in progress [10]. In current practice, however, this type of application-specific fine-tuning often involves a reimplementation of algorithms by researchers and practitioners in Visual Analytics [15]. The obvious disadvantages include a sub-optimal use of skills and resources and an explosion of proprietary implementations rather than standardized and tested solutions. In contrast, existing systems and languages for data analysis have widely been used for a long time and offer a variety of proven algorithms. In fact, an increasing number of academic and commercial visualization tools stress the integration with software like MATLAB and R (e.g., the R integration in Tableau 1 or [38]). Two key goals are to offer the algorithmic functionality within the visualization tool and to increase the acceptance by data analysts who have been working with</p>
+			</abstract>
+		</profileDesc>
+	</teiHeader>
+	<text xml:lang="en">
+		<body>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1">INTRODUCTION</head><p>A tight interplay between visualization, interaction, and analytical computation is the core aspect of Visual Analytics <ref type="bibr" coords="1,231.59,313.26,14.13,10.80" target="#b24">[25,</ref><ref type="bibr" coords="1,248.28,313.26,10.69,10.80" target="#b43"> 45]</ref> . The motivation is to combine cognitive and perceptual capabilities of human analysts with computational capabilities for tasks like statistical modeling , planning, and decision making <ref type="bibr" coords="1,185.90,343.14,13.70,10.80" target="#b41">[43]</ref>. In addition to intelligent visualization and interaction concepts, involving the user in the analysis process implies delivering results and visual feedback within at most a few seconds <ref type="bibr" coords="1,119.04,373.03,10.42,10.80" target="#b8">[9] </ref>and ideally less than 100 ms <ref type="bibr" coords="1,235.56,373.03,13.72,10.80" target="#b40">[42]</ref>. Particularly for large data, this requirement contradicts the computational effort of many advanced algorithms like clustering or dimension reduction. As a compromise, a growing number of systems apply strategies like early visual feedback of partial results <ref type="bibr" coords="1,216.26,413.71,14.11,10.80" target="#b16">[17,</ref><ref type="bibr" coords="1,234.73,413.71,10.66,10.80" target="#b22"> 23]</ref>, cancellation on arrival of new input <ref type="bibr" coords="1,136.23,423.67,13.79,10.80" target="#b34">[36]</ref>, or active steering of a computation in progress <ref type="bibr" coords="1,80.13,433.63,13.80,10.80" target="#b9">[10]</ref> . In current practice, however, this type of applicationspecific fine-tuning often involves a reimplementation of algorithms by researchers and practitioners in Visual Analytics <ref type="bibr" coords="1,233.06,453.55,13.79,10.80" target="#b14">[15]</ref>. The obvious disadvantages include a sub-optimal use of skills and resources and an explosion of proprietary implementations rather than standardized and tested solutions. In contrast, existing systems and languages for data analysis have widely been used for a long time and offer a variety of proven algorithms . In fact, an increasing number of academic and commercial visualization tools stress the integration with software like MATLAB and R (e.g., the R integration in Tableau 1 or <ref type="bibr" coords="1,202.19,533.94,13.49,10.80" target="#b36">[38]</ref>). Two key goals are to offer the algorithmic functionality within the visualization tool and to increase the acceptance by data analysts who have been working with  the integration reasonably easy from a software engineering point of view. However, as pointed out by Fekete, " computation and analyses are often seen as black boxes that take tables as input and output, along with set of parameters, and run to completion or error without interruption " <ref type="bibr" coords="1,445.88,354.78,13.80,10.80" target="#b14">[15]</ref>. In general, it is commonly stated in the Visual Analytics community that exploration is not taken into account in most infrastructures for analysis computation <ref type="bibr" coords="1,529.24,374.71,13.80,10.80" target="#b24">[25]</ref> , explaining " calls for more research <ref type="bibr" coords="1,432.24,384.67,12.84,10.80">[...] </ref>on designing analysis modules that can repair computations when data changes, provide continuous feedback during the computation, and be steered by user interaction when possible " <ref type="bibr" coords="1,366.35,414.67,13.69,10.80" target="#b14">[15]</ref>. Motivated by and echoing these calls, we structure requirements and formalize strategies to achieve them. Using this formalization, we argue that a range of possibilities for implementing these strategies already exists based on currently available computation infrastructures. Specifically, the focus of this paper is on studying conceptual possibilities for tightly integrating analytical algorithms of existing computation software into interactive visualization tools. A main goal of the paper is to increase the awareness and the understanding of these possibilities within the Visual Analytics community. Another goal is to improve the understanding of the needs of Visual Analytics applications within communities focusing on algorithm design like Knowledge Discovery and Data Mining. To this extent, the contributions of the paper can be summarized as follows: @BULLET A structured characterization of visual exploration needs concerning user involvement in ongoing computations. @BULLET A formal characterization and comparison of strategies for achieving user involvement in different types of algorithms @BULLET Considerations for implementing these strategies either as part of the visualization tool or as part of the algorithm, including an identification of requirements and guidelines for the design of algorithmic APIs in favor of a tight integration. @BULLET A survey of frequently used algorithms for knowledge extraction and model building of multivariate data regarding the fulfillment of these guidelines as a case study based on the software R.  integrate computational tools to perform calculations, as found in re- search <ref type="bibr" coords="2,78.21,61.26,14.24,10.80" target="#b23">[24,</ref><ref type="bibr" coords="2,95.61,61.26,11.26,10.80" target="#b36"> 38,</ref><ref type="bibr" coords="2,110.15,61.26,11.99,10.80" target="#b45"> 47] </ref>as well as in commercial products like Tableau, JMP 4 , or Spotfire 5 . However, these implementations often boil down to a black box integration that is insufficient for realizing interactive exploration of large datasets as envisioned in this paper. On the other hand, there are graphical libraries developed for extending computational environments by visualization capabilities, such as the GGobi<ref type="bibr" coords="2,73.95,121.02,17.49,10.80" target="#b42">[44] </ref>package for R. However, these extensions are usually not designed for dealing with large datasets and do not allow users to actively interact with ongoing computations. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2">RELATED WORK</head><p> The visualization community has already identified the need for intermediate results, which state-of-the-art computational environments cannot provide in most of the cases. According to Fekete <ref type="bibr" coords="2,270.38,179.83,13.80,10.80" target="#b14">[15]</ref> , analytical environments are not designed for exploration and algorithm designers often make no effort to provide such early results during computation. In the VisMaster book <ref type="bibr" coords="2,191.97,209.84,44.45,10.80">[25, p. 97f]</ref>, the authors take the same line by explicitly identifying needs and goals for realizing interactive visual analysis. The major goals are to get fast initial response with progressive refinement, to provide means for triggering recomputation following small changes, and to allow analysts to steer the computation. The work by Fisher et al. <ref type="bibr" coords="2,218.29,259.64,14.98,10.80" target="#b16">[17] </ref>confirms the need for early feedback during computations by a user study on incremental visualization. A more general discussion of user involvement in online algorithms together with a description of example implementations has been provided by the CONTROL project <ref type="bibr" coords="2,237.08,299.49,13.70,10.80" target="#b22">[23]</ref>. We take this requirements analysis one step further, and provide a detailed discussion of how different types of early information exchange support user involvement in interactive exploration. User interaction in a more general sense was investigated by Yi et al. <ref type="bibr" coords="2,65.52,358.42,13.81,10.80" target="#b50">[52]</ref>, who proposed seven interaction categories for visualization based on the user's intent, Card et al.'s venerable work <ref type="bibr" coords="2,245.69,368.38,10.54,10.80" target="#b8">[9] </ref> on three levels of time constraints in interaction, or in Nielsen's book on usability engineering <ref type="bibr" coords="2,100.30,388.30,13.71,10.80" target="#b30">[32]</ref>. While these works cover important needs of user involvement in general, we focus on bidirectional user involvement in ongoing computations (<ref type="bibr" coords="2,137.95,408.23,14.54,10.80">Sec. </ref>3), and we derive strategies for achieving the desired involvement in practice (Sec. 4). To enable earlier user involvement, strategies to accelerate result availability have been proposed in various contexts. Examples include pre-aggregation strategies for databases such as OLAP and data cubes <ref type="bibr" coords="2,75.47,467.15,13.71,10.80" target="#b27">[28]</ref> , as well as sampling and filtering techniques for progressive refinement in online aggregation <ref type="bibr" coords="2,185.45,477.12,14.25,10.80" target="#b15">[16,</ref><ref type="bibr" coords="2,201.54,477.12,11.24,10.80" target="#b16"> 17,</ref><ref type="bibr" coords="2,214.62,477.12,10.69,10.80" target="#b22"> 23]</ref>, enumerative queries <ref type="bibr" coords="2,52.08,487.08,13.79,10.80" target="#b22">[23]</ref>, or data mining <ref type="bibr" coords="2,131.39,487.08,13.71,10.80" target="#b49">[51]</ref> . For subdividable problems, Divide-andrecombine (D&amp;R) approaches split up a problem into multiple parts, solve the parts individually, and finally recombine the partial results. Examples include MapReduce <ref type="bibr" coords="2,166.52,516.96,15.00,10.80" target="#b11">[12] </ref>or RHIPE <ref type="bibr" coords="2,224.14,516.96,13.79,10.80" target="#b20">[21]</ref>. However, these examples focus more on speeding up the computation of large data by parallelization, rather than actively involving the user. The need of visualizing incremental results can be found in many different application contexts beyond multivariate data analysis. Progressive drawing is a well-known approach in volume rendering <ref type="bibr" coords="2,289.82,575.77,9.51,10.80" target="#b7">[8]</ref>, map rendering applications such as Google or Bing Maps, or the drawing of function graphs <ref type="bibr" coords="2,135.98,595.70,13.80,10.80" target="#b33">[35]</ref>. Particularly interesting in this respect is the work by Angelini and Santucci <ref type="bibr" coords="2,180.85,605.77,9.51,10.80" target="#b0">[1]</ref>, as it provides a formal model that allows characterizing and evaluating incremental visualizations regardless of the application context. Furthermore, much research has gone into visually representing the uncertainty of incomplete results <ref type="bibr" coords="2,52.08,645.62,14.25,10.80" target="#b16">[17,</ref><ref type="bibr" coords="2,69.25,645.62,11.24,10.80" target="#b19"> 20,</ref><ref type="bibr" coords="2,83.41,645.62,10.68,10.80" target="#b32"> 34]</ref>. While this is important, the focus of this paper lies on achieving intermediate feedback in the first place, while particular visualization techniques are out of scope. In summary, many approaches have been proposed to achieve user involvement in ongoing computations. Building on these possibilities, our primary goal is to provide a more formal characterization and comparison of strategies for achieving user involvement for different types of algorithms, together with a discussion in the context of integration with existing computational environments. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Entity of interest </head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Execution </head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3">TYPES OF USER INVOLVEMENT</head><p>As a starting point for discussing integration concepts, this section describes four different Types of User Involvement (TUI) that an interactive visualization may support for an ongoing computation of an algorithm P. In the context of this paper, the main goal of the TUI is to discuss the needs of visual exploration regarding the integration with ongoing computations more specifically. The scope of the TUI is limited to the time between the start and the end of a computation of P, i.e., it does neither include a priori parameterization , nor any further application of the final result r P . Accordingly , we define the scope of P such as to include any bounded computation or algorithm that has a well-defined end. Note that this explicitly excludes problems that can change over time, such as accounting for new data that concurrently arrives via streaming. We will refer to a variety of algorithms from multivariate analysis for illustrating the TUI and other concepts. In particular, we will relate to the well-known algorithms k-means clustering (as in the R method kmeans) and modelbased feature subset selection (as in the R method regsubsets) as recurring examples whenever reasonable, and refer to them using the abbreviations KMEANS and SUBSETS. We define the TUI based on two orthogonal dimensions (see <ref type="figure" coords="2,533.46,407.72,19.75,10.80">Fig. 1</ref>): 1. The direction of information. We distinguish between feedback and control. Feedback comprises information which is passed from the computation to the user and requires an appropriate visual representation to enable an efficient and correct interpretation by the user. Control is information passed from the user to the computation and requires appropriate interaction techniques. 2. The entity of interest. We distinguish between information concerning the execution of the computation, and information concerning final or intermediate results of P. </p><p>The four TUI are defined as the Cartesian product of these dimensions and will be discussed in the following sections: execution feedback (Sec. 3.1), result feedback (Sec. 3.2), execution control (Sec. 3.3), and result control (Sec. 3.4). This classification of TUI is independent of any specific algorithm or the structure of its result as well as any particular implementation and strategy how a certain involvement has been realized. We emphasize that our focus is on the question what can be visualized and controlled and why from a user's perspective rather than on the issue how, which depends on the particular algorithm P. We also stress that this paper does not assume every type of user involvement to be indiscriminately beneficial for each situation. User involvement may incur costs and complexities on multiple levels including the implementation, the computation, and the application by users. Identifying the most appropriate degree of user involvement is a key topic of Visual Analytics <ref type="bibr" coords="2,429.16,664.78,9.68,10.80" target="#b2">[3,</ref><ref type="bibr" coords="2,441.40,664.78,11.25,10.80" target="#b10"> 11,</ref><ref type="bibr" coords="2,455.21,664.78,11.14,10.80" target="#b26"> 27,</ref><ref type="bibr" coords="2,468.90,664.78,11.99,10.80" target="#b44"> 46] </ref> and depends on the algorithm and the application context. Our focus is on the classification of known types of user involvement and on general strategies to accomplish it on a technical level rather than on the assessment, when specific TUI are appropriate. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.1">Execution Feedback</head><p> This TUI comprises any kind of feedback about the ongoing computation of P as such. Common types of information include: @BULLET Aliveness confirms that the computation is in progress and no event has occurred that may cause failure to eventually deliver the final result, e.g., a crash, a deadlock, or a lost connection. @BULLET Absolute progress includes information about the current execution phase of P which may be qualitative (e.g., " computing distance matrix... " ) or quantitative (e.g., " iteration 12 " for KMEANS or the number of processed data items <ref type="bibr" coords="3,245.63,142.87,9.41,10.80" target="#b0">[1]</ref>). @BULLET Relative progress includes information about the degree of completeness of P which is frequently provided as percentage or as an estimate of the remaining time. From the user point of view, execution feedback should mainly answer two questions: First, can any result be expected at all? This may not be the case either due to the occurrence of a failure or an unacceptably long time required for computation. Second, does it make sense to wait for the result or do something else in between? </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.2">Result Feedback</head><p>This TUI involves any kind of intermediate feedback regarding the result r P of the ongoing computation of P. We distinguish between four common classes of result feedback: @BULLET Structure-preserving intermediate results˜rresults˜ results˜r P i are structurally equivalent to the final result r P in the sense that the same techniques for visualization and data processing can be applied to them as surrogates while r P is not yet available. This is typically the case for iterative and anytime algorithms. For example, the intermediate object positions after each iteration of a multidimensional scaling algorithm are structurally equivalent to the final positions. In case of the SUBSETS example, the best subset found so far has the same structure as the eventually best subset . Further examples from literature include non-negative matrix factorization <ref type="bibr" coords="3,128.16,384.43,13.71,10.80" target="#b9">[10]</ref>, self-organizing maps <ref type="bibr" coords="3,223.84,384.43,13.79,10.80" target="#b38">[40]</ref> , and data aggre- gation <ref type="bibr" coords="3,91.67,394.39,13.80,10.80" target="#b16">[17]</ref>. The structure of r P may be multi-faceted, however, and consist of multiple parts of which only a subset is provided as feedback during computation. In the KMEANS example, r P comprises both the cluster centers and the cluster assignments of all data points. To limit data transfer, showing only the intermediate centers during computation could be a reasonable option. @BULLET Aggregated information provides a certain aspect of intermediate results˜rresults˜ results˜r P i without preserving the structure in full detail. Common examples are quality measures of˜rof˜ of˜r P i <ref type="bibr" coords="3,232.07,474.18,9.51,10.80" target="#b4">[5]</ref> , e.g., the goodness of fit for the best subset so far with respect to a certain type of model (in the SUBSETS example) or the overall stress of the current solution in case of multidimensional scaling. @BULLET Uncertainty concerning the final result r P as estimated based on the available intermediate information. An example are confidence bounds for r P <ref type="bibr" coords="3,141.35,533.94,13.69,10.80" target="#b16">[17]</ref>. @BULLET Provenance includes any type of meta-information concerning simplifications made for generating˜rgenerating˜ generating˜r P i . Depending on the strategy to enable user involvement (see Sec. 4), this class may involve information about the considered data or the settings of complexity parameters. In this respect, provenance information is related to execution feedback about the absolute progress, but always refers to a particular intermediate result˜rresult˜ result˜r P i . An appropriate visual representation depends on many aspects like the type and structure of the intermediate results˜rresults˜ results˜r P i , the update rate of˜r of˜ of˜r P i , the involved amount of transferred data, and the intended goal of the visualization. It should, however, ensure that the result is perceived as intermediate. One option for doing so is to explicitly represent the change of the intermediate results over time. Examples include techniques of comparative visualization <ref type="bibr" coords="3,181.49,673.98,14.88,10.80" target="#b18">[19] </ref>to represent the difference betweeñ r P i and˜rand˜ and˜r P i−1 , or line graphs to visualize the convergence of aggregated information or uncertainty over time <ref type="bibr" coords="3,221.29,693.90,13.79,10.80" target="#b16">[17]</ref>. The key benefit of intermediate result feedback for the user is to enable an earlier continuation of the analysis based on preliminary information. Moreover, result feedback supports the decision whether the ongoing computation should be cancelled. This may be the case if the current intermediate result is already good enough or if the final result is not likely to be good enough. Finally, access to intermediate results is a key requirement for result control (see Sec. 3.4). </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.3">Execution Control</head><p> This TUI involves any kind of control of the execution of the ongoing computation of P as such. The most important type of execution control is cancellation, i.e., an explicit or implicit request to cancel the execution prematurely. Explicit requests are issued by the user if control feedback or result feedback suggests that either intermediate results are good enough, or the final result is unlikely to be good, or no result can be expected in acceptable time at all. Implicit requests are typically triggered by updated dependencies of the algorithms like changed input data and algorithm parameters. Such requests often entail a subsequent restart of the computation, a paradigm described in the context of multi-threaded visual analysis <ref type="bibr" coords="3,470.73,197.60,13.80,10.80" target="#b34">[36]</ref>. Another type of execution control is the prioritization of the remaining work. While the final result r P is not affected, the purpose is to alter the sequence of intermediate results in order to generate presumably more interesting ones earlier. In this respect, prioritization can be regarded as borderline case between execution and result control. Examples include algorithms involving spatial partitioning or hierarchical structures where users may want to process more interesting parts first <ref type="bibr" coords="3,359.25,277.63,13.79,10.80" target="#b48">[50]</ref>. As another example, algorithms processing search spaces may benefit from looking into more promising regions first. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.4">Result Control</head><p>This TUI refers to user interaction with the ongoing computation of P in order to steer the final result r P . This enables users to take advantage from human perception and domain knowledge <ref type="bibr" coords="3,501.55,334.26,9.68,10.80" target="#b2">[3,</ref><ref type="bibr" coords="3,513.91,334.26,11.24,10.80" target="#b24"> 25,</ref><ref type="bibr" coords="3,527.71,334.26,10.69,10.80" target="#b43"> 45]</ref>, e.g., for early validation of intermediate results, guided feature selection, weighting, and for avoidance of being stuck in local extrema. In the widest sense, this TUI corresponds to the common understanding of the Visual Analytics process as defined by Keim et al. <ref type="bibr" coords="3,512.26,374.10,13.80,10.80" target="#b25">[26]</ref> . Consequently , a significant share of the Visual Analytics literature addresses this TUI, e.g., clustering <ref type="bibr" coords="3,401.01,394.14,13.79,10.80" target="#b29">[31]</ref>, classification <ref type="bibr" coords="3,470.60,394.14,13.70,10.80" target="#b46">[48]</ref>, regression <ref type="bibr" coords="3,529.93,394.14,13.80,10.80" target="#b28">[30]</ref> , dimension reduction <ref type="bibr" coords="3,378.24,404.11,13.80,10.80" target="#b13">[14]</ref>, distance functions <ref type="bibr" coords="3,464.95,404.11,9.60,10.80" target="#b6">[7]</ref>, and many others. In the context of this paper, it is helpful to distinguish between inner and outer result control. The difference is whether the steering is based on intermediate results of a single execution of P, or on final results of multiple individual executions. Inner result control thus refers to the ability of controlling a single ongoing computation of P before it eventually returns a final result. Typical examples are partial modifications of the computation state between two consecutive iterations of P. In the KMEANS example, users could be allowed to shift, merge, or split cluster centers between iterations. Outer result control involves multiple consecutive executions of P that do not directly re-use previous results. It imposes no requirements on the algorithm, but relies on the visualization tool to enable the discourse between the user and the computation. As stated above, our scope of the TUI is limited to the time between the start and the end of a single computation of P. Therefore, outer result control is not relevant for this paper from the point of view of algorithm design. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4">STRATEGIES FOR ACHIEVING USER INVOLVEMENT</head><p>The previous section defined types of user involvement in ongoing computations. This section describes four strategies S1 – S4 to achieve user involvement for algorithms with different characteristics. We note that our focus is on the technical applicability of these strategies for enabling any type of user involvement, not on the discussion when specific TUI are appropriate from an application point of view. The motivation of these strategies within this paper is achieving a tighter user involvement in integrations of interactive visualization software with computational environments, such as R or MATLAB. However, their formulation does not rely on this application context, but can be regarded as a contribution to general algorithm design regarding early user involvement. The common key idea of the four strategies is to replace the execution of an algorithm P by a series of smaller steps { ˜ P 1 , ..., ˜ P n } in order to allow feedback and control between any subsequent steps˜Psteps˜ steps˜P i <ref type="figure" coords="4,52.09,101.18,19.05,9.87">Fig. 2</ref> . S1: Data Subsetting. Additional passes of P for increasing subsets of data are computed to allow user involvement after a shorter time. and˜Pand˜ and˜P i+1 . The simplification of P to steps˜Psteps˜ steps˜P i can be achieved in several ways, which can be characterized based on two orthogonal aspects: </p><formula>Result r Data D Algorithm P D1 D2 D3 P r P D 1 D2 D =D 3 P(D) P P P S1 r P 1 ~ r P 2 ~ </formula><p>(1) The dimension of simplification of P can either be the input data, the parameters, or the algorithm itself. (2) The approach of simplification along these dimensions can be realized by subdivision of P for divisible problems, or based on simplified extra passes if a subdivision is not possible. The Cartesian product of these two aspects yields six combinations which are entirely covered by our four strategies: S1 computes extra passes for simplified data, S2 computes extra passes for simplified parameters or a simplified algorithm. S3 subdivides P into subproblems with respect to data or parameters, while S4 subdivides the control flow of the algorithm as such. In this sense, we argue that our set of strategies is complete in the context of our scope, i.e., enabling user involvement during the computation of operations with bounded effort. Motivated by the structured approach of describing and comparing design patterns in software engineering <ref type="bibr" coords="4,208.56,287.72,13.71,10.80" target="#b17">[18]</ref>, we characterize each strategy in terms of the name, definition, scope, examples, considerations regarding user involvement, and computational implications. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.1">S1: Data Subsetting</head><p>Definition. Perform computations of P for increasingly larger subsets D i ⊆ D i+1 ⊆ D of data records or dimensions of a data table D in additional passes and enable user involvement after completing every pass˜Ppass˜ pass˜P i = P(D i ) (see <ref type="figure" coords="4,127.84,364.26,20.12,10.80">Fig. 2</ref>). Scope. S1 operates solely in the data space. As a consequence, S1 is structurally applicable to any algorithm that operates on a data table or data vector D. From an application point of view, S1 requires that intermediate results provide a meaningful approximation of the final result r P . Specifically, this is the case for algorithms inferring a global structure like clusters, trends, and aggregation. In contrast to strategies subdividing the workload into disjoint segments (i.e., S3), the subsetting of D does not rely on reusing results between passes. As a consequence, S1 is in particular applicable in situations where algorithms cannot reasonably be subdivided for inherent structural reasons or due to constraints imposed by their programming interface. This makes S1 the most generally applicable strategy that requires little knowledge about the inner structure of P. However, the type of P determines whether subsetting is possible and reasonable in terms of data records (i.e., rows of D) or in terms of data dimensions (i.e., columns of D). Another important consideration is the method for defining the subsets of D, which significantly affects how representative the intermediate results are. This issue is directly related to sampling, which is discussed extensively in the literature also in context of visualization <ref type="bibr" coords="4,164.22,564.32,9.69,10.80" target="#b3">[4,</ref><ref type="bibr" coords="4,176.10,564.32,11.25,10.80" target="#b12"> 13,</ref><ref type="bibr" coords="4,189.67,564.32,11.14,10.80" target="#b27"> 28,</ref><ref type="bibr" coords="4,203.12,564.32,10.60,10.80" target="#b31"> 33]</ref>. Examples. As stated above, S1 is generally suitable for algorithms inferring a global structure or information. This includes, for example, most algorithms from unsupervised statistical learning <ref type="bibr" coords="4,255.64,594.57,13.79,10.80" target="#b21">[22]</ref>. In this case, subsetting data records may enable an early detection and potentially correction of wrong assumptions or inadequate parameters, e.g., a wrong number of clusters in the KMEANS example. Dimension reduction techniques like PCA and MDS may also benefit from subsetting of data records just as most descriptive statistics like statistical moments (e.g., mean, variance, skewness), percentiles, etc. While the purpose of subsetting in S1 is achieving early user involvement , techniques from supervised learning may already include record-based subsetting for the purpose of model validation <ref type="bibr" coords="4,285.23,684.46,13.79,10.80" target="#b21">[22]</ref>. Depending on the purpose of the model, however, applying S1 for speedup may still be applicable, e.g., when visually indicating linear trends in a scatter plot. More care must be taken with subsetting of dimensions in machine learning, as the selection of features is very critical for the quality and representativity of results.  User involvement. The key parameters for enabling user involvement are the number and the size of the data subsets D i . These parameters enable a tradeoff between frequency of user involvement, quality in terms of completeness of intermediate results, and computational overhead. The typically known size of D i relative to D enables a direct quantification of the completeness in terms of the considered data size. This information should especially be conveyed as feedback regarding result provenance and can also be seen as absolute progress. Feedback concerning the relative progress with respect to the overall time, however, requires intimate knowledge of the computational complexity of P. Especially for client-driven implementations (Sec. 5.1), this may also be a major challenge for enabling user control mechanisms at an approximately equal rate. Computational implications. The computational overhead of S1 is the sum of all P(D i ), which can be very significant. On the other hand, the execution of the P(D i ) and the P(D) is easily parallelizable. In so far, S1 does not necessarily incur a latency for receiving the final result. In an extreme case, all P(D i ) as well as P(D) are scheduled independently, loosely relying on the increasing effort for computing increasing percentages of D to arrive in order. The memory consumption , however, typically also increases with the degree of parallelization due to a multiplication of algorithm-internal structures. Regarding the storage of D i , indexing of D should be used whenever possible to avoid data duplication and reduce data transfer. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.2">S2: Complexity Selection</head><p>Definition. Perform computations of P for less complex parameter configurations˜Pconfigurations˜ configurations˜P i in additional passes before computing P itself, and enable user involvement after completing every pass˜Ppass˜ pass˜P i (see <ref type="figure" coords="4,530.45,413.58,20.12,10.80">Fig. 3</ref>). Scope. S2 operates in the parameter space of P. Therefore, the applicability of S2 is determined by the existence and accessibility of complexity parameters that enable a speed vs. quality tradeoff. In particular , this applies to approximation algorithms <ref type="bibr" coords="4,486.86,453.90,14.98,10.80" target="#b47">[49] </ref> and many heuristics of computationally intractable problems in operations research, but also to many algorithms in other fields like statistics (see below). In contrast to S1 that operates in data space, the application of S2 is very dependent on P and typically requires structural knowledge of P and the effect of parameter changes in context of the specific data. This is a highly non-trivial issue in general as also shown by the growing importance of parameter space analysis as a topic in visualization literature <ref type="bibr" coords="4,349.66,533.95,13.80,10.80" target="#b39">[41]</ref> . In particular, the purpose of many complexity parameters in statistics is to adjust the suitability for particular data and a particular purpose rather than to simply trade off quality versus speed. An example is the bias vs. variance tradeoff of many types of statistical models <ref type="bibr" coords="4,369.20,573.80,13.79,10.80" target="#b21">[22]</ref>, where additional complexity improves the model quality only to a certain point before degrading generalizability due to over-fitting. As a consequence, S2 should only be considered for algorithms where concluding from intermediate results˜rresults˜ results˜r P i to the final result r P is meaningful. On the other hand, S2 does not require any structural decomposability of P, as it is the case for S3 and S4. In contrast to S1 which requires vector-or tabular-oriented data, S2 is also applicable to algorithms working on non-decomposable operands like analytical functions. Examples. In operations research, approximation algorithms for computationally intractable problems are common. They provide a solution that is provably optimal up to a constant – and often definable – factor and have provable run-time bounds <ref type="bibr" coords="4,471.64,694.03,13.71,10.80" target="#b47">[49]</ref>. For nearest neighbor search, for example, ε-approximate variants exist that enable to trade off the probability of finding the true nearest neighbor versus space and time costs especially in high-dimensional spaces (e.g., Arya et al. <ref type="bibr" coords="4,549.54,723.90,9.44,10.80" target="#b1">[2]</ref>) of subdivision schemes, the size of search radii, thresholds for stopping criteria, or even the algorithm itself as long as different algorithms yield structurally equivalent results, which includes most heuristics. Many algorithms for feature subset selection (SUBSETS), for example , differ in whether they perform a greedy or an exhaustive search. User involvement. The key parameters for enabling user involvement are the number of approximation steps and the complexities of the steps. Unlike for S1, the degree of freedom for both parameters is determined by P. Quantitative complexity parameters like thresholds may enable a precise choice of the number of approximations and even a quantification of the completeness or precision (e.g., for estimating relative progress). Conversely, categorical parameters such as available heuristic algorithms may impose a strict limitation on the number and complexities of steps, and complexities may be hard to estimate or even order. This makes a quantification of the progress difficult or impossible in general and only enables qualitative feedback regarding progress and result provenance. While feedback regarding result provenance is essential especially for strategy S2, however, only expert users will often be able to interpret the information. As for S1, another challenge for client-driven implementations (Sec. 5.1) will typically be to enable user control mechanisms at an approximately equal rate. Computational implications. The computational overhead of S2 is the sum of additional passes for computing the steps˜Psteps˜ steps˜P i . However, these computations are independent and thus easily parallelizable. As discussed for S1, this enables to reduce or avoid the latency for receiving the final result r P at the cost of increasing memory consumption. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.3">S3: Divide and Combine</head><p>Definition. Subdivide a workload W into n disjoint parts {w 1 , ..., w n }, apply P independently to each part w k to generate partial results </p><formula>{r P(w 1 ) , ..., r P(w n ) }</formula><p> , and compute intermediate results or the final result based on combining some or all r P(w k ) (see <ref type="figure" coords="5,218.62,442.02,20.28,10.80">Fig. 4</ref>). Scope. S3 imposes two requirements on P: First, independent applications of P to parts w k of a subdivided workload W must be possible in order to generate the partial results r P(w k ) . Second, a meaningful combination C must exist to combine subsets of partial results to intermediate results˜rresults˜ results˜r P i that are structurally equivalent to the final result r P . In particular, applying C to all partial results yields the final result r P of P. In context of S3, a single step˜Pstep˜ step˜P i thus comprises the computation of a subset of partial results and the application of C to them. The subdivision of W can be defined in terms of data (i.e., data space-based) or parameters (i.e., parameter space-based) that P is applied to. A data space-based subdivision is specifically possible in cases where applying P to a collection of elements (e.g., a set, a vector , a matrix) internally involves applying the same operation to each element. A parameter space-based subdivision is applicable to algorithms that take a specification of a domain (e.g., the extents of a search space) as a parameter, given that disjoint parts of the domain can be processed independently. It should be noted that a disjoint subdivision of the workload W does not in all cases imply a disjoint subdivision of the data or parameter space considered by each P(w k ) for computation . In other words, the disjoint subdivision applies to the output of P rather than the input of P. Tolerating a certain overlap in the inputs of multiple P(w k ) extends the applicability of S3 to operations that require a specified context around each processed element, e.g., for convolution or pattern search. The characteristics of the combination C depend on the structure of the result r P . In many cases, C is a composition of partial results in order to restore their context within W which has been lost due to the initial subdivision. Sometimes, C may also be a simple aggregation (e.g., maximum or mean). In any case, a practical requirement is that <ref type="figure" coords="5,309.47,114.26,23.46,9.87">Fig. 5.</ref>S4: Dependent subdivision. The idea is to involve the user between sequentially dependent steps of algorithms P, e.g., iterations. an application of C should be cheap to perform compared to computing the partial results themselves. The reason is that the intermediate results˜rresults˜ results˜r P i are composed of arbitrary and non-disjoint subsets of the partial results (see <ref type="figure" coords="5,378.57,177.66,21.96,10.80">Fig. 4</ref>). C may thus be applied to a single partial result multiple times for generating different intermediate results. </p><formula>Input P P P P S4 Algorithm P Result r P r P r P 1 ~ r P 1 ~ r P 2 ~ r P 2 ~ </formula><p>In order to avoid confusion, we point out that S3 is related and often applicable yet not equivalent to divide and conquer (D&amp;C) algo- rithms <ref type="bibr" coords="5,335.01,221.10,9.51,10.80" target="#b5">[6]</ref> . For D&amp;C algorithms, the subdivision is an inherent property of the algorithm while S3 refers to a subdivision-based strategy in a broader sense. In particular, S3 does not require that the application of P to a single element P(w k ) becomes trivial. In this respect, S3 is more related to parallelization paradigms like MapReduce <ref type="bibr" coords="5,520.30,260.94,13.79,10.80" target="#b11">[12]</ref>. Examples. An example for data space-based S3 is the sampled evaluation of a function, e.g., for progressive rendering of increasingly fine-grained function graphs. In this case, P is the evaluation of the function for a set of positions, W are the positions of all samples , w k is a certain subset, and C restores the context (i.e., the position and order) of results of P within W . Another example is the progressive computation of aggregates, e.g., the average <ref type="bibr" coords="5,487.94,334.38,13.72,10.80" target="#b16">[17]</ref>. In this case, P may involve potentially optimized algorithms for computing the aggregate for blocks of data w k and C further aggregates multiple r P(w k ) according to their cardinality. A parameter space-based example is the computation of the autocorrelation of a time series. The parameter refers to the interval (W ) of considered lags. This interval can be separated in disjoint parts and C recomposes the autocorrelation as a function of the lag-size. User involvement. The two key characteristics of S3 are the degree of subdivision (DIVIDE, i.e., the number n of w k ), and the strategy to generate the intermediate results˜rresults˜ results˜r P i (COMBINE). In general, DIVIDE is the more decisive factor for execution feedback and control while COMBINE determines the frequency and quality of result feedback. An approximately uniform subdivision of W facilitates feedback regarding the relative progress as compared to S1 and S2 and also enables user control like cancellation at a roughly equal rate. Regarding result feedback, COMBINE defines the ordering of the computations for all parts w k , and the amount of additional completeness for each intermediate result˜rresult˜ result˜r P i . As the number of intermediate results˜rresults˜ results˜r P i is independent of DIVIDE, the rates for feedback and control may be different. It is therefore a possible strategy to internally decouple the processing of COMBINE from DIVIDE (e.g., by multithreading ), and to define the progress for each˜Peach˜ each˜P i in terms of additional time rather than W by applying C to all already completed </p><formula>r P(w k ) . </formula><p> Computational implications. Increasing the degree of subdivision DIVIDE enables more fine-grained execution feedback and control without inherently inferring higher costs for obtaining the final result r P(W ) . In practice, however, each application of P may involve a certain overhead for reasons including the internal structure of P, potentially overlapping inputs of multiple P(w k ), and implementationrelated issues (e.g., data transfer, initialization, etc.). The latter are typically more significant for client-driven implementations (see Sec. 5.1). In addition, the overhead of S3 includes generating intermediate results from partial results and thus depends on COMBINE. </p><p>The independence of all P(w k ) makes S3 suitable for performing computations in parallel. In general, parallelization is typically a key motivation for subdivision. In the context of user involvement, however , a certain degree of sequential scheduling is required in order to involve the user between independent subsets of workload parts. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.4">S4: Dependent Subdivision</head><p>Definition. Subdivide P into sequentially dependent steps˜Psteps˜ steps˜P i so that the result˜rresult˜ result˜r P i of each step is an input to the next step˜Pstep˜ step˜P i+1 , and is structurally equivalent to the final result r P . Enable user involvement between steps (see <ref type="figure" coords="6,112.65,93.30,20.26,10.80">Fig. 5</ref>). Scope. S4 poses requirements regarding the decomposability of P and the structural equivalence of the result of each step˜rstep˜ step˜r P i to r P . In particular, this includes iterative algorithms where the result of each iteration serves as input to the next. In addition to inherently iterative problems, multiple problems can directly be transformed to iterative problems (e.g., recursive problems <ref type="bibr" coords="6,181.62,154.02,9.41,10.80" target="#b5">[6]</ref>), or an iterative variant exists (e.g., iterative PCA <ref type="bibr" coords="6,126.83,163.98,13.43,10.80" target="#b37">[39]</ref>). While iterative algorithms are the by far most important example of S4, the sequential steps could also be defined in terms of an ordered domain that needs to be processed sequentially , e.g., progressive signal reconstruction as described below. In contrast to S1 and S2, each step˜Pstep˜ step˜P i can reuse the previous result˜r result˜ result˜r P i−1 to avoid redundant computation. In contrast to S3, each step˜Pstep˜ step˜P i depends on the previous step˜Pstep˜ step˜P i−1 , i.e., it is not possible to decompose the workload into independent parts. Examples. S4 is in particular applicable to inherently iterative algorithms . In statistical learning, prominent examples include (1) the training of regression or classification models such as neural networks, (2) dimension reduction algorithms like multi-dimensional scaling, and (3) clustering algorithms such as partitioning around medoids or the recurring example KMEANS. Other examples are force-based algorithms for graph layout <ref type="bibr" coords="6,145.58,306.79,13.79,10.80">[29]</ref>, as well as algorithms that – potentially recursively – build hierarchical structures (e.g., decision trees), where each recursion adds to the complexity of˜rof˜ of˜r P i . Concerning sequential processing of an ordered domain, consider a progressive reconstruction of a signal (e.g., a time series or an image ) from a frequency-based representation, as common for displaying large JPEG images. An implementation of S4 could define˜Pdefine˜ define˜P i as to reconstruct a certain disjoint band of increasingly higher frequencies and to add the result to the already reconstructed part of the signal. User involvement. The key parameter for enabling user involvement is the step size, denoted by s. Varying s enables to trade off the frequency of feedback and user control against the computational overhead involved with each step. For iterative algorithms, s is typically defined in terms of iterations which enables user involvement at an approximately equal rate. Whether relative feedback can reasonably be provided depends on whether the number of steps is known in advance. As this often does not apply to convergent algorithms, a distance from a termination criterion may be provided instead. In contrast to all other strategies, each step˜Pstep˜ step˜P i depends on the result of the previous step˜Pstep˜ step˜P i−1 for S4. We argue that this is a requirement for permitting meaningful control of the ultimate result r P within an ongoing computation of P, i.e., enabling inner result control (see Sec. 3.4). For S1 and S2, changing data or parameters typically requires to restart computing all intermediate results, beginning with the simplest step. For S3, obtaining a homogeneous final result r P requires that each step P(w k ) is computed in the same way for all independent workload parts w k . For these reasons, outer result control is more appropriate when applying S1, S2, or S3. In contrast, for iterative algorithms, inner result control can be reasonable to enable domain knowledge for affecting convergence (e.g., avoiding local extrema). Computational implications. As discussed for the degree of subdivision of S3, the step size s may have a practical effect on the computational overhead imposed by S4. Unlike for S3, however, the sequential dependence of the˜Pthe˜ the˜P i on each other does not permit parallelization. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5">CLIENT-DRIVEN VS ALGORITHM-DRIVEN IMPLEMENTATION OF STRATEGIES</head><p> The previous sections characterized types of user involvement in ongoing computations (Sec. 3) and described four strategies to achieve user involvement for algorithms with different characteristics (Sec. 4). This section discusses possibilities of realizing the strategies when integrating interactive visualization software and computational environments . We will refer to these environments as VIS and COMP, where <ref type="figure" coords="6,314.65,180.86,19.42,9.87">Fig. 6</ref> . Reimplementing algorithms P in VIS allows to achieve user involvement but involves substantial effort for VIS (left). In client-driven integration, VIS implements strategies for achieving user involvement by connecting to existing P that provide adequate interfaces (middle). In algorithm-driven integration, VIS connects to algorithms that implement strategies and provide communication directly from within (right). VIS can be any interactive visualization tool and COMP can be computational environments such as R or MATLAB, as well as any other external computational resource or library. We discriminate between three responsibilities: Algorithm refers to performing the computation of P or˜Por˜ or˜P i . Client refers to visualizing the feedback of Algorithm and the handling of user input, i.e., the elements for human-computer interaction. Flow control refers to implementing the control flow and communication between Algorithm and Client. This includes the implementation of a strategy for defining and scheduling the steps˜Psteps˜ steps˜P i . Currently, a frequent situation in Visual Analytics is that all three responsibilities, i.e., Algorithm, Client and Flow control are implemented as part of VIS (see <ref type="figure" coords="6,415.04,368.94,20.26,10.80">Fig. 6</ref> , left column), which has disadvantages as pointed out in related work <ref type="bibr" coords="6,449.20,378.90,14.99,10.80" target="#b14">[15] </ref>and in the introduction. In context of integrating VIS and COMP, however, we assume that the role of the Algorithm is provided by COMP and the role of the Client is taken by VIS. In this case, the Flow control can either be a responsibility of VIS (client-driven integration, center column in <ref type="figure" coords="6,510.58,418.75,19.70,10.80">Fig. 6</ref> ), or a responsibility of COMP (algorithm-driven integration, right column in <ref type="figure" coords="6,314.64,438.67,20.20,10.80">Fig. 6</ref> ). Characterizing, comparing, and discussing these two scenarios is the purpose of this section. We establish requirements imposed by client-and algorithm-driven integration, and we derive guidelines to the design of the interface of P in favor of flexible client control. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.1">Client-driven integration</head><p>In client-driven integration, the definition and scheduling of the˜Pthe˜ the˜P i is managed by VIS, while their computation is performed by COMP. Between any steps˜Psteps˜ steps˜P i and˜Pand˜ and˜P i+1 , VIS can realize user involvement, e.g., by visualizing˜rvisualizing˜ visualizing˜r P i or by adjusting the call of˜Pof˜ of˜P i+1 according to user input. This externalization of the control flow requires that the programming interface of P exposes all parameters that clients need to define˜Pdefine˜ define˜P i . We subsequently analyze these requirements for each strategy. In S1, the˜Pthe˜ the˜P i are defined as executions of P on subsets of the input data D. Externally produced subsets can be fed to P instead of the full D, making S1 applicable for client-driven integration without additional requirements. In S2, a client-driven selection of complexity involves calling P for different parameters. This yields the following interface Requirement for a Client-driven integration (RC) for S2: </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>RC 1. Expose complexity parameters to trade off speed for quality. </head><p>Considering the central role of most complexity parameters, this criterion is not very limiting in practice (see Sec. 6). For S3, clients need to define a part of the subdivided workload W for each call of P. To support S3, the interface of P must meet the requirement RC2: </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>RC 2. Enable a precise specification of the processed workload. </head><p>For data space-based applications of S3, a subdivision into coherent blocks is often possible on the client side. Parameter space-based applications of S3 require the possibility to fully specify boundaries via the interface, e.g., the lower and upper limit of a considered subspace. Requirement RC2 also holds for S4, as the sequential processing of iterations is also based on a decomposition of workload. The specification can either be explicit, i.e., the number of iterations performed iñ P i , or implicit, by means of a stopping criterion. A second requirement of S4 is the ability to pass the final state of˜Pof˜ of˜P <ref type="figure" coords="8,52.09,213.62,24.09,9.87" target="#tab_1">Table 1</ref>. A survey of frequently used R algorithms regarding the fulfillment of the identified requirements and guidelines in favor of a tight integration. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>between algorithms and clients as valuable future core extensions of widely-used COMP environments. </head><p>A key consideration of respective extensions refers to their level of abstraction. Low-level mechanisms do not directly support any semantics of the communicated information but rely on the end points to do so. Conversely, high-level mechanisms could directly provide support for specific types of user involvement. For execution feedback and control (e.g., cancellation), this seems rather straightforward. For result feedback and control, however, defining standardized means seems highly non-trivial, but would enable benefits like querying intermediate results of different algorithms transparently to the client. While this may be a too demanding step for current computation environments , considerations like these could be a starting point for designing new computation infrastructures, as suggested by Fekete <ref type="bibr" coords="8,285.36,363.67,13.79,10.80" target="#b14">[15]</ref>. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6">CASE STUDY " R " : APPLICABILITY OF STRATEGIES</head><p> In the previous section, we identified a set of requirements and guidelines for the design of algorithmic interfaces in favor of an applicability of the proposed strategies. In this section, we investigate to which degree an exemplary computational environment fulfills the requirements of client-driven integration or even actively supports user involvement in the sense of algorithm-driven integration. Specifically, we surveyed 14 common algorithms for important problems related to multivariate analysis from the scripting environment R. The selection of R was motivated by its broad acceptance in academia and corporate research, the choice of algorithms was inspired by R's reference list of recommended packages for common topics, CRAN Task Views 6 . <ref type="figure" coords="8,62.05,505.01,26.57,10.80" target="#tab_1">Table 1</ref>gives an overview of the survey results. The table suggests that the large majority of the inspected algorithms supports a clientdriven application of multiple strategies, while only a few of them directly provide algorithm-driven feedback. This indicates that there is currently a large potential of realizing user involvement at the hands of VIS developers, as well as potential for COMP developers to support user involvement more directly. The data-based S1 is applicable to all algorithms operating on a data table. This applies to all our examples except for optimization (optim) and monte-carlo integration (vegas), which take analytic functions as inputs. Also, all investigated algorithms expose some complexity parameter or method selector that influences the runtime of single steps (RC1). For example, the pamonce option enables algorithmic short cuts in Partitioning-around-medoids clustering (pam), and best-subset feature selection (regsubsets) offers a selector of exhaustive vs. stepwise methods. Furthermore, the majority of investigated subdividable algorithms fulfills the interface requirements of strategies S3 and S4 (RC2, RC3). However, not all surveyed algorithms fulfill RC1 -RC3, which allows us to discuss potential interface improvements for specific realworld examples. Note that this discussion is neither an assessment of the algorithms themselves nor their specific implementations. without the availability of standardized communication protocols. </p></div><figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_4" validated="false" coords="4,324.72,723.90,240.54,21.13"><figDesc coords="5,76.19,95.78,221.19,9.87;5,46.91,105.26,250.46,10.53;5,46.92,114.74,218.33,9.87">S3: Divide and Combine involves (1) applying P to independent parts w k of a workload W , and (2) recombining the results using a combination C to obtain intermediate results or the final result.</figDesc><table coords="4,324.72,723.90,240.54,21.13">. 
+Further examples of complexity parameters include the refinement Workload W 
+
+w 1 w 3 
+w 2 
+
+w 1 
+
+w 2 
+
+w 3 
+
+r P(w ) 
+
+2 
+
+r P(w ) 
+
+3 
+
+r P(w ) 
+
+1 
+
+r P(w ) 
+
+k 
+
+P(W) 
+
+P 
+
+P 
+
+P 
+
+S3 
+
+Algorithm P 
+Result r P 
+r P 
+
+C 
+r P 1 
+
+~ 
+
+r P 2 
+
+~ 
+
+C 
+
+Fig. 4. </table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_6" validated="false" coords="7,46.91,94.42,250.13,39.83"><figDesc coords="7,294.95,94.42,1.94,8.33;7,46.91,101.10,167.14,11.73;7,46.92,113.25,250.12,11.67;7,46.92,123.54,245.78,10.71">i on tõ P i+1 . We identify RC3 for S4 as follows: RC 3. Provide access to all parts of the state as output, and accept equivalent information as input, in order to enable resuming the com</figDesc><table coords="8,67.33,49.17,480.77,158.77">Algorithm (package) 
+Description 
+Operates 
+Exposes 
+Definable 
+State 
+Provides 
+Comm. 
+Allows 
+on table 
+complexity 
+workload 
+restorability 
+communication 
+granularity 
+callbacks 
+param. (RC1) 
+(RC2) 
+(RC3) 
+from within 
+(GA1) 
+(GA2) 
+
+tsne (tnse) 
+T-SNE dimension reduction 
+
+
+
+
+(trace+GA2) 
+
+
+neuralnet (neuralnet) 
+Neural network 
+
+
+
+
+(trace) 
+
+
+optim (stats) 
+Optimization 
+-
+
+
+
+(trace) 
+
+
+sammon (MASS) 
+Multi-dimensional scaling 
+
+
+
+
+(trace) 
+
+
+vegas (R2Cuba) 
+Monte Carlo Integration 
+-
+
+
+
+(trace) 
+
+
+kmeans (cluster) 
+K-means clustering 
+
+
+
+
+
+
+
+som (kohonen) 
+Self organizing map 
+
+
+
+
+
+
+
+emcluster (EMCluster) 
+Expectation max. clustering 
+
+
+
+
+
+
+
+rpart (rpart) 
+Recursive tree construction 
+
+
+
+
+
+
+
+regsubsets (leaps) 
+Best subset feature selection 
+
+
+
+
+
+
+
+biglm (biglm) 
+Linear model 
+
+
+
+
+
+
+
+pam (cluster) 
+Partitioning around medoids 
+
+
+
+
+(trace) 
+
+
+acf (stats) 
+Autocorrelation 
+
+
+
+
+
+
+
+ksvm (kernlab) 
+Support vector machine 
+
+
+
+
+
+
+
+
+</table></figure>
+
+			<note place="foot" n="4"> http://www.jmp.com 5 http://spotfire.tibco.com</note>
+
+			<note place="foot" n="6"> http://cran.r-project.org/web/views Example 1: The clustering method pam iteratively performs an exhaustive search of medoids, i.e., data records that exhibit a minimal sum of distances to all other records. While pam allows the specification of an initial set of medoids (RC3), it is not possible to subdivide iterations into separate calls (RC2). Adding a numeric parameter indicating the number of iterations to perform in each step would enable users to suggest cluster medoids in-between, in order to speed up convergence for large datasets as well as to avoid local minima. Example 2: The iterative training of support vector machines as provided by ksvm does not expose the divisibility of the underlying Sequential Minimal Optimization [37]. However, the usefulness and convergence of SVMs highly depends on the choice of multiple model parameters. We suggest to enable a specification of the number of iterations and the previously trained model as input parameters of ksvm. This would allow early previews and cancellation of the model identification for an exploration of model parameters. Example 3: Computing the autocorrelation function of a time series (acf) can be seen as a divide-and-combine approach of computing correlations between a time series T and different lags of T . While acf allows a specification of the longest computed lag (lag.max) in the sense of RC1, it lacks the counterpart lag.min needed for a workload specification according to RC2. After surveying the examples regarding the client-driven applicability of strategies, we now discuss the direct support of user involvement as provided by algorithms. Several algorithms provide a uni-directional trace of textual feedback to a console during their execution (pam, vegas, sammon, optim, neuralnet and tsne). Most of them allow specifying different levels of verbosity, while tsne, neuralnet and optim even allow specifying the interval between messages (GA1). Apart from this trace, one example comes close to the perfectly accessible algorithm as outlined by algorithm-driven integration: The iterative tsne algorithm for dimension reduction allows clients to define a callback (GA2) that is executed instead of printing the trace at regular, client-definable intervals (GA1). This enables flexible feedback in a consistent way. However, we found no algorithms that consider control signals during their execution. A possible explanation could be that R usually runs in single-threaded, stand-alone command line environments, where the receiving of concurrent control signals is practically not feasible . With callbacks at hand, however, algorithms could incorporate control by considering the return value of callbacks in their control flow. As long as measures like this have not been adopted, providing user control is possible by implementing S1-S4 on the client-side. This case study shows that very few of the examined R implementations directly provide intermediate feedback in a consistent way, and none of them directly supports intermediate control. This confirms the necessity of external means such as client-driven strategies when integrating VIS with R for visual exploration. On the upside, all surveyed algorithms fulfill the requirements of at least one client-driven strategy. The fact that there are good as well as bad examples shows that integrability lies at the hands of the single COMP developer, even</note>
+		</body>
+		<back>
+			<div type="annex">
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.2">Algorithm-driven integration</head><p>In algorithm-driven integration, the Flow Control is realized directly within the implementation of P. Specifically, P is responsible for defining simplification steps˜Psteps˜ steps˜P i according to a particular strategy, and for communicating with the Client in order to enable user involvement. Definition of the simplification steps. When defining the steps˜Psteps˜ steps˜P i , four objectives can be identified for different TUI: (1) Execution feedback should be provided as precisely as possible and at approximately equal rates. (2) Result feedback should provide good approximations of r P as early as possible. <ref type="bibr" coords="7,144.58,500.10,10.43,10.80" target="#b2">(3) </ref> Both execution control and result control should have a minimal latency. (4) The computational overhead of user involvement should be minimal. These objectives are partly contradicting each other. Defining the steps˜Psteps˜ steps˜P i represents a mechanism to control this tradeoff for optimization within a given context. While the four objectives generally apply to client-driven as well as algorithm-driven integration scenarios, typically the client knows their preference in context. For algorithm-driven integration scenarios, it is thus desirable that the client has means of controlling the definition of steps˜Psteps˜ steps˜P i via the interface of P. However, a direct definition of steps often requires an intimate knowledge about the inner structure of P. In this sense, an algorithm-driven Flow Control provides two key advantages over client-driven integration: First, the implementation of P is the more appropriate place to be aware of the inner structure and any implications than the client. Ideally , the client can specify the preference of the objectives and certain constraints (e.g., a minimal frequency of feedback) while the algorithm knows how to realize this specification. Based on this consideration , we formulate the following Guideline for the design of P's interface in the context of Algorithm-driven integration (GA): GA 1. Offer means for specifying preference and constraints by the client regarding desired feedback and control rates. A second advantage of algorithm-driven integration is that communication is not limited to the times between structurally equivalent˜Pequivalent˜ equivalent˜P i . </p><p>For example, execution control can be realized after arbitrary blocks of code, allowing to check for cancellation signals often without having to generate result feedback at the same rate. This source-code level of granularity also allows minimizing the overhead of executing multiple steps˜Psteps˜ steps˜P i instead of a single P, as the products of potential common initialization steps can be reused. Communication with the Client. In algorithm-driven integration, the extent of supported feedback and control is entirely up to P. This makes sense, as appropriate types of user involvement are strongly algorithm-dependent. On that account, it is a key goal of this paper to encourage algorithm developers to acknowledge the degree of supported user involvement as a conscious design choice. The exchange of information between P and VIS can be implemented in different ways. A simple feedback mechanism commonly found in command line-based computation environments is providing a textual trace of the ongoing computation to a console. This onedirectional form of communication is usually intended to be read directly by users, not clients like VIS. As a result, parsing the trace may be difficult and highly algorithm-specific. As it is intended for console display, larger amounts of data can not be communicated reasonably. A more flexible option is the definition of an interface by the algorithm for sending feedback to and querying control information from an unknown client during the computation. Technically, a broad set of communication techniques exists, including the registration of call back procedures, dedicated points of code insertion, registration mechanisms implementing the Observer design pattern <ref type="bibr" coords="7,489.51,301.76,13.79,10.80" target="#b17">[18]</ref> , message passing and application-layer network protocols. As a common guideline in software engineering, we argue for a separation of concerns in that algorithm implementations should need to care more about what to communicate and when, rather than about how and to whom. Details of the communication such as the number and location of clients, or issues like parsing protocols should be decoupled from the actual implementation of P in order to minimize the implementation effort of algorithm developers and to maximize the reusability of an implementation in various environments. We see two options to achieve this: The first option is pragmatic in the sense that the algorithm developers should support the communication technique that incurs the minimal effort on their side. Translating one of the aforementioned techniques to another is typically possible and requires an Adapter <ref type="bibr" coords="7,545.01,442.17,14.87,10.80" target="#b17">[18] </ref> which can – and should – be realized outside the algorithm, for example by the client developer. In many cases, the most simple technique is providing means for registering callback methods in the same programming language as the algorithm implementation. This inversion of control enables a single client to insert code into P that is called at semantically meaningful positions of the control flow for exchanging feedback and control signals, e.g., between iterations. P does not need to know the client but executes callbacks as a black box. A direct use by clients may pose certain challenges, such as different languages of VIS and COMP, or requiring VIS and COMP to be executed on the same machine. However, as argued above, Adapter objects can be defined to address these challenges, e.g., by translating local calls to Remote Procedure Calls (RPC). We thus suggest the following interface guideline as a pragmatic step towards separation of concern: </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head> GA 2. Provide a callback interface to allow a client-side customization of the communication protocol. </head><p> The second option of the algorithm developer is to rely on an existing communication infrastructure, which may be external or internal. External refers to libraries and middleware outside the environment of COMP, e.g., for message passing. While this typically enables more powerful communication possibilities (e.g., over a network), a disadvantage for clients could be to incur the communication infrastructure as potentially unwanted dependency. In contrast, an internal infrastructure refers to a dedicated extension of the COMP environment itself (e.g., MATLAB or the R core) that algorithms and clients can use for benefit without additional complexity or dependency. However , such extensions are typically not provided today. We thus recommend to realize powerful and easy-to-use communication mechanisms </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="7">DISCUSSION AND FUTURE WORK</head><p>This paper is intended to show individual developers in the VIS and COMP communities practical measures of supporting integrability on their end. We agree with previous work <ref type="bibr" coords="9,194.18,100.26,14.88,10.80" target="#b14">[15] </ref>that the development of algorithms that directly provide standardized communication would be highly desirable in this context, as it allows reuse and minimizes effort for the VIS community. However, agreeing on protocol standards and implementing them for existing P is tedious, and putting the full load on the shoulders of COMP developers is not reasonable. The clientdriven application of S1-S4 can be seen as a practicable alternative that allows VIS developers to achieve user involvement for a large number of existing implementations. Adhering to interface requirements in favor of client-driven integration is a more manageable first request to COMP developers than providing perfectly accessible algorithms. Fekete has identified two key limitations of current integrations between VIS and COMP for the purpose of exploration <ref type="bibr" coords="9,241.46,220.39,13.99,10.80" target="#b14">[15]</ref> : First, " algorithms provided by analytical environments are not designed for exploration and make no effort in providing early results quickly to the analyst " . Our paper directly addresses this issue, as the characterized strategies and resulting guidelines pave the way for tighter integrations that support user involvement during computations. As the second issue , Fekete states that " when data is large <ref type="bibr" coords="9,209.30,280.16,13.77,10.71">[...] </ref>transfer time itself exceeds the reactivity requirement " <ref type="bibr" coords="9,177.48,290.12,13.80,10.80" target="#b14">[15]</ref> . This issue is further aggravated by the exchange of intermediate signals. However, many forms of intermediate communication are substantially smaller than the regular inputs or outputs of P, e.g., the cluster centers in KMEANS. Apart from data size, the severity of this limitation in practice depends on infrastructural aspects of the integration that are beyond the scope of this paper. Examples include network-based vs. memory-based communication , same machine vs. different machine in LAN / Internet, stateless vs. workspace-based COMP, internal data source vs. tertiary database, as well as overheads incurred the internal data format of COMP. As our discussion does not cover these aspects as such, we demonstrate in the following that the presented strategies and integration scenarios can work for moderately large datasets. As an initial proof of concept, we implemented four common integration scenarios by connecting our VIS environment Visplore <ref type="bibr" coords="9,270.01,430.19,14.23,10.80" target="#b28">[30,</ref><ref type="bibr" coords="9,286.08,430.19,11.24,10.80" target="#b33"> 35,</ref><ref type="bibr" coords="9,46.92,440.15,11.99,10.80" target="#b34"> 36] </ref>to R and MATLAB: We integrated Visplore with (1) the c-based R-API as part of the Visplore process <ref type="bibr" coords="9,186.05,450.11,13.71,10.80" target="#b23">[24]</ref>, (2) the COM interface of the MATLAB engine in a different process (3) the RServe package via TCP running on the same PC 7 as Visplore, and (4) RServe running on a different PC 8 via Gigabit LAN.  reports timings of transferring arrays of randomized double precision values from VIS to COMP. Timings for the other direction, i.e., COMP to VIS, were equivalent in this measurement. As a second experiment, we implemented the client-driven versions of S1 and S4 for the R-method kmeans based on the local API integration of R. The input of a 20-dimensional table of random data records is transferred to the R-workspace once, while cluster labels for each record are returned to Visplore after every step˜P step˜ step˜P i .  states average timings of early result availability for varying numbers of data records (S1) as well as percentages of the full iteration count (S4), for k = 20 clusters. The intention of these tests is to show that data transfer can be sufficiently fast for data sizes commonly found in real world analyses. Especially in local integrations, computation times are often the more limiting factor. to many algorithms in other disciplines. However, there are contexts where users will not consider all TUI as desirable. While result control might counteract the reproducibility of results in some cases, early result feedback might as well be unfamiliar to users that are accustomed to " seeing precise figures " <ref type="bibr" coords="9,433.16,173.10,13.72,10.80" target="#b16">[17]</ref>. In such cases, the potentially large overheads of executing additional steps˜Psteps˜ steps˜P i might be particularly painful if these resources could have been used to execute P as a black box more quickly. Finally, approximate solutions often introduce the need for explicit encoding of incompleteness and uncertainty, which increase the complexity of drawings and may even confuse users unfamiliar with such techniques. We see multiple directions for future work: (1) We plan to implement client-driven integration strategies for different algorithms within Visplore, in order to evaluate them in the context of real-world tasks. </p><p>(2) While our discussion of realizing client-driven strategies assumed the client to be VIS, we intend to investigate implementing it as an autonomous piece of reusable middleware. (3) To enable a more general assessment of the applicability of strategies, we also intend to extend our survey to include additional COMP environments like MATLAB or Python. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="8">CONCLUSION</head><p> In this paper we characterized possibilities of achieving a tight integration between computational environments and visualization software. We laid the ground by a structured characterization of needs for user involvement in ongoing computations. Based on this classification, we formalized and described strategies to realize these needs for algorithms of different characteristics. A detailed discussion of considerations for client-driven and algorithm-driven implementations enabled us to identify guidelines to algorithmic interfaces which we evaluated based on a survey of common algorithms of the software R. The combination of automated analysis techniques with interactive visualization is the key idea of Visual Analytics <ref type="bibr" coords="9,481.18,452.70,13.79,10.80" target="#b24">[25]</ref>. In this sense, we see our work as contribution on multiple levels. On a theoretical level, the formalization and comparison of technical strategies to achieve user involvement is a contribution to the theoretical foundations of Visual Analytics. On a practical level, we believe that the described implementation considerations facilitate an adoption for numerous integration scenarios based on existing computation environments. On a community level, we hope that the identification of specific requirements and guidelines for client-driven and algorithm-driven implementations fosters the development of computational infrastructures which are better suited to the needs of visual exploration. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>ACKNOWLEDGMENTS </head><p>This work has been supported by the Austrian Funding Agency (FFG) within the scope of the programs COMET K1 and ICT of the Future (project nr. 840232), as well as the FWF-funded project P24597-N23 (VISAR). Thanks go to Clemens Arbesser for valuable discussions, and to Johanna Schlereth for help with the figures. </p></div>			</div>
+			<div type="references">
+
+				<listBibl>
+
+<biblStruct coords="9,327.80,659.54,232.16,9.60;9,327.84,668.89,231.95,9.60;9,327.84,678.37,127.78,9.60"  xml:id="b0">
+	<analytic>
+		<title level="a" type="main">Modeling Incremental Visualizations</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Angelini</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Santucci</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. of the EuroVis Workshop on Visual Analytics (EuroVA &apos;13)</title>
+		<meeting>. of the EuroVis Workshop on Visual Analytics (EuroVA &apos;13)</meeting>
+		<imprint>
+			<date type="published" when="2013" />
+			<biblScope unit="page" from="13" to="17" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,327.81,687.85,232.10,9.60;9,327.84,697.32,231.97,9.60;9,327.83,706.80,179.26,9.60"  xml:id="b1">
+	<analytic>
+		<title level="a" type="main">An Optimal Algorithm for Approximate Nearest Neighbor Searching Fixed Dimensions</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Arya</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<forename type="middle">M</forename>
+				<surname>Mount</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<forename type="middle">S</forename>
+				<surname>Netanyahu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Silverman</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<forename type="middle">Y</forename>
+				<surname>Wu</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Journal of the ACM</title>
+		<imprint>
+			<biblScope unit="volume">45</biblScope>
+			<biblScope unit="issue">6</biblScope>
+			<biblScope unit="page" from="891" to="923" />
+			<date type="published" when="1998" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,327.83,716.28,231.68,9.60;9,327.83,725.75,231.87,9.60;9,327.83,735.11,188.02,9.60"  xml:id="b2">
+	<analytic>
+		<title level="a" type="main">Investigating and Reflecting on the Integration of Automatic Data Analysis and Visualization in Knowledge Discovery</title>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<surname>Bertini</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Lalanne</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">ACM SIGKDD Explorations Newsletter</title>
+		<imprint>
+			<biblScope unit="volume">11</biblScope>
+			<biblScope unit="issue">2</biblScope>
+			<biblScope unit="page" from="9" to="18" />
+			<date type="published" when="2010" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,70.30,52.22,232.06,9.60;10,70.33,61.57,231.99,9.60;10,70.33,71.05,121.18,9.60"  xml:id="b3">
+	<analytic>
+		<title level="a" type="main">Give Chance a Chance: Modeling Density to Enhance Scatter Plot Quality Through Random Data Sampling</title>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<surname>Bertini</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Santucci</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Information Visualization</title>
+		<imprint>
+			<biblScope unit="volume">5</biblScope>
+			<biblScope unit="issue">2</biblScope>
+			<biblScope unit="page" from="95" to="110" />
+			<date type="published" when="2006" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,70.33,80.53,231.72,9.60;10,70.33,90.00,232.12,9.60;10,70.33,99.48,206.03,9.60"  xml:id="b4">
+	<analytic>
+		<title level="a" type="main">Quality Metrics in High-Dimensional Data Visualization: An Overview and Systematization</title>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<surname>Bertini</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Tatu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Keim</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Trans. on Visualization and Computer Graphics</title>
+		<imprint>
+			<biblScope unit="volume">17</biblScope>
+			<biblScope unit="issue">12</biblScope>
+			<biblScope unit="page" from="2203" to="2212" />
+			<date type="published" when="2011" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,70.35,108.96,231.64,9.60;10,70.33,118.43,17.84,9.60"  xml:id="b5">
+	<monogr>
+		<title level="m" type="main">Fundamentals of Algorithmics</title>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Brassard</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Bratley</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="1996" />
+			<publisher>Prentice-Hall</publisher>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,70.33,127.79,232.05,9.60;10,70.33,137.27,232.08,9.60;10,70.33,146.74,225.32,9.60"  xml:id="b6">
+	<analytic>
+		<title level="a" type="main">Dis-Function: Learning Distance Functions Interactively</title>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<surname>Brown</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Liu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Brodley</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Chang</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. of the IEEE Conference on Visual Analytics in Science and Technology</title>
+		<meeting>. of the IEEE Conference on Visual Analytics in Science and Technology</meeting>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2012" />
+			<biblScope unit="page" from="83" to="92" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,70.33,156.22,232.09,9.60;10,70.33,165.69,231.87,9.60;10,70.33,175.17,158.51,9.60"  xml:id="b7">
+	<analytic>
+		<title level="a" type="main">Progressive Volume Rendering of Large Unstructured Grids</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Callahan</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<surname>Bavoil</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">V</forename>
+				<surname>Pascucci</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Silva</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Trans. on Visualization and Computer Graphics</title>
+		<imprint>
+			<biblScope unit="volume">12</biblScope>
+			<biblScope unit="issue">5</biblScope>
+			<biblScope unit="page" from="1307" to="1314" />
+			<date type="published" when="2006" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,70.30,184.65,232.19,9.60;10,70.33,194.12,231.91,9.60;10,70.33,203.48,224.99,9.60"  xml:id="b8">
+	<analytic>
+		<title level="a" type="main">The Information Visualizer , an Information Workspace</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<forename type="middle">K</forename>
+				<surname>Card</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<forename type="middle">G</forename>
+				<surname>Robertson</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">D</forename>
+				<surname>Mackinlay</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. of the SIGCHI Conference on Human Factors in Computing Systems</title>
+		<meeting>. of the SIGCHI Conference on Human Factors in Computing Systems</meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="1991" />
+			<biblScope unit="page" from="181" to="186" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,70.33,212.96,231.97,9.60;10,70.34,222.43,231.63,9.60;10,70.34,231.91,231.90,9.60;10,70.34,241.39,37.76,9.60"  xml:id="b9">
+	<analytic>
+		<title level="a" type="main">UTOPIAN: User-Driven Topic Modeling Based on Interactive Nonnegative Matrix Factorization</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Choo</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Lee</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Reddy</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Park</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Trans. on Visualization and Computer Graphics</title>
+		<imprint>
+			<biblScope unit="volume">19</biblScope>
+			<biblScope unit="issue">12</biblScope>
+			<biblScope unit="page" from="1992" to="2001" />
+			<date type="published" when="2013" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,70.30,250.86,232.09,9.60;10,70.34,260.34,232.09,9.60;10,70.34,269.82,209.23,9.60"  xml:id="b10">
+	<analytic>
+		<title level="a" type="main">An Affordance-Based Framework for Human Computation and Human-Computer Collaboration</title>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Crouser</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Chang</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Trans. on Visualization and Computer Graphics</title>
+		<imprint>
+			<biblScope unit="volume">18</biblScope>
+			<biblScope unit="issue">12</biblScope>
+			<biblScope unit="page" from="2859" to="2868" />
+			<date type="published" when="2012-12" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,70.28,279.17,232.13,9.60;10,70.33,288.65,217.18,9.60"  xml:id="b11">
+	<analytic>
+		<title level="a" type="main">MapReduce: Simplified Data Processing on Large Clusters</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Dean</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Ghemawat</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Communications of the ACM</title>
+		<imprint>
+			<biblScope unit="volume">51</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="107" to="113" />
+			<date type="published" when="2004" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,70.28,298.13,232.02,9.60;10,70.33,307.60,232.03,9.60;10,70.33,317.08,177.71,9.60"  xml:id="b12">
+	<analytic>
+		<title level="a" type="main">by chance: enhancing interaction with large data sets through statistical sampling</title>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Dix</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Ellis</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. of the Conference on Advanced Visual Interfaces (AVI &apos;02)</title>
+		<meeting>. of the Conference on Advanced Visual Interfaces (AVI &apos;02)</meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="2002" />
+			<biblScope unit="page" from="167" to="176" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,70.30,326.55,232.06,9.60;10,70.34,336.03,232.00,9.60;10,70.34,345.51,232.14,9.60;10,70.34,354.86,184.40,9.60"  xml:id="b13">
+	<analytic>
+		<title level="a" type="main">Observation-Level Interaction with Statistical Models for Visual Analytics</title>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Endert</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Han</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Maiti</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<surname>House</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Leman</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>North</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. of the IEEE Conference on Visual Analytics in Science and Technology (VAST &apos;11)</title>
+		<meeting>. of the IEEE Conference on Visual Analytics in Science and Technology (VAST &apos;11)</meeting>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2011-10" />
+			<biblScope unit="page" from="121" to="130" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,70.29,364.34,231.96,9.60;10,70.34,373.82,147.82,9.60"  xml:id="b14">
+	<analytic>
+		<title level="a" type="main">Visual Analytics Infrastructures: From Data Management to Exploration</title>
+		<author>
+			<persName>
+				<forename type="first">J.-D</forename>
+				<surname>Fekete</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Computer</title>
+		<imprint>
+			<biblScope unit="volume">46</biblScope>
+			<biblScope unit="issue">7</biblScope>
+			<biblScope unit="page" from="22" to="29" />
+			<date type="published" when="2013" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,70.30,383.29,231.84,9.60;10,70.34,392.77,232.06,9.60;10,70.34,402.25,210.33,9.60"  xml:id="b15">
+	<analytic>
+		<title level="a" type="main">Incremental, Approximate Database Queries and Uncertainty for Exploratory Visualization</title>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Fisher</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. of the IEEE Symp. on Large Data Analysis and Visualization (LDAV &apos;11)</title>
+		<meeting>. of the IEEE Symp. on Large Data Analysis and Visualization (LDAV &apos;11)</meeting>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2011" />
+			<biblScope unit="page" from="73" to="80" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,70.30,411.72,231.77,9.60;10,70.35,421.08,231.84,9.60;10,70.35,430.56,232.02,9.60;10,70.35,440.03,181.80,9.60"  xml:id="b16">
+	<analytic>
+		<title level="a" type="main">Trust Me, I&apos;m Partially Right: Incremental Visualization Lets Analysts Explore Large Datasets Faster</title>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Fisher</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">I</forename>
+				<surname>Popov</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Drucker</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. of the SIGCHI Conference on Human Factors in Computing Systems (CHI &apos;12)</title>
+		<meeting>. of the SIGCHI Conference on Human Factors in Computing Systems (CHI &apos;12)</meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="2012" />
+			<biblScope unit="page" from="1673" to="1682" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,70.32,449.51,232.15,9.60;10,70.35,458.99,232.10,9.60;10,70.35,468.46,148.79,9.60"  xml:id="b17">
+	<monogr>
+		<title level="m" type="main">Design Patterns: Elements of Reusable Object-oriented Software</title>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<surname>Gamma</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Helm</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Johnson</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Vlissides</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="1995" />
+			<publisher>Addison-Wesley Longman Publishing Co., Inc</publisher>
+			<pubPlace>Boston, MA, USA</pubPlace>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,70.32,477.94,232.23,9.60;10,70.35,487.42,231.88,9.60;10,70.35,496.77,114.71,9.60"  xml:id="b18">
+	<analytic>
+		<title level="a" type="main">Visual Comparison for Information Visualization</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Gleicher</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Albers</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Walker</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">I</forename>
+				<surname>Jusufi</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<forename type="middle">D</forename>
+				<surname>Hansen</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">C</forename>
+				<surname>Roberts</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Information Visualization</title>
+		<imprint>
+			<biblScope unit="volume">10</biblScope>
+			<biblScope unit="issue">4</biblScope>
+			<biblScope unit="page" from="289" to="309" />
+			<date type="published" when="2011" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,70.32,506.25,232.08,9.60;10,70.36,515.73,231.83,9.60;10,70.36,525.20,110.28,9.60"  xml:id="b19">
+	<analytic>
+		<title level="a" type="main">The Visualization of Uncertain Data: Methods and Problems</title>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Griethe</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Schumann</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. of Conference Simulation and Visualization (SimVis &apos;06)</title>
+		<meeting>. of Conference Simulation and Visualization (SimVis &apos;06)</meeting>
+		<imprint>
+			<date type="published" when="2006" />
+			<biblScope unit="page" from="143" to="156" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,70.36,534.68,231.75,9.60;10,70.36,544.15,232.04,9.60;10,70.36,553.63,57.34,9.60"  xml:id="b20">
+	<analytic>
+		<title level="a" type="main">Large Complex Data: Divide and Recombine (D&amp;R) with</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Guha</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Hafen</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Rounds</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Xia</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Li</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Xi</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<forename type="middle">S</forename>
+				<surname>Cleveland</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">RHIPE. Stat</title>
+		<imprint>
+			<biblScope unit="volume">1</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="53" to="67" />
+			<date type="published" when="2012" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,70.33,563.11,231.82,9.60;10,70.36,572.48,156.84,9.60"  xml:id="b21">
+	<monogr>
+		<title level="m" type="main">The Elements of Statistical Learning</title>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Hastie</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Tibshirani</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Friedman</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2009" />
+			<publisher>Springer</publisher>
+		</imprint>
+	</monogr>
+	<note>2nd. edition</note>
+</biblStruct>
+
+<biblStruct coords="10,70.33,581.96,232.05,9.60;10,70.35,591.43,232.12,9.60;10,70.35,600.91,124.54,9.60"  xml:id="b22">
+	<analytic>
+		<title level="a" type="main">Interactive Data Analysis: The CONTROL Project</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">M</forename>
+				<surname>Hellerstein</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Avnur</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Chou</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Hidber</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Olston</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">V</forename>
+				<surname>Raman</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Roth</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<forename type="middle">J</forename>
+				<surname>Haas</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Computer</title>
+		<imprint>
+			<biblScope unit="issue">8</biblScope>
+			<biblScope unit="page" from="3251" to="59" />
+			<date type="published" when="1999" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,70.29,610.39,232.03,9.60;10,70.35,619.86,231.96,9.60;10,70.35,629.34,231.85,9.60;10,70.35,638.82,206.12,9.60"  xml:id="b23">
+	<analytic>
+		<title level="a" type="main">A Generic Model for the Integration of Interactive Visualization and Statistical Computing using R</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Kehrer</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<forename type="middle">N</forename>
+				<surname>Boubela</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Filzmoser</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Piringer</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Poster Proc. of the IEEE Conference on Visual Analytics Science and Technology (VAST &apos;12)</title>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2012" />
+			<biblScope unit="page" from="233" to="234" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,70.32,648.17,232.11,9.60;10,70.35,657.65,232.09,9.60;10,70.35,667.13,48.81,9.60"  xml:id="b24">
+	<analytic>
+		<title/>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<forename type="middle">A</forename>
+				<surname>Keim</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Kohlhammer</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Ellis</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<surname>Mansmann</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Mastering The Information Age -Solving Problems with Visual Analytics. Eurographics</title>
+		<imprint>
+			<date type="published" when="2010" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,70.31,676.60,231.95,9.60;10,70.35,686.08,232.11,9.60;10,70.35,695.55,226.38,9.60"  xml:id="b25">
+	<analytic>
+		<title level="a" type="main">Visual Analytics: Scope and Challenges</title>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<forename type="middle">A</forename>
+				<surname>Keim</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<surname>Mansmann</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Schneidewind</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Thomas</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Ziegler</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Visual Data Mining, number 4404 in Lecture Notes in Comp. Science</title>
+		<imprint>
+			<publisher>Springer</publisher>
+			<date type="published" when="2008" />
+			<biblScope unit="page" from="76" to="90" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,70.31,705.03,232.27,9.60;10,70.35,714.39,222.68,9.60"  xml:id="b26">
+	<analytic>
+		<title level="a" type="main">Visual Analytics: How Much Visualization and How Much Analytics</title>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<forename type="middle">A</forename>
+				<surname>Keim</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<surname>Mansmann</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Thomas</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">SigKDD Explorations</title>
+		<imprint>
+			<date type="published" when="2009" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,70.29,723.86,232.14,9.60;10,70.35,733.34,203.18,9.60;10,314.67,51.98,250.41,9.60;10,333.02,61.34,232.11,9.60;10,333.02,70.82,187.54,9.60"  xml:id="b27">
+	<analytic>
+		<title level="a" type="main">imMens: Real-Time Visual Querying of Big Data McGuffin and I. Jurisica. Interaction Techniques for Selecting and Manipulating Subgraphs in Network Visualizations</title>
+		<author>
+			<persName>
+				<forename type="first">Z</forename>
+				<surname>Liu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Jiang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Heer</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Computer Graphics Forum IEEE Trans. on Visualization and Computer Graphics</title>
+		<imprint>
+			<biblScope unit="volume">32</biblScope>
+			<biblScope unit="issue">3pt46</biblScope>
+			<biblScope unit="page" from="421" to="430" />
+			<date type="published" when="2009" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,333.01,80.29,231.87,9.60;10,333.02,89.77,231.99,9.60;10,333.02,99.25,186.11,9.60"  xml:id="b28">
+	<analytic>
+		<title level="a" type="main">A Partition-Based Framework for Building and Validating Regression Models</title>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Mühlbacher</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Piringer</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">VAST &apos;13)</title>
+		<imprint>
+			<date type="published" when="2013" />
+			<biblScope unit="page" from="1962" to="1971" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,333.01,108.72,231.73,9.60;10,333.02,118.20,232.04,9.60;10,333.01,127.56,232.04,9.52;10,333.01,137.03,77.34,9.60"  xml:id="b29">
+	<analytic>
+		<title level="a" type="main">ClusterSculptor: A Visual Analytics Tool for High-Dimensional Data</title>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<forename type="middle">J</forename>
+				<surname>Nam</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Y</forename>
+				<surname>Han</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Mueller</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Zelenyuk</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Imre</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. of the IEEE Symp. on Visual Analytics in Science and Technology (VAST &apos;07)</title>
+		<meeting>. of the IEEE Symp. on Visual Analytics in Science and Technology (VAST &apos;07)</meeting>
+		<imprint>
+			<date type="published" when="2007-10" />
+			<biblScope unit="page" from="75" to="82" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,332.97,146.51,194.27,9.60"  xml:id="b30">
+	<analytic>
+		<title/>
+	</analytic>
+	<monogr>
+		<title level="j">J. Nielsen. Usability Engineering</title>
+		<imprint>
+			<publisher>Morgan Kaufmann</publisher>
+			<date type="published" when="1993" />
+			<publisher>Morgan Kaufmann</publisher>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,332.97,155.99,232.25,9.60;10,333.01,165.46,232.01,9.60;10,333.00,174.94,204.20,9.60"  xml:id="b31">
+	<analytic>
+		<title level="a" type="main">Random Sampling from Database Files: A Survey</title>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<surname>Olken</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Rotem</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Statistical and Scientific Database Management, number 420 in Lecture Notes in Comp. Science</title>
+		<imprint>
+			<publisher>Springer</publisher>
+			<date type="published" when="1990" />
+			<biblScope unit="page" from="92" to="111" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,332.94,184.42,232.11,9.60;10,333.00,193.89,232.02,9.60;10,333.00,203.25,98.85,9.60"  xml:id="b32">
+	<analytic>
+		<title level="a" type="main">Visualizing Data with Bounded Uncertainty</title>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Olston</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">D</forename>
+				<surname>Mackinlay</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. of the IEEE Symp. on Information Visualization (Info- Vis&apos;02)</title>
+		<meeting>. of the IEEE Symp. on Information Visualization (Info- Vis&apos;02)</meeting>
+		<imprint>
+			<date type="published" when="2002" />
+			<biblScope unit="page">37</biblScope>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,332.97,212.73,231.98,9.60;10,333.01,222.20,231.83,9.60;10,333.01,231.68,170.63,9.60"  xml:id="b33">
+	<analytic>
+		<title level="a" type="main">HyperMoVal: Interactive Visual Validation of Regression Models for Real-Time Simulation</title>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Piringer</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Berger</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Krasser</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">EuroVis &apos;10)</title>
+		<imprint>
+			<date type="published" when="2010" />
+			<biblScope unit="page" from="983" to="992" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,332.98,241.16,231.65,9.60;10,333.01,250.63,232.12,9.60;10,333.01,260.11,201.95,9.60"  xml:id="b34">
+	<analytic>
+		<title level="a" type="main">A Multi-Threading Architecture to Support Interactive Visual Exploration</title>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Piringer</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Tominski</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Muigg</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Berger</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Trans. on Visualization and Computer Graphics</title>
+		<imprint>
+			<biblScope unit="volume">15</biblScope>
+			<biblScope unit="issue">6</biblScope>
+			<biblScope unit="page" from="1113" to="1120" />
+			<date type="published" when="2009" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,332.97,269.58,232.08,9.60;10,333.01,278.94,231.96,9.60;10,333.01,288.42,50.94,9.60"  xml:id="b35">
+	<analytic>
+		<title level="a" type="main">Sequential Minimal Optimization: A Fast Algorithm for Training Support Vector Machines</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Platt</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Advances in Kernel Methods -Support Vector Learning</title>
+		<imprint>
+			<date type="published" when="1998" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,333.02,297.89,231.91,9.60;10,333.00,307.37,231.73,9.60;10,333.00,316.85,232.21,9.60;10,333.00,326.32,231.89,9.60;10,333.00,335.80,126.60,9.60"  xml:id="b36">
+	<analytic>
+		<title level="a" type="main">Linking Advanced Visualization and MATLAB for the Analysis of 3D Gene Expression Data</title>
+		<author>
+			<persName>
+				<forename type="first">O</forename>
+				<surname>Rübel</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<forename type="middle">V E</forename>
+				<surname>Keränen</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Biggin</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<forename type="middle">W</forename>
+				<surname>Knowles</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<forename type="middle">H</forename>
+				<surname>Weber</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Hagen</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Hamann</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<forename type="middle">W</forename>
+				<surname>Bethel</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Visualization in Medicine and Life Sciences II, Mathematics and Visualization</title>
+		<imprint>
+			<publisher>Springer</publisher>
+			<date type="published" when="2012" />
+			<biblScope unit="page" from="265" to="283" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,333.00,345.28,232.00,9.60;10,333.01,354.63,232.03,9.60;10,333.01,364.11,87.08,9.60"  xml:id="b37">
+	<analytic>
+		<title/>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Roweis</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Spca</forename>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. of the Conference on Advances in Neural Information Processing Systems</title>
+		<meeting>. of the Conference on Advances in Neural Information essing Systems</meeting>
+		<imprint>
+			<publisher>MIT Press</publisher>
+			<date type="published" when="1998" />
+			<biblScope unit="page" from="626" to="632" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,332.97,373.59,231.93,9.60;10,333.00,383.06,232.04,9.60;10,333.00,392.56,232.15,9.52;10,333.00,402.03,96.32,9.60"  xml:id="b38">
+	<analytic>
+		<title level="a" type="main">Visual Cluster Analysis of Trajectory Data with Interactive Kohonen Maps</title>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Schreck</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Bernard</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Tekusova</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Kohlhammer</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. of the IEEE Symp. on Visual Analytics in Science and Technology (VAST &apos;08)</title>
+		<meeting>. of the IEEE Symp. on Visual Analytics in Science and Technology (VAST &apos;08)</meeting>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2008" />
+			<biblScope unit="page" from="3" to="10" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,332.97,411.51,232.06,9.60;10,333.00,420.87,232.12,9.60;10,333.00,430.34,232.05,9.60"  xml:id="b39">
+	<analytic>
+		<title level="a" type="main">Visual Parameter Space Analysis: A Conceptual Framework</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Sedlmair</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Heinzl</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Bruckner</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Piringer</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Möller</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Trans. on Visualization and Computer Graphics</title>
+		<imprint>
+			<biblScope unit="page">2014</biblScope>
+		</imprint>
+	</monogr>
+	<note>cond. . accepted for InfoVis</note>
+</biblStruct>
+
+<biblStruct coords="10,332.98,439.82,232.18,9.60;10,333.00,449.29,93.22,9.60"  xml:id="b40">
+	<analytic>
+		<title level="a" type="main">Dynamic Queries for Visual Information Seeking</title>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Shneiderman</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Software</title>
+		<imprint>
+			<biblScope unit="volume">11</biblScope>
+			<biblScope unit="issue">6</biblScope>
+			<biblScope unit="page" from="70" to="77" />
+			<date type="published" when="1994" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,332.97,458.77,232.02,9.60;10,333.00,468.25,174.14,9.60"  xml:id="b41">
+	<analytic>
+		<title level="a" type="main">Visual Analytics: Seeking the Unknown</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Streit</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">O</forename>
+				<surname>Bimber</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Computer</title>
+		<imprint>
+			<biblScope unit="volume">46</biblScope>
+			<biblScope unit="issue">7</biblScope>
+			<biblScope unit="page" from="20" to="21" />
+			<date type="published" when="2013" />
+		</imprint>
+	</monogr>
+	<note>Introduction</note>
+</biblStruct>
+
+<biblStruct coords="10,332.97,477.72,232.03,9.60;10,333.01,487.20,231.99,9.60;10,333.01,496.56,216.81,9.60"  xml:id="b42">
+	<analytic>
+		<title level="a" type="main">GGobi Meets R: An Extensible Environment for Interactive Dynamic Data Visualization</title>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Temple</forename>
+				<surname>Lang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<forename type="middle">F</forename>
+				<surname>Swayne</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. of the 2nd International Workshop on Distributed Statistical Computing</title>
+		<meeting>. of the 2nd International Workshop on Distributed Statistical Computing</meeting>
+		<imprint>
+			<date type="published" when="2001" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,332.98,506.03,232.06,9.60;10,333.02,515.51,177.45,9.60"  xml:id="b43">
+	<monogr>
+		<title level="m" type="main">Illuminating the Path: The Research and Development Agenda for Visual Analytics</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">J</forename>
+				<surname>Thomas</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<forename type="middle">A</forename>
+				<surname>Cook</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2005" />
+			<publisher>IEEE</publisher>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,332.99,524.99,232.24,9.60;10,333.02,534.46,231.95,9.60;10,333.02,543.94,231.82,9.60;10,333.02,553.42,231.81,9.60;10,333.02,562.89,231.96,9.60;10,333.02,572.25,154.92,9.60"  xml:id="b44">
+	<analytic>
+		<title level="a" type="main">On Computationally-Enhanced Visual Analysis of Heterogeneous Data and its Application in Biomedical Informatics</title>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Turkay</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<surname>Jeanquartier</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Holzinger</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Hauser</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Interactive Knowledge Discovery and Data Mining in Biomedical Informatics, number 8401 in Lecture Notes in Computer Science</title>
+		<editor>A. Holzinger and I. Jurisica</editor>
+		<meeting><address><addrLine>Berlin Heidelberg</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer</publisher>
+			<date type="published" when="2014-01" />
+			<biblScope unit="page" from="117" to="140" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,333.01,581.73,231.66,9.60;10,333.02,591.20,232.05,9.60;10,333.02,600.68,128.24,9.60"  xml:id="b45">
+	<analytic>
+		<title level="a" type="main">No Need to Talk to Strangers -Cooperation of Interactive Software with R as Moderator</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Urbanek</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. of the Symp. of the Interface of Computing Science and Statistics</title>
+		<meeting>. of the Symp. of the Interface of Computing Science and Statistics</meeting>
+		<imprint>
+			<date type="published" when="2002" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,332.98,610.16,231.73,9.60;10,333.02,619.63,232.08,9.60;10,333.02,629.11,231.97,9.60"  xml:id="b46">
+	<analytic>
+		<title level="a" type="main">BaobabView: Interactive Construction and Analysis of Decision Trees</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Van Den Elzen</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Van Wijk</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. of the IEEE Symp. on Visual Analytics Science and Technology (VAST &apos;11)</title>
+		<meeting>. of the IEEE Symp. on Visual Analytics Science and Technology (VAST &apos;11)</meeting>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2011" />
+			<biblScope unit="page" from="151" to="160" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,332.97,638.58,187.55,9.60"  xml:id="b47">
+	<monogr>
+		<title level="m" type="main">Approximation Algorithms</title>
+		<author>
+			<persName>
+				<forename type="first">V</forename>
+				<forename type="middle">V</forename>
+				<surname>Vazirani</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2001" />
+			<publisher>Springer</publisher>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,332.98,647.94,231.74,9.60;10,333.02,657.42,232.13,9.60;10,333.02,666.89,81.78,9.60"  xml:id="b48">
+	<analytic>
+		<title level="a" type="main">Steerable, Progressive Multidimensional Scaling</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Williams</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Munzner</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">IEEE Symp. on Information Visualization</title>
+		<imprint>
+			<date type="published" when="2004" />
+			<biblScope unit="page" from="57" to="64" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,332.99,676.37,231.96,9.60;10,333.02,685.85,232.12,9.60;10,333.02,695.32,215.01,9.60"  xml:id="b49">
+	<analytic>
+		<title level="a" type="main">Dynamic Visualization of Transient Data Streams</title>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<forename type="middle">C</forename>
+				<surname>Wong</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Foote</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Adams</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Cowley</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Thomas</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. of the IEEE Symp. on Information Visualization (InfoVis &apos;03)</title>
+		<meeting>. of the IEEE Symp. on Information Visualization (InfoVis &apos;03)</meeting>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2003" />
+			<biblScope unit="page" from="97" to="104" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,333.00,704.80,231.94,9.60;10,333.03,714.16,232.04,9.60;10,333.03,723.63,231.71,9.60;10,333.03,733.11,17.84,9.60"  xml:id="b50">
+	<analytic>
+		<title level="a" type="main">Toward a Deeper Understanding of the Role of Interaction in Information Visualization</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">S</forename>
+				<surname>Yi</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Y</forename>
+				<surname>Kang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Stasko</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Jacko</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Trans. on Visualization and Computer Graphics</title>
+		<imprint>
+			<biblScope unit="volume">13</biblScope>
+			<biblScope unit="issue">6</biblScope>
+			<biblScope unit="page" from="1224" to="1231" />
+			<date type="published" when="2007" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+				</listBibl>
+			</div>
+		</back>
+	</text>
+</TEI>

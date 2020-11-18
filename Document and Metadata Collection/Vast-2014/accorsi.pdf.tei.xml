@@ -1,0 +1,2158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.tei-c.org/ns/1.0 /home/pisenberg/grobid/grobid-home/schemas/xsd/Grobid.xsd"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+	<teiHeader xml:lang="en">
+		<encodingDesc>
+			<appInfo>
+				<application version="0.4.1" ident="GROBID" when="2016-09-09T13:51+0000">
+					<ref target="https://github.com/kermitt2/grobid">GROBID - A machine learning software for extracting information from scholarly documents</ref>
+				</application>
+			</appInfo>
+		</encodingDesc>
+		<fileDesc>
+			<titleStmt>
+				<title level="a" type="main">HydroQual: Visual Analysis of River Water Quality</title>
+			</titleStmt>
+			<publicationStmt>
+				<publisher/>
+				<availability status="unknown"><licence/></availability>
+			</publicationStmt>
+			<sourceDesc>
+				<biblStruct>
+					<analytic>
+						<author>
+							<persName>
+								<forename type="first">Pierre</forename>
+								<surname>Accorsi</surname>
+							</persName>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Mickäelmick¨mickäel</forename>
+								<surname>Fabrèguefabr</surname>
+							</persName>
+						</author>
+						<author>
+							<persName>
+								<surname>Fabrègue</surname>
+							</persName>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Arnaud</forename>
+								<surname>Sallaberry</surname>
+							</persName>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Agroparistech</forename>
+								<surname>Montpellier</surname>
+							</persName>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Nathalie</forename>
+								<surname>Lalande</surname>
+							</persName>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">†</forename>
+								<surname>Irstea</surname>
+							</persName>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Montpellier</forename>
+								<surname>Agnèsagn</surname>
+							</persName>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Agnès</forename>
+								<surname>Braud</surname>
+							</persName>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Sandra</forename>
+								<surname>Bringay</surname>
+							</persName>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Florence</forename>
+								<surname>Le Ber</surname>
+							</persName>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Pascal</forename>
+								<surname>Poncelet</surname>
+							</persName>
+						</author>
+						<author>
+							<affiliation>
+								<orgName type="institution">LIRMM Univ. Montpellier</orgName>
+							</affiliation>
+						</author>
+						<author>
+							<affiliation>
+								<orgName type="institution">IRSTEA Montpellier Univ</orgName>
+								<address>
+									<settlement>Strasbourg/ENGEES</settlement>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<affiliation>
+								<orgName type="institution">LIRMM Univ</orgName>
+								<address>
+									<settlement>Montpellier</settlement>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<affiliation>
+								<orgName type="department">Flavie Cernesson †</orgName>
+								<orgName type="institution">LIRMM Univ. Montpellier</orgName>
+							</affiliation>
+						</author>
+						<author>
+							<affiliation>
+								<orgName type="department">ICube Univ. Strasbourg/ENGEES</orgName>
+								<orgName type="institution">LIRMM Univ</orgName>
+								<address>
+									<addrLine>Montpellier 2 Maguelonne Teisseire † IRSTEA</addrLine>
+									<settlement>Montpellier</settlement>
+								</address>
+							</affiliation>
+						</author>
+						<title level="a" type="main">HydroQual: Visual Analysis of River Water Quality</title>
+					</analytic>
+					<monogr>
+						<imprint>
+							<date/>
+						</imprint>
+					</monogr>
+				</biblStruct>
+			</sourceDesc>
+		</fileDesc>
+		<profileDesc>
+			<textClass>
+				<keywords>
+					<term>Visual Analytics</term>
+					<term>Spatiotemporal Data Mining and Visualization</term>
+					<term>Water Quality</term>
+				</keywords>
+			</textClass>
+			<abstract>
+				<p>Economic development based on industrialization, intensive agriculture expansion and population growth places greater pressure on water resources through increased water abstraction and water quality degradation [40]. River pollution is now a visible issue, with emblematic ecological disasters following industrial accidents such as the pollution of the Rhine river in 1986 [31]. River water quality is a pivotal public health and environmental issue that has prompted governments to plan initiatives for preserving or restoring aquatic ecosystems and water resources [56]. Water managers require operational tools to help interpret the complex range of information available on river water quality functioning. Tools based on statistical approaches often fail to resolve some tasks due to the sparse nature of the data. Here we describe HydroQual, a tool to facilitate visual analysis of river water quality. This tool combines spatiotem-poral data mining and visualization techniques to perform tasks defined by water experts. We illustrate the approach with a case study that illustrates how the tool helps experts analyze water quality. We also perform a qualitative evaluation with these experts.</p>
+			</abstract>
+		</profileDesc>
+	</teiHeader>
+	<text xml:lang="en">
+		<body>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1">INTRODUCTION</head><p>Water is a vital component for all known forms of life. The World Health Organization (WHO) estimates that domestic uses (drinking , cooking, and hygiene) require a minimum of 20 litres of good quality water per day and per person. Water quality issues first arose in the nineteenth century when scientists revealed a link between water quality and health problems; e.g., J. Snow was the first to suggest that cholera is a waterborne epidemic <ref type="bibr" coords="1,226.61,527.81,14.19,8.02" target="#b14">[14,</ref><ref type="bibr" coords="1,242.79,527.81,10.65,8.02" target="#b48"> 48]</ref>. Scientists noticed that the severity of water quality degradation depends on the population growth and the development of cities and economic activities <ref type="bibr" coords="1,88.40,557.69,13.74,8.02" target="#b40">[40]</ref>. Water pollution is a major global problem that the United Nations Environment Program (UNEP) and WHO <ref type="bibr" coords="1,225.74,577.74,14.19,8.02" target="#b56">[56,</ref><ref type="bibr" coords="1,242.14,577.74,11.95,8.02" target="#b53"> 53] </ref> have highlighted , thus leading many countries to develop tailored water policies and programs for preserving and restoring water quality. Water policies are followed by the expansion and modification of water quality monitoring which in turn depends on the improvement of analytic methods and scientific knowledge. Early river monitoring of a few European rivers began in the late 19th century, but only five water quality descriptors were analyzed <ref type="bibr" coords="1,460.70,228.17,13.74,8.02" target="#b40">[40]</ref>. Nowadays, more than 150 descriptors (biological and chemical) are analyzed <ref type="bibr" coords="1,526.00,238.13,14.19,8.02" target="#b40">[40,</ref><ref type="bibr" coords="1,543.81,238.13,10.65,8.02" target="#b53"> 53]</ref>. Monitoring and associated databases primarily aim to characterize: (1) the overall conditions and trends concerning the river, and (2) the ability to control water for a given use or to assess the impact of human activities on water. This knowledge then leads to decision making on protection or restoration measures to take on the authorization or prohibition of the use of the resource. Large datasets are thus compiled by geolocalized river stations where sampling is based on sequences of biological indices and physicochemical pa- rameters. The importance of having operational tools to help in the interpretation of complex information concerning the water quality of rivers and their functioning, as well as assessment of the effectiveness of ongoing action programs is underlined by international directives such as the European Water Framework Directive (WFD) <ref type="bibr" coords="1,345.62,388.10,13.74,8.02" target="#b24">[24]</ref>. Several tools based on GIS and including statistics and charts have already been proposed but, due the sparse and heterogeneous aspects of water quality data, statistical approaches overlook some properties. Data mining and information visualization techniques are necessary to overcome the shortcomings of these techniques and complete their results. Visual analytics is the science of analytical reasoning facilitated by interactive visual interfaces <ref type="bibr" coords="1,428.44,458.36,13.74,8.02" target="#b50">[50]</ref> . More precisely, " visual analytics combines automated analysis techniques with interactive visualizations for effective understanding, reasoning and decision making on the basis of very large and complex datasets " <ref type="bibr" coords="1,496.92,488.25,13.74,8.02" target="#b34">[34]</ref>. Automated analysis techniques include statistics, mathematics, knowledge representation , management and discovery technologies. In this paper, we focus on combining data mining techniques with visualization and interaction techniques (see <ref type="figure" coords="1,498.17,528.62,19.83,8.02">Fig. 1</ref>). The tool is the result of 3 years of collaboration between domain experts (hydrologists, hydrobiologists, water managers) and computer scientists specialized in data mining and information visualization. Our main contribution is the design of a visual interface to explore river water quality. The tool requirements also led us to make some contributions in data mining and information visualization. Here we: (1) propose a new metric to evaluate sequential dissimilarity , (2) present an optimized algorithm to extract temporal patterns, and (3) describe a new algorithm to visualize clusters. The paper is organized as follows. Sec. 2 focuses on the domain problem characterization. Sec. 3 presents related work. Sec. 4 explains the data abstraction design. Sec. 5 describes the visual mappings and the interactive techniques of our tool. In Sec. 6, we evaluate our approach. We conclude in Sec. 7. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2">DOMAIN PROBLEM CHARACTERIZATION</head><p> In this section, two domain experts, who are co-authors of this paper , briefly introduce their domain (section 2.1) and then explain <ref type="figure" coords="2,54.00,199.64,28.53,7.37">Figure 1</ref>: HydroQual is a tool that facilitates visual analysis of river water quality. The input dataset consists of sequences of biological indices and physicochemical values for several geolocalized sampling river stations. The clustering view (top left) shows stations grouped by their behavioral similarity. The geographical view (top right) shows the geolocation of the stations. By selecting a set of stations from these two views, users can extract and visualize temporal patterns regarding biological indices and physicochemical parameters in the temporal patterns view (bottom). the problem (section 2.2). Later, in collaboration with 10 domain experts from universities and consultancy firms, they specify their needs (section 2.3.1) from which computer scientists deduce a list of requirements for the tool (section 2.3.2). </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="123"></head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.1">River Water Quality</head><p> Water quality is defined by the capacity of water to sustain various uses or processes and to sustain aquatic life <ref type="bibr" coords="2,234.97,382.55,13.74,8.02" target="#b53">[53]</ref>. Water has physical, chemical or biological characteristics that determine its quality. For example, toxic concentration limits are very strict and pathogens are not allowed in drinking water <ref type="bibr" coords="2,216.46,412.44,13.74,8.02" target="#b25">[25]</ref>, some fishes live in very specific water temperature conditions <ref type="bibr" coords="2,219.87,422.40,13.74,8.02">[39]</ref>, etc. Surface waters and rivers are particularly vulnerable. For example , rivers are very sensitive to contamination by pathogens (bacteria , etc.), heavy metals (lead, etc.), and microorganic pollutants (hydrocarbon, etc.), organic matter degradation, and changes in the hydrological regime <ref type="bibr" coords="2,128.53,472.87,13.74,8.02" target="#b53">[53]</ref>. The greatest natural influences are geological, hydrological and climatic because they directly affect the quantity and quality of available water. Human activities also influence water resources. Rivers have always constituted an easily accessible water resource for numerous uses leading to consumption (drinking water, industrial water, irrigation water, etc.) or not (hydropower, transportation , fishing, recreational activities, etc.). Water resources are directly impacted by human activities (industrial waste or sewage treatment plants, agricultural nonpoint source pollution, etc.). Pollution can be diffuse or not, continuous or related to events such as the Rhine river pollution in 1986 after the Sandoz chemical spill at Basel (Switzerland) <ref type="bibr" coords="2,127.21,593.07,13.74,8.02" target="#b31">[31]</ref>. All the natural processes and human activities are intertwined. Identifying possible relations between biology (fishes, macroinvertebrates , diatoms, macrophytes), physicochemical parameters that represent general water characteristics, macropollutants or micropollutants , physical conditions (banks and riverbed state, hydrology, presence or absence of sill ...) or human pressures (land uses, industry or waste water plant output) needs to take into account many temporal and spatial scales <ref type="bibr" coords="2,152.61,673.42,13.74,8.02" target="#b37">[37]</ref>. For instance, when working on nutrients, which are related to water quality degradation, domain experts need to know (1) the local processes that control natural nitrogen, phosphorus and oxygen cycles; (2) the contributions related to human activities at different scales, i.e. atmospheric transport, point source pollution (urban sewage) and diffuse pollution (soil leaching) <ref type="bibr" coords="2,484.34,67.85,14.19,8.02" target="#b51">[51,</ref><ref type="bibr" coords="2,501.52,67.85,10.65,8.02" target="#b41"> 41]</ref> . They contribute to integrate nutrients issues in district or local water planning or reporting documents (taking into account national or supranational frameworks), to identify critical situations and to prioritize actions. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.2">Identification of Current Domain Expert Problems</head><p> Domain experts are faced with (1) the technical advances in monitoring and databases, (2) the complexity of partially understood processes that govern water quality and river functioning and (3) the increasingly demanding challenges concerning sustainable management of water resources <ref type="bibr" coords="2,418.45,182.98,13.74,8.02" target="#b53">[53]</ref>. Monitoring water quality variables follows different standards (adapted metrology and pre-treatment) according to the nature of the variables and the objective of the water quality station (permanent monitoring, specific campaigns to improve knowledge, pollution crisis management). Standards changed in Europe with the implementation of WFD, and detection thresholds are more accurate, especially for micropollutants. Some water quality variables are not directly observed but stored as indices that summarize the information (biological data for instance) and provide qualitative information . Observations or indices are stored in numerous databases. So, databases provide experts with a mass of heterogeneous, sparse and irregular information from which he/she must extract knowledge essential for decision making. As the amount of data is huge, tools including data mining and visual analysis techniques are required for knowledge extraction. These tools must take into account the nature (observation, index, etc.), completeness and quality of the data (sampling river station data are more or less complete, some data are missing, others unreliable), their diverse shapes and origins , as well as the granularity of measurements (data on different spatial and temporal scales). Firstly, domain experts need to easily access the data (user friendly queries), the treatment (quickness) and the results of a given analysis (effective and smart representation). It is very challenging with water quality data due to their specificities. In this paper, we work primarily on physicochemical parameters and biological indices. The definition of the selected descriptors for this paper is provided in section 6.1. They are ranked in five classes: high (blue), good (green), moderate (yellow), poor (orange), bad (red) that give the status of the alteration according to the classification of the former French water quality assessment system, as used in <ref type="bibr" coords="2,383.43,494.01,10.45,8.02" target="#b6">[7] </ref>or <ref type="bibr" coords="2,405.03,494.01,13.74,8.02" target="#b10">[11]</ref>. As an example, we use IBGN, i.e. the French benthic macroinvertebrate biological index <ref type="bibr" coords="2,500.62,503.98,10.45,8.02" target="#b0">[1] </ref>based on the abundance and selective sensitivity of river benthic invertebrates to stresses. The obtained value is an integer between 0 and 20 <ref type="bibr" coords="2,545.31,523.90,9.52,8.02" target="#b5">[6]</ref>. High values correspond to a high quality status (blue class), which means good conditions for fauna development. Secondly, domain experts need to respond to operational questions . As a consequence of 2.1, many dynamics are involved in water quality processes, and different dynamics can lead to the same situation. So, it is necessary to find relations between the parameters , e.g. between biological indices and physicochemical parameters . For instance, a high organic matter value, which is one of the signs of excess of feed, can explain low biological index values. In terms of sequences, a poor IBGN class can follow a moderate or poor organic matter class. But is it always the case? Is it the only observed relationship with such result? Do we observe same situations for a specific area (the process is generalized), for comparable contexts (the process is localized)? Do we observe anomalies on data, or outliers (and why)? Do we observe resilient processes (and why)? Can we identify new pressures? Can we quantify restoration actions' efficiency? Do we have more consistent relations, when we work with all the available data instead of a subset localized in a given basin? </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.3">Requirement Analysis</head><p> Domain experts currently use statistical methods or models that require a priori an extreme simplification of processes. Data exploration methods end by the interpretation and explanation of the processes . Nevertheless, it is necessary to define practical questions to guide the tool design process. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.3.1">Expert-Oriented Needs</head><p>We identify five major types of questions expressed in general terms that integrate temporal and spatial scales issues and satisfy scientific and operational aspects for the expertise domain: (Q1) For a given goal, which dataset is relevant? (Q2) For a given study area, what river stations have behavioral similarities? (Q3) Conversely, for a given similar subset, where are the river stations being involved are located? (Q4) For a given river station and a given biological index, what is the worst qualitative value computed? (Q5) For a given set of river stations, what are the main temporal trends among the biological indices and physicochemical parameters? </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.3.2">Requirements for the tool</head><p>Starting from these questions, we identify seven requirements for our tool: R1 -Select sub-dataset (years, months, biological indices and physicochemical parameters), for Q1. R2 -Visualize/navigate through sampling river stations from their locations, for Q3 and Q4. R3 -Visualize/navigate through sampling river stations from their behavioral similarity, for Q2 and Q4. R4 -Select groups of sampling river stations from their locations, for Q3 and Q5. R5 -Select groups of sampling river stations from their behavioral similarities, for Q2 and Q5. R6 -Visualize biological indices classes, for Q4. R7 -Extract and visualize temporal patterns of classes of biological indices and physicochemical parameters for Q5. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3">RELATED WORK</head><p> Our visual analytics approach combines data mining and visualization techniques. We thus first focus on related work dealing with mining river water status data. We then present related work on visualization. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.1">Mining Water Quality Data</head><p> Many parameters are involved in determination of the water ecosystem status. These parameters are related to different aspects, such as biology, physicochemistry and hydromorphology. Most studies focus on the impact of physicochemistry or hydromorphology on different biological dimensions. Some research has applied data mining approaches to study the fauna aspect, represented by macroinvertebrates <ref type="bibr" coords="3,229.14,514.59,13.74,8.02" target="#b29">[29]</ref> , fish commu- nities <ref type="bibr" coords="3,75.24,524.56,13.74,8.02" target="#b60">[60]</ref>, as well as the fauna dimension with diatoms <ref type="bibr" coords="3,251.63,524.56,14.94,8.02" target="#b35">[35] </ref> or phytoplankton populations <ref type="bibr" coords="3,138.47,534.52,13.74,8.02" target="#b45">[45]</ref>. State of art methods have revealed the importance of considering and combining biological and physicochemical variables in order to find relevant knowledge. However, none of these studies have taken into account the temporal aspect with pattern mining approaches, which are essential for analyzing pollution dynamics. The approach presented in this study is well adapted for temporal datasets with multiple variables, represented here by biology and physicochemistry. Furthermore, knowledge extracted via temporal pattern approaches are easy to analyze by domain experts. This paper uses such approaches in a method that we present in the section 4. Currently, the most common pattern-based method used to explore temporal data is called sequential pattern mining. In the literature , this approach has been widely used in many applications such as analysis <ref type="bibr" coords="3,96.14,674.07,13.74,8.02" target="#b28">[28]</ref>, classification <ref type="bibr" coords="3,166.09,674.07,14.94,8.02" target="#b16">[16] </ref>or prediction <ref type="bibr" coords="3,233.53,674.07,13.74,8.02" target="#b54">[54]</ref>. They were first introduced by <ref type="bibr" coords="3,123.37,684.03,10.45,8.02" target="#b2">[3] </ref>and are a temporal extension of association rules <ref type="bibr" coords="3,74.58,694.00,9.52,8.02" target="#b1">[2]</ref>. They were first developed to find correlations between supermarket products. Sequential patterns are relevant when there is an order among database events. This order is usually a temporal one. Let us consider an hypothetical temporal database and a sequential pattern, (Pollution)(Dead animals): 30%, extracted from the database. This sequential pattern means that Pollution event is temporally followed by a Dead animals event with a frequency of 30% in the database. Despite their advantages, sequential patterns often bring limited information since they only provide totally ordered information about data. To illustrate this, let us consider a second pattern (Pollution)(Dead vegetation):30% discovered in the same database. It is possible to extract the two patterns exactly from the same set of transactions. They coexist in the database. The coexistence of sequential patterns is not taken into account with this method. However, this coexistence can be synthesized based on partial ordering. <ref type="figure" coords="3,391.51,177.44,30.50,8.02" target="#fig_0">Figure 2</ref>presents a so-called partially ordered pattern, denoted po-pattern <ref type="bibr" coords="3,421.41,187.40,13.74,8.02" target="#b26">[26]</ref>, that combines the two previous sequential patterns. This pattern means that a Pollution event is followed by two events Dead animals and Dead vegetation, which are not ordered. Po-pattern approaches used in hydrobiological databases have some advantages: (1) they are well adapted to the temporal aspect of the database, (2) they provide more information on order among elements than sequential patterns, and (3) they are represented as a directed acyclic graph, which helps in understanding, which is important for domain experts. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Pollution </head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.2">Visualizing Water Quality Data</head><p> To our knowledge, the earliest work dealing with water quality visualization is a dot map of John Snow, who plotted the location of deaths from cholera in London for September 1854 <ref type="bibr" coords="3,505.69,424.35,13.74,8.02" target="#b48">[48]</ref>. The map clearly shows that deaths were mostly grouped around the Broad Street water pump, which was contaminated. Several geographical information systems (GIS) have been developed for, or support, water quality analysis <ref type="bibr" coords="3,489.37,464.66,13.74,8.02" target="#b15">[15]</ref> . Their visualization is based on a map in which different parameters are plotted, such as areas, rivers, stations, measurements, etc. Some approaches are enriched with statistics and charts (e.g. see <ref type="bibr" coords="3,492.54,494.55,9.71,8.02" target="#b8">[9,</ref><ref type="bibr" coords="3,505.07,494.55,11.95,8.02" target="#b9"> 10] </ref>or ArcGIS Geostatistical Analyst 1 ). Techniques based on more sophisticated plots <ref type="bibr" coords="3,337.89,514.47,14.19,8.02" target="#b27">[27,</ref><ref type="bibr" coords="3,354.57,514.47,11.95,8.02" target="#b33"> 33] </ref>or self-organizing maps <ref type="bibr" coords="3,456.96,514.47,14.94,8.02" target="#b38">[38] </ref>have also been studied. Boyer et al. <ref type="bibr" coords="3,364.16,524.43,14.94,8.02" target="#b11">[12] </ref>proposed various visualization approaches, with each visualization technique demonstrating a water quality trend in a specific way. Statistical based visualization approaches help in extracting knowledge on water quality, but statistical analysis fails to capture the complexity of some processes. In this paper, we thus propose a visualization based on data mining techniques. These techniques help reveal different kinds of patterns to supplement the statistical analysis. To our knowledge, no visualization tool including data mining for water quality analysis has been proposed so far. As this paper focuses on geospatial and temporal data only when applied to water quality, we do not give an overview of the related visualization techniques. For an introduction to geospatial data visualization , please refer to the 5th and 6th chapters of <ref type="bibr" coords="3,523.65,654.86,13.74,8.02" target="#b55">[55]</ref>. An introduction to temporal data visualization and a major overview of the techniques is given in <ref type="bibr" coords="3,409.37,674.79,9.52,8.02" target="#b3">[4]</ref>. Spatiotemporal data visualization has been studied in <ref type="bibr" coords="3,373.42,684.75,9.52,8.02" target="#b4">[5]</ref>. A tool combining data mining and visualization techniques for spatiotemporal data has also been proposed, but the techniques do not meet our requirements <ref type="bibr" coords="4,202.42,67.85,13.74,8.02" target="#b17">[17]</ref>. Finally, sequential pattern visualization has been investigated in several studies (e.g. <ref type="bibr" coords="4,127.21,87.77,14.19,8.02" target="#b57">[57,</ref><ref type="bibr" coords="4,143.85,87.77,11.21,8.02" target="#b59"> 59,</ref><ref type="bibr" coords="4,157.50,87.77,10.31,8.02" target="#b47"> 47]</ref>), but to the best of our knowledge no studies have been specifically devoted to po-pattern visualiza- tion. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4">DATA ABSTRACTION</head><p> The data we explore are temporal sequences composed of biological indices and physicochemical parameters from river sampling stations. Thus, sequences are built by ordering measure samplings according to their timestamp. In relational database vocabulary, the physicochemical and biological variables are called items. An itemset IS is a non-ordered group of measures sampled at the same timestamp. A sequence S = IS 1 IS 2 . . . IS |S| is a non-empty and ordered list of |S| itemsets, i.e. groups of measures ordered according to their timestamp. Discussions with domain experts lead to the discretization of all variables from the dataset into five classes: Blue, Green, Yellow, Orange and Red, as previously explained in Sec. 2.2. To illustrate this, let (AZOT,PHOS)(IBGN)(AZOT) be the sequence of a river station. This means that, in this river, a green AZOT has been measured at the same time as a blue PHOS, followed by a blue IBGN, in turn followed by a red AZOT. Sec. 4.1 and 4.2 introduce two approaches based on temporal sequences. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.1">Clusters of Sequences</head><p> To address the third requirement (R3), we need to group river stations according to their behavioral similarity, i.e. similarities in their corresponding sequences. All clustering techniques are based on dissimilarities between data features. Measuring the similarity between two itemset sequences is not a trivial task. Thus, we adapt one of the most famous dissimilarity measures used in the timeseries domain: Dynamic Time Warping <ref type="bibr" coords="4,216.46,379.84,13.74,8.02" target="#b46">[46]</ref> . We call our approach adapted to itemset sequences Dynamic Sequence Warping. Let S = IS 1 IS 2 . . . IS |S| and S = IS 1 IS 2 . . . IS |S | be two itemset sequences. Dynamic Sequence Warping on S and S , denoted DSW (S, S ) is defined as: </p><formula>DSW (S, S ) = γ(|S|, |S |) (1) </formula><p> Where γ(|S|, |S |) is the optimal cumulative path recursively defined as: </p><formula>γ(i, j) = δ (IS i , IS j ) + min    γ( i − 1 , j − 1 ), γ( i , j − 1 ), γ( i − 1 , j ) </formula><formula>(2) </formula><p>It is inspired by the Dynamic Time Warping definition. The main difference concerns the dissimilarity measure used between sequence elements. In timeseries, elements are quantitative values but in itemset sequences elements are discrete variables. Then we use a Jaccard distance, denoted δ (IS i , IS j ) in the equation 2, which is very popular for determining how two sets of elements are different . In this paper, we use this dissimilarity measure between sequences in a hierarchical agglomerative clustering algorithm. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.2">Closed Partially Ordered Patterns</head><p>The aim of this step is to extract po-patterns from a sequence database, where each sequence corresponds to the samples of a station (R7). In the following, the database in <ref type="figure" coords="4,228.19,644.18,27.25,8.02" target="#tab_1">Table 1</ref>is used to illustrate our method. We symbolize items with alphabet letters to facilitate the following definitions. In practice, items are physicochemical and biological variables. This database example contains three sequences composed of items a, b, d, e, f and g. A po-pattern (partially ordered pattern) is a directed acyclic graph G = (V, A), where V is the set of itemsets and A is the temporal order between these itemsets. The temporal order is transitive Seq id Sequence  for all u, v ∈ V , u &lt; v if there is a directed path from u to v. However , these elements are not comparable if there is no path from u to v or from v to u. Each path in the graph is a sequence. In our case, the order relation between vertices represents the temporality. Thus, in a po-pattern G = (V, A), two vertices u, v ∈ V such as u &lt; v means that the itemset u is temporaly followed by the itemset v. For example, in the po-pattern G 4 in <ref type="figure" coords="4,453.61,197.22,20.21,8.02">Fig. 3</ref>.d, there is a path from </p><formula>S 1 (a f )(d)(e)(a) S 2 (e)</formula><p>(e) to (g) then (e) &lt; (g), i.e. (e) is followed by (g). Po-patterns are characterized by their support. The support is the number of sequences in the database that contain the po-pattern. A sequence S supports a po-pattern G, denoted G s S, if all paths (sequences) in G are included in S. For example the sequence (a)( f ) is included in the sequence (a)(c)(c f ). Then the po-pattern G 1 in <ref type="figure" coords="4,522.35,257.00,20.15,8.02">Fig. 3</ref>.a is supported by sequences S 1 and S 2 in the database, i.e. </p><formula>G 1 s S 1 , G 1 s S 2 and support of G 1 is 2. e d &gt; &lt; af (a) e d a e &gt; &lt; af (b) e a &gt; &lt; (c) e b &gt; &lt; a b g (d) </formula><p>Figure 3: List of patterns extracted from <ref type="figure" coords="4,462.64,424.19,24.73,7.37" target="#tab_1">Table 1</ref></p><formula>: (a) G 1 on {S 1 , S 2 }. </formula><formula>(b) G 2 on {S 1 , S 2 }. (c) G 3 on {S 1 , S 2 , S 3 }. (d) G 4 on {S 2 , S 3 }. </formula><p> In po-pattern mining, some po-patterns are redundant in the results . For example, po-patterns G 1 and G 2 in <ref type="figure" coords="4,486.80,464.86,27.71,8.02">Fig. 3.a</ref>and 3.b are both supported by sequences S 1 and S 2 but we observe that for each path in po-pattern G 1 , there is at least one path in po-pattern G 2 that supports it, but the reverse is not true. G 1 is considered as included in G 2 (G 2 is more specific than G 1 ) and is denoted G 1 g G 2 . Then G 1 is redundant w.r.t. G 2 since they are supported by the same set of sequences and G 2 contains all the information in G 1 as well as other information not in G 1 . Furthermore, we observe that there is no other po-pattern G such that G 2 g G supported by S 1 and S 2 . G 2 is then considered as a closed po-pattern. The complete set of closed po-patterns is a subset of the set of po-patterns without information loss, i.e. it is possible to retrieve the complete set of po-patterns with the complete set of closed po-patterns. In this paper, we focus on such patterns. <ref type="figure" coords="4,437.82,594.37,19.46,8.02">Fig. 3</ref> .b, 3.c and 3.d give the complete set of closed po-patterns from the database in <ref type="figure" coords="4,506.00,604.33,26.81,8.02" target="#tab_1">Table 1</ref>with a support greater or equal to 2. Extracting closed po-patterns is a complex task. We use the algorithm proposed in <ref type="bibr" coords="4,395.65,634.22,14.94,8.02" target="#b26">[26] </ref>that extracts the complete set of closed po-patterns with a support greater than a given a minimum support θ . The minimum support parameter is mandatory since the closed po-pattern search space is huge. Closed po-pattern extraction follows a pattern-growth approach represented by a prefix-tree. Such a tree is a representation of the overall search space of the algorithm. Closed po-patterns are constructed by expanding frequent sequence prefixes <ref type="bibr" coords="4,510.12,703.96,14.94,8.02" target="#b43">[43] </ref>from the database (sequence prefixes with a support greater or equal to θ ). <ref type="figure" coords="5,54.00,57.88,20.93,8.02">Fig. 4</ref>shows the prefix-tree that covers the database in <ref type="figure" coords="5,250.98,57.88,25.30,8.02" target="#tab_1">Table 1</ref>Labels in vertices represent frequent items and a path from the root to a leaf represent a frequent sequence prefix. For example the path on the left in the prefix-tree represents the sequence prefix (a f )(d). Numbers under vertices are the support of the frequent sequence prefix represented by the node, i.e. the support of (a f )(d) is equal to 2. We observe two kinds of items, normal items and items preceded by symbol ' '. They represent S- Extensions and I-Extensions, respectively. An I-Extension extends an itemset: sequence prefix (a) I-Extended with item d gives the sequence prefix (ad). An S-Extension extends the sequence: sequence prefix (a) S-Extended with item d gives the sequence prefix (a)(d). The set of closed po-patterns given by <ref type="figure" coords="5,249.46,305.21,20.68,8.02">Fig. 3</ref>.b, 3.c and 3.d are extracted from this prefix-tree. Indeed, each pattern is deduced from a sub-prefix-tree of the overall prefix-tree. <ref type="figure" coords="5,266.20,325.13,20.71,8.02" target="#fig_4">Fig. 5</ref>.a provides the sub-prefix-tree used to process closed po-pattern G 3 . Thus, the algorithm is divided into two parts: (1) extracting the complete set of closed sub-prefix-trees and (2) each closed subprefix-tree is processed by starting from leaves to remove redundancy and merge equivalent sequence suffixes. For more details about the algorithm, please refer to <ref type="bibr" coords="5,181.74,384.91,13.74,8.02" target="#b26">[26]</ref>. Unfortunately, applying this approach generates many redundancies in some branches of sub-prefix-trees. For example, we highlight two redundant parts in <ref type="figure" coords="5,161.82,415.93,20.99,8.02" target="#fig_4">Fig. 5</ref>.a. This means that branches make the algorithm time consuming and are unsuitable for a visualization tool that requires realtime interaction. We thus improve the algorithm to avoid these redundancies and improve the process. We propose one inspired by <ref type="bibr" coords="5,196.93,475.71,13.74,8.02" target="#b58">[58]</ref>, in which the authors tackle this issue by detecting and merging branches that are equivalent (refer to <ref type="bibr" coords="5,104.88,495.63,14.94,8.02" target="#b58">[58] </ref> for details about the equivalence checking property ). We adapt to closed po-pattern this technique that was initially proposed in closed sequential pattern mining since both approaches follow the same pattern-growth paradigm. We illustrate this process in <ref type="figure" coords="5,81.01,535.48,27.97,8.02" target="#fig_4">Fig. 5.b</ref>where a redundant part of the tree is merged. This markedly improves the extraction process because redundant paths in sub-prefix-trees are directly merged instead of explored. Furthermore , it improves the second step based on frequent sequence suffixes since some branches have already been merged by the op- timization.  In order to highlight the optimization gain, we process experiments on different groups of river station sequences. <ref type="figure" coords="5,513.80,67.85,44.20,8.02" target="#fig_5">Fig 6 shows</ref>results obtained with the non-optimized and optimized algorithms. The protocol is: we randomly select 50 sequences from the initial dataset and extract closed po-patterns at various minimum support thresholds with both algorithms. We perform this operation 30 times and compute the average computation for each minimum support threshold. We apply this on various subsets of sequences to simulate the sequence selection and the pattern extraction proposed by HydroQual. We observe that the optimized version is more efficient than the non-optimized one, especially at low minimum support threshold. For example, at a minimum support of 0.32, the extraction time is 6.7 sec for the optimized version while it is 35.53 sec for the non-optimized one. The optimized version is 3.96 times faster at a minimum support of 0.35, and 5.3 times faster at a minimum support of 0.32. This optimization substantially improves the HydroQual interactivity since there is a greater computation gain at lower minimum support. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5">VISUAL MAPPINGS AND INTERACTIVE FUNCTIONALITY</head><p>Based on the data abstraction described in Sec. 4, we now focus on the different visualizations (Sec. 5.1 -5.3) and interaction methods (Sec. 5.4) of HydroQual. This tool was developed for and in cooperation with domain experts. It is based on three coordinated views designed to fit the seven requirements described in Sec. 2.3.2. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.1">Geographical View</head><p>In this section we describe the view of HydroQual that shows the geographical locations of the river stations (R2). The user can switch between several background maps like the ones provided by Open Street Map or Google Map. In particular, the use of Google Maps physical background highlights topological characteristics of the area and was found very useful by the domain experts (see <ref type="figure" coords="5,364.85,542.90,20.79,8.02">Fig. 1</ref>). Domain experts also lead us to include the Corinne Land Cover background <ref type="bibr" coords="5,442.08,552.86,13.74,8.02" target="#b23">[23]</ref>, which shows the land use (forest, agricultural lands, urban and industrial areas, etc.). See <ref type="figure" coords="5,543.80,562.83,14.20,8.02;5,317.96,572.79,3.57,8.02" target="#fig_7">Fig.  7</ref>.a for an example. Additional layers are also available: watershed, hydroecological regions, administrative regions and hydrographical network. The user can select the layers he wants to see. They are then displayed on the foreground of the map (see <ref type="figure" coords="5,441.58,612.89,20.72,8.02" target="#fig_7">Fig. 7</ref>.b for an example). The final view also includes Leaflet's 2 zooming (mouse wheel) and moving function (mouse drag 'n drop) to ease exploration of the visualization. <ref type="figure" coords="5,368.80,643.02,20.93,8.02" target="#fig_7">Fig. 7</ref>shows the results obtained on a real example. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.2">Clustering View</head><p>In this section, we describe the HydroQual view showing clusters of stations extracted as described in Sec. 4.1. This view helps domain experts identify which stations act in a similar way (R3).  We propose a four step technique for laying out stations and clusters: (1) we use the distance matrix to position stations with a multidimensional scaling algorithm, (2) we represent clusters as circles positioned at the barycenter of the stations they contain, (3) we use methods drawn from collision detection studies to seperate overlapping cluster circles and we also move the stations to keep their barycenters at the centers of the circles, and (4) we rearrange the stations for each cluster to better fit the areas demarcated by the circles. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.2.1">Initial Placement of Stations (step 1)</head><p>Multidimensional scaling techniques <ref type="bibr" coords="6,191.97,532.07,14.94,8.02" target="#b13">[13] </ref>are aimed at modeling dissimilarity data among pairs of objects into points in a lowdimensional geometric space. These points can be represented graphically and visualized afterwards. For our purpose, points represent river stations and the dissimilarity measure is computed as described in Sec. 4.1. A non-metric MDS (Smacof, <ref type="bibr" coords="6,249.56,581.88,14.34,8.02" target="#b18">[18]</ref> ) is performed . When provided a dissimilarity matrix and a desired destination dimension k (2 in our case), it fits stations to a k-dimension configuration by iteratively increasing a stress function. An initial configuration can be either randomized or given. A metric MDS <ref type="bibr" coords="6,76.05,631.70,14.94,8.02" target="#b36">[36] </ref>is often computed as an initial configuration. However, this technique is very time-consuming and performs poorly on large datasets. We therefore use the freefold embedding heuristic <ref type="bibr" coords="6,269.83,651.62,14.94,8.02" target="#b44">[44] </ref>to obtain the initial configuration. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.2.2">Cluster Display (step 2)</head><p>We represent clusters as circles positioned at the barycenter of the stations they contain. Discussions with domain experts reveal that the main information to highlight is the cluster size, which is not easy to detect for very dense clusters (most of the stations overlap). We thus map the cluster size to the radius of the corresponding circle (see <ref type="figure" coords="6,347.33,247.11,19.63,8.02" target="#fig_6">Fig. 8</ref>.a). </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.2.3">Clusters Overlap Removal (step 3)</head><p>The obtained configuration contains overlapping clusters which makes it hard for domain experts to distinguish clusters and view river stations as part of a cluster (see <ref type="figure" coords="6,457.68,300.71,26.84,8.02" target="#fig_6">Fig. 8.a</ref>). Discussions with domain experts reveal that they are interested in visualizing distances between clusters and distances between pairwise nodes of the same clusters. Distances between nodes of different clusters are not as important for them. We thus move clusters to avoid overlap while preserving the relative distances of their centers. The method is based on collision detection between circles. Most collision detection approaches act in two phases to reduce computation time <ref type="bibr" coords="6,336.24,380.41,13.74,8.02" target="#b22">[22]</ref>. First, the broad phase is aimed at excluding a maximum of couples to be tested with space partitioning algorithms. We use a quadtree in our application. Then the narrow phase precisely determines if the remaining couples collide with each other and reveals their penetration vector. Since we represent a cluster with a circle, collision detection between two clusters as well as computation of the penetration vector is straightforward. We finally use the highest penetration vector among all couples of overlapping clusters to rearrange the circles while preserving their relative distances (see <ref type="figure" coords="6,317.96,470.08,19.73,8.02" target="#fig_6">Fig. 8</ref>.b). </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.2.4">Final Station Placement (step 4)</head><p>We finally rearrange the river stations for each cluster to better fit the area defined by the circle. After this step, distances between stations of a cluster do not correspond to the same dissimilarity measures of the same distances in another clusters. Discussions with the domain experts reveal that it is more important to detect relative positions of couples of inner river stations than to preserve absolute river station distances within the whole configuration. Moreover, space distortion of inner river stations removes some overlaps and helps in visualizing stations. We first compute a convex hull of the river stations for each clus- ter <ref type="bibr" coords="6,329.27,603.86,14.94,8.02" target="#b30">[30] </ref>(see <ref type="figure" coords="6,362.36,603.86,25.61,8.02" target="#fig_6">Fig. 8.c</ref>). Then we move river stations on the hull to the circle (see <ref type="figure" coords="6,357.36,613.82,20.02,8.02" target="#fig_6">Fig. 8</ref>.d). We compute a Delaunay triangulation among the river station positions. This gives us a graph where nodes on the outer face represent stations of the convex hull. We apply Tutte's algorithm on this graph <ref type="bibr" coords="6,404.03,643.71,13.74,8.02" target="#b52">[52]</ref> . It iteratively positions every river station that is not on the outer face at the barycenter of its neighbors. Our graph is triangulated and we fix its outer face. So the solution is unique and preserves the relative positions of river stations in the triangulation. Using Tutte's algorithm to reorganize the node positions has already been tested in another context <ref type="bibr" coords="6,490.44,693.52,9.52,8.02" target="#b7">[8]</ref>. <ref type="figure" coords="6,506.21,693.52,27.26,8.02" target="#fig_6">Fig. 8.e</ref>shows the results obtained on an example. The final view also includes a zooming (mouse wheel) and a moving function (mouse drag 'n drop) to ease exploration of the visualization. <ref type="figure" coords="7,104.85,67.85,20.93,8.02" target="#fig_8">Fig. 9</ref>shows the results obtained on a real example. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.3">Temporal Patterns View</head><p>In this section we describe the HydroQual view that shows closed po-patterns extracted as described in Sec. 4.2 (R7). According to domain expert requirements, this view requires a set of stations as input and a biological index. The biological index is selected by the user when he/she launches the extraction. Closed po-patterns extracted only deal with this biological index and the related physicochemical parameters. In the next section, we describe how stations are selected from the two previous views. The temporal pattern view is divided into two panels (see bottom of <ref type="figure" coords="7,64.06,421.93,20.03,8.02">Fig. 1</ref>). The first panel located on the left side shows the list of closed po-patterns extracted. Each element on the list shows the id of its associated closed po-pattern, its size (number of nodes), a class of the biological index selected and an index showing how the closed po-pattern is discriminant as compared to the other classes. The discriminant score is determined by using the growth rate interestingness measure <ref type="bibr" coords="7,136.99,481.71,14.93,8.02" target="#b20">[20] </ref>(see Growth Rate in <ref type="figure" coords="7,233.92,481.71,20.84,8.02">Fig. 1</ref>). Briefly, it involves retrieving closed po-patterns that are specific to a considered biological index class. A click on an element displays the corresponding closed po-pattern on the right panel. Since a closed po-pattern is a directed acyclic graph, it can be displayed using graph drawing techniques. We draw the graph in a layered fashion using Sugiyama's algorithm <ref type="bibr" coords="7,213.47,541.74,14.94,8.02" target="#b49">[49] </ref>to place emphasis on the sequential aspect. With this approach, each layer represents a different timestamp. We use the implementation of the algorithm provided by the Graphviz library <ref type="bibr" coords="7,174.14,571.63,13.74,8.02" target="#b21">[21]</ref>. As mentioned in Sec. 4, an itemset consists in a set of items. An item is a physicochemical parameter. It possesses a variable name and its associated class which belongs to a set of colors, as defined by domain experts. Depending on the domain experts requirements , we represent an item with its variable name in plain text, highlighted by the color corresponding to its value. <ref type="figure" coords="7,271.86,631.67,22.19,8.02">Fig. 1</ref>shows a closed po-pattern on a real example (see bottom). The final view also includes a zooming (mouse wheel) and a moving function (mouse drag 'n drop) to facilitate exploration of the visualization. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.4">Interaction</head><p>This section covers the issue of how the user interacts with the views. The user is first asked to select a dataset. This dataset can be furthermore filtered. The filter parameters include year interval, consecutive months, biological indices and physical parameters of interest (R1). Parameters selected are displayed on the left panel (see <ref type="figure" coords="7,334.63,87.77,19.68,8.02">Fig. 1</ref>). When launched with a specific button, the temporal pattern view computes and shows the closed po-patterns corresponding to a set of stations. This set has to be defined by the user from the clustering and/or the geographical views (R4 and R5). There are two kinds of interaction technique for this purpose. One can select a station individually by clicking on it or he/she can select multiple stations at once by using a Lasso type tool. The selected stations are then highlighted by changing their border color to pink (instead of black). When the selection is changed in a given view, the other view is then updated so that the selection is the same in both views (see <ref type="figure" coords="7,334.63,197.70,19.68,8.02">Fig. 1</ref>). The color of a station corresponds to the worst value of a selected biological index found in the station sequence. The user can change the selected indicator using a dedicated button (R6). As requested by domain experts, we implement copy, print and save features to allow further consultations of the measures and other station related data. We also keep logs of temporal patterns generated during a session in the left panel. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6">DEMONSTRATION WITH FEEDBACK</head><p> Two domain experts who are co-authors of this paper first evaluate the visual analysis tool through a case study showing how the tool has been useful for them to find already known information and, more importantly, to discover new ones. We then present their feedback collected through a questionaire they had to fill. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6.1">Case Study</head><p>The objective of the case study is to illustrate one application of the use of HydroQual. This example highlights the relationship between values of a biological index and physicochemical parameters describing river water quality. The expectations cover different aspects: the ability to analyse all the available data, considering their spatial and temporal characteristics, to confirm some existing knowledge, to find new ones or anomalies, and if possible, to deduce some operational conclusions. As a biological index, we chose to work with the French benthic macroinvertebrate index IBGN <ref type="bibr" coords="7,430.73,464.19,9.52,8.02" target="#b0">[1]</ref> , based on the abundance and selective sensitivity of river benthic invertebrates to stresses, which are commonly monitored to assess organic pollution and hydromorphological degradation <ref type="bibr" coords="7,404.16,494.07,13.74,8.02" target="#b42">[42]</ref>. However, invertebrates are sensitive to multiple stressors, which is an obstacle to the identification of relationships between biological indices and physicochemical pa- rameters <ref type="bibr" coords="7,351.07,523.96,13.74,8.02" target="#b32">[32]</ref>. We decided to select five groups of physicochemical parameters: four groups to account for interference by macropollutants (MOOX, AZOT, NITR and PHOS) and the last group to account for disturbances in the general water characteristics (in our case, we focus on mineral characteristics, MINE). First of all, we define these five groups of physicochemical parameters. The MOOX group consists of eight physicochemical parameters and indicates the presence or absence of organic pollution which consumes oxygen in the river. Various origins can explain this pollution: mainly domestic and industrial (agrofood) wastewater , livestock wastewater, winegrowing effluents, natural plant debris , etc. The main impacts are (1) water deoxygenation, (2) the silting of river bottoms, and (3) macroinvertebrate habitats modifications . To reduce this disorder, water managers improve treatment of wastewater organic matter. The AZOT group concerns nitrogenous parameters except nitrates. It indicates nitrogen contamination in rivers derived mainly from domestic, industrial and livestock effluents . An excess of nitrogen contributes to create anoxic conditions and can thus have toxic effects on the ecosystem, including on macroinvertebrates and fish fauna. The treatment of this kind of pollution is the same as for MOOX. The NITR group consists only of the nitrate concentration. Nitrates can be directly assimilated by plants. Combined with other nutrients, they favor algae and aquatic plant growth. Nitrates mainly indicate diffuse pollution from agricultural sources (fertilizer leaching during rainfall events). Atmospheric nitrates seeping into rivers during the rainy season resulting from agricultural spraying, industrial and road traffic emissions . An excess of nitrates causes eutrophication. Specific treatments have to be implemented to reduce nitrates in wastewater. To limit agricultural nitrates, different actions can be proposed: (1) limit the use of fertilizers, (2) promote an interface area and catch crops to limit nitrate fluxes into rivers. The PHOS group consists of total phosphorus and orthophosphate. Phosphorus is an essential element for proper development of organisms. Phosphorus fluxes are derived from domestic and industrial wastewater (mainly detergents ), livestock building effluents, and soil erosion. This is the main factor limiting or not eutrophication. Phosphorus fluxes are mainly reduced by limiting the use of detergents that contain phosphorus , and limiting fertilizer applications, and specific treatments of livestock effluents. The MINE group concerns the conductivity and concentration of calcium, chlorides, sulfates, cations, sodium, and magnesium. MINE provides information on the water origin. River waters enriched in minerals and salts depend on the residence time in geological formations and the nature of soils leached during rainfall events. Minerals and salts are mainly of natural origin but can also be related to human activities (agricultural, industrial or domestic). Macroinvertebrates are very sensitive to water salinity (and hence conductivity) and the presence of minerals for their growth and development <ref type="bibr" coords="8,145.39,346.80,13.74,8.02" target="#b19">[19]</ref>. But there are thresholds (deficiency or excess) above which salts and minerals are harmful to fauna. Remediation actions are limited to setting up some specific wastewater treatments. Then, we prepare the queries for the test set. The IBGN values and those of the five physicochemical parameter groups are ranked in five quality classes as described above (high/blue, good/green, moderate/yellow, poor/orange, bad/red). More precisely, we study the relationship between quality classes of IBGN and of physicochemical parameters. The tested dataset extends from 1 July 1999 to 31 December 2010. River stations are located in the east of France. We decided to define subsets of water quality stations used in the clustering view for a first diagnosis of the advantages of this ranking, seldom used by domain experts. The cluster view shows eight clusters from all water quality stations available in the database. A comparison between clusters and station locations on the geographical view shows that each cluster regroups stations with behavioral similarity and with a geographical organization: each cluster consists of one or a few groups of neighboring stations plus points scattered throughout the entire study area. The clusters could be explained by the overall criteria of position (latitude), environment (climate, altitude), and the nature of human activities (rural, industrial plains, etc.). So we find a coherence at the district level. We select a single cluster whose stations are exclusively located in the Rhone-Mediterranean and Corsica districts. These stations represent rivers located in rural foothills. The tested datasets consist of 957 sampling records across 287 water quality stations. We launch closed po-pattern extraction on these stations with the IBGN biological index. HydroQual proposes 176 closed popatterns for a support of 0.25. Thanks to our optimization, the pattern extraction is quasi-immediate. We analyze the closed po-patterns for each IBGN class (<ref type="figure" coords="8,263.61,672.66,23.96,8.02" target="#tab_2">Table 2</ref>). Two criteria, i.e. the support and growth rate, help domain experts to interpret the results. In our case, the interpretation is solid, especially since the support and growth rate values are the highest. We identify for each class of IBGN, the most frequent patterns. Let us begin by the IBGN blue class. The IBGN blue class is mainly following the MINE blue class, and the MOOX blue (in one case green) class, in different combinations and different MINE-MOOX group temporal associations. The blue class for the MINE group and MOOX group is discriminating (high growth rate) compared to the other four IBGN classes. The IBGN green class is following the MINE green class. The IBGN yellow class is mainly following the yellow or orange classes for the PHOS group, which often appears in combination with the MOOX green class. Another kind of association relates to the yellow or green classes for the MINE group. The IBGN orange class is following primarily the PHOS red class that often appears in combination with the AZOT yellow class. Other associations relate yellow or orange classes for the MINE group, and green or yellow classes for the MOOX group. The IBGN red class is only represented by five samples and is following the MINE red class. From this description, we highlight known information. Even at this stage, identification of known information with a new approach leads to a very interesting conclusion: excellent correspondence between a given IBGN class and its corresponding MINE class, i.e. the IBGN blue class follows a MINE blue class, a IBGN green class, a MINE green class, etc. Further, MINE classes are discriminating . Here we clearly find that the IBGN reflects the physical environmental conditions. In addition, we assume that the associations are different between blue and green classes on the one hand, yellow, orange and red on the other. This distinction is interesting because it allows us to clearly distinguish samples from rivers with good or very good water quality in terms of IBGN classes from the others. Thus, when the IBGN is in the blue class, the MINE blue class is associated (before, after or in the same time) with the MOOX blue class. This means that there is little or no organic pollution present. This is a typical situation for semi-natural areas with few human activities. The analysis also provides new insight for rivers whose classes (yellow, orange and red) indicate poor water quality in terms of IBGN classes. The PHOS group always has a yellow class or worse and appears to be more limiting than the class for the MOOX group, which can be green. Here we trace pollution of human or animal origin. The PHOS-AZOT group association for the orange class indicates point source pollution due to the presence of livestock or wastewater treatment plants. Indeed, the predominance of the PHOS-AZOT group combination compared to the NITR group reveals a hierarchy of pollution sources: point pollution seems to influence water quality of the studied rivers more than diffuse pollution due to agricultural activities, even though it could be present in these areas. For these rivers, water managers have to improve wastewater treatment and limit detergent use. It is encouraging for hydrologists to discover known relationships between biological index and physicochemical parameters in a qualitative way. It is also interesting to be able to propose some operational recommendations useful for water managers at district level who have to define priorities to restore water quality. In conclusion, this first test demonstrates the consistency between the values of classes of the studied biological index and of the physicochemical parameters. Different closed po-patterns high-light many forms of association, thus expressing the complexity of biophysical processes related to oxygen, nitrogen and phosphorus cycles. This type of analysis is not as directly possible by conventional statistical approaches. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6.2">User Feedback</head><p> We evaluated the benefits of our visual analysis tool with two academic domain experts. We first explained the data abstractions, the visual encoding schemes and the interaction features of the tool. Then we asked them to manipulate the prototype. Finally, we asked them to fill in a questionaire dealing with the aesthetics, visual design , interactions, learnability, performance, functionality and ability to help in extracting information. They both found the tool aesthetically pleasing. On the visual design, they found it was tailored for their tasks. They particularly appreciated the use of colors in the different views. One also pointed out the quality of the mapping of stations and clusters in the clustering view. Concerning the interaction features, they both mentioned that they corresponded to their needs. They really appreciated the modes of selection in the clustering and geographical views. Both agreed that manipulating the tool is easy and intuitive. They estimated the learning time from 15 to 30 min. They were more reserved about the data abstraction. They explained that use of the tool requires an understanding of the structures extracted with data mining techniques (clusters and closed po-patterns), which is not trivial for non-specialists. Nevertheless, when they got familiar with them, they both agreed that these structures are necessary for their tasks, and are major improvements as compared to previous tools. Both domain experts highlighted the interactivity of the tool, appreciating especially that the running time of the closed popattern extraction never exceed a few seconds for current use. The domain experts used all the features implemented and thought they were all useful and tailored to their needs. This is not surprising because most of these features meet their initial requirements. Their main suggestion was to group highly similar closed po-patterns. Defining similarity between closed po-patterns and designing an adapted interactive visualization is beyond the scope of this paper, but we plan to do this in the near future. Finally, the tool helped the domain expert to find previously known information and new information (see examples in Sec. 6.1). In conclusion, the domain experts were very enthusiastic regarding the prototype we gave them. They both mentioned that the new approaches developed are very promising to supplement their usual statistical analysis tools. They particularly appreciated the fact that they gained new insight to help them in addressing important questions . They also think that the tool can be a good support in discussions . They plan to use it to perform their daily analyses. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="7">CONCLUSION AND FUTURE WORK</head><p>We have described HydroQual, a visual analysis tool of river water quality. It combines spatiotemporal data mining and visualization techniques to perform tasks defined by domain experts. Besides the design of the overall process, the tool requirements led us to make some contributions concerning data mining and information visualization techniques: (1) we propose a new metric to evaluate sequential dissimilarity in Sec. 4.1, (2) we present an optimized algorithm to extract closed po-patterns in Sec. 4.2, (3) we describe a new algorithm to visualize clusters in Sec. 5.2. We have illustrated the efficiency of the tool with a case study. The first results are very promising. Within a few hours, domain experts were able to find previously known information and new information. We also collected domain experts feedback that highlighted their enthusiasm. As a future work, we plan to improve the temporal pattern tools. As mentioned by the domain experts, some closed po-patterns are highly similar. Finding both a method to group them and a visual encoding to show the overall representative patterns and explore groups in detail would help experts to extract information faster. </p></div><figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_0" coords="3,317.96,271.05,240.04,7.37;3,317.96,280.52,15.95,7.37"><head>Figure 2: </head><figDesc>Figure 2: Example of a partially ordered pattern with a frequency of 30% </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_1" coords="5,54.00,57.88,225.65,8.02"><head></head><figDesc>Fig. 4 shows the prefix-tree that covers the database in Table 1. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_2" coords="5,54.00,425.25,240.05,8.66;5,54.00,435.21,240.05,8.66;5,54.00,445.82,13.94,8.02"><head></head><figDesc> (a)(g) and (a)(b) are uselessly explored since they are reexplored in branches (e)(a)(g) and (e)(a)(b). These redundan- cies </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_4" coords="5,54.00,703.20,240.04,7.37;5,54.00,712.66,121.97,7.37"><head>Figure 5: </head><figDesc> Figure 5: Example of the optimization: (a) Non-optimized sub-prefixtree . (b) Optimized sub-prefix-tree. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_5" coords="5,346.86,366.37,182.24,7.37"><head>Figure 6: </head><figDesc>Figure 6: Non-optimized versus optimized algorithm </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_6" coords="6,54.00,176.99,504.00,7.37;6,54.00,186.46,504.00,7.37;6,54.00,195.92,35.11,7.37"><head>Figure 8: </head><figDesc>Figure 8: Example of the embedding process: (a) Initial placement with a MDS algorithm. (b) Cluster overlap removal. (c) Computation of the convex hull. (d) Moving of the stations of the convex hull to cluster circles. (e) Triangulation and rearrangement of the stations with Tutte's algorithm. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_7" coords="6,54.00,369.19,240.04,7.37;6,54.00,378.66,240.04,7.37;6,54.00,388.12,145.70,7.37"><head>Figure 7: </head><figDesc>Figure 7: View of the sampling stations of the area of Aix-les-Bains, France. (a) Corinne Land Cover background. (b) Google Maps physical background with watershed contours. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_8" coords="7,54.00,278.79,240.04,7.37;7,54.00,288.26,20.13,7.37"><head>Figure 9: </head><figDesc> Figure 9: View of sampling stations grouped by their behavioral sim- ilarity. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_2" validated="false" coords="4,358.20,106.95,159.55,7.37"><figDesc coords="4,358.20,106.95,159.55,7.37">Table 1: An example of a sequence database</figDesc><table></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_4" validated="false" coords="8,317.96,127.67,240.04,16.84"><figDesc coords="8,317.96,127.67,240.04,7.37;8,317.96,137.14,51.03,7.37">Table 2: Number of river stations and of closed po-patterns extracted for each class.</figDesc><table></table></figure>
+
+			<note place="foot" n="1"> http://www.esri.com/software/arcgis/extensions/ geostatistical [Online; accessed 24-July-2014]</note>
+
+			<note place="foot" n="2"> http://leafletjs.com/ [Online; accessed 24-July-2014]</note>
+		</body>
+		<back>
+
+			<div type="acknowledgement">
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>ACKNOWLEDGEMENTS </head><p>This project was funded through the French National Research Agency (ANR) project ANR 11 MONU 14 FRESQUEAU. We would like to thank Corinne Grac (LIVE), Xavier Dolques (ICUBE) and Danielle Levet (AQUASCOPE) for their assistance in collecting data and defining the requirements. We also would like to thank Hugo Alatrista Salas and Vijay Ingalalli (LIRMM) for their technical expertise. </p></div>
+			</div>
+
+			<div type="references">
+
+				<listBibl>
+
+<biblStruct coords="9,336.21,194.05,224.88,7.13;9,336.22,203.51,221.79,7.13;9,336.22,212.98,177.09,7.13"  xml:id="b0">
+	<monogr>
+		<title level="m" type="main">QualitéQualité´Qualitéécologique des milieux aquatiques -Détermination de l&apos;indice biologique global normalisé (ibgn)</title>
+		<author>
+			<persName>
+				<forename type="first">Afnor</forename>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2004" />
+		</imprint>
+	</monogr>
+	<note>Association. francaise de normalisation</note>
+</biblStruct>
+
+<biblStruct coords="9,336.21,222.44,221.78,7.13;9,336.22,231.91,221.79,7.13;9,336.22,241.37,148.31,7.13"  xml:id="b1">
+	<analytic>
+		<title level="a" type="main">Fast algorithms for mining association rules in large databases</title>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Agrawal</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Srikant</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">International Conference on Very Large Data Bases (VLDB&apos;94)</title>
+		<imprint>
+			<date type="published" when="1994" />
+			<biblScope unit="page" from="487" to="499" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,336.21,250.84,221.79,7.13;9,336.22,260.30,221.78,7.13"  xml:id="b2">
+	<analytic>
+		<title level="a" type="main">Mining sequential patterns</title>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Agrawal</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Srikant</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">International Conference on Data Engineering (ICDE&apos;95)</title>
+		<imprint>
+			<date type="published" when="1995" />
+			<biblScope unit="page" from="3" to="14" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,336.21,269.76,221.79,7.13;9,336.22,279.23,126.52,7.13"  xml:id="b3">
+	<monogr>
+		<title level="m" type="main">Visualization of Time-Oriented Data</title>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Aigner</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Miksch</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Schumann</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Tominski</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2011" />
+			<publisher>Springer</publisher>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,336.21,288.69,221.78,7.13;9,336.22,298.16,221.79,7.13;9,336.22,307.62,147.06,7.13"  xml:id="b4">
+	<analytic>
+		<title level="a" type="main">Exploratory spatiotemporal visualization: an analytical review</title>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Andrienko</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Andrienko</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Gatalsky</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Journal of Visual Languages and Computing</title>
+		<imprint>
+			<biblScope unit="volume">14</biblScope>
+			<biblScope unit="issue">6</biblScope>
+			<biblScope unit="page" from="503" to="541" />
+			<date type="published" when="2003" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,336.21,317.09,221.78,7.13;9,336.22,326.55,221.78,7.13;9,336.22,336.02,221.78,7.13;9,336.22,345.48,77.26,7.13"  xml:id="b5">
+	<analytic>
+		<title level="a" type="main">Assessing pollution of toxic sediment in streams using bioecological traits of benthic macroinvertebrates</title>
+		<author>
+			<persName>
+				<forename type="first">V</forename>
+				<surname>Archaimbault</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Usseglio-Polatera</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Garric</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J.-G</forename>
+				<surname>Wasson</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Babut</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Freshwater Biology</title>
+		<imprint>
+			<biblScope unit="volume">55</biblScope>
+			<biblScope unit="issue">7</biblScope>
+			<biblScope unit="page" from="1430" to="1446" />
+			<date type="published" when="2010" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,336.21,354.95,221.78,7.13;9,336.22,364.41,221.78,7.13;9,336.22,373.87,221.78,7.13;9,336.22,383.34,97.55,7.13"  xml:id="b6">
+	<analytic>
+		<title level="a" type="main">Functional differences among benthic macroinvertebrate communities in reference streams of same order in a given biogeographic area</title>
+		<author>
+			<persName>
+				<forename type="first">V</forename>
+				<surname>Archaimbault</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Usseglio-Polatera</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J.-P</forename>
+				<surname>Bossche</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Hydrobiologia</title>
+		<imprint>
+			<biblScope unit="volume">551</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="171" to="182" />
+			<date type="published" when="2005" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,336.21,392.80,221.78,7.13;9,336.22,402.27,221.78,7.13;9,336.22,411.73,221.79,7.13;9,336.22,421.20,114.78,7.13"  xml:id="b7">
+	<analytic>
+		<title level="a" type="main">GosperMap: Using a gosper curve for laying out hierarchical data</title>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Auber</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Huet</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Lambert</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Renoust</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Sallaberry</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Saulnier</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Visualization and Computer Graphics</title>
+		<imprint>
+			<biblScope unit="volume">11</biblScope>
+			<biblScope unit="issue">19</biblScope>
+			<biblScope unit="page" from="1820" to="1832" />
+			<date type="published" when="2013" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,336.21,430.66,221.78,7.13;9,336.22,440.13,221.78,7.13;9,336.22,449.59,221.78,7.13;9,336.22,459.06,123.66,7.13"  xml:id="b8">
+	<monogr>
+		<title level="m" type="main">Minnesota lake water quality on-line database and visualization tools for exploratory trend analyses</title>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Axler</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Will</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<surname>Ruzycki</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Henneck</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Olker</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Swintek</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2009" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,336.21,468.52,221.78,7.13;9,336.22,477.98,221.78,7.13;9,336.22,487.45,221.78,7.13;9,336.22,496.91,221.78,7.13;9,336.22,506.38,221.78,7.13;9,336.22,515.84,96.87,7.13"  xml:id="b9">
+	<monogr>
+		<title level="m" type="main">Data visualization , time-series analysis, and mass-balance modeling of hydrologic and water-quality data for the McTier Creek Watershed</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<forename type="middle">T</forename>
+				<surname>Benedict</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<forename type="middle">A</forename>
+				<surname>Conrads</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<forename type="middle">D</forename>
+				<surname>Feaster</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<forename type="middle">A</forename>
+				<surname>Journey</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<forename type="middle">E</forename>
+				<surname>Golden</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<forename type="middle">D</forename>
+				<surname>Knightes</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<forename type="middle">M</forename>
+				<surname>Davis</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<forename type="middle">M</forename>
+				<surname>Bradley</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2012" />
+			<pubPlace>South Carolina</pubPlace>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,336.21,525.31,221.78,7.13;9,336.22,534.77,221.78,7.13;9,336.22,544.24,221.79,7.13;9,336.22,553.70,29.89,7.13"  xml:id="b10">
+	<analytic>
+		<title level="a" type="main">The seine system: Introduction to a multidisciplinary approach of the functioning of a regional river system</title>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Billen</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Garnier</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J.-M</forename>
+				<surname>Mouchel</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Silvestre</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Science of The Total Environment</title>
+		<imprint>
+			<biblScope unit="issue">13</biblScope>
+			<biblScope unit="page" from="3751" to="3763" />
+			<date type="published" when="2007" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,336.21,563.16,221.78,7.13;9,336.22,572.63,221.78,7.13"  xml:id="b11">
+	<monogr>
+		<title level="m" type="main">Maximizing information from a water quality monitoring network through visualization techniques</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Boyer</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Sterling</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Jones</surname>
+			</persName>
+		</author>
+		<imprint/>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,336.22,582.09,183.22,7.13"  xml:id="b12">
+	<analytic>
+		<title/>
+	</analytic>
+	<monogr>
+		<title level="j">Estuarine, Coastal and Shelf Science</title>
+		<imprint>
+			<biblScope unit="volume">50</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="39" to="48" />
+			<date type="published" when="2000" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,336.21,591.56,221.78,7.13;9,336.22,601.02,143.50,7.13"  xml:id="b13">
+	<monogr>
+		<title level="m" type="main">Modern multidimensional scaling : Theory and applications</title>
+		<author>
+			<persName>
+				<forename type="first">I</forename>
+				<surname>Brog</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<forename type="middle">J F</forename>
+				<surname>Groenen</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="1997" />
+			<publisher>Springer-Verlag</publisher>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,336.21,610.49,221.79,7.13;9,336.22,619.95,74.07,7.13"  xml:id="b14">
+	<monogr>
+		<title level="m" type="main">The Chemical Gatekeeper</title>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<forename type="middle">H</forename>
+				<surname>Brooke</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">V</forename>
+				<surname>Liebig</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2002" />
+			<publisher>Cambridge University Press</publisher>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,336.21,629.42,221.78,7.13;9,336.22,638.88,221.78,7.13;9,336.22,648.35,221.78,7.13;9,336.22,657.81,221.78,7.13;9,336.22,667.27,76.15,7.13"  xml:id="b15">
+	<analytic>
+		<title level="a" type="main">Geospatial tools to support watershed environmental monitoring and reclamation: Assessing mining impacts on the Upper Susquehanna-Lackawanna American heritage river</title>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<forename type="middle">A</forename>
+				<surname>Bruns</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<forename type="middle">O</forename>
+				<surname>Sweet</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Advanced Integration of Geospatial Technologies in Mining and Reclamation</title>
+		<imprint>
+			<date type="published" when="2004" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,336.21,676.74,221.79,7.13;9,336.22,686.20,221.79,7.13;9,336.22,695.67,167.79,7.13"  xml:id="b16">
+	<analytic>
+		<title level="a" type="main">Direct discriminative pattern mining for effective classification</title>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Cheng</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">X</forename>
+				<surname>Yan</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Han</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<forename type="middle">S</forename>
+				<surname>Yu</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">International Conference on Data Engineering (ICDE&apos;08)</title>
+		<imprint>
+			<date type="published" when="2008" />
+			<biblScope unit="page" from="169" to="178" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,336.21,705.13,221.78,7.13;9,336.22,714.60,221.78,7.13;10,72.26,58.56,221.79,7.13;10,72.26,68.02,17.93,7.13"  xml:id="b17">
+	<analytic>
+		<title level="a" type="main">Exploratory spatio-temporal data mining and visualization</title>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Compieta</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<forename type="middle">D</forename>
+				<surname>Martinoc</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Bertolottoa</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<surname>Ferruccic</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Kechadi</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Journal of Visual Languages and Computing</title>
+		<imprint>
+			<biblScope unit="volume">18</biblScope>
+			<biblScope unit="issue">3</biblScope>
+			<biblScope unit="page" from="255" to="279" />
+			<date type="published" when="2007" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,72.26,77.49,221.78,7.13;10,72.26,86.95,217.69,7.13"  xml:id="b18">
+	<analytic>
+		<title level="a" type="main">Applications of convex analysis to multidimensional scaling</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>De Leeuw</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Recent Developments in Statistics</title>
+		<imprint>
+			<date type="published" when="1977" />
+			<biblScope unit="page" from="133" to="145" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,72.26,96.42,221.78,7.13;10,72.26,105.88,221.78,7.13;10,72.26,115.35,221.79,7.13;10,72.26,124.81,69.29,7.13"  xml:id="b19">
+	<analytic>
+		<title level="a" type="main">Invertebrate community structure in streams of the Manawatu-Wanganui region, New Zealand: the roles of catchment versus reach scale influences</title>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<forename type="middle">G</forename>
+				<surname>Death</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<forename type="middle">K</forename>
+				<surname>Joy</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Freshwater Biology</title>
+		<imprint>
+			<biblScope unit="issue">8</biblScope>
+			<biblScope unit="page" from="49982" to="997" />
+			<date type="published" when="2004" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,72.26,134.28,221.78,7.13;10,72.26,143.74,221.79,7.13;10,72.26,153.20,221.78,7.13;10,72.26,162.67,17.93,7.13"  xml:id="b20">
+	<analytic>
+		<title level="a" type="main">Efficient mining of emerging patterns: Discovering trends and differences</title>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Dong</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Li</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">ACM SIGKDD International Conference on Knowledge Discovery and Data Mining (KDD&apos;99)</title>
+		<imprint>
+			<date type="published" when="1999" />
+			<biblScope unit="page" from="43" to="52" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,72.26,172.13,221.78,7.13;10,72.26,181.60,221.78,7.13;10,72.26,191.06,209.61,7.13"  xml:id="b21">
+	<analytic>
+		<title level="a" type="main">Graphviz and dynagraph static and dynamic graph drawing tools</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Ellson</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<forename type="middle">R</forename>
+				<surname>Gansner</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<surname>Koutsofios</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<forename type="middle">C</forename>
+				<surname>North</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Woodhull</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Graph Drawing Software</title>
+		<imprint>
+			<publisher>Springer-Verlag</publisher>
+			<date type="published" when="2003" />
+			<biblScope unit="page" from="127" to="148" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,72.26,200.53,221.78,7.13;10,72.26,209.99,56.89,7.13"  xml:id="b22">
+	<monogr>
+		<title level="m" type="main">Real-Time Collision Detection</title>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Ericson</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2005" />
+			<publisher>Morgan Kaufmann Publishers Inc</publisher>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,72.26,219.46,221.78,7.13;10,72.26,228.92,221.78,7.13;10,72.26,238.38,81.92,7.13"  xml:id="b23">
+	<monogr>
+		<title level="m" type="main">CLC2006 technical guidelines</title>
+		<author>
+			<persName>
+				<forename type="first">European</forename>
+				<surname>Environment</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Agency</forename>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2006" />
+			<publisher>Office for Official Publications of the European Communities</publisher>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,72.26,247.85,221.78,7.13;10,72.26,257.31,221.78,7.13;10,72.26,266.78,221.79,7.13;10,72.26,276.24,52.03,7.13"  xml:id="b24">
+	<analytic>
+		<title level="a" type="main">Directive 2000/60/ec of the European parliament and of the council of 23 october 2000 establishing a framework for community action in the field of water policy</title>
+		<author>
+			<persName>
+				<forename type="first">European</forename>
+				<surname>Union</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Official Journal, OJ L</title>
+		<imprint>
+			<biblScope unit="volume">327</biblScope>
+			<biblScope unit="page" from="1" to="73" />
+			<date type="published" when="2000" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,72.26,285.71,221.78,7.13;10,72.26,295.17,221.79,7.13;10,72.26,304.64,83.91,7.13"  xml:id="b25">
+	<analytic>
+		<title level="a" type="main">Council directive 98/83/ec of 3 november 1998 on the quality of water intended for human consumption</title>
+		<author>
+			<persName>
+				<forename type="first">European</forename>
+				<surname>Union</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Official Journal , OJ L</title>
+		<imprint>
+			<biblScope unit="volume">330</biblScope>
+			<biblScope unit="page" from="1" to="32" />
+			<date type="published" when="2009" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,72.26,314.10,221.79,7.13;10,72.26,323.57,221.79,7.13;10,72.26,333.03,219.17,7.13"  xml:id="b26">
+	<analytic>
+		<title level="a" type="main">Orderspan: Mining closed partially ordered patterns</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Fabrègue</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Braud</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Bringay</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<surname>Ber</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Teisseire</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">International Symposium on Intelligent Data Analysis (IDA&apos;13)</title>
+		<imprint>
+			<date type="published" when="2013" />
+			<biblScope unit="page" from="186" to="197" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,72.26,342.49,221.78,7.13;10,72.26,351.96,221.78,7.13;10,72.26,361.42,163.33,7.13"  xml:id="b27">
+	<analytic>
+		<title level="a" type="main">Visualization of water quality data for the Chesapeake Bay</title>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<forename type="middle">B</forename>
+				<surname>Forgang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Hamann</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<forename type="middle">F</forename>
+				<surname>Cerco</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">IEEE Symposium on Information Vizualization (InfoVis&apos;96)</title>
+		<imprint>
+			<date type="published" when="1996" />
+			<biblScope unit="page">417</biblScope>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,72.26,370.89,221.78,7.13;10,72.26,380.35,144.42,7.13"  xml:id="b28">
+	<analytic>
+		<title level="a" type="main">Interestingness measures for data mining: A survey</title>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<surname>Geng</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<forename type="middle">J</forename>
+				<surname>Hamilton</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">ACM Computing Survey</title>
+		<imprint>
+			<biblScope unit="volume">38</biblScope>
+			<date type="published" when="2006" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,72.26,389.82,221.78,7.13;10,72.26,399.28,221.78,7.13;10,72.26,408.75,166.52,7.13"  xml:id="b29">
+	<analytic>
+		<title level="a" type="main">Applications of artificial neural networks predicting macroinvertebrates in freshwaters</title>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<forename type="middle">L</forename>
+				<surname>Goethals</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Dedecker</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Gabriels</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Lek</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Pauw</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Aquatic Ecology</title>
+		<imprint>
+			<biblScope unit="volume">41</biblScope>
+			<biblScope unit="page" from="491" to="508" />
+			<date type="published" when="2007" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,72.26,418.21,221.78,7.13;10,72.26,427.67,221.79,7.13;10,72.26,437.14,17.93,7.13"  xml:id="b30">
+	<analytic>
+		<title level="a" type="main">An efficient algorithm for determining the convex hull of a finite planar set</title>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<forename type="middle">L</forename>
+				<surname>Graham</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Information Processing Letters</title>
+		<imprint>
+			<biblScope unit="volume">1</biblScope>
+			<biblScope unit="issue">4</biblScope>
+			<biblScope unit="page" from="132" to="133" />
+			<date type="published" when="1972" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,72.26,446.60,221.78,7.13;10,72.26,456.07,221.79,7.13;10,72.26,465.53,150.51,7.13"  xml:id="b31">
+	<analytic>
+		<title level="a" type="main">Ecotoxicology an analysis of the Rhine pollution caused by the Sandoz chemical accident</title>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Guttinger</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Stumm</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Interdisciplinary Science Reviews</title>
+		<imprint>
+			<biblScope unit="volume">17</biblScope>
+			<biblScope unit="issue">2</biblScope>
+			<biblScope unit="page" from="127" to="136" />
+			<date type="published" when="1986" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,72.26,475.00,221.78,7.13;10,72.26,484.46,221.78,7.13;10,72.26,493.93,221.78,7.13;10,72.26,503.39,221.78,7.13;10,72.26,512.86,98.88,7.13"  xml:id="b32">
+	<analytic>
+		<title level="a" type="main">Assessment of European streams with diatoms, macrophytes, macroinvertebrates and fish: a comparative metric-based analysis of organism response to stress</title>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Hering</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<forename type="middle">K</forename>
+				<surname>Johnson</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Kramn</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Schmutz</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Szoszkiewicz</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<forename type="middle">F M</forename>
+				<surname>Verdonschot</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Freshwater Biology</title>
+		<imprint>
+			<biblScope unit="issue">9</biblScope>
+			<biblScope unit="page" from="511757" to="1785" />
+			<date type="published" when="2006" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,72.26,522.32,221.78,7.13;10,72.26,531.78,221.78,7.13;10,72.26,541.25,188.19,7.13"  xml:id="b33">
+	<analytic>
+		<title level="a" type="main">Effective visualization for the spatiotemporal trend analysis of the water quality in the Nakdong river of Korea</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<forename type="middle">S P</forename>
+				<surname>Hye Won Lee</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Kon Joon</forename>
+				<surname>Bhang</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Ecological Informatics</title>
+		<imprint>
+			<biblScope unit="volume">5</biblScope>
+			<biblScope unit="issue">3</biblScope>
+			<biblScope unit="page">281292</biblScope>
+			<date type="published" when="2010" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,72.26,550.71,221.78,7.13;10,72.26,560.18,221.78,7.13;10,72.26,569.72,221.79,6.86;10,72.26,579.11,221.79,7.13;10,72.26,588.57,17.93,7.13"  xml:id="b34">
+	<analytic>
+		<title level="a" type="main">Visual analytics: Definition, process, and challenges. In Information Visualization: Human-Centered Issues and Perspectives</title>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Keim</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Andrienko</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J.-D</forename>
+				<surname>Fekete</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Görg</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Kohlhammer</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Melancon</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">LNCS</title>
+		<imprint>
+			<publisher>Springer</publisher>
+			<biblScope unit="volume">4950</biblScope>
+			<biblScope unit="page" from="154" to="175" />
+			<date type="published" when="2008" />
+			<publisher>Springer</publisher>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,72.26,598.04,221.79,7.13;10,72.26,607.50,221.78,7.13;10,72.26,616.97,146.47,7.13"  xml:id="b35">
+	<analytic>
+		<title level="a" type="main">Learning habitat models for the diatom community in lake Prespa</title>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Kocev</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Naumoski</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Mitreski</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Krsti´ckrsti´c</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Džeroski</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Ecological Modelling</title>
+		<imprint>
+			<biblScope unit="volume">221</biblScope>
+			<biblScope unit="issue">2</biblScope>
+			<biblScope unit="page" from="330" to="337" />
+			<date type="published" when="2010" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,72.26,626.43,221.78,7.13;10,72.26,635.89,136.02,7.13"  xml:id="b36">
+	<analytic>
+		<title level="a" type="main">Nonmetric multidimensional scaling: A numerical method</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">B</forename>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Psychometrika</title>
+		<imprint>
+			<biblScope unit="volume">29</biblScope>
+			<biblScope unit="page">115129</biblScope>
+			<date type="published" when="1964" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,72.26,645.36,221.78,7.13;10,72.26,654.82,221.78,7.13;10,72.26,664.29,221.79,7.13;10,72.26,673.75,177.62,7.13"  xml:id="b37">
+	<analytic>
+		<title level="a" type="main">Implementing the DPSIR framework to link water quality of rivers to land use: methodological issues and preliminary field test</title>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Lalande</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<surname>Cernesson</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Decherf</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M.-G</forename>
+				<surname>Tournoud</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">International Journal of River Basin Management</title>
+		<imprint>
+			<biblScope unit="page" from="1" to="17" />
+			<date type="published" when="2014" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,72.26,683.22,221.78,7.13;10,72.26,692.68,221.78,7.13;10,72.26,702.15,221.79,7.13;10,72.26,711.61,69.29,7.13"  xml:id="b38">
+	<analytic>
+		<title level="a" type="main">Non-linear visualization and analysis of large water quality data sets: a model-free basis for efficient monitoring and risk assessment</title>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Lischeid</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Stochastic Environmental Research and Risk Assessment</title>
+		<imprint>
+			<biblScope unit="volume">23</biblScope>
+			<biblScope unit="issue">7</biblScope>
+			<biblScope unit="page" from="977" to="990" />
+			<date type="published" when="2009" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,317.96,58.56,240.04,7.13;10,336.21,68.02,221.78,7.13;10,336.21,77.49,196.15,7.13"  xml:id="b39">
+	<analytic>
+		<title level="a" type="main">The effects of temperature, river flow, and tidal cycles on the onset of glass eel and elver migration into fresh water in the American eel</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<forename type="middle">H</forename>
+				<surname>Martin</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Journal of Fish Biology</title>
+		<imprint>
+			<biblScope unit="volume">46</biblScope>
+			<biblScope unit="issue">5</biblScope>
+			<biblScope unit="page" from="891" to="902" />
+			<date type="published" when="1995" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,336.21,86.95,221.78,7.13;10,336.21,96.42,221.78,7.13;10,336.21,105.88,33.87,7.13"  xml:id="b40">
+	<analytic>
+		<title level="a" type="main">The quality of rivers: From pristine stage to global pollution</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Meybeck</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Helmer</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Global and Planetary Change</title>
+		<imprint>
+			<biblScope unit="volume">1</biblScope>
+			<biblScope unit="issue">4</biblScope>
+			<biblScope unit="page" from="283" to="309" />
+			<date type="published" when="1989" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,336.21,115.35,221.78,7.13;10,336.21,124.81,221.78,7.13;10,336.21,134.28,188.31,7.13"  xml:id="b41">
+	<analytic>
+		<title level="a" type="main">The water quality of the river Thame in the Thames basin of south/south-eastern England</title>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Neal</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Neal</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<surname>Hill</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Wickham</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Science of The Total Environment</title>
+		<imprint>
+			<biblScope unit="volume">360</biblScope>
+			<biblScope unit="issue">13</biblScope>
+			<biblScope unit="page" from="254" to="271" />
+			<date type="published" when="2006" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,336.21,143.74,221.78,7.13;10,336.21,153.20,221.78,7.13;10,336.21,162.67,221.78,7.13;10,336.21,172.13,17.93,7.13"  xml:id="b42">
+	<analytic>
+		<title level="a" type="main">A stressor specific multimetric approach for monitoring running waters in Austria using benthic macro-invertebrates</title>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Ofenbock</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">O</forename>
+				<surname>Moog</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Gerritsen</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Barbour</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Hydrobiologia</title>
+		<imprint>
+			<biblScope unit="volume">516</biblScope>
+			<biblScope unit="page" from="1" to="3251" />
+			<date type="published" when="2004" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,336.21,181.60,221.78,7.13;10,336.21,191.06,221.78,7.13;10,336.21,200.53,221.78,7.13;10,336.21,209.99,102.50,7.13"  xml:id="b43">
+	<analytic>
+		<title level="a" type="main">Mining sequential patterns by pattern-growth: The prefixspan approach</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Pei</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Han</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Mortazavi-Asl</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Wang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Pinto</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Q</forename>
+				<surname>Chen</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">U</forename>
+				<surname>Dayal</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M.-C</forename>
+				<surname>Hsu</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Knowledge and Data Engineering</title>
+		<imprint>
+			<biblScope unit="volume">16</biblScope>
+			<biblScope unit="page" from="1424" to="1440" />
+			<date type="published" when="2004" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,336.21,219.46,221.78,7.13;10,336.21,228.92,221.79,7.13;10,336.21,238.46,221.78,6.86;10,336.21,247.85,97.84,7.13"  xml:id="b44">
+	<analytic>
+		<title level="a" type="main">Anchor-free distributed localization in sensor networks</title>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<forename type="middle">B</forename>
+				<surname>Priyantha</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Balakrishnan</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<forename type="middle">D</forename>
+				<surname>Demaine</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<forename type="middle">J</forename>
+				<surname>Teller</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">International Conference on Embedded Networked Sensor Systems (Sen- Sys&apos;03)</title>
+		<imprint>
+			<date type="published" when="2003" />
+			<biblScope unit="page" from="340" to="341" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,336.21,257.31,221.78,7.13;10,336.21,266.78,221.78,7.13;10,336.21,276.24,221.78,7.13;10,336.21,285.71,213.18,7.13"  xml:id="b45">
+	<analytic>
+		<title level="a" type="main">Ecological relationships, thresholds and time-lags determining phytoplankton community dynamics of lake Kinneret, Israel elucidated by evolutionary computation and wavelets</title>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<surname>Recknagel</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">I</forename>
+				<surname>Ostrovsky</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Cao</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Zohary</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">X</forename>
+				<surname>Zhang</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Ecological Modelling</title>
+		<imprint>
+			<biblScope unit="volume">6</biblScope>
+			<biblScope unit="page" from="1" to="3" />
+			<date type="published" when="2013" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,336.21,295.17,221.78,7.13;10,336.21,304.64,221.79,7.13;10,336.21,314.10,95.70,7.13"  xml:id="b46">
+	<analytic>
+		<title level="a" type="main">A dynamic programming approach to continuous speech recognition</title>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Sakoe</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Chiba</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">International Congress on Acoustics</title>
+		<imprint>
+			<date type="published" when="1971" />
+			<biblScope unit="page" from="65" to="69" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,336.21,323.57,221.78,7.13;10,336.21,333.03,221.78,7.13;10,336.21,342.49,221.79,7.13;10,336.21,351.96,60.00,7.13"  xml:id="b47">
+	<analytic>
+		<title level="a" type="main">Sequential patterns mining and gene sequence visualization to discover novelty from microarray data</title>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Sallaberry</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Pecheur</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Bringay</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Roche</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Teisseire</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Journal of Biomedical Informatics</title>
+		<imprint>
+			<biblScope unit="volume">44</biblScope>
+			<biblScope unit="page" from="760" to="774" />
+			<date type="published" when="2011" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,336.21,361.42,221.78,7.13;10,336.21,370.89,17.93,7.13"  xml:id="b48">
+	<monogr>
+		<title level="m" type="main">On the Mode of Communication of Cholera</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Snow</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="1855" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,336.21,380.35,221.78,7.13;10,336.21,389.82,221.79,7.13;10,336.21,399.28,162.49,7.13"  xml:id="b49">
+	<analytic>
+		<title level="a" type="main">Methods for visual understanding of hierarchical system structures</title>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Sugiyama</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Tagawa</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Toda</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Systems , Man, and Cybernetics</title>
+		<imprint>
+			<biblScope unit="volume">11</biblScope>
+			<biblScope unit="issue">2</biblScope>
+			<biblScope unit="page" from="109" to="125" />
+			<date type="published" when="1981" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,336.21,408.75,221.79,7.13;10,336.21,418.21,64.65,7.13"  xml:id="b50">
+	<monogr>
+		<title level="m" type="main">Illuminating the Path</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">J</forename>
+				<surname>Thomas</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<forename type="middle">A</forename>
+				<surname>Cook</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2005" />
+			<publisher>IEEE Computer Society Press</publisher>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,336.21,427.67,221.78,7.13;10,336.21,437.14,221.78,7.13;10,336.21,446.60,221.78,7.13;10,336.21,456.07,35.87,7.13"  xml:id="b51">
+	<analytic>
+		<title level="a" type="main">Origins and quantification of nitrogen inputs into a coastal lagoon: Application to the Thau lagoon (France)</title>
+		<author>
+			<persName>
+				<forename type="first">M.-G</forename>
+				<surname>Tournoud</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Payraudeau</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<surname>Cernesson</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Salles</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Ecological Modelling</title>
+		<imprint>
+			<biblScope unit="volume">193</biblScope>
+			<biblScope unit="issue">12</biblScope>
+			<biblScope unit="page" from="19" to="33" />
+			<date type="published" when="2006" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,336.21,465.53,221.78,7.13;10,336.21,475.00,116.44,7.13"  xml:id="b52">
+	<analytic>
+		<title level="a" type="main">How to draw a graph</title>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<forename type="middle">T</forename>
+				<surname>Tutte</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the London Mathematical Society</title>
+		<meeting>the London Mathematical Society</meeting>
+		<imprint>
+			<date type="published" when="1963" />
+			<biblScope unit="page" from="743" to="768" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,336.21,484.46,221.78,7.13;10,336.21,494.01,221.78,6.86;10,336.21,503.39,171.89,7.13"  xml:id="b53">
+	<analytic>
+		<title level="a" type="main">Water Quality Monitoring -A Practical Guide to the Design and Implementation of Freshwater Quality Studies and Monitoring Programmes</title>
+		<author>
+			<persName>
+				<forename type="first">Unep</forename>
+				<surname>Who</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">UNEP/WHO publications</title>
+		<imprint>
+			<date type="published" when="1996" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,336.21,512.86,221.78,7.13;10,336.21,522.32,221.79,7.13;10,336.21,531.78,174.87,7.13"  xml:id="b54">
+	<analytic>
+		<title level="a" type="main">Sequential pattern mining for protein function prediction</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Wang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">X</forename>
+				<surname>Shang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Z</forename>
+				<surname>Li</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Advanced Data Mining and Applications (ADMA&apos;08)</title>
+		<imprint>
+			<date type="published" when="2008" />
+			<biblScope unit="page" from="652" to="658" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,336.21,541.25,221.79,7.13;10,336.21,550.71,215.93,7.13"  xml:id="b55">
+	<monogr>
+		<title level="m" type="main">Interactive Data Visualization: Foundations, Techniques, and Applications</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Ward</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Grinstein</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Keim</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2010" />
+			<pubPlace>A K Peters, Ltd</pubPlace>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,336.21,560.18,221.78,7.13;10,336.21,569.64,188.88,7.13"  xml:id="b56">
+	<monogr>
+		<title level="m" type="main">Water Pollution Control -A Guide to the Use of Water Quality Management Principles. WHO publications</title>
+		<author>
+			<persName>
+				<forename type="first">Who</forename>
+				<surname>Unep</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="1997" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,336.21,579.11,221.78,7.13;10,336.21,588.57,221.79,7.13;10,336.21,598.04,195.86,7.13"  xml:id="b57">
+	<analytic>
+		<title level="a" type="main">Visualizing sequential patterns for text mining</title>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<forename type="middle">C</forename>
+				<surname>Wong</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Cowley</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Foote</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<surname>Jurrus</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Thomas</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">IEEE Symposium on Information Vizualization (InfoVis&apos;00)</title>
+		<imprint>
+			<date type="published" when="2000" />
+			<biblScope unit="page" from="105" to="111" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,336.21,607.50,221.78,7.13;10,336.21,616.97,221.79,7.13;10,336.21,626.43,131.27,7.13"  xml:id="b58">
+	<analytic>
+		<title level="a" type="main">Clospan: Mining closed sequential patterns in large datasets</title>
+		<author>
+			<persName>
+				<forename type="first">X</forename>
+				<surname>Yan</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Han</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Afshar</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">SIAM International Conference on Data Mining (SDM&apos;03)</title>
+		<imprint>
+			<date type="published" when="2003" />
+			<biblScope unit="page" from="166" to="177" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,336.21,635.89,221.78,7.13;10,336.21,645.36,221.79,7.13;10,336.21,654.82,221.78,7.13"  xml:id="b59">
+	<analytic>
+		<title level="a" type="main">Visualizing frequent itemsets, association rules, and sequential patterns in parallel coordinates</title>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<surname>Yang</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Computational Science and Its Applications (ICCSA&apos;03), volume 2667 of LNCS</title>
+		<imprint>
+			<biblScope unit="page" from="21" to="30" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,336.21,673.75,221.78,7.13;10,336.21,683.22,221.78,7.13;10,336.21,692.68,221.78,7.13;10,336.21,702.15,17.93,7.13"  xml:id="b60">
+	<analytic>
+		<title level="a" type="main">Identification of hydrologic indicators related to fish diversity and abundance: A data mining approach for fish community analysis</title>
+		<author>
+			<persName>
+				<forename type="first">Y.-C</forename>
+				<forename type="middle">E</forename>
+				<surname>Yang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">X</forename>
+				<surname>Cai</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<forename type="middle">E</forename>
+				<surname>Herricks</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Water Resources Research</title>
+		<imprint>
+			<biblScope unit="volume">44</biblScope>
+			<date type="published" when="2008" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+				</listBibl>
+			</div>
+		</back>
+	</text>
+</TEI>

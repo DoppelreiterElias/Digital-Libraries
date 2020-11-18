@@ -1,0 +1,1029 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.tei-c.org/ns/1.0 /home/pisenberg/grobid/grobid-home/schemas/xsd/Grobid.xsd"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+	<teiHeader xml:lang="en">
+		<encodingDesc>
+			<appInfo>
+				<application version="0.4.1" ident="GROBID" when="2016-09-09T13:38+0000">
+					<ref target="https://github.com/kermitt2/grobid">GROBID - A machine learning software for extracting information from scholarly documents</ref>
+				</application>
+			</appInfo>
+		</encodingDesc>
+		<fileDesc>
+			<titleStmt>
+				<title level="a" type="main">Maintaining Interactivity While Exploring Massive Time Series</title>
+			</titleStmt>
+			<publicationStmt>
+				<publisher/>
+				<availability status="unknown"><licence/></availability>
+			</publicationStmt>
+			<sourceDesc>
+				<biblStruct>
+					<analytic>
+						<author>
+							<persName>
+								<forename type="first">Sye-Min</forename>
+								<surname>Chan</surname>
+							</persName>
+							<affiliation>
+								<orgName type="institution">Stanford University</orgName>
+							</affiliation>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Ling</forename>
+								<surname>Xiao</surname>
+							</persName>
+							<affiliation>
+								<orgName type="institution">Stanford University</orgName>
+							</affiliation>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">John</forename>
+								<surname>Gerth</surname>
+							</persName>
+							<affiliation>
+								<orgName type="institution">Stanford University</orgName>
+							</affiliation>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Pat</forename>
+								<surname>Hanrahan</surname>
+							</persName>
+							<affiliation>
+								<orgName type="institution">Stanford University</orgName>
+							</affiliation>
+						</author>
+						<title level="a" type="main">Maintaining Interactivity While Exploring Massive Time Series</title>
+					</analytic>
+					<monogr>
+						<imprint>
+							<date/>
+						</imprint>
+					</monogr>
+				</biblStruct>
+			</sourceDesc>
+		</fileDesc>
+		<profileDesc>
+			<textClass>
+				<keywords>
+					<term>Index Terms: D211 [Software Engineering]: Software Architectures—Domain-specific architectures</term>
+					<term>H52 [Information Interfaces And Presentation]: User Interface—Graphical user in- terfaces (GUI)</term>
+					<term>K40 [Information Systems Applications]: General</term>
+				</keywords>
+			</textClass>
+			<abstract>
+				<p>The speed of data retrieval qualitatively affects how analysts visually explore and analyze their data. To ensure smooth interactions in massive time series datasets, one needs to address the challenges of computing ad hoc queries, distributing query load, and hiding system latency. In this paper, we present ATLAS, a visualization tool for temporal data that addresses these issues using a combination of high performance database technology, predictive caching, and level of detail management. We demonstrate ATLAS using commodity hardware on a network traffic dataset of more than a billion records.</p>
+			</abstract>
+		</profileDesc>
+	</teiHeader>
+	<text xml:lang="en">
+		<body>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1">INTRODUCTION</head><p>There has long been interest in applying visual analytics to temporal data <ref type="bibr" coords="1,73.35,313.44,10.45,12.36" target="#b5">[6] </ref><ref type="bibr" coords="1,86.00,313.44,14.92,12.36" target="#b15">[17] </ref> because visualization combined with interaction augments the human's cognitive process leading analysts to discoveries in complex data <ref type="bibr" coords="1,114.36,333.36,13.72,12.36" target="#b24">[27]</ref> . Rapidly falling storage costs now permit collection of massive datasets but supporting interactive visual analysis for these datasets is difficult. There are three main challenges. First, analysts do not merely want to view raw data; they need to explore it using ad hoc filters, aggregations, and trending. As dataset size grows, the cost of computing these queries also increases. Second, as datasets become too large for the analyst's machine, housing data on remote servers creates problems in load balancing the distributed queries. Third, fetching data from remote database servers is likely to introduce latencies that affect the responsiveness of the visualization system and disrupt analysis. In this paper we address these challenges by applying technologies from database systems and computer graphics to the field of visual analytics. To support fast query over massive datasets, researchers have developed new methods to more efficiently partition , store, and index data. In the field of computer graphics, realtime rendering systems such as flight simulators use level of detail (LOD) management and pre-fetching techniques to smoothly display large amounts of data at multiple resolutions. Inspired by these approaches, we have created ATLAS, an interactive visualization tool for large temporal databases running on commodity hardware. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2">RELATED WORK</head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.1">Visualization</head><p>The visualization of time series dates back to as early as the tenth century when the inclinations of the planetary orbits were plotted with lines as a function of time <ref type="bibr" coords="1,170.18,599.88,13.72,12.36" target="#b25">[28]</ref>. Since then, numerous visual metaphors have been developed to emphasize specific properties of time series such as periodicity <ref type="bibr" coords="1,163.01,619.81,9.51,12.36" target="#b6">[7]</ref>focused on using interactive visualization to support analytical tasks such as pattern searching <ref type="bibr" coords="1,411.80,131.30,9.51,12.36" target="#b5">[6]</ref> , motif discovery and anomaly detec- tion <ref type="bibr" coords="1,334.12,141.27,13.72,12.36" target="#b15">[17]</ref>. While these applications were built using datasets that fit in system memory, there has been relatively little work on supporting interactive visual exploration over large temporal databases. Network traffic analysts routinely deal with huge volumes of temporal data which is difficult to visualize en toto. In VIAssist, Tesone et al. <ref type="bibr" coords="1,365.97,191.08,14.92,12.36" target="#b23">[26] </ref>attack the problem of visual complexity through " smart aggregation " which performs data aggregation either automatically when the cardinality ratio of a field exceeds the threshold or according to user-defined controls. Smart aggregation ensures that the amount of data retrieved will be manageable for visual analysis . ATLAS limits visual complexity by using window displaying a fixed number of time series. However, it must also deal with some kindred aggregation issues, especially when the analyst zooms out to coarse time intervals. Nuance <ref type="bibr" coords="1,433.44,270.79,14.92,12.36" target="#b16">[18] </ref>is a system that creates models of the expected behavior of the time series for thousands of monitored systems and displays current data against the model. It handles large datasets in a streaming environment whereas ATLAS is built to directly explore large historical data. The importance of optimizing data access and filtering times to support fluid visual analysis was recognized by Bethel et al. <ref type="bibr" coords="1,545.01,330.56,9.51,12.36" target="#b1">[2]</ref>. Their system used compressed bitmap indexing of flat files to speed up queries, and demonstrated support for interactive ad hoc and multi-resolution query on a supercomputer platform optimized for data intensive analysis and visualization tasks. ATLAS aims for similar functionality but uses a column-oriented database and a network of servers running on commodity hardware. Doshi et al. addressed the problem of visually exploring large datasets by prefetching <ref type="bibr" coords="1,405.18,410.26,14.92,12.36" target="#b10">[12] </ref>and discussed several strategies such as Random, Direction, and Focus. In <ref type="bibr" coords="1,452.41,420.22,13.72,12.36">[11]</ref>, they proposed a strategy selection framework that adapts to user interactions. ATLAS uses a prediction strategy that is similar to their direction strategy, but instead of sending queries only when the system is idle, it predicts when queries need to be sent in order to maintain interactivity. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.2">Database Systems</head><p> Most relational database management systems (RDBMS) are roworiented , meaning attributes of a record are contiguous in storage , and optimized for throughput performance in on-line transaction processing applications such as order entry and banking. For on-line analytical processing applications, where query throughput is more important, data cubes can be used to accelerate common queries in a large data warehouse <ref type="bibr" coords="1,444.82,558.12,10.45,12.36" target="#b7">[8] </ref> by pre-computing aggregations of measures over a set of dimensions. However, with large datasets pre-computed views need to be planned with care <ref type="bibr" coords="1,529.04,578.04,14.92,12.36" target="#b12">[14] </ref>because of the large number of possible views. Column-oriented storage is better for many analytic queries <ref type="bibr" coords="1,542.82,597.96,14.92,12.36" target="#b18">[21] </ref>[22] because only the attribute data referenced in the queries are fetched. Equivalent queries can also be computed in row-oriented databases, but their implementations are complicated <ref type="bibr" coords="1,516.93,627.85,13.72,12.36" target="#b17">[20]</ref> . Harizopoulos et al. <ref type="bibr" coords="1,387.05,637.81,14.92,12.36" target="#b13">[15] </ref>explored the tradeoffs between row and column-oriented architectures in terms of disk bandwidth and CPU performance, and concluded that column stores can almost always achieve better query performance. In part because of FORTRAN, column storage has been widely used for decades in scientific computing. In current scientific data management the ROOT <ref type="bibr" coords="1,404.58,697.59,10.45,12.36" target="#b4">[5] </ref> system from CERN provides an objectoriented store with attribute columns in flat files. In database ap-plications, C-Store <ref type="bibr" coords="2,126.73,47.67,13.72,12.36" target="#b20">[23]</ref>, MonetDB <ref type="bibr" coords="2,187.52,47.67,9.51,12.36" target="#b3">[4]</ref>, and the MonetDB/X100 extension <ref type="bibr" coords="2,91.21,57.63,14.92,12.36" target="#b14">[16] </ref> are examples of open source column-oriented systems . The last has shown excellent performance in queries over large datasets such as TREC Terabyte Track <ref type="bibr" coords="2,222.08,77.56,9.51,12.36" target="#b8">[9]</ref>. Both compress data columns in order to improve effective disk bandwith and employ lazy decompression for better processor cache utilization. Tesone's VIAssist system uses Sybase IQ <ref type="bibr" coords="2,220.63,107.44,14.92,12.36" target="#b21">[24] </ref>, a commercial column-oriented database with specialized indexes to improve performance for low cardinality, grouped, or range data. ATLAS employs kdb+ <ref type="bibr" coords="2,98.25,137.33,14.92,12.36" target="#b26">[29] </ref>, a commercial system optimized for distributed time series analysis. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.3">Computer Graphics</head><p> Texture mapping is a process which adds surface details by mapping an image to the surface of a computer generated model. Since the observable resolution of a texture varies with viewing angle and distance, computer graphics systems often store a texture at multiple levels of detail. The Mipmap technique <ref type="bibr" coords="2,223.97,219.15,14.92,12.36" target="#b27">[30] </ref>does this with a pyramid of images at different resolutions. Flight simulator systems , that must render large number of textures in real-time, extend this idea with the Clipmap <ref type="bibr" coords="2,168.65,249.04,14.92,12.36" target="#b22">[25] </ref>which treats the whole texture dataset as a mipmap to fetch only the portions that are visible in the clipped view. To hide system latency due to data access, data is pre-fetched <ref type="bibr" coords="2,99.47,278.93,10.45,12.36" target="#b2">[3] </ref>along the flight path. Pre-fetching may be done by biasing mip-level computations to retrieve higher resolutions maps earlier; or to predict the textures that will be needed by tracking the change in the viewpoint. The task of visualizing a large number of long time series is analogous to the rendering of large terrains except pixels are mapped to temporal space rather than geography. ATLAS uses techniques similar to level of detail and pre-fetching to support smooth navigation in the temporal space. However, unlike graphics systems where textures can be pre-computed, the exploration of temporal database involves ad hoc queries and filters that must be computed at run-time. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3">SYSTEM GOALS</head><p>We aim to develop a system that allows interactive exploration over large temporal databases. Our design goals for ATLAS are as fol- lows: 1. Ad hoc querying: In order to support exploratory analysis, it is important to allow analysts to ask ad hoc questions about the data. Our goal is to allow analysts to calculate arbitrary aggregates formed by attributes in the database and to apply any filters to the data. This flexibility raises two issues. First, analysts might formulate ad hoc queries that are expensive to compute, especially over large databases. Second, permitting filters with queries largely precludes the use of pre-computed aggregates, forcing them to be computed directly from the underlying data for each query. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.">Load balancing:</head><p>As the amount of data analyzed increases, it is essential for the system to be able to expand processing capacity. A common way to handle this problem is by increasing the number of database servers. However, this only works if the system can distribute query load efficiently over the set of servers. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.">Smooth Interaction: Exploratory analysis</head><p> is greatly enhanced by smooth interactions. Specifically, fluid behavior for bread and butter operations such as panning and zooming gives analysts the impression of " flying " through the database. With large databases, this is difficult to achieve due to system latencies caused by query computation and data transfer. Supporting zooming at interactive speed is particularly difficult , since the number of records which must be scanned by the system increases exponentially as the analyst zooms out to examine a longer time period. To address this problem some systems pre-fetch data which creates a new set of questions about what data to fetch and when to fetch it. ATLAS is composed of three parts, a database cluster, a query distribution server, and a visual interface. In Section 4, we will first give an overview of the architecture of ATLAS, and then describe each of its components in detail. In Section 5, we will evaluate the performance of ATLAS according to the three design goals. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4">SYSTEM</head><p>ATLAS uses a client-server architecture in which the server is a database cluster, and the client consists of a visual interface and a query distribution server. The separation of database server from the client abstracts the details of data storage from the client and allows data to be distributed over any number of database servers. The division of client into the visual interface and the query distribution server partitions the user interface and the caching of data. This allows visualizations and interactions to be conducted smoothly while data are being fetched. It also leverages modern multi-core systems by multiprocessing the visual interface and the query distribution server on separate processors. The interactions among different components of the system are shown in <ref type="figure" coords="2,351.91,287.15,29.78,12.36" target="#fig_0">Figure 1</ref>with green arrows denoting control flow and blue arrows showing data flow. During exploration, the analyst interactively pans, zooms, filters, and groups time series through the visual interface. Based on user interactions, the visual interface predicts data requirements, sending requests to the query distribution server via Java remote method invocation. Upon receiving the request, the query distribution server divides the job according to load and dispatches the queries to the cluster of database servers. As the query results return, the query distribution server writes the data into memory mapped files which are polled by the visual interface as it creates visualizations. We will use two datasets as examples to discuss the design and performance of ATLAS. The first contains network flows collected over two months in the Computer Science and Electrical Engineering Departments at Stanford University. The database has 1.28 billion rows of data with 25 columns of attributes, which include timestamps, durations, protocols, local and remote ports and IP addresses , number and size of packets etc. taking up more than 100 GB on disk. Data for each date is stored by kdb+ in a separate directory with each attribute column stored in a file sorted by time and indexed by multiple attributes. The second is a financial dataset obtained from the Centre of Research in Security Prices (CRSP) <ref type="bibr" coords="2,542.85,667.70,14.92,12.36" target="#b9">[10] </ref> which consists of daily stock prices of over 25,000 companies between 1925 and 2006. The database has roughly 73 million rows of 20 columns consuming 10GB of disk. Its attributes include the CRSP permanent company numbers, exchange ticker symbols, the standard industrial classification codes, open and close prices, and share volume etc. Data are first grouped by the permanent company number, and then sorted by date. Various fields such as ticker symbol are indexed. All timing experiments and performance tests were done on a compute cluster using 8 rack-mounted SunFire V40z computer servers, each with 4 AMD Opteron 852 2.6Ghz processors, 32 GB of PC3200 DDR RAM, and a 300GB 10K RPM SCSI U320 disk. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.1">Database System</head><p> Interactive visual analysis over any large dataset is impossible without an efficient data management system because accessing and summarizing the data prior to mapping it for visualization is the gating factor in system performance. The cost of moving data through the multi-tiered storage hierarchies of today's systems is so high that it is critical for applications to try and fetch only needed data. In situations where analysts can predict interesting aggregations in advance, datacube techniques are effective performance accelerators . However, one of our goals is to allow analysts to specify ad hoc aggregations and filters over the data; either of which renders precomputation ineffective and thus places a premium on being able to perform runtime processing on servers. Finally, time series data are intrinsically ordered and traditional analysis in this field includes algorithms such as the exponentially weighted moving average which are dependent on ordered data. In ATLAS data is stored in kdb+, a database designed specifically to support time series data, which has three major attributes important to achieving our goals: (a) column-oriented storage; (b) partitioning and indexing schemes for ordered data; and (c) a networkable query engine with a programming language. Column-oriented storage in kdb+ improves query times by improving locality in several ways. First, since many ad hoc queries touch just a few columns, only the data associated with them will be moved through the storage hierarchy thus avoiding the expense of bringing in data which will lie unreferenced. Second, when a column is being scanned as part of a filter, its data will lie contiguously making access sequential whereas row-oriented data would be accessed with potentially large stride factors. Such dense locality improves speed from the processor cache out to the page tables. Third, kdb+ accesses data using memory-mapped files wherein a disk file becomes a piece of the application address space. While the entire file contents are logically available, only those portions which are referenced are transferred from disk. Transfer occurs through the highly efficient OS page-fault process. Furthermore, files are implicitly shared for reading across all processes mapping the same file. Thus, the combination of column-oriented storage and mapped files creates granular, shareable, flexible, hardware-assisted access to data under the simple programming model of vector indexing. The second design element involves partitioning and indexing schemes for ordering data. Stock market data is often partitioned by its ticker symbol because analysts want to compare the performance of specific groups of stocks. Network flow data is more naturally partitioned by date because the large number of network addresses; network devices tend to create traffic every day; and the problems of interest usually involve contemporaneous behavior. While kdb+ stores each column as a separate flat file, it also allows one to partition data according to the values of one column. Temporal partitions can be organized in days, months, or years. Each partition becomes a directory in the filesystem and the directory's name becomes a virtual column in what is logically a single table. The columns of data within each partition can also ordered by sorting on one or more of them. Any column may be indexed in which case a hash table is appended to its data file. Network data is often sorted by time then indexed by its categorical dimensions. Queries of a sorted column can be processed very efficiently with a binary search. Having the hash index appended to the data column means not only that it won't be touched if not in referenced, but also that it will be logically nearby when needed. The final important kdb+ element is its networked query engine and the q query language which has analytic functions for time series analysis such as moving average and grouping functions including ones that expressly bin time values across ar rich set of date and time granularities. Applications can connect via TCP sockets to the server natively, from Java, via ODBC, or as a webserver. Queries may be submitted as SQL92 or in native q with results returned in tables, CSV, HTML, or XML. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.2">Query Distribution Server</head><p> The query distribution server runs on the client computer. It is responsible for querying the database cluster and serving the data to the visualization system. The design goal of this component is to minimize both the query time from the database cluster and the transfer time to the visualization system.of 1 minute, 10 minutes, 30 minutes, etc. Zooming in requires the inverse of the above operations with a maximum threshold on the visual distance. This approach has the advantage that we can delegate the computation to scalable database clusters, and we transfer the minimal amount of data to the client. For visualization systems where all data is resident, panning and random access are trivial modifications to the window boundaries. Once data exceeds memory, disk access at speeds far slower than interaction demands must occur. ATLAS hides the disk latency during panning by placing a ceiling on the maximum panning speed. This ceiling is determined by analysis requirements and depends on the size of the dataset and the performance of the database cluster. For example, network analysis using four cluster machines resulted in a ceiling of 600 pixels per second. ATLAS does not support smooth interaction for temporal random-access, instead an analyst using ATLAS zooms out from his current temporal location, and then zooms in to the desired location, similar to Pad++ <ref type="bibr" coords="4,252.30,207.07,9.51,12.36" target="#b0">[1]</ref>. Large datasets often contain thousands of time series; however, the number an analyst can simultaneously examine is limited by the vertical resolution of the display. ATLAS supports vertical scrolling by fetching only the series that are currently visible or predicted to be visible soon in fashion similar to panning. The vertical ordering of series is determined by the analyst's choice of an ordering attribute. The analyst can change the ordering to juxtapose related series and thus affect the focal series and future predictions. For example , the series in the network data can be ordered according to local IP, remote IP, local Port, etc. ATLAS helps the analyst maintain visual context during vertical scrolling with two panels, one above and one below the main display area showing as an overlaid time series those that are immediately above or below the focal series. This approach is similar to fisheye views <ref type="bibr" coords="4,210.70,346.55,13.72,12.36" target="#b11">[13]</ref>. ATLAS can also show grouped series overlaid as one plot. This can be used reveal trends in related series, e.g. the stock price for all auto manufacturers . Since a group of series might have many members, ATLAS only shows the top five series in a single group as determined by the analyst-selected ordering attribute for the group. ATLAS is designed to hide the query latency associated with analysis. Ideally, visual analysis tasks can always be performed on data that is cached. In reality, it is possible that the data is not ready when it is needed. For example, the database could be unexpectedly slow because of expensive queries from other analysts. In such cases, ATLAS does not stop and wait, instead, it highlights the ranges of any unavailable series in red and allows the analyst to continue his analysis on the data that is available. Meanwhile, the front-end polls the mapped files for new ranges or series and displays them as they arrive. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.4">Predictive Caching</head><p>ATLAS hides the latency associated with querying large datasets by predicting and preemptively caching required data. The predictive algorithm is based on observing that there is a sense of momentum associated with the direction of exploration -e.g. an analyst panning to the left at time t is likely to continue panning left at time t+1. As seen in <ref type="figure" coords="4,116.64,578.04,27.34,12.36">figure 3</ref>, ATLAS has 6 directions of exploration (pan left, pan right, scroll up, scroll down, zoom in, and zoom out) with different interaction triggers fetching in different dimensions– panning right (left) leads to the fetching of the next (previous) time window for the same set of series that are currently visible, scrolling down (up) leads to the fetching of the same time window for the set of time series that will become visible next, and zooming in (out) leads to the fetching of a narrower (wider) time window for the same set of series. Once the fetch direction is determined, the system needs to decide when to issue the query, and what data to fetch. These decisions are governed by a set of system parameters and constraints, which will be discussed in section 4.4.1. We create a timing model for each dataset as a preprocessing step to estimate query </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.4.1">Constraints</head><p>A major question to answer in predictive caching is " what to fetch " . A query consists of various variables: the aggregates, the aggregation level, the filters, the set of series, and the time range. The first three are defined by users, while the last two are determined by the system according to the current time window, the set of visible series, the user interactions, and the parameters governing the number of series and the time range to pre-fetch. To determine when queries should be issued, the system needs to take into consideration how long the query would take to complete, as estimated by the timing model, and when the data is needed, i.e. how long it takes to reach the end of the currently cached data under the maximum panning , scrolling, or zooming speed. <ref type="figure" coords="4,443.32,498.34,26.46,12.36" target="#tab_1">Table 1</ref>shows the list of system parameters. The values of the system parameters are chosen to ensure that data will always be retrieved in time to support smooth interactions. We formalize this with a set of constraints that need to be satisfied by the parameters (<ref type="figure" coords="4,391.28,548.16,25.56,12.36" target="#tab_2">Table 2</ref>). For example, the cache size needs to be big enough so that newly fetched data will not overwrite the data used in the current frame. The number of series fetched during panning and zooming has to be large enough so that when the analyst decides to start scrolling, there will be enough time to fetch the next set of time series that become visible. Similarly, the time range queried during scrolling and zooming should accommodate a sudden panning action. In <ref type="figure" coords="4,416.04,617.89,25.74,12.36" target="#tab_2">Table 2</ref>, the last two constraints ensure that queries are not issued too frequently. The solution space of the constraints is not a unique point, but a region that contains differing tradeoffs. For ATLAS we prefer a solution that queries data justin-time . This minimizes the load on the client machine, the load on the database cluster, and the overhead associated with the analyst changing directions during panning / zooming / and scrolling. Our objective is not to pull the maximum amount of data possible, but rather to get the minimum amount of data to sustain smooth interactions . If the query speed were instantaneous, we would only need to fetch data in the current frame. On the other hand, if the query speed is extremely slow, everything would need to be precomputed and stored on the client machine. ATLAS will function with any solution in the solution space with the tradeoff between client and server load adjusted depending on available resource. To show how ATLAS uses the parameters to support smooth interactions , consider the scenario where an analyst pans to the right. When the motion is detected by the scrollbar, the system will check the cached files to determine when new data will be needed. If the minimum time taken to pan to the end of the cached data is smaller than t pan , a query is issued for the N pan series that are closest to the visible window over T pan after the last time point cached. Since t pan is greater than the estimated time taken for the query to complete, we expect the data to arrive before they are needed for visualization. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.4.2">Timing Model</head><p>The timing models are used to estimate the time required for a query to complete. They are specific to each database because of the differences in size and organization of data; however, they are all based on the premise that query processing times increase linearly with the number of records contained in the query range. This is a reasonable choice since most query times are dominated by disk and memory access, not computation. As the number of records depends on the number of time series to be fetched as well as the time range spanned by the query, we measure the change in query processing times as these two variables change. During this cessing step we also vary the number of database servers and use a load balancing algorithm to simplify the model by measuring the number of records read and the amount of time taken for the server with the most work. For the stock price database we observed that changing the number of series and the time range of the query have the same effect on the query processing time. We therefore concluded that the two variables are redundant and model the query time using the number of records as the only variable. The timing model was created by simply running linear regression on the number of records contained in a query range and the response time. Query speed over the network flow database was highly dependent on the number of days spanned by the query because the network dataset is partitioned by date. However, we did observe a linear relationship between the query time and the number of records fetched when when the number of days spanned is held constant. <ref type="figure" coords="6,54.00,627.85,30.55,12.36">Figure 4</ref>shows the change in response times for queries that span 5 and 10 days as the number of records increases and their linear regression lines. <ref type="figure" coords="6,115.70,647.78,30.31,12.36" target="#fig_4">Figure 5</ref>and 6 show the changes in the slope and the intercept of the regression lines as the number of days spanned by the query changes. As shown, the slope decreases exponentially while the intercept increases linearly with the number of days. Therefore, to estimate the time it takes for a given query to complete , the number of days spanned by the query is first used to estimate the parameters of a linear model. The resultant linear model is then used to compute the query time given the number of records. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5">PERFORMANCE</head><p>In this section, we evaluate the performance of the main features of ATLAS: support of ad hoc queries, load balancing, and smooth interaction. Examples of ATLAS in use are shown in the accompanying video, in which we demonstrate system interactivity and perform a case study of network intrusion detection. In the case study, we follow an analytical process inspired by US CERT analysts <ref type="bibr" coords="6,542.84,128.95,14.92,12.36">[19] </ref>but ATLAS allows the analysis to proceed without having to create the dramatically reduced sample that they needed to extract because of limited data capacity of their tools. In ATLAS, data are stored in a column-oriented database system designed and optimized for temporal queries. In Section 5.1, we will briefly compare the performance of this to a row-oriented database system to justify our design choice. As the amount of data being collected and analyzed increases, it is important for systems to expand their analytic capacity. In Section 5.2, we will evaluate our load balancing algorithm by assessing its performance as more database servers are added. ATLAS supports smooth interactive explorations via predictive caching. In Section 5.3, we will measure the performance gained by the use of predictive caching. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.1">Database Performance</head><p> The query performance of the database server system is critical if ATLAS is to meet its design goals. To demonstrate that the column-oriented kdb+ 2.4 system used by ATLAS is a good choice, we compared it to MySQL 5.0.22, a widely-used, roworiented RDBMS with a good reputation for performance in readonly queries. The queries were run against one of the SunFire servers with the 1.28 billion row dataset of network flows stored on the local disk. Each row consists of 25 columns of attributes. As is customary with this type of data, it is organized in tables by date. For both kdb+ and MySQL, the overall database size including indices is 128GB. MySQL stores the table data (82 GB) separate from the indices (46 GB). Performance measures of the raw disk read on the 64-bit Linux 2.6 system showed that it could sustain data transfer at a rate of 59 MB/sec when the read data was being discarded. Scanning Queries Scanning queries occur when indices cannot be used or when the analyst is zoomed out so far that the entire time span of the dataset must be summarized. In our first test, we measured the performance of such a scanning query involving summing one column at initialization when no data has yet been transferred from disk. MySQL took 2134 seconds whereas kdb+ finished in 113 yielding a speedup of 19 for kdb+. This is near the ratio of the byte width of a full row in MySQL to the byte width of the selected column. kdb+ read data at 45 MB/s from disk to MySQL's 40 MB/s indicating efficient use of filesystem operations by both. We then reissued the same query to measure the effect of the operating system's file cache. In this test, MySQL took 2074 seconds while kdb+ finished in 28 for a speedup factor of 74 for kdb+. The change is probably due to the fact that the 5GB of data in the 60 files comprising the single column kdb+ reads can be cached in the RAM of the server whereas MySQL's retraversal of 82GB of data overwhelms it. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Simple Indexed + Partitioned Queries </head><p> Next, we sought to understand the performance of queries which look at indexed data in restricted date ranges since experienced analysts will make sure that important attributes are indexed and for the most likely queries the date range will be limited to days rather than months. For these tests, we again summed a single column, but now only interdomain traffic grouped hourly by network address spanning a few days to a week. When selecting two relatively quiet addresses over a four day range, the kdb+ advantage dropped to only a factor of 3 over MySQL (11.95 versus 3.98 secs). However, adding a third active address exceeded the configured 8G limit for MySQL's temporary RAM table resulting in a disastrous 2709 sec query versus 6.7 sec for kdb+. The problem here is that while kdb+ will take advantage of date partitioned tables, MySQL has only the limited functionality of the MERGE table (essentially a listed of concatenated tables) requiring the application to create temporary MERGE table definitions for the specific date ranges of the query. Thus, while kdb+ indexing may be less sophisticated, it is more predictable and arguably more effective. Other Queries There are also analytic queries which can be made in q which are difficult or inexpressible in SQL. For example , the " moving average " or " weighted moving average " queries, which are common in time series analysis and supported by q, are typically not performed in a relational system like MySQL because they required ordering semantics which cannot be expressed directly in the language. This is not to say that the functions cannot be provided, rather that they would have to be explicitly coded in the ATLAS client or elsewhere. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.2">Load balancing</head><p>ATLAS uses a client-server architecture to offload analytic query processing from the analyst's workstation so that as the size of datasets grow, more database servers can be added to maintain or improve response time. To manage query processing the AT- LAS client contains a query distribution server that aims at dividing workload evenly among the available database servers. This step is essential in optimizing the performance gain when adding servers. To evaluate the quality of the load balancing algorithm, we measured query performance while varying the number of database servers used. In this experiment, the network flow dataset was used because of its larger size. We chose from the database the 120 network addresses with the largest overall number or flows and computed the sum of application bytes by hour over 60 days. This calculation traverses about half of all rows (600 million records) and so represents a severe test of processing capacity. We recorded query time as we increased the number of database servers. The time consists of the elapsed time for the query, excluding the time for writing the data to cache files or for displaying the data since that time is negligible compared to query computation time. As shown in <ref type="figure" coords="7,111.31,657.74,29.17,12.36" target="#fig_7">Figure 7</ref> , the speedup, as calculated by the proportional gain in query throughput when compared to the base case where only one database server was used, increased linearly with the number of database servers. The trend was consistent as the number of database servers increased to 15. As we further increased the number of servers, we observed a decrease in performance gain. This is due to the current load balancing algorithm which can only divide queries by date and time bounds. Since data are partitioned by date in the network database, it is more efficient to divide queries by time than by lists of series. However, a combined approach that divides query both by time and the list of series might prove beneficial as we further develop the system to accommodate datasets of different size and organization. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.3">Predictive Caching</head><p>Predictive caching is necessary to support fluid exploration over large databases. To demonstrate the performance gain, we compared the smoothness of panning in systems with and without predictive caching. In this experiment, we measured the time taken to pan over two months of data for 15 network addresses at an aggregation level of 10 minutes. The maximum panning speed was 600 pixels per second. Each frame was about 900 pixels wide and spanned approximately 1.6 days. The selected set of network addresses generated about 2 million flows per day. Thus, each frame requires the traversal of approximately 3.2 million records and a data rate of 2.1 million records/sec is needed to support panning at the maximum speed. With predictive caching, the system fetched 15 days of data as an initialization step, and when it was 2.5 frames away from the end of the cache, it issued a query to pre-fetch 5 more days of data. In the version without predictive caching, the system also fetched 15 days of data as an initialization step, but only fetched data when necessary, i.e. when data for the current frame were not available, the system issued a query for 2 more days of data. At the maximum panning speed, an analyst should be able to examine two months of data in 57 seconds. With predictive caching, we were able to achieve a performance of 65 seconds including the time to initialize the cache and to pan over all the data. In contrast, the system without predictive caching took 96 seconds because it had to pause and wait for data to be fetched on more than 20 occasions . This not only slowed down analysis, but also disrupted the process even though each pause took only a second or two. Thus predictive caching can significantly improve user experience by enabling smooth and fluid interactions. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6">DISCUSSION</head><p>In this paper we used ATLAS to explore challenges to visualization created by the dramatic increase in dataset sizes. This involved a largely straightforward combination of clustered database servers with load balancing and predictive caching algorithms in a clientserver architecture. The contribution is in specifying the decomposition of function and the distribution of tasks. Our design is premised on the notion that one must push as much analysis as possible onto the database servers because that is the component which will most naturally scale with data growth. Doing the bulk of analytic computation on the server reduces the amount of data transmitted to the client thereby lowering its disk and bandwidth requirements . The analyst's workstation acts as a cache for the computed results which are then visualized with new analysis requests generated by tracking user interactions. To push as much analysis as possible onto the database system, we used kdb+ because it parallelizes queries easily and features a rich query language oriented to analysis of time series data. However , for any analytic queries which are expressible by a traditional row-oriented database, we saw that MySQL could also be scaled to provide interactive performance. For most queries, we observed that what matters is the effective working set of data that must be moved through the server's memory hierarchy. Thus, the principal advantage for column-oriented databases is that their memory footprint is smaller. There is much room to improve the timing and load balancing algorithms. Our current models estimate query time based on the number of server instances available; the time range spanned by the query; and the number of series to be fetched. The model is precomputed for each type of dataset and is static in nature. One way to make the system more robust would be to adjust the model according to measurements taken at run-time. Furthermore, the model makes no attempt to optimize workload across multiple queries or track query history by server. Such tracking could be use to direct future queries at servers which may have already cached the needed data. We would like to support more visual analytic tasks. For example , in large datasets, analysts want to reason at higher abstraction levels. Instead of the values of a time series at specific points in time, analysts are more interested in patterns across time periods. Being able to efficiently search for interesting patterns and classify them would be of great value in visual analysis. The ATLAS architecture could easily support pattern searching as described in TimeSearcher <ref type="bibr" coords="8,106.90,197.11,10.45,12.36" target="#b5">[6] </ref>in large datasets by distributing the search over a cluster of database servers. However, predictive caching will not be as effective due to the difficulty in predicting the pattern of interest and the algorithm's reliance on inertia in user actions. More sophisticated methods of identifying potentially interesting features in datasets will be needed. The one thing that is certain is that dataset sizes will continue to grow. Since the value of visual analytics is often critically dependent being able to freely explore data, designing systems to maintain interactivity over massive datasets is now vitally important. </p></div><figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_0" coords="2,350.55,544.53,174.68,11.80"><head>Figure 1: </head><figDesc>Figure 1: The client-server architecture of ATLAS. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_1" coords="5,54.00,351.53,503.46,11.80;5,54.00,361.00,339.70,11.80"><head>Figure 2: </head><figDesc>Figure 2: Fontend interface of ATLAS. 1: The main panel where time series in focus are plotted as line graphs. 2: Context panels showing the time series outside the focal point. 3: List of attributes that can be used for grouping and filtering. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_2" coords="5,54.00,682.90,239.82,11.80;5,54.00,692.36,81.29,11.80"><head>Figure 3: Figure 4: </head><figDesc>Figure 3: The three dimensions for caching, as defined by panning, scrolling, and zooming. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_3" coords="6,83.11,203.95,4.50,12.00;6,107.42,203.95,9.01,12.00;6,134.08,203.95,9.01,12.00;6,160.75,203.95,9.01,12.00;6,187.33,203.95,9.01,12.00;6,214.00,203.95,9.01,12.00;6,240.67,203.95,9.01,12.00;6,267.33,203.95,9.01,12.00;6,77.88,196.52,4.50,12.00;6,71.13,176.77,11.26,12.00;6,71.13,157.03,11.26,12.00;6,71.13,137.36,11.26,12.00;6,71.13,117.62,11.26,12.00;6,77.88,97.95,4.50,12.00;6,71.13,78.21,11.26,12.00;6,71.13,58.54,11.26,12.00;6,114.42,214.49,128.32,12.00;6,55.03,152.08,12.00,20.72;6,55.03,140.82,12.00,9.00;6,55.03,95.79,12.00,42.78;6,94.59,49.26,167.94,12.00"><head></head><figDesc>Days Spanned by Query Slope (in thousandth) Slope of Linear Model against Number of Days </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_4" coords="6,56.40,227.06,234.98,11.80"><head>Figure 5: </head><figDesc>Figure 5: Change in slope of linear model in the network database. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_5" coords="6,54.00,429.31,239.83,11.80;6,54.00,438.77,34.82,11.80"><head>Figure 6: </head><figDesc>Figure 6: Change in intercept of linear model in the network database. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_7" coords="7,59.81,636.26,228.21,11.80"><head>Figure 7: </head><figDesc>Figure 7: Speedup of query with the number of database servers </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_1" validated="false" coords="4,332.11,47.63,211.73,98.25"><figDesc coords="4,406.46,47.63,62.97,11.80;4,332.11,56.08,22.55,11.95;4,384.77,56.08,31.98,11.95;4,332.11,66.42,138.97,11.74;4,384.80,75.89,125.18,11.56;4,384.80,85.35,105.25,11.56;4,332.11,95.21,28.19,10.99;4,384.76,95.21,159.08,12.08;4,332.11,105.05,31.39,10.99;4,384.75,105.05,139.16,12.08;4,332.11,114.87,29.21,10.99;4,384.77,114.87,151.66,10.99;4,384.80,124.33,144.90,10.99;4,384.80,133.80,104.15,12.08">Table 1: Variables Action Variables Initialization @BULLET Size of cache file (S cache ) @BULLET Number of series to be fetched (N init ) @BULLET Time range to be fetched (T init ) Panning/ @BULLET Number of series to be fetched (N pan/scroll/zoom ) Scrolling/ @BULLET Time range to be fetched (T pan/scroll/zoom ) Zooming @BULLET Time at which the pre-fetch query is issued in terms of the amount of time before the end of cache is reached (t pan/scroll/zoom )</figDesc><table></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_2" validated="false" coords="4,317.95,155.24,239.26,213.53"><figDesc coords="4,367.24,155.24,141.33,11.80;4,323.94,163.70,34.06,11.95;4,323.94,174.04,108.29,11.56;4,323.94,183.50,115.18,11.74;4,323.94,192.97,70.68,11.56;4,323.94,202.44,72.16,11.56;4,323.94,211.81,33.60,11.95;4,323.94,222.15,192.94,10.99;4,323.94,231.62,163.68,10.99;4,323.94,241.09,189.40,10.99;4,323.94,250.55,197.96,10.99;4,323.94,260.02,63.67,10.99;4,323.94,269.40,39.79,11.95;4,323.94,279.51,121.74,11.98;4,323.94,288.97,233.28,11.98;4,323.94,298.43,228.12,11.98;4,323.94,307.89,205.42,12.31;4,323.94,317.72,93.16,11.80;4,323.94,327.43,37.41,11.74;4,317.95,356.40,206.74,12.36">Table 2: Fixed variables and Constraints Constants @BULLET Maximum panning speed (V pan ) @BULLET Maximum scrolling speed (V scroll ) @BULLET Window width (W w ) @BULLET Window height (H w ) Functions @BULLET NumDataPoint(T) = number of data points in time range T @BULLET TimeRange(W)= time range spanned by width W @BULLET NumSeries (L)= number of time series visible in length L @BULLET TimeToFetch (T, N)= the amount of time taken to fetch time range T for N series Constraints @BULLETS cache ≥ NumDataPoint(T init + T pan ) @BULLETN init = N pan = N zoom = NumSeries(H w ) + 2 × NumSeries(t scroll /V scroll ) @BULLETT init = T scroll = T zoom = TimeRange(W w ) + 2 × TimeRange(t pan /V pan ) @BULLETt pan/scroll/zoom &gt; TimeToFetch(T pan/scroll/zoom , N pan/scroll/zoom ) @BULLETT pan ≥ TimeRange(2 ×W w ) @BULLETN scroll ≥ 3 ing time. These models will be discussed in section 4.4.2.</figDesc><table></table></figure>
+
+			<note place="foot">The query distribution server fetches data from the database cluster by distributing queries over the servers according to a load balancing algorithm that tries to equalize the workload among them. We determine the workload by the total number of records that needs to be scanned in a query. Depending on the organization and size of the dataset along with the analysis characteristics, the data can either be partitioned by time, or by the series. For example, in the network dataset, we have chosen to partition the load according to ranges of days because data are stored in the resolution of milliseconds, giving orders of magnitude more data points in each series than there are series. In addition, we have found that analysts tend to concentrate on a few suspicious machines but would look at their data over very large time ranges to extract historical trends. To partition the time ranges so that the workload is distributed evenly, the system keeps track of the total number of data points per day for the current set of time series, and estimates workload by computing the total number of data points in the queried time range. The query distribution server transfers data to the visualization system by creating memory mapped files shared between the two components. Using memory mapped files the query distribution server can run as a completely separate process from the visualization system which allows modern operating systems to more efficiently delegate resources. However, because there is no data duplication , effective disk transfer rates are the same as having the query distribution server running in the memory space of the visualization system. Since the network and financial data has orders of magnitude more records for each series relative to the number of series, ATLAS creates a separate memory mapped file for each series at each aggregation level. To control disk space consumption, the files are implemented as circular buffers in time. 4.3 Visual Interface The ATLAS visual interface, as shown in figure 2, supports scrolling, panning, zooming, ordering, filtering, and grouping time series displayed as line graphs or bar charts. ATLAS overcomes the latencies associated with querying large datasets by monitoring the analyst&apos;s actions and predictively caching the data that will be needed to render subsequent frames. How the predictions are made will be described later. Here, we note that zoom out is the most difficult operation to support, since it entails an exponential increase in the number of records analyzed. This creates two difficulties: first, there may be too much data to be transferred to the local client; and second, there are not enough pixels at current resolutions to show individual records. ATLAS overcomes these difficulties by coupling zooming with level of detail (LOD). When the analyst zooms out, we adjust the visual distance between consecutive data points until a threshold minimum inter-point distance is reached. To zoom out further, we issue new queries to the servers to re-bin the records using familiar temporal intervals such as minutes, hours, and days. In the network dataset the finest level of detail is milliseconds. When zooming out, we aggregate records in intervals</note>
+		</body>
+		<back>
+
+			<div type="acknowledgement">
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>ACKNOWLEDGEMENTS </head><p> This work is supported by Max Planck Center for Visual Computing and Communication (MPC-VCC) and the Stanford Regional Visualization and Analytics Center (RVAC). MPC-VCC was jointly established by the Max Planck Society for the Advancement of Science and Stanford University. Stanford RVAC is supported by the National Visualization and Analytics Center (NVAC ), a U.S. Department of Homeland Security program operated by the Pacific Northwest National Laboratory (PNNL), a U.S. Department of Energy Office of Science laboratory. </p></div>
+			</div>
+
+			<div type="references">
+
+				<listBibl>
+
+<biblStruct coords="8,72.25,434.18,221.55,10.99;8,72.26,443.41,221.55,11.23;8,72.26,452.86,221.57,11.14;8,72.26,462.33,207.06,11.23"  xml:id="b0">
+	<analytic>
+		<title level="a" type="main">Pad++: a zooming graphical interface for exploring alternate interface physics</title>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<forename type="middle">B</forename>
+				<surname>Bederson</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">D</forename>
+				<surname>Hollan</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">UIST &apos;94: Proceedings of the 7th annual ACM symposium on User interface software and technology</title>
+		<meeting><address><addrLine>New York, NY, USA</addrLine></address></meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="1994" />
+			<biblScope unit="page" from="17" to="26" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,72.25,472.04,221.55,10.99;8,72.26,481.50,221.50,10.99;8,72.26,490.73,221.54,11.14;8,72.26,500.43,85.37,10.99"  xml:id="b1">
+	<analytic>
+		<title level="a" type="main">Accelerating network traffic analytics using query-driven visualization. Visual Analytics Science And Technology</title>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<forename type="middle">W</forename>
+				<surname>Bethel</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Campbell</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<surname>Dart</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Stockinger</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Wu</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">IEEE Symposium On</title>
+		<imprint>
+			<date type="published" when="2006-10" />
+			<biblScope unit="page" from="115" to="122" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,72.25,509.89,221.57,10.99;8,72.26,519.36,38.69,10.99"  xml:id="b2">
+	<monogr>
+		<title level="m" type="main">Implementing a texture cache system. Game Developer Magazine</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Blow</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="1998" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,72.25,528.82,221.59,10.99;8,72.26,538.05,221.58,11.23;8,72.26,547.52,221.58,11.23;8,72.26,557.22,103.99,10.99"  xml:id="b3">
+	<analytic>
+		<title level="a" type="main">High performance support for oo traversals in monet</title>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<forename type="middle">A</forename>
+				<surname>Boncz</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<surname>Kwakkel</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<forename type="middle">L</forename>
+				<surname>Kersten</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">BNCOD 14: Proceedings of the 14th British National Conference on Databases</title>
+		<meeting><address><addrLine>London , UK</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer-Verlag</publisher>
+			<date type="published" when="1996" />
+			<biblScope unit="page" from="152" to="169" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,72.25,566.68,221.56,10.99;8,72.26,575.90,221.58,11.23;8,72.26,585.37,221.52,11.14;8,72.26,594.84,144.88,11.23"  xml:id="b4">
+	<monogr>
+		<title level="m" type="main">Root – an object oriented data analysis framework. Nuclear Instruments and Methods in Physics Research Section A: Accelerators, Spectrometers, Detectors and Associated Equipment</title>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Brun</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<surname>Rademakers</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="1997-04" />
+			<biblScope unit="page" from="81" to="86" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,72.25,604.54,221.57,10.99;8,72.26,614.01,221.58,10.99;8,72.26,623.46,38.27,10.99"  xml:id="b5">
+	<analytic>
+		<title level="a" type="main">Interactive pattern search in time series</title>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Buono</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Aris</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Plaisant</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Khella</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Shneiderman</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">SPIE</title>
+		<imprint>
+			<biblScope unit="volume">5669</biblScope>
+			<biblScope unit="page" from="175" to="186" />
+			<date type="published" when="2005" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,72.25,632.93,221.51,10.99;8,72.26,642.16,221.58,11.23;8,72.26,651.62,221.57,11.23;8,72.26,661.33,93.55,10.99"  xml:id="b6">
+	<analytic>
+		<title level="a" type="main">Interactive visualization of serial periodic data</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">V</forename>
+				<surname>Carlis</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">A</forename>
+				<surname>Konstan</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">UIST &apos;98: Proceedings of the 11th annual ACM symposium on User interface software and technology</title>
+		<meeting><address><addrLine>New York, NY, USA</addrLine></address></meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="1998" />
+			<biblScope unit="page" from="29" to="38" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,72.25,670.80,221.60,10.99;8,72.26,680.02,167.12,11.23"  xml:id="b7">
+	<analytic>
+		<title level="a" type="main">An overview of data warehousing and olap technology</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Chaudhuri</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">U</forename>
+				<surname>Dayal</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">SIGMOD Rec</title>
+		<imprint>
+			<biblScope unit="volume">26</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="65" to="74" />
+			<date type="published" when="1997" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,72.25,689.72,221.54,10.99;8,72.26,698.94,128.77,11.23"  xml:id="b8">
+	<analytic>
+		<title level="a" type="main">The trec terabyte retrieval track</title>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Clarke</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Craswell</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">I</forename>
+				<surname>Soboroff</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">SIGIR Forum</title>
+		<imprint>
+			<biblScope unit="volume">39</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="25" to="25" />
+			<date type="published" when="2005" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,72.25,708.65,216.57,10.99;8,317.95,48.08,239.82,10.99;8,336.21,57.55,221.57,10.99;8,336.21,66.77,221.57,11.23;8,336.21,76.24,221.56,11.23;8,336.21,85.94,206.98,10.99"  xml:id="b9">
+	<analytic>
+		<title level="a" type="main">A strategy selection framework for adaptive prefetching in data visualization</title>
+		<author>
+			<persName>
+				<forename type="first">Crsp</forename>
+				<surname>Center</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<forename type="middle">R</forename>
+				<surname>Research In Security Prices</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<forename type="middle">E</forename>
+				<surname>Doshi</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<forename type="middle">A</forename>
+				<surname>Rosario</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<forename type="middle">O</forename>
+				<surname>Rundensteiner</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<surname>Ward</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">SSDBM&apos;2003: Proceedings of the 15th international conference on Scientific and statistical database management</title>
+		<meeting><address><addrLine>Washington, DC, USA</addrLine></address></meeting>
+		<imprint>
+			<publisher>IEEE Computer Society</publisher>
+			<date type="published" when="2003" />
+			<biblScope unit="page" from="107" to="116" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.20,95.41,221.58,10.99;8,336.21,104.64,221.55,11.23;8,336.21,114.10,221.57,11.14;8,336.21,123.56,221.60,11.23;8,336.21,133.26,16.93,10.99"  xml:id="b10">
+	<analytic>
+		<title level="a" type="main">Prefetching for visual data exploration</title>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<forename type="middle">R</forename>
+				<surname>Doshi</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<forename type="middle">A</forename>
+				<surname>Rundensteiner</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<forename type="middle">O</forename>
+				<surname>Ward</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">DASFAA &apos;03: Proceedings of the Eighth International Conference on Database Systems for Advanced Applications</title>
+		<meeting><address><addrLine>Washington, DC, USA</addrLine></address></meeting>
+		<imprint>
+			<publisher>IEEE Computer So- ciety</publisher>
+			<date type="published" when="2003" />
+			<biblScope unit="page">195</biblScope>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.20,142.49,221.58,11.23;8,336.21,152.20,17.92,10.99"  xml:id="b11">
+	<analytic>
+		<title level="a" type="main">Generalized fisheye views</title>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<forename type="middle">W</forename>
+				<surname>Furnas</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">SIGCHI Bull</title>
+		<imprint>
+			<biblScope unit="volume">17</biblScope>
+			<biblScope unit="issue">4</biblScope>
+			<biblScope unit="page" from="16" to="23" />
+			<date type="published" when="1986" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.20,161.66,221.57,10.99;8,336.21,170.89,221.58,11.23;8,336.21,180.34,221.58,11.23;8,336.21,190.05,126.32,10.99"  xml:id="b12">
+	<analytic>
+		<title level="a" type="main">Implementing data cubes efficiently</title>
+		<author>
+			<persName>
+				<forename type="first">V</forename>
+				<surname>Harinarayan</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Rajaraman</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">D</forename>
+				<surname>Ullman</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">SIGMOD &apos;96: Proceedings of the 1996 ACM SIG- MOD international conference on Management of data</title>
+		<meeting><address><addrLine>New York, NY, USA</addrLine></address></meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="1996" />
+			<biblScope unit="page" from="205" to="216" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.20,199.52,221.55,10.99;8,336.21,208.74,221.56,11.23;8,336.21,218.21,221.56,11.23;8,336.21,227.91,115.72,10.99"  xml:id="b13">
+	<analytic>
+		<title level="a" type="main">Performance tradeoffs in read-optimized databases</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Harizopoulos</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">V</forename>
+				<surname>Liang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<forename type="middle">J</forename>
+				<surname>Abadi</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Madden</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">VLDB &apos;06: Proceedings of the 32nd international conference on Very large data bases</title>
+		<imprint>
+			<publisher>VLDB Endowment</publisher>
+			<date type="published" when="2006" />
+			<biblScope unit="page" from="487" to="498" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.20,237.37,221.52,10.99;8,336.21,246.60,221.56,11.23;8,336.21,256.06,221.51,11.14;8,336.21,265.53,190.42,11.23"  xml:id="b14">
+	<analytic>
+		<title level="a" type="main">Efficient and Flexible Information Retrieval Using MonetDB/X100</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Heman</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Zukowski</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<forename type="middle">P</forename>
+				<surname>De Vries</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<forename type="middle">A</forename>
+				<surname>Boncz</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the Biennial Conference on Innovative Data Systems Research (CIDR)</title>
+		<meeting>the Biennial Conference on Innovative Data Systems Research (CIDR)<address><addrLine>Asilomar, CA, USA</addrLine></address></meeting>
+		<imprint>
+			<publisher>Demo Paper</publisher>
+			<date type="published" when="2007-01" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.20,275.24,221.57,10.99;8,336.21,284.46,221.60,11.23;8,336.21,293.92,221.58,11.14;8,336.21,303.38,221.61,11.23;8,336.21,313.09,74.08,10.99"  xml:id="b15">
+	<analytic>
+		<title level="a" type="main">Visually mining and monitoring massive time series</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Lin</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<surname>Keogh</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Lonardi</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">P</forename>
+				<surname>Lankford</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<forename type="middle">M</forename>
+				<surname>Nystrom</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">KDD &apos;04: Proceedings of the tenth ACM SIGKDD international conference on Knowledge discovery and data mining</title>
+		<meeting><address><addrLine>New York, NY, USA</addrLine></address></meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="2004" />
+			<biblScope unit="page" from="460" to="469" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.20,322.56,221.53,10.99;8,336.21,332.02,221.55,10.99;8,336.21,341.25,221.57,11.14;8,336.21,350.71,197.31,11.23;8,317.95,360.41,239.84,10.99;8,336.21,369.88,220.26,10.99;8,336.21,379.34,17.92,10.99"  xml:id="b16">
+	<analytic>
+		<title level="a" type="main">Putting security in context: Visual correlation of network activity with real-world information Flow visualization using ms-excel</title>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<forename type="middle">A</forename>
+				<surname>Pike</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Scherrer</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Zabriskie</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">VizSEC 2007: Proceedings of the Workshop on Visualization for Computer Security</title>
+		<editor>19] L. Rock and J. Brown</editor>
+		<meeting><address><addrLine>Berlin</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer-Verlag</publisher>
+			<date type="published" when="2008" />
+			<biblScope unit="page" from="203" to="220" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.20,388.57,221.57,11.23;8,336.21,398.04,219.68,11.23"  xml:id="b17">
+	<monogr>
+		<title level="m" type="main">Developing Time-Oriented Database Applications in SQL</title>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<forename type="middle">T</forename>
+				<surname>Snodgrass</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<forename type="middle">S</forename>
+				<surname>Jensen</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2000" />
+			<publisher>Morgan Kaufmann Publishers</publisher>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.20,407.73,221.57,10.99;8,336.21,417.20,221.53,10.99;8,336.21,426.66,58.83,10.99"  xml:id="b18">
+	<monogr>
+		<title level="m" type="main">One size fits all: A concept whose time has come and gone</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Stonebraker</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2007" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.20,436.13,221.57,10.99;8,336.21,445.60,216.62,10.99;8,336.21,455.06,57.52,10.99"  xml:id="b19">
+	<monogr>
+		<title level="m" type="main">Supporting column store performance claims</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Stonebraker</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2008" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.20,464.52,221.57,10.99;8,336.21,473.98,221.49,10.99;8,336.21,483.21,221.58,11.23;8,336.21,492.68,221.54,11.14;8,336.21,502.14,173.68,11.23"  xml:id="b20">
+	<analytic>
+		<title level="a" type="main">C-store: a column-oriented dbms</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Stonebraker</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<forename type="middle">J</forename>
+				<surname>Abadi</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Batkin</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">X</forename>
+				<surname>Chen</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Cherniack</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Ferreira</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<surname>Lau</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Lin</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Madden</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<forename type="middle">O</forename>
+				<surname>Neil</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<forename type="middle">O</forename>
+				<surname>Neil</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Rasin</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Tran</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Zdonik</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">VLDB &apos;05: Proceedings of the 31st international conference on Very large data bases</title>
+		<imprint>
+			<publisher>VLDB Endowment</publisher>
+			<date type="published" when="2005" />
+			<biblScope unit="page" from="553" to="564" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.20,511.85,161.78,10.99"  xml:id="b21">
+	<monogr>
+		<title level="m" type="main">Sybase iq</title>
+		<author>
+			<persName>
+				<surname>Sybase</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="1997" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.20,521.31,221.55,10.99;8,336.21,530.53,221.60,11.23;8,336.21,540.00,221.55,11.23;8,336.21,549.70,142.24,10.99"  xml:id="b22">
+	<analytic>
+		<title level="a" type="main">The clipmap: a virtual mipmap</title>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<forename type="middle">C</forename>
+				<surname>Tanner</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<forename type="middle">J</forename>
+				<surname>Migdal</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<forename type="middle">T</forename>
+				<surname>Jones</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">SIGGRAPH &apos;98: Proceedings of the 25th annual conference on Computer graphics and interactive techniques</title>
+		<meeting><address><addrLine>New York, NY, USA</addrLine></address></meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="1998" />
+			<biblScope unit="page" from="151" to="158" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.20,559.17,221.53,10.99;8,336.21,568.64,221.53,10.99;8,336.21,577.86,221.56,11.23;8,336.22,587.32,198.45,11.23"  xml:id="b23">
+	<analytic>
+		<title level="a" type="main">Balancing interactive data management of massive data with situational awareness through smart aggregation . Visual Analytics Science and Technology</title>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<forename type="middle">R</forename>
+				<surname>Tesone</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">R</forename>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Symposium on</title>
+		<imprint>
+			<biblScope unit="page" from="67" to="74" />
+			<date type="published" when="2007-10-30" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.21,596.78,221.60,11.23;8,336.22,606.25,221.53,11.23;8,336.22,615.96,38.71,10.99"  xml:id="b24">
+	<monogr>
+		<title level="m" type="main">Illuminating the Path-The Research and Development Agenda for Visual Analytics</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">J</forename>
+				<surname>Thomas</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<forename type="middle">A</forename>
+				<surname>Cook</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2005" />
+			<publisher>IEEE Computer Society Press</publisher>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.21,625.18,221.54,11.23;8,336.22,634.89,88.91,10.99"  xml:id="b25">
+	<monogr>
+		<title level="m" type="main">The Visual Display of Quantitative Information</title>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<surname>Tufte</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2001" />
+			<publisher>Graphics Press</publisher>
+		</imprint>
+	</monogr>
+	<note>second. edition</note>
+</biblStruct>
+
+<biblStruct coords="8,336.21,644.34,147.75,10.99"  xml:id="b26">
+	<monogr>
+		<title/>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Whitney</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<surname>Kdb+</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2003" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.21,653.57,221.56,11.23;8,336.22,663.28,57.30,10.99"  xml:id="b27">
+	<analytic>
+		<title level="a" type="main">Pyramidal parametrics</title>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<surname>Williams</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">SIGGRAPH Comput. Graph</title>
+		<imprint>
+			<biblScope unit="volume">17</biblScope>
+			<biblScope unit="issue">3</biblScope>
+			<biblScope unit="page" from="1" to="11" />
+			<date type="published" when="1983" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+				</listBibl>
+			</div>
+		</back>
+	</text>
+</TEI>

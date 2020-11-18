@@ -1,0 +1,741 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.tei-c.org/ns/1.0 /home/pisenberg/grobid/grobid-home/schemas/xsd/Grobid.xsd"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+	<teiHeader xml:lang="en">
+		<encodingDesc>
+			<appInfo>
+				<application version="0.4.1" ident="GROBID" when="2016-09-09T13:39+0000">
+					<ref target="https://github.com/kermitt2/grobid">GROBID - A machine learning software for extracting information from scholarly documents</ref>
+				</application>
+			</appInfo>
+		</encodingDesc>
+		<fileDesc>
+			<titleStmt>
+				<title level="a" type="main">Two-stage Framework for Visualization of Clustered High Dimensional Data</title>
+			</titleStmt>
+			<publicationStmt>
+				<publisher/>
+				<availability status="unknown"><licence/></availability>
+			</publicationStmt>
+			<sourceDesc>
+				<biblStruct>
+					<analytic>
+						<author>
+							<persName>
+								<forename type="first">Jaegul</forename>
+								<surname>Choo</surname>
+							</persName>
+							<affiliation>
+								<orgName type="department" key="dep1">College of Computing</orgName>
+								<orgName type="department" key="dep2">College of Computing Georgia Institute of Technology</orgName>
+								<orgName type="laboratory">National Visualization and Analytics Center Pacific Northwest National Laboratory</orgName>
+								<orgName type="institution">Georgia Institute of Technology</orgName>
+								<address>
+									<addrLine>266 Ferst Drive, 902 Battelle Blvd, 266 Ferst Drive</addrLine>
+									<postCode>30332, 99354, 30332</postCode>
+									<settlement>Atlanta, Richland, Atlanta</settlement>
+									<region>GA, WA, GA</region>
+									<country>USA, USA, USA</country>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Shawn</forename>
+								<surname>Bohn</surname>
+							</persName>
+							<affiliation>
+								<orgName type="department" key="dep1">College of Computing</orgName>
+								<orgName type="department" key="dep2">College of Computing Georgia Institute of Technology</orgName>
+								<orgName type="laboratory">National Visualization and Analytics Center Pacific Northwest National Laboratory</orgName>
+								<orgName type="institution">Georgia Institute of Technology</orgName>
+								<address>
+									<addrLine>266 Ferst Drive, 902 Battelle Blvd, 266 Ferst Drive</addrLine>
+									<postCode>30332, 99354, 30332</postCode>
+									<settlement>Atlanta, Richland, Atlanta</settlement>
+									<region>GA, WA, GA</region>
+									<country>USA, USA, USA</country>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Haesun</forename>
+								<surname>Park</surname>
+							</persName>
+							<affiliation>
+								<orgName type="department" key="dep1">College of Computing</orgName>
+								<orgName type="department" key="dep2">College of Computing Georgia Institute of Technology</orgName>
+								<orgName type="laboratory">National Visualization and Analytics Center Pacific Northwest National Laboratory</orgName>
+								<orgName type="institution">Georgia Institute of Technology</orgName>
+								<address>
+									<addrLine>266 Ferst Drive, 902 Battelle Blvd, 266 Ferst Drive</addrLine>
+									<postCode>30332, 99354, 30332</postCode>
+									<settlement>Atlanta, Richland, Atlanta</settlement>
+									<region>GA, WA, GA</region>
+									<country>USA, USA, USA</country>
+								</address>
+							</affiliation>
+						</author>
+						<title level="a" type="main">Two-stage Framework for Visualization of Clustered High Dimensional Data</title>
+					</analytic>
+					<monogr>
+						<imprint>
+							<date/>
+						</imprint>
+					</monogr>
+				</biblStruct>
+			</sourceDesc>
+		</fileDesc>
+		<profileDesc>
+			<textClass>
+				<keywords>
+					<term>dimension reduction, linear discriminant analysis,</term>
+					<term>principal component analysis, orthogonal centroid method, 2D pro-</term>
+					<term>jection, clustered data, regularization, generalized singular value</term>
+					<term>decomposition</term>
+				</keywords>
+			</textClass>
+			<abstract>
+				<p>In this paper, we discuss dimension reduction methods for 2D vi-sualization of high dimensional clustered data. We propose a two-stage framework for visualizing such data based on dimension reduction methods. In the first stage, we obtain the reduced dimensional data by applying a supervised dimension reduction method such as linear discriminant analysis which preserves the original cluster structure in terms of its criteria. The resulting optimal reduced dimension depends on the optimization criteria and is often larger than 2. In the second stage, the dimension is further reduced to 2 for visualization purposes by another dimension reduction method such as principal component analysis. The role of the second-stage is to minimize the loss of information due to reducing the dimension all the way to 2. Using this framework, we propose several two-stage methods, and present their theoretical characteristics as well as experimental comparisons on both artificial and real-world text data sets.</p>
+			</abstract>
+		</profileDesc>
+	</teiHeader>
+	<text xml:lang="en">
+		<body>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1">INTRODUCTION</head><p> Within the visual analytics community, various types of information content are represented using high dimensional signatures. To make these signatures useful they often need to be transformed into a lower dimension (i.e., 2D or 3D) for a variety of visual representations such as scatter plots. Many researchers in this community have used a wide assortment of dimension reduction techniques, e.g., self-organizing map (SOM) <ref type="bibr" coords="1,174.74,480.57,13.74,8.12" target="#b11">[12]</ref> , principal component analysis (PCA) <ref type="bibr" coords="1,90.89,490.54,13.74,8.12" target="#b10">[11]</ref>, multidimensional scaling (MDS) <ref type="bibr" coords="1,229.73,490.54,9.52,8.12" target="#b1">[2]</ref>, etc. However, it is not always clear why a certain technique has been chosen over another, especially to the end user. Typically, its goal can be viewed in terms of two aspects: efficiency and accuracy. Efficiency as defined here is the time to compute the reduction, but accuracy may not be as simple to quantify. Many would amiably agree to quantify accuracy as a measure of the relationship preservation in the high dimensional space to the reduced dimensional space. Note that most techniques either directly or indirectly work on this principle. There are other properties that are important to those interpreting the semantics of the reduced space. Specifically, we note that while local neighbor preservation is important it depends upon the analysis task. No single reduction technique will provide the complete view as various properties of the space are obscured or lost. We have mentioned that typically the primary objective is relationship preservation. However, there are at least two others: outlier and macro structure visualization. Outliers are conceptually easy (i.e., a variance beyond some threshold), but more difficult to quantify, as we do not necessarily know which set of outliers are important to accentuate to the user. Certain techniques (e.g., PCA) tend to show outliers more readily, however tend to compress the reduced space at the expense of showcasing the outliers. Other techniques (e.g., SOM) maximize space usage well, but do so at the expense of masking or even hiding those outliers. Likewise, macro structures of the high dimensional space may be masked or massively distorted during the reduction. Macro structures are those larger order groupings (e.g., clusters) that exist in the original dimensional space. We recognize they are important in dimension reduction research and to those in the visual analytics community. However, few of them focus on data representation especially for visualization of the clustered data <ref type="bibr" coords="1,408.86,271.15,14.19,8.12" target="#b19">[20,</ref><ref type="bibr" coords="1,425.30,271.15,11.21,8.12" target="#b12"> 13,</ref><ref type="bibr" coords="1,438.75,271.15,6.47,8.12" target="#b2"> 3]</ref>. We propose theoretical measures for these properties and efficient algorithms which will aid not only the researchers but ultimately the users/analysts to better understand which balance of properties are important and for which analytic tasks. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2">MOTIVATION</head><p> The focus of this paper is the fundamental characteristics of dimension reduction techniques for visualizing high dimensional data in the form of a 2D scatter plot when the data has cluster structure. The role of dimension reduction here is to give a 2-dimensional representation of data while preserving cluster structure as much as possible. To this end, supervised dimension reduction methods that incorporate cluster information such as linear discriminant analysis (LDA) <ref type="bibr" coords="1,357.71,418.39,10.45,8.12" target="#b3">[4] </ref>or orthogonal centroid method (OCM) <ref type="bibr" coords="1,515.92,418.39,14.94,8.12" target="#b9">[10] </ref>can be naturally considered. However, one of the issues is that with many dimension reduction methods designed to preserve the cluster structure in the data, the theoretically optimal reduced dimension, which is the smallest dimension that is acceptable with respect to the optimization criteria of the dimension reduction method, is usually larger than 2. For example, in LDA, the minimum reduced dimension that preserves the cluster structure quality measure defined as a trace maximization problem is one less than the number of clusters in the data in general <ref type="bibr" coords="1,346.59,518.83,9.71,8.12" target="#b7">[8,</ref><ref type="bibr" coords="1,358.54,518.83,6.48,8.12" target="#b6"> 7]</ref>. In this case, one may simply choose the two dimensions that contribute most to such a measure. However, with only two dimensions , such a measure may become significantly smaller than the original quantity after dimension reduction. This results in loss of information that hinders visualization in properly reflecting the true cluster relationship of the data. A similar situation may occur when using PCA for visualizing the data not having a cluster structure. Even though PCA finds the principal axes that maximally capture the variance of the data, when the resulting 2-dimensional representation of the data maintains only a small fraction of the total variance, the relationships of the data in 2 dimension are likely to be highly inconsistent with those in the original dimension. Such loss of information is inevitable in that the dimension has to be reduced to 2. Our main motivation is to deal with such loss more carefully by separating the loss-introducing stage from the original dimension reduction methods. Based on this idea, we propose the two-stage framework of dimension reduction for visualization. In this framework, a supervised dimension reduction method is applied in the first stage so that the original dimension is reduced to the minimum dimension achievable while preserving the quality of cluster measure as defined in a dimension reduction method. The reduced dimension achieved in the first stage is often larger than 2. Thus in the second stage, we find another dimension reducing transformation that minimizes the loss introduced in further reducing the dimension all the way to 2. This two-stage framework provides us with a means to flexibly apply different types of dimension reduction techniques in each stage and to systematically analyze their effects, which provides understanding the effects of the overall dimension reduction methods for visualization of clustered data. The issues then are the design of the most appropriate dimension reduction methods, the modeling of optimization criteria, and the corresponding solution methods. In this paper, we present both theoretical and empirical answers to these issues. Specifically, we propose several two-stage methods utilizing linear dimension reduction methods such as LDA, orthogonal centroid method (OCM), and principal component analysis (PCA), and we present their theoretical justifications by modeling the optimization criteria for which each method provides the optimal solution. Also, we illustrate and compare the effectiveness of the proposed methods by showing empirical visualization on synthetic and real-world data sets.Although nonlinear dimension reduction methods such as MDS or other manifold learning methods such as isometric feature mapping <ref type="bibr" coords="2,182.49,307.15,14.94,8.12" target="#b15">[16] </ref> and locally linear embed- ding <ref type="bibr" coords="2,72.44,317.11,14.94,8.12" target="#b13">[14] </ref>may also be utilized for the effective 2D visualization of high dimensional data, our focus in this paper is on linear methods. The linear methods are computationally more efficient in general, and unlike most of the manifold learning methods, they also provide dimension reducing transformations that can be applied to map and visualize unseen data points in the same space where the existing data are visualized. Our approach to successively apply two dimension reduction methods should be discerned from the previous works <ref type="bibr" coords="2,264.57,397.11,14.19,8.12" target="#b17">[18,</ref><ref type="bibr" coords="2,282.83,397.11,11.21,8.12" target="#b18"> 19,</ref><ref type="bibr" coords="2,54.00,407.07,11.95,8.12" target="#b20"> 21] </ref> in that they usually aim for improving computational efficiency , scalability, or applicability of a certain dimension reduction method, e.g., LDA. The rest of this paper is organized as follows. In Section 3, LDA, OCM, and PCA are described based on a unified framework of the scatter matrices and their trace optimization problems. In Section 4, we formulate two-stage dimension reduction methods, and in Section 5, several two-stage methods for visualization are proposed and compared along with their criteria. Experimental comparisons are given using artificial and real-world data sets in Section 6, and conclusion and future work are addressed in Section 7. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3">DIMENSION REDUCTION AS TRACE OPTIMIZATION PROBLEM</head><p>In this section, we introduce the notions of scatter matrices used in defining cluster quality and optimization criteria for dimension reduction. Suppose a dimension reducing linear transformation G T ∈ R l×m maps an m-dimensional data vector x to a vector z in an ldimensional space (m &gt; l): </p><formula>G T : x ∈ R m×1 → z = G T x ∈ R l×1 . </formula><formula>(1) </formula><p>Suppose also that a data matrix </p><formula>A = [a 1 a 2 · · · a n ] </formula><p>∈ R m×n is given where the columns a j , j = 1, . . . , n, of A represent n data items in an m-dimensional space, and they are partitioned into k clusters. Without loss of generality, for simplicity of notations, we further assume that A is partitioned as </p><formula>A = [A 1 A 2 · · · A k ], where A i ∈ R m×n i and k ∑ i=1 n i = n. </formula><p>Let N i denote the set of column indices that belong to cluster i, and n i the size of N i . The i-th cluster centroid c (i) and the global centroid c are defined, respectively, as </p><formula>c (i) = 1 n i ∑ j∈N i a j and c = 1 n n ∑ j=1 a j . </formula><p>The scatter matrix within the i-th cluster S </p><p>(i) w , the within-cluster scatter matrix S w , the between-cluster scatter matrix S b , and the total (or mixture) scatter matrix S t are defined <ref type="bibr" coords="2,484.89,153.10,9.70,8.12" target="#b8">[9,</ref><ref type="bibr" coords="2,496.88,153.10,10.65,8.12" target="#b14"> 15]</ref>, respectively, as </p><formula>S (i) w = ∑ j∈N i (a j − c (i) )(a j − c (i) ) T , S w = k ∑ i=1 S (i) w = k ∑ i=1 ∑ j∈N i (a j − c (i) )(a j − c (i) ) T , (2) </formula><formula>S b = k ∑ i=1 ∑ j∈N i (c (i) − c)(c (i) − c) T = k ∑ i=1 n i (c (i) − c)(c (i) − c) T = 1 n k−1 ∑ i=1 k ∑ j=i+1 n i n j (c (i) − c ( j) )(c (i) − c ( j) ) T , and (3) S t = n ∑ j=1 (a j − c)(a j − c) T . </formula><formula>(4) </formula><p>Note that the total scatter matrix S t is related to S w and S b as <ref type="bibr" coords="2,537.02,330.78,10.46,8.12" target="#b8">[9] </ref>S t = S w + S b . </p><formula>(5) </formula><p>When G T in Eq. (1) is applied to the matrix A, the scatter matrices S w , S b , and S t in the original dimensional space are reduced to the </p><formula>l × l matrices G T S w G, G T S b G, and G T S t G, </formula><p>respectively. By computing the trace of the scatter matrices as </p><formula>trace(S w ) = k ∑ i=1 ∑ j∈N i (a j − c (i) ) T (a j − c (i) ) = k ∑ i=1 ∑ j∈N i a j − c (i) 2 2 , (6) trace(S b ) = k ∑ i=1 ∑ j∈N i (c (i) − c) T (c (i) − c) = k ∑ i=1 n i c (i) − c 2 2 (7) = 1 n k−1 ∑ i=1 k ∑ j=i+1 n i n j c (i) − c ( j) 2 2 , and (8) trace(S t ) = n ∑ j=1 (a j − c) T (a j − c) = n ∑ j=1 a j − c 2 2 , (9) </formula><p>we obtain values that can be used to measure the cluster quality. Note that from Eqs. (7) and (8), trace(S b ) can be viewed as the squared sum of the pairwise distances between cluster centroids as well as that of the distances between each centroid and the global centroid. The cluster structure quality can be defined by analyzing how well each cluster can be discriminated from each other. High quality clusters usually have small trace(S w ) and large trace(S b ), relating to the small variance within each cluster and the large distances between clusters. Subsequently, dimension reduction methods may be intended to maximize trace(G T S b G) and minimize trace(G T S w G) in the reduced dimensional space. This simultaneous optimization can be approximated to a single criterion as </p><formula>J b/w (G) = max trace((G T S w G) −1 (G T S b G)), </formula><formula>(10) </formula><p> which is the criterion of LDA. In addition, one may focus on maximizing the distances between clusters, which can be represented as the criterion of OCM, i.e., </p><formula>J b (G) = max G T G=I trace(G T S b G). </formula><formula>(11) </formula><p>On the other hand, regardless of cluster dependent terms, S w and S b , the trace of the total scatter matrix S t can be maximized as </p><formula>J t (G) = max G T G=I trace(G T S t G), </formula><formula>(12) </formula><p>which turns out to be the criterion of PCA. In Eqs. (11) and (12), without the constraint, G T G = I, J b (G) and J t (G) can become arbitrarily large. In what follows, LDA, OCM, and PCA are discussed based on such maximization criteria, and their properties relevant to visualization are identified. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.1">Linear Discriminant Analysis (LDA)</head><p>Conceptually, in LDA, we are looking for a dimension reducing transformation that keeps the between-cluster relationship as remote as possible by maximizing trace(G T S b G) while keeping the within cluster relationship as compact as possible by minimizing trace(G T S w G). As shown in Eq. (10), the criterion of LDA can be written as </p><formula>J b/w (G) = max trace((G T S w G) −1 (G T S b G)). </formula><formula>(13) </formula><p>It can be shown that for any G ∈ R m×l where m &gt; l , </p><formula>trace((G T S w G) −1 (G T S b G)) ≤ trace(S −1 w S b ), </formula><formula>(14) </formula><p>meaning that the cluster structure quality measured by trace(S −1 w S b ) cannot be increased after dimension reduction <ref type="bibr" coords="3,225.37,441.42,9.52,8.12" target="#b3">[4]</ref>. By setting the derivative of Eq. (13) with respect to G to zero, which gives the first order optimality condition, it can be shown that the solution of LDA, where we denote it as G LDA , has the columns which are the leading generalized eigenvectors u of the generalized eigenvalue problem, </p><formula>S b u = λ S w u. </formula><formula>(15) </formula><p>Since the rank of S b is at most k − 1, LDA achieves the upper bound of trace(</p><formula>(G T S w G) −1 (G T S </formula><formula>(S −1 w S b ) for l ≥ k − 1, </formula><formula>(16) </formula><p>which indicates trace(S −1 w S b ) is preserved between the original space and the reduced dimensional space obtained by G LDA . </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.2">Orthogonal Centroid Method (OCM)</head><p>Orthogonal centroid method (OCM) <ref type="bibr" coords="3,185.23,630.05,14.94,8.12" target="#b9">[10] </ref> focuses only on maximizing trace(G T S b G) under the constraint of G T G = I. The criterion of OCM is shown as J b (G) = max G T G=I trace(G T S b G). </p><formula>(17) </formula><p>It is known that for any G ∈ R m×l where m &gt; l such that G T G = I, trace(G T S b G) ≤ trace(S b ), </p><formula>(18) </formula><p>which means the cluster structure quality measured by trace(S b ) cannot be increased after dimension reduction. The solution of Eq. </p><p>() is preserved between the original and the reduced dimensional spaces. An advantage of OCM is that it achieves an upper bound of trace(G T S b G) more efficiently by using QR decomposition, avoiding the eigendecomposition. The algorithm of OCM is as follows . First the centroid matrix C is formed so that each column of C is composed of each cluster's centroid vector, i.e., </p><formula>C = c 1 c 2 · · · c k . </formula><p>Then the reduced QR decomposition <ref type="bibr" coords="3,537.95,217.70,10.46,8.12" target="#b4">[5] </ref>of C is computed for C = Q k R where Q k ∈ R m×k with Q T k Q k = I and R ∈ R k×k is upper triangular. The solution of OCM, G OCM , is found as </p><formula>G OCM = Q k . </formula><p>Note that the columns of By using the equivalence between Eqs. (3) and (3), one can prove that each pairwise distance between cluster centroids is also preserved in the reduced dimensional space obtained by OCM. Another important property of OCM is that by projecting data into the subspace spanned by the centroids, the order of similarities between any particular point and centroids are preserved in terms of Euclidean norm and cosine similarity measure <ref type="bibr" coords="3,498.89,399.71,14.19,8.12" target="#b9">[10,</ref><ref type="bibr" coords="3,515.72,399.71,6.47,8.12" target="#b6"> 7]</ref>. In other words, for any vector q ∈ R m×1 and cluster centroids c (i) and c ( j) , we have </p><formula>q − c (i) 2 &lt; q − c ( j) 2 ⇒ G T OCM q − G T OCM c (i) 2 &lt; G T OCM q − G T OCM c ( j) 2 , and q T c (i) q 2 c (i) 2 &lt; q T c ( j) q 2 c ( j) 2 ⇒ G T OCM q T G T OCM c (i) G T OCM q 2 G T OCM c (i) 2 &lt; G T OCM q T G T OCM c ( j) G T OCM q 2 G T OCM c ( j) 2 </formula><p>. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.3">Principal Component Analysis (PCA)</head><p>PCA is a well-known dimension reduction method that captures the maximal variance in the data. The criterion of PCA can be written as </p><formula>J t (G) = max G T G=I trace(G T S t G). </formula><formula>(20) </formula><p>For any G ∈ R m×l where m &gt; l such that G T G = I, we have trace(G T S t G) ≤ trace(S t ), </p><formula>(21) </formula><p> which means trace(S t ) cannot be increased after dimension reduction . The solution of Eq. (20), where we denote it as G PCA , can be obtained by setting the columns of G as the leading eigenvectors of S t . Since the rank of S t is at most min(m, n), PCA achieves the upper bound of trace(G T S t G) in Eq. (21) for any l such that l ≥ min(m, n), i.e., trace(G T PCA S t G PCA ) = trace(S t ) for l ≥ min(m, n). In many applications of PCA, however, l is usually chosen as a fixed value less than the ranke of S t for the purpose of dimension reduction or noise reduction. This noisy subspace corresponds to the smallest eigenvectors of S t , and they are removed by PCA for better representation of the data. Although S t is related to S b and S w as in Eq. (5), S t as it is does not contain any information on cluster labels. That is, unlike LDA and OCM, PCA ignores the cluster structure represented by S b and/or S w , which is why PCA is considered as an unsupervised dimension reduction method. Usually, PCA assumes that the global centroid is zero by subtracting the empirical mean of the data from each data vector. The centered data can be represented as A − ce T , where e is ndimensional vector whose components are all 1's. PCA has a unique property that, given a fixed l, it produces the best reduced dimensional representation that minimizes the difference between the centered matrix A − ce T and its projection to the reduced dimensional space GG T (A − ce T ) where G has orthonormal columns, i.e., </p><formula>G PCA = arg min G, G T G=I l GG T (A − ce T ) − (A − ce T ), </formula><p> where the matrix norm · is either a Frobenius norm or a Euclidean norm. The three discussed methods are summarized in <ref type="figure" coords="4,238.02,397.18,25.30,8.12" target="#tab_1">Table 1</ref>. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head> 4 FORMULATION OF TWO-STAGE FRAMEWORK FOR </head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>ALIZATION </head><p> Suppose we want to find a dimension reducing linear transformation V T ∈ R 2×m that maps an m-dimensional data vector x to a vector z in a 2-dimensional space (m ≫ 2): </p><formula>V T : x ∈ R m×1 → z = V T x ∈ R 2×1 . </formula><formula>(22) </formula><p> Further assume that it is composed of two stages of dimension reductions as follows. In the first stage, a dimension reducing linear transformation G T ∈ R l×m maps an m-dimensional data vector x to a vector y in the l-dimensional space (l ≪ m): </p><formula>G T : x ∈ R m×1 → y = G T x ∈ R l×1 , </formula><formula>(23) </formula><p>where l is fixed as its minimum optimal dimension by the first-stage criterion. When l ≤ 2, we have no further dimension reduction to do after the first step. However, an optimal l in many methods and for many data sets is larger than 2, and so we assume that l &gt; 2. In the second stage, another dimension reducing linear transformation H T ∈ R 2×l maps an l-dimensional data vector y to a vector z in the 2-dimensional space(l &gt; 2): </p><formula>H T : y ∈ R l×1 → z = H T y ∈ R 2×1 . </formula><formula>(24) </formula><p> Such consecutive dimension reductions performed by G T followed by H T can be combined, resulting in a single dimension reducing transformation V T as </p><formula>V T = H T G T . </formula><formula>(25) </formula><p>In the next section, discussion will be focused on various ways for choosing the first stage dimension reducing transformation G and the second stage dimension transformation H with a purpose to construct combined dimension reducing transformation V T = H T G T for 2-dimensional visualization according to various optimization criteria. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5">TWO-STAGE METHODS FOR 2D VISUALIZATION</head><p> All the proposed two-stage methods start from one of the supervised dimension reduction methods such as LDA or OCM that are designed for clustered data. In the first stage (by G T ∈ R l×m in Eq. (23)), the dimension is reduced by LDA or OCM to the smallest dimension that satisfies Eq. (16) or (19), respectively. Therefore in the first stage, the cluster structure quality measured either by trace(S −1 w S b ) or trace(S b ) is preserved. Then we perform the second-stage dimension reduction (by H T ∈ R 2×l in <ref type="bibr" coords="4,509.03,307.00,29.60,8.12">Eq. (24)</ref>) that minimizes the loss of information either by applying the same criterion used in the first stage or by using J t in Eq. (20), i.e., that of PCA. As seen in Section 3.3, Eq. (20) gives the best approximation of the first-stage results that minimize the difference in terms of Frobenius/Euclidean norm. In what follows, we describe each of the two-stage methods in detail, and derive their equivalent single-stage methods (by V T ∈ R 2×m in <ref type="bibr" coords="4,350.33,387.19,29.33,8.12">Eq. (22)</ref>) in case they exist. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.1">Rank-2 LDA</head><p>In this method, LDA is applied in the first stage, and trace(S −1 w S b ) is preserved in the l-dimensional space where l = k − 1. In the second stage, the same criterion J b/w (H) is used to reduce the ldimensional first-stage results to 2-dimensional data. The criterion of the second-stage dimension reducing matrix H can be formulated as </p><formula>H b/w = max H∈R l×2 trace((H T (G T LDA S w G LDA )H) −1 (H T (G T LDA S b G LDA )H)). </formula><formula>(26) </formula><p> Assuming the columns of G LDA , which are generalized eigenvectors of Eq. (15), are in decreasing order of their corresponding generalized eigenvalues, i.e., </p><formula>G LDA = u 1 u 2 · · · u k−1 where λ 1 ≥ λ 2 ≥ · · · ≥ λ k−1 , </formula><p>the solution of Eq. (26) is </p><formula>H b/w = e 1 e 2 , </formula><p>where e 1 and e 2 are the first and the second standard unit vectors, i.e., </p><formula>e 1 = 1 0 · · · 0 T ∈ R l×1 and e 2 = 0 1 0 · · · 0 T ∈ R l×1 </formula><p>. This solution is equivalent to choosing two dimensions with the most leading generalized eigenvalues from the first stage result, and the resulting two-stage method can be represented as a single-stage dimension reduction method by V ∈ R m×2 which directly maximize J b/w , i.e., </p><formula>V b/w = arg max V ∈R m×2 J b/w (V ) = arg max V ∈R m×2 trace((V T S w V ) −1 (V T S b V )). (27) </formula><formula>(H T (G T S b G)H) </formula><p>The solution of Eq. (27) becomes </p><formula>V b/w = G LDA H b/w = u 1 u 2 , </formula><p>where u 1 and u 2 are the leading generalized eigenvectors of Eq. (15). This solution is also known as reduced-rank linear discriminant analysis <ref type="bibr" coords="5,105.31,204.04,9.52,8.12" target="#b5">[6]</ref>. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.2">LDA followed by PCA</head><p>In this method, LDA is applied in the first stage, and trace(S −1 w S b ) is preserved in the l-dimensional space where l = k − 1. In the second stage, PCA is applied in order to obtain the best approximation of the l-dimensional first-stage results in terms of Frobenius/Euclidean norm. The second-stage dimension reducing matrix H is obtained by solving </p><formula>H t = arg max H∈R l×2 ,H T H=I trace(H T (G T LDA S t G LDA )H), </formula><formula>(28) </formula><p>where the solution is the two leading eigenvectors of the total scatter matrix of the first-stage result, </p><formula>G T LDA (S b + S w )G LDA ≃ G T LDA S b G LDA . </formula><p>In this case, the principal axes that PCA gives in the second stage better reflect those of the between-cluster matrix of the first-stage result, G T LDA S b G LDA , and they may in turn discriminate the clusters clearly in the 2-dimensional space. In this sense, LDA followed by PCA achieves a clear cluster structure as well as a good approximation of the first-stage result. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.3">OCM followed by PCA</head><p>In this method, OCM is applied in the first stage, and trace(S b ) is preserved in the l-dimensional space where l = k. In the second stage, PCA is applied in order to obtain the best approximation of the l-dimensional first-stage results in terms of Frobenius/Euclidean norm. As in Section 5.2, the second-stage dimension reducing matrix H is obtained by solving </p><formula>H t = arg max H∈R l×2 ,H T H=I trace(H T (G T OCM S t G OCM )H), </formula><formula>(30) </formula><p>where the solution is the two leading eigenvectors of the total scatter matrix of the first-stage result, , which may rather scatter the data points within each cluster, eventually preventing the visualization results from showing a clear cluster structure. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.4">Rank-2 PCA on S b</head><p>In this method, OCM is applied in the first stage, and trace(S b ) is preserved in the l-dimensional space where l = k. In the second stage, the same criterion J b (H) is used to reduce the l-dimensional first-stage results to 2-dimensional data. The second-stage dimension reducing matrix H is obtained by solving </p><formula>H b = arg max H∈R l×2 ,H T H=I trace(H T (G T OCM S b G OCM )H), </formula><formula>(32) </formula><p> where the solution is the two leading eigenvectors of the betweenscatter matrix of the first-stage result, G T OCM S b G OCM . The columns of G OCM form the subspace spanned by centroids, and this subspace includes the range space of S b . Accordingly, one can easily show that the eigenvector u Y i ∈ R l×1 of G T OCM S b G OCM is related to eigenvectors u i ∈ R m×1 of S b as u Y i = G T OCM u i with their corresponding eigenvalues matched as well, i.e., λ Y i = λ i . Hence, the solution of Eq. (32) can be written as </p><formula>H b = u Y 1 u Y 2 = G T OCM u 1 u 2 . </formula><formula>(33) </formula><p> Using Eq. (33) and the relationship shown in Eq. (25), the singlestage dimension reducing transformation V b can be built as </p><formula>V T b = H T b G T OCM = u T 1 u T 2 G OCM G T OCM = u T 1 u T 2 (34) = arg max V ∈R m×2 J b (V ) = arg max V ∈R m×2 trace(V T S b V ). </formula><formula>(35) </formula><p>Eq. (34) holds since the eigenvectors of S b , u 1 and u 2 , are in the range space of G OCM . The criterion of Eq. (35) has been used in one of the successful visual analytic systems, IN-SPIRE, for 2D representation of document data <ref type="bibr" coords="5,435.48,633.52,13.75,8.12" target="#b16">[17]</ref>. The discussed two-stage methods are summarized in <ref type="figure" coords="5,518.83,643.48,25.29,8.12" target="#tab_2">Table 2</ref>. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6.1">Regularization on LDA for undersampled data</head><p> In undersampled cases, the LDA criterion shown in Eq. (13) cannot be applied directly because S w is singular. In order to overcome this singularity problem, Howland et al. proposed a universal algorithmic framework of LDA using the generalized singular value decomposition (LDA/GSVD) <ref type="bibr" coords="6,182.98,179.12,9.71,8.12" target="#b7">[8,</ref><ref type="bibr" coords="6,194.70,179.12,6.47,8.12" target="#b6"> 7]</ref>. Specifically, for the case when m ≫ n ≫ k, which is usual for most undersampled problems , LDA/GSVD gives the solution for G such that G T S w G = 0 while maintaining the maximum value of trace(G T S b G). This solution makes sense since LDA criterion is formulated to minimize trace(G T S w G). However, it means that all of the data points belonging to a specific cluster are represented as a single point in the reduced dimensional space, which lessens the generalization ability for classification as well as for visualizing the individual data relationship within each cluster. On the contrary, the fact that LDA makes G T S w G = 0 can be viewed as an advantage for visualization purposes since LDA has the capability to fully minimize trace(G T S w G). By means of regularization on S w one can control trace(G T S w G), which determines the scatter of the data points within each cluster. In regularized LDA which was originally proposed to avoid the singularity of S w in classification context, S w is replaced by a nonsingular matrix S w + γI where I is an identity matrix, and γ is a control parameter. In general , as γ is increased, the within-cluster distance, trace(G T S w G), also becomes larger with data points being more scattered around their corresponding centroids. As γ is decreased, the within-cluster distance becomes smaller, and the data points gather closer around their centroids. Such manipulation of γ can be exploited in a visualization context because one can choose an appropriate value of γ so that the second-stage method such as PCA, which maximizes trace(G T S t G) = trace(G T S b G + G T S w G), does not focus too much on trace(G T S w G). The results that follow are based on such choices of γ. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6.2">Data Sets</head><p>The data sets tested are composed of one artificially-generated Gaussian-mixture dataset (GAUSSIAN) and three real-world text data sets (MEDLINE, NEWSGROUPS, and REUTERS) that are clustered based on their topics. All the text documents are encoded as term-document matrices where each dimension corresponds to a particular word, and the value of a certain dimension represents the frequency of the corresponding word shown in the document. Each data set is set to have an equal number of data per cluster, and have a mean of zero which is attained by subtracting the global mean. (See Section 6.3.) The descriptions of data sets, which are also summarized in Table 3, are as follows. The GAUSSIAN data set is a randomly generated Gaussian mixture with 10 clusters. Each cluster is made up of 100 data vectors, which add up to 1000 in total, and the dimension is set to 1100, which is slightly more than the number of the data items. In its visualization shown in <ref type="figure" coords="6,130.88,642.64,27.64,8.12" target="#fig_0">Fig. (1)</ref>, the clusters are labeled using letters as @BULLET 'a', 'b', . . . , and 'j'. The MEDLINE data set is a document corpus related to medical science from the National Institutes of Health 1 . The original dimension is 22095, and the number of clusters is 5, where each clus-where the letters in parentheses are used in the visualization shown in <ref type="figure" coords="6,327.18,396.87,26.50,8.12" target="#fig_20">Fig. (4)</ref>. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6.3">Effects of Data Centering</head><p>Fig. 5 is the example of applying OCM+PCA to the MEDLINE data set with and without data centering. Once the MEDLINE data set is encoded as a term-document matrix, every component has a non-negative value, which results in the global centroid that is significantly far from the origin. Then performing PCA without data centering might give the first principal axis as the one reflecting the global centroid rather than that discriminating clusters. If we consider projecting the data onto each of the horizontal and the vertical axes in <ref type="figure" coords="6,347.12,506.90,23.21,8.12" target="#fig_24">Fig. 5</ref> , the former, which corresponds to the first principal axis, does not help in showing the cluster structure clearly, and only the vertical axis, which corresponds to the second principal axis from PCA, discriminates clusters. We have found that such undesirable behavior is common in many cases without data centering , which is why we assume that data is centered throughout this paper. Accordingly, all the results shown in <ref type="figure" coords="6,480.52,566.68,22.18,8.12" target="#fig_0">Figs 1</ref>-4 are obtained after data centering. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6.4">Comparison of Visualization Results</head><p>The results of four two-stage methods for the tested data sets are shown in Figs.1-4 2 . In all cases, LDA-based methods show cluster structures more clearly than OCM-based methods. This proves the effectiveness of LDA that considers both within-and between-cluster measures while OCM only takes into account the latter. Due to this difference , OCM generally produces a widely-scattered data representation within each cluster. As a result, in the NEWSGROUPS dataset, such a wide within-cluster variance significantly deteriorates the cluster structure visualization even if OCM still attempts to maximize the between-cluster distance. In the MEDLINE and the REUTERS data sets, all of the four methods produce relatively similar results. However, we have controlled the within-cluster variance in LDA-based methods using the regularization term γI. In addition, the fact that rank-2 LDA and LDA+PCA produce almost identical results indicates that G T LDA S t G LDA is dominated by G T LDA S b G LDA after LDA is applied in the first stage as we expected. Rank-2 LDA represents each cluster most compactly by minimizing the within-cluster radii both in the first and the second stage. However, it may reduce the between-cluster distances as well because J b/w maximizes the conceptual ratio of two scatter measures. As can be seen in the two LDA-based methods applied to the NEW- GROUPS data set, while rank-2 LDA minimizes the within-cluster radii, it also places the centroids closer to each other as compared to those in LDA+PCA. Due to this effect, which one is preferable between rank-2 LDA and LDA+PCA depends on the data set to be visualized. Overall, OCM+PCA and Rank-2 PCA on S b show similar results . It means G T S b G ≃ G T S t G in that the difference between two methods lies in whether PCA is applied to G T S b G or G T S t G in the second stage. Since performing PCA on G T S b G is computationally more efficient than PCA on G T S t G, Rank-2 PCA on S b can be a good alternative to OCM+PCA in case efficient computation is important. Finally, these visualization results reveal the interesting cluster relationships underlying in the data. In <ref type="figure" coords="7,216.16,333.21,29.58,8.12" target="#fig_5">Fig. (2)</ref>, the clusters for colon cancer ('c') and oral cancer ('o') are shown close to each other. In <ref type="figure" coords="7,109.44,353.14,28.96,8.12" target="#fig_8">Fig. (3)</ref>, the clusters of soc.religion.christian ('c') and talk.religion.misc ('r'), those of comp.sys.ibm.pc.hardware ('p') and comp.sys.mac.hardware ('a'), and those of sci.crypt ('y') and sci.med ('d') are closely located respectively in LDA-based methods. In addition, the two clusters, misc.forsale ('f') and rec.sport.baseball ('b'), are shown to be the most distinctive, which makes sense because those topics are quite irrelevant to the others. In <ref type="figure" coords="7,64.29,422.88,28.22,8.12" target="#fig_20">Fig. (4)</ref>, the clusters of grain ('g'), wheat ('w'), and corn ('c') as well as those of money-fx ('m') and interest ('i') are visualized very close. (</p><formula>a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a aa a aa a aa a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a </formula><formula>d d d d d d d d d d d d d d d d d d d d d d dd d d d d d d d d d d dd d d d d d d d d d d d d dd d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d e </formula><formula>f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j jj j jj j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j a b c d e f g h i j </formula><formula>a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a aa a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a </formula><formula>c c c c d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d </formula><formula>e f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f ff f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j j a b </formula><formula>0.06 h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h hh h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h hh h h h h h h h h h c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c dd d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o oo o o o o o o o o o o o o o o o o o o o o o o o o o o o o o t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t h c d o t </formula><formula>h h h h hh h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h hh h h h h h h h h h h h h h h h h h h h h h h h h h h h hh h h h h h h h h h c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c dd d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d dd d d d d d d d d d d d d d d d d d d d d d d d o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o oo o o o o o o o o o o o o o o o o o o o o o o o o o o o o o t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t h c d o t −0.2 </formula><formula>h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h hh h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h hh h h h h h h h h h c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d dd d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t tt t t t t t t t t t t h c d o t </formula><formula>h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h hh h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h hh h h h h h h h h h c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c cc c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d dd d d d d d d d d d d d d dd d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t t tt t t t t t t t t t t h c d o t </formula><formula>0.06 p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f b </formula><formula>y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y e e e e e e e e e e e e e e e e e e e e e e e e e e e e e e e e e e e e e e e e e e e e e e e e ee e e e e e e e e e e e e e e e e e e e e d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c cc c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c g g g g g g g g g g g g g g g gg g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p r r r r r r r r r r r r r r r r r r r r r r rr r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r r p a f b </formula><formula>0.06 p p p p p pp p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f b </formula><formula>y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y yy yy y y y y y y y y y y y y y y </formula><formula>d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d </formula><formula>c c c c g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g p p p p p p p p p p p pp p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p </formula><formula>0.2 p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f b </formula><formula>y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y </formula><formula>c c c g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p </formula><formula>0.2 p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f f </formula><formula>y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y </formula><formula>d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p p </formula><formula>e e a a a a a a a a aa a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m gc c c c e a m g r t i s w c −0</formula><formula>e e a a a a a a a a a a a a a a aa a a a a a a a aa a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a aa a a a a a m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m mm m m m m m m m m m m m m m mm m m m m m m m m m m m m m m m m m m m m m m m m m m g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g r r r r r rr r r r r r r r r r r r r r r r r s s s s s ss s s s s s s s s s s ss s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s ss s s s s s s s s s s s s s s s s s s s s ss s s s s s s s w w w w w w w w w w w w w ww w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c e a m g r t i s w c −0</formula><formula>e a a a a a a a a a a a aa a aa a a a a a a aa a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g r r r r r r r r r r rr r r r r r rr r r r r r i s s s s s s s s s s s s ss s s s s s s s s s s s s s s s s s ss s s s s s s s s s s s s s s s s s s ss s s s s s s s s s s s s s s s s s s s s s s s s s s s w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w ww w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w c c </formula><formula>e a a a a a a a a a a a aa a aa a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m m g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g r r r ri s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s ss s s s s s s s s s s s ss s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s s w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w w </formula><formula>c c d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d dd d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o</formula><formula>0.2 h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h h </formula><formula>d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o o </formula></div><figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_0" coords="8,178.07,64.77,253.11,7.64"><head>Figure 1: </head><figDesc>Figure 1: Comparison of the two-stage methods in the GAUSS data set. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_5" coords="8,174.11,199.57,261.03,7.64;8,73.73,209.06,58.90,8.12;8,192.91,209.06,53.26,8.12;8,326.32,209.06,55.13,8.12;8,447.89,209.06,80.19,9.35"><head>Figure 2: </head><figDesc>Figure 2: Comparison of the two-stage methods in the MEDLINE data set. (a) Rank-2 LDA (b) LDA+PCA (c) OCM+PCA (d) Rank-2 PCA on S b </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_8" coords="8,162.68,334.38,283.90,7.64;8,73.73,343.86,58.90,8.12;8,192.90,343.86,53.26,8.12;8,326.32,343.86,55.12,8.12;8,447.88,343.86,80.19,9.35"><head>Figure 3: </head><figDesc>Figure 3: Comparison of the two-stage methods in the NEWSGROUPS data set. (a) Rank-2 LDA (b) LDA+PCA (c) OCM+PCA (d) Rank-2 PCA on S b </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_20" coords="8,172.78,469.19,263.68,7.64;8,73.73,478.66,58.90,8.12;8,192.90,478.66,53.26,8.12;8,326.32,478.66,55.12,8.12;8,447.88,478.66,80.19,9.35"><head>Figure 4: </head><figDesc>Figure 4: Comparison of the two-stage methods in the REUTERS data set. (a) Rank-2 LDA (b) LDA+PCA (c) OCM+PCA (d) Rank-2 PCA on S b </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_24" coords="8,177.95,603.93,253.36,7.64;8,170.20,613.42,271.59,8.12"><head>Figure 5: </head><figDesc>Figure 5: Example of effects of data centering in the MEDLINE data set. (a)OCM+PCA with data centering (b)OCM+PCA without data centering </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_0" validated="false" coords="3,54.00,526.21,240.06,52.19"><figDesc coords="3,148.93,526.21,145.13,9.90;3,54.00,536.17,35.75,8.97;3,91.31,555.22,30.86,8.12;3,122.18,552.92,3.88,6.22;3,122.18,554.66,46.48,10.60;3,168.65,552.45,8.91,6.97;3,178.06,554.66,9.96,8.97;3,188.01,552.92,3.88,6.22;3,188.01,554.66,48.80,10.60;3,131.64,569.44,27.09,8.97">b G)) in Eq. (14) for any l such that l ≥ k − 1, i.e., trace((G T LDA S w G LDA ) −1 (G T LDA S b G LDA )) = trace</figDesc><table></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_1" validated="false" coords="3,317.95,77.72,240.05,79.32"><figDesc coords="3,321.69,77.72,236.31,8.12;3,317.95,87.13,240.03,9.90;3,317.95,95.79,240.04,11.20;3,317.95,107.05,104.28,8.97;3,365.85,128.26,27.38,8.12;3,393.23,125.96,3.88,6.22;3,398.48,127.70,111.63,9.90;3,543.06,128.26,14.94,8.12">17) can be obtained by setting the columns of G as the leading eigenvectors of S b . Since S b has at most k − 1 nonzero eigenvalues, the upper bound of trace(G T S b G) in Eq. (18) can be achieved for any l such that l ≥ k − 1, i.e., trace(G T S b G) = trace(S b ) for l ≥ k − 1. (19)</figDesc><table coords="3,317.95,147.70,97.47,9.34">Eq. (19) indicates trace(S b </table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_2" validated="false" coords="3,317.95,279.40,240.04,50.62"><figDesc coords="3,414.26,279.40,143.73,9.23;3,317.95,288.81,240.04,8.97;3,317.95,299.33,102.93,8.12;3,351.91,319.97,27.38,8.12;3,379.29,317.68,3.88,6.22;3,379.29,319.42,144.76,10.60">G OCM are composed of the orthogonal bases for the subspace spanned by the centroids, and l = k in this case. Finally, OCM achieves trace(G T OCM S b G OCM ) = trace(S b ), where l = k.</figDesc><table></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_3" validated="false" coords="4,65.95,63.93,497.37,76.76"><figDesc coords="4,144.50,63.93,320.26,8.53;4,247.53,74.80,18.07,8.12;4,376.24,74.80,20.43,8.12;4,498.47,74.80,17.44,8.12;4,78.67,87.15,81.94,8.12;4,76.68,101.32,23.43,9.86;4,100.12,97.04,24.24,9.21;4,116.54,101.32,31.37,9.86;4,147.92,100.02,14.69,9.98;4,197.24,88.67,15.37,9.69;4,213.12,88.07,22.39,8.97;4,197.24,98.08,91.50,11.29;4,288.73,98.55,27.17,11.20;4,333.82,94.21,50.88,9.90;4,365.95,102.37,21.72,6.88;4,388.02,92.91,51.06,11.20;4,455.81,94.21,49.63,9.52;4,486.68,102.37,21.72,6.88;4,508.75,92.91,49.81,10.82;4,100.96,112.24,37.36,8.12;4,198.67,112.24,115.77,8.12;4,352.69,112.24,67.49,8.12;4,451.03,112.24,112.30,8.12;4,65.95,122.60,107.36,8.12;4,74.20,132.57,90.88,8.12;4,247.53,127.28,18.07,8.97;4,384.38,127.88,3.98,8.00;4,489.02,127.83,36.35,8.12">Table 1: Comparison of dimension reduction methods. It is assumed S b and S t are full rank. LDA OCM PCA Optimization Criterion (x ∈ R m×1 G T → y ∈ R l×1 ) J b/w (G) = max trace((G T S w G) −1 (G T S b G)) J b (G) = max G T G=I trace(G T S b G) J t (G) = max G T G=I trace(G T S t G) Algorithm generalized eigendecomposition QR decomposition symmetric eigendecomposition Smallest dimension achieving the criterion upper bound k − 1 k min(m, n)</figDesc><table></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_4" validated="false" coords="5,65.95,63.93,481.95,72.33"><figDesc coords="5,141.99,63.93,325.26,7.64;5,502.40,74.80,45.50,9.35;5,70.65,87.15,76.52,8.12;5,65.95,101.32,23.43,9.86;5,89.39,97.04,24.24,9.21;5,105.81,101.32,31.37,9.86;5,137.19,100.02,14.68,9.98;5,188.46,92.45,75.05,11.29;5,263.51,92.45,72.49,11.66;5,327.02,94.21,21.42,10.40;5,420.07,92.91,94.86,11.20;5,67.80,112.24,82.22,8.12;5,66.76,126.40,23.39,9.86;5,90.16,122.12,21.98,9.22;5,104.08,126.40,31.11,9.86;5,135.19,125.08,15.87,10.00;5,175.78,112.84,35.37,9.98;5,212.52,114.14,9.96,8.97;5,222.47,112.37,44.35,11.29;5,203.77,124.90,9.96,8.97;5,214.35,123.61,3.88,6.22;5,219.61,124.90,9.96,8.97;5,229.56,123.61,37.75,11.19;5,288.05,119.85,17.42,8.12;5,285.24,127.45,22.70,6.88;5,308.28,119.29,9.96,8.97;5,318.86,118.00,3.88,6.22;5,324.12,119.29,9.96,8.97;5,334.07,118.00,65.20,10.82;5,379.04,127.45,22.70,6.88;5,402.08,119.29,9.96,8.97;5,412.67,118.00,3.88,6.22;5,417.92,119.29,9.96,8.97;5,427.88,118.00,65.20,10.82;5,472.85,127.45,22.70,6.88">Table 2: Summary of the optimization criteria of the two-stage dimension reduction methods. 2 PCA on S b Stage 1: Preservation (x ∈ R m×1 G T → y ∈ R l×1 ) trace((G T S w G) −1 (G T S b G)) = trace(S −1 w S b ) trace(G T S b G) = trace(S b ) Stage 2: Maximization (y ∈ R l×1 H T → z ∈ R 2×1 ) trace((H T (G T S w G)H) −1 (H T (G T S b G)H)) trace H T H=I (H T (G T S t G)H) trace H T H=I (H T (G T S t G)H) trace H T H=I</figDesc><table coords="5,198.19,74.80,304.21,8.12">Rank-2 LDA 
+LDA + PCA 
+OCM+PCA 
+Rank-</table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_5" validated="false" coords="5,54.00,347.22,240.05,113.05"><figDesc coords="5,164.57,347.22,10.35,9.90;5,171.05,353.34,12.95,6.22;5,184.49,349.07,29.39,9.23;5,63.96,359.03,80.90,8.12;5,106.60,378.91,6.47,8.00;5,113.07,376.58,3.88,6.22;5,113.07,378.31,58.02,10.60;5,171.08,376.58,3.88,6.22;5,171.08,382.70,12.95,6.22;5,184.53,378.31,56.93,9.90;5,279.11,378.87,14.94,8.12;5,54.00,396.90,240.03,11.19;5,54.00,407.91,166.90,10.82;5,91.30,429.91,27.37,8.12;5,118.67,427.61,3.88,6.22;5,118.67,429.35,85.65,10.60;5,204.31,427.61,3.88,6.22;5,204.31,429.35,52.46,10.60;5,54.00,447.93,75.35,9.98;5,125.47,454.05,12.95,6.22;5,138.92,447.93,99.26,11.08;5,234.30,454.05,12.95,6.22;5,247.75,449.78,46.07,9.35">G T LDA S t G LDA . From Eq. (5), we have G T LDA S t G LDA = G T LDA (S b + S w )G LDA . (29) Since LDA conceptually maximizes trace(G T S b G) and minimizes trace(G T S w G), the result is expected to satisfy trace(G T LDA S b G LDA ) ≫ trace(G T LDA S w G LDA )), which means that G T LDA S t G LDA is dominated by G T LDA S b G LDA , i.e.,</figDesc><table></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_6" validated="false" coords="5,63.96,143.99,494.04,579.89"><figDesc coords="5,164.57,682.18,10.35,9.89;5,171.05,688.30,15.30,6.22;5,187.12,684.02,32.01,9.23;5,63.96,693.99,80.89,8.12;5,101.33,713.88,6.47,8.00;5,107.80,711.54,3.88,6.22;5,107.80,713.28,63.28,10.60;5,171.08,711.54,3.88,6.22;5,171.08,717.66,15.30,6.22;5,187.17,713.28,59.55,9.90;5,279.11,713.83,14.94,8.12;5,426.20,171.82,43.81,8.97;5,470.01,170.08,3.88,6.22;5,470.01,171.82,54.23,10.60;5,317.95,187.24,80.23,9.98;5,394.31,193.36,15.30,6.22;5,410.39,189.10,147.60,9.34;5,317.95,199.01,10.35,9.90;5,324.42,205.13,15.30,6.22;5,340.51,199.01,160.84,11.08;5,497.47,205.13,15.30,6.22;5,513.55,200.86,44.45,9.23;5,317.95,210.82,240.04,8.12;5,317.95,218.93,10.35,9.90;5,324.42,225.05,15.30,6.22;5,340.51,220.83,30.24,9.30">G T OCM S t G OCM . From Eq. (5), we have G T OCM S t G OCM = G T OCM (S b + S w )G OCM . (31) ) ≫ trace(G T OCM S w G OCM ), which means that G T OCM S b G OCM does not necessarily dominate G T OCM S t G OCM . Then the two principal axes of G T OCM S t G OCM obtained by PCA in the second stage tend to fail to reflect those of G T OCM S b G OCM</figDesc><table coords="5,317.95,143.99,240.05,38.43">Unlike LDA, OCM does not minimize trace(G T S w G) as shown in 
+Eq. (17). Therefore the following may not be the case: 
+
+trace(G T 
+OCM S b G OCM </table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_7" validated="true" coords="6,145.92,63.88,320.18,50.96"><figDesc coords="6,246.67,63.88,115.91,7.64">Table 3: Description of data sets.</figDesc><table coords="6,145.92,73.64,320.18,41.20">GAUSSIAN MEDLINE NEWSGROUPS REUTERS 
+Original dimension, m 
+1100 
+22095 
+16702 
+3907 
+Number of data items, n 
+1000 
+500 
+770 
+800 
+Number of clusters, k 
+10 
+5 
+11 
+10 
+
+</table></figure>
+
+			<note place="foot" n="6"> EXPERIMENTS In this section, we present visualization results using the proposed methods for several data sets, especially focusing on undersampled text data visualization where the data item is represented in m-dimensional space and the number of the data items n is less than m (m &gt; n).</note>
+
+			<note place="foot" n="1"> http://www.cc.gatech.edu/˜hpark/data.html ter has 100 documents. The cluster labels that correspond to the document topics are shown as • heart attack (&apos;h&apos;), colon cancer (&apos;c&apos;), diabetes (&apos;d&apos;), oral cancer (&apos;o&apos;), and tooth decay (&apos;t&apos;), where the letters in parentheses are used in the visualization shown in Fig. (2). The NEWSGROUPS data set [1] is a collection of newsgroup documents, and originally composed of 20 topics. However, we have chosen 11 topics for visualization, and each cluster is set to have 70 documents. The original dimension is 16702, and the cluster labels are shown as • comp.sys.ibm.pc.hardware (&apos;p&apos;), comp.sys.mac.hardware (&apos;a&apos;), misc.forsale (&apos;f&apos;), rec.sport.baseball (&apos;b), sci crypt (&apos;y&apos;), sci.electronics (&apos;e&apos;), sci.med (&apos;d&apos;), soc.religion.christian (&apos;c&apos;), talk.politics.guns (&apos;g&apos;), talk.politics.misc (&apos;p&apos;), and talk.religion.misc (&apos;r&apos;), where the letters in parentheses are used in the visualization shown in Fig. (3). The REUTERS data set [1] is the document collection that appeared in the Reuters newswire in 1987, and originally composed of hundreds of topics. Among them, 10 topics related to economic subjects are chosen for visualization, and each cluster has 80 documents . The original dimension is 3907, and the cluster labels are shown as • earn (&apos;e&apos;), acquisitions (&apos;a&apos;), money-fx (&apos;m&apos;), grain (&apos;g&apos;), crude (&apos;r&apos;), trade (&apos;t&apos;), interest (&apos;i&apos;), ship (&apos;s&apos;), wheat (&apos;w&apos;), and corn (&apos;c&apos;),</note>
+
+			<note place="foot" n="2"> Those figures can be arbitrarily magnified without losing the resolution in the electronic version of this paper.</note>
+
+			<note place="foot" n="7"> CONCLUSION AND FUTURE WORK According to our results, LDA-based methods are shown to be superior to OCM-based methods since both within-and betweencluster relationships are taken into account in LDA. Especially, combined with PCA in the second stage, LDA+PCA achieves a clear discrimination between clusters as well as the best approximation of the results of LDA when the distance between data is measured in terms of Frobenius/Euclidean norm. However, many classes except for few of them that are clearly unrelated tend to be overlapped especially when dealing with large numbers of data points and clusters. This is inherently due to the nature of the second-stage dimension reduction in which only the two axes are chosen so that the classes which contribute most to the second stage criteria can be well-discriminated. Such behavior can exaggerate the distances between particular clusters, and more elaboration towards new criteria that fits in visualization is required. In the MEDLINE and the REUTERS datasets, visualization results seem to have a tail-shape along specific directions. We often found this phenomenon to occur in many other data sets. It is still unclear as to what causes this and how it affects the visualization, e.g. characteristics of information loss in the second stage. Finally, in order to determine how much loss of information is introduced by each method, more rigorous analysis based on various quantitative measures such as pairwise between-cluster distance and within-cluster radii should be conducted.</note>
+		</body>
+		<back>
+
+			<div type="acknowledgement">
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>ACKNOWLEDGEMENTS </head><p>The work of these authors was supported in part by the National Science Foundation grants CCF-0732318 and CCF-0808863. Any opinions, findings and conclusions or recommendations expressed in this material are those of the authors and do not necessarily reflect the views of the National Science Foundation. </p></div>
+			</div>
+
+			<div type="annex">
+			</div>
+			<div type="references">
+
+				<listBibl>
+
+<biblStruct coords="7,336.21,142.24,221.79,7.22;7,336.21,151.71,221.78,7.22;7,336.21,161.17,39.63,7.22"  xml:id="b0">
+	<monogr>
+		<title level="m" type="main">UCI machine learning repository</title>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Asuncion</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Newman</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2007" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="7,336.21,170.64,221.79,7.22;7,336.21,180.11,64.43,7.22"  xml:id="b1">
+	<monogr>
+		<title/>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<forename type="middle">F</forename>
+				<surname>Cox</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<forename type="middle">A A</forename>
+				<surname>Cox</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="1994" />
+			<publisher>Multidimensional Scaling. Chapman &amp; Hall</publisher>
+			<pubPlace>London</pubPlace>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="7,336.21,189.57,221.79,7.22;7,336.21,199.03,221.79,7.22;7,336.21,208.50,114.24,7.22"  xml:id="b2">
+	<analytic>
+		<title level="a" type="main">Class visualization of high-dimensional data with applications</title>
+		<author>
+			<persName>
+				<forename type="first">I</forename>
+				<forename type="middle">S</forename>
+				<surname>Dhillon</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<forename type="middle">S</forename>
+				<surname>Modha</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<forename type="middle">S</forename>
+				<surname>Spangler</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Computational Statistics &amp; Data Analysis</title>
+		<imprint>
+			<biblScope unit="volume">41</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="59" to="90" />
+			<date type="published" when="2002" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="7,336.21,217.96,221.79,7.22;7,336.21,227.43,126.63,7.22"  xml:id="b3">
+	<monogr>
+		<title level="m" type="main">Introduction to Statistical Pattern Recognition, second edition</title>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Fukunaga</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="1990" />
+			<publisher>Academic Press</publisher>
+			<pubPlace>Boston</pubPlace>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="7,336.21,236.89,221.79,7.22;7,336.21,246.36,159.09,7.22"  xml:id="b4">
+	<analytic>
+		<title/>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<forename type="middle">H</forename>
+				<surname>Golub</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<forename type="middle">F</forename>
+				<surname>Van Loan</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Matrix Computations</title>
+		<imprint>
+			<publisher>Johns Hopkins University Press</publisher>
+			<date type="published" when="1996" />
+			<publisher>Johns Hopkins University Press</publisher>
+		</imprint>
+	</monogr>
+	<note>third. edition</note>
+</biblStruct>
+
+<biblStruct coords="7,336.21,255.82,221.78,7.22;7,336.21,265.28,214.14,7.22"  xml:id="b5">
+	<monogr>
+		<title level="m" type="main">The Elements of Statistical Learning: Data Mining, Inference, and Prediction</title>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Hastie</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Tibshirani</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Friedman</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2001" />
+			<publisher>Springer</publisher>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="7,336.21,274.75,221.79,7.22;7,336.21,284.21,221.79,7.22;7,336.21,293.68,221.78,7.22;7,336.21,303.15,69.30,7.22"  xml:id="b6">
+	<analytic>
+		<title level="a" type="main">Structure preserving dimension reduction for clustered text data based on the generalized singular value decomposition</title>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Howland</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Jeon</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Park</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">SIAM Journal on Matrix Analysis and Applications</title>
+		<imprint>
+			<biblScope unit="volume">25</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="165" to="179" />
+			<date type="published" when="2003" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="7,336.21,312.61,221.79,7.22;7,336.21,322.07,221.79,7.22;7,336.21,331.54,221.79,7.22;7,336.21,341.00,17.94,7.22"  xml:id="b7">
+	<analytic>
+		<title level="a" type="main">Generalizing discriminant analysis using the generalized singular value decomposition. Pattern Analysis and Machine Intelligence</title>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Howland</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Park</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on</title>
+		<imprint>
+			<biblScope unit="volume">26</biblScope>
+			<biblScope unit="issue">8</biblScope>
+			<biblScope unit="page" from="995" to="1006" />
+			<date type="published" when="2004-08" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="7,336.21,350.47,221.77,7.22;7,336.21,359.93,131.52,7.22"  xml:id="b8">
+	<monogr>
+		<title level="m" type="main">Algorithms for clustering data</title>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Jain</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Dubes</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="1988" />
+			<publisher>Prentice-Hall, Inc. Upper Saddle River</publisher>
+			<pubPlace>NJ, USA</pubPlace>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="7,336.21,369.40,221.79,7.22;7,336.21,378.86,221.79,7.22;7,336.21,388.36,221.79,7.11;7,336.21,397.79,56.46,7.22"  xml:id="b9">
+	<analytic>
+		<title level="a" type="main">Dimensional reduction based on centroids and least squares for efficient processing of text data</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Jeon</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Park</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">B</forename>
+				<surname>Rosen</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the First SIAM International Workshop on Text Mining. Chiago, IL</title>
+		<meeting>the First SIAM International Workshop on Text Mining. Chiago, IL</meeting>
+		<imprint>
+			<date type="published" when="2001" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="7,336.21,407.25,182.99,7.22"  xml:id="b10">
+	<monogr>
+		<title level="m" type="main">Principal component analysis</title>
+		<author>
+			<persName>
+				<forename type="first">I</forename>
+				<surname>Jolliffe</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2002" />
+			<publisher>Springer</publisher>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="7,336.21,416.72,163.66,7.22"  xml:id="b11">
+	<monogr>
+		<title level="m" type="main">Self-organizing maps</title>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Kohonen</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2001" />
+			<publisher>Springer</publisher>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="7,336.21,426.19,221.79,7.22;7,336.21,435.64,221.79,7.22;7,336.21,445.11,146.99,7.22"  xml:id="b12">
+	<analytic>
+		<title level="a" type="main">Visualization of labeled data using linear transformations</title>
+		<author>
+			<persName>
+				<forename type="first">Y</forename>
+				<surname>Koren</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<surname>Carmel</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Information Visualization, 2003. INFOVIS 2003. IEEE Symposium on</title>
+		<imprint>
+			<date type="published" when="2003-10" />
+			<biblScope unit="page" from="23" to="30" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="7,336.21,454.57,221.79,7.22;7,336.21,464.04,212.29,7.22"  xml:id="b13">
+	<analytic>
+		<title level="a" type="main">Nonlinear Dimensionality Reduction by Locally Linear Embedding</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<forename type="middle">T</forename>
+				<surname>Roweis</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<forename type="middle">K</forename>
+				<surname>Saul</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Science</title>
+		<imprint>
+			<biblScope unit="volume">290</biblScope>
+			<biblScope unit="issue">5500</biblScope>
+			<biblScope unit="page" from="2323" to="2326" />
+			<date type="published" when="2000" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="7,336.21,473.51,221.79,7.22;7,336.21,482.97,221.80,7.22;7,336.21,492.43,110.83,7.22"  xml:id="b14">
+	<analytic>
+		<title level="a" type="main">Using discriminant eigenfeatures for image retrieval</title>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<forename type="middle">L</forename>
+				<surname>Swets</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">J</forename>
+				<surname>Weng</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Pattern Analysis and Machine Intelligence</title>
+		<imprint>
+			<biblScope unit="volume">18</biblScope>
+			<biblScope unit="issue">8</biblScope>
+			<biblScope unit="page" from="831" to="836" />
+			<date type="published" when="1996" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="7,336.21,501.90,221.79,7.22;7,336.21,511.36,221.78,7.22;7,336.21,520.83,93.21,7.22"  xml:id="b15">
+	<analytic>
+		<title level="a" type="main">A Global Geometric Framework for Nonlinear Dimensionality Reduction</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">B</forename>
+				<surname>Tenenbaum</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">V</forename>
+				<forename type="middle">D</forename>
+				<surname>Silva</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">C</forename>
+				<surname>Langford</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Science</title>
+		<imprint>
+			<biblScope unit="issue">5500</biblScope>
+			<biblScope unit="page" from="2902319" to="2323" />
+			<date type="published" when="2000" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="7,336.21,530.29,221.79,7.22;7,336.21,539.76,221.81,7.22;7,336.21,549.22,17.94,7.22"  xml:id="b16">
+	<analytic>
+		<title level="a" type="main">The ecological approach to text visualization</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">A</forename>
+				<surname>Wise</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Journal of the American Society for Information Science</title>
+		<imprint>
+			<biblScope unit="volume">50</biblScope>
+			<biblScope unit="issue">13</biblScope>
+			<biblScope unit="page" from="1224" to="1233" />
+			<date type="published" when="1999" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="7,336.21,558.68,221.79,7.22;7,336.21,568.15,221.79,7.22;7,336.21,577.61,140.92,7.22"  xml:id="b17">
+	<analytic>
+		<title level="a" type="main">A two-stage linear discriminant analysis via qrdecomposition . Pattern Analysis and Machine Intelligence</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Ye</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Q</forename>
+				<surname>Li</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on</title>
+		<imprint>
+			<biblScope unit="volume">27</biblScope>
+			<biblScope unit="issue">6</biblScope>
+			<biblScope unit="page" from="929" to="941" />
+			<date type="published" when="2005-06" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="7,336.21,587.08,221.79,7.22;7,336.21,596.55,221.79,7.22;7,336.21,606.01,37.87,7.22"  xml:id="b18">
+	<analytic>
+		<title level="a" type="main">A direct LDA algorithm for high-dimensional data with application to face recognition</title>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Yu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Yang</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Pattern Recognition</title>
+		<imprint>
+			<biblScope unit="volume">34</biblScope>
+			<biblScope unit="page" from="2067" to="2070" />
+			<date type="published" when="2001" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="7,336.21,615.47,221.78,7.22;7,336.21,624.93,221.79,7.22;7,336.21,634.44,221.78,7.11;7,336.21,643.87,221.79,7.22"  xml:id="b19">
+	<analytic>
+		<title level="a" type="main">Cross-weighted fisher discriminant analysis for visualization of dna microarray data</title>
+		<author>
+			<persName>
+				<forename type="first">X</forename>
+				<surname>Zhang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Myers</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Kung</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Acoustics, Speech, and Signal Processing Proceedings. (ICASSP&apos;04). IEEE International Conference on</title>
+		<imprint>
+			<date type="published" when="2004-03" />
+			<biblScope unit="page" from="589" to="92" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="7,336.21,653.33,221.78,7.22;7,336.21,662.80,221.80,7.22;7,336.21,672.26,221.79,7.22"  xml:id="b20">
+	<monogr>
+		<title level="m" type="main">Discriminant analysis of principal components for face recognition. Automatic Face and Gesture Recognition</title>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Zhao</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Chellappa</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Krishnaswamy</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="1998" />
+			<biblScope unit="page">336</biblScope>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+				</listBibl>
+			</div>
+		</back>
+	</text>
+</TEI>
