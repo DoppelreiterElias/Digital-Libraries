@@ -1,0 +1,921 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.tei-c.org/ns/1.0 /home/pisenberg/grobid/grobid-home/schemas/xsd/Grobid.xsd"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+	<teiHeader xml:lang="en">
+		<encodingDesc>
+			<appInfo>
+				<application version="0.4.1" ident="GROBID" when="2016-09-09T13:37+0000">
+					<ref target="https://github.com/kermitt2/grobid">GROBID - A machine learning software for extracting information from scholarly documents</ref>
+				</application>
+			</appInfo>
+		</encodingDesc>
+		<fileDesc>
+			<titleStmt>
+				<title level="a" type="main">Activity Analysis Using Spatio-Temporal Trajectory Volumes in Surveillance Applications</title>
+			</titleStmt>
+			<publicationStmt>
+				<publisher/>
+				<availability status="unknown"><licence/></availability>
+			</publicationStmt>
+			<sourceDesc>
+				<biblStruct>
+					<analytic>
+						<author>
+							<persName>
+								<forename type="first">Firdaus</forename>
+								<surname>Janoos</surname>
+							</persName>
+							<affiliation>
+								<orgName type="department">Dept. of Computer Science and Engineering</orgName>
+								<orgName type="institution">Ohio State University</orgName>
+							</affiliation>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Shantanu</forename>
+								<surname>Singh</surname>
+							</persName>
+							<affiliation>
+								<orgName type="department">Dept. of Computer Science and Engineering</orgName>
+								<orgName type="institution">Ohio State University</orgName>
+							</affiliation>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Okan</forename>
+								<surname>Irfanoglu</surname>
+							</persName>
+							<affiliation>
+								<orgName type="department">Dept. of Computer Science and Engineering</orgName>
+								<orgName type="institution">Ohio State University</orgName>
+							</affiliation>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Raghu</forename>
+								<surname>Machiraju</surname>
+							</persName>
+							<affiliation>
+								<orgName type="department">Dept. of Computer Science and Engineering</orgName>
+								<orgName type="institution">Ohio State University</orgName>
+							</affiliation>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Richard</forename>
+								<surname>Parent</surname>
+							</persName>
+							<affiliation>
+								<orgName type="department">Dept. of Computer Science and Engineering</orgName>
+								<orgName type="institution">Ohio State University</orgName>
+							</affiliation>
+						</author>
+						<title level="a" type="main">Activity Analysis Using Spatio-Temporal Trajectory Volumes in Surveillance Applications</title>
+					</analytic>
+					<monogr>
+						<imprint>
+							<date/>
+						</imprint>
+					</monogr>
+				</biblStruct>
+			</sourceDesc>
+		</fileDesc>
+		<profileDesc>
+			<textClass>
+				<keywords>
+					<term>wavelets, HOSVD, surveillance, anomaly detection, trajectory Index Terms: I47 [Computing Methodologies]: Image Proc and Comp Vision—Feature Measurement</term>
+					<term>I54 [Computing Methodologies]: Pat Rec —Applications</term>
+					<term>I48 [Scene Analysis]: Tracking—</term>
+				</keywords>
+			</textClass>
+			<abstract>
+				<p>In this paper, we present a system to analyze activities and detect anomalies in a surveillance application, which exploits the intuition and experience of security and surveillance experts through an easy-to-use visual feedback loop. The multi-scale and location specific nature of behavior patterns in space and time is captured using a wavelet-based feature descriptor. The system learns the fundamental descriptions of the behavior patterns in a semi-supervised fashion by the higher order singular value decomposition of the space described by the training data. This training process is guided and refined by the users in an intuitive fashion. Anomalies are detected by projecting the test data into this multi-linear space and are visualized by the system to direct the attention of the user to potential problem spots. We tested our system on real-world surveillance data, and it satisfied the security concerns of the environment.</p>
+			</abstract>
+		</profileDesc>
+	</teiHeader>
+	<text xml:lang="en">
+		<body>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1">INTRODUCTION</head><p> In today's world, monitoring and surveillance are increasingly critical parts in wide-spread homeland security systems. However, one of the main difficulties in building such systems lies in discriminating unusual and threatening behavior against the backdrop of the range of normal or typical behaviors of people in the environment. What is informative in surveillance includes recognizing activities, knowing typical and threatening patterns of behavior, inferring intent , and seeing through attempts to mask threats with normal behavior . Yet, finding any of this information in the increasing sea of low level video data (and other sensor modalities) is a complex task that goes well beyond simply providing more and different sensors over wider areas. Advances in remote sensing systems have provided human operators access to more data, but, in a typical surveillance application the amount of video feed captured is so large that it quickly overwhelms the ability of security personnel to analyze and respond to data in a time critical fashion. The current challenge is to help extract relevant patterns and direct the attention of the human operators to acute situations and longer term trends (i.e. seeing new patterns of typical behavior and identifying emerging threats.) Our proposed system is part of a larger Strategic Surveillance System built on the concept of Collaborative Autonomy, in which machine agents are designed to collaborate with human operators to overcome the brittleness in algorithms, to cope with the false alarm problem, to re-direct human attention to changing events, and to be re-directable as people bring contextual information to bear. This * e-mail: {janoos,singhsh,irfanogl,raghu,parent}@cse.ohio-state.edu collaboration must be enabled for different time scales which will require different tactics of human-automata coordination. These principles require that the human operators be able to interact with and guide the system to ensure that it operates congruent to their experience and intuition for human behavior patterns. In computer vision, the problem of determining patterns of behavior in an environment has been extensively studied (see Sec. 2 for a brief survey). The traditional approach involves tracking people in the environment, extracting the spatio-temporal trajectories of each individual, and then analyzing these trajectories separately and collectively to identify the behavior of the group, in a semantic sense (e.g. people gathering/dispering, or person A following person B or a traffic jam at intersection, etc. ). However, one of the main drawbacks of this approach has been the generation of the spatio-temporal trajectories themselves. It is a major challenge to acquire a clean, error free, uninterrupted trajectory of every individual in the environment . Unreliability in the low-level person detection algorithms is one factor, but the main problem is due to tracking issues like fragmentation of the trajectory (due to occlusions), sensor gap (when an individual temporarily moves out of camera coverage) and ambiguity (when two or more individuals come together and then move apart). We deal with these problems of fragmentation, sensor gap and ambiguity, by looking for behavior patterns in the ensemble of the trajectories rather than individually. We build a spatio-temporal trajectory volume (STTV) of all the (perhaps fragmented) trajectories occurring in the environment over an extended period of time, and analyze this volume for known patterns and anomalies without having to construct the exact trajectory for each individual. Also, the combination of machine analysis and user interpretation makes our method robust to the levels of noise usually encountered in surveillance systems. Behavior patterns occur across multiple scales, and are location dependent (space and time). Different behaviors may be composed of the same set of primitive events that differ only in their timespan , and their time of occurrence. Similarly, the geographic location and extent affects the identification of the behavior. Additionally , the trajectory volumes are constructed from tracking data obtained from multiple independent cameras, and therefore suffer from problems of exactly determining trajectory correspondences across cameras, and from general errors due to occlusions, illumination changes, etc. Therefore, the multi-scale, location sensitive nature of our task, and the localized nature of the noise in the model, suggest that wavelets are an appropriate basis for the feature descriptor. Our system is designed to be trained online by security personnel , who identify segments of video feed as normal behavior patterns . The training instances in a single class of activities exhibit similar patterns at characteristic scales and translations in the trajectory volume. Our system learns these recurring themes from the instances of a class in an automated fashion, and uses this information to identify whether a new trajectory volume (testing data point) exhibits a similar activity pattern. A PCA-like method (Fukunaga <ref type="bibr" coords="1,317.96,712.76,14.33,8.14" target="#b15">[16]</ref> ) is ideal for such an application. PCA itself requires the feature be presented as a vector, which blurs the separation between the two spatial scales, the temporal scale, the two spatial locations and the temporal location in the wavelet description. To preserve the information independence between these modes, we use Higher Order Singular Value Decomposition (HOSVD) to perform such an analysis. We perform the HOSVD on the wavelet derived feature space, rather than the trajectory volume space itself, because our feature descriptor captures the spatio-temporal proximity of the activity in the scene, which is not captured by voxels of the original volume. <ref type="figure" coords="2,53.99,402.79,28.45,7.86">Figure 1</ref> : Schematic overview of system showing the different modules of the systems. The Low Level Tracking Module interfaces with the surveillance cameras and supplies our system with trajectory data, which is converted to a representation called a Spatio Temporal Trajectory Volume (STTV). The Analysis Module builds a wavelet based description of the behaviors and performs anomaly detection, in conjunction with the Training Subsystem. The Visualization Module and User Feedback Loop allows the user to interact with and control the system. <ref type="figure" coords="2,63.96,501.81,20.94,8.14">Fig. 1</ref>shows a schematic overview of our proposed system. The Low Level Tracking Module interfaces with the surveillance cameras and supplies our system with trajectory data, which is converted to a representation called a Spatio Temporal Trajectory Volume (STTV) as explained in Sec. 3. The Feature Descriptor Extraction sub-system builds a wavelet based description of the behaviours captured by the STTV (Sec. 3.1). These feature descriptors are used to train the system, as well as perform anomaly detection as described in Sec. 4. The user (security expert) can view the video feed, the STTV representation and anomalies detected by the system through the User Interface, and can guide the system through the Visual Feedback Loop described in Sec. 5. In Sec. 6 we discuss the experience of the users with our system and show user validation of the analysis algorithm. Finally, in Sec. 7, we conclude by presenting a summary of our methods and directions for future work. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2">RELATED WORK</head><p>The problem of human activity recognition has been extensively studied in computer vision (Bobick <ref type="bibr" coords="2,182.36,692.79,10.45,8.14" target="#b2">[3] </ref>and Nagel <ref type="bibr" coords="2,233.67,692.79,14.33,8.14" target="#b24">[25]</ref>) and has the following four salient categories: I. Human Action Analysis: The high level reasoning about the activity of individuals by analyzing the motion of their body parts. Aggarwal and Cai <ref type="bibr" coords="2,384.51,66.69,9.52,8.14" target="#b0">[1]</ref>, and Gavrila <ref type="bibr" coords="2,442.83,66.69,14.93,8.14" target="#b16">[17] </ref>give a plenary review of the current research in this area. II. Motion Based Recognition: The recognition of behavior of individual humans from their motion information, by analyzing the spatio-temporal trajectories. See Niu et al. <ref type="bibr" coords="2,477.59,107.75,13.74,8.14" target="#b25">[26]</ref>, Brand et al. <ref type="bibr" coords="2,545.30,107.75,9.52,8.14" target="#b4">[5]</ref>, Oliver <ref type="bibr" coords="2,342.73,117.71,13.74,8.14" target="#b26">[27]</ref>, for more detail on these methods. III. Interactive Behavior Recognition: It consists of understanding human behaviors involving interactions between two or more people. These methods are usually restricted to a very small number of people, and over relatively short durations of time. Oliver <ref type="bibr" coords="2,343.09,168.74,13.74,8.14" target="#b27">[28]</ref>, <ref type="bibr" coords="2,362.86,168.74,14.93,8.14" target="#b26">[27] </ref>gives a comprehensive survey of the work in this field. IV. Group Behavior Analysis: This involves analyzing the behavior of large and varying numbers of people over varying lengths of time, and geographical areas of varying sizes, in order to determine the patterns of human behavior in the environment. Whereas we are interested in the problem of labeling group behavior patterns as normal or anomalous, and in highlighting the region of the anomaly, much of existing literature is devoted to extracting semantic (higher level) inferences and cataloguing the behavior patterns (Buxton and Mukerjee <ref type="bibr" coords="2,403.09,269.57,10.45,8.14" target="#b7">[8] </ref>). Below we give a brief survey of the representative research in this domain. Buxton <ref type="bibr" coords="2,356.93,290.71,10.45,8.14" target="#b6">[7] </ref> presents a Bayesian belief revision approach for active behavioural analysis which exploits simple correlations in the spatio-temporal data to infer more complex behaviours. Cupillard et al. <ref type="bibr" coords="2,340.06,320.60,13.74,8.14" target="#b9">[10]</ref>, <ref type="bibr" coords="2,360.43,320.60,14.93,8.14" target="#b10">[11] </ref>discuss a method for recognizing behavior using multiple cameras with overlapping fields of view. They define a formal language to describe behavioural patterns. The surveillance data from multiple cameras is combined by grouping objects with similar values of position, size, motion patterns, and semantic labels . Hongeng et al. <ref type="bibr" coords="2,402.16,370.40,13.74,8.14" target="#b17">[18]</ref>, <ref type="bibr" coords="2,422.61,370.40,14.93,8.14" target="#b18">[19] </ref>propose a more general method of activity recognition using a Bayesian framework based analysis of the trajectories of the individuals in the scene. Brémond and Medioni <ref type="bibr" coords="2,350.14,400.29,10.45,8.14" target="#b5">[6] </ref>specify a model to describe scenarios of human activity as a combination of sub-scenarios and properties of the mobile objects involved in the scenario. To perform scenario recognition, this method requires an a priori specification of the mission context (the specific methods to recognize the scenarios,) in a formal language. The class of methods listed so far, require an a priori specification of the behavior patterns in some type of formal language or as finite automata, as compared to our method in which security personnel can train the system simply by a " point-and-click " type of operation, without having to analyze the semantics of the patterns themselves. Makris and Ellis <ref type="bibr" coords="2,388.65,511.09,14.93,8.14" target="#b20">[21] </ref> propose a combination of spatial and probabilistic models for reasoning about pedestrian behavior, using unsupervised learning techniques to label trajectories and identify atypical behaviours. In <ref type="bibr" coords="2,405.80,540.98,14.93,8.14" target="#b21">[22] </ref> they investigate an activity-based semantic model for a scene under visual surveillance, that identifies regions where particular types of motion activity are located. They illustrate methods that allow unsupervised learning of the model from trajectory data. The main drawback of such methods is that they build a probabilistic model of typical pedestrian trajectories and flag anomalies as large deviations from this but do not enforce user defined or context specfic behavior classes, (e.g. day time activity vs. night time activity). In addition to requiring clean motion trajectories of all the individuals in the environment, the methods cited above, in general, require other modalities of information such as the size and color histograms of the moving regions, etc., which makes them very sensitive to noise in the lower-level vision systems. Also, this affects scalability of these methods with respect to group sizes and behavior patterns, in terms of the computational complexity of the methods and the descriptive capability of the behavior models. Brand and Kettnaker <ref type="bibr" coords="2,408.35,712.77,9.52,8.14" target="#b3">[4]</ref>, use an entropy minimized HMM to annotate office activity, monitor traffic intersections and infer 3D motion from video. In the traffic monitoring application, they use optical flow to perform abnormality detection. The main difference is that traffic motion is very ordered (restricted to lanes), and the number of behavior types is small as compared to pedestrian behaviours . Furthermore, this method does not distinguish between different behavior types, rather it learns a single model of normal behavior and tests all input against this model. Also, it does not address the issue of behavior patterns occurring over multiple spatiotemporal scales. A significant difference between the methods mentioned so far and ours is that they do not specifically incorporate visual and userinteractive elements into their design and formulation. We feel that this prevents these systems from being used to their maximum potential (See Sec. 5). Davis et al. <ref type="bibr" coords="3,106.32,206.16,14.93,8.14" target="#b12">[13] </ref>introduced the concept of activity maps, as a 2D spatial and scene-specific model of the local activity (motion) occurring in the area under surveillance, over a specific time interval. Human activity is defined as any human generated motion and is recognized by characteristic translating motion patterns. They then use the activity maps to determine the optimal scan paths for the PTZ cameras in the environment. The problem of visualizing video so as to convey maximum information to users in appropriate visual representations has been studied in the context of volume visualization. Chen et al. <ref type="bibr" coords="3,266.08,295.83,10.45,8.14" target="#b8">[9] </ref>give a broad treatement of this subject, with emphasis on the visualization of motion events in videos, and a comparison of the different abstract visual representations. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3">SPATIO-TEMPORAL TRAJECTORY VOLUMES (STTV)</head><p>Trajectory fragments of pedestrian motion from video are used to generate a volumetric representation called the Spatio-Temporal Trajectory Volume (STTV). An STTV summarizes the results of tracking human activity within a spatio-temporal extent of constant duration. An implementation of the Lucas-Kanade tracker <ref type="bibr" coords="3,270.16,396.36,14.93,8.14" target="#b19">[20] </ref>is used to extract trajectories from a video sequence. It generates several fragmented trajectories of the motion in that temporal extent. We then embed these trajectories in the STTV. Next, we smooth the volume with a Gaussian filter to mitigate the effects of tracking noise and trajectory fragmentation. <ref type="figure" coords="3,187.88,446.17,21.86,8.14" target="#fig_1">Fig. 2</ref> shows the STTV constructed for one such video sequence in our environment. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.1">Wavelet Based Feature Descriptors</head><p> The wavelet transform provides a rich and descriptive means of analyzing functions by providing time-frequency localization and they form an unconditional basis for a large class of signals (Donoho <ref type="bibr" coords="3,54.00,516.00,13.44,8.14" target="#b14">[15]</ref> ). Also most wavelet systems satisfy the multi-resolution condition (Daubechies <ref type="bibr" coords="3,126.50,525.96,13.44,8.14" target="#b11">[12]</ref>), and allow for a multi-scale analysis of signals. If F(x, y,t) is the STTV to be transformed, the 3D scaling coefficient c i jk (u, v, w) and corresponding wavelet coefficient d i jk (u, v, w) are defined by: </p><formula>c i jk (u, v, w) = x y t F(x, y,t)φ i jk,uvw (x, y,t)dxdydt (1) d i jk (u, v, w) = x y t F(x, y,t)ψ i jk,uvw (x, y,t)dxdydt </formula><formula>(2) </formula><p>where φ i jk,uvw (x, y,t) is the 3D scaling function and ψ i jk,uvw (x, y,t) is the 3D wavelet function at the log 2 scale factors i, j, k and with the translations factors as 2 i u, 2 j v, 2 k w respectively. The reconstruction formula is: </p><formula>F(x, y,t) = ∑ uvw c i 0 j 0 k 0 (k)φ i 0 j 0 k 0 ,uvw (x, y,t) + i 0 ∑ i=1 j 0 ∑ j=1 k 0 ∑ k=1 ∑ uvw d i jk (u, v, w)ψ i jk,uvw (x, y,t) (3) </formula><p> The 3D wavelet transform (and its inverse) are computed by the sequential application of the 1D Discrete Wavelet Transform (Inverse DWT respectively) in O(UVW ) time (Mallat <ref type="bibr" coords="3,484.02,86.61,13.44,8.14" target="#b22">[23]</ref>), where U,V,W are the extents of F(x, y,t) along the x, y,t axes respectively. Since we are interested in studying the multi-scale structure present in the STTV F(x, y,t), and not in reconstruction or compression per se, we use the scaling coefficients of the wavelet transform to create our feature descriptor. The scaling coefficients capture the structure present in the signal, and their magnitude is maximum when the size of the structure matches the size of the scaling function (Mallat and Zhong <ref type="bibr" coords="3,407.11,166.32,13.74,8.14" target="#b23">[24]</ref>, Baranuik <ref type="bibr" coords="3,463.59,166.32,9.41,8.14" target="#b1">[2]</ref>). The 1D form of the feature descriptor γ j (u) at scale level i and translation 2 i u is defined as: </p><formula>γ i (u) = c i (u) − r i (u) j = j 0 ...1 </formula><formula>(4) </formula><p>where, r i (u) = (c i+1 ↑ 2) h 0 , a is the reconstruction of the scaling coefficients c i+1 (u) up by one level. It is so defined to remove the redundancy of information that exists in the scaling coefficients across scales. Using this descriptor reconstruction can be achieved only up to the finest but one scale. That is, while the coefficients c 0 represent the sampling resolution, reconstruction of only up to coefficients c 1 can be performed recursively using Eqn. 5 </p><formula>c i (u) = γ i (u) + r i (u) i = i 0 ...1 </formula><formula>(5) </formula><p>The 3D form of the descriptor γ i jk (u, v, w) is obtained similarly from the 3D scaling coefficients. We use the orthogonal 3D Haar wavelet system to generate the feature descriptors, because the compact, non-overlapping support of the scaling function in each scale gives good separation of the information at that scale. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4">ANOMALY DETECTION 4.1 Behavior Classes</head><p>In our application, the behavior patterns are grouped together into day-and-time specific classes, like early-morning, start-of-school-day, lecture-period, weekend-night, etc. Therefore the candidate class, against which to test a video sequence for anomalies, is known a priori based on when (day and time) the video sequence was recorded. As a result, the anomaly detection problem becomes (a) to see if the test data point belongs to the candidate class, (b) in what salient ways does it differ from the class. We learn a fundamental description of each class by decomposing the space spanned by its training samples using Higher Order Singular Value Decomposition (HOSVD) (Sec. 4.2) and then eliminating the natural variations and background noise in the training samples through dimensionality reduction. The process of dimensionality reduction is guided by the human operators of the system who adjust the parameters of the anomaly detection module to bring it in line with their expectations (Sec. 4.4). </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.2">Higher Order Singular Value Decomposition</head><p>HOSVD is an extension of the classical PCA/SVD on matrices to higher order tensors (<ref type="bibr" coords="3,396.07,606.03,73.15,8.14">Lathauwer et al. [14]</ref>). The feature descriptor γ i jk (u, v, w) of the STTV is essentially a tensor, in which the two spatial scales, the temporal scale, the two spatial translations and the temporal translation form six independent modes. Ideally, we would like to preserve this independence of the modes when fitting a model to each behavior class, however the size of this six mode tensor is prohibitively large (log 2 U × log 2 V × log 2 W ×U ×V ×W where U,V,W are the extents of the STTV along the x, y and t axes respectively). In order reduce the size of this tensor, we assume the two spatial axes x and y to be isotropic and identical, and collapse a ↑ denotes upsampling by a factor or 2, denotes convolution, h 0 is the low-pass quadrature filter of the wavelet system <ref type="figure" coords="4,305.32,207.49,25.81,7.84">Fig. (a)</ref>shows an image of the scene with the trajectories over a fixed temporal duration overlaid on it. <ref type="figure" coords="4,172.84,216.93,25.83,7.84">Fig. (b)</ref>shows these trajectories laid out in 3D (x,y,t). <ref type="figure" coords="4,368.09,216.93,25.38,7.84">Fig. (c)</ref>shows the Gaussian smoothed STTV for this duration. the two spatial scales into one mode (similarly for spatial translations ). Thus the four mode tensor form is γ <ref type="bibr" coords="4,205.90,277.66,9.65,9.04">[i j]</ref>k (<ref type="bibr" coords="4,222.76,273.63,12.90,11.62">[uv]</ref>, w) and has size log 2 U × log 2 W ×U ×W . We decompose the tensor using HOSVD (Vasilescu and Terzopoulos <ref type="bibr" coords="4,158.92,296.78,13.40,8.11" target="#b28">[29]</ref>). This allows us to control the variance in the observed data and to localize the error of a test data point in each mode independently, by reducing the dimensions of each mode separately. Intuitively, this means that by adjusting the number of dimensions in, say, the temporal translation mode one can control how sensitive the model is to differences of temporal translation between the test data point and the space spanned by the class. If N is the number of training instances of a behavior class, we construct a 5 mode tensor T by concatenating the training instances along the fifth mode. We then learn the linear space spanned by the modes of that behavior class by decomposing the tensor as: </p><formula>T = S × 1 U (trg) × 2 U (i j) × 3 U (k) × 4 U (uv) × 5 U (w) (6) </formula><p> The tensor S is called the core tensor and is analogous to the diagonal singular value matrix in traditional SVD. However, in HOSVD, S is not a diagonal tensor. The operation × n indicates a tensormatrix multiplication with respect to mode n. The U matrices contain the eigenvectors giving the principal directions in the respective mode. Here U (trg) is the space of training instances, U (i j) the space spanned by the spatial scales, U (k) the space spanned by the temporal scales, and U (uv) and U (w) are the spaces spanned by the spatial and temporal translations respectively. With this decomposition, the sources of variation and noise are identified in each mode independently. The underlying behavior class is then modeled by reducing the dimensions in each mode separately as explained in Sec. 4.4. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.3">Detecting Anomalies</head><p>The anomaly in a new STTV with respect to a behavior class is detected and localized by reconstructing the STTV in the reduced dimension multi-linear space describing that class, and then measuring the difference with the original STTV. Let S be the core tensor of this reduced multi-linear space, </p><formula>U (trg) , U (i j) , U (k) , U (k) , U (uv) , U (w) </formula><p> be the corresponding eigenvector matrices, and let x be the coefficients for a test data point in the space spanned by U (trg) . If C = γ <ref type="bibr" coords="4,195.69,700.28,9.65,9.04">[i j]</ref>k (<ref type="bibr" coords="4,212.55,696.25,12.89,11.62">[uv]</ref>, w) , ∀<ref type="bibr" coords="4,246.85,696.25,13.07,11.62">[i j]</ref>, k, <ref type="bibr" coords="4,271.05,696.25,12.70,11.62">[uv]</ref>, w is the 4-mode feature descriptor tensor for this test instance, then a corresponding tensor C is reconstructed in the reduced dimension multi-linear space, as: </p><formula>C = S × 1 x × 2 U (i j) × 3 U (k) × 4 U (uv) × 5 U (w) (7) If M = S × 2 U (i j) × 3 U (k) × 4 U (uv) × 5 U (w) (8) then C = M × 1 x (9) </formula><p>Eqn. 9 is a multi-linear operation which maps the coefficients of the space spanned by the training instance mode to feature descriptor tensor C. In order to find the best coefficient vector x for an unseen test instance, we minimize the reconstruction error as: </p><formula>E = ∑ p ∑ q ∑ r ∑ s (C pqrs − ( N ∑ n M npqrs × x n )) 2 (10) </formula><p>This minimization problem can be recast as the linear system: </p><formula>Ax = b (11) where A l,m = ∑ p ∑ q ∑ r ∑ s (M l pqrs × M mpqrs ) (12) and b l = ∑ p ∑ q ∑ r ∑ s (M l pqrs × C pqrs ) (13) </formula><p>The solution x to this equation is the optimum representation for the test feature tensor C. The rows of U (trg) are the fundamental feature vectors for that mode, and can be used to detect any abnormalities in the test case by finding the minimum distance d of the test case from the behavior class, as: </p><formula>d n = N ∑ l=1 (x l − U (trg) (n, l)) 2 (14) </formula><p>where d = min(d n ). If this distance d is within a given tolerance interval, the test instance is assumed to be normal as defined by that particular behavior class (with minor variations), else the test instance is assumed to not at all exhibit that behavior pattern. If the test instance belongs to the class (within acceptable tolerances ), then the anomalies are computed as: </p><formula>E = C − C (15) </formula><p>This error tensor E is then converted to the STTV space and is visualized in the user interface as anomalous behaviours in the test data point. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.4">Dimensionality Reduction</head><p>The accuracy of the anomaly detection algorithm is quantified by its sensitivity b (</p><formula>M T P /(M T P + M FN )) and specificity (M T N /(M T N + M FP )</formula><p>). Empirically, we find that the sensitivity and specificity depend monotonically on the number of dimensions retained, as would be expected. If a large number of dimensions are retained then the specificity increases but the sensitivity reduces, because of over-fitting. By contrast, if too many dimensions are removed then the sensitivity increases while the specificity reduces because now the model is too general. However, because the concept of an anomaly is subjective, it is hard to mathematically determine what the correct number of dimensions should be. For this purpose we provide the user with four parameters to control the number of dimensions in each mode: (i) Γ i j for the spatial scale mode, (ii) Γ k for the temporal scale mode, (iii) Γ uv for the spatial translation mode, and (iv) Γ w for the temporal translation mode. A value 0 results in all dimensions being removed, while a value of 1 results in no dimensions being reduced. We found that reducing the U (trg) matrix to 5 dimensions gives good results across all behavior classes. From our experiments (Sec. 4.5, Sec. 6), we also noticed that the minimum number of dimensions required to perform accurate anomaly detections depends upon the subjective complexity of the behavior class. More complex classes required more number of dimensions to be retained. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.5">Algorithm Verification</head><p>To quantify the correctness of our algorithms against known ground truth, we simulated the trajectories for three behavior patterns of increasing subjective complexity, and built synthetic STTVs from them. We generated the training set by adding perturbations to the base STTV in the form of random trajectories. The mass b of the perturbations varied from 1% to 50% of the total mass. <ref type="figure" coords="5,262.36,388.53,31.58,8.14">Fig. 3(a)</ref>shows the base STTVs for pattern 1. Pattern 3 is similar to the STTV in <ref type="figure" coords="5,87.86,408.45,19.80,8.14" target="#fig_1">Fig. 2</ref>, and pattern 2 has intermediate complexity. We expect our algorithm to identify the perturbations as anomalies . In <ref type="figure" coords="5,86.48,429.10,21.50,8.14">Fig. 3</ref>(b) we show the sensitivity and specificity curves with respect to Γ i j for the 20% noise case, with other modes fixed. From these curves we observe that as the complexity of the behavior class increases, the number of dimensions required to reach the same level of specificity increases. The sensitivity and specificity curves with respect to the other modes exhibit similar trends. <ref type="figure" coords="5,54.00,488.87,30.48,8.14">Fig. 3(c)</ref>shows the average sensitivity and specificity curves (for all patterns) with respect to the percentage of perturbation mass, keeping the number of dimensions fixed. Here we see that the algorithm is robustly capable of identifying the salient patterns in a behavior class even with a large amount of variation in the training data set. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5">USER INTERFACE</head><p>Our system was developed to meet a need of campus security of analysis of macro-behavior patterns for the purpose crowd management and for determining the optimal deployment of security personnel . It was important that the system leverage the users' intuition and experience for normal vs. abnormal behavior without subsuming , hampering or overwhelming their decision making capabilities. The specific user requirements were: (i) to display the video feed from the scene, overlaid with cues to possible locations of anomalies (direction-of-attention), (ii) to provide a spatio-temporal representation of the activity allowing the users develop an intuition for b Mass of a spatio-temporal volume F is defined as  and to understand the spatio-temporal relationships of normal behavior patterns and anomalies, (iii) to be able to train the system to detect new behavior patterns, (iv) to be able to update the behavior patterns detected by the system, (vi) to fine tune the algorithms to bring it inline with the user's expectations and intuition, (vii) to keep the interface simple yet functional in order to minimize the training required to use the system. In the following sections we describe the user interface which was designed to meet these re- quirements. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.1">GUI Layout</head><p>The main window of the GUI is shown in <ref type="figure" coords="5,467.01,178.33,19.56,8.14" target="#fig_4">Fig. 4</ref>. It consists of three types of visualizations and provides controls through which the user interacts with the analysis engine. The Video Feed view displays the video sequence being analyzed frame by frame, with the regions of anomaly overlaid on it, thereby guiding the attention of the user to interesting or suspicious regions. The user can load a video sequence and control the play back using a Play, Fast-Forward, Rewind paradigm. The Current STTV view displays the STTV of the current window of 32 × 15s duration. The Anomaly STTV view displays the anomalies in the current STTV. The anomalies are color coded according to their intensity as per the Alert Code color bar, which also indicates the cumulative anomaly level of the current STTV. The Add To Training Database panel enables the user to train the system by adding a new instance to an existing behavior class, or initializing a new class. The Adjust Analysis Parameters panel allows the user modify the parameters of the analysis module (Sec. 4.4) and visualize the results. The Review Training Database button brings up a dialog box that lets the user view the training STTVs in a behavior class and delete an instance if it is unsatisfac- tory. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.2">User Interaction</head><p>The typical user interaction loop is shown in <ref type="figure" coords="5,485.51,409.95,21.66,8.14" target="#fig_3">Fig. 5</ref>Also, see the </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Sensitivity Specficitity </head><p>(c) Perturbation sensitivity and specificity <ref type="figure" coords="6,54.51,220.76,28.42,7.84">Figure 3</ref>: Quantitative verification of the algorithm . <ref type="figure" coords="6,239.21,220.76,25.54,7.84">Fig. (a)</ref>shows one synthetic STTV. <ref type="figure" coords="6,366.17,220.76,25.54,7.84">Fig. (b)</ref>shows the sensitivity (full lines) and specificity (dashed lines) curves with respect to Γ i j for patterns 1 (in blue), 2 (in red) and 3 (in green). <ref type="figure" coords="6,375.04,230.20,24.75,7.84">Fig. (c)</ref>shows the average sensitivity and specificity curves with respect to the percentage of perturbation mass. and the Anomaly STTV view shows the anomaly with respect to the day-and-time specific behavior class, (iii) the user can adjust playback speed, pause, fast forward and rewind the video stream, or step through the STTV windows, (iv) the user can select another behavior class to analyze the current STTV against, (v) the user can examine the views in more detail by zooming, panning and rotating (for the volume views), (vi) the user can adjust the Γ i j , Γ k , Γ uv , Γ w parameters for the current behavior class and reanalyze the STTV, (vii) if the current STTV is a good example of an existing class, the user can add it to the training database, (viii) if the STTV represents a new behavior class, the user can initialize the new class with this instance, and specify the day and time of the class occurence, (ix) the user can review the STTVs in the training database for any class and can remove an instance if it is no longer a suitable example for that class. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6">RESULTS</head><p>Our system was trained and tested on real surveillance video in a busy area of a university campus of size ≈ 200m 2 as shown in the Video Feed display of <ref type="figure" coords="6,134.24,476.18,19.71,8.11" target="#fig_4">Fig. 4</ref>. The spatio-temporal trajectories were embedded in STTVs of size 64 × 64 × 32 corresponding to physical dimensions of 15m × 15m × (32 × 15s), built on a sliding timewindow basis (of 120s intervals). </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6.1">User Experience</head><p>We polled the users of our system regarding the intuitiveness of the STTV representation and the functionality of the system. Initially , most of the users found the STTV representation of spatiotemporal activity hard to understand, and had trouble relating a 3D volume with something that they understood as a temporally changing 2D phenomenon. However, because of the parallel layout of the Video Feed view and the corresponding STTV view, they soon (&lt; 5 video sequences) learnt to correlate the dynamic 2D activity with the static spatio-temporal representation. The Current STTV and Anomaly STTV views by themselves remained difficult to understand , but, when coupled with the Video Feed view most users could map activity in a region of the STTV to activity in the environment . They were also able to map their intuition for normal vs. abnormal behavior to the STTV representation, and could readily distinguish STTVs of different behavior classes. After getting acclimatized to the STTV representation, the users could train the system for different behavior patterns with increasing ease. It was observed that manually identifying the specific anomalies in the STTV was a time-consuming and difficult task. Also, the  anomalies detected by the algorithm matched those identified manually with a high degree of confidence (Sec. 6.2). This confirmed our initial belief that while users have an intuitive understanding of when a certain behavior pattern is unexpected or abnormal, they cannot pinpoint the exact cause of the abnormality with equal ease. Therefore, an automatic system like ours that uses their understanding to aid them identify anomalies would be invaluable for crowd behavior analysis. The users found the adjustment of the Γ parameters fairly intuitive without having to understand their operation. As the result of changing the parameters could be observed visually, the user could simply use visual feedback to guide the selection of these parame- ters. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6.2">User Validation</head><p> We were able to identify and train the system for nine distinctive behavior classes, as shown in <ref type="figure" coords="6,413.97,619.97,24.78,8.11">Table 1</ref>, where each class corresponds to a distinct behavior pattern. Each user was allowed to independently select the number of dimensions in each mode, and then subjectively validate the accuracy of the anomaly detection system. The sensitivity and specificity were determined by polling the users for their estimates and then averaging the results across the users. <ref type="figure" coords="6,536.56,669.63,20.33,8.11;6,317.68,679.56,19.60,8.11">Fig. 6  and 7</ref>show the results for two different cases. <ref type="figure" coords="6,327.61,691.34,26.08,8.11">Table 1</ref>also shows the standard deviation σ Γ in the Γ parameters across the users. It can be seen that, despite the fact the users were training the system to match their individual intuition, the variation was relatively low. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="7">CONCLUSION</head><p> In this paper, we presented a user-guided visual system for surveillance applications to detect anomalies in crowd behavior patterns. Our system was built on the concept of collaborative autonomy, in which we leverage the domain expertise of users in an intuitive manner, through a visual feedback loop, to identify abnormal behaviors and improve the performance of the system. The system in turn directs the attention of the users to anomalous events occurring in the environment. We proposed a wavelet based feature descriptor that captured the multi-scale, location sensitive nature of behavior patterns. The multi-linear decomposition method that was used to learn the underlying model for each behavior class gives the user a high degree of control on the operation of the analysis and anomaly detection algorithms, and lets the user fine-tune the system so that it reflects his/her intuitive notion of anomalous behaviors. We presented a quantitative evaluation of our algorithm, and a qualitative evaluation of the entire system from the end user's point of view. We also demonstrated how the system is an invaluable aid in a modern surveillance setup. Currently we are working on making this system completely real-time and deploying it across the entire campus, in which security personnel can monitor and respond to events as they happen. We also looking at methods to improve the accuracy of the algorithms and providing more advanced analysis and visualization capabilities (e.g. monitoring a specific group of people over time and identifying their participation in anomalies, </p><formula>etc.) (a) Test STTV </formula><p>(b) Reconstruction of test STTV in class HOSVD space </p><p>(c) Anomalies in test STTV <ref type="figure" coords="8,54.00,227.26,27.93,7.86">Figure 6</ref>: Results for an inter-lecture-period test case, showing a high density of spatio-temporal trajectories along all walk-ways. <ref type="figure" coords="8,533.04,227.26,25.05,7.86">Fig. (a)</ref>Test STTV with the anomalies manually highlighted <ref type="figure" coords="8,234.12,236.72,24.92,7.86">Fig. (b)</ref>shows the reconstruction of the test-case in the reduced dimension multi-linear space spanned by the behavior class <ref type="figure" coords="8,163.58,246.18,24.80,7.86">Fig. (c)</ref>shows the anomalies identified by the analysis module </p><p>(a) Test STTV (b) Reconstruction of test STTV in class HOSVD space </p><p>(c) Anomalies in test STTV <ref type="figure" coords="8,50.22,436.92,29.19,8.02">Figure 7</ref>: Results for an after-hours test case, showing scattered trajectories along the walk-ways. <ref type="figure" coords="8,426.05,436.92,19.62,8.02">Fig. (</ref>a) Test STTV with the anomalies manually highlighted <ref type="figure" coords="8,127.81,446.58,26.40,8.02">Fig. (b)</ref>shows the reconstruction of the test-case in the reduced dimension multi-linear space spanned by the behavior class <ref type="figure" coords="8,71.01,456.24,25.30,8.02">Fig. (c)</ref>shows the anomalies identified by the analysis module </p></div><figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_1" coords="4,54.55,207.49,502.63,7.84;4,54.56,216.93,502.62,7.84;4,54.55,226.36,30.86,7.84"><head>Figure 2: </head><figDesc>Figure 2: Construction of Spatio-Temporal Trajectory Volume (STTV). Fig. (a) shows an image of the scene with the trajectories over a fixed temporal duration overlaid on it. Fig. (b) shows these trajectories laid out in 3D (x,y,t). Fig. (c) shows the Gaussian smoothed STTV for this duration. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_2" coords="5,68.68,685.62,56.35,9.06;5,61.97,695.03,232.08,8.03;5,54.00,704.49,240.07,8.03;5,54.00,713.96,240.07,8.01;5,54.00,723.42,79.81,7.24"><head></head><figDesc>: mass of the volume marked as true positive anomalies, M T N : mass of the volume marked as true negative anomalies, M FP : mass of the volume marked as false positive anomalies, M FN : mass of the volume marked as false negative anomalies. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_3" coords="5,371.79,642.55,132.40,7.86;5,317.96,662.60,240.02,10.00;5,317.96,674.42,239.94,8.14;5,317.96,684.38,239.94,8.14;5,317.96,694.34,240.04,8.14;5,317.96,702.06,240.04,11.65;5,329.15,721.93,209.31,8.50"><head>Figure 5: </head><figDesc>Figure 5: Typical user interaction loop accompanying video for a demonstration of the GUI c . Typical user interaction would be as follows: (i) the user loads a video sequence and specifies its date and time, (ii) the GUI displays the video frame by frame in the Video Feed view, while the Current STTV view shows the STTV spanning 32 × 15s time windows, with 120s steps, c www.cse.ohio-state.edu\˜singhsh\itr\guiedu\˜edu\˜singhsh\itr\gui.avi </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_4" coords="7,237.91,328.95,136.23,7.86"><head>Figure 4: </head><figDesc>Figure 4: The Graphical User Interface </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_0" validated="true" coords="6,328.11,286.87,218.48,120.44"><figDesc coords="6,390.73,286.87,93.23,7.84">Table 1: Behavior Patterns</figDesc><table coords="6,328.11,303.25,218.48,104.06">Behavior 
+Training Sens. Spec. 
+σ Γ 
+Class 
+Insts. 
+(%) 
+(%) 
+early-morning 
+15 
+87 
+80 
+0.20 
+start-of-school-day 
+11 
+82 
+81 
+0.12 
+lecture-period 
+12 
+83 
+84 
+0.22 
+inter-lecture-period 
+17 
+88 
+83 
+0.16 
+after-hours 
+11 
+84 
+82 
+0.16 
+late-evening 
+10 
+86 
+81 
+0.19 
+weekday-night 
+14 
+82 
+79 
+0.21 
+weekend-day 
+10 
+83 
+85 
+0.16 
+weekend-night 
+11 
+85 
+83 
+0.17 
+
+</table></figure>
+		</body>
+		<back>
+
+			<div type="acknowledgement">
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>ACKNOWLEDGEMENTS </head><p>The authors wish to thank Prof. James W. Davis and Patrick Maughn. This material is based upon work supported by the National Science Foundation under Grant No. 0428249. </p></div>
+			</div>
+
+			<div type="references">
+
+				<listBibl>
+
+<biblStruct coords="7,72.26,713.96,221.79,7.24;7,72.26,723.42,197.32,7.24"  xml:id="b0">
+	<analytic>
+		<title level="a" type="main">Human motion analysis: A review</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">K</forename>
+				<surname>Aggarwal</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Q</forename>
+				<surname>Cai</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Computer Vision and Image Understanding</title>
+		<imprint>
+			<biblScope unit="volume">73</biblScope>
+			<biblScope unit="issue">3</biblScope>
+			<biblScope unit="page" from="428" to="440" />
+			<date type="published" when="1999" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="7,336.21,361.01,221.79,7.24;7,336.21,370.53,221.78,7.18;7,336.21,379.94,53.15,7.24"  xml:id="b1">
+	<analytic>
+		<title level="a" type="main">Optimal Tree Approximation using Wavelets</title>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Baraniuk</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">SPIE Technical Conference on Wavelet Applications in Signal Processing</title>
+		<imprint>
+			<date type="published" when="1999-07" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="7,336.21,389.40,221.82,7.24;7,336.21,398.88,66.64,7.24"  xml:id="b2">
+	<analytic>
+		<title level="a" type="main">Computers seeing action</title>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Bobick</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">British Machine Vision Conference</title>
+		<imprint>
+			<date type="published" when="1996" />
+			<biblScope unit="page" from="13" to="22" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="7,336.21,408.34,221.85,7.24;7,336.21,417.80,221.84,7.24;7,336.21,427.26,98.23,7.24"  xml:id="b3">
+	<analytic>
+		<title level="a" type="main">Discovery and segmentation of activities in video</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Brand</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">V</forename>
+				<surname>Kettnaker</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Pattern Analysis and Machine Intelligence</title>
+		<imprint>
+			<biblScope unit="volume">22</biblScope>
+			<biblScope unit="page" from="844" to="851" />
+			<date type="published" when="2000-08" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="7,336.21,436.73,221.84,7.24;7,336.21,446.20,221.82,7.24;7,336.21,455.66,99.58,7.24"  xml:id="b4">
+	<analytic>
+		<title level="a" type="main">Coupled hidden markov models for complex action recognition</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Brand</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Oliver</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Pentland</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">IEEE Conference on Computer Vision and Pattern Recognition</title>
+		<imprint>
+			<date type="published" when="1996" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="7,336.22,465.12,221.84,7.24;7,336.22,474.59,221.80,7.24;7,336.22,484.05,17.94,7.24"  xml:id="b5">
+	<monogr>
+		<title level="m" type="main">Scenario recognition in airborne video imagery. DARPA Image Understanding Workshop</title>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<surname>Brémond</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Medioni</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="1998" />
+			<biblScope unit="page" from="211" to="216" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="7,336.22,493.51,221.85,7.24;7,336.22,503.04,221.78,7.18;7,336.22,512.45,80.15,7.24"  xml:id="b6">
+	<analytic>
+		<title level="a" type="main">Advanced visual surveillance using bayesian networks</title>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Buxton</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Colloquium on Image Processing for Security Applications</title>
+		<imprint>
+			<biblScope unit="volume">9</biblScope>
+			<biblScope unit="issue">074</biblScope>
+			<biblScope unit="page" from="1" to="5" />
+			<date type="published" when="1997-03" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="7,336.22,521.91,221.79,7.24;7,336.22,531.37,123.18,7.24"  xml:id="b7">
+	<analytic>
+		<title level="a" type="main">Conceptualizing images</title>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Buxton</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Mukerjee</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Image and Vision Computing</title>
+		<imprint>
+			<biblScope unit="volume">18</biblScope>
+			<biblScope unit="issue">2</biblScope>
+			<biblScope unit="page">79</biblScope>
+			<date type="published" when="2000-01" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="7,336.22,540.84,221.84,7.24;7,336.22,550.31,221.83,7.24;7,336.22,559.77,129.63,7.24"  xml:id="b8">
+	<analytic>
+		<title level="a" type="main">Visual signatures in video visualization</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Chen</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Botchen</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Hashim</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">I</forename>
+				<surname>Thornton</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Visualization and Computer Graphics</title>
+		<imprint>
+			<biblScope unit="volume">12</biblScope>
+			<biblScope unit="issue">5</biblScope>
+			<biblScope unit="page" from="1093" to="1100" />
+			<date type="published" when="2006" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="7,336.22,569.23,221.83,7.24;7,336.22,578.70,221.83,7.24;7,336.22,588.16,221.62,7.24"  xml:id="b9">
+	<monogr>
+		<title level="m" type="main">Tracking groups of people for video surveillance</title>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<surname>Cupillard</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<surname>Brémond</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Thonnat</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2001-09" />
+			<biblScope unit="page" from="88" to="100" />
+			<pubPlace>Kingston, UK</pubPlace>
+		</imprint>
+	</monogr>
+	<note>2nd. European Workshop on Advanced Videobased Surveillance Systems</note>
+</biblStruct>
+
+<biblStruct coords="7,336.22,597.63,221.82,7.24;7,336.22,607.10,221.82,7.24;7,336.22,616.56,127.61,7.24"  xml:id="b10">
+	<analytic>
+		<title level="a" type="main">Group behavior recognition with multiple cameras</title>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<surname>Cupillard</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<surname>Brémond</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Thonnat</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Sixth IEEE Workshop on Applications of Computer Vision</title>
+		<imprint>
+			<date type="published" when="2002" />
+			<biblScope unit="page" from="177" to="183" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="7,336.22,626.02,221.81,7.24;7,336.21,635.48,168.01,7.24"  xml:id="b11">
+	<analytic>
+		<title level="a" type="main">Ten lectures on wavelets</title>
+		<author>
+			<persName>
+				<forename type="first">I</forename>
+				<surname>Daubechies</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Society for Industrial and Applied Mathematics</title>
+		<imprint>
+			<date type="published" when="1992" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="7,336.21,644.96,221.84,7.24;7,336.21,654.42,221.80,7.24;7,336.21,663.88,62.22,7.24"  xml:id="b12">
+	<monogr>
+		<title level="m" type="main">An adaptive focus-of-attention model for video surveillance and monitoring. Machine Vision and Applications</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Davis</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Morison</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Woods</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2007" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="7,336.21,673.34,221.84,7.24;7,336.21,682.81,221.82,7.24;7,336.21,692.27,104.30,7.24"  xml:id="b13">
+	<analytic>
+		<title level="a" type="main">A multilinear singular value decomposition</title>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<surname>De Lathauwer</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>De Moor</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Vandewalle</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">SIAM Journal of Matrix Analysis and Applications</title>
+		<imprint>
+			<biblScope unit="volume">21</biblScope>
+			<biblScope unit="issue">4</biblScope>
+			<biblScope unit="page" from="1253" to="1278" />
+			<date type="published" when="2000" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="7,336.21,701.74,221.84,7.24;7,336.21,711.20,221.81,7.24;7,336.21,720.67,130.63,7.24"  xml:id="b14">
+	<analytic>
+		<title level="a" type="main">Unconditional bases are optimal bases for data compression and for statistical estimation</title>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<forename type="middle">L</forename>
+				<surname>Donoho</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Applied and Computational Harmonic Analysis</title>
+		<imprint>
+			<biblScope unit="volume">1</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="100" to="115" />
+			<date type="published" when="1993" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,68.86,499.12,226.28,7.39;8,68.86,508.78,151.80,7.39"  xml:id="b15">
+	<monogr>
+		<title level="m" type="main">Introduction to Statistical Pattern Recognition</title>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Fukunaga</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="1990" />
+			<publisher>Elsevier</publisher>
+			<pubPlace>Science, Massachusetts, USA</pubPlace>
+		</imprint>
+	</monogr>
+	<note>2. edition</note>
+</biblStruct>
+
+<biblStruct coords="8,68.86,518.43,226.34,7.39;8,68.86,528.08,208.54,7.39"  xml:id="b16">
+	<analytic>
+		<title level="a" type="main">The visual analysis of human movement: A survey</title>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<forename type="middle">M</forename>
+				<surname>Gavrila</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Computer Vision and Image Understanding</title>
+		<imprint>
+			<biblScope unit="volume">73</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="82" to="98" />
+			<date type="published" when="1999" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,68.86,537.75,226.31,7.39;8,68.86,547.40,226.30,7.39;8,68.86,557.06,115.57,7.39"  xml:id="b17">
+	<analytic>
+		<title level="a" type="main">Bayesian framework for video surveillance application</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Hongeng</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<surname>Brémond</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Nevatia</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">15th International Conference on Pattern Recognition</title>
+		<imprint>
+			<date type="published" when="2000" />
+			<biblScope unit="page" from="164" to="170" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,68.86,566.71,226.31,7.39;8,68.86,576.36,226.31,7.39;8,68.86,586.02,154.68,7.39"  xml:id="b18">
+	<analytic>
+		<title level="a" type="main">Representation and optimal recognition of human activities</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Hongeng</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<surname>Brémond</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Nevatia</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">IEEE Conference on Computer Vision and Pattern Recognition</title>
+		<imprint>
+			<date type="published" when="2000" />
+			<biblScope unit="page" from="818" to="825" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,68.86,595.68,226.33,7.39;8,68.86,605.34,226.29,7.39;8,68.86,614.99,163.24,7.39"  xml:id="b19">
+	<analytic>
+		<title level="a" type="main">An iterative image registration technique with an application to stereo vision</title>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Lucas</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Kanade</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">International Journal of Computers And Their Applications</title>
+		<imprint>
+			<biblScope unit="page" from="674" to="679" />
+			<date type="published" when="1981" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,68.86,624.64,226.33,7.39;8,68.86,634.30,226.28,7.39;8,68.86,643.96,18.30,7.39"  xml:id="b20">
+	<analytic>
+		<title level="a" type="main">Spatial and probabilistic modelling of pedestrian behaviour</title>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Makris</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Ellis</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">British Machine Vision Conference</title>
+		<imprint>
+			<date type="published" when="2002-09" />
+			<biblScope unit="page" from="557" to="566" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,68.86,653.62,226.33,7.39;8,68.86,663.27,226.31,7.39;8,68.86,672.92,138.00,7.39"  xml:id="b21">
+	<analytic>
+		<title level="a" type="main">Automatic learning of an activity-based semantic scene model</title>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Makris</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Ellis</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">IEEE Conference on Advanced Video and Signal Based Surveillance</title>
+		<imprint>
+			<date type="published" when="2003" />
+			<biblScope unit="page" from="183" to="188" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,68.86,682.58,226.33,7.39;8,68.86,690.70,226.27,8.92;8,68.85,701.90,72.75,7.39"  xml:id="b22">
+	<monogr>
+		<title level="m" type="main">Multiresolution approximation and wavelet orthonormal bases of l 2 . Transactions of the</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Mallat</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="1989-07" />
+			<publisher>American Mathematical Society</publisher>
+			<biblScope unit="page" from="69" to="87" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,68.85,711.55,226.33,7.39;8,68.85,721.20,226.32,7.39;8,338.14,499.12,109.25,7.39"  xml:id="b23">
+	<analytic>
+		<title level="a" type="main">Characterization of signals from multiscale edges</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Mallat</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Zhong</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Pattern Analysis and Machine Intelligence</title>
+		<imprint>
+			<biblScope unit="volume">14</biblScope>
+			<biblScope unit="issue">7</biblScope>
+			<biblScope unit="page" from="710" to="732" />
+			<date type="published" when="1992-07" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,338.14,508.78,226.33,7.39;8,338.14,518.43,143.13,7.39"  xml:id="b24">
+	<analytic>
+		<title level="a" type="main">From image sequences towards conceptual descriptions</title>
+		<author>
+			<persName>
+				<forename type="first">H.-H</forename>
+				<surname>Nagel</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Image Vision Computing</title>
+		<imprint>
+			<biblScope unit="volume">6</biblScope>
+			<biblScope unit="issue">2</biblScope>
+			<biblScope unit="page" from="59" to="74" />
+			<date type="published" when="1988" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,338.14,528.08,226.33,7.39;8,338.14,537.75,215.92,7.39"  xml:id="b25">
+	<analytic>
+		<title level="a" type="main">Human activity detection and recognition for video surveillance</title>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Niu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Long</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">IEEE Multimedia and Expo Conference</title>
+		<imprint>
+			<date type="published" when="2004" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,338.14,547.40,226.32,7.39;8,338.14,557.06,226.29,7.39;8,338.14,566.71,226.33,7.39;8,338.14,576.37,35.47,7.39"  xml:id="b26">
+	<analytic>
+		<title level="a" type="main">Towards Perceptual Intelligence: Statistical Modeling of Human Individual and Interactive Behaviors</title>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Oliver</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Massachusetts Institute of Technology (MIT), Media Lab</title>
+		<meeting><address><addrLine>Cambridge, MA</addrLine></address></meeting>
+		<imprint>
+			<date type="published" when="2000" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,338.14,586.02,226.33,7.39;8,338.14,595.68,226.33,7.39;8,338.14,605.34,45.86,7.39"  xml:id="b27">
+	<analytic>
+		<title level="a" type="main">Statistical modeling of human interactions</title>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Oliver</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Rosario</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Pentland</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">IEEE CVPR Workshop on the Interpretation of Visual Motion</title>
+		<imprint>
+			<date type="published" when="1998" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,338.14,614.99,226.33,7.39;8,338.14,624.65,226.31,7.39;8,338.14,634.30,135.02,7.39"  xml:id="b28">
+	<analytic>
+		<title level="a" type="main">Multilinear subspace analysis for image ensembles</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<forename type="middle">A O</forename>
+				<surname>Vasilescu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Terzopoulos</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">IEEE Conference on Computer Vision and Pattern Recognition</title>
+		<imprint>
+			<date type="published" when="2003-06" />
+			<biblScope unit="page" from="93" to="99" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+				</listBibl>
+			</div>
+		</back>
+	</text>
+</TEI>

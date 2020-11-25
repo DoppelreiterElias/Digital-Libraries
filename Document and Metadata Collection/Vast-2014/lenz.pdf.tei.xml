@@ -1,0 +1,1946 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.tei-c.org/ns/1.0 /home/pisenberg/grobid/grobid-home/schemas/xsd/Grobid.xsd"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+	<teiHeader xml:lang="en">
+		<encodingDesc>
+			<appInfo>
+				<application version="0.4.1" ident="GROBID" when="2016-09-09T13:52+0000">
+					<ref target="https://github.com/kermitt2/grobid">GROBID - A machine learning software for extracting information from scholarly documents</ref>
+				</application>
+			</appInfo>
+		</encodingDesc>
+		<fileDesc>
+			<titleStmt>
+				<title level="a" type="main">Visual Analysis of Patterns in Multiple Amino Acid Mutation Graphs</title>
+			</titleStmt>
+			<publicationStmt>
+				<publisher/>
+				<availability status="unknown"><licence/></availability>
+			</publicationStmt>
+			<sourceDesc>
+				<biblStruct>
+					<analytic>
+						<author>
+							<persName>
+								<forename type="first">Olav</forename>
+								<surname>Lenz</surname>
+							</persName>
+							<affiliation>
+								<orgName type="institution">are with Computational Biology</orgName>
+								<address>
+									<region>TU Darmstadt</region>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Frank</forename>
+								<surname>Keul</surname>
+							</persName>
+							<affiliation>
+								<orgName type="institution">are with Computational Biology</orgName>
+								<address>
+									<region>TU Darmstadt</region>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Sebastian</forename>
+								<surname>Bremm</surname>
+							</persName>
+							<affiliation>
+								<orgName type="institution">are with Computational Biology</orgName>
+								<address>
+									<region>TU Darmstadt</region>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Kay</forename>
+								<surname>Hamacher</surname>
+							</persName>
+							<affiliation>
+								<orgName type="institution">are with Computational Biology</orgName>
+								<address>
+									<region>TU Darmstadt</region>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Tatiana</forename>
+								<surname>Von Landesberger</surname>
+							</persName>
+							<affiliation>
+								<orgName type="institution">are with Computational Biology</orgName>
+								<address>
+									<region>TU Darmstadt</region>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">@bullet</forename>
+								<forename type="middle">F</forename>
+								<surname>Keul</surname>
+							</persName>
+							<affiliation>
+								<orgName type="institution">are with Computational Biology</orgName>
+								<address>
+									<region>TU Darmstadt</region>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">K</forename>
+								<surname>Hamacher</surname>
+							</persName>
+							<affiliation>
+								<orgName type="institution">are with Computational Biology</orgName>
+								<address>
+									<region>TU Darmstadt</region>
+								</address>
+							</affiliation>
+						</author>
+						<title level="a" type="main">Visual Analysis of Patterns in Multiple Amino Acid Mutation Graphs</title>
+					</analytic>
+					<monogr>
+						<imprint>
+							<date/>
+						</imprint>
+					</monogr>
+					<note>• O. Lenz, S. Bremm and T. von Landesberger are with GRIS, TU Darmstadt.</note>
+				</biblStruct>
+			</sourceDesc>
+		</fileDesc>
+		<profileDesc>
+			<textClass>
+				<keywords>
+					<term>Index Terms— Biologic Visualization</term>
+					<term>Graph Visualization</term>
+					<term>Motif Search</term>
+					<term>Motif Visualization</term>
+					<term>Biology</term>
+					<term>Mutations</term>
+					<term>Pattern Visualization</term>
+				</keywords>
+			</textClass>
+			<abstract>
+				<p>Fig. 1. The problem and the proposed solution for the visual analysis of patterns in mutation graphs: Top: A set of input mutation graphs. It is difficult to compare them and to identify common patterns. Middle: Visualization of the number of found patterns grouped by their structure. Bottom: User-selected relevant patterns can be examined in detail both in the input graph and in the 3D structure. Abstract— Proteins are essential parts in all living organisms. They consist of sequences of amino acids. An interaction with reactive agent can stimulate a mutation at a specific position in the sequence. This mutation may set off a chain reaction, which effects other amino acids in the protein. Chain reactions need to be analyzed, as they may invoke unwanted side effects in drug treatment. A mutation chain is represented by a directed acyclic graph, where amino acids are connected by their mutation dependencies. As each amino acid may mutate individually, many mutation graphs exist. To determine important impacts of mutations, experts need to analyze and compare common patterns in these mutations graphs. Experts, however, lack suitable tools for this purpose. We present a new system for the search and the exploration of frequent patterns (i.e., motifs) in mutation graphs. We present a fast pattern search algorithm specifically developed for finding biologically relevant patterns in many mutation graphs (i.e., many labeled acyclic directed graphs). Our visualization system allows an interactive exploration and comparison of the found patterns. It enables locating the found patterns in the mutation graphs and in the 3D protein structures. In this way, potentially interesting patterns can be discovered. These patterns serve as starting point for a further biological analysis. In cooperation with biologists, we use our approach for analyzing a real world data set based on multiple HIV protease sequences.</p>
+			</abstract>
+		</profileDesc>
+	</teiHeader>
+	<text xml:lang="en">
+		<body>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1">INTRODUCTION</head><p>Pharmaceutical drug development strives to find effective drugs with high impact and low side effects. These drugs interact with a targeted protein (i.e., a sequence of amino acids) at specific positions of the amino acid chain. The interactions with the amino acid chain may e-mail to: tvcg@computer.org. induce indirect changes, e.g., induced mutations. The induced mutations may in turn induce further derived mutations, creating numerous evolutionary linked mutation events. These events may have a strong effect on large parts of a protein causing unwanted side effects, such as diminishing effectiveness of the drug. Therefore, the investigation of such evolutionary linked chain mutations plays an important role in drug development. Drug developers need to avoid addressing protein's positions with strong co-evolutionary dependencies <ref type="bibr" coords="2,231.63,123.12,13.74,8.02" target="#b16">[17]</ref>. The analysis of mutation chain events can also lead to new insights not only in drug development, but also in other fields of research, such as phylogenetic studies of our evolutionary history <ref type="bibr" coords="2,231.28,153.72,9.52,8.02" target="#b3">[4]</ref>. In this paper, we focus on the analysis of chained mutation events in evolutionary research. With this novel approach, biologists try to detect important patterns within mutation chain events of the HIV protease. The mutation chain events can be represented by so-called " mutation graphs " (MGs) (see <ref type="figure" coords="2,134.42,204.25,19.74,8.02">Fig. 2</ref>). Mutation graphs are labeled directed acyclic graphs, in which the nodes are amino acids located at particular protein's positions, e.g., G18: glycid at position 18. The directed edges reflect the mutation dependencies of the amino acids, i.e., inducing or repressing further mutations. Each mutation graph shows how the mutation of one amino acid (the root node on the top) induces a chain of the following mutations. As each amino acid in a protein might mutate individually, many mutation graphs per protein can emerge (see <ref type="figure" coords="2,104.83,283.95,20.93,8.02">Fig. 1</ref>top). The biologists need to analyze all the mutation graphs in order to identify important mutation patterns. Patterns are parts of evolutionary chain reactions (subgraphs of MGs), which occur often or have a specific form or size (see <ref type="figure" coords="2,138.64,324.52,20.03,8.02">Fig. 2</ref> ). For example, large patterns can affect many positions in the protein. They imply a large influence on the protein. Thus, detecting patterns in the mutation graphs could allow biologists and drug developers to detect " evasive " mutations and can provide knowledge for new drug design strategies and target sites. Many visual interactive tools have been developed for analyzing various types of data like genome or protein data <ref type="bibr" coords="2,223.21,385.01,9.71,8.02" target="#b5">[6,</ref><ref type="bibr" coords="2,235.27,385.01,6.72,8.02" target="#b6"> 7,</ref><ref type="bibr" coords="2,244.33,385.01,11.21,8.02" target="#b25"> 26,</ref><ref type="bibr" coords="2,257.89,385.01,10.65,8.02" target="#b29"> 30]</ref> . However , examining patterns in mutation graphs is a relatively novel field of research, therefore biologists and pharmacologists currently lack proper analytical tools. Especially, the available tools do not allow for visual analysis of patterns in multiple mutation graphs simultaneously. We present a new approach for finding and exploring patterns in many mutation graphs. Our contributions and application benefits are: @BULLET We present a fast pattern search algorithm, which finds frequent biologically relevant patterns in multiple mutation graphs (i.e., labeled directed acyclic graphs). @BULLET We propose a novel interactive visualization system for the exploration of found patters from various perspectives: a global overview of the found patterns, a view on selected types of found patterns with additional information, as well as a view on locations of the found patterns in both mutation graphs and 3D protein structures. Note, the global overview is a new way of visualizing a large number of the found patterns. @BULLET Our approach identifies frequent mutation patterns and key amino acids which are involved in multiple mutation chains. This helps the pharmacologist to estimate the side effects caused by a potential drug treatment. </p><p> Our software has been developed in close cooperation with biologists performing research in this field. We apply our new system on real-world data from the life science domain and evaluate its advantages for analyzing mutation chain events for an important protein in biomedicine (the HIV protease). The system extension and adaptation to biological use case and the evaluation have been conducted together with biological experts co-authoring the paper. The paper is structured as follows. Section 2 provides details about the biological background and the tasks. Section 3 presents related work including pattern search and visual exploration of event propagation in networks. Section 4 gives a brief overview of our approach. Section 5 presents our pattern search algorithm, while Section 6 describes the interactive interface for pattern exploration. Section 7 demonstrates the approach in an use case with real world data. Section 8 concludes and outlines of possible future extensions. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2">BIOLOGIC BACKGROUND AND TASKS</head><p>Biologists wish to analyze the direct and implied effects of a mutation of amino acids in a protein using the so-called mutation graphs (MGs). Mutation graphs are composed of amino-acids (nodes) connected by directed edges representing their co-evolutionary relationships. These relationships are of two types: inducing and repressing. This means, that an amino acid at one position in the protein can increase or decrease the occurrence of other amino acids at other positions (see blue (inducing) and red (repressing) edges in <ref type="figure" coords="2,472.75,163.80,19.97,8.02">Fig. 2</ref>). <ref type="figure" coords="2,502.85,163.80,30.42,8.02">Figure 2</ref>shows a small example of several mutation graphs. On the left, Glycine on position 16 (G16) would induce a mutation to Lysin on position 70 (K70). This again would induce mutations to Argenine at the same position (R70) and Threonine at position 39 (T39). Such inducing/repressing mutation reactions are calculated for each amino acid in a protein independently. This results in a set of mutation graphs (see <ref type="figure" coords="2,350.64,233.53,21.03,8.02">Fig. 1</ref>top). Thus, the biologists need to analyze hundreds of mutation graphs (see Sec. 7 as example of 246 MGs). The number of analyzed mutation graphs N corresponds to the number of amino acids in a protein starting the mutation chain. As each amino acid can set off a mutation chain possibly affecting all amino acids in a protein, the analyzed mutation graphs can then altogether contain up to N 2 nodes. The analyzed mutation graphs contain possibly interesting patterns (i.e., subgraphs or motifs), which need to be extracted and analyzed. A pattern is a subgraph of MG, which has specific meaning or occurs often in a dataset (see the highlighted areas in <ref type="figure" coords="2,463.14,333.16,19.33,8.02">Fig. 2</ref>). Biologically, these patterns describe often occurring dependency routes corresponding to evolutionary trails and bottlenecks. Finding and analyzing of these patterns is in the focus of our co-authors from biology and, thus, also of this paper. Note that this kind of analysis is novel also in biologic research. Therefore, no ready to use tools are available to help finding and analyzing these patterns. <ref type="figure" coords="2,322.84,532.14,3.32,7.37">2</ref> . Toy-example of four mutation graphs with potential patterns highlighted (colored background). The nodes represent amino acids, where the labels reflect their type and position. These graphs are calculated for each amino acid in the protein independently. </p><p> When analyzing patterns in mutation graphs, the following biologically relevant tasks emerge: T1 Distribution of all patterns Examining the distribution of all patterns is necessary for assessing of the magnitude of effects in mutation graphs. It summarizes which kinds of patterns were found in the data set and thus shows whether large or small patterns are present. T2 Identification of most prominent patterns Prominent patterns appear in many different mutation graphs. Highlighting frequent patterns is of special interest for the biologists . The frequent patterns give insight into " bottlenecks " of evolutionary events. T3 Identification of very complex or simple patterns Complex patterns explain higher order interdependencies. The analysis of complex patterns allows to inspect dependencies affecting large portions of the protein. While these large chain reactions should be considered in drug development, targeting amino acids within these patterns can imply unfavorable results such as faster drug resistance mutations. T4 Structural localization of patterns The found patterns should not only be analyzed in isolation, but with respect to their location within the mutation graph and to their positions in the 3D representation of the protein as a physical object. Spatial position of the affected sites and their respective structural organization can give insight on the rationale behind the pattern. Position in mutation graphs allows researchers to identify patterns serving, e.g., as evolutionary bottleneck or as an entry to numerous subsequent mutations. </p><p>These tasks are the pivotal elements for the design and development of the analysis software described in the following section. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3">RELATED WORK</head><p> There are many different publications and examples for visual interactive tools in the field of biology like <ref type="bibr" coords="3,197.20,234.23,9.71,8.02" target="#b5">[6,</ref><ref type="bibr" coords="3,209.74,234.23,6.72,8.02" target="#b6"> 7,</ref><ref type="bibr" coords="3,219.29,234.23,11.21,8.02" target="#b25"> 26,</ref><ref type="bibr" coords="3,233.33,234.23,10.65,8.02" target="#b29"> 30]</ref>. They focus on different areas then our paper (e.g., on genome). We present works closely related to our work: visual analysis of mutation chains (a kind of event propagation in networks). We reviews methods for finding patterns in networks and their visualization. We also discuss visual comparison of multiple graphs for identifying common subgraphs. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.1">Pattern Search in Graphs</head><p> An exhaustive search for patterns (i.e., motifs) in a network is an NPhard problem <ref type="bibr" coords="3,104.71,325.58,9.52,8.02" target="#b7">[8]</ref>. There are several algorithms for finding patterns in directed and undirected graphs. Recent reviews <ref type="bibr" coords="3,232.75,335.54,14.19,8.02" target="#b35">[37,</ref><ref type="bibr" coords="3,250.01,335.54,11.95,8.02" target="#b48"> 51] </ref>summarize and compare them. The available algorithms search for all unlabeled patterns in a network, which have pre-defined size k (k = number of nodes in a pattern). These tools include FANMOD <ref type="bibr" coords="3,236.64,365.43,13.74,8.02" target="#b47">[50]</ref>, Mavisto <ref type="bibr" coords="3,287.20,365.43,13.74,8.02" target="#b38">[40]</ref>, MFinder <ref type="bibr" coords="3,87.62,375.40,13.74,8.02">[27]</ref>, <ref type="bibr" coords="3,107.05,375.40,13.74,8.02" target="#b20">[21]</ref>, <ref type="bibr" coords="3,126.47,375.40,13.74,8.02" target="#b23">[24]</ref>, MODA <ref type="bibr" coords="3,175.16,375.40,14.19,8.02" target="#b15">[16,</ref><ref type="bibr" coords="3,191.60,375.40,10.31,8.02" target="#b31"> 33]</ref>). Available strategies for a speed-up the pattern search are: 1) better ways of building up larger patterns from previously found smaller subgraphs <ref type="bibr" coords="3,93.12,405.45,14.94,8.02" target="#b23">[24] </ref>2) symmetry breaking, which eliminates the need for isomorphism checking <ref type="bibr" coords="3,139.11,415.42,14.19,8.02" target="#b15">[16,</ref><ref type="bibr" coords="3,156.25,415.42,10.65,8.02" target="#b31"> 33]</ref>, or 3) sampling – heuristic approach <ref type="bibr" coords="3,54.00,425.38,14.19,8.02">[27,</ref><ref type="bibr" coords="3,71.23,425.38,10.65,8.02" target="#b47"> 50]</ref>. The above-mentioned algorithms find only patterns with a certain number of nodes or edges. They would not find all possible patterns with different sizes (esp., larger). This is a restriction for an exploratory analysis, which assumes no apriori knowledge about the dataset and its structure. In our work, we use a labeled extension if the algorithm by Ku- ramochi <ref type="bibr" coords="3,86.52,485.32,13.74,8.02" target="#b23">[24]</ref>. We adapt this technique for labeled pattern search in many directed acyclic graphs. Our method proposes a fast combination of patterns. As we focus on an explorative analysis, we do not restrict the size of the patterns in advance. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.2">Pattern Visualization in Graphs</head><p>The set of all patterns found in the network is commonly presented as a list of node link diagrams together with patterns' frequency as a number <ref type="bibr" coords="3,83.91,566.72,14.19,8.02" target="#b24">[25,</ref><ref type="bibr" coords="3,100.63,566.72,11.21,8.02"> 27,</ref><ref type="bibr" coords="3,114.36,566.72,11.21,8.02" target="#b38"> 40,</ref><ref type="bibr" coords="3,128.09,566.72,10.65,8.02" target="#b47"> 50]</ref> . These views were mainly developed for unlabeled patterns or patterns with few categories of nodes <ref type="bibr" coords="3,264.66,576.68,13.74,8.02" target="#b24">[25]</ref>. With the increasing number of different patterns found, a simple pattern list does not scale up. It requires a lot of scrolling. This problem is particularly severe for labeled graphs, which are in our focus. The number of possible labeled patterns is much larger then the number of unlabeled patters. The number of possible labeled patterns is a combination of the number of all possible pattern structures and the number of their possible label combinations (see Sec. 5.1 for details). Another possibility of pattern visualization is highlighting of userselected patterns in the network (e.g., <ref type="bibr" coords="3,193.20,666.51,13.44,8.02" target="#b43">[46]</ref>). For better readability of the pattern structure, specific pattern-based layouts have been devel- oped <ref type="bibr" coords="3,77.47,686.44,14.19,8.02" target="#b17">[18,</ref><ref type="bibr" coords="3,94.69,686.44,10.65,8.02" target="#b21"> 22]</ref>. These technique do not scale up for large graphs or graphs with many patterns as each pattern needs to be shown individ- ually. Scalability of pattern exploration can be improved by pattern-based graph aggregation of node-link diagrams <ref type="bibr" coords="3,206.01,726.46,14.19,8.02" target="#b13">[14,</ref><ref type="bibr" coords="3,223.15,726.46,11.21,8.02" target="#b36"> 38,</ref><ref type="bibr" coords="3,237.30,726.46,10.65,8.02" target="#b43"> 46]</ref>, iconic pattern presentation <ref type="bibr" coords="3,100.89,736.42,14.94,8.02" target="#b24">[25] </ref>or compression of adjacency matrices <ref type="bibr" coords="3,260.55,736.42,13.74,8.02" target="#b12">[13]</ref>. These methods decrease network size, however the aggregation of overlapping patterns, found also in our case, is problematic for all methods. Therefore, these techniques have only limited value added. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.3">Visual Analysis of Event Propagation in Networks</head><p> Visual Analysis of event propagation in networks is a new topic, therefore few dedicated tools exist. Analysts mainly employ standard statistical software tools (e.g., Matlab) and charts available in standard visualization softwares (e.g., Pajek <ref type="bibr" coords="3,443.65,143.94,9.52,8.02" target="#b2">[3]</ref>, or GraphViz <ref type="bibr" coords="3,505.35,143.94,9.41,8.02">[?]</ref>). Three systems specialize on event propagation <ref type="bibr" coords="3,499.34,155.41,14.19,8.02">[31,</ref><ref type="bibr" coords="3,516.41,155.41,11.21,8.02"> 41,</ref><ref type="bibr" coords="3,530.50,155.41,10.65,8.02" target="#b42"> 45]</ref>. FNA (Financial network analysis) <ref type="bibr" coords="3,427.20,165.37,14.94,8.02">[41] </ref>focuses on analysis of financial transactions. It offers simple static visualization of networks. The users with good programming skills can run pre-defined simulations, however the tool does not provide methods for the exploration of results and their comparison. NBW (Network workbench tool) <ref type="bibr" coords="3,543.21,205.23,14.94,8.02">[31] </ref>is developed for analysis of gene regulation models – binary processes in networks. It offers an interface for defining model parameters and a static visualization of the result. It is not capable of comparing several inputs. Recently, von Landesberger et al. presented a system for visual analysis of contagion in networks <ref type="bibr" coords="3,440.95,255.04,13.74,8.02" target="#b42">[45]</ref>. The system offers simulation and interactive visualization of expansion processes. The resulting graphs are shown as node-link diagrams. The user has the possibility to select one or more nodes for analyzing their occurrence across the simulations. The system neither detects nor shows patterns. Moreover , this manual approach does not scale with the number of graphs. It is limited to a handful of graphs. In sum, Event propagation analysis systems do not support finding and exploration of interesting patterns in many networks. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.4">Visual Comparison of Multiple Graphs</head><p>Several visual comparison techniques also focus on exploration of commonalities among graphs <ref type="bibr" coords="3,424.46,386.95,13.74,8.02" target="#b45">[48]</ref>. Two compared graphs are usually shown next to each other, where the corresponding nodes or graph parts are highlighted. VisLink <ref type="bibr" coords="3,552.06,408.39,14.94,8.02" target="#b9">[10] </ref>and Holten et al. <ref type="bibr" coords="3,382.16,418.35,14.94,8.02" target="#b18">[19] </ref>link the same nodes of the two graphs. This technique does not show structural relationship (pattern) among highlighted nodes. Archambault <ref type="bibr" coords="3,376.75,449.74,10.45,8.02" target="#b1">[2] </ref>identifies the common subgraphs of two graphs and then shows only the differences between them. Tu and Shen <ref type="bibr" coords="3,552.06,459.70,14.94,8.02" target="#b40">[43] </ref> create a unified graph of two trees and show it in a treemap. The unification however can produce large trees if the two compared graphs are very dissimilar. These methods are restricted only to two graphs. For several graphs, pairwise comparison leading to a quadratic number of comparisons would be required. Several tree comparison techniques combine interactive visualization with highlighting of common subgraphs (e.g., <ref type="bibr" coords="3,504.32,530.84,32.91,8.12">[7, ?, 29]</ref>. These techniques are however restricted to trees with common leaves, without labels in inner nodes. Therefore they are not suitable for our case. There are techniques for multiple graph comparison <ref type="bibr" coords="3,521.18,562.34,14.19,8.02" target="#b14">[15,</ref><ref type="bibr" coords="3,538.49,562.34,11.21,8.02" target="#b30"> 32,</ref><ref type="bibr" coords="3,552.81,562.34,10.65,8.02" target="#b44"> 47]</ref>. They only analyze global similarities without subgraph matching. They are not able to identify and show common patterns. In general, current methods for visual graph comparison have restrictions (only pairwise comparison, only trees, only global similarity ), which are not suitable for our use case. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5">PATTERNS IN MUTATION GRAPHS AND PATTERN SEARCH 5.1 Patterns in Mutation Graphs</head><p>Patterns are subgraphs of graphs with specific meaning or functional property <ref type="bibr" coords="4,77.79,226.12,14.94,8.02">[28] </ref>(see also <ref type="figure" coords="4,128.85,226.12,19.85,8.02">Fig. 2</ref>). They are building blocks of networks, such as biological or financial networks. This paper focuses on finding patterns in a set of N mutation graphs (see <ref type="figure" coords="4,61.27,256.01,30.14,8.02">Fig 1 top</ref>). Each MG has up to N labeled nodes. MGs are directed acyclic graphs (DAGs) with a single root and unique node labels (see <ref type="figure" coords="4,45.00,275.94,19.72,8.02">Fig. 2</ref>). A mutation graph has edges only between neighboring levels. These properties constrain the set of possible patterns. We consider labeled patterns with unique labels (i.e., each node has a different label). Patterns are composed of several nodes, which can be on two neighboring levels (basic patterns) or on several levels (complex patterns). <ref type="figure" coords="4,98.42,325.75,29.75,8.02" target="#fig_5">Figure 6</ref>shows an example of a basic pattern (pink) and a complex pattern (orange). One pattern can be found in several MGs, however in each MG only once (due to uniqueness of labels). Pattern Labels Labellings in mutation graphs and in their patterns are very important for the analysis, as amino acid position and type can give rise to varying effects. Labels, however, pose a scalability challenge to both pattern search and to the visualization. In fact, labels expand the number of possible patterns exponentially compared to unlabeled patterns. One unlabeled pattern with k vertices can have the same structure as |N |! (|N |−k)!·k! labeled patterns, where |N | is the number of nodes in the original MG (see also <ref type="figure" coords="4,210.11,428.85,19.68,8.02" target="#fig_3">Fig. 4</ref>). Basic Patterns A basic pattern is a subgraph of MG, which stretches only between two neighboring levels (see the pink pattern in <ref type="figure" coords="4,45.00,557.01,28.60,8.02" target="#fig_5">Figure 6</ref>). We focus on basic patterns with specific biological meaning for mutation expansion (see <ref type="figure" coords="4,146.69,566.97,19.61,8.02" target="#fig_4">Fig. 5</ref>). This set was inspired by common patterns in biology and finance <ref type="bibr" coords="4,157.82,576.94,14.19,8.02">[28,</ref><ref type="bibr" coords="4,174.25,576.94,11.21,8.02" target="#b43"> 46,</ref><ref type="bibr" coords="4,187.70,576.94,10.65,8.02" target="#b44"> 47]</ref>. @BULLET Line pattern (LP , also called " single chain " ): The mutation of one amino acid impacts only one other amino acid. These effects are desirable if a target amino acid should be influenced indirectly. @BULLET Fan-out pattern (F P ): The mutation of one amino acid influences numerous other amino acids. This might lead to unpredictable impact on the function of the whole protein. @BULLET Merge pattern (M P ): One target amino acid can be affected by multiple other amino acids. This might reveal potentially unstable amino acids. @BULLET Double-cross pattern (DCP ) This type combines the previous two types. Contained amino acids can have a significant influence on the mutation graph. However, as this networks are highly interconnected, they tend to be rather small, so that the resulting impact on the protein is limited and predictable. </p><p>(a) Line (b) Fan-Out (c) Merge (d) Double-cross We suppose, that the found basic patterns cannot be expanded to a larger pattern (e.g., from a line to a merge pattern). Complex Patterns Complex patterns are a combination of two or more basic patterns (see <ref type="figure" coords="4,396.22,331.10,19.67,8.02" target="#fig_5">Fig. 6</ref>). Two basic patterns may be combined only when the labeled root nodes of one pattern match the labeled leaves of the second pattern within the same MG. Biologically, complex patterns may represent multi-level dependencies between structurally distinct regions and can explain wide-spread evolutionary in- teractions. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.2">Pattern Search</head><p>In our work, we developed a special fast exhaustive pattern search algorithm for finding labeled patterns in the set of input MGs. In line with the requirements of biological analysis, the assumptions of the search algorithm are: 1. Unknown pattern size: We aim for exploratory analysis with no a priori assumption on maximum or minimum pattern size. 2. The number of graphs to analyze: The patterns need to be found in a possibly large set of mutation graphs. In a medium-sized data set, we need to analyze 400 MGs with up to 400 nodes each, leading to up to 160, 000 nodes in total. 3. Special pattern types: We need to find biologically relevant patterns in mutation graphs (see Sec. 5.1). Our algorithm is composed of two steps: 1) finding basic patterns and 2) iteratively combining them into larger complex patterns. We first perform an exhaustive search for basic patterns (see Alg. 1) in the set of input mutation graphs M Gs. For each node v of a graph G ∈ M Gs, we check whether it is a part of a basic pattern P . The basic pattern search getBasicP attern() uses the algorithm by Grochow et al. <ref type="bibr" coords="5,97.33,73.31,13.74,8.02" target="#b15">[16]</ref> , as it has high performance for finding specific patterns . We store the found patterns p in a set f oundBasicP atterns. We also store in which MGs the pattern is located (location(p) → locBasicP attern). This information is used for building complex patterns in the second step and for analyzing pattern occurrence. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Algorithm 1 Find basic patterns </head><p>Require: M Gs Ensure: f oundBasicP atterns, locBasicP attern f oundBasicP atterns ← ∅ locBasicP attern ← ∅ for all G ∈ M Gs do for all v ∈ G do for all P ∈ {LP, M P, F P, M P, DCP } do p ← getBasicP attern(v, G, P ) if p = ∅ then f oundBasicP atterns ← f oundBasicP atterns ∪ p locBasicP attern ← locBasicP attern ∪ {p, location(p)} end if end for end for end for </p><p>Algorithm 2 Find complex Patterns patterns ← f oundBasicP atterns newP atterns ← f oundBasicP atterns combP atterns ← ∅ locP atterns ← locBasicP attern for all p1 ∈ patterns do for all p2 ∈ newP atterns do if p1 = p2 ∧ (|location(p1) ∩ location(p2)| &gt; 1) then if (roots(p1) ∩ leaves(p2) = ∅)or (leaves(p1) ∩ roots(p2) = ∅) then combp = combine(p1, p2) location(combP ) ← location(p1) ∩ location(p2) combP atterns ← combP atterns ∪ combP locP atterns ← locP atterns ∪ location(combP ) end if end if end for for all cP ∈ combp do removeSubP atterns(cP ) end for patterns ← patterns − {p1} newP atterns ← newP atterns ∪ combP atterns end for </p><p>In the second step, the found labeled basic patterns f oundBasicP atterns are successively merged into larger and larger complex patterns until all maximal (largest) patterns have been found (see Alg. 2). During the search, location and frequency of all found complex patterns is stored. For faster calculation of complex patterns, we use the information on the location and the form of the base patterns found. Our algorithm relies on the uniqueness of node labels and the implied single occurrence of a pattern in a MG. Therefore, we do not need to go recursively through the graphs. In our work, we wish to focus on larger patterns as they are more interesting then smaller patterns, if their have the same occurrence . Therefore, smaller patterns that form a larger pattern at the same locations (so-called " complete subpatterns " ) are removed in removeSubP atterns. This also reduces the number of patterns found for the further analysis. The constraint of same-location is important . Only if the subpattern occurs at the same locations as the larger pattern, then the existence of the smaller pattern does not bring any additional information to the user. An example is shown in <ref type="figure" coords="5,552.05,63.35,14.95,8.02;5,316.62,73.31,17.28,8.02" target="#fig_6">Fig- ure 7</ref> . The purple pattern is a complete sub-pattern of the orange pattern , its occurrence is redundant to the orange pattern. However, the pink pattern occurs more often then the orange pattern, so the removal of the pink pattern would lead to an information loss. Theoretic complexity The theoretic complexity of the pattern search is composed of two parts: 1) the search for basic patterns and 2) their combination. The basic pattern search combines breadth first search with the search for a specific basic pattern leading to the complexity of O(|V | + |E|) 2 · N , where |V | and |E| are the maximum number of nodes and edges in the MGs. N is the number of MGs. The second step has a worst case complexity of O(log(|V |)+log(N )+p). This complexity is lower then that of common search algorithms </p><formula>O(E k· |V |! </formula><p>|V −k|!k! · N ) <ref type="bibr" coords="5,392.01,395.88,9.52,8.02" target="#b0">[1]</ref>. Experimental runtimes: We show the speed of our algorithm on mutation graphs of various numbers and sizes (see <ref type="figure" coords="5,512.31,416.07,26.76,8.02" target="#tab_1">Table 1</ref>). The MGs were extracted from random inputs. We used a PC with Intel(R) Core(TM) i7 CPU 920 @ 2.67GHz, Java32bit. ). #P: the number of found patterns, T(s): the runtime in seconds. These results show that the runtime depends strongly on the number of found patterns, less then on the overall graph size. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6">VISUAL EXPLORATION OF PATTERNS</head><p>The visual interface (see <ref type="figure" coords="5,405.26,625.53,23.57,8.02" target="#fig_1">Fig. 3)</ref>shows the found patterns (1) in several interactively linked views. The views were designed in cooperation with biologists so that they suit to their analytical needs. The view guides the users through various levels of details (see <ref type="figure" coords="5,316.62,665.64,19.57,8.02" target="#fig_1">Fig. 3</ref>). The number of found patterns (1) by type is shown in a coarse overview (2). Then the user explores advanced information on selected pattern types (2) and finally, she can analyze the location of the found patterns in the mutation graphs or in the 3D protein structure (3). @BULLET Detailed Pattern View: It displays the user-selected patterns with additional analytical information (e.g., pattern's occurrence, or its position within MGs). @BULLET Pattern Locations: These view show the locations of userselected patterns in the mutation graphs and in 3D protein structures . The user can explore in detail, in which mutation graphs and where exactly the patterns are situated. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>@BULLET </head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6.1">Pattern Overview</head><p> Pattern overview shows the number of found patterns by their composition in a compact scale-free representation (see <ref type="figure" coords="6,222.19,156.69,19.71,8.02" target="#fig_7">Fig. 8</ref>). It allows the user to get an overview of which patterns are found and how often. It provides a first insight into the dataset. Design: This view was specially developed for scalability reasons, as the traditional approaches (esp. a list of patterns), did not scale up for our use case. It required a lot of scrolling, making a comparison of patterns difficult and time consuming. Our idea was to compress the view on patterns in a way that the user still can see which patterns are found and how often. This was a difficult challenge. We first tried group pattern by their structure. For example, we grouped all line-line-merge patterns in one and all linemerge-line patterns into another group. This kind of grouping, however , still resulted in a large number of data to show, which increases exponentially with the number of basic patterns combined. Therefore, we decided to simplify the view even more. The final approach groups the found patterns according to the types of combined basic patterns (see <ref type="figure" coords="6,158.12,676.65,19.24,8.02" target="#fig_8">Fig. 9</ref>). We thereby disregard the order of combined patterns and their number. For example, line-merge and merge-line-line pattern would be together in one group line+merge. This simplification has one important advantage: the number of such groups is limited to 15 irrespective of the size and structure of the found patterns. There are 4 individual, 6 double, 7 tripple and 1 four pattern combination (see <ref type="figure" coords="6,135.89,736.42,20.93,8.02" target="#fig_7">Fig. 8</ref>bottom). The presented grouping allows us to create a scale-free visualization of the patterns. The pattern combinations are placed on the screen according to the number of combined patterns (see <ref type="figure" coords="6,491.55,386.96,46.07,8.02" target="#fig_7">Fig. 8 bottom</ref>). As this compact representation hides inner structure of the patterns, we decided to design specific glyphs showing the user more insight into the structures and numbers of the found patterns (see <ref type="figure" coords="6,499.61,416.85,23.54,8.02" target="#fig_9">Fig. 10</ref>). Each glyph shows the number of found patterns in a group (icon) as well as more detailed information on the structure of patterns in the group (heatmap) (see <ref type="figure" coords="6,386.05,446.74,23.54,8.02" target="#fig_9">Fig. 10</ref>). @BULLET The icon shows the basic pattern types combine within a group (see <ref type="figure" coords="6,345.37,476.50,26.56,8.02" target="#fig_9">Fig. 10</ref>right). The color denotes the number of patterns found (light to dark green). The exact number is in the icon. Note that the color scheme can be changed on demand. @BULLET Pattern heatmap (see <ref type="figure" coords="6,405.90,506.89,25.93,8.02" target="#fig_9">Fig. 10</ref>left) on the top shows the number of found patterns according to their structure. Each cell shows the number of patterns having a particular size (column) and a particular number of basic patterns combined (row). Green tone shows the number of found patterns. The white cells with gray outline show possible pattern combinations, where no patterns were found. The outer white areas correspond to impossible pattern type combinations (e.g., a larger size then the number of basic patterns combined). Interaction: The user can use the heatmap for selecting interesting patterns for a detailed analysis (see <ref type="figure" coords="6,438.74,616.36,24.07,8.02">Fig. 11</ref>). The user can select the patterns with a specific structure (a cell), with a specific size (row) or length (column). The selected patterns are shown either in the detailed view or are highlighted directly in the MGs. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6.2">Detail Pattern View</head><p>The detailed pattern view provides the user with important information on the exact form of the patterns as well as their distribution across the dataset (see <ref type="figure" coords="6,353.85,696.57,24.75,8.02" target="#fig_10">Fig. 12</ref>). These views are important for the biological interpretation of the found patterns. Design: The detailed pattern view has three linked parts: The top left part of the detailed view shows the number of found patterns according to their type (see <ref type="figure" coords="6,441.50,736.42,29.41,8.02" target="#fig_10">Fig. 12A</ref>). This provides a brief <ref type="figure" coords="7,54.00,347.74,22.69,7.37">Fig. 11</ref>. Interaction with the overview: The user selects a set of patterns – a row in the heatmap – for their detailed inspection. In this example , the user selects all complex patterns, which consist of exactly three basic patterns and have the size of 3 or 4. information on the number of patterns, which could be seen only in the overview. The main part (see <ref type="figure" coords="7,132.33,427.08,29.68,8.02" target="#fig_10">Fig. 12B</ref>) shows the exact form and labels of the found patterns as node link diagrams. The background color indicates the pattern frequency (light to dark green, few to many). This allows the user to inspect the patterns and extract their biological meaning. The list is sorted by user preferences: by frequency, size or number of basic patterns combined. The information panel on the right (see <ref type="figure" coords="7,207.93,486.85,30.07,8.02" target="#fig_10">Fig. 12C</ref>) shows analytical information on pattern occurrence and location of user-selected patterns . Pattern frequency is shown on the top as a bar. The full bar means occurrence in all MGs. As requested by the users, we also included information on pattern location within MGs. The distribution of pattern locations within a MGs (hierarchy level) is shown as a histogram. It shows whether the pattern occurs rather at the beginning or at the end of the mutation chain. The patterns occurring at the beginning are more likely to cause multitude of pattern unrelated subsequent mutations, whereas patterns at the end of mutation chains can be viewed as evolutionary end points. Interaction: The user can select one or more patterns in the main view for a detailed inspection in additional views (see <ref type="figure" coords="7,254.56,606.41,24.16,8.02" target="#fig_1">Fig. 13</ref>). The selected patterns are highlighted by a colored border. Each pattern is assigned a different color. The colors are kept constant in all views. Note that we expect that the user focuses on a few patterns. If the user wishes to analyze more patterns, she can do so sequentially. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6.3">Pattern Locations Views</head><p> The most detailed views on exact locations of selected patterns in mutation graphs and in 3D protein structures were requested by the users. These views are needed for biological analysis of the data. The users wish to know exactly where the patterns are located in order to make inference from the data (see <ref type="figure" coords="7,156.33,716.50,23.54,8.02" target="#fig_1">Fig. 13</ref>). The view on the pattern locations within the graphs shows the filtered set of MGs – only those containing the selected patterns. This set is usually smaller then the input set of graphs. MGs are displayed as node-link diagrams using Sugyiama-style layout <ref type="bibr" coords="7,502.05,290.68,13.74,8.02" target="#b39">[42]</ref>. The selected patterns are highlighted using convex hulls. The hulls are inspired by the visualization of groups of nodes in graphs called bubble sets <ref type="bibr" coords="7,552.06,310.61,14.94,8.02" target="#b10">[11] </ref>and groups of points in scatterplots <ref type="bibr" coords="7,443.54,320.57,14.19,8.02" target="#b37">[39,</ref><ref type="bibr" coords="7,459.80,320.57,10.65,8.02" target="#b41"> 44]</ref>. For consistency, the hulls have the color assigned to the pattern in the detailed view. The 3D structural view on the patterns shows the pattern as additional nodes and links within the protein structure. This view allows the biologist to examine also structural closeness of the mutated amino acids in the protein. It shows which part of the protein is affected by the mutation pattern and whether this pattern is compact or spreads across wide parts of the protein. 3D structures are visualized with VMD <ref type="bibr" coords="7,340.34,400.33,13.74,8.02" target="#b19">[20]</ref>, as it is the common tool used in biological analysis. We extended the standard VMD view with the display of the found pat- terns. <ref type="figure" coords="7,339.35,420.26,34.71,8.02" target="#fig_1">Figure 13</ref>shows the patterns within the 3D structure as red and blue arrows between the corresponding amino acids. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="7">APPLICATION</head><p>We show the application of our tool to real world data as analyzed by biologists. The biologists were able to detect important patterns within mutation chain events of the HIV protease. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="7.1">Motivation and Analytic Goal</head><p>The human immuno-deficiency virus 1 (HIV1) targets T helper cells of the immune system. After infection, the virus evntually destroys the target cells leading to the acquired immuno-deficiency syndrome (AIDS) and subsequent infection with HIV and AIDS associated dis- eases. Modern therapies target a variety of essential HIV proteins such as the reverse transcriptase and the HIV protease (HIVP). While HIVP inhibition does not prevent infection of T helper cells, it prevents the formation of a functional virion and, in theory, should also stop HIV from proliferating within the infected organism. This may not be successful due to a high variability of HIV genes. These so-called viral quasi-species are capable of adapting to additional evolutionary pressure induced by drugs which thus leads to the evolution of drugresistant viruses. This eventually increases the failure rate of a treat- ment. A large number of HIVP data are available for analysis. The analysis based on such wide data base can lead to robust evolutionary insights . Especially, the analysis of patterns in the mutation chains can reveal causally determined evolutionary relationships beyond simple pairwise dependencies. The new insights on mutation patterns could enable the design of new combined drug therapies targeting a multitude of connected residual positions to further limit HIVs elusiveness against long-term drug treatment. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="7.2">Input Data</head><p>The input data are HIVP sequences. Each sequence has exactly 99 amino acids. The data were obtained from the HIV drug resistance database <ref type="bibr" coords="8,77.98,264.97,13.74,8.02" target="#b34">[36]</ref>. It provides data on more than 65, 000 HIVP sequences. The data is gained from both drug treated and untreated patients. As data curation, we omitted sequences with non-canonical amino acids, since they might indicate imprecise or wrong sequencing results, resulting in 34, 747 sequences. The data for the analysis in this use case was pre-processed in two steps: first calculating the initial correlated mutation graph and then extracting the mutation chains in form of mutation graphs (MGs) for all amino acids in the protein. As initial step, so-called correlated mutation graphs were constructed . We used the protocol by <ref type="bibr" coords="8,175.16,365.01,9.52,8.02" target="#b3">[4]</ref> . The number of minimal sequences present in any sub-alignment was set to 2. The frequency threshold was set to ∆f = 0.15. We used unweighted graphs consisting of edges the revealed p-values of 0.05 or less. We then corrected for multiple-testing effects. Here, we decided to use the conservative Bonferroni-correction which avoids problems with dependent hypotheses on co-evolutionary signatures among the various higherorder correlations present in molecular evolution <ref type="bibr" coords="8,227.87,434.75,13.74,8.02" target="#b46">[49]</ref>. The number of tests was nt := Na · Na · N · (N − 1), where N is the number of amino acid positions due to the lack of symmetry in amino acid pairs (i, j) ↔ (j, i); and Na = 20 is the number of naturally occurring of amino acid types. Thus, nt = 3, 880, 800. We have therefore used an effective p-value threshold of 10 −2 /nt ≈ 10 −8 to construct the resulting directed unweighted graph. It contained 246 vertices and 3, 233 edges. In the second step, we extracted the dataset of mutation graphs for the visual pattern analysis. It was calculated from the initial correlated mutation graph using mutation chain algorithm provided by the biologists. We got a set of 246 mutation graphs (MGs). The graphs had between 1 and 203 nodes, having from 0 to 610 edges each. This graph data set serves as input for the analysis of patterns. Graph computation used R <ref type="bibr" coords="8,153.58,574.65,14.94,8.02" target="#b33">[35] </ref>and the iGraph <ref type="bibr" coords="8,226.29,574.65,13.74,8.02" target="#b11">[12]</ref>. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="7.3">Use Case</head><p>Our pattern search algorithm found 101 patterns in the input mutation graphs. The overview of all found patterns is shown in <ref type="figure" coords="8,248.13,616.45,33.15,8.02" target="#fig_3">Figure 14</ref>(a). The most prominent group of patters is composed fan-out patterns (68, highlighted in dark green (T1). These fan-out patterns have varying number of levels (see green cells in the heatmap in <ref type="figure" coords="8,227.55,646.34,32.41,8.02" target="#fig_3">Figure 14</ref> (a)). Mutation fan-out patterns with a larger number of levels can be seen as more complex interaction cascades, which could contain information on long ranging relationship networks. <ref type="figure" coords="8,54.96,686.40,36.13,8.02" target="#fig_3">Figure 14</ref>(a) shows many potentially relevant patterns, which should be analyzed in detail (T2). Due to page limitation, we show two prominent examples selected by the biologists. First, the expert focuses on complex patterns as they reveal an interplay of multiple biologically relevant interactions. <ref type="figure" coords="8,228.74,726.46,33.62,8.02" target="#fig_3">Figure 14</ref> (b) highlights the most prominent pattern in the top left corner (see the pattern  a summary of all found patterns (a), selected pattern types are shown in the detailed pattern view (b). The user then selects most interesting patterns for exploration of their locations both in the 3D protein structure (c) and within their respective mutation graphs (d). highlighted with an orange rectangle). This pattern is composed of a fan-out and a line pattern. Interestingly this pattern occurs solely in the middle of mutation graphs (T4), neither at the beginning nor at the end of the mutation chain (see the orange histogram of occurrences on the right of the image). This implies that this mutation pattern can be thought as an evolutionary bottleneck for 2.85%, i.e. 7 out of 246, of all mutation graphs (see the relative number of pattern's occurences shown in <ref type="figure" coords="9,88.65,474.96,23.67,8.02" target="#fig_3">Fig. 14</ref>(b), top right). Biologically, the complex pattern highlighted in <ref type="figure" coords="9,243.73,485.74,34.36,8.02" target="#fig_3">Figure 14</ref> (d) describes the influence of the occurrence of glutamine at position 61. This Gln61 is responsible for two different effects on three positions in the HIV protease (positions 57, 65 and 72) (T3). Hereby the first level influence on each of the three positions is both inductive and inhibitive . In detail, this means that at position 72 the occurrence of the hydrophobic isoleucine is positively influenced whereas the polar threonine is inhibited. Therefore, the polar uncharged Gln61 increases hydrophobicity at this position. At position 57, a quite different effect can be observed. Here, Gln61 increases the probability of arginine and reduces the emergence of lysine . Since both arginine and lysine are positively charged, no change in net surface charge and polarity arises. Nevertheless, arginine with its guanidinium group can form more H-bonds than lysine and serves to increase the stability of the protein via additional salt bridge in- teractions <ref type="bibr" coords="9,92.04,635.99,10.45,8.02" target="#b4">[5] </ref>(T4). A similar effect can be observed at position 65 where the occurrence of the negatively charged glutamic acid is favored while also negatively charged aspartic acid can be observed less frequent. The only difference between these two amino acids is the length of the side chain. Furthermore, the bulkier side chain group of glutamic acid has a slightly smaller pKa value than aspartic acid. This could lead to altering responses to solvent interactions. Interestingly, second level effects are induced by the Arg57 which in turn influences position 61 by reducing the occurrence of serine and thus leading to mutual dependencies on both sites. Altogether, Gln61 influences residues in the cantilever region (position 65 and 72) and the flaps of HIVP (position 57) hence forming an evolutionary pattern connecting these two regions. This region has already been shown to be functionally involved in the opening and closing of the flaps by the means of compression and extension <ref type="bibr" coords="9,552.06,83.27,14.94,8.02" target="#b32">[34] </ref>(T4). More recently, this unique property of the exo region near Gln61 has been used for HIVP inhibitor design <ref type="bibr" coords="9,465.59,103.20,9.71,8.02" target="#b8">[9,</ref><ref type="bibr" coords="9,477.86,103.20,10.65,8.02" target="#b22"> 23]</ref>, further emphasizing the importance of understanding possible evolutionary dependencies. The second biologically relevant example, is the most frequently observed pattern (see the pattern highlighted with an orange rectangle in <ref type="figure" coords="9,340.03,143.62,24.03,8.02" target="#fig_10">Fig. 12</ref>). This pattern is observed in over 58% of all mutation graphs (see <ref type="figure" coords="9,360.59,153.58,25.98,8.02" target="#fig_10">Fig. 12</ref>top right) (T2). A detailed view on 3D structure in <ref type="figure" coords="9,326.55,163.54,33.94,8.02" target="#fig_4">Figure 15</ref>(a) shows that asparagine at position 88 is located in an α-helical structure. This residue exerts an inhibitory and an enhancing evolutionary effect on position 30 (see <ref type="figure" coords="9,454.18,183.47,24.04,8.02" target="#fig_4">Fig. 15</ref>) (T4). More exactly, the probability to find aspartic acid is increased, while structurally highly similar asparagine is disfavored. Due to the change in net charge at this site, the flexibility of the loop region connecting the HIVP active site (Asp25 – Thr26 – Gly27) with the subsequent β-sheet could be directly affected. The above described patterns – the most frequent fan-out and complex patterns – serve as selected examples from the multitude of identified patterns. More patterns, which could not be shown due to space limitations could lead to further insights into how and why specific drug resistances arise, which drug interactions can be easily avoided by the HIVP or on general evolutionary dynamics in HIVP. In this way, our approach may enable researchers to dissect evolutionary dependencies in regions with high mutual information <ref type="bibr" coords="9,512.83,313.55,14.94,8.02" target="#b16">[17] </ref>and study future drug therapy approaches. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="8">CONCLUSIONS AND FUTURE WORK</head><p> We presented a new approach for the visual analysis of patterns in mutation graphs, which represent mutation chain reactions of amino acids in proteins. Many such graphs result from modifications of individual amino acids, e.g., through drug treatment. The finding and exploration of often occurring patterns in the mutation graphs is an important part of pharmacological drug development or evolutionary research. Our approach combines an adapted algorithm for pattern search in multiple mutation graphs and an interactive interface for pattern exploration in several linked views. As the number of patterns can be large, we presented a novel overview of the number of found patterns grouped by structure. In this view, the user can select interesting pattern types for their detailed analysis and for the exploration of their locations in the mutation graphs and in 3D protein structures. We have evaluated our system on real world data of HIV protease mutations. The results show interesting insights into mutations of this protein. These insights initiate future biological investigations. In the future, we would like to extend our approach in several ways. The biologists would be interested in new ways of comparing patterns across several datasets. It would be also interesting to include additional biological meta-information (e.g., charge, secondary structure information, positions affected by drug application) in the analysis . From visualization point of view, we would like to develop an extended pattern-centric graph layout, which emphasizes the patterns found in acyclic directed graphs. Our approach could be applied to further application areas, which analyze chain reactions in networks, such as information cascades or disease spreading. </p></div><figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_0" coords="2,307.62,532.14,250.38,7.37;2,307.62,541.61,250.38,7.37;2,307.62,551.07,250.38,7.37;2,307.62,560.54,170.86,7.37"><head>Fig. </head><figDesc> Fig. 2. Toy-example of four mutation graphs with potential patterns highlighted (colored background). The nodes represent amino acids, where the labels reflect their type and position. These graphs are calculated for each amino acid in the protein independently. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_1" coords="4,45.00,149.12,513.00,7.37;4,45.00,158.59,443.72,7.37"><head>Fig. 3. </head><figDesc>Fig. 3. Overview of our approach: (1) Pattern search results. (2) Overview of the number of patterns found. (3) Interesting patterns with additional information on their occurrence. (4) The location of selected patterns is examined directly in MGs and in 3D protein structures. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_3" coords="4,45.00,506.95,250.38,7.37;4,45.00,516.42,115.81,7.37"><head>Fig. 4. </head><figDesc>Fig. 4. One unlabeled pattern represents a large number of labeled patterns with the same structure. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_4" coords="4,307.62,268.73,250.38,7.37;4,307.62,278.19,182.76,7.37"><head>Fig. 5. </head><figDesc>Fig. 5. Types of biologically relevant basic patterns used in our work. Out of these 4, more complex patterns can be build. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_5" coords="4,307.62,517.78,250.38,7.37;4,307.62,527.24,213.16,7.37"><head>Fig. 6. </head><figDesc>Fig. 6. Combination of two basic patterns (pink, Fan-Out and purple, Line) found in the same MG into a complex pattern (orange). </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_6" coords="5,316.62,260.93,250.38,7.37;5,316.62,270.40,250.38,7.37;5,316.62,279.86,250.38,7.37;5,316.62,289.33,235.46,7.37"><head>Fig. 7. </head><figDesc>Fig. 7. Example for pattern removal: The purple pattern is removed as it is a full subpattern of the orange pattern. Both patterns occur simultaneously. The pink pattern occurs also in other MG, then orange pattern, so it carries extra information. Therefore, it is not removed. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_7" coords="6,45.00,478.48,250.38,7.37;6,45.00,487.95,250.38,7.37;6,45.00,497.41,250.38,7.37;6,45.00,506.88,250.38,7.37;6,45.00,516.34,250.38,7.37;6,45.00,525.81,217.06,7.37"><head>Fig. 8. </head><figDesc>Fig. 8. Benefit of our Pattern Overview. Top: A large number of found patterns presented in a standard way. Patterns are difficult to compare and analyze. Bottom: Our pattern overview visualizes the same amount of information in a compact and structured way. The patterns are grouped by their structure. The number of found patterns is indicated by color from light to dark green (few to many patterns). </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_8" coords="6,307.62,298.13,250.38,7.37;6,307.62,307.59,250.38,7.37;6,307.62,317.05,250.38,7.37;6,307.62,326.52,250.38,7.37;6,307.62,335.98,112.84,7.37"><head>Fig. 9. </head><figDesc>Fig. 9. Grouping patterns by their composition. The icon (bottom) shows the basic patterns, which are combined in the patterns (top). In this example the icon stands for all patterns which consists only of line and fan-out patterns. The number shows how many of this combinations were found (in this example 12). </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_9" coords="7,54.00,163.95,250.38,7.37;7,54.00,173.41,250.38,7.37;7,54.00,182.88,250.38,7.37;7,54.00,192.34,250.38,7.37;7,54.00,201.81,250.38,7.37;7,54.00,211.27,250.38,7.37;7,54.00,220.74,43.87,7.37"><head>Fig. 10. </head><figDesc>Fig. 10. Glyph showing the number of found patterns. Left: Heatmap shows the number of patterns according to their size and the number of combined basic patterns. Background color denotes the number of patterns found. Right: Icon shows the types of basic patterns combined within the group. The number and the background color indicates the number of found patterns. Color scheme: light to dark green meaning few to many. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_10" coords="7,316.62,211.59,250.38,7.37;7,316.62,221.05,250.38,7.37;7,316.62,230.52,250.38,7.37;7,316.62,239.98,250.38,7.37;7,316.62,249.45,62.99,7.37"><head>Fig. 12. </head><figDesc>Fig. 12. Detailed Pattern View. A: Overview of the number of found patterns by basic types. B: The patterns found and their frequency indicated by background color. Dark green means many patterns found. C: Information panel showing additional analytical information for userselected patterns. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_11" coords="7,316.62,563.78,250.38,7.37;7,316.62,573.25,250.38,7.37;7,316.62,582.71,102.61,7.37"><head>Fig. 13. </head><figDesc>Fig. 13. Further exploration: For one or more selected patterns (left) in the Detailed Pattern View the pattern location can be shown in the Pattern Location View (right). </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_13" coords="8,307.62,699.01,250.38,7.37;8,307.62,708.47,250.38,7.37;8,307.62,717.94,250.38,7.37;8,307.62,727.40,250.38,7.37;8,307.62,736.86,102.33,7.37"><head>Fig. 14. </head><figDesc> Fig. 14. Use Case workflow. Starting with a summary of all found patterns (a), selected pattern types are shown in the detailed pattern view (b). The user then selects most interesting patterns for exploration of their locations both in the 3D protein structure (c) and within their respective mutation graphs (d). </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_15" coords="9,54.00,362.88,250.38,7.37;9,54.00,372.35,195.58,7.37"><head>Fig. 15. </head><figDesc>Fig. 15. (a): Structural view of line pattern connecting position 88 to 30. (b) Position of a fan out pattern within a mutation graph. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_1" validated="false" coords="5,316.62,552.13,250.38,16.84"><figDesc coords="5,316.62,552.13,250.38,7.37;5,316.62,561.59,43.70,7.37">Table 1. Experimental runtimes. Average results (10 runs of each configuration</figDesc><table></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_2" validated="false" coords="5,336.55,716.50,230.45,27.94"><figDesc coords="5,336.55,716.50,230.45,8.02;5,336.55,726.46,230.45,8.02;5,336.55,736.42,170.58,8.02">Pattern Overview: This novel scalable view shows the number of patterns found in the dataset. It also allows to select certain types of patterns for further detailed inspection.</figDesc><table></table></figure>
+
+			<note place="foot" n="4"> OVERVIEW OF OUR APPROACH Our approach combines a new specific algorithm for finding biologically relevant patterns in mutation graphs (MGs) with a novel interactive visual interface for pattern exploration (see Fig. 3). The interface shows the patterns on various levels of detail, addressing the scalability issue w.r.t. the number of patterns found and w.r.t. the number of graphs (MGs). The approach has been developed together with experts from biology so that it suits their analytical needs. We first explain our pattern search algorithm (see Sec. 5) and then describe the interactive interface (see Sec. 6).</note>
+		</body>
+		<back>
+
+			<div type="acknowledgement">
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>ACKNOWLEDGMENTS </head><p>The authors gratefully acknowledge financial support by the Deutsche Forschungsgemeinschaft under grants no. HA 5261/3-1 and LA 3001/1-1. </p></div>
+			</div>
+
+			<div type="references">
+
+				<listBibl>
+
+<biblStruct coords="9,334.88,699.24,232.12,7.13;9,334.88,708.70,140.00,7.13"  xml:id="b0">
+	<analytic>
+		<title level="a" type="main">Finding and counting given length cycles</title>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Alon</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Yuster</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">U</forename>
+				<surname>Zwick</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Algorithmica</title>
+		<imprint>
+			<biblScope unit="volume">17</biblScope>
+			<biblScope unit="issue">3</biblScope>
+			<biblScope unit="page" from="209" to="223" />
+			<date type="published" when="1997" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,334.88,718.17,232.12,7.13;9,334.88,727.63,232.12,7.13;9,334.88,737.10,137.62,7.13"  xml:id="b1">
+	<analytic>
+		<title level="a" type="main">Structural differences between two graphs through hierarchies</title>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Archambault</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of Graphics Interface</title>
+		<meeting>Graphics Interface</meeting>
+		<imprint>
+			<publisher>Canadian Information Processing Society</publisher>
+			<date type="published" when="2009" />
+			<biblScope unit="page" from="87" to="94" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,63.26,54.06,232.12,7.13;10,63.26,63.52,232.12,7.13;10,63.26,72.99,128.21,7.13"  xml:id="b2">
+	<monogr>
+		<title level="m" type="main">Pajek -analysis and visualization of large networks Mathematics and Visualization: Graph Drawing Software</title>
+		<author>
+			<persName>
+				<forename type="first">V</forename>
+				<surname>Batagelj</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">V</forename>
+				<surname>Batagelj</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Mrvar</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Mrvar</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2003" />
+			<biblScope unit="page" from="77" to="103" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,63.26,82.45,232.12,7.13;10,63.26,91.92,232.12,7.13;10,63.26,101.38,164.61,7.13"  xml:id="b3">
+	<analytic>
+		<title level="a" type="main">Using amino acid correlation and community detection algorithms to identify functional determinants in protein families</title>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<surname>Bleicher</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Lemke</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<forename type="middle">C</forename>
+				<surname>Garratt</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">PLoS One</title>
+		<imprint>
+			<biblScope unit="volume">6</biblScope>
+			<biblScope unit="issue">12</biblScope>
+			<biblScope unit="page">27786</biblScope>
+			<date type="published" when="2011" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,63.26,110.85,232.12,7.13;10,63.26,120.31,232.12,7.13;10,63.26,129.78,232.12,7.13;10,63.26,139.24,79.69,7.13"  xml:id="b4">
+	<analytic>
+		<title level="a" type="main">A structural role for arginine in proteins: multiple hydrogen bonds to backbone carbonyl oxygens</title>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Borders</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">A</forename>
+				<surname>Jr</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<forename type="middle">A</forename>
+				<surname>Broadwater</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">E</forename>
+				<surname>Bekeny</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<forename type="middle">S</forename>
+				<surname>Salmon</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<forename type="middle">M</forename>
+				<surname>Lee</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">V</forename>
+				<forename type="middle">B</forename>
+				<surname>Eldridge</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<surname>Pett</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Protein Sci</title>
+		<imprint>
+			<biblScope unit="volume">3</biblScope>
+			<biblScope unit="issue">4</biblScope>
+			<biblScope unit="page" from="541" to="548" />
+			<date type="published" when="1994-04" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,63.26,148.70,232.12,7.13;10,63.26,158.17,232.12,7.13;10,63.26,167.63,123.54,7.13"  xml:id="b5">
+	<analytic>
+		<title level="a" type="main">Computing and visually analyzing mutual information in molecular co-evolution</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Bremm</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Schreck</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Boba</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Held</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Hamacher</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">BMC Bioinformatics</title>
+		<imprint>
+			<biblScope unit="volume">11</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page">330</biblScope>
+			<date type="published" when="2010" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,63.26,177.10,232.12,7.13;10,63.26,186.56,232.12,7.13;10,63.26,196.03,195.94,7.13"  xml:id="b6">
+	<analytic>
+		<title level="a" type="main">Interactive visual comparison of multiple trees</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Bremm</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Von Landesberger</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>He</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Schreck</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Weil</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Hamacher</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">IEEE Visual Analytics Science and Technology</title>
+		<imprint>
+			<date type="published" when="2011" />
+			<biblScope unit="page" from="31" to="40" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,63.26,205.49,232.12,7.13;10,63.26,214.96,232.12,7.13;10,63.26,224.42,134.77,7.13"  xml:id="b7">
+	<analytic>
+		<title level="a" type="main">Torque: topology-free querying of protein interaction networks</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Bruckner</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<surname>Hüffner</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<forename type="middle">M</forename>
+				<surname>Karp</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Shamir</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Sharan</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Nucleic acids research</title>
+		<imprint>
+			<biblScope unit="volume">37</biblScope>
+			<biblScope unit="issue">2</biblScope>
+			<biblScope unit="page" from="106" to="108" />
+			<date type="published" when="2009" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,63.26,233.88,232.12,7.13;10,63.26,243.35,232.12,7.13;10,63.26,252.81,232.12,7.13;10,63.26,262.28,152.83,7.13"  xml:id="b8">
+	<analytic>
+		<title level="a" type="main">Identification of broad-based hiv-1 protease inhibitors from combinatorial libraries</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<forename type="middle">W</forename>
+				<surname>Chang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<forename type="middle">J</forename>
+				<surname>Giffin</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Muller</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Savage</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Y</forename>
+				<forename type="middle">C</forename>
+				<surname>Lin</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Hong</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Jin</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<forename type="middle">R</forename>
+				<surname>Whitby</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">H</forename>
+				<surname>Elder</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<forename type="middle">L</forename>
+				<surname>Boger</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<forename type="middle">E</forename>
+				<surname>Torbett</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Biochem J</title>
+		<imprint>
+			<biblScope unit="issue">3</biblScope>
+			<biblScope unit="page" from="429527" to="532" />
+			<date type="published" when="2010-08" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,63.26,271.74,232.12,7.13;10,63.26,281.21,169.57,7.13"  xml:id="b9">
+	<analytic>
+		<title level="a" type="main">Vislink: Revealing relationships amongst visualizations</title>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Collins</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Carpendale</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE TVCG</title>
+		<imprint>
+			<biblScope unit="volume">13</biblScope>
+			<biblScope unit="issue">6</biblScope>
+			<biblScope unit="page" from="1192" to="1199" />
+			<date type="published" when="2007" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,63.26,290.67,232.12,7.13;10,63.26,300.14,232.12,7.13;10,63.26,309.60,91.89,7.13"  xml:id="b10">
+	<analytic>
+		<title level="a" type="main">Bubble sets: Revealing set relations with isocontours over existing visualizations</title>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Collins</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Penn</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Carpendale</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE TVCG</title>
+		<imprint>
+			<biblScope unit="volume">15</biblScope>
+			<biblScope unit="issue">6</biblScope>
+			<biblScope unit="page" from="1009" to="1016" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,63.26,319.07,232.12,7.13;10,63.26,328.53,191.52,7.13"  xml:id="b11">
+	<monogr>
+		<title level="m" type="main">The igraph software package for complex network research</title>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Csardi</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Nepusz</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2006" />
+			<biblScope unit="page">1695</biblScope>
+			<pubPlace>InterJournal, Complex Systems</pubPlace>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,63.26,337.99,232.12,7.13;10,63.26,347.46,232.12,7.13;10,63.26,356.92,185.94,7.13"  xml:id="b12">
+	<analytic>
+		<title level="a" type="main">Compressed adjacency matrices: Untangling gene regulatory networks. Visualization and Computer Graphics</title>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Dinkla</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Westenberg</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Van Wijk</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on</title>
+		<imprint>
+			<biblScope unit="volume">18</biblScope>
+			<biblScope unit="issue">12</biblScope>
+			<biblScope unit="page" from="2457" to="2466" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,63.26,366.39,232.12,7.13;10,63.26,375.85,232.12,7.13;10,63.26,385.40,232.12,6.86;10,63.26,394.78,128.96,7.13"  xml:id="b13">
+	<analytic>
+		<title level="a" type="main">Motif simplification: improving network visualization readability with fan, connector, and clique glyphs</title>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Dunne</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Shneiderman</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the SIGCHI Conference on Human Factors in Computing Systems</title>
+		<meeting>the SIGCHI Conference on Human Factors in Computing Systems</meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="2013" />
+			<biblScope unit="page" from="3247" to="3256" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,63.26,404.25,232.12,7.13;10,63.26,413.71,232.12,7.13;10,63.26,423.17,220.96,7.13"  xml:id="b14">
+	<analytic>
+		<title level="a" type="main">ManyNets: an interface for multiple network analysis and visualization</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Freire</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Plaisant</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Shneiderman</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Golbeck</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. of Int. Conf. on Human factors in computing systems</title>
+		<meeting>. of Int. Conf. on Human factors in computing systems</meeting>
+		<imprint>
+			<date type="published" when="2010" />
+			<biblScope unit="page" from="213" to="222" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,63.26,432.64,232.12,7.13;10,63.26,442.10,232.12,7.13;10,63.26,451.57,186.73,7.13"  xml:id="b15">
+	<analytic>
+		<title level="a" type="main">Network motif discovery using subgraph enumeration and symmetry-breaking</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Grochow</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Kellis</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Research in Computational Molecular Biology</title>
+		<imprint>
+			<publisher>Springer</publisher>
+			<date type="published" when="2007" />
+			<biblScope unit="page" from="92" to="106" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,63.26,461.03,232.12,7.13;10,63.26,470.50,197.00,7.13"  xml:id="b16">
+	<analytic>
+		<title level="a" type="main">Relating sequence evolution of hiv1-protease to its underlying molecular mechanics</title>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Hamacher</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Gene</title>
+		<imprint>
+			<biblScope unit="volume">422</biblScope>
+			<biblScope unit="issue">12</biblScope>
+			<biblScope unit="page" from="30" to="36" />
+			<date type="published" when="2008-10" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,63.26,479.96,232.12,7.13;10,63.26,489.43,213.31,7.13"  xml:id="b17">
+	<analytic>
+		<title level="a" type="main">Drawing graphs within graphs</title>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Holleis</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Zimmermann</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Gmach</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">J. of Graph Algorithms and Applications</title>
+		<imprint>
+			<biblScope unit="volume">9</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="7" to="18" />
+			<date type="published" when="2005" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,63.26,498.89,232.12,7.13;10,63.26,508.36,224.68,7.13"  xml:id="b18">
+	<analytic>
+		<title level="a" type="main">Visual comparison of hierarchically organized data</title>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Holten</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Van Wijk</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Computer Graphics Forum</title>
+		<imprint>
+			<date type="published" when="2008" />
+			<biblScope unit="page" from="759" to="766" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,63.26,517.82,232.12,7.13;10,63.26,527.28,163.69,7.13"  xml:id="b19">
+	<analytic>
+		<title level="a" type="main">Vmd: visual molecular dynamics</title>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Humphrey</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Dalke</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Schulten</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">J Mol Graph</title>
+		<imprint>
+			<biblScope unit="volume">14</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="33" to="41" />
+			<date type="published" when="1996-02" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,63.26,536.75,232.12,7.13;10,63.26,546.21,232.12,7.13;10,63.26,555.68,144.57,7.13"  xml:id="b20">
+	<analytic>
+		<title level="a" type="main">Efficient sampling algorithm for estimating sub-graph concentrations and detecting network motifs</title>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Kashtan</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Itzkovitz</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Milo</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">U</forename>
+				<surname>Alon</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Bioinformatics</title>
+		<imprint>
+			<biblScope unit="volume">20</biblScope>
+			<biblScope unit="page" from="1746" to="1758" />
+			<date type="published" when="2004" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,63.26,565.14,232.12,7.13;10,63.26,574.61,232.12,7.13;10,63.26,584.07,232.12,7.13;10,63.26,593.54,29.89,7.13"  xml:id="b21">
+	<analytic>
+		<title level="a" type="main">Coordinated perspectives and enhanced force-directed layout for the analysis of network motifs</title>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Klukas</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<surname>Schreiber</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Schwöbbermeyer</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Asia-Pacific Symposium on Information Visualisation</title>
+		<imprint>
+			<date type="published" when="2006" />
+			<biblScope unit="page" from="39" to="48" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,63.26,603.00,232.12,7.13;10,63.26,612.47,232.12,7.13;10,63.26,621.93,232.12,7.13;10,63.26,631.39,232.12,7.13;10,63.26,640.86,49.14,7.13"  xml:id="b22">
+	<analytic>
+		<title level="a" type="main">Targeting dynamic pockets of hiv-1 protease by structure-based computational screening for allosteric inhibitors</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Kunze</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Todoroff</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Schneider</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Rodrigues</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Geppert</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<surname>Reisen</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Schreuder</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Saas</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Hessler</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">K.-H</forename>
+				<surname>Baringhaus</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Schneider</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">J Chem Inf Model</title>
+		<imprint>
+			<biblScope unit="volume">54</biblScope>
+			<biblScope unit="issue">3</biblScope>
+			<biblScope unit="page" from="987" to="991" />
+			<date type="published" when="2014-03" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,63.26,650.32,232.12,7.13;10,63.26,659.79,232.12,7.13;10,63.26,669.25,60.66,7.13"  xml:id="b23">
+	<analytic>
+		<title level="a" type="main">An efficient algorithm for discovering frequent subgraphs. Knowledge and Data Eng</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Kuramochi</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Karypis</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Trans. on</title>
+		<imprint>
+			<biblScope unit="volume">16</biblScope>
+			<biblScope unit="issue">9</biblScope>
+			<biblScope unit="page" from="1038" to="1051" />
+			<date type="published" when="2004" />
+		</imprint>
+	</monogr>
+	<note>sept</note>
+</biblStruct>
+
+<biblStruct coords="10,63.26,678.72,232.12,7.13;10,63.26,688.18,232.12,7.13;10,63.26,697.65,172.00,7.13"  xml:id="b24">
+	<analytic>
+		<title level="a" type="main">Visual compression of workflow visualizations with automated detection of macro motifs</title>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<surname>Maguire</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Rocca-Serra</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S.-A</forename>
+				<surname>Sansone</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Davies</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Chen</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE TVCG</title>
+		<imprint>
+			<biblScope unit="volume">19</biblScope>
+			<biblScope unit="issue">12</biblScope>
+			<biblScope unit="page" from="2576" to="2585" />
+			<date type="published" when="2013" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,63.26,707.11,232.12,7.13;10,63.26,716.57,142.80,7.13;10,45.00,726.04,250.38,7.13"  xml:id="b25">
+	<analytic>
+		<title level="a" type="main">Mizbee: a multiscale synteny browser</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Meyer</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Munzner</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Pfister</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE TVCG</title>
+		<imprint>
+			<biblScope unit="volume">15</biblScope>
+			<biblScope unit="issue">6</biblScope>
+			<biblScope unit="page" from="897" to="904" />
+			<date type="published" when="2009" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,63.26,735.50,220.09,7.13"  xml:id="b26">
+	<monogr>
+		<title level="m" type="main">html (accessed 5</title>
+		<author>
+			<persName>
+				<forename type="first">/</forename>
+				<surname>Urialon</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2009" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,307.62,54.06,250.38,7.13;10,325.88,63.52,232.12,7.13;10,325.88,72.99,132.38,7.13"  xml:id="b27">
+	<analytic>
+		<title level="a" type="main">Network motifs: simple building blocks of complex networks</title>
+		<author>
+			<persName>
+				<forename type="first">]</forename>
+				<forename type="middle">R</forename>
+				<surname>Milo</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Shen-Orr</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Itzkovitz</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Kashtan</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Chklovskii</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">U</forename>
+				<surname>Alon</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Science Signalling</title>
+		<imprint>
+			<biblScope unit="issue">5594</biblScope>
+			<biblScope unit="page">298824</biblScope>
+			<date type="published" when="2002" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,325.88,82.45,232.12,7.13;10,325.88,91.92,232.12,7.13;10,325.88,101.38,175.25,7.13"  xml:id="b28">
+	<analytic>
+		<title level="a" type="main">Treejuxtaposer: scalable tree comparison using focus+context with guaranteed visibility</title>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Munzner</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<surname>Guimbretì Ere</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Tasiran</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<surname>Zhang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Y</forename>
+				<surname>Zhou</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">ACM Trans. Graph</title>
+		<imprint>
+			<biblScope unit="volume">22</biblScope>
+			<biblScope unit="page" from="453" to="462" />
+			<date type="published" when="2003-07" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,325.88,110.85,232.12,7.13;10,325.88,120.31,232.12,7.13;10,325.88,129.78,142.65,7.13;10,307.62,139.24,62.65,7.13;10,386.68,139.24,89.98,7.13;10,493.07,139.24,64.93,7.13;10,325.88,148.70,232.12,7.13;10,325.88,158.17,165.71,7.13"  xml:id="b29">
+	<analytic>
+		<title level="a" type="main">Large-scale multiple sequence alignment visualization through gradient vector flow analysis</title>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<forename type="middle">T</forename>
+				<surname>Nguyen</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Ropinski</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">IEEE Biological Data Visualization</title>
+		<imprint>
+			<date type="published" when="2006" />
+			<biblScope unit="page" from="9" to="16" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,325.88,167.63,232.12,7.13;10,325.88,177.10,160.59,7.13"  xml:id="b30">
+	<analytic>
+		<title level="a" type="main">Trees of trees: an approach to comparing multiple alternative phylogenies</title>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Nye</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Systematic biology</title>
+		<imprint>
+			<biblScope unit="volume">57</biblScope>
+			<biblScope unit="issue">5</biblScope>
+			<biblScope unit="page">785</biblScope>
+			<date type="published" when="2008" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,325.88,186.56,232.12,7.13;10,325.88,196.03,232.12,7.13;10,325.88,205.49,122.56,7.13"  xml:id="b31">
+	<analytic>
+		<title level="a" type="main">Moda: an efficient algorithm for network motif discovery in biological networks</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Omidi</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<surname>Schreiber</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Masoudi-Nejad</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Genes &amp; genetic systems</title>
+		<imprint>
+			<biblScope unit="volume">84</biblScope>
+			<biblScope unit="issue">5</biblScope>
+			<biblScope unit="page" from="385" to="395" />
+			<date type="published" when="2009" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,325.88,214.96,232.12,7.13;10,325.88,224.42,232.12,7.13;10,325.88,233.88,232.12,7.13;10,325.88,243.35,105.37,7.13"  xml:id="b32">
+	<analytic>
+		<title level="a" type="main">Hiv-1 protease molecular dynamics of a wild-type and of the v82f/i84v mutant: possible contributions to drug resistance and a potential new target site for drugs</title>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<forename type="middle">L</forename>
+				<surname>Perryman</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J.-H</forename>
+				<surname>Lin</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">A</forename>
+				<surname>Mccammon</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Protein Sci</title>
+		<imprint>
+			<biblScope unit="volume">13</biblScope>
+			<biblScope unit="issue">4</biblScope>
+			<biblScope unit="page" from="1108" to="1123" />
+			<date type="published" when="2004-04" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,325.88,252.81,232.12,7.13;10,325.88,262.28,201.98,7.13"  xml:id="b33">
+	<monogr>
+		<title level="m" type="main">R: A Language and Environment for Statistical Computing. R Foundation for Statistical Computing</title>
+		<author>
+			<persName>
+				<forename type="first">R Core</forename>
+				<surname>Team</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2014" />
+			<pubPlace>Vienna, Austria</pubPlace>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,325.88,271.74,232.12,7.13;10,325.88,281.21,220.89,7.13"  xml:id="b34">
+	<analytic>
+		<title level="a" type="main">Human immunodeficiency virus reverse transcriptase and protease sequence database</title>
+		<author>
+			<persName>
+				<forename type="first">S.-Y</forename>
+				<surname>Rhee</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Nucleic Acids Res</title>
+		<imprint>
+			<biblScope unit="volume">31</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page">298303</biblScope>
+			<date type="published" when="2003" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,325.88,290.67,232.12,7.13;10,325.88,300.14,202.33,7.13"  xml:id="b35">
+	<analytic>
+		<title level="a" type="main">Strategies for network motifs discovery</title>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Ribeiro</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<surname>Silva</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Kaiser</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">IEEE Int. Conf. on e-Science</title>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2009" />
+			<biblScope unit="page" from="80" to="87" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,325.88,309.60,232.12,7.13;10,325.88,319.07,232.12,7.13;10,325.88,328.53,84.26,7.13"  xml:id="b36">
+	<analytic>
+		<title level="a" type="main">Unraveling protein networks with power graph analysis</title>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<surname>Royer</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Reimann</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Andreopoulos</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Schroeder</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">PLoS computational biology</title>
+		<imprint>
+			<biblScope unit="volume">4</biblScope>
+			<biblScope unit="issue">7</biblScope>
+			<biblScope unit="page">1000108</biblScope>
+			<date type="published" when="2008" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,325.88,337.99,232.12,7.13;10,325.88,347.46,232.12,7.13;10,325.88,356.92,227.13,7.13"  xml:id="b37">
+	<analytic>
+		<title level="a" type="main">A new metaphor for projection-based visual analysis and data exploration</title>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Schreck</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Panse</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Electronic Imaging 2007, pages 64950L–64950L. International Society for Optics and Photonics</title>
+		<imprint>
+			<date type="published" when="2007" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,325.88,366.39,232.12,7.13;10,325.88,375.85,181.23,7.13;10,307.62,385.32,67.62,7.13;10,400.08,385.32,157.92,7.13;10,325.88,394.78,216.56,7.13"  xml:id="b38">
+	<analytic>
+		<title level="a" type="main">Mavisto: a tool for the exploration of network motifs</title>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<surname>Schreiber</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Schwobbermeyer</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">41] K. Soramäki. Financial network analysis (FNA)</title>
+		<imprint>
+			<date type="published" when="2005" />
+			<biblScope unit="page" from="3572" to="3574" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,325.88,404.25,232.12,7.13;10,325.88,413.71,232.12,7.13;10,325.88,423.17,124.31,7.13"  xml:id="b39">
+	<analytic>
+		<title level="a" type="main">Methods for visual understanding of hierarchical system structures. Systems, Man and Cybernetics</title>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Sugiyama</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Tagawa</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Toda</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on</title>
+		<imprint>
+			<biblScope unit="volume">11</biblScope>
+			<biblScope unit="issue">2</biblScope>
+			<biblScope unit="page" from="109" to="125" />
+			<date type="published" when="1981" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,325.88,432.64,232.12,7.13;10,325.88,442.10,232.12,7.13;10,325.88,451.57,77.26,7.13"  xml:id="b40">
+	<analytic>
+		<title level="a" type="main">Visualizing changes of hierarchical data using treemaps. Visualization and Computer Graphics</title>
+		<author>
+			<persName>
+				<forename type="first">Y</forename>
+				<surname>Tu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H.-W</forename>
+				<surname>Shen</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on</title>
+		<imprint>
+			<biblScope unit="volume">13</biblScope>
+			<biblScope unit="issue">6</biblScope>
+			<biblScope unit="page" from="1286" to="1293" />
+			<date type="published" when="2007" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,325.88,461.03,232.12,7.13;10,325.88,470.50,232.12,7.13;10,325.88,479.96,96.53,7.13"  xml:id="b41">
+	<analytic>
+		<title level="a" type="main">Visual analytics of time dependent 2D point clouds</title>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Von Landesberger</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Bremm</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Rezaei</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Schreck</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Computer Graphics International</title>
+		<imprint>
+			<date type="published" when="2009" />
+			<biblScope unit="page" from="97" to="101" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,325.88,489.43,232.12,7.13;10,325.88,498.89,202.12,7.13"  xml:id="b42">
+	<analytic>
+		<title level="a" type="main">Visual analysis of contagion in networks</title>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Von Landesberger</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Diel</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Bremm</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<forename type="middle">W</forename>
+				<surname>Fellner</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Information Visualization</title>
+		<imprint>
+			<date type="published" when="2013" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,325.88,508.36,232.12,7.13;10,325.88,517.82,232.12,7.13;10,325.88,527.28,232.12,7.13;10,325.88,536.75,105.52,7.13"  xml:id="b43">
+	<analytic>
+		<title level="a" type="main">A system for interactive visual analysis of large graphs using motifs in graph editing and aggregation</title>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Von Landesberger</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Görner</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Rehner</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Schreck</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of Vision Modeling Visualization Workshop</title>
+		<meeting>Vision Modeling Visualization Workshop</meeting>
+		<imprint>
+			<date type="published" when="2009" />
+			<biblScope unit="page" from="331" to="339" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,325.88,546.21,232.12,7.13;10,325.88,555.68,232.12,7.13;10,325.88,565.14,203.91,7.13"  xml:id="b44">
+	<analytic>
+		<title level="a" type="main">Visual analysis of graphs with multiple connected components</title>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Von Landesberger</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Görner</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Schreck</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. IEEE Symp. on Visual Analytics Science and Technology</title>
+		<meeting>. IEEE Symp. on Visual Analytics Science and Technology</meeting>
+		<imprint>
+			<date type="published" when="2009" />
+			<biblScope unit="page" from="155" to="162" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,325.88,574.61,232.12,7.13;10,325.88,584.07,232.12,7.13;10,325.88,593.54,232.12,7.13;10,325.88,603.00,37.86,7.13"  xml:id="b45">
+	<analytic>
+		<title level="a" type="main">Visual analysis of large graphs: State-of-theart and future research challenges</title>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Von Landesberger</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Kuijper</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Schreck</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Kohlhammer</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Van Wijk</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J.-D</forename>
+				<surname>Fekete</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Fellner</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Computer Graphics Forum</title>
+		<imprint>
+			<biblScope unit="volume">30</biblScope>
+			<biblScope unit="page" from="1719" to="1749" />
+			<date type="published" when="2011" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,325.88,612.47,232.12,7.13;10,325.88,621.93,232.12,7.13;10,325.88,631.39,232.12,7.13;10,325.88,640.86,131.04,7.13"  xml:id="b46">
+	<analytic>
+		<title level="a" type="main">Using graphics processing units to investigate molecular coevolution</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Waechter</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Jaeger</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Thuerck</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Weissgraeber</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Widmer</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Goesele</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Hamacher</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Concurrency and Computation: Practice and Experience</title>
+		<imprint>
+			<biblScope unit="volume">26</biblScope>
+			<biblScope unit="issue">6</biblScope>
+			<biblScope unit="page" from="1278" to="1296" />
+			<date type="published" when="2014" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,325.88,650.32,232.12,7.13;10,325.88,659.79,162.71,7.13"  xml:id="b47">
+	<analytic>
+		<title level="a" type="main">FANMOD: a tool for fast network motif detection</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Wernicke</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<surname>Rasche</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Bioinformatics</title>
+		<imprint>
+			<biblScope unit="volume">22</biblScope>
+			<biblScope unit="issue">9</biblScope>
+			<biblScope unit="page" from="1152" to="1153" />
+			<date type="published" when="2006" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,325.88,669.25,232.12,7.13;10,325.88,678.72,232.12,7.13;10,325.88,688.18,69.29,7.13"  xml:id="b48">
+	<analytic>
+		<title level="a" type="main">Biological network motif detection: principles and practice</title>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<surname>Wong</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Baur</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Quader</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C.-H</forename>
+				<surname>Huang</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Briefings in bioinformatics</title>
+		<imprint>
+			<biblScope unit="volume">13</biblScope>
+			<biblScope unit="issue">2</biblScope>
+			<biblScope unit="page" from="202" to="215" />
+			<date type="published" when="2012" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+				</listBibl>
+			</div>
+		</back>
+	</text>
+</TEI>

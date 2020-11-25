@@ -1,0 +1,769 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.tei-c.org/ns/1.0 /home/pisenberg/grobid/grobid-home/schemas/xsd/Grobid.xsd"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+	<teiHeader xml:lang="en">
+		<encodingDesc>
+			<appInfo>
+				<application version="0.4.1" ident="GROBID" when="2016-09-09T13:36+0000">
+					<ref target="https://github.com/kermitt2/grobid">GROBID - A machine learning software for extracting information from scholarly documents</ref>
+				</application>
+			</appInfo>
+		</encodingDesc>
+		<fileDesc>
+			<titleStmt>
+				<title level="a" type="main">Beyond Usability: Evaluation Aspects of Visual Analytic Environments</title>
+			</titleStmt>
+			<publicationStmt>
+				<publisher/>
+				<availability status="unknown"><licence/></availability>
+				<date type="published" when="2006-10-31">2006 October 31 -November 2</date>
+			</publicationStmt>
+			<sourceDesc>
+				<biblStruct>
+					<analytic>
+						<author role="corresp">
+							<persName>
+								<forename type="first">Jean</forename>
+								<surname>Scholtz</surname>
+							</persName>
+							<email>e-mail: jean.scholtz@pnl.gov</email>
+							<affiliation>
+								<orgName type="laboratory">Pacific Northwest National Laboratory</orgName>
+							</affiliation>
+						</author>
+						<title level="a" type="main">Beyond Usability: Evaluation Aspects of Visual Analytic Environments</title>
+					</analytic>
+					<monogr>
+						<title level="m">IEEE Symposium on Visual Analytics Science and Technology</title>
+						<meeting> <address><addrLine>Baltimore, MD, USA</addrLine></address>
+						</meeting>
+						<imprint>
+							<date type="published" when="2006-10-31">2006 October 31 -November 2</date>
+						</imprint>
+					</monogr>
+					<note>145 1-4244-0592-0/06/$20.00</note>
+				</biblStruct>
+			</sourceDesc>
+		</fileDesc>
+		<profileDesc>
+			<textClass>
+				<keywords>
+					<term>CR Categories and Subject Descriptors: H51 [Information Interfaces and Presentation] : Evaluation/ methodology</term>
+					<term>H53 [Information Interfaces and Presentation]: Group and Organization Interfaces Additional Keywords: visualization</term>
+					<term>analytic environments</term>
+					<term>metrics</term>
+				</keywords>
+			</textClass>
+			<abstract>
+				<p>A new field of research, visual analytics, has recently been introduced. This has been defined as &quot; the science of analytical reasoning facilitated by interactive visual interfaces &quot; [20]. Visual analytic environments, therefore, support analytical reasoning using visual representations and interactions, with data representations and transformation capabilities, to support production, presentation, and dissemination. As researchers begin to develop visual analytic environments, it will be advantageous to develop metrics and methodologies to help researchers measure the progress of their work and understand the impact their work will have on the users who will work in such environments. This paper presents five areas or aspects of visual analytic environments that should be considered as metrics and methodologies for evaluation are developed. Evaluation aspects need to include usability, but it is necessary to go beyond basic usability. The areas of situation awareness, collaboration, interaction, creativity, and utility are proposed as the five evaluation areas for initial consideration. The steps that need to be undertaken to develop systematic evaluation methodologies and metrics for visual analytic environments are outlined. 1 INTRODUCTION Visualizations are a means of taking advantage of some of the unique capabilities of humans. The human visual channel has a high bandwidth, and we are able to take in a large quantity of visual information. However, we can typically attend to only a small portion of this information. The challenge, then, is to produce visualizations that help users focus on the most relevant or most interesting aspect of the data being presented. Our society today is faced with a rapidly increasing amount of data. Information users in all domains have more information than they can deal with. Herbert Simon observed that, &quot; What information consumes is rather obvious: it consumes the attention of its recipients. Hence a wealth of information creates a poverty of attention, and a need to allocate that attention efficiently among the overabundance of information sources that might consume it [18]. &quot; _____________ The goal of visualization researchers is to produce visual representations of complex relationships that help users efficiently allocate their attention. While this appears straightforward, developing metrics to measure the success of visualizations is a complex task involving a number of factors. In this paper, we focus on metrics and methodologies for visual analytic environments for information analysts. We use the term visual analytic environments to encompass software and hardware, computing power as well as display technology. A visual environment for analytic work implies an interaction between the users in the environment and the data with which they are working. This interaction uses techniques supported by the software and hardware. Standard metrics exist today in many areas of information technology. These metrics are used to measure performance, either of the system alone or of the combination of the user and the system for interactive technologies. For example, speech recognition research uses word error rate to evaluate progress in the field. Information retrieval has long used precision and recall [24]. Usability evaluations use efficiency, effectiveness, and user satisfaction to measure human-computer performance. The metrics for speech recognition and information retrieval are independent of the user but rely on having &quot; ground truth &quot; of the dataset being used. Usability evaluations depend on empirical studies of users interacting with the software. To account for individual differences in users, several methods are used. Either participants in the evaluations are selected to be representative of actual users, or large numbers of participants must be used to mitigate individual differences. The evaluation of visual analytic environments will require going beyond performance evaluations and usability evaluations. This paper discusses metrics and methodologies for evaluation including the assessment of situation awareness, collaboration, interaction, creativity, and utility. Each of these e areas is discussed along with ways to develop metrics for each area. Recommendations for an approach to metrics development are proposed. 2 USABILITY OF VISUALIZATIONS Freitas et al. [7] suggest that usability evaluations of visualizations involve three issues: presentation of the data, interaction with the data, and the usability of the data itself. The usability of the data is based on three principles: reliability of the data; access to original data – that is, avoid changing the data in a way that the user cannot access it as it was originally; and assessing the usability of the data in the user&apos;s decision-making process. Freitas et al. also suggest that distinctions need to be made about the type of visualizations. In their work, they use only two categories: visualizations that display data characteristics and values and visualizations that display data structure and relationships. They define three classes of interaction: help and orientation; browsing and searching; and data reduction. To help define evaluation criteria, they propose five properties of visual representations that should be</p>
+			</abstract>
+		</profileDesc>
+	</teiHeader>
+	<text xml:lang="en">
+		<body>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>INTRODUCTION </head><p>Visualizations are a means of taking advantage of some of the unique capabilities of humans. The human visual channel has a high bandwidth, and we are able to take in a large quantity of visual information. However, we can typically attend to only a small portion of this information. The challenge, then, is to produce visualizations that help users focus on the most relevant or most interesting aspect of the data being presented. Our society today is faced with a rapidly increasing amount of data. Information users in all domains have more information than they can deal with. Herbert Simon observed that, " What information consumes is rather obvious: it consumes the attention of its recipients. Hence a wealth of information creates a poverty of attention, and a need to allocate that attention efficiently among the overabundance of information sources that might consume it <ref type="bibr" coords="1,54.00,643.31,10.66,8.35" target="#b18">[18]</ref>. " _____________ e-mail: jean.scholtz@pnl.gov </p><p>The goal of visualization researchers is to produce visual representations of complex relationships that help users efficiently allocate their attention. While this appears straightforward, developing metrics to measure the success of visualizations is a complex task involving a number of factors. In this paper, we focus on metrics and methodologies for visual analytic environments for information analysts. We use the term visual analytic environments to encompass software and hardware, computing power as well as display technology. A visual environment for analytic work implies an interaction between the users in the environment and the data with which they are working. This interaction uses techniques supported by the software and hardware. Standard metrics exist today in many areas of information technology. These metrics are used to measure performance, either of the system alone or of the combination of the user and the system for interactive technologies. For example, speech recognition research uses word error rate to evaluate progress in the field. Information retrieval has long used precision and recall <ref type="bibr" coords="1,341.28,348.35,13.92,8.35" target="#b23">[24]</ref>. Usability evaluations use efficiency, effectiveness, and user satisfaction to measure human-computer performance. The metrics for speech recognition and information retrieval are independent of the user but rely on having " ground truth " of the dataset being used. Usability evaluations depend on empirical studies of users interacting with the software. To account for individual differences in users, several methods are used. Either participants in the evaluations are selected to be representative of actual users, or large numbers of participants must be used to mitigate individual differences. The evaluation of visual analytic environments will require going beyond performance evaluations and usability evaluations. This paper discusses metrics and methodologies for evaluation including the assessment of situation awareness, collaboration, interaction, creativity, and utility. Each of these e areas is discussed along with ways to develop metrics for each area. Recommendations for an approach to metrics development are proposed. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2">USABILITY OF VISUALIZATIONS</head><p>Freitas et al. <ref type="bibr" coords="1,381.10,562.19,10.48,8.35" target="#b7">[7] </ref>suggest that usability evaluations of visualizations involve three issues: presentation of the data, interaction with the data, and the usability of the data itself. The usability of the data is based on three principles: reliability of the data; access to original data – that is, avoid changing the data in a way that the user cannot access it as it was originally; and assessing the usability of the data in the user's decisionmaking processData visualization metrics have been proposed by Brath <ref type="bibr" coords="2,54.00,460.43,9.79,8.35" target="#b1">[2,</ref><ref type="bibr" coords="2,63.79,460.43,6.53,8.35" target="#b2">3]</ref>, who looked at such aspects as the number of data points, the density of data points, the number of simultaneous dimensions, appropriate representations, and the percentage of data that are occluded. Tufte <ref type="bibr" coords="2,89.26,500.51,15.05,8.35" target="#b20">[21,</ref><ref type="bibr" coords="2,104.31,500.51,11.29,8.35" target="#b21">22,</ref><ref type="bibr" coords="2,115.59,500.51,11.29,8.35" target="#b22">23] </ref>also provides valuable guidelines and examples for visualization. Tufte provides examples of simple visualizations for complex and multiple types of data, including the famous Napoleon's March visualization. He uses backgrounds to plot data, thereby giving data a context for rapid and increased comprehension. These metrics and evaluations at this level are invaluable. However, they are only the starting point for evaluations when we consider visual analytic environments. One limitation of the work reviewed above is that it seems to have neglected the problem of change over time as a relationship with a major emphasis on static visualizations. In the context of visual analytic work an important aspect of what an analyst may want to see is some sort of change over time. Indeed, the final solution to an analytic problem may emerge only after a period of the visual analog of " onion peeling " or " pearl growing " which have been studied in the context of change over time in bibliographic database searching <ref type="bibr" coords="2,247.69,671.39,9.63,8.35" target="#b9">[8]</ref>. Amar and Stasko <ref type="bibr" coords="2,128.16,681.47,10.48,8.35" target="#b0">[1] </ref>propose a framework for the design and evaluation of visualizations based on " analytic gaps. " They define these gaps as " obstacles faced by visualizations in facilitating higher level analytic tasks " . In particular they define tasks for two types of gaps: rationale gaps and world view gaps. A rationale gap is the gap between seeing a relationship and being able to explain the nature of the relationship. A world view gap is the difference between what is shown in the visualization and the visualization that would be needed in order to be directly used in a decision-making process. Amar and Stasko propose three subtasks to evaluate if these gaps have been eliminated. For tasks to test rationale gaps, they propose the subtasks of exposing uncertainty, concretizing relationships, and formulating cause and effect. For evaluating world view gaps, they propose the subtasks of determining domain parameters, constructing multivariate explanations, and confirming hypotheses. This framework represents a shift to user-centered metrics. The proposed subtasks go beyond the perceptual tasks of viewing the visualization and reporting information about the individual pieces of data. Amar and Stasko are focused on the utility that the visualization provides to the analyst in a decision-making task. While this represents an excellent start, analytic tasks performed by information analysts are at a higher level than those suggested by Amar and Stasko. Therefore it would be appropriate for visualizations to provide support at a higher level. This support can be classified into areas or aspects and that metrics can eventually be identified to assess support in these areas. These areas are discussed in the following section. This level of awareness is achieved if operators are able to perceive in the user interface the information that is needed to do their job. The next level is comprehension (SA level 2). Not only must the information be perceived, it must be combined with other information and interpreted correctly. The third level (SA level 3) is projection or the ability to predict what will happen next based on the current situation. As situations are dynamic, time is critical to situation awareness as well. User interfaces need to be designed to facilitate the continuous acquisition of SA. Operator interfaces for control of semi-autonomous systems, such as aircraft, power plants, and manufacturing systems, have been assessed for situation awareness. Performance-based methods, knowledge-based methods, subjective ratings, and direct assessment methodologies have been used to evaluate operators' SA. Performance or outcome methods look at the outcome <ref type="bibr" coords="3,268.56,216.35,13.92,8.35" target="#b15">[15]</ref>. Was the correct decision made? One problem with using outcome methods is that even people with perfect situation awareness can make bad decisions; hence, the outcomes will be less than ideal. The converse is also true. People with less than ideal situation awareness can make decisions that turn out to be correct. Knowledge-based methods are used in experimental conditions to assess situation awareness. These methods isolate particular components and assess them individually. Knowledge-based methods are better at uncovering declarative information than procedural information. Verbalization methods, such as think-aloud and talk-aloud protocols <ref type="bibr" coords="3,260.63,336.83,10.48,8.35" target="#b6">[6] </ref>are also used to discover what information users are relying on when making their decisions. Subjective measures <ref type="bibr" coords="3,143.77,366.83,15.06,8.35" target="#b12">[11] </ref>ask users to assign a numerical value to their situation awareness at any given time. While this gives us an indication of the level of awareness, it fails to help us understand what information is missing. This method, however, can be used in an operational environment. Scholtz et al. <ref type="bibr" coords="3,119.76,417.23,15.04,8.35" target="#b16">[16,</ref><ref type="bibr" coords="3,134.81,417.23,11.28,8.35" target="#b17">17] </ref>have developed a methodology for evaluating human-robot interfaces modeled after the Situational Awareness Global Assessment Technique (SAGAT) developed by Endsley <ref type="bibr" coords="3,102.51,447.23,9.63,8.35" target="#b5">[5]</ref>. This evaluation methodology uses expert knowledge to develop questions that assess the users' awareness of a particular situation. A simulation is used, and the user is stopped during the simulation and given a quick series of questions to answer. These questions assess the three levels of situational awareness. After answering these questions, the users are returned to the simulation. The SAGAT methodology allows comparison of interface designs with respect to how well each facilitates the acquisition of situation awareness by users. The questions used in the assessment are based on the domain and must be developed in conjunction with domain experts. In addition to awareness of the situation being researched, users also need to be aware of where they are in their own process, as well as what others are doing if the environment is being used collaboratively. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.2">Collaboration</head><p>The usual questions in collaboration environments are who, what, where, and when. If multiple people are working in a synchronous environment, it is important to be able to determine who is doing what and where in the collaboration environment people are working. In an asynchronous environment, we are interested in knowing who did what, when it was done, and where we can find the work. There has been extensive research on providing this type of awareness in CSCW (computer supported cooperative work) environments. Information analysts follow an iterative process of information seeking and sense-making. It is helpful for analysts to know what sources they have already visited, what queries they have already done, and what information they have already incorporated into their sense-making. It may also be useful for analysts working together to have an understanding of this same information for their collaborators. We keep track of this type of information in many ways: to-do lists explicitly written down, lists in our heads, formal representations in project management software, and sticky notes, to mention a few. If this type of information is provided in the user interface, an SA measure could be developed to evaluate it. Collaborators may have different domain expertise. That is, one analyst might be a signals intelligence expert and might want to view data in an entirely different way than a political analyst. The ability to share and discuss data at a data level while using different views is a necessary feature of visual analytic environments that are collaborative. As systems become more intelligent and act more like human collaborators, analysts will want to know what the system is doing and why the system is making recommendations. Metrics developed for evaluating collaboration should include the typical who, what, when, and where. As analysts need to justify their recommendations, the why also becomes important. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.3">Interaction</head><p>Visual analytic environments will not rely solely on static displays. Users will be able to interact with the displays. While usability is certainly one aspect of interaction, it will be necessary to go beyond usability to evaluate the capabilities provided by the interaction. Such capabilities should include: @BULLET ability to view occluded information @BULLET ability to move up and down in the level of abstraction of the views @BULLET high-level " undos " (see discussion on creativity) @BULLET data sharing, not view sharing (see collaboration). This is only a rudimentary beginning. This list of capabilities will certainly be increased through contextual work with analysts using their current tools. Wehrend and Lewis <ref type="bibr" coords="3,405.58,453.01,15.04,8.35" target="#b24">[25] </ref>identified 11 tasks that one might do with a visualization: <ref type="bibr" coords="3,396.96,594.36,15.04,8.35" target="#b25">[26] </ref>added additional tasks to this list: identify; encode; emphasize; reveal; generalize and switch. Is it possible or even preferable to provide interactions at this level? The actual set of interactions need to be identified by working with information analysts to determine what it is they actually want to achieve using visualizations and how much effort is currently needed to carry out such tasks currently. For each of the interactions identified, it will be necessary to ensure the usability of each as well as to evaluate the utility of the interaction. This means that the various interactions should provide some insight into the information. This may not be true for all types of data or for all types of analysts. As we all differ in the ways we can best comprehend information, a number of different views should be present for the analyst to use. In addition, analysts should be able to easily configure their workspaces to use the views they use most often. ISO 9241 – Part 10 provides seven principles of dialog (human-computer interaction): @BULLET Suitability for the task @BULLET Self–descriptiveness of the action @BULLET Controllability @BULLET Conformity with user expectations or consistency @BULLET Error tolerance @BULLET Suitability for individualization or customization @BULLET Suitability for learning. These principles are certainly appropriate for evaluating a given set of interactions provided within a visual analytic environment. The challenge is in the first principle—suitability for the task. We must consider at what level(s) we want users to be able to interact. Should this be at the level of comparing entities, comparing categories, or comparing different combinations of categories? </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.">4 Creativity</head><p>Creativity is not a term usually associated with analysis. However, as Hewett <ref type="bibr" coords="4,133.93,295.31,10.48,8.35" target="#b10">[9] </ref>has pointed out, there are reasons to believe that creative work takes place in a large variety of contexts and domains. Furthermore, Hewett <ref type="bibr" coords="4,217.96,315.23,10.48,8.35" target="#b10">[9] </ref>has argued that design considerations for supporting creative work must take into account the design and development of the entire computer-based support environment. The National Science Foundation recently sponsored a workshop on user interfaces to support creativity <ref type="bibr" coords="4,239.74,365.63,13.92,8.35">[14]</ref>. Based upon an analysis of work reported in The Handbook of Creativity <ref type="bibr" coords="4,95.51,385.55,13.74,8.35">[19]</ref>, this report proposes that support tools for creative or innovative work must recognize that creativity is a multi-dimensional construct that involves a problem space with at least seven dimensions. These problem space dimensions are @BULLET Creativity is a property of people, products, and a set of cognitive processes. @BULLET Creativity can be thought of as a personal, social, societal or cultural phenomenon. @BULLET Creativity can be common and frequent, or rare. @BULLET Creativity may be domain-specific or domain- independent. @BULLET Creativity may be qualitative or quantitative. @BULLET Creativity can occur in an individual or in a group. The multiple dimensions of creativity imply that support tools for creativity must take into account the environment in which work will take place. For example, designers of group brainstorming tools have made contributions anonymous as this encourages people to speak more freely when in groups. One way to approach metrics for creativity is to consider methods for studying creativity <ref type="bibr" coords="4,169.23,582.35,13.74,8.35" target="#b14">[13]</ref>. These include: @BULLET the use of psychometric tests @BULLET experimental methodologies @BULLET biological methodologies @BULLET computational modelling @BULLET contextual studies. If we want tools to support creativity, those tools should enhance the personal experience of the user(s), improve the products or outcomes, and improve the processes used in creating the product or producing the outcome. The National Science Foundation (NSF) study group suggested the following metrics to be used in evaluating creativity support tools: 3.5 Utility One of the most important measures of visual analytic environments is the utility of the environment from the user perspective. This includes metrics already suggested for evaluating creativity. The focus here is on the improvement of the process and an increased quality of product. Process time should be decreased, or if not, the individual should be able to produce a better product in the same time as a baseline condition. It is also preferable if new tools and environments can reduce the cognitive workload on users. In essence, the environment should allow the user to spend more time on task and less time on the tool or environment being used. Quantitative measures for evaluation should include: @BULLET number of citations in the analytic product @BULLET analyst's confidence in product recommendations @BULLET number of hypotheses investigated in product. We have had senior analysts rate a number of analytic products (on the same task) and provide us with their criteria. We are in the process of compiling and analyzing this data to determine if there is a correlation between more highly rated products and our quantitative measures. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.6">Other Concerns</head><p>Obviously, there are also logistics and interoperability issues involved. Data must be quickly imported in the environment and easily exported as well. Interoperable knowledge representations underlie all of this work. While necessary for effective and efficient visual analytic environments, this area of research is out of the scope of visual analytic environments. In addition, the area of trust should be considered for intelligent software algorithms. End users will take advantage of intelligent software only if they trust the information returned, hypotheses suggested, and measures of uncertainty computed. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4">PROCESS FOR METRICS DEVELOPMENT</head><p>In the previous section, five areas for evaluation of visual analytic environments were presented. For each of these areas, some possible measures were presented. Future studies are planned to determine the methodologies to use to accurately capture the needed data. Moreover, these metrics will need to be validated. That is, to determine if these metrics discriminate " good " systems from " not so good " systems. In addition, metrics should also be defined to determine if the rationale for the development of visual analytic environments (VAE) are supported. <ref type="figure" coords="4,409.69,637.31,30.95,8.35" target="#tab_3">Table 3</ref>provides a starting set of hypotheses. For each of these hypotheses, it is possible to construct measures for that hypothesis and methodologies for capturing the measurements. These hypotheses and measures should be considered only as discussion points and will need to be refined and later validated in experiments. The third column of <ref type="figure" coords="4,399.85,697.55,27.36,8.35" target="#tab_3">Table 3</ref>maps the hypothesis to a possible contributing area(s) of evaluation. In upcoming evaluations the quantitative measures listed in column two will be collected along with measures for the different areas. The resulting data will be analyzed to determine which hypotheses are supported and to ascertain which evaluation areas contribute to supporting the various hypotheses. A similar methodology was used in producing evaluation methodologies for question-answering systems <ref type="bibr" coords="5,84.98,115.79,13.70,8.35" target="#b13">[12]</ref>. The validation procedure proposed is to work with senior analysts to develop criteria for ranking analytic products. These criteria will be applied to products produced in experiments. The various measures for the hypotheses and areas of evaluation will be analyzed to determine if these measures produce results that are in line with the product rankings. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5">NEXT STEPS</head><p>Having formulated some starting hypotheses, the next steps are to start discussions with researchers in visual analytic environments, users of visual analytic environments, and managers of visual analytic environment programs—in essence, the stakeholders. The metrics need to reflect the needs of the researchers. The metrics also need to be based on the needs of other stakeholders. Once that is done, appropriate methods for collecting the necessary data will need to be determined and eventually the metrics will need to be validated. It will be necessary to identify current environments and produce baseline metrics that can be used for subsequent comparisons. Researchers should be encouraged to try out subsets of these metrics in their ongoing work to determine which metrics are useful in providing feedback on their work. As a case study, the results of a visualization contest for the 2006 Workshop of the IEEE Symposium on Visual Analytics Science and Technology (VAST) will be analyzed. A dataset and a set of questions to be answered by contest participants using their visualizations has been developed by the contest committee. These questions have been developed in line with Endsley's three levels of situation awareness. Participants in the contest are required to submit both the answers to the questions and the process they used to arrive at the answers. Robust visual analytic environments may apply for the opportunity to participate in a " live " version of the contest, where analysts will work with the systems to answer similar questions. This will allow the contest judges to view the process and the products produced by these analysts within a given time frame. The metrics proposed here are specifically to support information analysts using visual analytic environments. However, visualizations and environments should support analytic work in numerous domains. Once the metrics and methodologies for the intelligence domain have been refined, the next step will be to apply them in other domains such as medicine, health care, weather research, and education. The National Institutes of Health (NIH)/NSF report on Visualization Research Challenges <ref type="bibr" coords="6,132.96,286.67,15.05,8.35" target="#b11">[10] </ref>outlines the following challenges for visualizations (among others): @BULLET Systematically explore the design space of visualizations. @BULLET Evaluate the effect of visualization techniques and approaches. @BULLET Collaborate with domain experts and use applied problems to drive and evaluate visualizations. The metrics presented in this paper should provide ways to assess the progress being made in addressing these challenges. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Hypothesis </head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>REFERERNCES </head></div><figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_0" coords="5,241.68,249.95,69.30,8.24;5,421.68,249.95,50.65,8.24;5,421.68,260.03,72.86,8.24;5,97.68,270.59,119.19,8.35;5,97.68,280.43,119.26,8.35;5,97.68,290.51,90.88,8.35;5,97.68,300.59,29.22,8.35;5,241.68,270.59,119.18,8.35;5,241.68,280.43,136.08,8.35;5,241.68,290.51,122.08,8.35;5,241.68,300.59,148.09,8.35;5,421.68,270.59,39.10,8.35;5,97.68,310.91,107.49,8.35;5,97.68,320.99,99.83,8.35;5,97.68,331.07,95.73,8.35;5,97.68,340.91,31.14,8.35;5,241.68,310.91,149.69,8.35;5,241.68,320.99,61.87,8.35;5,241.68,331.07,147.34,8.35;5,241.68,340.91,94.48,8.35;5,421.68,310.91,39.10,8.35;5,421.68,320.99,36.24,8.35;5,97.68,351.47,89.98,8.35;5,97.68,361.55,110.32,8.35;5,97.68,371.39,78.47,8.35;5,241.68,351.47,142.81,8.35;5,241.68,361.55,84.23,8.35;5,241.68,371.39,126.01,8.35;5,421.68,351.47,49.67,8.35;5,421.68,361.55,74.34,8.35;5,97.68,381.95,119.46,8.35;5,97.68,392.03,119.74,8.35;5,97.68,401.87,53.73,8.35;5,241.68,381.95,149.73,8.35;5,241.68,392.03,56.40,8.35;5,421.68,381.95,39.10,8.35;5,421.68,392.03,23.76,8.35;5,97.68,412.43,107.77,8.35;5,97.68,422.51,104.30,8.35;5,97.68,432.59,111.85,8.35;5,97.68,442.43,53.99,8.35;5,241.68,412.43,150.86,8.35;5,241.68,422.51,62.84,8.35;5,241.68,432.59,122.35,8.35;5,421.68,412.43,39.10,8.35;5,421.68,422.51,36.24,8.35;5,97.68,452.99,107.77,8.35;5,97.68,463.07,112.92,8.35;5,97.68,472.91,111.35,8.35;5,97.68,482.99,27.08,8.35;5,241.68,452.99,141.31,8.35;5,241.68,463.07,126.91,8.35;5,421.68,452.99,39.10,8.35;5,421.68,463.07,74.34,8.35;5,97.68,493.55,90.44,8.35;5,97.68,503.39,102.20,8.35;5,97.68,513.47,73.43,8.35;5,241.68,493.55,155.63,8.35;5,241.68,503.39,29.03,8.35;5,421.68,493.55,74.34,8.35;5,97.68,524.03,119.70,8.35;5,97.68,533.87,52.27,8.35;5,241.68,524.03,140.38,8.35;5,241.68,533.87,124.49,8.35;5,241.68,543.95,152.85,8.35;5,421.68,524.03,39.10,8.35;5,421.68,533.87,33.12,8.35;5,421.68,543.95,23.76,8.35;5,97.68,554.51,90.44,8.35;5,97.68,564.59,61.87,8.35;5,241.68,554.51,73.15,8.35;5,241.68,564.59,101.21,8.35;5,421.68,554.51,74.34,8.35;5,421.68,564.59,23.76,8.35;5,97.68,574.91,111.56,8.35;5,97.68,584.99,118.09,8.35;5,241.68,574.91,73.15,8.35;5,241.68,584.99,140.14,8.35;5,241.68,595.07,39.12,8.35;5,421.68,574.91,36.24,8.35;5,421.68,584.99,23.76,8.35"><head></head><figDesc>Possible measures Contributing Evaluation Area(s) VAE should increase the amount of information/ data that analysts can incorporate into their analysis -Number of documents looked at -Number of entities considered (some notion of relationships, attributes) -Amount of evidence extracted and used Interaction Visualizations (created by the analyst) should increase the comprehension of analytic products -Accuracy of customer comprehension of analytic products -Accuracy of comprehension of analytic products by other analysts Interaction Creativity VAE should increase the efficiency and effectiveness of analytic collaboration -Time for each party in collaboration to comprehend a situation -Accuracy in shared understanding Collaboration Situation Awareness VAE will increase the number of alternative paths that analysts are able to explore -Increased analyst confidence in products -Paths explored Interaction Utility VAE should allow analysts to view information at different levels of abstraction efficiently and effectively -Time to answer questions about different abstraction levels -Accuracy in answering questions Interaction Creativity VAE should allow analysts to efficiently and effectively view data from multiple intelligence sources -Time/accuracy in answering questions about different intelligence sources Interaction Situation Awareness VAE should improve the comprehension that analysts have of the situation -Situation awareness measures for levels 1, 2, and 3 Situation Awareness VAE should improve the process of the analysts -Time spent in each step of the process -Time spent in overhead (tool use) -Productivity of information-seeking tasks Interaction Usability Utility VAE should improve the analytic products -Quality of products -Understanding of customer Situation Awareness Utility VAE should allow the analysts to be more creative in their work -Quality of products -Radical nature of alternative solutions considered Creativity Utility </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_0" validated="false" coords="1,54.00,632.51,522.00,125.64"><figDesc coords="2,191.51,65.63,94.32,8.35;2,54.00,75.71,231.82,8.35;2,54.00,85.79,231.85,8.35;2,54.00,95.63,231.80,8.35;2,54.00,105.71,231.75,8.35;2,54.00,115.79,231.86,8.35;2,54.00,125.87,124.46,8.35">and transitions between states. For each of these properties, they define metrics. These are shown in Table 1. Interactions with visualizations also need to be evaluated. Table 2 presents metrics proposed by Freitas et al. for evaluating different types of interactions. In addition, the limitations of the visualizations should be evaluated in terms of scalability and flexibility.</figDesc><table coords="1,54.00,632.51,522.00,125.64">. Freitas et al. also suggest that distinctions 
+need to be made about the type of visualizations. In their work, 
+they use only two categories: visualizations that display data 
+characteristics and values and visualizations that display data 
+structure and relationships. They define three classes of 
+interaction: help and orientation; browsing and searching; and 
+data reduction. To help define evaluation criteria, they propose 
+five properties of visual representations that should be 
+
+145 
+
+IEEE Symposium on Visual Analytics Science and Technology 2006 
+October 31 -November 2, Baltimore, MD, USA 
+1-4244-0592-0/06/$20.00 © 2006 IEEE 
+
+considered: 
+
+limitations, cognitive complexity; spatial 
+organization; information coding; </table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_1" validated="true" coords="2,61.20,144.75,212.76,141.63"><figDesc coords="2,74.64,144.75,199.32,8.84;2,122.88,153.87,93.63,8.84">Table 1. Metrics for properties of visual representations suggested by Freitas et al.</figDesc><table coords="2,61.20,165.23,198.65,121.15">Properties of visual 
+representations 
+
+Suggested metrics 
+
+Cognitive complexity 
+Data density; data 
+dimension; display of 
+relevant information 
+Spatial organization 
+Logical order; occlusion; 
+display of details; 
+reference context 
+Information coding 
+Information mapping; 
+realistic techniques 
+State transitions 
+Image generation time; 
+visual spatial orientation 
+
+</table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_2" validated="true" coords="2,61.20,307.23,203.75,130.83"><figDesc coords="2,98.64,307.23,151.47,8.84;2,114.00,316.59,120.75,8.84">Table 2: Metrics proposed by Freitas et al. for interactions with visualizations.</figDesc><table coords="2,61.20,327.95,203.75,110.11">Type of Interaction 
+Suggested Metrics 
+Orientation and help 
+Control of additional 
+detail; undo; representation 
+of additional information 
+Navigation and 
+querying 
+
+Selection of objects; 
+viewpoint manipulation; 
+geometric manipulation; 
+growing; searching and 
+querying 
+Data set reduction 
+Filtering; clustering; 
+planning 
+
+</table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_5" validated="false" coords="5,241.20,239.07,130.59,8.84"><figDesc coords="5,241.20,239.07,130.59,8.84">Table 3. Hypotheses and measures.</figDesc><table></table></figure>
+
+			<note place="foot" n="3"> AREAS FOR EVALUATION Performance metrics are certainly needed. If a software algorithm is developed to calculate and display the highest ranked documents in a document collection given a particular ranking scheme, then the software must be evaluated to ensure that it performs correctly. If the software algorithm is developed to do this calculation on large amounts of data in a short time, then performance evaluations are needed to verify this. Usability evaluations are also needed as visualizations are effective only if users can interpret the information provided and use the interactions provided by the software to manipulate the data and produce different views. The software must support intuitive interactions so that analysts can focus on the information they are manipulating, not the manipulation technique itself. Therefore, in addition to the typical usability measures of effectiveness, efficiency, and user satisfaction, we add a measure of cognitive workload. Visual analytic environments should strive to reduce the overall cognitive workload of analysts today. If analysts have to think less about the user interactions, they will have more time to think about analysis. However, visual analytic environments will be used by multiple analysts from multiple disciplines for multi-source analysis. We propose that the areas of situation awareness, collaboration, interaction, creativity, and utility need to be considered as well. 3.1 Situation Awareness Information analysts seek information used in sense making. Sense making is an understanding of a given situation at a given period of time. Thus, one way to evaluate visualizations is to assess the user&apos;s situation awareness as gleaned from the visualization. Endsley [4] defines three levels of situation awareness (SA): perception, comprehension, and projection. Perception is the basic level of situation awareness (SA level 1).</note>
+		</body>
+		<back>
+			<div type="references">
+
+				<listBibl>
+
+<biblStruct coords="6,72.00,413.74,208.78,7.25;6,72.00,423.82,209.15,7.25;6,72.00,433.66,183.72,7.25"  xml:id="b0">
+	<analytic>
+		<title level="a" type="main">BEST PAPER: A Knowledge Task-Based Framework for Design and Evaluation of Information Visualizations</title>
+		<author>
+			<persName>
+				<forename type="first">Robert</forename>
+				<forename type="middle">A</forename>
+				<surname>Amar</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">John</forename>
+				<forename type="middle">T</forename>
+				<surname>Stasko</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">INFOVIS</title>
+		<imprint>
+			<biblScope unit="volume">2004</biblScope>
+			<biblScope unit="page" from="143" to="150" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="6,72.00,443.74,209.34,7.25;6,72.00,453.82,123.21,7.16"  xml:id="b1">
+	<analytic>
+		<title level="a" type="main">Interactive Information visualization Guidelines</title>
+		<author>
+			<persName>
+				<forename type="first">Richard</forename>
+				<surname>Brath</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of HCI International &apos;97</title>
+		<meeting>HCI International &apos;97</meeting>
+		<imprint/>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="6,72.00,463.66,208.95,7.25;6,72.00,473.74,209.20,7.25;6,72.00,483.82,169.26,7.25"  xml:id="b2">
+	<analytic>
+		<title level="a" type="main">Metrics for Effective Information Visualization</title>
+		<author>
+			<persName>
+				<forename type="first">Richard</forename>
+				<surname>Brath</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of IEEE Symposium on Information Visualization &apos;97</title>
+		<meeting>IEEE Symposium on Information Visualization &apos;97</meeting>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="1997" />
+			<biblScope unit="page" from="108" to="111" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="6,72.00,493.66,208.95,7.25;6,72.00,503.74,209.34,7.25;6,72.00,513.82,209.35,7.25"  xml:id="b3">
+	<analytic>
+		<title level="a" type="main">Theoretical Underpinning of Situation Awareness: Critical Review</title>
+		<author>
+			<persName>
+				<forename type="first">Mica</forename>
+				<surname>Endsley</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Situation Awareness Analysis and Measurement</title>
+		<editor>Mica R. Endsley and Daniel J. Garland</editor>
+		<imprint/>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="6,72.00,523.66,208.77,7.25;6,72.00,533.74,10.14,7.25"  xml:id="b4">
+	<monogr>
+		<title/>
+		<author>
+			<persName>
+				<forename type="first">Lawrence</forename>
+				<surname>Erlbaum</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Associates</forename>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2000" />
+			<biblScope unit="page" from="3" to="32" />
+			<pubPlace>Mahwah, New Jersey</pubPlace>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="6,72.00,543.82,209.22,7.25;6,72.00,553.66,209.17,7.25;6,72.00,563.74,8.04,7.16;6,80.16,562.35,3.96,3.69;6,88.56,563.74,192.46,7.25;6,72.00,573.82,97.00,7.25"  xml:id="b5">
+	<analytic>
+		<title level="a" type="main">Design and Evaluation for situation awareness enhancement</title>
+		<author>
+			<persName>
+				<forename type="first">Mica</forename>
+				<surname>Endsley</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the Human Factors Society 32 nd Annual Meeting</title>
+		<meeting>the Human Factors Society 32 nd Annual Meeting<address><addrLine>Santa Monica, CA</addrLine></address></meeting>
+		<imprint>
+			<publisher>Human Factors Society</publisher>
+			<date type="published" when="1988" />
+			<biblScope unit="page" from="97" to="101" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="6,72.00,583.66,209.04,7.25;6,72.00,593.74,197.82,7.25"  xml:id="b6">
+	<monogr>
+		<title level="m" type="main">Protocol Analysis: Verbal Reports as Data</title>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Anders</forename>
+				<surname>Ericsson</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Herbert</forename>
+				<surname>Simon</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="1993" />
+			<publisher>MIT Press</publisher>
+			<pubPlace>Cambridge, MA</pubPlace>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="6,72.00,603.82,209.36,7.25;6,72.00,613.66,209.02,7.25;6,72.00,623.74,206.04,7.25"  xml:id="b7">
+	<monogr>
+		<title level="m" type="main">Evaluating Usability of Information Visualization Techniques</title>
+		<author>
+			<persName>
+				<forename type="first">Carla</forename>
+				<surname>Freitas</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Paulo</forename>
+				<surname>Luzzardi</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Richard</forename>
+				<surname>Cava</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Marco</forename>
+				<surname>Windler</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Marcelo</forename>
+				<surname>Pimenta</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Luciana</forename>
+				<surname>Nedel</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2002" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="6,278.16,622.35,3.00,3.69;6,72.00,633.82,208.92,7.25;6,72.00,643.66,98.92,7.25"  xml:id="b8">
+	<analytic>
+		<title/>
+	</analytic>
+	<monogr>
+		<title level="m">th Workshop on Human Factors in Computer Systems</title>
+		<imprint>
+			<publisher>Brazilian Computer Society Press</publisher>
+			<date type="published" when="2002" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="6,72.00,653.74,209.14,7.25;6,72.00,663.82,209.32,7.25;6,72.00,673.66,209.04,7.25;6,72.00,683.74,209.04,7.26;6,72.00,693.82,127.50,7.25"  xml:id="b9">
+	<analytic>
+		<title level="a" type="main">The use of thinking-out-loud and protocol analysis in development of a process model of interactive database searching Amsterdam: North-Holland</title>
+		<author>
+			<persName>
+				<forename type="first">Thomas</forename>
+				<surname>Hewett</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Sari</forename>
+				<surname>Scott</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Human computer interaction--INTERACT &apos;87</title>
+		<editor>H.-J. Bullinger &amp; B. Shackel</editor>
+		<imprint>
+			<date type="published" when="1987" />
+			<biblScope unit="page" from="51" to="56" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="6,336.24,56.38,209.14,7.25;6,336.24,66.46,209.32,7.25;6,336.24,76.30,148.14,7.25"  xml:id="b10">
+	<analytic>
+		<title level="a" type="main">Informing the design of computer-based environments to support creativity</title>
+		<author>
+			<persName>
+				<forename type="first">Thomas</forename>
+				<surname>Hewett</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">International Journal of Human-Computer Studies</title>
+		<imprint>
+			<biblScope unit="volume">63</biblScope>
+			<biblScope unit="page" from="383" to="409" />
+			<date type="published" when="2005" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="6,336.24,86.38,209.29,7.25;6,336.24,96.46,208.95,7.25;6,336.24,106.30,148.38,7.25"  xml:id="b11">
+	<analytic>
+		<title/>
+		<author>
+			<persName>
+				<forename type="first">Chris</forename>
+				<surname>Johnson</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Robert</forename>
+				<surname>Moorhead</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Tamara</forename>
+				<surname>Munzner</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Hanspeter</forename>
+				<surname>Pfister</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Penny</forename>
+				<surname>Rheingans</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Terry</forename>
+				<surname>Yoo</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">NIH/NSF Visualization Research Challenges</title>
+		<imprint>
+			<date type="published" when="2006-01" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="6,336.24,116.38,209.17,7.25;6,336.24,126.46,209.16,7.25;6,336.24,136.30,208.93,7.25;6,336.24,146.38,162.04,7.25"  xml:id="b12">
+	<monogr>
+		<title level="m" type="main">Subjective Measures of Situation Awareness Situation Awareness Analysis and Measurement</title>
+		<author>
+			<persName>
+				<forename type="first">Debra</forename>
+				<surname>Jones</surname>
+			</persName>
+		</author>
+		<editor>Mica R. Endsley and Daniel J. Garland</editor>
+		<imprint>
+			<date type="published" when="2000" />
+			<publisher>Lawrence Erlbaum Associates</publisher>
+			<biblScope unit="page" from="113" to="128" />
+			<pubPlace>Mahwah, New Jersey</pubPlace>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="6,336.24,156.46,209.09,7.25;6,339.28,166.30,206.10,7.25;6,336.24,176.38,209.15,7.25;6,336.24,186.46,209.13,7.25;6,336.24,196.30,159.67,7.25"  xml:id="b13">
+	<analytic>
+		<title level="a" type="main">User-centered Evaluation of Interactive Question-answering Systems</title>
+		<author>
+			<persName>
+				<forename type="first">Diane</forename>
+				<surname>Kelly</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Paul</forename>
+				<surname>Kantor</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Emile</forename>
+				<surname>Morse</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Jean</forename>
+				<surname>Scholtz</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Ying</forename>
+				<surname>Sun</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the Workshop on Interactive Question Answering at the Human Language Technology Conference (HLT-NAACL &apos;06)</title>
+		<meeting>the Workshop on Interactive Question Answering at the Human Language Technology Conference (HLT-NAACL &apos;06)<address><addrLine>New York, NY</addrLine></address></meeting>
+		<imprint>
+			<date type="published" when="2006-06" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="6,336.24,206.38,209.07,7.25;6,336.24,216.46,208.92,7.25;6,336.24,226.30,94.14,7.25;6,318.24,236.38,226.90,7.25;6,336.24,246.46,194.72,7.26"  xml:id="b14">
+	<monogr>
+		<title level="m" type="main">Handbook of Creativity</title>
+		<author>
+			<persName>
+				<forename type="first">Richard</forename>
+				<surname>Mayer</surname>
+			</persName>
+		</author>
+		<editor>Robert Sternberg</editor>
+		<imprint>
+			<date type="published" when="1999-03-01" />
+			<publisher>Cambridge University Press</publisher>
+			<pubPlace>Cambridge, UK</pubPlace>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="6,336.24,256.30,209.26,7.25;6,336.24,266.38,209.18,7.25;6,336.24,276.46,209.16,7.25;6,336.24,286.30,208.93,7.25;6,336.24,296.38,160.12,7.25"  xml:id="b15">
+	<monogr>
+		<title level="m" type="main">Use of Testable Responses for Performance-Based Measurement of Situation Awareness Situation Awareness Analysis and Measurement</title>
+		<author>
+			<persName>
+				<forename type="first">Amy</forename>
+				<surname>Pritchett</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R. John</forename>
+				<surname>Hansman</surname>
+			</persName>
+		</author>
+		<editor>Mica R. Endsley and Daniel J. Garland</editor>
+		<imprint>
+			<date type="published" when="2000" />
+			<publisher>Lawrence Erlbaum Associates</publisher>
+			<biblScope unit="page" from="189" to="209" />
+			<pubPlace>Mahwah, New Jersey</pubPlace>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="6,336.24,306.46,209.16,7.25;6,336.24,316.30,209.18,7.25;6,336.24,326.38,209.15,7.25;6,336.24,336.46,164.22,7.25"  xml:id="b16">
+	<analytic>
+		<title level="a" type="main">Evaluating human-robot interfaces: development of a situational awareness assessment methodology</title>
+		<author>
+			<persName>
+				<forename type="first">Jean</forename>
+				<surname>Scholtz</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Brian</forename>
+				<surname>Antonishek</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Jeff</forename>
+				<surname>Young</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Hawaii International Conference on System Science 37 (HICSS 37). Hawaii</title>
+		<imprint>
+			<date type="published" when="2004-01" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="6,336.24,346.30,209.36,7.25;6,339.44,356.38,206.07,7.25;6,336.24,366.46,208.92,7.25;6,336.24,376.30,116.22,7.25"  xml:id="b17">
+	<analytic>
+		<title level="a" type="main">Implementation of a Situation Awareness Assessment Tool for Evaluation of Human-Robot Interfaces</title>
+		<author>
+			<persName>
+				<forename type="first">Jean</forename>
+				<surname>Scholtz</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Brian</forename>
+				<surname>Antonishek</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Jeff</forename>
+				<surname>Young</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">System Man and Cybernetics Journal</title>
+		<imprint>
+			<date type="published" when="2004" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="6,336.24,386.38,209.30,7.25;6,336.24,396.46,44.92,7.25;6,397.43,396.46,148.17,7.25;6,336.24,406.30,209.24,7.25;6,336.24,416.38,68.23,7.25;6,318.24,426.46,227.20,7.25;6,336.24,436.30,129.86,7.25"  xml:id="b18">
+	<analytic>
+		<title level="a" type="main">Designing organizations for an informationrich world</title>
+		<author>
+			<persName>
+				<forename type="first">Herbert</forename>
+				<surname>Simon</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Computers, Communications, and the Public Interest</title>
+		<editor>Martin Greenberg</editor>
+		<meeting><address><addrLine>Robert Sternberg, Handbook of Creativity ; Cambridge, UK</addrLine></address></meeting>
+		<imprint>
+			<publisher>Johns Hopkins Press Cambridge University Press</publisher>
+			<date type="published" when="1971" />
+			<biblScope unit="page" from="40" to="41" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="6,336.24,446.38,208.96,7.25;6,336.24,456.46,209.33,7.16;6,336.24,466.30,93.81,7.25"  xml:id="b19">
+	<analytic>
+		<title/>
+	</analytic>
+	<monogr>
+		<title level="m">Illuminating the Path: the Research and Development Agenda for Visual Analytics</title>
+		<editor>James J. Thomas and Kristin A. Cook</editor>
+		<imprint>
+			<publisher>IEEE Press</publisher>
+			<date type="published" when="2005" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="6,336.24,476.38,209.33,7.25;6,336.24,486.46,69.90,7.25"  xml:id="b20">
+	<monogr>
+		<title level="m" type="main">The Visual Display of Quantitative Information</title>
+		<author>
+			<persName>
+				<forename type="first">Edward</forename>
+				<surname>Tufte</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="1983" />
+			<publisher>Graphics Press</publisher>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="6,336.25,496.30,202.62,7.25"  xml:id="b21">
+	<analytic>
+		<title/>
+	</analytic>
+	<monogr>
+		<title level="j">Edward Tufte, Envisioning Information</title>
+		<imprint>
+			<publisher>Graphics Press</publisher>
+			<date type="published" when="1990" />
+			<publisher>Graphics Press</publisher>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="6,336.25,506.38,190.62,7.25"  xml:id="b22">
+	<monogr>
+		<title/>
+		<author>
+			<persName>
+				<forename type="first">Edward</forename>
+				<surname>Tufte</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Visual</forename>
+				<surname>Explanations</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="1996" />
+			<publisher>Graphics Press</publisher>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="6,336.25,514.94,208.85,8.77;6,336.25,524.78,209.34,8.78;6,336.25,536.38,95.57,7.25"  xml:id="b23">
+	<monogr>
+		<title level="m" type="main">The Fourteenth Text REtrieval Conference Proceedings</title>
+		<editor>Ellen Voorhees and Lori Buckland</editor>
+		<imprint>
+			<date type="published" when="2005-11-15" />
+			<pubPlace>Gaithersburg, MD</pubPlace>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="6,336.25,546.46,209.17,7.25;6,336.25,556.30,208.84,7.25;6,336.25,566.38,109.74,7.25"  xml:id="b24">
+	<analytic>
+		<title level="a" type="main">A problem –oriented classification of visualization techniques</title>
+		<author>
+			<persName>
+				<forename type="first">Stephen</forename>
+				<surname>Wehrend</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Clayton</forename>
+				<surname>Lewis</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings IEEE Visualization &apos;90</title>
+		<meeting>IEEE Visualization &apos;90</meeting>
+		<imprint>
+			<date type="published" when="1990" />
+			<biblScope unit="page" from="139" to="143" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="6,336.25,576.46,209.14,7.25;6,336.25,586.30,209.29,7.25;6,336.25,596.38,63.42,7.25"  xml:id="b25">
+	<analytic>
+		<title level="a" type="main">Visual task characterization for automated visual discourse synthesis</title>
+		<author>
+			<persName>
+				<forename type="first">Michelle</forename>
+				<surname>Zhou</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Steve</forename>
+				<surname>Feiner</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of CHI &apos;98</title>
+		<meeting>CHI &apos;98</meeting>
+		<imprint>
+			<date type="published" when="1988" />
+			<biblScope unit="page" from="392" to="399" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+				</listBibl>
+			</div>
+		</back>
+	</text>
+</TEI>

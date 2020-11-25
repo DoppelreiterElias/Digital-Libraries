@@ -1,0 +1,2904 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.tei-c.org/ns/1.0 /home/pisenberg/grobid/grobid-home/schemas/xsd/Grobid.xsd"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+	<teiHeader xml:lang="en">
+		<encodingDesc>
+			<appInfo>
+				<application version="0.4.1" ident="GROBID" when="2016-09-09T13:45+0000">
+					<ref target="https://github.com/kermitt2/grobid">GROBID - A machine learning software for extracting information from scholarly documents</ref>
+				</application>
+			</appInfo>
+		</encodingDesc>
+		<fileDesc>
+			<titleStmt>
+				<title level="a" type="main">An Affordance-Based Framework for Human Computation and Human-Computer Collaboration</title>
+			</titleStmt>
+			<publicationStmt>
+				<publisher/>
+				<availability status="unknown"><licence/></availability>
+			</publicationStmt>
+			<sourceDesc>
+				<biblStruct>
+					<analytic>
+						<author>
+							<persName>
+								<forename type="first">R</forename>
+								<forename type="middle">Jordan</forename>
+								<surname>Crouser</surname>
+							</persName>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Remco</forename>
+								<surname>Chang</surname>
+								<roleName>Member, Ieee</roleName>
+							</persName>
+						</author>
+						<title level="a" type="main">An Affordance-Based Framework for Human Computation and Human-Computer Collaboration</title>
+					</analytic>
+					<monogr>
+						<imprint>
+							<date/>
+						</imprint>
+					</monogr>
+				</biblStruct>
+			</sourceDesc>
+		</fileDesc>
+		<profileDesc>
+			<textClass>
+				<keywords>
+					<term>Index Terms—Human computation</term>
+					<term>human complexity</term>
+					<term>theory</term>
+					<term>framework</term>
+				</keywords>
+			</textClass>
+			<abstract>
+				<p>—Visual Analytics is &quot; the science of analytical reasoning facilitated by visual interactive interfaces &quot; [70]. The goal of this field is to develop tools and methodologies for approaching problems whose size and complexity render them intractable without the close coupling of both human and machine analysis. Researchers have explored this coupling in many venues: VAST, Vis, InfoVis, CHI, KDD, IUI, and more. While there have been myriad promising examples of human-computer collaboration, there exists no common language for comparing systems or describing the benefits afforded by designing for such collaboration. We argue that this area would benefit significantly from consensus about the design attributes that define and distinguish existing techniques. In this work, we have reviewed 1,271 papers from many of the top-ranking conferences in visual analytics, human-computer interaction, and visualization. From these, we have identified 49 papers that are representative of the study of human-computer collaborative problem-solving, and provide a thorough overview of the current state-of-the-art. Our analysis has uncovered key patterns of design hinging on human-and machine-intelligence affordances, and also indicates unexplored avenues in the study of this area. The results of this analysis provide a common framework for understanding these seemingly disparate branches of inquiry, which we hope will motivate future work in the field.</p>
+			</abstract>
+		</profileDesc>
+	</teiHeader>
+	<text xml:lang="en">
+		<body>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1">INTRODUCTION</head><p> Thomas and Cook define the field of Visual Analytics as " the science of analytical reasoning facilitated by visual interactive interfaces " <ref type="bibr" coords="1,57.07,332.93,13.74,8.02" target="#b76">[70]</ref>. By leveraging increasing computational power and the significant bandwidth of human visual processing channels, it strives to facilitate the analytical reasoning process and support the " human capacity to perceive, understand, and reason about complex and dynamic data and situations " <ref type="bibr" coords="1,132.55,372.78,13.74,8.02" target="#b76">[70]</ref> . As the field matures, it is increasingly imperative to provide mechanisms for approaching analytic tasks whose size and complexity render them intractable without the close coupling and dynamic interplay of both human and machine analysis . Primary goals of this field are to develop tools and methodologies that facilitate human-machine collaborative problem solving, and to understand and maximize the benefits of such a partnership. Researchers have explored this coupling in many venues: IEEE Conference on Visual Analytics Science and Technology (VAST), IEEE Visualization Conference (Vis), IEEE Information Visualization Conference (InfoVis), ACM Conference on Human Factors in Computing Systems (CHI), ACM Conference on Knowledge Discovery and Data Mining (KDD), ACM Conference in Intelligent User Interfaces (IUI), and more. The study of general human-computer collaboration offers a plethora of examples of successful human/machine teams <ref type="bibr" coords="1,55.47,523.16,14.19,8.02" target="#b20">[15,</ref><ref type="bibr" coords="1,72.71,523.16,11.21,8.02" target="#b27"> 23,</ref><ref type="bibr" coords="1,86.97,523.16,11.21,8.02" target="#b41"> 37,</ref><ref type="bibr" coords="1,101.22,523.16,11.21,8.02" target="#b43"> 39,</ref><ref type="bibr" coords="1,115.48,523.16,11.21,8.02" target="#b46"> 41,</ref><ref type="bibr" coords="1,129.74,523.16,11.21,8.02" target="#b51"> 46,</ref><ref type="bibr" coords="1,143.99,523.16,11.21,8.02" target="#b56"> 50,</ref><ref type="bibr" coords="1,158.25,523.16,11.21,8.02" target="#b71"> 65,</ref><ref type="bibr" coords="1,172.51,523.16,11.21,8.02" target="#b72"> 66,</ref><ref type="bibr" coords="1,186.76,523.16,11.21,8.02" target="#b74"> 68,</ref><ref type="bibr" coords="1,201.02,523.16,10.65,8.02" target="#b89"> 83]</ref>. Developments in supervised machine learning in the visualization community present several vetted techniques for human intervention into computationally complex tasks <ref type="bibr" coords="1,84.23,553.04,9.71,8.02" target="#b8">[3,</ref><ref type="bibr" coords="1,95.96,553.04,6.72,8.02" target="#b9"> 4,</ref><ref type="bibr" coords="1,104.71,553.04,11.21,8.02" target="#b17"> 12,</ref><ref type="bibr" coords="1,117.95,553.04,11.21,8.02" target="#b23"> 18,</ref><ref type="bibr" coords="1,131.18,553.04,11.21,8.02" target="#b32"> 28,</ref><ref type="bibr" coords="1,144.41,553.04,11.21,8.02" target="#b33"> 29,</ref><ref type="bibr" coords="1,157.64,553.04,11.21,8.02" target="#b40"> 36,</ref><ref type="bibr" coords="1,170.87,553.04,11.21,8.02" target="#b53"> 47,</ref><ref type="bibr" coords="1,184.11,553.04,11.21,8.02" target="#b57"> 51,</ref><ref type="bibr" coords="1,197.34,553.04,10.65,8.02" target="#b63"> 57]</ref>. The emerging field of human computation inverts the traditional paradigm of machines providing computational support for problems that humans find challenging , and demonstrates success using aggregated human processing power facilitated by machines to perform difficult computational tasks such as image labeling <ref type="bibr" coords="1,113.44,602.86,14.19,8.02" target="#b26">[21,</ref><ref type="bibr" coords="1,129.43,602.86,11.21,8.02" target="#b37"> 33,</ref><ref type="bibr" coords="1,142.45,602.86,11.21,8.02"> 73,</ref><ref type="bibr" coords="1,155.46,602.86,10.65,8.02" target="#b79"> 74]</ref>, annotating audio clips <ref type="bibr" coords="1,251.69,602.86,14.19,8.02" target="#b49">[44,</ref><ref type="bibr" coords="1,267.68,602.86,10.65,8.02" target="#b55"> 49]</ref>, and even folding proteins <ref type="bibr" coords="1,124.78,612.82,13.74,8.02" target="#b25">[20]</ref>. While there have been a multitude of promising examples of human-computer collaboration, there exists no common language for describing such partnerships. This begs several questions: </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1.1">Problem selection</head><p>How do we tell if a problem would benefit from a collaborative technique? Balancing the cost of building and deploying a collaborative system with the benefits afforded by its use is currently precarious at best. Without a framework in which to situate the development of new systems, we rely heavily on researcher intuition and current fieldwide trends to decide which problems to approach using these techniques . This is akin to looking for the sharpest needle in a haystack of needles, and while it has led to many novel approaches to hard problems , it has also led to the investment of significant time and energy into inefficient collaborative solutions for problems that might better have been (or have already been) solved by human or machine techniques alone. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1.2">Function allocation</head><p>How do we decide which tasks to delegate to which party, and when? It has long been stated (even by the author himself) that Fitts' HABA-MABA lists <ref type="bibr" coords="1,370.41,485.89,14.94,8.02" target="#b31">[27] </ref>are insufficient and out-of-date. Sheridan notes that function allocation in collaborative systems is far from a perfect science <ref type="bibr" coords="1,349.43,505.81,13.74,8.02" target="#b69">[63]</ref> . Dekker argues that static function allocation consistently misses the mark because humans adapt to their surroundings, including systems with which they work <ref type="bibr" coords="1,448.23,525.74,13.74,8.02">[22]</ref> . However, the effectiveness of any collaborative system is deeply rooted in its ability to leverage the best that both humans and machine have to offer. Because of this, a language for describing the skills and capacity of the collaborating team is long overdue. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1.3">Comparative analysis</head><p>Finally, how does one system compare to others trying to solve the same problem? With no common language or measures by which to describe new systems, we must rely heavily on researcher intuition and anecdotal evidence. This makes it challenging to reproduce results and to build on previous discoveries, leading to the development of many one-off solutions rather than a cohesive, directed line of research. </p><p>We argue that each of these areas would benefit from consensus about the set of attributes that define and distinguish existing techniques . In this work, we have reviewed 1,271 papers from many of the top-ranking conferences in visual analytics, human-computer interaction, and related areas. From this corpus, we have identified 49 that we believe are representative of the study of human-computer collaborative problem-solving, and provide a thorough overview of the current state-of-the-art. Our analysis has uncovered key patterns of design hinging on human-and machine-intelligence affordances, or properties of the human and machine collaborators that offer opportunities for collaborative action. The results of this analysis provide a common framework for understanding these seemingly disparate branches of research and also indicate unexplored avenues in the study of this area, which we hope will motivate future work in the field. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1.4">Contributions</head><p> This paper makes several contributions to the study of humancomputer collaboration and human computation in Visual Analytics and HCI: @BULLET First, we conduct a comprehensive literature review of 1,271 papers in this area and present a collection of 49 publications that represent the state of the art in the study of human-computer collaboration and human computation. </p><p>@BULLET Second, from these papers we identify groupings based on human-and machine-intelligence affordances. These groupings form the basis of a common framework for understanding and discussing this collection of work. </p><p>@BULLET Third, we identify unexplored areas for future work and argue for the utility of this framework in addressing the questions outlined in the previous section. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2">BACKGROUND</head><p>Before we present our survey and associated framework, let us first briefly describe two terms that will be utilized extensively throughout this paper: human-computer collaboration and human computation. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.1">Human-Computer Collaboration</head><p> In a 1993 symposium at AAAI, researchers from a variety of backgrounds came together to discuss challenges and benefits in the emerging field of human-computer collaboration. They defined collaboration as a process in which two or more agents work together to achieve shared goals, and human-computer collaboration as collaboration involving at least one human and at least one computational agent <ref type="bibr" coords="2,255.70,454.65,13.74,8.02" target="#b75">[69]</ref>. This collaboration has also been called mixed-initiative systems <ref type="bibr" coords="2,255.70,464.61,13.74,8.02" target="#b38">[34]</ref>, in which either the system or the user can initiate action, access information and suggest or enact responses <ref type="bibr" coords="2,176.03,484.54,13.74,8.02" target="#b76">[70]</ref> . Mixed-initiative systems have been explored in diverse areas including knowledge dis- covery <ref type="bibr" coords="2,49.93,504.47,13.74,8.02" target="#b77">[71]</ref>, problem-solving in AI <ref type="bibr" coords="2,156.27,504.47,13.74,8.02" target="#b30">[26]</ref> , procedural training in virtual reality <ref type="bibr" coords="2,66.38,514.43,14.94,8.02" target="#b62">[56] </ref>and much more. The field of Visual Analytics is deeply rooted in human-computer collaboration; that is, Visual Analytics seeks to leverage both analyst intelligence and machine computational ability in a collaborative effort to solve complex problems. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.2">Human Computation</head><p>In his 2005 doctoral thesis <ref type="bibr" coords="2,120.28,577.44,13.74,8.02" target="#b78">[72]</ref>, Luis von Ahn introduces the concept of human computation; that is, harnessing human time and energy for solving problems that have to date proven computationally intractable. This is accomplished by treating human brains as processors in a distributed system. With the advent of online marketplaces providing an on-demand workforce for microtasks, we have seen an explosion of work utilizing human processing power to approach problems such as image labeling <ref type="bibr" coords="2,78.50,647.17,14.19,8.02" target="#b26">[21,</ref><ref type="bibr" coords="2,95.28,647.17,11.21,8.02" target="#b37"> 33,</ref><ref type="bibr" coords="2,109.08,647.17,11.21,8.02"> 73,</ref><ref type="bibr" coords="2,122.89,647.17,10.65,8.02" target="#b79"> 74]</ref>, digitizing text <ref type="bibr" coords="2,192.65,647.17,13.74,8.02" target="#b82">[77]</ref>, annotating audio clips <ref type="bibr" coords="2,42.52,657.14,14.19,8.02" target="#b49">[44,</ref><ref type="bibr" coords="2,59.80,657.14,10.65,8.02" target="#b55"> 49]</ref>, and folding proteins <ref type="bibr" coords="2,154.29,657.14,13.74,8.02" target="#b25">[20]</ref>. For surveys of research in this area, please see <ref type="bibr" coords="2,95.45,667.10,14.19,8.02" target="#b61">[55,</ref><ref type="bibr" coords="2,111.89,667.10,10.65,8.02" target="#b88"> 82]</ref>. While much of the work in this has shown promise in harnessing human computational power, there is a temptation to use human workers as an easy out. In his article entitled " Why I Hate Mechanical Turk Research (and Workshops) " <ref type="bibr" coords="2,125.11,707.34,9.52,8.02">[1]</ref>, Adar argues: We should not fool ourselves into believing that all hard problems fit this mold <ref type="bibr" coords="2,130.85,736.42,110.59,8.02">[warrant human computation] </ref>or completely distract ourselves from advancing other, computational means of solving these problems. More importantly , we should not fool ourselves into believing that we have done something new by using human labor . . . Showing that humans can do human work is not a contribution. This sentiment has prompted fascinating debate about when and how to leverage human intelligence in computation. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.3">Previous Frameworks</head><p> A few of the existing papers surveying work in Human-Computer Collaboration and Human Computation also include discussions of the design dimensions that organize and contextualize their work. In these surveys, the authors provide mechanisms to compare and contrast the systems they review to others along salient dimensions. Bertini and Lalanne <ref type="bibr" coords="2,368.34,213.44,10.45,8.02" target="#b14">[9] </ref>survey the intersection of machine learning and visualization, identifying three categories of design hinging on the distribution of labor between human and machine. In enhanced visualization , human use of the visualization is the primary data analysis mechanism and automatic computation provides additional support in the form of projection, intelligent data reduction, and pattern disclosure . In enhanced mining, data analysis is primarily accomplished by the machine through data mining and visualization provides an advanced interactive interface to help interpret the results through model presentation and patterns exploration and filtering. In integrated visualization and mining, work is distributed equally between the human and machine collaborators at different stages: white-box integration, where the human and machine cooperate during model-building, and black-box integration, where the human is permitted to modify parameters of the algorithm and immediately visualize the results. In the area of human computation, Yuen et al. <ref type="bibr" coords="2,468.65,363.07,14.94,8.02" target="#b88">[82] </ref>identify three broad categories based on the relative maturity of the system. Initiatory systems are the earliest examples of human computation and were generally used to collect commonsense knowledge. Distributed systems were the next generation of human computation, aggregating the contributions of Internet users but with limited scalability and without any mechanism to guarantee the accuracy of the information collected . Finally, the authors describe social game-based systems, the most recent incarnation of human computation involving enjoyable, scalable and reliable systems for approaching hard AI problems. In a later survey, Quinn and Bederson <ref type="bibr" coords="2,410.00,462.70,14.94,8.02" target="#b61">[55] </ref>identify six dimensions along which they characterize human computation systems. Motivation describes the mechanism for encouraging human participation. Quality control indicates whether and how a quality standard is enforced upon the human workers. Aggregation refers to the means by which human contributions are collected and used to solve the problem at hand. The remaining dimensions of human skill, process order, and task-request cardinality are self-explanatory. Each of these frameworks provides critical insight into organizing the systems appearing in the venues they survey. However, because each is specific to a specific subclass of collaborative systems, it is difficult to extend them to a broader class of human-computer collaborative systems. In the following sections, we provide a detailed survey of the literature across many venues, and argue for examining these systems through the lens of affordances; that is, what does each collaborator (machine or human) bring to the table in support of the shared goals of the team? </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3">FRAMEWORK: ALLOCATION AND AFFORDANCES</head><p> We now introduce the foundation upon which we will build our framework for describing and understanding human-computer collaborative systems. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.1">Function allocation in human-machine systems</head><p> Researchers have sought a systematic approach for the appropriate allocation of functions to humans and machines for decades. In 1950, Fitts published the first formal attempt to characterize functions performed better by machines than humans, and vice versa <ref type="bibr" coords="2,499.18,736.42,13.74,8.02" target="#b31">[27]</ref> . For years, this list was regarded as the definitive mantra for function allocation , despite the author's assertion that to use his list to determine function allocation was to lose sight of the most basic tenet of a human-machine collaborative system. As later articulated by Jordan , this underlying foundation is that humans and machines are complementary , rather than antithetical <ref type="bibr" coords="3,162.96,103.20,13.74,8.02" target="#b42">[38]</ref>. Price <ref type="bibr" coords="3,207.07,103.20,14.94,8.02" target="#b60">[54] </ref>further expands on this idea by arguing that function allocation is perhaps better envisioned as an iterative process rather than a decisive listing, and that there may be more the one optimal allocation for any given problem . Price also notes that human operators require support to perform optimally, and emphasizes the importance of understanding cognitive loading and engagement. In more recent work, several contemporaries have argued that the notion of function allocation as it was originally conceived no longer makes sense. Sheridan discusses several problems with function allocation which include ever-increasing computing power, complicated problems with optimal allocation differing at each stage, and illdefined problem spaces <ref type="bibr" coords="3,121.38,222.99,13.74,8.02" target="#b69">[63]</ref>. Dekker and Woods provide a second counterargument to the validity of any Fitts-style HABA-MABA listing in <ref type="bibr" coords="3,57.92,242.91,13.74,8.02">[22]</ref>. They point out a relationship that is often leveraged (though seldom explicitly stated) by the field of Visual Analytics: human-machine collaboration transforms human practice and forces people to adapt their skills and analytic practices. They argue for a shift in attention, moving away from allocation of tasks to a focus centered on how to design for harmonious human-machine cooperation. That is, how do we get humans and machines to play nicely, and work effectively? </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.2">Affordances</head><p>In 1977, American psychologist J.J. Gibson stated his theory that an organism and its environment complement each other <ref type="bibr" coords="3,230.77,354.65,13.74,8.02" target="#b35">[31]</ref>, which is much in alignment with the work by Jordan cited in the previous section . In this work, Gibson coined the term affordances, defining them as the opportunities for action provided to an organism by an object or environment. Norman later appropriated this term as it applies to design and the field of Human-Computer Interaction, redefining it slightly to refer only to the action possibilities that are readily perceivable by a human operator <ref type="bibr" coords="3,128.63,424.39,13.74,8.02" target="#b59">[53]</ref>. This definition shifts the concept of affordance toward relational rather than subjective or intrinsic; that is, an affordance exists between an actor and the object or environment, not existing separate from that relationship. In the case of human-computer collaboration, we argue that there exist affordances in both directions. Both human and machine bring to the partnership opportunities for action, and each must be able to perceive and access these opportunities in order for them to be effectively leveraged. These affordances define the interaction possibilities of the team, and determine the degree to which each party's skills can be utilized during collaborative problem-solving. In the next sections, we will survey the existing literature through the lens of affordances, providing a common framework for understanding and comparing research in the areas of human-computer collaboration, human intervention , and human computation. The affordances we identify are by no means an exhaustive list; they represent the patterns of design that we have seen in the existing literature of an emerging area. Please note that while examples will generally be given under the heading of a single affordance, systems mentioned may utilize multiple affordances (both human and machine) at the same time. For a complete listing of the affordances identified in all systems surveyed, please see <ref type="figure" coords="3,254.99,623.88,26.89,8.02">Table 1</ref>in the Appendix of this work. In Section 6, we present case studies of specific systems to discuss the costs and benefits of leveraging multiple affordances. </p><p>Given its direct applicability, it is perhaps unsurprising that we have seen a plethora of work in Visual Analytics and HCI leveraging human visual processing. For example, human visual perceptive abilities are utilized by Peekaboom <ref type="bibr" coords="4,107.77,83.27,14.94,8.02" target="#b81">[76] </ref>to augment image labels on the web (see <ref type="figure" coords="4,22.50,93.23,22.80,8.02">Fig. 1a</ref>). For some tasks such as image labeling <ref type="bibr" coords="4,190.91,93.23,14.19,8.02" target="#b26">[21,</ref><ref type="bibr" coords="4,206.85,93.23,11.21,8.02" target="#b37"> 33,</ref><ref type="bibr" coords="4,219.81,93.23,11.21,8.02" target="#b65"> 59,</ref><ref type="bibr" coords="4,232.77,93.23,11.21,8.02" target="#b68"> 62,</ref><ref type="bibr" coords="4,245.73,93.23,11.21,8.02"> 73,</ref><ref type="bibr" coords="4,258.68,93.23,10.65,8.02" target="#b79"> 74]</ref>, visual search <ref type="bibr" coords="4,72.40,103.20,9.71,8.02" target="#b11">[6,</ref><ref type="bibr" coords="4,84.91,103.20,10.65,8.02" target="#b15"> 10]</ref>, and query validation <ref type="bibr" coords="4,179.40,103.20,14.19,8.02" target="#b54">[48,</ref><ref type="bibr" coords="4,196.39,103.20,10.65,8.02" target="#b85"> 80]</ref> , the systems presented rely heavily on the users' visual perceptive abilities, with the machine serving only as a facilitator between the human and the data. For other tasks such as exploring high-dimensional datasets <ref type="bibr" coords="4,241.83,133.09,14.19,8.02" target="#b74">[68,</ref><ref type="bibr" coords="4,258.68,133.09,10.65,8.02" target="#b89"> 83]</ref>, classification <ref type="bibr" coords="4,71.16,143.05,9.71,8.02" target="#b9">[4,</ref><ref type="bibr" coords="4,82.71,143.05,10.65,8.02" target="#b57"> 51]</ref>, and dimension reduction <ref type="bibr" coords="4,188.51,143.05,14.19,8.02" target="#b32">[28,</ref><ref type="bibr" coords="4,204.55,143.05,10.65,8.02" target="#b40"> 36]</ref> , machine affordances (which will be discussed at length in Section 5) are combined with human visual processing to achieve superior results. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.2">Visuospatial thinking</head><p>A level deeper than basic visual processing such as image recognition, another skill afforded by human collaborators is visuospatial thinking 2 , or our ability to visualize and reason about the spatial relationships of objects in an image. These abilities are strongly informed by our experiences in the physical world, which shape our understanding and are intrinsic to our everyday lives. We are able to visualize complex spatial relationships and tune this attention to accomplish specific goals. In an article on the significance of visuospatial representation in human cognition <ref type="bibr" coords="4,94.48,274.82,13.74,8.02" target="#b66">[60]</ref>, Tversky notes: For human cognition, <ref type="bibr" coords="4,125.22,293.50,31.88,8.02">[entities] </ref>are located in space with respect to a reference frame or reference objects that vary with the role of the space in thought or behavior. Which things, which references, which perspective depend on the function of those entities in context. . . These mental spaces do not seem to be simple internalizations of external spaces like images; rather, they are selective reconstructions, designed for certain ends. We have seen evidence that progress can be made on computationally intractable problems through the application of human visuospatial thinking. For example, the Fold.it project (see <ref type="figure" coords="4,197.93,401.85,25.32,8.02">Fig. 1b</ref> ) has demonstrated remarkable success at protein folding <ref type="bibr" coords="4,188.79,411.82,13.74,8.02" target="#b25">[20]</ref>, a problem known to be NP-complete <ref type="bibr" coords="4,91.98,421.78,10.45,8.02" target="#b12">[7] </ref>using purely computational means. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.3">Audiolinguistic ability</head><p>Another affordance presented by the human user is audiolinguistic ability; that is, our ability to process sound 3 and language 4 . Although separate from the visual affordances generally leveraged in Visual Analytics systems, we suggest that the interplay between visual and nonvisual human faculties is equally important in supporting analytical reasoning. In <ref type="bibr" coords="4,72.09,503.73,13.74,8.02" target="#b76">[70]</ref>, Thomas and Cook state: </p><p>We perceive the repercussions of our actions, which also recalibrates perception, ensuring that vision, hearing, and touch maintain their agreement with each other. If we are to build richly interactive environments that aid cognitive processing, we must understand not only the levels of perception and cognition but also the framework that ties them together in a dynamic loop of enactive, or action-driven, cognition that is the cognitive architecture of human-information processing. </p><p> The literature contains several examples of systems leveraging this affordance . The well-known reCAPTCHA <ref type="bibr" coords="4,171.45,630.77,14.94,8.02" target="#b82">[77] </ref> system uses human linguistic ability augment computer vision in an effort to fully digitize the world's libraries. In MonoTrans2 <ref type="bibr" coords="4,142.81,650.70,13.74,8.02" target="#b39">[35]</ref>, it is used to improve automated translation results using monolingual translators. In TagATune <ref type="bibr" coords="4,255.70,660.66,13.74,8.02" target="#b49">[44]</ref>, human audio processing ability is leveraged to generate descriptive tags for music clips (see <ref type="figure" coords="4,109.76,680.59,22.96,8.02">Fig. 1c</ref> ). We have also surveyed examples utilizing human audio linguistic ability for audio annotation <ref type="bibr" coords="4,232.57,690.55,9.71,8.02" target="#b10">[5,</ref><ref type="bibr" coords="4,244.89,690.55,11.21,8.02" target="#b49"> 44,</ref><ref type="bibr" coords="4,258.68,690.55,10.65,8.02" target="#b55"> 49]</ref>, transcription <ref type="bibr" coords="4,70.07,700.51,13.74,8.02" target="#b21">[16]</ref>, and even crowdsourced word processing <ref type="bibr" coords="4,236.97,700.51,9.52,8.02" target="#b13">[8]</ref>. <ref type="bibr" coords="4,305.05,142.55,11.95,8.02">[O]</ref> ur daily experience is social as well as physical. We interact daily with other people, and we live in a world that is socially constructed. Elements of our daily experience – family, technology, highway, invention, child, store, politician – gain their meaning from the network of social interactions in which they figure. So, the social and the physical are intertwined and inescapable aspects of our everyday ex- periences. We argue that this can be viewed as an affordance, not just a complicating factor. For example, in Mars Escape <ref type="bibr" coords="4,446.39,238.44,13.74,8.02" target="#b22">[17]</ref>, human participants partner with a virtual robot to complete collaborative tasks to build robust social training datasets for human-robot interaction research. This affordance is integral to the construction of commonsense knowledge databases <ref type="bibr" coords="4,322.99,278.29,14.19,8.02" target="#b48">[43,</ref><ref type="bibr" coords="4,340.68,278.29,11.21,8.02" target="#b50"> 45,</ref><ref type="bibr" coords="4,355.39,278.29,10.65,8.02" target="#b80"> 75]</ref>, and has been leveraged in domains such as stress relief <ref type="bibr" coords="4,329.04,288.25,14.94,8.02" target="#b24">[19] </ref>and providing social scripts to support children with autism <ref type="bibr" coords="4,311.28,298.22,13.74,8.02" target="#b16">[11]</ref>. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.5">Creativity</head><p>Another important affordance of human collaborators is creativity 5 . As noted by Fitts <ref type="bibr" coords="4,350.04,338.24,13.74,8.02" target="#b31">[27]</ref>, Dekker <ref type="bibr" coords="4,398.64,338.24,14.94,8.02">[22] </ref> and many others, humans are capable of incredible creativity, generating spontaneous arrhythmic approaches to problems that may be difficult or impossible to simulate. In <ref type="bibr" coords="4,294.83,368.13,13.74,8.02" target="#b64">[58]</ref>, American psychologist Mark Runco posits: It may be that creativity plays a role in all that is human . This surely sounds like a grand claim, but consider how frequently we use language or are faced with a problem . Think also how often problems are subtle and ill- defined. . . <ref type="bibr" coords="4,342.20,424.18,10.40,8.02">[C]</ref>reativity plays a role in each of our lives, and it does so very frequently. We have seen human creativity leveraged to great success in both physical and conceptual design. For example, Yu and Nickerson <ref type="bibr" coords="4,505.91,460.30,14.94,8.02" target="#b87">[81] </ref>use human creativity to crowdsource design sketches via a human genetic algorithm, and Tanaka et al. <ref type="bibr" coords="4,387.66,480.22,14.94,8.02" target="#b73">[67] </ref>use sequential application of crowds to produce creative solutions for social problems. Creativity has also been used to augment automated systems and find hidden outliers <ref type="bibr" coords="4,518.32,500.15,13.74,8.02" target="#b53">[47]</ref>. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.6">Domain knowledge</head><p> The final example of human affordance that we have seen in the literature is straightforward, but worthy of inclusion nonetheless. This is the affordance of domain knowledge. In their 2009 article on Knowledge- Assisted Visualization <ref type="bibr" coords="4,367.27,560.10,13.74,8.02" target="#b18">[13]</ref>, Chen et al. argue: <ref type="bibr" coords="4,305.05,576.29,11.95,8.02">[T]</ref> he knowledge of the user is an indispensable part of visualization . For instance, the user may assign specific colors to different objects in visualization according to certain domain knowledge. The user may choose certain viewing positions because the visualization results can reveal more meaningful information or a more problematic scenario that requires further investigation. Often, this domain knowledge can be difficult or impossible to embed fully into the system itself, or it may be too time-consuming to generate a complete model of the domain. Instead, we can leverage the experience of the human analyst as part of the collaborative process. For example, we have seen domain expertise leveraged to help diagnose network faults <ref type="bibr" coords="4,339.56,702.08,13.74,8.02" target="#b53">[47]</ref>, classify MRI data <ref type="bibr" coords="4,426.74,702.08,13.74,8.02" target="#b17">[12]</ref>, perform domain-specific data transformations <ref type="bibr" coords="4,360.48,712.04,13.74,8.02" target="#b44">[40]</ref> , and navigation and infer trends about a specific geographic region <ref type="bibr" coords="4,369.90,722.00,9.52,8.02" target="#b9">[4]</ref> . For over two decades, the HCI community has been engaged in conversation about affordances in technology, beginning with <ref type="bibr" coords="5,240.09,77.17,13.74,8.02" target="#b34">[30]</ref>. While much of the focus has centered on designing interfaces that are intuitive to the user, we would like to take the liberty of broadening the definition of affordances to include more than just design elements. In this section, we survey the literature with an eye toward the conceptual affordances of machine collaborators and discuss how they come into play in human-computer collaboration. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.1">Large-scale data manipulation</head><p>As predicted by Moore's Law <ref type="bibr" coords="5,141.61,169.75,13.74,8.02" target="#b58">[52]</ref>, computational power has steadily doubled every two years for the past five and a half decades. Because of this incredible increase in processing ability, machine collaborators afford large-scale data manipulation at speeds and scales Fitts never could have imagined. In Visual Analytics, this computational ability has been leveraged to help analysts navigate massive datasets across many domains. For example, RP Explorer uses random projections to approximate the results of projection pursuit to find classseparating views in high-dimensional space where traditional projection pursuit can fail to converge <ref type="bibr" coords="5,151.63,259.42,9.52,8.02" target="#b8">[3]</ref>. In ParallelTopics (see <ref type="figure" coords="5,251.02,259.42,24.01,8.02" target="#fig_0">Fig. 2a</ref>), computational methods for manipulating large datasets have been used to help users navigate and make sense of massive text corpora <ref type="bibr" coords="5,256.25,279.34,13.74,8.02" target="#b27">[23]</ref>. It has also been utilized to refine classification models and performing dimension reduction <ref type="bibr" coords="5,109.41,299.27,14.19,8.02" target="#b23">[18,</ref><ref type="bibr" coords="5,126.94,299.27,11.21,8.02" target="#b33"> 29,</ref><ref type="bibr" coords="5,141.49,299.27,10.65,8.02" target="#b57"> 51]</ref>, interactively cluster data <ref type="bibr" coords="5,252.62,299.27,9.52,8.02" target="#b9">[4]</ref>, and automatically extract transfer functions from user-selected data <ref type="bibr" coords="5,264.70,309.23,13.74,8.02" target="#b63">[57]</ref>. It has been used to suggest informative data views <ref type="bibr" coords="5,219.36,319.19,13.74,8.02" target="#b89">[83]</ref>, and even to help users externalize and understand their own insight generation pro- cess <ref type="bibr" coords="5,48.68,339.12,14.19,8.02" target="#b20">[15,</ref><ref type="bibr" coords="5,65.12,339.12,11.21,8.02" target="#b43"> 39,</ref><ref type="bibr" coords="5,78.56,339.12,11.21,8.02" target="#b46"> 41,</ref><ref type="bibr" coords="5,92.01,339.12,11.21,8.02" target="#b51"> 46,</ref><ref type="bibr" coords="5,105.46,339.12,10.65,8.02" target="#b71"> 65]</ref>. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.2">Collecting and storing large amounts of data</head><p> In addition to being able to manipulate large amounts of data at incredible speed, machine collaborators are also able to efficiently aggregate and store data for later use. This affordance has been used to support human users in many areas where the data is being generated in large quantities and from multiple sources simultaneously. For example, systems like Verbosity <ref type="bibr" coords="5,167.83,421.74,14.94,8.02" target="#b80">[75] </ref>and others <ref type="bibr" coords="5,226.75,421.74,14.19,8.02" target="#b48">[43,</ref><ref type="bibr" coords="5,243.99,421.74,11.95,8.02" target="#b50"> 45] </ref>aggregate and store information generated by human users to create commonsense knowledge repositories. It is also used in the collection of behavioral scripts for autism treatment <ref type="bibr" coords="5,178.07,451.63,14.94,8.02" target="#b16">[11] </ref> and human-robot inter- action <ref type="bibr" coords="5,56.79,461.59,13.74,8.02" target="#b22">[17]</ref> , as well as collecting tags for music and image annota- tion <ref type="bibr" coords="5,48.55,471.55,9.71,8.02" target="#b10">[5,</ref><ref type="bibr" coords="5,61.37,471.55,11.21,8.02" target="#b17"> 12,</ref><ref type="bibr" coords="5,75.69,471.55,11.21,8.02" target="#b26"> 21,</ref><ref type="bibr" coords="5,90.00,471.55,11.21,8.02" target="#b55"> 49,</ref><ref type="bibr" coords="5,104.31,471.55,11.21,8.02" target="#b65"> 59,</ref><ref type="bibr" coords="5,118.63,471.55,11.21,8.02" target="#b68"> 62,</ref><ref type="bibr" coords="5,132.94,471.55,11.21,8.02"> 73,</ref><ref type="bibr" coords="5,147.25,471.55,10.65,8.02" target="#b79"> 74]</ref>. In a world that is growing ever more big data-centric, storage capacity and efficient retrieval are critical advantages afforded by machine collaborators. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.3">Efficient data movement</head><p> Thanks to developments in data storage, the advent of fast and reliable networking techniques and the rapid development of an alwaysconnected society, data has been freed from its historic ties to a geographic location and machine collaborators afford very efficient data movement. This implies that data can be collaboratively accessed and manipulated by entities asynchronous in both time and space, with machines affording the efficient transfer of data to the right place at the right time. For example, VizWiz <ref type="bibr" coords="5,218.01,594.02,14.94,8.02" target="#b15">[10] </ref> leverages efficient data movement to connect visually-impaired users to sighted collaborators to get near real-time answers to visual search questions . This affordance is critical in facilitating distributed collabora- tion <ref type="bibr" coords="5,48.14,633.87,9.71,8.02" target="#b13">[8,</ref><ref type="bibr" coords="5,60.55,633.87,11.21,8.02" target="#b19"> 14,</ref><ref type="bibr" coords="5,74.45,633.87,11.21,8.02" target="#b24"> 19,</ref><ref type="bibr" coords="5,88.35,633.87,11.21,8.02" target="#b37"> 33,</ref><ref type="bibr" coords="5,102.25,633.87,11.21,8.02" target="#b73"> 67,</ref><ref type="bibr" coords="5,116.15,633.87,11.21,8.02" target="#b81"> 76,</ref><ref type="bibr" coords="5,130.05,633.87,10.65,8.02" target="#b85"> 80]</ref> , as well as access to distributed infor- mation <ref type="bibr" coords="5,59.14,643.84,14.19,8.02" target="#b37">[33,</ref><ref type="bibr" coords="5,76.06,643.84,11.21,8.02" target="#b49"> 44,</ref><ref type="bibr" coords="5,90.01,643.84,11.21,8.02" target="#b54"> 48,</ref><ref type="bibr" coords="5,103.94,643.84,10.65,8.02" target="#b81"> 76]</ref> . Efficient data movement techniques also facilitate rapid access to data that is too large to fit in memory. This has been used to augment human visual processing using saliency modu- lation <ref type="bibr" coords="5,53.99,673.73,14.94,8.02" target="#b41">[37] </ref>(see <ref type="figure" coords="5,87.49,673.73,23.36,8.02" target="#fig_0">Fig. 2b</ref>), as well as facilitate access to other datasets to numerous to list. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.4">Bias-free analysis</head><p>In contrast to the human affordance of sociocultural understanding, machines afford the opportunity for bias-free analysis. That is, apart from human bias introduced during the programming of the system, </p><p>(a) ParallelTopics <ref type="bibr" coords="5,438.93,180.03,11.62,6.23" target="#b27">[23] </ref>(b) Saliency-Assisted Navigation <ref type="bibr" coords="5,460.53,328.67,11.62,6.23" target="#b41">[37] </ref>(c) MDX <ref type="bibr" coords="5,427.25,504.21,11.62,6.23" target="#b72">[66] </ref> machines are able to operate and report on numerically or computationally significant information without experiential or sociocultural influence. In Visual Analytics, we have seen this affordance leveraged to help analysts direct their attention for natural disaster predic- tion <ref type="bibr" coords="5,310.66,591.73,14.94,8.02" target="#b72">[66] </ref>(see <ref type="figure" coords="5,345.22,591.73,24.43,8.02" target="#fig_0">Fig. 2c</ref>) as well as propose candidate visualizations for exploring high-dimensional data <ref type="bibr" coords="5,411.90,601.69,13.74,8.02" target="#b74">[68]</ref> . It has also been used to help analysts see dissimilarity to existing datapoints <ref type="bibr" coords="5,455.40,611.65,13.74,8.02" target="#b56">[50]</ref>, where confirmation or other bias may come into play. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6">MULTIPLE AFFORDANCES: CASE STUDIES</head><p>As stated in the introduction, while we have generally listed examples under a single main affordance, systems may utilize multiple affordances (both human and machine) in pursuit of a common goal. In this section, we analyze a few systems leveraging multiple affordances and discuss the impact of each set of design elements. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6.1">reCAPTCHA</head><p>reCAPTCHA, first introduced by Luis von Ahn et al. in <ref type="bibr" coords="5,496.21,726.46,14.94,8.02" target="#b82">[77] </ref>and later acquired by Google, is a web security mechanism that harnesses the (a) reCAPTCHA <ref type="bibr" coords="6,139.61,211.78,14.94,8.02" target="#b82">[77] </ref>(b) PatViz <ref type="bibr" coords="6,383.76,211.78,14.94,8.02" target="#b46">[41] </ref></p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>effort </head><p>of humans performing CAPTCHAs along with optical character recognition (OCR) to collaboratively digitize the world's text corpora (see <ref type="figure" coords="6,39.98,289.77,24.11,8.02" target="#fig_1">Fig. 3a</ref>). In the first year reCAPTCHA was made available for public use, over 440 million suspicious words were correctly deciphered resulting in over 17,600 successfully transcribed books <ref type="bibr" coords="6,255.70,309.70,13.74,8.02" target="#b82">[77]</ref>. As of this writing, the system is used over 100 million times every day with an overall success rate of 96.1%, and is currently being utilized to digitize the New York Times archive as well as Google Books. Such widespread adoption and remarkable accuracy mark reCAPTCHA as one of the most widely successful human-computer collaborative initiatives to date. We posit that the success of the reCAPTCHA system is due in part to its effective combination of human and machine affordances. After performing an initial automated recognition of a document (computation ), suspicious or unrecognizable words are identified and transmitted (efficient data movement) to a collection of human collaborators for evaluation (visual perception) and subsequent transcription (linguistic ability). Through this division of labor, each party receives manageable tasks to perform according to their skills, and each set of affordances can be leveraged without overloading the collaborator. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6.2">PatViz</head><p>PatViz <ref type="bibr" coords="6,48.45,488.80,14.94,8.02" target="#b46">[41] </ref>is a Visual Analytics system for the interactive analysis of patent information (see <ref type="figure" coords="6,107.87,498.76,23.52,8.02" target="#fig_1">Fig. 3b</ref>). PatViz utilizes a flexible coordinated multiple views (CMV) to support the construction of complex queries and the interactive exploration of patent result sets. Analysis of patent information is a complex task involving the synthesis of many data dimensions. Because of this, PatViz leverages a multitude of human and machine affordances in an effort to provide intuitive views for various data types: visual perception for the inspection of image data contained in patent documents, visuospatial ability for analyzing the relationships between various patents, audiolinguistic ability for evaluating terminology, and domain knowledge for understanding the relevance of the patent to its application, as well as with machine computation for generating data views on the fly, storage for aggregating the analysts' activity, and efficient data movement to provide the analyst with the appropriate information on-demand. However, in the case of leveraging affordances, more is not always better. As articulated in the discussion of the results <ref type="bibr" coords="6,210.32,648.20,13.94,8.02" target="#b46">[41]</ref>: One frequently expressed comment indicated that most of the patent experts never worked with a system providing interlinked and interactive visual interfaces. While this was also one of the systems properties that was most appreciated by the users, it became clear that such features are very difficult to use without any training. While the machine collaborator offers many opportunities for the human to utilize many different analytical skills, it falls short in effectively leveraging these affordances by leaving the decision of when and how to select views wholly at the discretion of the human. Because so many different affordances are being leveraged, it is difficult for the human collaborators to organize their strategy in approaching the analysis, resulting in an interface that " is difficult to comprehend . . . without previous instruction " <ref type="bibr" coords="6,420.43,319.66,13.74,8.02" target="#b46">[41]</ref>. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="7">SUGGESTED EXTENSIONS</head><p>The scope of this paper is limited to the affordances we have identified in the existing literature on human-computer collaboration and human computation; it is far from an exhaustive list of the possible affordances that exist between human and machine. We would like posit a few un-or under-explored affordances and suggest scenarios in which these affordances might prove useful. Human Adaptability: One of the most important components of the human analytic process is the ability to take multiple perspectives on a problem, and adapt hypotheses and mental models in the wake of new information. This adaptability is critical to the successful generation of insight about large datasets. However, most work in this area has centered around supporting the adapting user, rather than explicitly leveraging this. </p><p> Consider the hypothetical collaborative system leveraging human adaptability along the lines suggested by Thomas and Cook <ref type="bibr" coords="6,518.07,517.24,13.94,8.02" target="#b76">[70]</ref>: as human collaborators are exploring a dataset, the system observes patterns in provenance to try to detect when an analyst has gotten " stuck " in a redundant or potentially fruitless analytical path. When this happens, the system suggests an alternative perspective or avenue for exploration. This encourages the analyst to form new hypotheses or adopt new methods of inquiry, ensuring that the analysis does not become entrenched in a local minimum. Machine Sensing: With new developments in hardware technology rapidly becoming more readily available, there is the potential for significant advances in the kinds of sensory information that machines can make available. However, to our knowledge, this affordance has not yet been considered as part of a collaborative system. </p><p>We see potential for the utility of sensing technology as part of a human-computer collaborative team in two areas. First, sensing technology could be used to make the human collaborator aware of extrasensory information about the environment around them. Second , it could be used to respond to changes in the human collaborator themselves; for example, adapting to the user's mental state using brain sensing technology to improve the working environment. </p><p>These represent just a brief brainstorming of potential additions to the list of affordances we have observed in the literature to date, and we hope that these ideas will inspire intellectual discourse and encourage further inquiry. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="8">DISCUSSION</head><p>We close this paper with a discussion of the utility of this framework for addressing critical need in the area of human-machine collaboration , as well as its shortcomings and areas for future work. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="8.1">Utility of an affordance-based framework</head><p>We claim that with the development of an affordance-based language for describing human-computer collaborative systems, we are indeed in a better position than when we first began. To validate this claim, let us return to the three questions posed in the introduction of this paper: How do we tell if a problem would benefit from a collaborative technique? We argue that the set of problems warranting a collaborative technique is equivalent to the set problems where there is an opportunity to effectively leverage affordances on both sides of the partnership in pursuit of the solution. By framing potential collaboration in terms of the affordances at our disposal, we can then consider which of these affordances could be used to approach a problem and construct a solution. How do we decide which tasks to delegate to which party, and when? In adopting this language, we are deliberately moving away from terminology that encourages us to speak in terms of deficiencies; that is, we need the human because computers are bad at X, etc. Instead of deciding who gets (stuck with) which task, we begin to reason about who can contribute to the collective goal at each stage. The answer may not be only the human, or only the machine, but could in fact be both. By designing such that all parties are aware of the affordances made available to them by their collaborators, we encourage the development of more flexible procedures for collective problem-solving. </p><p>How does one system compare to others trying to solve the same problem? Of the contributions made by this framework, we believe that providing a common language for discussing humancomputer collaborative systems is its greatest strength. We are able to talk about which affordances are being leveraged, and use these to compare and contrast between systems. We may also be able to make hypotheses about how these choices of affordances influence the resulting solutions by comparing performance measures. However, this language does not yet afford a robust, theoretical comparison. To achieve this, we must first build our understanding of the mechanisms underlying these affordances and their associated costs. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="8.2">Complexity measures for Visual Analytics</head><p> While we believe that this framework provides an important foundation for developing a common language, it is only the first of many steps toward a rich vocabulary for describing human-computer collaborative systems. Consider for example the plethora of human computation systems for image labeling that we have reviewed in this work: the ESP Game <ref type="bibr" coords="7,84.75,626.69,13.74,8.02">[73]</ref>, Ka-captcha <ref type="bibr" coords="7,146.47,626.69,13.74,8.02" target="#b26">[21]</ref>, KissKissBan <ref type="bibr" coords="7,213.69,626.69,13.74,8.02" target="#b37">[33]</ref>, LabelMe <ref type="bibr" coords="7,266.94,626.69,14.94,8.02" target="#b65">[59] </ref>and Phetch <ref type="bibr" coords="7,73.49,636.65,13.74,8.02" target="#b79">[74]</ref> . Each system leverages the visual perception and linguistic abilities of the human users, and the aggregative capacity of the machine. Given that these systems are all addressing very similar problems using a similar approach, how do they compare to one another? We argue that is it critical to develop a common language not just for describing which affordances are being leveraged, but how much and how well. The National Science Foundation CISE directorate has called for the development of theoretical measures for systems involving human computation, calling this one of the five most important questions facing computer science today <ref type="bibr" coords="7,146.21,736.42,13.74,8.02" target="#b84">[79]</ref>. This need was reiterated at the CHI2011 workshop on Crowdsourcing and Human Computation <ref type="bibr" coords="7,527.32,53.38,13.74,8.02" target="#b47">[42]</ref>. Can we begin to describe the complexity of human-computer collaborative systems with a robust language parallel to describing the complexity of an algorithmic system? Researchers in the field of Artificial Intelligence have begun to imagine the concept of complexity measures for systems involving human contribution. Shahaf and Amir define a Human-Assisted Turing Machine using the human as an oracle with known complexity <ref type="bibr" coords="7,527.32,124.09,13.74,8.02" target="#b67">[61]</ref>. In this work, they demonstrate that much of the standard theoretical language holds true, including algorithmic complexity, problem complexity , complexity classes and more. However, they also raise several questions that remain unanswered: @BULLET First, what is the best way to measure human work? In terms of human time, space, or utility? Should we consider the input size, that is, how much data does the human need to process? Or to compensate for compression, should we be measuring information density instead? </p><p>@BULLET Second, how can we assess this human work in practice? Through empirical evaluation of a sample population's performance on a given task, we can begin to understand how the average human performs, but this information is task-specific. Perhaps more broadly applicable would be to develop a set of canonical actions that humans can perform with known complexity , but compiling this list is nontrivial. </p><p> @BULLET Finally, how do we account for individual differences in human operators? Perhaps the problem under consideration utilizes skills or knowledge not common to every user (such as bilingual translation). In this case, a general model of humans is insufficient; instead, we need to understand the complexity of the individual candidate. This requires the development of algorithmic systems that are to be able to effectively and efficiently utilize the affordances provided by the humans available to them, rather than only the optimal human collaborator under perfect conditions. </p><p>These areas afford many rich opportunities for collaboration with our colleagues in theoretical computer science, as well as in psychology and neuroscience. By engaging in the interdisciplinary pursuit of answers around human affordances, we hope to construct a more complete picture of insight generation, the mechanisms of human understanding , and the the analytic process as a whole. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="9">CONCLUSION</head><p>In this article, we have presented a comprehensive survey of work in the area of human-computer collaborative systems and human computation . Out of 1,271 papers reviewed, we selected a corpus of 49 publications that represent the state of the art, and from these papers we identify patterns of human-and machine-intelligence affordances. These affordances form the basis of a common framework for understanding and discussing this collection of work. We argue for the utility of this framework, then discuss some of its shortcomings and identify unexplored avenues for extending this line of inquiry. While we have concentrated our efforts on systems explicitly labeled as human-computer collaboration, mixed-initiative, or human computation, we posit that the framework presented here will benefit the field of Visual Analytics as a whole. While there has been remarkable progress in the development of novel solutions to support analytic processes, we have not yet fully realized our potential as a systematic science that builds and organizes knowledge in the form of testable theories and predictions. In presenting a preliminary framework for describing and comparing systems involving human and machine collaborators , we aspire to lay the foundation for a more rigorous analysis of the tools and approaches presented by our field, thereby paving the way for the construction of an increasingly robust understanding of analytical reasoning and how to best support insight generation. <ref type="figure" coords="8,22.50,652.86,25.18,7.37">Table 1</ref>. A table of all surveyed human-computer collaborative systems and the affordances they leverage. The human affordances listed are (in order): visual perception, visuospatial ability, audioliguistic ability, creativity, sociocultural awareness, and domain knowledge. The machine affordances listed are (in order): large-scale data manipulation, collecting and storing large amounts of data, efficient data movement, and biasfree analysis. </p></div><figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_0" coords="5,294.12,522.69,250.38,7.37;5,294.12,532.15,243.30,7.37"><head>Fig. 2. </head><figDesc>Fig. 2. Systems leveraging machine affordances: (a) Large-scale data manipulation, (b) Efficient data movement, and (c) Bias-free analysis. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_1" coords="6,22.50,231.62,513.00,7.37;6,22.50,241.08,513.00,7.37;6,22.50,250.54,359.88,7.37"><head>Fig. 3. </head><figDesc>Fig. 3. Systems leveraging multiple affordances: (a) reCAPTCHA [77] leverages human visual perception and audiolinguistic ability with machine storage and efficient data movement to digitize the world's libraries. (b) PatViz leverages human visual perception, visuospatial ability, audiolinguistic ability and domain knowledge with machine computation, storage and efficient data movement. </figDesc></figure>
+
+			<note place="foot" n="4"> HUMAN AFFORDANCES The human-computation and human-computer collaborative systems we have reviewed leverage a variety of skills and abilities afforded by the human participants. In this section, we will offer a brief definition of each of the affordances we have observed in the literature, discuss the utility of these affordances as articulated in the work reviewed and offer an overview of the application of each affordance. (a) Peekaboom [76] (b) Fold.it [20] (c) TagATune [44] Fig. 1. Systems leveraging human affordances: (a) Visual perception, (b) Visuospatial thinking, and (c) Audiolinguistic ability. 4.1 Visual perception Of the human affordances we will discuss, perhaps the most salient to the study of Visual Analytics is visual perception 1 . In [64], Shneiderman comments on humans&apos; capacity for visual processing: [T]he bandwidth of information presentation is potentially higher in the visual domain than for media reaching any of the other senses. Humans have remarkable perceptual abilities . . . Users can scan, recognize, and recall images rapidly, and can detect changes in size, shape, color, movement, or texture. They can point to a single pixel, even in a megapixel display, and can drag one object to another to perform an action. 1 For more on visual perception, see Gibson [32].</note>
+
+			<note place="foot" n="2"> For more on visuospatial thinking, see Shah and Miyake [60]. 3 For more on psychoacoustics, see Fastl and Zwicker [25]. 4 For more on language, see Vygotsky [78]. 4.4 Sociocultural awareness In addition to physical senses, human collaborators also afford attributes such as sociocultural awareness, which refers to an individual&apos;s understanding of their actions in relation to others and to the social , cultural, and historical context in which they are carried out. Researchers in the area of embodied interaction have long advocated for design that acknowledges the importance of this relationship. In [24], Dourish notes:</note>
+
+			<note place="foot" n="5"> For more on creativity, see Amabile [2].</note>
+		</body>
+		<back>
+			<div type="references">
+
+				<listBibl>
+
+<biblStruct coords="7,72.94,26.18,424.53,7.50;8,216.97,104.26,72.73,8.02;8,410.86,104.26,77.70,8.02;8,146.31,115.58,17.79,6.23;8,184.77,115.58,19.37,6.23;8,220.26,115.58,66.97,6.23;8,303.50,115.58,17.43,6.23;8,340.23,115.58,22.47,6.23;8,381.32,115.58,18.79,6.23;8,419.32,115.58,21.31,6.23;8,458.24,115.58,63.91,6.23;8,97.58,125.94,31.82,6.23;8,78.26,136.30,51.15,6.23;8,76.42,146.66,52.99,6.23;8,79.62,157.02,49.79,6.23;8,91.58,167.38,37.83,6.23;8,71.29,177.75,58.11,6.23;8,78.08,188.11,51.33,6.23;8,95.05,198.47,34.35,6.23;8,97.06,208.83,32.34,6.23;8,85.63,219.19,43.77,6.23;8,80.01,229.55,49.40,6.23;8,90.87,239.91,38.54,6.23"  xml:id="b0">
+	<monogr>
+		<title level="m" type="main">Human Affordances Machine Affordances Visual Spatial Aud/Ling Creativity Social Domain Comp. Storage Moving Bias-Free PatViz</title>
+		<author>
+			<persName>
+				<forename type="first">And Chang: An Affordance-Based</forename>
+				<surname>Framework</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<surname>Human</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<surname>Computation</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<surname>Human-Computer…</surname>
+			</persName>
+		</author>
+		<imprint/>
+	</monogr>
+	<note>62. ] reCAPTCHA [77] VizWiz [10] Phetch [74] ESP Game [73] KissKissBan [33] LabelMe [59</note>
+</biblStruct>
+
+<biblStruct coords="8,84.29,250.27,45.11,6.23;8,80.40,260.63,49.01,6.23;8,102.87,271.00,26.54,6.23;8,99.59,281.36,29.81,6.23;8,78.49,291.72,50.92,6.23;8,92.13,302.08,37.28,6.23"  xml:id="b1">
+	<monogr>
+		<title/>
+		<author>
+			<persName>
+				<surname>Ka-Captcha</surname>
+			</persName>
+		</author>
+		<imprint/>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,72.59,405.69,56.81,6.23;8,96.39,416.05,33.01,6.23;8,97.73,426.41,31.67,6.23;8,84.08,436.77,45.32,6.23;8,47.67,447.14,81.73,6.23;8,61.78,457.50,67.62,6.23;8,97.90,467.86,31.50,6.23"  xml:id="b2">
+	<monogr>
+		<title level="m" type="main">CzSaw [39] Fold.it [20] HRI scripts</title>
+		<author>
+			<persName>
+				<surname>Automated+viz</surname>
+			</persName>
+		</author>
+		<imprint/>
+	</monogr>
+	<note>Animated. agents for VR [56] VA Model-learning [29] EyeSpy [6]</note>
+</biblStruct>
+
+<biblStruct coords="8,80.26,478.22,49.14,6.23;8,76.69,488.58,52.71,6.23"  xml:id="b3">
+	<analytic>
+		<title/>
+	</analytic>
+	<monogr>
+		<title level="m">MonoTrans2 [35] CastingWords</title>
+		<imprint/>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,87.48,581.83,41.93,6.23"  xml:id="b4">
+	<monogr>
+		<title/>
+		<author>
+			<persName>
+				<surname>Tagatune</surname>
+			</persName>
+		</author>
+		<imprint/>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,81.95,592.19,47.45,6.23;8,75.55,602.55,53.85,6.23;8,77.50,612.91,51.91,6.23;8,58.50,623.27,70.90,6.23;8,89.31,633.64,40.09,6.23"  xml:id="b5">
+	<monogr>
+		<title level="m" type="main">Autism scripts [11] Social Games [43] Common Consensus [45] Verbosity</title>
+		<author>
+			<persName>
+				<surname>Majorminer</surname>
+			</persName>
+		</author>
+		<imprint/>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,22.50,652.86,513.00,7.37;8,22.50,662.32,513.00,7.37;8,22.50,671.79,114.41,7.37;9,35.49,74.58,246.39,7.13;9,49.76,84.13,232.12,6.86;9,49.76,93.51,202.72,7.13"  xml:id="b6">
+	<analytic>
+		<title level="a" type="main">Table 1. A table of all surveyed human-computer collaborative systems and the affordances they leverage. The human affordances listed are (in order): visual perception, visuospatial ability, audioliguistic ability, creativity, sociocultural awareness, and domain knowledge. The machine affordances listed are (in order) REFERENCES [1] E. Adar. Why i hate mechanical turk research (and workshops)</title>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. of the 29th SIGCHI Conf. on Human factors in computing systems: Workshop on Crowdsourcing and Human Computation</title>
+		<meeting>. of the 29th SIGCHI Conf. on Human factors in computing systems: Workshop on Crowdsourcing and Human Computation</meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="2011" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,49.76,102.97,232.12,7.13;9,49.76,112.44,110.42,7.13"  xml:id="b7">
+	<monogr>
+		<title level="m" type="main">Creativity in context: Update to &quot; the social psychology of creativity</title>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Amabile</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="1996" />
+			<publisher>Westview press</publisher>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,49.76,121.90,232.12,7.13;9,49.76,131.37,232.12,7.13;9,49.76,140.83,232.12,7.13;9,49.76,150.30,17.93,7.13"  xml:id="b8">
+	<analytic>
+		<title level="a" type="main">Using random projections to identify class-separating variables in high-dimensional spaces</title>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Anand</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<surname>Wilkinson</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Dang</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Visual Analytics Science and Technology (VAST), Conf. on</title>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2011" />
+			<biblScope unit="page" from="263" to="264" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,49.76,159.76,232.12,7.13;9,49.76,169.23,232.12,7.13;9,49.76,178.69,232.12,7.13;9,49.76,188.16,108.25,7.13"  xml:id="b9">
+	<analytic>
+		<title level="a" type="main">Interactive visual clustering of large collections of trajectories</title>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Andrienko</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Andrienko</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Rinzivillo</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Nanni</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Pedreschi</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<surname>Giannotti</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Visual Analytics Science and Technology (VAST) 2009, Symposium on</title>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2009" />
+			<biblScope unit="page" from="3" to="10" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,49.76,197.62,232.12,7.13;9,49.76,207.08,232.12,7.13;9,49.76,216.55,194.43,7.13"  xml:id="b10">
+	<analytic>
+		<title level="a" type="main">User-centered design of a social game to tag music</title>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<surname>Barrington</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>O &apos;malley</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Turnbull</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Lanckriet</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. of the ACM SIGKDD Workshop on Human Computation</title>
+		<meeting>. of the ACM SIGKDD Workshop on Human Computation</meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="2009" />
+			<biblScope unit="page" from="7" to="10" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,49.76,226.01,232.12,7.13;9,49.76,235.48,232.12,7.13;9,49.76,244.94,232.12,7.13;9,49.76,254.41,71.64,7.13"  xml:id="b11">
+	<analytic>
+		<title level="a" type="main">Eyespy: supporting navigation through play</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Bell</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Reeves</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Brown</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Sherwood</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Macmillan</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Ferguson</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Chalmers</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. of the 27th SIGCHI Conf. on Human factors in computing systems</title>
+		<meeting>. of the 27th SIGCHI Conf. on Human factors in computing systems</meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="2009" />
+			<biblScope unit="page" from="123" to="132" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,49.76,263.87,232.12,7.13;9,49.76,273.34,232.12,7.13;9,49.76,282.80,78.95,7.13"  xml:id="b12">
+	<analytic>
+		<title level="a" type="main">Protein folding in the hydrophobichydrophilic (hp) model is np-complete</title>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Berger</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Leighton</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Journal of Computational Biology</title>
+		<imprint>
+			<biblScope unit="volume">5</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="27" to="40" />
+			<date type="published" when="1998" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,49.76,292.26,232.12,7.13;9,49.76,301.73,232.12,7.13;9,49.76,311.19,232.12,7.13;9,49.76,320.66,130.53,7.13"  xml:id="b13">
+	<analytic>
+		<title level="a" type="main">Soylent: a word processor with a crowd inside</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Bernstein</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Little</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Miller</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Hartmann</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Ackerman</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Karger</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Crowell</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Panovich</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. of the 23rd symposium on User interface software and technology</title>
+		<meeting>. of the 23rd symposium on User interface software and technology</meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="2010" />
+			<biblScope unit="page" from="313" to="322" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,49.76,330.12,232.12,7.13;9,49.76,339.59,232.12,7.13;9,49.76,349.05,188.14,7.13"  xml:id="b14">
+	<analytic>
+		<title level="a" type="main">Investigating and reflecting on the integration of automatic data analysis and visualization in knowledge discovery</title>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<surname>Bertini</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Lalanne</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">ACM SIGKDD Explorations Newsletter</title>
+		<imprint>
+			<biblScope unit="volume">11</biblScope>
+			<biblScope unit="issue">2</biblScope>
+			<biblScope unit="page" from="9" to="18" />
+			<date type="published" when="2010" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,49.76,358.52,232.12,7.13;9,49.76,367.98,232.12,7.13;9,49.76,377.45,232.12,7.13;9,49.76,386.91,173.64,7.13"  xml:id="b15">
+	<analytic>
+		<title level="a" type="main">Vizwiz: nearly real-time answers to visual questions</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Bigham</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Jayant</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Ji</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Little</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Miller</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Miller</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Miller</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Tatarowicz</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>White</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>White</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. of the 23rd symposium on User interface software and technology</title>
+		<meeting>. of the 23rd symposium on User interface software and technology</meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="2010" />
+			<biblScope unit="page" from="333" to="342" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,49.76,396.37,232.12,7.13;9,49.76,405.84,232.12,7.13;9,49.76,415.30,180.61,7.13"  xml:id="b16">
+	<analytic>
+		<title level="a" type="main">Developing scripts to teach social skills: Can the crowd assist the author?</title>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<surname>Boujarwah</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Kim</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Abowd</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Arriaga</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Workshops at the Twenty-Fifth AAAI Conf. on Artificial Intelligence</title>
+		<imprint>
+			<date type="published" when="2011" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,49.76,424.77,232.12,7.13;9,49.76,434.23,232.12,7.13;9,49.76,443.70,232.12,7.13;9,49.76,453.16,55.12,7.13"  xml:id="b17">
+	<analytic>
+		<title level="a" type="main">Query-based coordinated multiple views with feature similarity space for visual analysis of mri repositories</title>
+		<author>
+			<persName>
+				<forename type="first">I</forename>
+				<surname>Bowman</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Joshi</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Van Horn</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Visual Analytics Science and Technology (VAST), Conf. on</title>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2011" />
+			<biblScope unit="page" from="267" to="268" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,49.76,462.63,232.12,7.13;9,49.76,472.09,232.12,7.13;9,49.76,481.55,232.12,7.13;9,49.76,491.02,29.89,7.13"  xml:id="b18">
+	<analytic>
+		<title level="a" type="main">Data, information, and knowledge in visualization</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Chen</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Ebert</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Hagen</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Laramee</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Van Liere</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Ma</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Ribarsky</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Scheuermann</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Silver</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Computer Graphics and Applications</title>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="2912" to="2931" />
+			<date type="published" when="2009" />
+			<publisher>IEEE</publisher>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,49.76,500.48,232.12,7.13;9,49.76,509.95,232.12,7.13;9,49.76,519.41,232.12,7.13;9,49.76,528.88,91.20,7.13"  xml:id="b19">
+	<analytic>
+		<title level="a" type="main">Supporting effective common ground construction in asynchronous collaborative visual analytics</title>
+		<author>
+			<persName>
+				<forename type="first">Y</forename>
+				<surname>Chen</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Alsakran</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Barlowe</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Yang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Y</forename>
+				<surname>Zhao</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Visual Analytics Science and Technology (VAST), Conf. on</title>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2011" />
+			<biblScope unit="page" from="101" to="110" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,49.76,538.34,232.12,7.13;9,49.76,547.81,232.12,7.13;9,49.76,557.27,192.03,7.13"  xml:id="b20">
+	<analytic>
+		<title level="a" type="main">Click2annotate: Automated insight externalization with rich semantics</title>
+		<author>
+			<persName>
+				<forename type="first">Y</forename>
+				<surname>Chen</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Barlowe</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Yang</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Visual Analytics Science and Technology (VAST), Symposium on</title>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2010" />
+			<biblScope unit="page" from="155" to="162" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,49.76,566.74,232.12,7.13;9,49.76,576.20,232.12,7.13;9,49.76,585.66,175.80,7.13"  xml:id="b21">
+	<analytic>
+		<title level="a" type="main">An iterative dual pathway structure for speech-to-text transcription</title>
+		<author>
+			<persName>
+				<forename type="first">Y</forename>
+				<surname>Chen</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Liem</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Zhang</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Human Computation: Papers from the AAAI Workshop</title>
+		<meeting><address><addrLine>San Francisco, CA</addrLine></address></meeting>
+		<imprint>
+			<date type="published" when="2011" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,49.76,595.13,232.12,7.13;9,49.76,604.59,232.12,7.13;9,49.76,614.06,17.93,7.13"  xml:id="b22">
+	<analytic>
+		<title level="a" type="main">Crowdsourcing hri through online multiplayer games</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Chernova</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Orkin</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Breazeal</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. Dialog with Robots: AAAI fall symposium</title>
+		<meeting>. Dialog with Robots: AAAI fall symposium</meeting>
+		<imprint>
+			<date type="published" when="2010" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,49.76,623.52,232.12,7.13;9,49.76,632.99,232.12,7.13;9,49.76,642.45,232.12,7.13;9,49.76,651.92,83.23,7.13"  xml:id="b23">
+	<analytic>
+		<title level="a" type="main">ivisclassifier: An interactive visual analytics system for classification based on supervised dimension reduction</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Choo</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Lee</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Kihm</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Park</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Visual Analytics Science and Technology (VAST), Symposium on</title>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2010" />
+			<biblScope unit="page" from="27" to="34" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,49.76,661.38,232.12,7.13;9,49.76,670.84,232.12,7.13;9,49.76,680.31,221.42,7.13"  xml:id="b24">
+	<analytic>
+		<title level="a" type="main">Stress outsourced: a haptic social network via crowdsourcing</title>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Chung</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Chiu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">X</forename>
+				<surname>Xiao</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Chi</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. of the 27th SIGCHI Conf. on Human factors in computing systems</title>
+		<meeting>. of the 27th SIGCHI Conf. on Human factors in computing systems</meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="2009" />
+			<biblScope unit="page" from="2439" to="2448" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,49.76,689.77,232.12,7.13;9,49.76,699.24,232.12,7.13;9,49.76,708.70,215.50,7.13"  xml:id="b25">
+	<analytic>
+		<title level="a" type="main">Predicting protein structures with a multiplayer online game</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Cooper</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<surname>Khatib</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Treuille</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Barbero</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Lee</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Beenen</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Leaver-Fay</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Baker</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Z</forename>
+				<surname>Popovic</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Nature</title>
+		<imprint>
+			<biblScope unit="issue">7307</biblScope>
+			<biblScope unit="page" from="466756" to="760" />
+			<date type="published" when="2010" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,49.76,718.17,232.12,7.13;9,49.76,727.63,232.12,7.13;9,49.76,737.10,119.52,7.13;9,294.12,54.06,250.38,7.13;9,312.38,63.52,232.12,7.13;9,312.38,72.99,65.31,7.13"  xml:id="b26">
+	<analytic>
+		<title level="a" type="main">Ka-captcha: An opportunity for knowledge acquisition on the web [22] S. Dekker and D. Woods. Maba-maba or abracadabra? progress on human-automation coordination</title>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Da</forename>
+				<surname>Silva</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Garcia</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. of the national Conf. on Artificial Intelligence</title>
+		<meeting>. of the national Conf. on Artificial Intelligence</meeting>
+		<imprint>
+			<date type="published" when="2002" />
+			<biblScope unit="page" from="1322240" to="244" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,312.38,82.45,232.12,7.13;9,312.38,91.92,232.12,7.13;9,312.38,101.38,154.76,7.13"  xml:id="b27">
+	<analytic>
+		<title level="a" type="main">Paralleltopics: A probabilistic approach to exploring document collections</title>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Dou</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">X</forename>
+				<surname>Wang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Chang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Ribarsky</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Conf. on</title>
+		<imprint>
+			<date type="published" when="2011" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,312.38,110.85,232.12,7.13;9,312.38,120.31,69.73,7.13"  xml:id="b28">
+	<monogr>
+		<title level="m" type="main">Where the action is: the foundations of embodied interaction</title>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Dourish</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2004" />
+			<publisher>The MIT Press</publisher>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,312.38,129.78,232.12,7.13;9,312.38,139.24,119.17,7.13"  xml:id="b29">
+	<monogr>
+		<title level="m" type="main">Psychoacoustics: facts and models</title>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Fastl</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<surname>Zwicker</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2007" />
+			<publisher>Springer-Verlag</publisher>
+			<pubPlace>New York Inc</pubPlace>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,312.38,148.70,232.12,7.13;9,312.38,158.17,232.12,7.13;9,312.38,167.63,169.28,7.13"  xml:id="b30">
+	<analytic>
+		<title level="a" type="main">Trips: An integrated intelligent problemsolving assistant</title>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Ferguson</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Allen</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. of the National Conf. on Artificial Intelligence</title>
+		<meeting>. of the National Conf. on Artificial Intelligence</meeting>
+		<imprint>
+			<publisher>JOHN WILEY &amp; SONS LTD</publisher>
+			<date type="published" when="1998" />
+			<biblScope unit="page" from="567" to="573" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,312.38,177.10,232.12,7.13;9,312.38,186.56,69.51,7.13"  xml:id="b31">
+	<monogr>
+		<title level="m" type="main">Human engineering for an effective air-navigation and trafficcontrol system</title>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Fitts</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="1951" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,312.38,196.03,232.12,7.13;9,312.38,205.49,232.12,7.13;9,312.38,214.96,17.93,7.13"  xml:id="b32">
+	<monogr>
+		<title level="m" type="main">Visual human+ machine learning. Visualization and Computer Graphics, Transactions on</title>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Fuchs</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Waser</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Groller</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2009" />
+			<biblScope unit="page" from="1327" to="1334" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,312.38,224.42,232.12,7.13;9,312.38,233.88,232.12,7.13;9,312.38,243.35,133.48,7.13"  xml:id="b33">
+	<analytic>
+		<title level="a" type="main">A visual analytics approach to model learning</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Garg</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">I</forename>
+				<surname>Ramakrishnan</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Mueller</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Visual Analytics Science and Technology (VAST), Symposium on</title>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2010" />
+			<biblScope unit="page" from="67" to="74" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,312.38,252.81,232.12,7.13;9,312.38,262.28,232.12,7.13;9,312.38,271.74,63.66,7.13"  xml:id="b34">
+	<analytic>
+		<title level="a" type="main">Technology affordances</title>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Gaver</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. of the SIGCHI Conf. on Human factors in computing systems: Reaching through technology</title>
+		<meeting>. of the SIGCHI Conf. on Human factors in computing systems: Reaching through technology</meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="1991" />
+			<biblScope unit="page" from="79" to="84" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,312.38,281.21,232.12,7.13;9,312.38,290.67,61.98,7.13"  xml:id="b35">
+	<monogr>
+		<title level="m" type="main">The theory of affordances. Perceiving, acting, and knowing</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Gibson</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="1977" />
+			<biblScope unit="page" from="67" to="82" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,312.38,300.14,232.12,7.13;9,312.38,309.60,39.63,7.13"  xml:id="b36">
+	<monogr>
+		<title level="m" type="main">The ecological approach to visual perception</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Gibson</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="1986" />
+			<pubPlace>Lawrence Erlbaum</pubPlace>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,312.38,319.07,232.12,7.13;9,312.38,328.53,232.12,7.13;9,312.38,337.99,198.42,7.13"  xml:id="b37">
+	<analytic>
+		<title level="a" type="main">Kisskissban: a competitive human computation game for image annotation</title>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Ho</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Chang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Lee</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Hsu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Chen</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. of the SIGKDD Workshop on Human Computation</title>
+		<meeting>. of the SIGKDD Workshop on Human Computation</meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="2009" />
+			<biblScope unit="page" from="11" to="14" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,312.38,347.46,232.12,7.13;9,312.38,357.00,232.12,6.86;9,312.38,366.39,110.38,7.13"  xml:id="b38">
+	<analytic>
+		<title level="a" type="main">Principles of mixed-initiative user interfaces</title>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<surname>Horvitz</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. of the SIGCHI Conf. on Human factors in computing systems: the CHI is the limit</title>
+		<meeting>. of the SIGCHI Conf. on Human factors in computing systems: the CHI is the limit</meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="1999" />
+			<biblScope unit="page" from="159" to="166" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,312.38,375.85,232.12,7.13;9,312.38,385.32,232.12,7.13;9,312.38,394.78,232.12,7.13;9,312.38,404.25,79.61,7.13"  xml:id="b39">
+	<analytic>
+		<title level="a" type="main">Monotrans2: A new human computation system to support monolingual translation</title>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Hu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Bederson</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Resnik</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Y</forename>
+				<surname>Kronrod</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. of the 29th SIGCHI Conf. on Human factors in computing systems</title>
+		<meeting>. of the 29th SIGCHI Conf. on Human factors in computing systems</meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="2011" />
+			<biblScope unit="page" from="1133" to="1136" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,312.38,413.71,232.12,7.13;9,312.38,423.17,232.12,7.13;9,312.38,432.64,232.12,7.13;9,312.38,442.10,17.93,7.13"  xml:id="b40">
+	<analytic>
+		<title level="a" type="main">Dimstiller: Workflows for dimensional analysis and reduction</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Ingram</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Munzner</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">V</forename>
+				<surname>Irvine</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Tory</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Bergner</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Mller</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Visual Analytics Science and Technology (VAST), Symposium on</title>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2010" />
+			<biblScope unit="page" from="3" to="10" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,312.38,451.57,232.12,7.13;9,312.38,461.03,232.12,7.13;9,312.38,470.50,81.25,7.13"  xml:id="b41">
+	<monogr>
+		<title level="m" type="main">Saliency-assisted navigation of very large landscape images. Visualization and Computer Graphics, Transactions on</title>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Ip</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Varshney</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2011" />
+			<biblScope unit="page" from="1737" to="1746" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,312.38,479.96,232.12,7.13;9,312.38,489.43,205.25,7.13"  xml:id="b42">
+	<analytic>
+		<title level="a" type="main">Allocation of functions between man and machines in automated systems</title>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Jordan</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Journal of applied psychology</title>
+		<imprint>
+			<biblScope unit="volume">47</biblScope>
+			<biblScope unit="issue">3</biblScope>
+			<biblScope unit="page">161</biblScope>
+			<date type="published" when="1963" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,312.38,498.89,232.12,7.13;9,312.38,508.36,232.12,7.13;9,312.38,517.82,232.12,7.13;9,312.38,527.28,71.06,7.13"  xml:id="b43">
+	<analytic>
+		<title level="a" type="main">Capturing and supporting the analysis process</title>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Kadivar</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">V</forename>
+				<surname>Chen</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Dunsmuir</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<surname>Lee</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Qian</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Dill</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Shaw</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Woodbury</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Visual Analytics Science and Technology (VAST), Symposium on</title>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2009" />
+			<biblScope unit="page" from="131" to="138" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,312.38,536.75,232.12,7.13;9,312.38,546.21,232.12,7.13"  xml:id="b44">
+	<analytic>
+		<title level="a" type="main">Wrangler: Interactive visual specification of data transformation scripts</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Kandel</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Paepcke</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Hellerstein</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Heer</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. of the</title>
+		<meeting>. of the</meeting>
+		<imprint>
+			<date type="published" when="2011" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,312.38,555.68,232.12,7.13;9,312.38,565.14,17.93,7.13"  xml:id="b45">
+	<monogr>
+		<title level="m" type="main">on Human factors in computing systems</title>
+		<author>
+			<persName>
+				<surname>Conf</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2011" />
+			<publisher>ACM</publisher>
+			<biblScope unit="page" from="3363" to="3372" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,312.38,574.61,232.12,7.13;9,312.38,584.07,232.12,7.13;9,312.38,593.54,220.62,7.13"  xml:id="b46">
+	<analytic>
+		<title level="a" type="main">Iterative integration of visual insights during patent search and analysis</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Koch</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Bosch</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Giereth</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Ertl</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Visual Analytics Science and Technology (VAST), Symposium on</title>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2009" />
+			<biblScope unit="page" from="203" to="210" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,312.38,603.00,232.12,7.13;9,312.38,612.47,232.12,7.13;9,312.38,621.93,63.55,7.13"  xml:id="b47">
+	<analytic>
+		<title level="a" type="main">The complexity of crowdsourcing: Theoretical problems in human computation</title>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Kulkarni</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">CHI Workshop on Crowdsourcing and Human Computation</title>
+		<imprint>
+			<date type="published" when="2011" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,312.38,631.39,232.12,7.13;9,312.38,640.86,232.12,7.13;9,312.38,650.32,232.12,7.13;9,312.38,659.79,154.87,7.13"  xml:id="b48">
+	<analytic>
+		<title level="a" type="main">Community-based game design: experiments on social games for commonsense data collection</title>
+		<author>
+			<persName>
+				<forename type="first">Y</forename>
+				<surname>Kuo</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Lee</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Chiang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Wang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<surname>Shen</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Chan</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Hsu</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. of the ACM SIGKDD Workshop on Human Computation</title>
+		<meeting>. of the ACM SIGKDD Workshop on Human Computation</meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="2009" />
+			<biblScope unit="page" from="15" to="22" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,312.38,669.25,232.12,7.13;9,312.38,678.72,232.12,7.13;9,312.38,688.18,17.93,7.13"  xml:id="b49">
+	<analytic>
+		<title level="a" type="main">Tagatune: A game for music and sound annotation</title>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<surname>Law</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<surname>Von Ahn</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Dannenberg</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Crawford</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Proc. of ISMIR</title>
+		<imprint>
+			<date type="published" when="2007" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,312.38,697.65,232.12,7.13;9,312.38,707.11,232.12,7.13;9,312.38,716.57,150.67,7.13"  xml:id="b50">
+	<analytic>
+		<title level="a" type="main">Common consensus: a webbased game for collecting commonsense goals</title>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Lieberman</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Smith</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Teeters</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">ACM Workshop on Common Sense for Intelligent Interfaces</title>
+		<imprint>
+			<date type="published" when="2007" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,312.38,726.04,232.12,7.13;9,312.38,735.50,232.12,7.13;9,532.75,26.46,16.00,7.26"  xml:id="b51">
+	<analytic>
+		<title level="a" type="main">Helping users recall their reasoning process</title>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Lipford</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<surname>Stukes</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Dou</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Hawkins</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Chang</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Visual Analytics Science and Technology 2867</title>
+		<imprint/>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,30.75,26.18,466.72,7.50;10,40.76,54.06,168.42,7.13"  xml:id="b52">
+	<analytic>
+		<title/>
+		<author>
+			<persName>
+				<forename type="first">Crouser</forename>
+				<surname>And</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Chang: An Affordance-Based</forename>
+				<surname>Framework</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<surname>Human</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<surname>Computation</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<surname>Human-Computer…</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Symposium on</title>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2010" />
+			<biblScope unit="page" from="187" to="194" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,63.52,232.12,7.13;10,40.76,72.99,232.12,7.13;10,40.76,82.45,232.12,7.13;10,40.76,91.92,71.06,7.13"  xml:id="b53">
+	<analytic>
+		<title level="a" type="main">Netclinic: Interactive visualization to enhance automated fault diagnosis in enterprise networks</title>
+		<author>
+			<persName>
+				<forename type="first">Z</forename>
+				<surname>Liu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Lee</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Kandula</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Mahajan</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Visual Analytics Science and Technology (VAST), Symposium on</title>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2010" />
+			<biblScope unit="page" from="131" to="138" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,101.38,232.12,7.13;10,40.76,110.85,232.12,7.13;10,40.76,120.31,198.42,7.13"  xml:id="b54">
+	<analytic>
+		<title level="a" type="main">Page hunt: using human computation games to improve web search</title>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Ma</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Chandrasekar</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Quirk</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Gupta</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. of the ACM SIGKDD Workshop on Human Computation</title>
+		<meeting>. of the ACM SIGKDD Workshop on Human Computation</meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="2009" />
+			<biblScope unit="page" from="27" to="28" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,129.78,232.12,7.13;10,40.76,139.24,192.96,7.13"  xml:id="b55">
+	<analytic>
+		<title level="a" type="main">A web-based game for collecting music metadata</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Mandel</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Ellis</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Journal of New Music Research</title>
+		<imprint>
+			<biblScope unit="volume">37</biblScope>
+			<biblScope unit="issue">2</biblScope>
+			<biblScope unit="page" from="151" to="165" />
+			<date type="published" when="2008" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,148.70,232.12,7.13;10,40.76,158.17,232.12,7.13;10,40.76,167.63,228.02,7.13"  xml:id="b56">
+	<analytic>
+		<title level="a" type="main">Interactive decision making using dissimilarity to visually represented prototypes</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Migut</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Van Gemert</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Worring</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Visual Analytics Science and Technology (VAST), Conf. on</title>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2011" />
+			<biblScope unit="page" from="141" to="149" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,177.10,232.12,7.13;10,40.76,186.56,232.12,7.13;10,40.76,196.03,133.48,7.13"  xml:id="b57">
+	<analytic>
+		<title level="a" type="main">Visual exploration of classification models for risk assessment</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Migut</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Worring</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Visual Analytics Science and Technology (VAST), Symposium on</title>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2010" />
+			<biblScope unit="page" from="11" to="18" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,205.49,232.12,7.13;10,40.76,214.96,121.62,7.13"  xml:id="b58">
+	<analytic>
+		<title level="a" type="main">Cramming more components onto integrated circuits</title>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Moore</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. of the IEEE</title>
+		<meeting>. of the IEEE</meeting>
+		<imprint>
+			<date type="published" when="1998" />
+			<biblScope unit="page" from="82" to="85" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,224.42,201.31,7.13"  xml:id="b59">
+	<monogr>
+		<title level="m" type="main">The design of everyday things. Basic books</title>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Norman</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2002" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,233.88,232.12,7.13;10,40.76,243.35,232.12,7.13;10,40.76,252.81,17.93,7.13"  xml:id="b60">
+	<analytic>
+		<title level="a" type="main">The allocation of functions in systems</title>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Price</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Human Factors: The Journal of the Human Factors and Ergonomics Society</title>
+		<imprint>
+			<biblScope unit="volume">27</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="33" to="45" />
+			<date type="published" when="1985" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,262.28,232.12,7.13;10,40.76,271.74,232.12,7.13;10,40.76,281.21,171.91,7.13"  xml:id="b61">
+	<analytic>
+		<title level="a" type="main">Human computation: a survey and taxonomy of a growing field</title>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Quinn</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Bederson</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. of the 29th SIGCHI Conf. on Human factors in computing systems</title>
+		<meeting>. of the 29th SIGCHI Conf. on Human factors in computing systems</meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="2011" />
+			<biblScope unit="page" from="1403" to="1412" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,290.67,232.12,7.13;10,40.76,300.14,232.12,7.13;10,40.76,309.60,117.46,7.13"  xml:id="b62">
+	<analytic>
+		<title level="a" type="main">Animated agents for procedural training in virtual reality: Perception, cognition, and motor control</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Rickel</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Johnson</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Applied Artificial Intelligence</title>
+		<imprint>
+			<biblScope unit="volume">13</biblScope>
+			<biblScope unit="issue">4-5</biblScope>
+			<biblScope unit="page" from="343" to="382" />
+			<date type="published" when="1999" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,319.07,232.12,7.13;10,40.76,328.53,232.12,7.13;10,40.76,337.99,149.10,7.13"  xml:id="b63">
+	<analytic>
+		<title level="a" type="main">Automatic transfer functions based on informational divergence</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Ruiz</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Bardera</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">I</forename>
+				<surname>Boada</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">I</forename>
+				<surname>Viola</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Visualization and Computer Graphics , Transactions on</title>
+		<imprint>
+			<biblScope unit="volume">17</biblScope>
+			<biblScope unit="issue">12</biblScope>
+			<biblScope unit="page" from="1932" to="1941" />
+			<date type="published" when="2011" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,347.46,232.12,7.13;10,40.76,356.92,103.91,7.13"  xml:id="b64">
+	<monogr>
+		<title level="m" type="main">Creativity: Theories and themes: Research, development, and practice</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Runco</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2007" />
+			<publisher>Academic Press</publisher>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,366.39,232.12,7.13;10,40.76,375.85,232.12,7.13;10,40.76,385.32,111.13,7.13"  xml:id="b65">
+	<analytic>
+		<title level="a" type="main">Labelme: a database and web-based tool for image annotation</title>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Russell</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Torralba</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Murphy</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Freeman</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Int&apos;l journal of computer vision</title>
+		<imprint>
+			<biblScope unit="volume">77</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="157" to="173" />
+			<date type="published" when="2008" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,394.78,232.12,7.13;10,40.76,404.25,98.88,7.13"  xml:id="b66">
+	<monogr>
+		<title level="m" type="main">The Cambridge handbook of visuospatial thinking</title>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Shah</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Miyake</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2005" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,413.71,232.12,7.13;10,40.76,423.25,232.12,6.86;10,40.76,432.64,17.93,7.13"  xml:id="b67">
+	<analytic>
+		<title level="a" type="main">Towards a theory of ai completeness</title>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Shahaf</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<surname>Amir</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">8th Interational symposium on logic formalizations of commonsense reasoning</title>
+		<imprint>
+			<date type="published" when="2007" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,442.10,232.12,7.13;10,40.76,451.57,232.12,7.13;10,40.76,461.03,213.45,7.13"  xml:id="b68">
+	<analytic>
+		<title level="a" type="main">Human-aided computing: Utilizing implicit human processing to classify images</title>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Shenoy</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Tan</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. of the 26th SIGCHI Conf. on Human factors in computing systems</title>
+		<meeting>. of the 26th SIGCHI Conf. on Human factors in computing systems</meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="2008" />
+			<biblScope unit="page" from="845" to="854" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,470.50,232.12,7.13;10,40.76,479.96,191.07,7.13"  xml:id="b69">
+	<analytic>
+		<title level="a" type="main">Function allocation: algorithm, alchemy or apostasy? Int&apos;l</title>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Sheridan</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Journal of Human-Computer Studies</title>
+		<imprint>
+			<biblScope unit="volume">52</biblScope>
+			<biblScope unit="issue">2</biblScope>
+			<biblScope unit="page" from="203" to="216" />
+			<date type="published" when="2000" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,489.43,232.12,7.13;10,40.76,498.89,232.12,7.13;10,40.76,508.36,128.17,7.13"  xml:id="b70">
+	<analytic>
+		<title level="a" type="main">The eyes have it: A task by data type taxonomy for information visualizations</title>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Shneiderman</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Visual Languages Proc.., IEEE Symposium on</title>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="1996" />
+			<biblScope unit="page" from="336" to="343" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,517.82,232.12,7.13;10,40.76,527.28,232.12,7.13;10,40.76,536.75,91.20,7.13"  xml:id="b71">
+	<analytic>
+		<title level="a" type="main">Connecting the dots in visual analysis</title>
+		<author>
+			<persName>
+				<forename type="first">Y</forename>
+				<surname>Shrinivasan</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Gotzy</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Lu</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Visual Analytics Science and Technology (VAST), Symposium on</title>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2009" />
+			<biblScope unit="page" from="123" to="130" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,546.21,232.12,7.13;10,40.76,555.68,232.12,7.13;10,40.76,565.14,232.12,7.13;10,40.76,574.61,133.48,7.13"  xml:id="b72">
+	<analytic>
+		<title level="a" type="main">Guided analysis of hurricane trends using statistical processes integrated with interactive parallel coordinates</title>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Steed</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Swan</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Jankun-Kelly</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Fitzpatrick</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Visual Analytics Science and Technology (VAST), Symposium on</title>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2009" />
+			<biblScope unit="page" from="19" to="26" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,584.07,232.12,7.13;10,40.76,593.54,232.12,7.13;10,40.76,603.00,232.12,7.13;10,40.76,612.47,44.94,7.13"  xml:id="b73">
+	<analytic>
+		<title level="a" type="main">Conceptual combination versus critical combination: Devising creative solutions using the sequential application of crowds</title>
+		<author>
+			<persName>
+				<forename type="first">Y</forename>
+				<surname>Tanaka</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Y</forename>
+				<surname>Sakamoto</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Kusumi</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. of the 33rd Conf. of the Cognitive Science Society</title>
+		<meeting>. of the 33rd Conf. of the Cognitive Science Society</meeting>
+		<imprint>
+			<date type="published" when="2011" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,621.93,232.12,7.13;10,40.76,631.39,232.12,7.13;10,40.76,640.86,232.12,7.13;10,40.76,650.32,232.12,7.13;10,40.76,659.79,63.09,7.13"  xml:id="b74">
+	<analytic>
+		<title level="a" type="main">Combining automated analysis and visualization techniques for effective exploration of high-dimensional data</title>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Tatu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Albuquerque</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Eisemann</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Schneidewind</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Theisel</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Magnork</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Keim</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Visual Analytics Science and Technology (VAST), Symposium on</title>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2009" />
+			<biblScope unit="page" from="59" to="66" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,669.25,232.12,7.13;10,40.76,678.72,114.67,7.13"  xml:id="b75">
+	<monogr>
+		<title level="m" type="main">Overview of human-computer collaboration. Knowledge- Based Systems</title>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<surname>Terveen</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="1995" />
+			<biblScope unit="page" from="67" to="81" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,688.18,232.12,7.13;10,40.76,697.65,193.60,7.13"  xml:id="b76">
+	<analytic>
+		<title level="a" type="main">Illuminating the path: The research and development agenda for visual analytics</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Thomas</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Cook</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE</title>
+		<imprint>
+			<biblScope unit="volume">54</biblScope>
+			<date type="published" when="2005" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,707.11,232.12,7.13;10,40.76,716.57,231.43,7.13"  xml:id="b77">
+	<analytic>
+		<title level="a" type="main">Principles of human-computer collaboration for knowledge discovery in science</title>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Valdés-Pérez</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Artificial Intelligence</title>
+		<imprint>
+			<biblScope unit="volume">107</biblScope>
+			<biblScope unit="issue">2</biblScope>
+			<biblScope unit="page" from="335" to="346" />
+			<date type="published" when="1999" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,726.04,232.12,7.13;10,40.76,735.50,32.92,7.13;10,285.12,54.06,250.38,7.13;10,303.38,63.60,232.12,6.86;10,303.38,72.99,91.78,7.13"  xml:id="b78">
+	<analytic>
+		<title level="a" type="main">Human Computation [73] L. Von Ahn and L. Dabbish. Labeling images with a computer game</title>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Von</forename>
+				<surname>Ahn</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. of the 22nd SIGCHI Conf. on Human factors in computing systems</title>
+		<meeting>. of the 22nd SIGCHI Conf. on Human factors in computing systems</meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="2004" />
+			<biblScope unit="page" from="319" to="326" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,82.45,232.12,7.13;10,303.38,91.92,232.12,7.13;10,303.38,101.38,232.12,7.13"  xml:id="b79">
+	<analytic>
+		<title level="a" type="main">Improving accessibility of the web with a computer game</title>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<surname>Von Ahn</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Ginosar</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Kedia</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Liu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Blum</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. of the 24th SIGCHI Conf. on Human factors in computing systems</title>
+		<meeting>. of the 24th SIGCHI Conf. on Human factors in computing systems</meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="2006" />
+			<biblScope unit="page" from="79" to="82" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,110.85,232.12,7.13;10,303.38,120.31,232.12,7.13;10,303.38,129.78,180.03,7.13"  xml:id="b80">
+	<analytic>
+		<title level="a" type="main">Verbosity: a game for collecting common-sense facts</title>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<surname>Von Ahn</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Kedia</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Blum</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. of the 24th SIGCHI Conf. on Human factors in computing systems</title>
+		<meeting>. of the 24th SIGCHI Conf. on Human factors in computing systems</meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="2006" />
+			<biblScope unit="page" from="75" to="78" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,139.24,232.12,7.13;10,303.38,148.70,232.12,7.13;10,303.38,158.17,155.97,7.13"  xml:id="b81">
+	<analytic>
+		<title level="a" type="main">Peekaboom: a game for locating objects in images</title>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<surname>Von Ahn</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Liu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Blum</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. of the 24th SIGCHI Conf. on Human factors in computing systems</title>
+		<meeting>. of the 24th SIGCHI Conf. on Human factors in computing systems</meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="2006" />
+			<biblScope unit="page" from="55" to="64" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,167.63,232.12,7.13;10,303.38,177.10,232.12,7.13;10,303.38,186.56,121.53,7.13"  xml:id="b82">
+	<analytic>
+		<title level="a" type="main">recaptcha: Human-based character recognition via web security measures</title>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<surname>Von Ahn</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Maurer</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Mcmillen</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Abraham</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Blum</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Science</title>
+		<imprint>
+			<biblScope unit="issue">5895</biblScope>
+			<biblScope unit="page" from="3211465" to="1468" />
+			<date type="published" when="2008" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,196.03,125.67,7.13"  xml:id="b83">
+	<monogr>
+		<title level="m" type="main">Thought and word</title>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<surname>Vygotsky</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="1962" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,205.49,232.12,7.13;10,303.38,214.96,61.32,7.13"  xml:id="b84">
+	<analytic>
+		<title level="a" type="main">Five deep questions in computing</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Wing</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Communications of the ACM</title>
+		<imprint>
+			<biblScope unit="volume">51</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="58" to="60" />
+			<date type="published" when="2008" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,224.42,232.12,7.13;10,303.38,233.88,232.12,7.13;10,303.38,243.35,232.12,7.13"  xml:id="b85">
+	<analytic>
+		<title level="a" type="main">Crowdsearch: exploiting crowds for accurate real-time image search on mobile phones</title>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Yan</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">V</forename>
+				<surname>Kumar</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Ganesan</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. of the 8th Int&apos;l Conf. on Mobile systems, applications, and services</title>
+		<meeting>. of the 8th Int&apos;l Conf. on Mobile systems, applications, and services</meeting>
+		<imprint>
+			<biblScope unit="page" from="77" to="90" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,252.81,39.75,7.13"  xml:id="b86">
+	<analytic>
+		<title/>
+	</analytic>
+	<monogr>
+		<title level="j">ACM</title>
+		<imprint>
+			<date type="published" when="2010" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,262.28,232.12,7.13;10,303.38,271.74,232.12,7.13;10,303.38,281.21,163.72,7.13"  xml:id="b87">
+	<analytic>
+		<title level="a" type="main">Cooks or cobblers?: crowd creativity through combination</title>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<surname>Yu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Nickerson</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. of the 29th SIGCHI Conf. on Human factors in computing systems</title>
+		<meeting>. of the 29th SIGCHI Conf. on Human factors in computing systems</meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="2011" />
+			<biblScope unit="page" from="1393" to="1402" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,290.67,232.12,7.13;10,303.38,300.14,232.12,7.13;10,303.38,309.60,91.20,7.13"  xml:id="b88">
+	<analytic>
+		<title level="a" type="main">A survey of human computation systems</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Yuen</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<surname>Chen</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">I</forename>
+				<surname>King</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Computational Science and Engineering, Int&apos;l Conf. on</title>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2009" />
+			<biblScope unit="page" from="723" to="728" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,319.07,232.12,7.13;10,303.38,328.53,232.12,7.13;10,303.38,337.99,232.12,7.13;10,303.38,347.46,17.93,7.13"  xml:id="b89">
+	<analytic>
+		<title level="a" type="main">iview: A feature clustering framework for suggesting informative views in volume visualization</title>
+		<author>
+			<persName>
+				<forename type="first">Z</forename>
+				<surname>Zheng</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Ahmed</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Mueller</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Visualization and Computer Graphics, Transactions on</title>
+		<imprint>
+			<biblScope unit="volume">17</biblScope>
+			<biblScope unit="issue">12</biblScope>
+			<biblScope unit="page" from="1959" to="1968" />
+			<date type="published" when="2011" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+				</listBibl>
+			</div>
+		</back>
+	</text>
+</TEI>

@@ -1,0 +1,1804 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.tei-c.org/ns/1.0 /home/pisenberg/grobid/grobid-home/schemas/xsd/Grobid.xsd"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+	<teiHeader xml:lang="en">
+		<encodingDesc>
+			<appInfo>
+				<application version="0.4.1" ident="GROBID" when="2016-09-09T13:50+0000">
+					<ref target="https://github.com/kermitt2/grobid">GROBID - A machine learning software for extracting information from scholarly documents</ref>
+				</application>
+			</appInfo>
+		</encodingDesc>
+		<fileDesc>
+			<titleStmt>
+				<title level="a" type="main">LoyalTracker: Visualizing Loyalty Dynamics in Search Engines</title>
+			</titleStmt>
+			<publicationStmt>
+				<publisher/>
+				<availability status="unknown"><licence/></availability>
+			</publicationStmt>
+			<sourceDesc>
+				<biblStruct>
+					<analytic>
+						<author>
+							<persName>
+								<forename type="first">Conglei</forename>
+								<surname>Shi</surname>
+							</persName>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Yingcai</forename>
+								<surname>Wu</surname>
+								<roleName>Member, Ieee</roleName>
+							</persName>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Shixia</forename>
+								<surname>Liu</surname>
+								<roleName>Senior Member, Ieee</roleName>
+							</persName>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Hong</forename>
+								<surname>Zhou</surname>
+							</persName>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Huamin</forename>
+								<surname>Qu</surname>
+								<roleName>Member, Ieee</roleName>
+							</persName>
+						</author>
+						<title level="a" type="main">LoyalTracker: Visualizing Loyalty Dynamics in Search Engines</title>
+					</analytic>
+					<monogr>
+						<imprint>
+							<date/>
+						</imprint>
+					</monogr>
+					<idno type="DOI">10.1109/TVCG.2014.2346912</idno>
+					<note>1733</note>
+				</biblStruct>
+			</sourceDesc>
+		</fileDesc>
+		<profileDesc>
+			<textClass>
+				<keywords>
+					<term>Index Terms—Time-series visualization</term>
+					<term>stacked graphs</term>
+					<term>log data visualization</term>
+					<term>text visualization</term>
+				</keywords>
+			</textClass>
+			<abstract>
+				<p>7-1 5 7-2 2 7-2 9 8-5 8-1 2 8-1 9 selected layer flow inflow branch outflow branch 1~7 8~15 16~25 26~ engine C engine B 7-1 5 7-2 2 7-2 9 8-5 8-1 2 8-1 9 selected branch flow Fig. 1: LoyalTracker illustrates loyalty dynamics of the users using search engine A. Top and bottom show the same flow view that highlights two different flowing patterns of the users (in orange) selected from a layer flow (top) and a branch flow (bottom) across multiple loyalty categories (layers) over time. The switching histogram on the top shows a visual summary of switching behavior. Abstract—The huge amount of user log data collected by search engine providers creates new opportunities to understand user loyalty and defection behavior at an unprecedented scale. However, this also poses a great challenge to analyze the behavior and glean insights into the complex, large data. In this paper, we introduce LoyalTracker, a visual analytics system to track user loyalty and switching behavior towards multiple search engines from the vast amount of user log data. We propose a new interactive visualization technique (flow view) based on a flow metaphor, which conveys a proper visual summary of the dynamics of user loyalty of thousands of users over time. Two other visualization techniques, a density map and a word cloud, are integrated to enable analysts to gain further insights into the patterns identified by the flow view. Case studies and the interview with domain experts are conducted to demonstrate the usefulness of our technique in understanding user loyalty and switching behavior in search engines.</p>
+			</abstract>
+		</profileDesc>
+	</teiHeader>
+	<text xml:lang="en">
+		<body>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1">INTRODUCTION</head><p>Search engines have become a necessity in our daily life, as the search engines empower us to find our desired information rapidly from the vast volume of web pages. Search engine business has thus become one of the most profitable businesses on Internet. Meanwhile, search engine providers also face fierce market competition <ref type="bibr" coords="1,243.03,436.18,14.30,10.80" target="#b16">[17,</ref><ref type="bibr" coords="1,260.02,436.18,10.72,10.80" target="#b25"> 27]</ref>. Prior studies show that 70% of users rely on multiple search engines and due to the low switching cost, engine switching happens frequently <ref type="bibr" coords="1,280.81,456.11,13.87,10.80" target="#b42">[44]</ref>. Earning loyalty can be critically important for search engine providers. Customer loyalty has long been regarded as a vital source of sustained profits, which enables a company to develop a sustainable advantage over competitors <ref type="bibr" coords="1,109.04,495.96,9.56,10.80" target="#b0">[1]</ref>. Retaining merely 5% of customers can improve profits by almost 100% <ref type="bibr" coords="1,133.01,505.92,13.85,10.80" target="#b26">[28]</ref> . Therefore, effectively tracking user loyalty and understanding how and why loyalty changes and users leave become particularly indispensable for search engine providers. As online service providers, search engine companies can collect large-scale log data from their users who consent to provide their search data, offering a richer source of data for an in-depth analysis of user behavior. This capability attracts considerable research attention from different research areas such as data mining and visualization. Extensive studies have been conducted to analyze the user behavior with respects to search engine switching <ref type="bibr" coords="1,189.03,595.93,9.60,10.80" target="#b8">[9,</ref><ref type="bibr" coords="1,200.69,595.93,11.16,10.80" target="#b40"> 42,</ref><ref type="bibr" coords="1,213.91,595.93,11.16,10.80" target="#b41"> 43,</ref><ref type="bibr" coords="1,227.13,595.93,10.57,10.80" target="#b42"> 44]</ref>. However, most existing work mainly focuses on short-term search engine switching behavior <ref type="bibr" coords="1,81.30,615.86,15.06,10.80" target="#b41">[43] </ref>and uses simple statistical methods to validate some given assumptions rather than detect abnormal or unexpected patterns. Visualization practitioners have also developed various systems <ref type="bibr" coords="1,533.00,405.92,14.08,10.80" target="#b24">[26,</ref><ref type="bibr" coords="1,549.16,405.92,11.16,10.80" target="#b38"> 40,</ref><ref type="bibr" coords="1,308.83,415.88,11.25,10.80" target="#b20"> 21,</ref><ref type="bibr" coords="1,322.40,415.88,12.01,10.80" target="#b32"> 34] </ref>using visualization techniques such as graphs to explore user behavior from the collected user log data. Nevertheless, most systems aim at visualizing Web traffic and/or user navigation paths through a website, but are incapable of tracking user retention rigorously or conducting a systematic analysis of defection patterns. A system capable of tracking customer loyalty is critically important for companies to prevent customer defection. For instance, customers usually have a higher probability of leaving when loyalty is found to be continuously decreasing. With an effective visualization system, a company can make an informed decision to customize its offerings or to take other necessary actions to retain customers. However, there are few proper visualization techniques that can be used to solve the problem. One particular challenge is the design of an intuitive and interactive visual representation to understand long-term behavior better, as characterized by dynamic loyalty variation and frequent defection over time <ref type="bibr" coords="1,346.51,570.07,14.30,10.80" target="#b25">[27,</ref><ref type="bibr" coords="1,363.53,570.07,10.72,10.80" target="#b41"> 43]</ref>. In addition, the faster word-of-mouth and lower switching costs on the Internet change the pace at which companies must improve their products and services to keep users loyal. These goals require timely detection and a thorough analysis of user loyalty and defection <ref type="bibr" coords="1,362.49,609.92,13.88,10.80" target="#b25">[27]</ref>. The growing scalability of the search log data makes timely detection and analysis difficult. Despite the discovery of patterns, the manner by which to convey the findings successfully to managers is another obstacle. Therefore, developing an effective and intuitive system to glean insights into large scale data through the visualization of user loyalty and defection over time is important. </p><p> To address these challenges, we develop LoyalTracker, a visual analytics system to analyze and track user loyalty and switching behavior towards multiple search engines using large-scale user log data. LoyalTracker enables analysts to define multiple loyalty categories such as hard-core loyals and switchers <ref type="bibr" coords="1,431.35,714.29,13.82,10.80" target="#b17">[18]</ref>, following the general practice in marketing. The analysts can then visually trace how users change their loyalty across categories over time. The system has three linked views: a flow view, a density map view, and a word cloud view. The flow view uses a new interactive visualization technique inspired by a chart drawn by Munroe <ref type="bibr" coords="2,137.91,71.10,13.63,10.80" target="#b22">[24]</ref>, which can visualize the dynamics in each predefined loyalty category and their aggregation over time clearly. In the density map view and word cloud view, we show more detailed information on demand, which aids analysts in quickly detecting user behavior, determining the underlying reasons, and intuitively conveying the findings to a wide audience. LoyalTracker targets the tracking and analysis of the user loyalty on search engines, but techniques used can be easily adapted to other similar problems on user loyalty and defection, because the characteristics of loyalty and switching behavior are shared across different areas. Our contributions are described as follows: @BULLET a set of design principles for analyzing the long-term and dynamic user loyalty of a large number of users at different levels of details. @BULLET an interactive visualization system to enable analysts to understand better user loyalty deviations within a search engine and the defections between multiple search engines. @BULLET an augmented stacked graph to show the flows between layers and the flows that enter or leave the graph. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2">RELATED WORK</head><p>Past research related to this work can be classified as follows: search engine switching, stacked graphs, and log data visualization. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.1">Search Engine Switching</head><p>Web search engines aid users in quickly locating information on the Internet, making the tools a necessity in daily life. A large percentage of daily users (up to 70%) frequently switch between different engines because of the low switching cost and other factors such as satisfaction, effectiveness, and familiarity <ref type="bibr" coords="2,160.27,354.09,13.85,10.80" target="#b42">[44]</ref> . In addition, 4% of search tasks involve multiple search engine usages. This percentage increases to over 10% for longer search tasks <ref type="bibr" coords="2,153.94,374.01,13.70,10.80" target="#b40">[42]</ref>. Extensive studies were conducted to understand how, when, and why users switch engines <ref type="bibr" coords="2,250.96,383.98,9.82,10.80" target="#b8">[9,</ref><ref type="bibr" coords="2,263.16,383.98,11.25,10.80" target="#b40"> 42,</ref><ref type="bibr" coords="2,276.80,383.98,11.25,10.80" target="#b41"> 43,</ref><ref type="bibr" coords="2,290.45,383.98,10.72,10.80" target="#b42"> 44]</ref>. Prior studies classified users into different categories based on their switching behavior <ref type="bibr" coords="2,124.44,403.90,13.86,10.80" target="#b15">[16]</ref>, examined multiple search usage <ref type="bibr" coords="2,262.69,403.90,13.85,10.80" target="#b42">[44]</ref> , developed models to explain engine switching behavior based on brand loy- alty <ref type="bibr" coords="2,68.12,423.83,13.61,10.80">[23]</ref>, predicted when users will switch <ref type="bibr" coords="2,204.41,423.83,9.40,10.80" target="#b8">[9]</ref>, or employed large-scale log analysis and user survey data to understand user motivations for switching <ref type="bibr" coords="2,90.07,443.75,13.77,10.80" target="#b40">[42]</ref>. Researchers have recently suggested the development of a better understanding of long-term engine switching behavior <ref type="bibr" coords="2,287.17,453.71,13.70,10.80" target="#b41">[43]</ref>, but existing studies only use simple statistical methods to validate the given assumptions. To our knowledge, interactive visualization systems capable of tracking and analyzing user behavior based on loyalty and defection remain lacking. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.2">Stacked Graphs</head><p>A stacked graph is constructed by stacking one time series on top of another, such that each time series is represented by a stacked layer. Havre et al. <ref type="bibr" coords="2,96.56,544.80,14.96,10.80" target="#b12">[13] </ref>introduced ThemeRiver that uses a river metaphor to visually depict the thematic variations in documents over time. Byron and Wattenberg <ref type="bibr" coords="2,129.02,564.72,10.58,10.80" target="#b1">[2] </ref>presented Streamgraph, which significantly improves the quality of standard stacked graphs. Streamgraph has been extended to help analysts better understand text corpora <ref type="bibr" coords="2,256.06,584.65,9.75,10.80" target="#b4">[5,</ref><ref type="bibr" coords="2,268.06,584.65,6.74,10.80" target="#b5"> 6,</ref><ref type="bibr" coords="2,277.04,584.65,11.22,10.80" target="#b21"> 22,</ref><ref type="bibr" coords="2,290.51,584.65,10.67,10.80" target="#b29"> 31]</ref>. TIARA <ref type="bibr" coords="2,83.59,594.61,15.06,10.80" target="#b21">[22] </ref>and its variant <ref type="bibr" coords="2,158.17,594.61,15.06,10.80" target="#b29">[31] </ref>are interactive visual text analysis tools that seamlessly integrate text summarization techniques for exploring large collections of documents. Dörk et al. <ref type="bibr" coords="2,247.39,614.53,10.57,10.80" target="#b5">[6] </ref>described a highly interactive system based on tailored stacked graphs to visualize a continuously updating information stream. These techniques can be used to visualize multiple time series but cannot reveal how different time series exchange quantities over time. TextFlow <ref type="bibr" coords="2,100.02,664.48,10.57,10.80" target="#b4">[5] </ref>employs a flow-based metaphor to enhance stacked graphs, such that the merging and splitting relationships between evolving topics in text corpora can be revealed. RankExplorer <ref type="bibr" coords="2,258.55,684.40,14.98,10.80" target="#b28">[30] </ref>extends stacked graphs by embedding color bars and changing glyphs to help users analyze ranking changes. TextFlow and RankExplorer were developed for different applications, but both could be used to track how quantities of time series flow to one another using either the flow-based visual metaphor <ref type="bibr" coords="2,112.83,734.22,10.51,10.80" target="#b4">[5] </ref>or the color bars <ref type="bibr" coords="2,186.76,734.22,13.80,10.80" target="#b28">[30]</ref>. However, the two methods are inappropriate for tracking user loyalty because of a variety of limitations such as distortion and intuitiveness issues. We analyze and compare the techniques in more detail in Section 5.1.1. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.3">Log Data Visualization</head><p>Human-generated log data, such as query logs <ref type="bibr" coords="2,483.05,102.14,13.74,10.80" target="#b46">[48]</ref>, usability logs <ref type="bibr" coords="2,552.73,102.14,14.19,10.80" target="#b9">[10,</ref><ref type="bibr" coords="2,315.42,112.10,6.40,10.80" target="#b7"> 8]</ref>, and Web clickstreams <ref type="bibr" coords="2,405.09,112.10,13.61,10.80" target="#b39">[41]</ref>, records various activities of users. SDSS Log Viewer <ref type="bibr" coords="2,358.75,122.06,14.81,10.80" target="#b46">[48] </ref> helps analysts quickly identify the data-seeking behavior of users from SQL query logs. Gray et al. <ref type="bibr" coords="2,479.65,132.03,10.44,10.80" target="#b7">[8] </ref>used a set of vertical striped bars to show the usage patterns from usability logs collected from a graphical user interface. Clickstreams visualization examines Web traffic and/or user navigation paths through a Web site for user behavior analyses <ref type="bibr" coords="2,383.32,171.87,9.82,10.80" target="#b2">[3,</ref><ref type="bibr" coords="2,395.69,171.88,12.01,10.80" target="#b19"> 20] </ref>and usability improvement <ref type="bibr" coords="2,511.12,171.88,9.65,10.80" target="#b3">[4]</ref>. Numerous systems such as WebQuilt <ref type="bibr" coords="2,412.49,181.84,15.02,10.80" target="#b38">[40] </ref>and Webviz <ref type="bibr" coords="2,474.77,181.84,15.02,10.80" target="#b24">[26] </ref>commonly use trees, treemaps, or node-link graphs to visualize clickstreams. Lee et al. <ref type="bibr" coords="2,550.93,191.80,14.87,10.80" target="#b19">[20] </ref>used parallel coordinates and star fields to visualize user paths and product performance. Wei et al. <ref type="bibr" coords="2,437.85,211.73,15.05,10.80" target="#b39">[41] </ref> introduced an interactive clustering method to reveal user behavior patterns from Web clickstream data. TrailExplorer2 <ref type="bibr" coords="2,391.56,231.65,15.02,10.80" target="#b27">[29] </ref>uses stacked bars and pie charts to discover valuable information from large-scale Web clickstreams. Behavior Graphs (WBG) <ref type="bibr" coords="2,416.81,251.67,9.47,10.80" target="#b2">[3]</ref>, based on state diagrams, were used to visualize the search structure on the Web and to discover usage behavior patterns. Lam et al. <ref type="bibr" coords="2,391.63,271.59,15.05,10.80" target="#b18">[19] </ref>developed Session Viewer to help analysts understand Web search usage behavior with multiple coordinated views, such as state transition diagrams, stacked bars, and tables. Outflow visualization <ref type="bibr" coords="2,364.92,301.48,15.06,10.80" target="#b43">[45] </ref>used a flow based design to show the aggregated multiple event sequences and their outcome, which can be used to analyze event progression pathways. Masruri et al. <ref type="bibr" coords="2,512.62,321.40,15.06,10.80" target="#b34">[36] </ref>improved the directed graphs to summarize people's preference transition. The improved graphs can show more information like latency and frequency, but it can hardly show long time temporal patterns. Compared with existing systems, we mainly focus on analyzing the dynamics of user loyalty and defection using millions of Web log entries, which is not supported by previous systems. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3">BACKGROUND</head><p>This section introduces the background knowledge on user loyalty and search engine switching, and then summarizes the analysis tasks. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.1">Customer Loyalty and Defection</head><p>A company can significantly boost its profits by building customer loyalty and reducing customer defection <ref type="bibr" coords="2,464.41,463.99,13.86,10.80" target="#b26">[28]</ref>. Thus, companies need to gather information about customers to track their loyalty, analyze their behaviors, and identify why they are leaving <ref type="bibr" coords="2,507.16,483.91,13.88,10.80" target="#b26">[28]</ref>. Customer loyalty is a complex phenomenon and is therefore difficult to define and measure <ref type="bibr" coords="2,363.42,503.84,13.85,10.80" target="#b44">[46]</ref>. From a behavioral view, customers are considered loyal to a firm if they consistently purchase products or services from the firm. Behavioral measures contain criteria such as repeat purchase and word-of-mouth referrals. From an attitudinal view, customers are considered loyal to a firm if they have a strong desire to maintain a relationship with the firm. Attitudinal measures include criteria such as commitment and trust. Attitudinal measures may better explain how and why loyalty changes but are more difficult to evaluate quantitatively and may need additional efforts to conduct questionnaires. Loyalty analysis of search engines has received considerable atten- tion <ref type="bibr" coords="2,332.09,603.55,9.64,10.80" target="#b8">[9]</ref>. Search engines have a significantly lower switching barrier, and users can easily change their search engines <ref type="bibr" coords="2,483.69,613.52,9.61,10.80" target="#b8">[9,</ref><ref type="bibr" coords="2,495.12,613.52,10.57,10.80" target="#b41"> 43]</ref>. Loyalty change and switching behavior are also easily observed, thus providing relatively complete data. Frequent variations and the rich data create a good opportunity to analyze the loyalty and derive design principles. Therefore, we base our work on the loyalty analysis of search engines. Nevertheless, our visualization design can be easily extended to analyze loyalty and switching behavior of other products and services, because of similar data characteristics, analysis tasks, and goals. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.2">Data Characterization and Task Analysis</head><p> We collected search log data from consenting users of a widelydistributed Web browser and store it in a MapReduce system. All personally identifiable information from the logs had been removed. Every log entry includes: a unique user identifier for each user, a query performed by the user, the search engine used for the query, the timestamp when the query was issued, and the URL and dwell time of the result page clicked. We followed an iterative user-centered design process to develop our visualization techniques. We worked closely with three domain experts (two applied scientists (AS) and a software development engineer (SDE)), from the search department of a corporation for eight months. The ASs focus on analyzing and understanding online user behavior and user experience. The SDE maintains a system called XSystem. XSystem uses the 2.5% sampled data from the collected raw data. It enables analysts to access large-scale search log data quickly using carefully-constructed queries and returns the results in a table. The feedback collected by the SDE suggests that a visual system that enables analysts to interact with the complete data and explore searching behavior is urgently needed. We held biweekly meetings and exchanged emails with the experts to gather and refine design requirements, present prototypes, and collect feedback to improve the system iteratively. We define some terms formally below. @BULLET A search session consists of a series of user search activities. A session ends if the user is idle for more than 30 minutes, which is widely adopted <ref type="bibr" coords="3,123.09,262.78,14.19,10.80" target="#b31">[33,</ref><ref type="bibr" coords="3,139.52,262.78,10.65,10.80" target="#b40"> 42]</ref>. @BULLET A switching event is defined as a pair of consecutive queries issued on distinct search engines within a single search session <ref type="bibr" coords="3,269.09,282.71,9.52,10.80" target="#b8">[9]</ref>. According to the suggestions of the domain experts, we employ wellestablished measures to estimate user loyalty and satisfaction. @BULLET User loyalty in search is evaluated using a behavioral measure of user engagement, the frequency of using the search engine. In general, there are two widely used metrics to quantify the user engagement: the number of queries <ref type="bibr" coords="3,196.09,344.08,14.98,10.80" target="#b13">[14] </ref>(at query level) and the number of sessions <ref type="bibr" coords="3,140.77,354.04,15.05,10.80" target="#b31">[33] </ref>(at session level) performed by users in certain time periods. The user engagement at query level is mainly used to describe the short-term user behavior, whereas the user engagement at session level is focusing more on describing the long-term user behavior. In our case, the analysts pay more attention to long-term behavior analysis. Therefore, the loyalty is defined at session level. @BULLET User satisfaction in search is measured based on how long a user stays on the destination page. A query is viewed as satisfactory if the searcher clicks a search result followed by a dwell time of more than 30 seconds <ref type="bibr" coords="3,158.04,453.67,9.82,10.80" target="#b6">[7,</ref><ref type="bibr" coords="3,170.19,453.67,11.25,10.80" target="#b10"> 11,</ref><ref type="bibr" coords="3,183.78,453.67,11.25,10.80" target="#b14"> 15,</ref><ref type="bibr" coords="3,197.36,453.67,10.72,10.80" target="#b40"> 42]</ref>. Although Hassan et al. proposed a sophisticated metric to measure user satisfaction <ref type="bibr" coords="3,280.63,463.63,13.66,10.80" target="#b11">[12]</ref>, we chose the simpler one because of two concerns: 1) due to the large size of the data and the computing complexity of the sophisticated metric, in the current computing infrastructure, it is hard to get the result in reasonable time when applying the sophisticated metric; 2) the simpler metric is widely used in the company and it has been proved to be effective. Nevertheless, in our system, we have carefully decoupled the calculation module with other modules such that it will be easy to replace current measure with more advanced one without affecting other modules. We complied a list of analysis tasks through a series of interviews with them. This process aided us in better understanding the problem domain and identifying the challenges faced by the target users.  Our collaborators need to analyze the distribution of switchers or new users to gain a better understanding of user behavior. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head> Q.4 What are the differences in the dynamic loyalty variation or userswitching behavior among multiple search engines? </head><p> Our collaborators want to analyze the differences among multiple search engines to identify the strengths and weaknesses of a search engine better based on loyalty and defection. Q.5 What are the reasons for the switching behavior or loyalty change? Our collaborators want to determine the reasons behind the identified user behavior pattern. These experts are interested in knowing whether a change in user satisfaction could lead to the behavior or if any keywords that easily trigger the pattern exist. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4">SYSTEM DESIGN</head><p>In this section, we discuss the visualization challenges and design rationale for the system. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.1">Analysis Challenges and Design Rationale</head><p>During our collaboration with the experts, we identified a few analysis challenges. Before we proposed the LoyalTracker system, when analysts want to analyze the complete data, they have to formulate their assumptions and construct scripts to test these assumptions and then submit the scripts to a MapReduce system to identify user behavior patterns. Running scripts on the system may take hours or days depending on the complexity of the tasks and the resources available on the system before the analysts can retrieve the results in tables. The analysts often use Microsoft Excel to analyze the retrieved table data and to create simple charts for demonstration. Obtaining the desired results to validate their assumptions is a tedious trial-and-error procedure . Testing assumptions is difficult, but detecting unexpected user behavior patterns from a vast amount of data is significantly more difficult and time-consuming. Although interesting results may be detected, effectively presenting these results would be another obstacle. A visualization system that enables analysts to analyze user loyalty interactively is urgently needed by the analysts in the company. Existing visualization techniques are unsuitable for the effective tracking of dynamic loyalty variation and analyzing user-switching behavior in one coherent view. We worked closely with domain experts and identified a set of design goals to address these challenges. A. User Flow Revelation. In marketing and loyalty analysis, analysts often classify users into different loyalty categories, such as hardcore loyals <ref type="bibr" coords="3,351.50,444.70,13.87,10.80" target="#b17">[18]</ref>. The users behavior is then analyzed and compared across different loyalty categories. The domain experts are concerned with the visual tracking of the dynamic variations of different loyalty categories and the summation of all the categories (Q1). More importantly , the design could effectively reveal how users flow between different loyalty categories as well as how they flow in and out of a typical search engine over time, thus enabling the accomplishment of the analysis tasks (Q1-Q3) related to the user flow of loyalty variation. B. Intuitive Storytelling Metaphor. A visual metaphor capable of telling a story intuitively is desired by our collaborators for the analysis tasks (Q1-Q5). An appropriate visual storytelling metaphor enables them to convey their findings more effectively with the support of visual evidence or related details to product teams and senior managers . Therefore, our work employs a visual representation based on an intuitive flow metaphor to facilitate storytelling. C. Multi-Scale Visual Representation. Detecting both short-term and long-term patterns is important. A sudden and dramatic change in customer loyalty should be immediately detected, especially for online service providers with a significantly lower switching barrier, to take prompt actions. It is also crucial for companies to identify long-term user behavior patterns, which can shed more light on user preferences and usage patterns <ref type="bibr" coords="3,378.86,654.32,13.88,10.80" target="#b41">[43]</ref>. Knowledge of the key trends in user loyalty and switching behavior is invaluable to companies. Therefore, the design should naturally support multi-scale analyses (Q1-Q5). D. Interactive Pattern Unfolding. A visual system that enables analysts to interact with the data directly and see the results immediately is always preferred by domain experts to complete the described tasks, particularly for Q3-Q5. The system should provide a visual overview of how user loyalty changes over time to identify interesting patterns, and enable analysts to gain further insight into the patterns and determine </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Raw Data </head><p>User <ref type="figure" coords="4,52.80,178.06,20.17,10.80">Fig. 2</ref>: Our system has a data processing part and a visualization part with three coordinated views. A flow view is used to provide a quick overview of the dynamic loyalty variation and switching behavior. A word cloud view and a density map view can help analysts interpret the user behavior patterns discovered in the flow view. the causes of such changes (i.e., the relationships between satisfaction and loyalty, and keywords that trigger the patterns). E. Comparative Analysis. A system that enables comparative analysis can aid in accomplishing the task of Q4. A desirable system should naturally support interactive brushing and visually highlight the similarities and differences in the dynamic user loyalty flow among different search engines. Furthermore, a statistical graph showing the overall distribution of the loyalty variation and flow in a search engine is also needed to facilitate the comparative analysis. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.2">System Overview</head><p>LoyalTracker begins with the data processing part, which submits a script to the MapReduce system and retrieves the results once the tasks complete. After that, LoyalTracker can perform interactively. LoyalTracker consists of three views: a flow view, a density map view, and a word cloud view (<ref type="figure" coords="4,143.71,389.53,20.03,10.80">Fig. 2</ref>). The flow view is used to provide a visual summary of dynamic loyalty change and user-switching pattern over time, such that analysts can track the dynamic variation readily. It uses a compact flow-based visual metaphor to enhance the stacked graphs for intuitively showing not only how users flow between layers but also how users enter or exit the search engine over time. The analysts can flexibly and visually specify queries in the flow view to perform an in-depth analysis in other views. The density map view can help analyze the relationships between user loyalty and satisfaction of a group of users. The word cloud view visually summarizes the query keywords that trigger engine switching for a group of users selected in the flow view to facilitate further understanding of the correlation between keywords and flow variation. The three views are well-coordinated to help analysts accomplish the various of tasks described in Section 3.2. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5">VISUAL ENCODING METHODS</head><p> In this section, we describe a set of visualization techniques for analyzing user loyalty. User interactions are subsequently presented. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.1">Flow View</head><p>In the flow view, we propose a new design and an interaction technique based on a flow metaphor for visualizing the dynamics of user loyalty. The flow metaphor is inspired by an infographics chart drawn by an artist <ref type="bibr" coords="4,73.63,634.59,15.06,10.80" target="#b22">[24] </ref>to illustrate the history of the United States congressional elections. <ref type="figure" coords="4,89.96,644.55,31.11,10.80">Fig. 3(a)</ref>shows the chart placed horizontally to fit the wide screen of modern displays better, with the timeline starting from left to right. The Congress members are categorized into different political groups, such as " left " and " right " , based on their political beliefs. The chart visually traces the evolving composition of the US congress using a stacked graph layout. Each group is encoded using a layer in a distinct color. The graph, compared with general stacked graphs, also shows how different layers exchange members with one another using a flow metaphor (i.e., branches) over time. The chart shows two types of branches on top of a layer at each time point. * Inflow branch along the top-left to bottom-right direction (<ref type="figure" coords="4,533.93,51.18,18.81,10.80">Fig. 3</ref>(a)) indicates that a group of members is entering the layer from the above. The inflow coming from the top empty space (<ref type="figure" coords="4,530.99,71.10,20.78,10.80">Fig. 3</ref>(b)) represents the new members. * Outflow branch along the bottom-left to top-right direction (<ref type="figure" coords="4,327.96,100.99,19.17,10.80">Fig. 3</ref>(c)) indicates that a group of members are leaving the layer to go to the layers above. The outflow departing from a layer to the top empty space (<ref type="figure" coords="4,375.13,120.92,19.58,10.80">Fig. 3</ref>(d)) represents the leaving members. An outflow branch linked to an inflow branch (<ref type="figure" coords="4,484.67,131.61,30.08,10.80">Fig. 3(e)</ref>) indicates the returning members who left for a short time. The width of a branch represents the number of members in it. The endpoints of multiple inflow (or outflow) branches are bundled together if the branches meet in a layer during a time frame. The chart is excellent for storytelling and has facilitated numerous discussions on the Web (approximately 430,000 results returned from the Google by searching " xkcd 1127 " and " xkcd congress " as of March 2014). The stable political beliefs of members yield the chart with less edge crossings, resulting in a clear, legible layout. The tasks of loyalty analysis are very similar to the tracing of political beliefs of the US congress members. A loyalty analysis also defines multiple loyalty categories and traces the dynamic change in different categories as discussed in Section 4.1. The customer loyalty does not dramatically change in most cases on the Web or in the real world <ref type="bibr" coords="4,550.33,272.56,13.63,10.80" target="#b25">[27]</ref>. The storytelling characteristic of the metaphor and its capability to reveal the flow between multiple categories directly satisfy design rationalities A and B. Therefore, we use a similar visual metaphor to design the flow view. We also extend the basic layout to enable multilevel representation, interactive pattern unfolding, and comparative analysis (meeting design rationality C, D, and E). </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.1.1">Comparison with Alternative Solutions</head><p>The domain experts need to visually track the dynamics of different loyalty categories as well as the summation of all the categories (Q1). According to the design rationals of user flow revelation (A), it is reasonable to design a visualization similar to stacked graphs to achieve the goal. It also demands an advanced layout that can convey how users flow across multiple loyalty categories over time. Two existing stacked graph techniques, TextFlow <ref type="bibr" coords="4,414.35,438.26,10.33,10.80" target="#b4">[5] </ref>and RankExplorer <ref type="bibr" coords="4,492.57,438.26,13.61,10.80" target="#b28">[30]</ref>, can accomplish this goal. TextFlow also uses a flow-based metaphor to convey the flowing pattern (see <ref type="figure" coords="4,389.46,458.19,19.93,10.80" target="#fig_1">Fig. 4</ref>(a)). This technique draws a complete flow branch between two consecutive time points to represent the streams of customers, which might introduce significant visual clutter caused by the edge crossings of multiple flows. TextFlow optimizes the layer ordering to reduce visual clutter. However, the ordering in loyalty analysis should be preserved because the order inherently implies a semantic meaning (i.e., the loyalty level). By contrast, LoyalTracker only draws a partial flow rather than a complete flow to mitigate the problem of edge crossings. TextFlow produces irregular white gaps between layers to show the flow, which distort the layers and present an incorrect aggregate pattern (sum of individual time series). Our flow-based visualization does not produce white gaps. RankExplorer <ref type="bibr" coords="4,377.93,578.47,14.94,10.80" target="#b28">[30] </ref>uses color bars rather than the flow metaphor to convey the flowing pattern (see <ref type="figure" coords="4,432.88,588.44,30.73,10.80" target="#fig_1">Fig. 4(b)</ref>). A flow from a layer m to another layer n is represented by a color bar in m, wherein the height of the bar encodes the flow size and the color of the bar encodes the flow direction. Compared with TextFlow, the color bars can eliminate the problem of edge crossings and help create a more compact layout without the distortion. However, this method is generally less intuitive than the flow-based methods. We present all three candidate designs in <ref type="figure" coords="4,472.96,658.91,20.80,10.80" target="#fig_1">Fig. 4</ref>to our collaborators and the feedback from them also confirmed our design choice. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.1.2">Visual Encoding</head><p>We use the flow metaphor described in Section 5.1 to design the flow view to show the dynamic loyalty variation. <ref type="figure" coords="4,474.08,714.29,30.73,10.80" target="#fig_1">Fig. 4(c)</ref>shows the visual encoding scheme. We define a cell as the part of a layer in a time frame (i.e., from time point t to t + 1). <ref type="figure" coords="5,46.20,143.59,19.64,10.80">Fig. 3</ref>: Left: Layout extracted from a chart drawn by an artist <ref type="bibr" coords="5,264.67,143.59,14.84,10.80" target="#b22">[24] </ref>where (a) and (b) are the inflow branches; (c) and (d) are the outflow branches; and (e) is a group of returning members. Right: Layout created through our method using the data manually extracted from the infographics chart. Both layouts can show not only the dynamic variation of each group but also the dynamic exchange of members across different groups. @BULLET Each layer in the flow view represents a certain degree of user loyalty. The width of the layer at a time point indicates the respective number of the users at that time. @BULLET The branches represent the users that flow in or out of the layers. The width of a branch encodes the number of users. Each cell contains two types of branches: the outflow branches on the left and inflow branches on the right (see <ref type="figure" coords="5,200.63,369.40,19.72,10.80" target="#fig_1">Fig. 4</ref>(c)). @BULLET The branches of the same type (e.g., inflow) in a cell are bundled to create a neat layout. The bundling order is determined by the order of the layers that the branches flow from </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>t </head><p>(inflow) or to (outflow). The vertical position of a bundled group encodes the average loyalty level of users. @BULLET The branches in the empty region above indicate new users who have just started using the search engine, or leaving users who stop using the current search engine. @BULLET We place a switching histogram above the flow design to provide an overview of user switching behavior at each time point. The color indicates where the new users come from or where the leaving users go to (see <ref type="figure" coords="5,153.91,488.95,20.04,10.80">Fig. 1</ref>). Flow based visualization could also show the user switching behavior across multiple search engines. However, after some experiments, we found that this solution suffered from severe visual clutter and can hardly handle comparative analysis and exploration with multiple search engines. The layout algorithm is described in details as follows. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.1.3">Layout Algorithm</head><p> We follow four design principles, including legibility, aesthetics, neatness , and faithfulness, so as to create a good layout. Legibility and aesthetics principles have been commonly employed in creating engaging , storytelling visualizations <ref type="bibr" coords="5,154.84,614.03,9.61,10.80" target="#b1">[2,</ref><ref type="bibr" coords="5,166.70,614.03,10.57,10.80" target="#b33"> 35]</ref>. Our work employs the legibility principle to create a proper layout, such that we can clearly reveal the user flow information (design rationality A). Specifically, we avoid putting the branches in a small region. A symmetric visual design is often utilized to enhance the aesthetics principle <ref type="bibr" coords="5,228.50,653.88,9.82,10.80" target="#b1">[2,</ref><ref type="bibr" coords="5,241.04,653.88,12.01,10.80" target="#b12"> 13] </ref>to generate an engaging visualization (design rationality B). Moreover, prior research proves that symmetrical objects can be perceived much more strongly <ref type="bibr" coords="5,77.84,683.77,13.74,10.80" target="#b37">[39]</ref>. Thus, we enforce the inflow and outflow branches to be symmetrical at each time point (see <ref type="figure" coords="5,175.70,693.73,20.05,10.80" target="#fig_3">Fig. 5</ref>(a) and (d)). The neatness and faithfulness principles ensure that we can effectively and faithfully reveal the information in the layout. The neatness principle is used to reduce visual clutter by aligning objects in an organized manner, because excess and disorganized items usually degrade visual task performance <ref type="bibr" coords="5,396.72,309.63,13.76,10.80" target="#b35">[37]</ref>. Thus, we align the endpoints of outflow branches to the right (<ref type="figure" coords="5,387.07,319.59,19.10,10.80" target="#fig_3">Fig. 5</ref>(a), (c), and (f)), and align the endpoints of inflow branches to the left (<ref type="figure" coords="5,407.92,329.55,19.43,10.80" target="#fig_3">Fig. 5</ref>(b), (g), and (h)) in each cell. The faithfulness principle ensures that the vertical position of each group of bundled branches should be unchanged, considering that the vertical position represents the average loyalty level of the branches. Thus, the branches can only move along a virtual track (see the dashed line in <ref type="figure" coords="5,333.73,379.36,19.93,10.80" target="#fig_3">Fig. 5</ref>(e)) within the cell. Following these principles, a force-directed model is developed to create the layout. We assume that a node placed in the middle of the endpoint of the group of bundled branches (the black nodes in <ref type="figure" coords="5,535.66,597.73,20.37,10.80" target="#fig_3">Fig. 5</ref>) can represent the group. The model has three basic forces: a spring force, a repulsive force, and a symmetric force. To meets the legibility principle, a spring force (the green springs in <ref type="figure" coords="5,318.52,637.58,20.87,10.80" target="#fig_3">Fig. 5</ref>) is used to cause attraction between the inflow and outflow branches in a cell, which enables the branches to have proper lengths to be legible. The spring force between nodes a and b (see <ref type="figure" coords="5,526.16,657.51,20.72,10.80" target="#fig_3">Fig. 5</ref>) is defined as follows </p><formula>f s (a, b) = k s (||p a − p b || − l) × (p a − p b )/||p a − p b || (1) </formula><p>where k s is a given weight, p a and p b represent the positions of a and b, respectively; and l is the original length of the spring. We also employ a repulsive force to make sure that the branches in a cell do not overlap when attractive force is used. The repulsive force follows Coulomb's law, which describes the electrostatic interaction between electrically charged particles and is defined as: where k e is the physical constant, and q a and q b are the charge of the nodes determined by the widths of the branches. The spring force is also used to create a neat layout and align the nodes of the outflow branches to the right or the nodes of the inflow branches to the left across the layers (red springs in <ref type="figure" coords="6,239.05,137.27,19.68,10.80" target="#fig_3">Fig. 5</ref>). We define a symmetric horizontal force for the inflow and outflow branches sharing the same root in the same layer at a time point (see <ref type="figure" coords="6,52.80,167.16,20.93,10.80" target="#fig_3">Fig. 5</ref>(a) and </p><p>(d)) to satisfy the aesthetics principle. </p><formula>f sym (a) =k sym (x t + (x a − x d )/2 − x a ) (3) f sym (d) =k sym (x t − (x a − x d )/2 − x d ) (4) </formula><p>where k sym is a given weight, x a and x d represents the positions of nodes a and d along the horizontal axis, respectively, x t is the horizontal position of the root point of a and d at time point t. When the algorithm starts, in each cell, the branches are placed along the horizontal axis. The algorithm then aggregates all the forces for each node and iteratively moves the particles based on the aggregated force. To satisfy the faithfulness principle, each node can only move along the virtual track within the time frame. This process repeats until the entire particle system achieves a stable state. Notice that all principles are equally important and thus k e and k sym are assigned appropriately to reflect the property. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.1.4">User Flow</head><p>Tracing the mechanism of flow of a selected group of users across layers over time in the flow view is very important in analyzing user behavior (design rationality A). Therefore, we use a design similar to FlowMap <ref type="bibr" coords="6,89.55,374.68,14.91,10.80" target="#b23">[25] </ref>to visually track the continuous evolution of a group of selected users in the flow view. One simple method to show this piece of information is by directly drawing a set of flows in the flow view to show the distribution of the users (see the highlighted orange flows in <ref type="figure" coords="6,223.83,414.53,20.57,10.80" target="#fig_5">Fig. 6</ref>(a)). The width of a flow encodes the number of the users in a layer or branch. Each flow is initially drawn in the middle position in a branch (i.e., branch flow, representing the users switching their category) or in a layer (i.e., layer flow, representing the users staying in the same loyalty category between two consecutive time points) (see <ref type="figure" coords="6,211.72,464.35,20.65,10.80" target="#fig_5">Fig. 6</ref>(a)) to simplify the problem. Although the user distribution is shown, the disconnected flows prevent the analysts tracking the flow patterns readily. Therefore, we smoothly link the flows together. In a branch (see <ref type="figure" coords="6,52.80,504.20,19.48,10.80" target="#fig_5">Fig. 6</ref>(a)) in layer i, we move down the root point of the branch flow as small as possible to join the layer flow (below the branch in layer i − 1) representing the users staying in the same layer. We also extend the end point of the branch flow to join the layer flow in the current layer i. The dashed red line in <ref type="figure" coords="6,134.64,544.05,30.96,10.80" target="#fig_5">Fig. 6(a)</ref>shows the adjusted flow. This process is repeated for each branch, such that both ends of all the branches join in the layer flows (in neighboring layers i and i − 1). To avoid ambiguity, we should make sure that a layer flow is in parallel with the layer, and should not deviate from the middle of the layer too much. Otherwise, the flow may show a wrong increasing or decreasing trend in the layer, which can mislead analysts. We design a method to optimize the positions of flows layer by layer. For layer i, we initially select the maximum layer flow and set its position to be the middle of the layer (see the yellow layer flows highlighted in <ref type="figure" coords="6,272.03,633.71,20.61,10.80" target="#fig_5">Fig. 6</ref>(b) in each layer). Next, we adjust other flows to link them smoothly to the maximum flow in layer i and obtain an initial layout (<ref type="figure" coords="6,249.25,653.64,19.76,10.80" target="#fig_5">Fig. 6</ref>(b)). Our goal is to find a vertical offset d to adjust the initial layout to minimize the ambiguity. We define the cost as follows. </p><formula>C i (d) = n l ∑ j=1 w l j (y l j − y l j − d) 2 + n b ∑ k=1 w b k (y b k − y b k − d) 2 (5) </formula><p> where n l and n b indicate the number of layer flows and branch flows, respectively ; y and y denote the original (<ref type="figure" coords="6,194.29,734.22,19.15,10.80" target="#fig_5">Fig. 6</ref>(a)) and initial (<ref type="figure" coords="6,270.45,734.22,19.26,10.80" target="#fig_5">Fig. 6</ref>(b)) vertical positions, respectively; w l j and w b k represent the widths of the branches. We can easily derive the optimal offset d satisfying C (d) = 0. <ref type="figure" coords="6,315.42,73.01,30.88,10.80" target="#fig_5">Fig. 6(c)</ref>shows the adjusted smooth user flows from <ref type="figure" coords="6,505.24,73.01,19.88,10.80" target="#fig_5">Fig. 6</ref>(b). </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.2">Density Map and Word Cloud</head><p>We use two additional visualizations, density map and world cloud, to facilitate the in-depth analysis of user loyalty (design rationality D). One important task of loyalty analysis is to investigate the relationship between user loyalty and satisfaction. We use a kernel density estimation (KDE) technique to create a density-based scatterplot called density map that shows the relationship (see <ref type="figure" coords="6,480.12,390.82,21.55,10.80">Fig. 9</ref>middle). KDE is particularly effective in plotting large datasets in scatterplots to circumvent the overdraw problem and achieve a truthful assessment of distributional data characteristics. Our collaborators are also interested in examining the keywords to trigger an engine switch. Thus, we also introduce a visualization (see <ref type="figure" coords="6,315.42,450.98,20.41,10.80">Fig. 9</ref>) to visually summarize the keywords that trigger the switching behavior. Word clouds are chosen because of the excellent storytelling and engaging capability <ref type="bibr" coords="6,405.11,470.90,15.06,10.80" target="#b36">[38] </ref>(design rationality B). Additionally, we place a color bar under each keyword to intuitively reveal the distribution of different switching types, as requested by our collaborators (See <ref type="figure" coords="6,334.21,500.79,20.62,10.80">Fig. 9</ref>). Each color bar under a word is divided vertically into multiple parts. Each part represents one type of engine switches and contains two color blocks (see the legend above the word cloud in <ref type="figure" coords="6,315.42,530.68,19.57,10.80">Fig. 9</ref>): the upper color encodes the previously used search engine and the lower color encodes the newly switched search engine. Also, the ratio between the size of each part and the total size of the color bar visually encodes the percentage of each type of engine switches. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.3">User Interactions</head><p>Design rationality D requests that the system enables analysts to interact with the data. Apart from basic interactions such as pan and zoom, the system supports a set of user interactions. Multi-scale exploration is supported by LoyalTracker to facilitate visual detection and analysis of patterns at different levels of detail (design rationality C). LoyalTracker enables analysts to select a time period and a scale (day, week, or month). The flow view will be updated automatically when the analysts choose a new time period or a scale. Comparative visualization can help analysts identify the similarity and difference between multiple search engines from the perspective of dynamic loyalty variation (design rationality E). Our system naturally enables interactive comparative visualization by showing multiple linked LoyalTrackers (see <ref type="figure" coords="6,410.69,713.91,23.54,10.80">Fig. 10</ref>). Filtering enables analysts to focus on important information. In a LoyalTracker, not all branches are important. Generally, the larger the branches, the more important they are. Our system allows an analyst to interactively remove less important branches. Brushing enables analysts to interactively choose their interested data in the visualization directly for further analysis. All visualizations are linked to allow for data exploration from different perspectives. An analyst can easily specify a fairly complex query by brushing multiple branches or layers in the graph. The branches are then combined by taking the union or intersection of the branches, thus allowing the analyst to visually construct queries in a very flexible manner. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6">EVALUATION AND DISCUSSION</head><p> We implemented the system using Java. After data preprocessing, interactive performance can be achieved using a PC with Intel(R) Core(TM) i7-2600 CPU and 8 GB memory. To further evaluate LoyalTracker system, we conducted interviews with five domain experts. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6.1">Comparison with Munroe's Chart</head><p>In the experiment, we compare Munroe's chart <ref type="bibr" coords="7,217.83,224.40,14.99,10.80" target="#b22">[24] </ref>with the result of our automatic method. We extracted a part of the original chart (see <ref type="figure" coords="7,46.20,244.33,34.66,10.80">Fig. 3 left</ref>) and then manually labeled the data used for our experiment. <ref type="figure" coords="7,46.20,254.29,64.60,10.80">Fig. 3 right shows</ref>the result. Although the data we used is not exactly the same with the original one (we were unable to obtain the same data and thus only estimated the width of the branches in the chart), we can find that our result can preserve the original information in Munroe's chart. Both figures enable an analyst to easily trace and identify the dynamics of the evolution of different political groups. Compared with the original chart, our result appears clean, neat, and simple. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6.2">Case Studies</head><p>We extracted the top 100,000 active customers in the US market during the first week of July 2012 from the massive search logs, as suggested by the domain experts. We then acquired the search behavior data on these users from July 2012 through December 2012. The domain experts were allowed freely to classify users into different categories according to the loyalty levels of the users. Based on their background knowledge, after several trials, they settled down four categories: more <ref type="bibr" coords="7,46.20,415.15,129.06,10.71">than 26, 16-25, 8-15, and less than 7 </ref>for the weekly level, or more than 6, 5, 3-4, and 1-2 for the daily level. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6.2.1">Tracing Customer Loyalty in Individual Engines</head><p>The first case study was to demonstrate the usefulness of LoyalTracker on analyzing the dynamics of user loyalty in engine A. Choosing a time scale and a segmentation is the first step for analysts to explore data using LoyalTracker. In this step, they can try different scales in order to see both long-term behavior and short-term behavior. In this case study, we explored the data using two scale levels: daily level (<ref type="figure" coords="7,68.73,516.37,19.55,10.80">Fig. 7</ref>) and weekly level (<ref type="figure" coords="7,159.65,516.37,19.05,10.80">Fig. 1</ref>). The flow views can provide an overview of the dynamics of user loyalty. From the flow view at daily level (<ref type="figure" coords="7,189.11,536.43,20.55,10.80">Fig. 7</ref>), we can clearly see a pattern: many customers did not use engine A on the weekend. From the flow view at weekly level (<ref type="figure" coords="7,154.22,556.36,18.85,10.80">Fig. 1</ref>), we can see no significant change in the sizes of different loyalty categories over time. The inflow and outflow branches have nearly the same size at each time point, indicating that there are almost equal numbers of customers entering or leaving a layer at each time point. Thus, each layer appears flat over time. Additionally, the figure also reveals that most customers tend to change their loyalty level between adjacent layers. Given that the vertical position of the endpoint of a branch inside a layer encodes the average level of customer loyalty, we see that most branches lie in lower parts of the layers, indicating that the changes in loyalty are usually <ref type="figure" coords="7,46.20,721.26,20.00,10.80">Fig. 7</ref>: The flow view shows the loyalty change of the engine A at the daily level. Many customers stop using it on the weekend (July 14th). slight. The stable nature of customer loyalty has also been reported in prior research <ref type="bibr" coords="7,360.61,61.14,13.74,10.80" target="#b25">[27]</ref>. From the switching histogram (<ref type="figure" coords="7,438.19,71.13,20.52,10.80">Fig. 1</ref>), we can see the statistics of engine switching behavior. More users who left current engine A switched to engine C than to engine B. By tracking the overall height in the flow view, we can observe that the number of total users is decreasing gradually. After examining all the engines, we found that the decreasing number was not caused by engine switching, given that all search engines exhibited the same phenomenon. The domain experts identified two possible reasons: 1) customers started to use other Web browsers; 2) customers cleaned the cookies of the browser. In such circumstance, we cannot track them any more. When a proper time scale and a suitable segmentation are selected, analysts can further interactively explore the data. User flow is the major interactive visualization component in the flow view, which can help analyze the loyalty dynamics for a specific group of users selected by the brushing interaction. To better understand the behavior of users with different loyalty levels, we studied two groups of users in the flow view: one group of users stably staying in a cell (layer flow) and the other switching from one layer to its upper layer (branch flow). We visually traced how both groups distribute across layers over time in the engine by drawing user flows highlighted in orange in <ref type="figure" coords="7,465.96,270.43,20.78,10.80">Fig. 1</ref>top (layer flow) and bottom (branch flow). We can clearly observe an interesting pattern. Compared with the user flow (top), the bottom user flow reveals that once the loyalty of users decreased (i.e., the users flowing through the outflow branch), only a few users would increase their loyalty again. In contrast, the top user flow appears more uniformly distributed. With the density map and the word cloud view, analysts can obtain more detailed information about the user behavior of the selected group of users. We visually examined the relationship between satisfaction and loyalty using the density map. We selected two groups of users in the same layer at the same time point. One group is in the layer, whereas the other group is in the branch (see <ref type="figure" coords="7,477.53,380.04,20.43,10.80">Fig. 1</ref>). We compared the density maps for the two groups of users (<ref type="figure" coords="7,472.16,390.00,19.09,10.80">Fig. 8</ref>). Surprisingly, the figures show no significant difference between the density maps. It is not an isolated case: across all layers and in all the three engines, we were unable to identify any strong correlation between loyalty and satisfaction based on the density map. The interaction with the density map enables analysts to further select users according to both satisfaction and loyalty. We selected a group of users with the lowest loyalty (from the top layer in <ref type="figure" coords="7,520.88,459.76,19.78,10.80">Fig. 1</ref>) and then examined the relationships between user loyalty and satisfaction. The density map shows that many users were quite satisfied but had low loyalty (Region a in <ref type="figure" coords="7,384.63,489.65,20.18,10.80">Fig. 9</ref>). Our domain experts initially speculated that the users could have just conducted navigational searches (i.e., a user searches the name of another search engine in search engine A and then switches to other search engines). We brushed different regions in the density map and examined the associated word clouds. By comparing the word cloud of Region a (see <ref type="figure" coords="7,474.52,539.47,20.36,10.80">Fig. 9</ref>left) with those of other regions (for example, the word cloud of Region b in <ref type="figure" coords="7,515.55,549.43,20.67,10.80">Fig. 9</ref>right), we found that the ratio of navigational search in other regions is higher than that in region a. This pattern can be found consistently from the <ref type="figure" coords="7,308.83,711.30,19.73,10.80">Fig. 8</ref>: Density maps (a) and (b) show the relationship between loyalty (horizontal axis) and satisfaction (vertical axis) of the selected group of users in the branch and the layer in <ref type="figure" coords="7,436.32,731.23,19.81,10.80">Fig. 1</ref>, respectively. <ref type="figure" coords="8,52.80,144.04,19.68,10.80">Fig. 9</ref>: Density map shows the relations between loyalty and satisfaction for a user group who are less loyal to search engine A. The word clouds on the left and right show the keywords triggering engine switching for the users in Region A and Region B of the density map, respectively. <ref type="figure" coords="8,52.80,298.66,23.87,10.80">Fig. 10</ref>: The flow views for all the three search engines. The width of the customer indicates search engine C has the most number of users. The user flow shows the distribution of the selected user group in engine C. From the switching histograms, we can see that the total ratio of the customers who left C to other search engines is much lower than that in engine A and B. top layer (representing the least loyal user) in A. However, this pattern cannot be found in any other search engines. The experts suggested some possible reasons. First, our satisfaction measure determines that a navigational search is an unsatisfied query because users do not stay in the search engines for more than 30 seconds. Thus, the users were treated as unsatisfied. Second, it was possible that A is set as the default search engine in the widely-used web browser and the users using the browser would perform more navigational search from A to others. (a) Loyalty Satisfaction <ref type="figure" coords="8,52.80,533.95,23.28,10.80">Fig. 11</ref>: Density maps (a), (b), and (c) show the relation between loyalty and satisfaction for user groups in the same layers at the same time point on the engine A, B, and C, respectively. </p><formula>Loyalty Satisfaction H'H H'P H'F H'N H'O ,'H , P I F Y N J Region </formula></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="7">-1 5</head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6.2.2">Tracing Customer Loyalty in Multiple Engines</head><p> The second case study demonstrated the use of our visualization techniques in comparative analysis for multiple search engines (<ref type="figure" coords="8,273.78,594.40,23.72,10.80">Fig. 10</ref>). The overall heights in the three flow views directly indicate the popularity of the three search engines among the active users: more users employ engine C than the other two engines. The number of users of engine A is slightly larger than engine B. From the switching histograms for the three search engines, we can clearly see that there is a different pattern for engine C compared with engine A and B: the total ratio of the users who left C to other search engines is much lower than that in engine A and B. By selecting a group of users, we can simultaneously see the user flows in all engines. <ref type="figure" coords="8,132.60,694.36,26.58,10.80">Fig. 10</ref>shows the user flow of the user group selected from engine C. A few selected users also used the other two search engines (A and B) at the same time, but with very different loyalty distributions: the users only exist in the first layer of engine B, whereas they exist in all layers except the bottom one of engine A. We then examined the relationship between loyalty and satisfaction for the three engines. By selecting the users in the same layers at the same time point in three engines, we obtained the corresponding three density maps shown in <ref type="figure" coords="8,421.74,367.17,24.41,10.80">Fig. 11</ref>. We compared the three density maps and found that despite being much more popular and having the largest number of users, search engine C does not exhibit a competitive advantage over its competitors in terms of user satisfaction. It is an unexpected pattern. Obviously, the users in search engine C are less satisfied compared with A and B. The domain experts pointed out two possible reasons: 1) users who use search engine C did more long tail/ rare queries. It is often difficult to get good results from the search engine <ref type="bibr" coords="8,340.66,446.87,13.81,10.80" target="#b30">[32]</ref>; 2) the satisfaction metric should be improved. For example, in many cases users can acquire the information they want on the result page without clicking the links of the results. However, in this case, the corresponding queries are classified as unsatisfied queries. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6.3">Interview with Domain Experts</head><p>We conducted in-depth interviews with five experts to evaluate the usability of the system, including four program managers (PMs) and a software development engineer (SDE) from the search department of a company. The PMs are particularly interested in analyzing user behavior patterns from search logs. They use XSystem daily to analyze the search logs. The SDE gathers feedback about XSystem from the users and maintains the system. Each interview lasted for 1.5 -2 hours. It started with a few questions to identify their background, followed by a tutorial to show the system features. We then asked them to freely explore a few data sets within the system. We finally asked them some post-study questions to collect their feedbacks and suggestions. We denote the participants as PM1, PM2, PM3, PM4, and SDE. Overall system usability. The system was received very well by all participants. PM4, the most senior PM, pro-actively contacted us and requested to try our system when she learned about it from other PMs. She commented " The system has a great potential and is powerful for finding and analyzing user switching patterns. " . Both PM2 and PM3 commented that the system is capable of helping them evaluate the effectiveness of a newly added feature of the search engine. All PMs were keen on using the comparative visualization feature provided by the system. SDE emphasized that the system would be valuable for the users of XSystem that is heavily used by a few hundreds of project managers, applied scientists, and other analysts in the company. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Visual design and interactions. All participants </head><p>were impressed by the visual design and the supported interactions. They especially like the narrative nature by LoyalTracker that can help reveal dynamic user loyalty variation visually and intuitively. PM2 felt very excited about the visual design and commented " I can clearly see the macro overall trend of user loyalty variation as well as the micro trend of user flowing patterns in one view " . They accepted the concept of multiscale exploration very well and agreed that the switching histogram is intuitive to understand and useful for showing switching behavior. The participants appreciated the interactions supported by the system . They acknowledged the usefulness of the filtering and brushing interactions. PM2 said " the user interactions would greatly facilitate my analysis tasks " . PM2 and PM4 commented that user flow enables them to easily connect the users who share a similar loyalty pattern and trace their loyalty variation across multiple search engines. The participants also acknowledged the usefulness of the density map and the word cloud. PM1 and PM2 commented that the word cloud can provide them a quick overview of the distribution of the words that trigger engine switching behavior. PM4 liked the density map and commented that " it allows me to quickly see the relationship between satisfaction and loyalty for a group of users " . All participants agreed on the usefulness of the linked visualizations. Suggestions. The participants provide valuable feedback about the system. All PMs except for PM3 suggested that we should support more data filtering operations, such as the filtering based on different entry points (such as tool bars or homepages). All PMs also highlighted the potential of the system to support other in-depth analysis. PM2 particularly commented that " The visualization is good at enabling qualitative analysis. It would be desired that quantitative analysis can also be supported " . The participants also had some concerns. PM1 and PM4 had concerns about the intuitiveness of the system. While it was easy for them to understand each individual view, they felt difficult to link them together. Nevertheless, they both agreed that after a short time training they could get used to the linked system. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6.4">Discussion</head><p>The search engine logs exhibit rich and valuable user information, which allow us to acquire a better understanding of user loyalty analysis and derive a set of considerate design principles. Although we mainly demonstrate our visualization techniques using search engine logs, the techniques could be easily adapted to other problems, such as user engagement on e-learning courses, which share similar data characteristics and task requirements. We employ a force-directed layout algorithm based on different effectiveness and aesthetics criteria to generate a layout. The layout algorithm works well when most branches do not cross more than two layers. It may fail to create an effective layout in some extreme cases in which there are frequent and dramatic exchanges of quantities across the distant layers. In this case, there would be a significant amount of clutter caused by crossings between the branches and the layers. The visual design based on color bars <ref type="bibr" coords="9,216.40,554.10,15.05,10.80" target="#b28">[30] </ref>would be helpful in these scenarios. Nevertheless, we believe that our design works for many scenarios of customer loyalty analysis as the loyalty degree of a customer will not dramatically change in most cases <ref type="bibr" coords="9,235.97,583.99,13.74,10.80" target="#b25">[27]</ref>. From the feedback from the expert review, the flow view layout is easy to be understood. One typical benefit of it is to allow an analyst to interactively specify a fairly complex query to find a group of users based on the user flow. However, the brushing interactions across multiple linked views may cause some learning costs, as we discussed in Section 6.3. In the case study, we visually compared three search engines using our system. It can naturally support more search engines by adding more flow views. But due to the limited screen space and capability of users for comparison tasks <ref type="bibr" coords="9,153.77,684.40,13.76,10.80" target="#b45">[47]</ref>, the comparison for more than four engines are not recommended. In LoyalTracker, we offer one density map view and one word cloud view. When conducting comparative analysis, it poses a challenge for analysts to visually compare multiple word clouds or multiple density maps. However, the smooth and responsive user interaction can largely help circumvent this problem. Analyst can quickly brush and see the results immediately. The case studies and expert reviews also confirm the usability and effectiveness of current interface and interaction design. In the flow view, we use different colors to encode the categories of loyalty. According to the previous study <ref type="bibr" coords="9,361.79,91.03,14.82,10.80" target="#b17">[18] </ref>and the suggestion from our experts, we classify the users into four groups. The flow view allows more than four categories. However, as people can efficiently distinguish only a dozen colors <ref type="bibr" coords="9,543.31,110.95,13.61,10.80" target="#b37">[39]</ref>, the number of the loyalty categories should be less than twelve. The user log data we used also has some limitations: @BULLET Uncertainty. Users are recognized by the ID stored in the cookie of a web browser in the data. Thus, when users change to another web browser or clean the cookies, we cannot track them any more. Furthermore, the user log data assumes one web browser in one computer used by only one person, which is not always the case. Although all the logs are stored anonymously, it is feasible to infer if two users are the same or not using some data fields such as IP address or the clicking behaviors, which could introduce uncertainty to the data. Some visual hints can be displayed to keep user aware of the uncertainty. @BULLET Scalability. The data processing part cannot be done real-time. Nevertheless, after that LoyalTracker can achieve interactive performance . From the case study, we found that explaining some patterns needs more original raw data from the data center. Due to the large scale of the data and the limited computing resource we have, in the current stage we cannot retrieve the raw data in real time. However, this problem can be solved in the future by applying in more computing resource. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="7">CONCLUSION AND FUTURE WORK</head><p>In this paper, we systematically study the effective visualization of customer loyalty and switching behavior from massive data sets in business intelligence. We derive a set of design principles to address the most important questions raised by the domain experts of loyalty analysis. Guided by the principles, we propose a visual analytics system. The system consists of three views: a flow view, a density map view, and a word cloud view. We design a new visualization technique in the flow view, based on a flow metaphor to interactively reveal the evolving patterns of customer loyalty and defection. The other two views: a density map view and a word cloud view enable in-depth analysis. Case studies and the interview with domain experts demonstrated the usefulness of the flow view for showing the overall loyalty trend along the time. The flow view plays a primary role in discovering the patterns we just discussed. It enables analysts to quickly and intuitively construct a fairly complex queries, such that they can perform detailed analysis and confirm the findings in the density map and word cloud. In the future, we plan to release a web based version of LoyalTracker to the search technology department of the company with a larger number of potential users. We are also planing to improve the interaction design in order to reduce the learning curve and make the system easier to use. For example, to reduce the complexity of the brushing interaction , more visual hints will be used to mark analysts interactions (i.e., union operations and intersection operations) so that the brushing results can be easily understood. Also, when analysts explore multiple flow views, synced zoom &amp; pan operations will be offered. Moreover, we plan to apply our techniques to other similar problems. For example, we can use them to track and analyze the dynamics of user engagement in e-learning courses from web log data. Thus, our techniques can be used by a large group of audience, which enable us to get richer feedback and suggestions. We will also further evaluate our techniques using a formal user study. Visualization of the co-evolution pattern of loyalty and satisfaction is another potential future research direction. </p></div><figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_1" coords="5,46.20,289.46,514.57,10.80"><head>Fig. 4: </head><figDesc>Fig. 4: (a) TextFlow based on a flow-based metaphor, (b) RankExplorer based on color bars, and (c) The flow view based on a new flow metaphor. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_3" coords="5,308.83,525.21,250.38,10.80;5,308.83,535.17,250.38,10.80;5,308.83,545.13,250.38,10.80;5,308.83,555.09,140.67,10.80"><head>Fig. 5: </head><figDesc>Fig. 5: Illustration for the force-directed model. Black nodes represent the group of the bundled branches. Nodes are connected by springs to achieve our layout goals. The dashed curve in the top left corner shows the track that the node can move along. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_5" coords="6,315.42,268.92,250.38,10.80;6,315.42,278.88,250.38,10.80;6,315.42,288.84,250.38,10.80;6,315.42,298.80,250.98,10.80;6,315.42,308.77,162.65,10.80"><head>Fig. 6: </head><figDesc>Fig. 6: Illustration of generating the user flow. (a) Straightforward method that shows the distribution of users over time, (b) the initial layout created by fixing the layer flow with the maximum width and adjusting other flows accordingly for the smoothing purpose, and (c) optimal result by minimizing the total cost C. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_8" coords="8,139.68,503.52,79.59,6.75;8,135.24,498.14,6.87,6.75;8,135.15,486.01,6.87,6.75;8,135.29,471.16,6.87,6.75;8,135.29,456.87,6.87,6.75;8,135.43,442.02,6.87,6.75;8,135.29,428.97,6.87,6.75;8,223.72,503.70,79.59,6.75;8,219.55,498.42,6.87,6.75;8,219.46,486.29,6.87,6.75;8,219.60,471.44,6.87,6.75;8,219.60,457.15,6.87,6.75;8,219.74,442.30,6.87,6.75;8,219.60,429.25,6.87,6.75;8,176.56,516.75,8.36,9.33;8,259.93,516.45,7.97,9.33;8,55.00,503.93,79.59,6.75"><head></head><figDesc>16 17 18 19 20 21 22 23 24 25 0.0 ) 16 17 18 19 20 21 22 23 24 25 </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_4" validated="false" coords="6,106.79,78.09,196.38,18.75"><figDesc coords="6,106.79,79.63,73.40,12.33;6,181.94,81.29,6.97,15.56;6,190.15,79.63,30.76,12.59;6,222.65,81.29,6.97,15.56;6,230.87,79.63,8.86,12.59;6,240.23,81.29,4.97,15.56;6,245.19,78.09,3.49,8.40;6,292.72,79.95,10.45,10.80">f e (a, b) = k e q a q b (p a − p b )/||p a − p b || 3 (2)</figDesc><table></table></figure>
+		</body>
+		<back>
+
+			<div type="acknowledgement">
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>ACKNOWLEDGMENTS </head><p>The authors wish to thank Aviz group in Inria, France, for their kind help on revising the paper and the anonymous reviewers for their valuable comments. This research was supported in part by HK RGC GRF 16208514, the National Basic Research Program of China (973 Program ) under Grant No. 2014CB340304, the National Natural Science Foundation of China 61103055, and FDYT LYM11113. </p></div>
+			</div>
+
+			<div type="references">
+
+				<listBibl>
+
+<biblStruct coords="10,71.05,72.62,233.51,9.60;10,70.70,82.08,158.76,9.60"  xml:id="b0">
+	<analytic>
+		<title level="a" type="main">Strengthening the satisfaction-profit chain</title>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<forename type="middle">W</forename>
+				<surname>Anderson</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">V</forename>
+				<surname>Mittal</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Journal of Service Research</title>
+		<imprint>
+			<biblScope unit="volume">3</biblScope>
+			<biblScope unit="issue">2</biblScope>
+			<biblScope unit="page" from="107" to="120" />
+			<date type="published" when="2000" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,71.05,91.55,233.51,9.60;10,70.92,101.01,233.45,9.60;10,71.05,110.48,29.89,9.60"  xml:id="b1">
+	<analytic>
+		<title level="a" type="main">Stacked graphs – geometry &amp; aesthetics</title>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<surname>Byron</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Wattenberg</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Visualization and Computer Graphics</title>
+		<imprint>
+			<biblScope unit="volume">14</biblScope>
+			<biblScope unit="issue">6</biblScope>
+			<biblScope unit="page" from="1245" to="52" />
+			<date type="published" when="2008" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,71.05,119.94,233.11,9.60;10,71.05,129.40,232.12,9.60;10,71.05,138.87,232.12,9.60;10,70.81,148.34,232.37,9.52;10,70.86,157.80,99.17,9.60"  xml:id="b2">
+	<analytic>
+		<title level="a" type="main">Information scent as a driver of web behavior graphs: results of a protocol analysis method for web usability</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<forename type="middle">K</forename>
+				<surname>Card</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Pirolli</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Van Der Wege</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">B</forename>
+				<surname>Morrison</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<forename type="middle">W</forename>
+				<surname>Reeder</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<forename type="middle">K</forename>
+				<surname>Schraedley</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Boshart</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the SIGCHI Conference on Human Factors in Computing Systems</title>
+		<meeting>the SIGCHI Conference on Human Factors in Computing Systems</meeting>
+		<imprint>
+			<date type="published" when="2001" />
+			<biblScope unit="page" from="498" to="505" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,71.05,167.26,232.12,9.60;10,70.79,176.73,96.75,9.60"  xml:id="b3">
+	<analytic>
+		<title level="a" type="main">Improving web usability through visualization</title>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<forename type="middle">H</forename>
+				<surname>Chi</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Internet Computing</title>
+		<imprint>
+			<biblScope unit="volume">6</biblScope>
+			<biblScope unit="issue">2</biblScope>
+			<biblScope unit="page" from="64" to="71" />
+			<date type="published" when="2002" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,71.05,186.20,233.51,9.60;10,70.81,195.66,232.37,9.60;10,70.61,205.12,233.56,9.60;10,71.05,214.59,17.93,9.60"  xml:id="b4">
+	<analytic>
+		<title level="a" type="main">Textflow: towards better understanding of evolving topics in text</title>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Cui</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Liu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<surname>Tan</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Shi</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Y</forename>
+				<surname>Song</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Z</forename>
+				<forename type="middle">J</forename>
+				<surname>Gao</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">X</forename>
+				<surname>Tong</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Qu</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Visualization and Computer Graphics</title>
+		<imprint>
+			<biblScope unit="issue">12</biblScope>
+			<biblScope unit="page" from="172412" to="2421" />
+			<date type="published" when="2011" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,71.05,224.05,232.12,9.60;10,71.05,233.52,232.12,9.60;10,71.05,242.98,158.61,9.60"  xml:id="b5">
+	<analytic>
+		<title level="a" type="main">A visual backchannel for large-scale events</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Dörk</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<forename type="middle">M</forename>
+				<surname>Gruen</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Williamson</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<forename type="middle">S T</forename>
+				<surname>Carpendale</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Visualization and Computer Graphics</title>
+		<imprint>
+			<biblScope unit="volume">16</biblScope>
+			<biblScope unit="issue">6</biblScope>
+			<biblScope unit="page" from="1129" to="1138" />
+			<date type="published" when="2010" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,71.05,252.45,232.12,9.60;10,71.05,261.91,232.12,9.60;10,70.57,271.38,199.60,9.60"  xml:id="b6">
+	<analytic>
+		<title level="a" type="main">Web search engine evaluation using clickthrough data and a user model</title>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Dupret</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">V</forename>
+				<surname>Murdock</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Piwowarski</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">WWW workshop Query Log Analysis: Social and Technological Challenges</title>
+		<imprint>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,71.05,280.84,232.12,9.60;10,70.81,290.30,232.37,9.60;10,71.05,299.77,41.84,9.60"  xml:id="b7">
+	<analytic>
+		<title level="a" type="main">Visualizing usability log data</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Gray</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<forename type="middle">N</forename>
+				<surname>Badre</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<forename type="middle">J</forename>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the IEEE Symposium on Information Visualization</title>
+		<meeting>the IEEE Symposium on Information Visualization</meeting>
+		<imprint>
+			<date type="published" when="1996" />
+			<biblScope unit="page" from="93" to="98" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,71.05,309.23,232.40,9.60;10,71.05,318.70,233.45,9.60;10,71.05,328.16,232.12,9.60;10,71.05,337.63,190.96,9.60"  xml:id="b8">
+	<analytic>
+		<title level="a" type="main">Why searchers switch: understanding and predicting engine switching rationales</title>
+		<author>
+			<persName>
+				<forename type="first">Q</forename>
+				<surname>Guo</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<forename type="middle">W</forename>
+				<surname>White</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Y</forename>
+				<surname>Zhang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Anderson</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<forename type="middle">T</forename>
+				<surname>Dumais</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the ACM SIGIR conference on Research and development in information retrieval</title>
+		<meeting>the ACM SIGIR conference on Research and development in information retrieval</meeting>
+		<imprint>
+			<date type="published" when="2011" />
+			<biblScope unit="page" from="335" to="344" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,71.05,347.09,232.12,9.60;10,71.05,356.56,232.12,9.60;10,71.05,366.02,146.20,9.60"  xml:id="b9">
+	<monogr>
+		<title level="m" type="main">Analyzing and visualizing log files: A computational science of usability</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Guzdial</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Santos</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Badre</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Hudson</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Gray</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="1994" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,71.05,375.49,232.12,9.60;10,71.05,384.95,232.12,9.60;10,71.05,394.41,193.05,9.60"  xml:id="b10">
+	<analytic>
+		<title level="a" type="main">Query segmentation revisited</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Hagen</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Potthast</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Stein</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Bräutigam</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 20th international conference on World wide web -WWW &apos;11</title>
+		<meeting>the 20th international conference on World wide web -WWW &apos;11<address><addrLine>New York, USA</addrLine></address></meeting>
+		<imprint>
+			<date type="published" when="2011-03" />
+			<biblScope unit="page">97</biblScope>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,71.05,403.88,232.40,9.60;10,71.05,413.35,232.12,9.60;10,71.05,422.81,232.43,9.52;10,71.05,432.27,212.74,9.60"  xml:id="b11">
+	<analytic>
+		<title level="a" type="main">Beyond Clicks: Query Reformulation as a Predictor of Search Satisfaction</title>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Hassan</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">X</forename>
+				<surname>Shi</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Craswell</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Ramsey</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 22nd ACM international conference on Conference on information &amp; knowledge management</title>
+		<meeting>the 22nd ACM international conference on Conference on information &amp; knowledge management<address><addrLine>New York,USA</addrLine></address></meeting>
+		<imprint>
+			<date type="published" when="2013" />
+			<biblScope unit="page" from="2019" to="2028" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,71.05,441.74,232.12,9.60;10,71.05,451.20,232.12,9.60;10,70.57,460.67,178.18,9.60"  xml:id="b12">
+	<analytic>
+		<title level="a" type="main">Themeriver: Visualizing thematic changes in large document collections</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Havre</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<surname>Hetzler</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Whitney</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<surname>Nowell</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Visualization and Computer Graphics</title>
+		<imprint>
+			<biblScope unit="volume">8</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="9" to="20" />
+			<date type="published" when="2002" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,71.05,470.13,232.12,9.60;10,71.05,479.59,232.12,9.60;10,71.05,489.06,232.41,9.60;10,70.59,498.52,149.81,9.60"  xml:id="b13">
+	<analytic>
+		<title level="a" type="main">Effects of search success on search engine re-use</title>
+		<author>
+			<persName>
+				<forename type="first">V</forename>
+				<surname>Hu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Stone</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Pedersen</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<forename type="middle">W</forename>
+				<surname>White</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 20th ACM international conference on Information and knowledge management</title>
+		<meeting>the 20th ACM international conference on Information and knowledge management<address><addrLine>New York, New York, USA</addrLine></address></meeting>
+		<imprint>
+			<publisher>ACM Press</publisher>
+			<date type="published" when="2011-10" />
+			<biblScope unit="page">1841</biblScope>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,71.05,507.99,233.45,9.60;10,71.05,517.45,232.12,9.60;10,71.05,526.92,232.41,9.60;10,70.59,536.38,151.38,9.60"  xml:id="b14">
+	<analytic>
+		<title level="a" type="main">Analyzing and evaluating query reformulation strategies in web search logs</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Huang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<forename type="middle">N</forename>
+				<surname>Efthimiadis</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceeding of the 18th ACM conference on Information and knowledge management</title>
+		<meeting>eeding of the 18th ACM conference on Information and knowledge management<address><addrLine>New York, New York, USA</addrLine></address></meeting>
+		<imprint>
+			<publisher>ACM Press</publisher>
+			<date type="published" when="2009-11" />
+			<biblScope unit="page">77</biblScope>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,71.05,545.85,232.12,9.60;10,71.05,555.31,232.12,9.60;10,70.39,564.78,222.63,9.60"  xml:id="b15">
+	<analytic>
+		<title level="a" type="main">An analysis of search engine switching behavior using click streams</title>
+		<author>
+			<persName>
+				<forename type="first">Y.-F</forename>
+				<surname>Juan</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C.-C</forename>
+				<surname>Chang</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the First International Workshop on Internet and Network Economics</title>
+		<meeting>the First International Workshop on Internet and Network Economics</meeting>
+		<imprint>
+			<date type="published" when="2005" />
+			<biblScope unit="page" from="806" to="815" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,71.05,574.24,232.12,9.60;10,71.05,583.71,233.11,9.60;10,71.05,593.17,232.13,9.60;10,70.86,602.63,97.62,9.60"  xml:id="b16">
+	<analytic>
+		<title level="a" type="main">Customer switching behavior in online services: An exploratory study of the role of selected attitudinal, behavioral, and demographic factors</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<forename type="middle">M</forename>
+				<surname>Keaveney</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Parthasarathy</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Journal of the Academy of Marketing Science</title>
+		<imprint>
+			<biblScope unit="volume">29</biblScope>
+			<biblScope unit="issue">4</biblScope>
+			<biblScope unit="page" from="374" to="390" />
+			<date type="published" when="2001" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,71.05,612.10,232.12,9.60;10,71.05,621.56,44.06,9.60"  xml:id="b17">
+	<monogr>
+		<title level="m" type="main">Marketing Management</title>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Kotler</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Keller</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2011" />
+			<publisher>Prentice Hall</publisher>
+		</imprint>
+	</monogr>
+	<note>14th. edition</note>
+</biblStruct>
+
+<biblStruct coords="10,71.05,631.03,232.12,9.60;10,71.05,640.49,232.12,9.60;10,70.57,649.96,182.13,9.60"  xml:id="b18">
+	<analytic>
+		<title level="a" type="main">Session viewer: Visual exploratory analysis of web session logs</title>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Lam</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Russell</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Tang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Munzner</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">IEEE Symposium on Visual Analytics Science and Technology</title>
+		<imprint>
+			<date type="published" when="2007" />
+			<biblScope unit="page" from="147" to="154" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,71.05,659.42,232.12,9.60;10,71.05,668.88,233.45,9.60;10,71.05,678.35,233.51,9.60"  xml:id="b19">
+	<analytic>
+		<title level="a" type="main">Visualization and analysis of clickstream data of online stores for understanding web merchandising</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Lee</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Podlaseck</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<surname>Schonberg</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Hoch</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Data Mining and Knowledge Discovery</title>
+		<imprint>
+			<biblScope unit="volume">5</biblScope>
+			<biblScope unit="issue">12</biblScope>
+			<biblScope unit="page" from="59" to="84" />
+			<date type="published" when="2001" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,71.05,687.81,233.23,9.60;10,71.05,697.28,233.40,9.60"  xml:id="b20">
+	<monogr>
+		<title level="m" type="main">A survey on information visualization: recent advances and challenges. The Visual Computer</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Liu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Cui</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Y</forename>
+				<surname>Wu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Liu</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2014" />
+			<biblScope unit="page" from="1" to="21" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,71.05,706.74,233.11,9.60;10,71.05,716.21,232.12,9.60;10,71.05,725.67,232.12,9.60;10,71.05,735.14,49.81,9.60;10,315.42,52.10,251.70,9.60;10,333.67,61.56,232.12,9.60;10,333.41,71.03,121.89,9.60"  xml:id="b21">
+	<analytic>
+		<title level="a" type="main">Interactive, topic-based visual text summarization and analysis Competition between internet search engines</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Liu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<forename type="middle">X</forename>
+				<surname>Zhou</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Pan</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Qian</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Cai</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">X</forename>
+				<surname>Lian</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Mukhopadhyay</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">U</forename>
+				<surname>Rajan</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Telang</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the ACM Conference on Information and Knowledge Management Proceedings of the Annual Hawaii International Conference on System Sciences</title>
+		<meeting>the ACM Conference on Information and Knowledge Management the Annual Hawaii International Conference on System Sciences</meeting>
+		<imprint>
+			<date type="published" when="2004" />
+			<biblScope unit="page" from="543" to="552" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,333.67,80.49,233.45,9.60;10,333.67,89.96,113.92,9.60"  xml:id="b22">
+	<monogr>
+		<title level="m" type="main">A history of the united states congress – partisan and ideological makeup</title>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Munroe</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="1127" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,333.67,99.42,232.12,9.60;10,333.67,108.89,233.12,9.60;10,333.67,118.35,73.94,9.60"  xml:id="b23">
+	<analytic>
+		<title level="a" type="main">Flow map layout</title>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Phan</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<surname>Xiao</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<forename type="middle">B</forename>
+				<surname>Yeh</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Hanrahan</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Winograd</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of IEEE Symposium on Information Visualization</title>
+		<meeting>IEEE Symposium on Information Visualization</meeting>
+		<imprint>
+			<date type="published" when="2005" />
+			<biblScope unit="page" from="219" to="224" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,333.67,127.82,232.12,9.60;10,333.67,137.28,233.12,9.60;10,333.67,146.74,69.95,9.60"  xml:id="b24">
+	<analytic>
+		<title level="a" type="main">Webviz: A tool for world-wide web access log analysis</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Pitkow</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<forename type="middle">A</forename>
+				<surname>Bharat</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the International World Wide Web Conference</title>
+		<meeting>the International World Wide Web Conference</meeting>
+		<imprint>
+			<date type="published" when="1994" />
+			<biblScope unit="page" from="271" to="277" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,333.67,156.21,233.52,9.60;10,333.39,165.67,155.09,9.60"  xml:id="b25">
+	<analytic>
+		<title level="a" type="main">E-Loyalty: your secret weapon on the web</title>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<forename type="middle">F</forename>
+				<surname>Reichheld</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Schefter</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Harvard Business Review</title>
+		<imprint>
+			<biblScope unit="volume">78</biblScope>
+			<biblScope unit="issue">4</biblScope>
+			<biblScope unit="page" from="105" to="113" />
+			<date type="published" when="2000" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,333.67,175.14,232.12,9.60;10,333.67,184.60,185.62,9.60"  xml:id="b26">
+	<analytic>
+		<title level="a" type="main">Zero defections: quality comes to services</title>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<forename type="middle">F</forename>
+				<surname>Reichheld</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">W</forename>
+				<surname>Sasser</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Harvard Business Review</title>
+		<imprint>
+			<biblScope unit="volume">68</biblScope>
+			<biblScope unit="issue">5</biblScope>
+			<biblScope unit="page" from="105" to="113" />
+			<date type="published" when="1990" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,333.67,194.07,232.12,9.60;10,333.39,203.53,232.41,9.60;10,333.19,213.00,150.40,9.60"  xml:id="b27">
+	<analytic>
+		<title level="a" type="main">Visual analysis of massive web session data</title>
+		<author>
+			<persName>
+				<forename type="first">Z</forename>
+				<surname>Shen</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Wei</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Sundaresan</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">K.-L</forename>
+				<surname>Ma</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the IEEE Symposium on Large Data Analysis and Visualization</title>
+		<meeting>the IEEE Symposium on Large Data Analysis and Visualization</meeting>
+		<imprint>
+			<date type="published" when="2012" />
+			<biblScope unit="page" from="65" to="72" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,333.67,222.46,233.44,9.60;10,333.67,231.92,232.12,9.60;10,333.19,241.39,206.07,9.60"  xml:id="b28">
+	<analytic>
+		<title level="a" type="main">RankExplorer: Visualization of ranking changes in large time series data</title>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Shi</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Cui</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Liu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Xu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Chen</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Qu</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Visualization and Computer Graphics</title>
+		<imprint>
+			<biblScope unit="volume">18</biblScope>
+			<biblScope unit="issue">12</biblScope>
+			<biblScope unit="page" from="2669" to="2678" />
+			<date type="published" when="2012" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,333.67,250.85,232.12,9.60;10,333.67,260.32,232.12,9.60;10,333.67,269.78,209.88,9.60"  xml:id="b29">
+	<analytic>
+		<title level="a" type="main">Understanding text corpora with multiple facets</title>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<surname>Shi</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<surname>Wei</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Liu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<surname>Tan</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">X</forename>
+				<surname>Lian</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<forename type="middle">X</forename>
+				<surname>Zhou</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the IEEE Symposium on Visual Analytics Science and Technology</title>
+		<meeting>the IEEE Symposium on Visual Analytics Science and Technology</meeting>
+		<imprint>
+			<date type="published" when="2010" />
+			<biblScope unit="page" from="99" to="106" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,333.67,279.25,232.26,9.60;10,333.67,288.71,232.11,9.60;10,333.01,298.18,234.17,9.60"  xml:id="b30">
+	<analytic>
+		<title level="a" type="main">Optimal rare query suggestion with implicit user feedback</title>
+		<author>
+			<persName>
+				<forename type="first">Y</forename>
+				<surname>Song</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<surname>He</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 19th International Conference on World Wide Web, WWW &apos;10</title>
+		<meeting>the 19th International Conference on World Wide Web, WWW &apos;10<address><addrLine>New York, NY, USA</addrLine></address></meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="2010" />
+			<biblScope unit="page" from="901" to="910" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,333.67,307.64,232.12,9.60;10,333.67,317.11,232.12,9.60;10,333.01,326.57,152.46,9.60"  xml:id="b31">
+	<analytic>
+		<title level="a" type="main">Evaluating and predicting user engagement change with degraded search relevance</title>
+		<author>
+			<persName>
+				<forename type="first">Y</forename>
+				<surname>Song</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">X</forename>
+				<surname>Shi</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">X</forename>
+				<surname>Fu</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the International World Wide Web Conference</title>
+		<meeting>the International World Wide Web Conference</meeting>
+		<imprint>
+			<biblScope unit="page">2013</biblScope>
+		</imprint>
+	</monogr>
+	<note>To. appear</note>
+</biblStruct>
+
+<biblStruct coords="10,333.67,336.03,232.12,9.60;10,333.67,345.50,232.13,9.60;10,333.67,354.96,222.19,9.60"  xml:id="b32">
+	<analytic>
+		<title level="a" type="main">A survey of visual analytics techniques and applications: State-of-the-art research and future challenges</title>
+		<author>
+			<persName>
+				<forename type="first">G.-D</forename>
+				<surname>Sun</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Y.-C</forename>
+				<surname>Wu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R.-H</forename>
+				<surname>Liang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S.-X</forename>
+				<surname>Liu</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Computer Science and Technology</title>
+		<imprint>
+			<biblScope unit="volume">28</biblScope>
+			<biblScope unit="issue">5</biblScope>
+			<biblScope unit="page" from="852" to="867" />
+			<date type="published" when="2013" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,333.67,364.43,233.45,9.60;10,333.67,373.89,232.12,9.60;10,333.39,383.36,114.78,9.60"  xml:id="b33">
+	<analytic>
+		<title level="a" type="main">Design considerations for optimizing storyline visualizations</title>
+		<author>
+			<persName>
+				<forename type="first">Y</forename>
+				<surname>Tanahashi</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">K.-L</forename>
+				<surname>Ma</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Visualization and Computer Graphics</title>
+		<imprint>
+			<biblScope unit="volume">18</biblScope>
+			<biblScope unit="issue">12</biblScope>
+			<biblScope unit="page" from="2679" to="2688" />
+			<date type="published" when="2012" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,333.67,392.82,232.12,9.60;10,333.67,402.29,167.67,9.60"  xml:id="b34">
+	<analytic>
+		<title level="a" type="main">Visualized preference transition network based on recency and frequency</title>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Tsuji</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Saga</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEMS</title>
+		<imprint>
+			<biblScope unit="volume">10</biblScope>
+			<biblScope unit="issue">4</biblScope>
+			<biblScope unit="page" from="238" to="246" />
+			<date type="published" when="2011" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,333.67,411.75,232.12,9.60;10,333.67,421.21,204.43,9.60"  xml:id="b35">
+	<analytic>
+		<title level="a" type="main">A crowding model of visual clutter</title>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Van Den Berg</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<forename type="middle">W</forename>
+				<surname>Cornelissen</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">B T M</forename>
+				<surname>Roerdink</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Journal of Vision</title>
+		<imprint>
+			<biblScope unit="volume">9</biblScope>
+			<biblScope unit="issue">24</biblScope>
+			<date type="published" when="2009" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,333.67,430.68,232.12,9.60;10,333.39,440.14,233.40,9.60;10,333.08,449.61,77.26,9.60"  xml:id="b36">
+	<analytic>
+		<title level="a" type="main">Participatory visualization with wordle</title>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<forename type="middle">B</forename>
+				<surname>Viégas</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Wattenberg</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Feinberg</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Visualization and Computer Graphics</title>
+		<imprint>
+			<biblScope unit="volume">15</biblScope>
+			<biblScope unit="issue">6</biblScope>
+			<biblScope unit="page" from="1137" to="1144" />
+			<date type="published" when="2009" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,333.67,459.07,232.12,9.60;10,333.14,468.54,209.49,9.60"  xml:id="b37">
+	<monogr>
+		<title level="m" type="main">Information Visualization, Third Edition: Perception for Design (Interactive Technologies)</title>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Ware</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2012" />
+			<publisher>Morgan Kaufmann</publisher>
+		</imprint>
+	</monogr>
+	<note>3rd. edition</note>
+</biblStruct>
+
+<biblStruct coords="10,333.67,478.00,233.52,9.60;10,333.30,487.47,233.82,9.60;10,333.67,496.93,232.12,9.60;10,333.19,506.40,123.60,9.60"  xml:id="b38">
+	<analytic>
+		<title level="a" type="main">What did they do? understanding clickstreams with the WebQuilt visualization system</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<forename type="middle">J</forename>
+				<surname>Waterson</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">I</forename>
+				<surname>Hong</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Sohn</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">A</forename>
+				<surname>Landay</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Heer</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Matthews</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the Working Conference on Advanced Visual Interfaces</title>
+		<meeting>the Working Conference on Advanced Visual Interfaces</meeting>
+		<imprint>
+			<date type="published" when="2002" />
+			<biblScope unit="page" from="94" to="102" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,333.67,515.86,232.12,9.60;10,333.67,525.32,232.12,9.60;10,333.19,534.79,170.18,9.60"  xml:id="b39">
+	<analytic>
+		<title level="a" type="main">Visual cluster exploration of web clickstream data</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Wei</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Z</forename>
+				<surname>Shen</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Sundaresan</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">K.-L</forename>
+				<surname>Ma</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the IEEE Symposium on Visual Analytics Science and Technology</title>
+		<meeting>the IEEE Symposium on Visual Analytics Science and Technology</meeting>
+		<imprint>
+			<date type="published" when="2012" />
+			<biblScope unit="page" from="3" to="12" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,333.67,544.25,232.12,9.60;10,333.67,553.72,232.13,9.60;10,333.67,563.18,156.49,9.60"  xml:id="b40">
+	<analytic>
+		<title level="a" type="main">Characterzing and predicting search engine switching behavior</title>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<forename type="middle">W</forename>
+				<surname>White</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<forename type="middle">T</forename>
+				<surname>Dumais</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the ACM conference on Information and knowledge management</title>
+		<meeting>the ACM conference on Information and knowledge management</meeting>
+		<imprint>
+			<date type="published" when="2009" />
+			<biblScope unit="page" from="87" to="96" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,333.67,572.65,232.12,9.60;10,333.67,582.11,232.12,9.60;10,333.34,591.58,203.55,9.60"  xml:id="b41">
+	<analytic>
+		<title level="a" type="main">Modeling long-term search engine usage</title>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<forename type="middle">W</forename>
+				<surname>White</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Kapoor</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<forename type="middle">T</forename>
+				<surname>Dumais</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the international conference on User Modeling, Adaptation, and Personalization</title>
+		<meeting>the international conference on User Modeling, Adaptation, and Personalization</meeting>
+		<imprint>
+			<date type="published" when="2010" />
+			<biblScope unit="page" from="28" to="39" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,333.67,601.04,232.12,9.60;10,333.39,610.51,232.41,9.60;10,333.67,619.97,232.12,9.52;10,333.67,629.44,93.00,9.60"  xml:id="b42">
+	<analytic>
+		<title level="a" type="main">Enhancing web search by promoting multiple search engine use</title>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<forename type="middle">W</forename>
+				<surname>White</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Richardson</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Bilenko</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<forename type="middle">P</forename>
+				<surname>Heath</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the ACM SIGIR conference on Research and development in information retrieval</title>
+		<meeting>the ACM SIGIR conference on Research and development in information retrieval</meeting>
+		<imprint>
+			<date type="published" when="2008" />
+			<biblScope unit="page" from="43" to="50" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,333.67,638.90,232.12,9.60;10,333.67,648.36,233.44,9.60;10,333.67,657.83,233.52,9.60"  xml:id="b43">
+	<analytic>
+		<title level="a" type="main">Exploring flow, factors, and outcomes of temporal event sequences with the outflow visualization</title>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Wongsuphasawat</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Gotz</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Visualization and Computer Graphics</title>
+		<imprint>
+			<biblScope unit="volume">18</biblScope>
+			<biblScope unit="issue">12</biblScope>
+			<biblScope unit="page" from="2659" to="2668" />
+			<date type="published" when="2012" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,333.67,667.29,232.13,9.60;10,333.67,676.76,233.32,9.60;10,333.67,686.22,33.87,9.60"  xml:id="b44">
+	<analytic>
+		<title level="a" type="main">Customer perceived value, satisfaction, and loyalty: The role of switching costs</title>
+		<author>
+			<persName>
+				<forename type="first">Z</forename>
+				<surname>Yang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<forename type="middle">T</forename>
+				<surname>Peterson</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Psychology &amp; Marketing</title>
+		<imprint>
+			<biblScope unit="volume">21</biblScope>
+			<biblScope unit="issue">10</biblScope>
+			<biblScope unit="page" from="799" to="822" />
+			<date type="published" when="2004" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,333.67,695.69,233.45,9.60;10,333.67,705.15,174.39,9.60"  xml:id="b45">
+	<analytic>
+		<title level="a" type="main">Multielement visual tracking: attention and perceptual organization</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Yantis</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Cognitive psychology</title>
+		<imprint>
+			<biblScope unit="volume">24</biblScope>
+			<biblScope unit="issue">3</biblScope>
+			<biblScope unit="page" from="295" to="340" />
+			<date type="published" when="1992-07" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,333.67,714.61,233.51,9.60;10,333.67,724.08,232.12,9.60;10,333.67,733.54,212.46,9.60"  xml:id="b46">
+	<analytic>
+		<title level="a" type="main">SDSS Log Viewer: visual exploratory analysis of large-volume sql log data</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Zhang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Chen</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<forename type="middle">S</forename>
+				<surname>Vogeley</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Pan</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Thakar</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Raddick</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the Visualization and Data Analysis</title>
+		<meeting>the Visualization and Data Analysis</meeting>
+		<imprint>
+			<date type="published" when="2012" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+				</listBibl>
+			</div>
+		</back>
+	</text>
+</TEI>

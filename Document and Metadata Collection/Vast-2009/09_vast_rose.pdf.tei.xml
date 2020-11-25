@@ -1,0 +1,2598 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.tei-c.org/ns/1.0 /home/pisenberg/grobid/grobid-home/schemas/xsd/Grobid.xsd"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+	<teiHeader xml:lang="en">
+		<encodingDesc>
+			<appInfo>
+				<application version="0.4.1" ident="GROBID" when="2016-09-09T13:40+0000">
+					<ref target="https://github.com/kermitt2/grobid">GROBID - A machine learning software for extracting information from scholarly documents</ref>
+				</application>
+			</appInfo>
+		</encodingDesc>
+		<fileDesc>
+			<titleStmt>
+				<title level="a" type="main">Describing Story Evolution from Dynamic Information Streams</title>
+			</titleStmt>
+			<publicationStmt>
+				<publisher/>
+				<availability status="unknown"><licence/></availability>
+			</publicationStmt>
+			<sourceDesc>
+				<biblStruct>
+					<analytic>
+						<author>
+							<persName>
+								<forename type="first">Stuart</forename>
+								<surname>Rose</surname>
+							</persName>
+							<affiliation>
+								<orgName type="laboratory">Pacific Northwest National Laboratory</orgName>
+							</affiliation>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Scott</forename>
+								<surname>Butner</surname>
+							</persName>
+							<affiliation>
+								<orgName type="laboratory">Pacific Northwest National Laboratory</orgName>
+							</affiliation>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Wendy</forename>
+								<surname>Cowley</surname>
+							</persName>
+							<affiliation>
+								<orgName type="laboratory">Pacific Northwest National Laboratory</orgName>
+							</affiliation>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Michelle</forename>
+								<surname>Gregory</surname>
+							</persName>
+							<affiliation>
+								<orgName type="laboratory">Pacific Northwest National Laboratory</orgName>
+							</affiliation>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Julia</forename>
+								<surname>Walker</surname>
+							</persName>
+							<affiliation>
+								<orgName type="laboratory">Pacific Northwest National Laboratory</orgName>
+							</affiliation>
+						</author>
+						<title level="a" type="main">Describing Story Evolution from Dynamic Information Streams</title>
+					</analytic>
+					<monogr>
+						<imprint>
+							<date/>
+						</imprint>
+					</monogr>
+				</biblStruct>
+			</sourceDesc>
+		</fileDesc>
+		<profileDesc>
+			<textClass>
+				<keywords>
+					<term>Index Terms: H31 [Content Analysis and Indexing]: Abstracting methods—</term>
+					<term>H33 [Information Search and Retrieval]: Information Filtering—</term>
+					<term>H37 [Digital Libraries]: User Issues—</term>
+					<term>I33 [Com- puter Graphics]: Picture/Image Generation—</term>
+				</keywords>
+			</textClass>
+			<abstract>
+				<p>Sources of streaming information, such as news syndicates, publish information continuously. Information portals and news aggrega-tors list the latest information from around the world enabling information consumers to easily identify events in the past 24 hours. The volume and velocity of these streams causes information from prior days to quickly vanish despite its utility in providing an informative context for interpreting new information. Few capabilities exist to support an individual attempting to identify or understand trends and changes from streaming information over time. The burden of retaining prior information and integrating with the new is left to the skills, determination, and discipline of each individual. In this paper we present a visual analytics system for linking essential content from information streams over time into dynamic stories that develop and change over multiple days. We describe particular challenges to the analysis of streaming information and present a fundamental visual representation for showing story change and evolution over time.</p>
+			</abstract>
+		</profileDesc>
+	</teiHeader>
+	<text xml:lang="en">
+		<body>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1">INTRODUCTION</head><p> Most information consumers interact with snapshots of an information space that is continually changing. Sources of information streams, such as news syndicates and information services, provide a variety of mechanisms for feeding the latest information by region , subject, or by user-defined search interests. However new information that arrives eclipses prior information. Although there are many interfaces for conveying the latest information, few if any capabilities provide a temporal context longer than 24 hours. Accurately identifying and intelligently describing change in an information space requires a context that relates new information with old. Fundamental tasks, such as tracking down initial precursors to an ongoing story can be problematic, particularly when stories span multiple documents and time intervals. Stories develop, merge, and split as they intersect and overlap with other stories over time. With a search interface to archived information, a user may formulate an effective query that recalls all documents related to a given story. However, identifying and exploring potential story connections using an archive search depends on each users prior knowledge of a related story and ability to formulate effective queries. Because it is human nature to prioritize and retain information that supports specific preferences, theories, or hypotheses, relying on individual abilities to acquire and maintain full coverage of a story's related context may actually diminish the objectivity and comprehensiveness of the coverage. We therefore consider the research presented here to provide a more effective means of discovering and maintaining coverage of information for a given analytic task as stories develop. This paper presents three contributions to the field of visual analytics that together enable computation and presentation of a lengthy temporal context in which new information can be situated with thematically related previous events. The first is a novel text analytic framework that extracts essential content from individual documents and computes significant themes occurring within documents collected into corpora or published within information streams. Applied to information streams, the analytic framework computes themes within time intervals enabling accurate detection of stories and their temporal dynamics. The second is a data model for describing and archiving the temporal context of significant themes in a manner that readily adapts to story changes and enables tracking of story evolution and dynamics. The third is a fundamental visual representation of story flow over time that conveys the temporal dynamics for all stories in an information space, enabling observation of story evolution, interaction, and flow over time. We consider the visual representation presented to be fundamental in nature, representing a basis for conveying the historic context and precursors to developing and ongoing stories. The data model presented exists independently of any visual representation and was developed to accomodate the dynamic nature of real stories. Stories are identifiable only as repeated joint membership of documents in the same sets. If documents do not repeatedly join up in the same set then they are not part of the same story. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2">RELATED WORK</head><p> Our work relates to research on visual representations and analysis of structure and change in flows of information over time. Of particular interest is prior work related to temporal analysis of information which we explore in the next two sections. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.1">Visual Methods</head><p>In his book, Envisioning Information, Tufte <ref type="bibr" coords="1,496.56,533.59,14.87,8.12">[15] </ref>describes a graphic time series produced in 1977 by Reebee Garofalo that tracks artistic genealogy and production among recording artists from 1955 to 1974. In Garofalo's graphic, names of recording artists are drawn on a two-dimensional cumulative trend plot, the horizontal axis representing time, the vertical axis generally representing market share. Artists are grouped by style of music and over time new artists are placed near those of similar styles. Tufte writes: Bearing some similarity to Garofalo's graphic, ThemeRiver <ref type="bibr" coords="1,318.00,713.83,9.68,8.12">[7,</ref><ref type="bibr" coords="1,330.24,713.83,7.43,8.12"> 6] </ref>provides a visual representation of the temporal rise and fall </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="99"></head><p>IEEE Symposium on Visual Analytics Science and Technology October 12 -13, Atlantic City, New Jersey, USA U.S. Government work not protected by U.S. copyright of major themes in a document corpus. While ThemeRiver automatically detects themes and their trends in order to show their temporal characteristics, individual items that constitute those trends are not visible, in contrast to the detailed labeling of artists in Garofalo's graphic. As a result ThemeRiver has a much lower information density. Although direct relationships between themes may exist in the corpus, they are not evident in ThemeRiver. Observation of the ThemeRiver visualization does not provide insight into how or to what extent themes interrelate. While correlation among themes may be inferred through observation of similar temporal patterns in ThemeRiver, direct influence between elements is not indicated. Representing the history of an individual document, HistoryFlow <ref type="bibr" coords="2,54.00,187.99,14.99,8.12">[17] </ref>presents a visualization of revision patterns made over the life of a document. The visualization mirrors the linear structure of the document, graphic representations of user revisions are shown in their location relative to the entire document and in the larger context of the document's history. The authors note the aid that the history flow visualization provides in understanding patterns of revisions and collaboration over time. Although focused on a single document, history flow effectively shows progression of all parts of a document in relation to each other. Themail <ref type="bibr" coords="2,99.00,278.35,14.87,8.12">[16] </ref>comprises a system for visualizing and exploring relationships based on interaction patterns as revealed through an individual's email archive. The authors note two distinct user interaction modes with the visualization, exploration of big picture trends and themes (haystack) and more detail-oriented exploration (needle). Based on user studies, the authors note that displaying large collections of keywords fostered user's insight into the evolution of relationships over time as users' past email exchanges were placed within a meaningful context. They also note that each users' familiarity with their respective email archives is essential in enabling efficient insight from the visualization. Single keywords in the visualization bring back memories of events and associated context . A user unfamiliar with the data would likely need to dig deeper into email content in order to resolve ambiguity associated with single keywords and to understand the context for particular keywords, relationships, and trends. A framework for tracking the popularity of quoted phrases (memes) through on-line text is described in <ref type="bibr" coords="2,226.80,448.39,13.70,8.12">[11]</ref>. The authors describe a framework for meme-tracking and demonstrate its utility in representing the news cycle and unique temporal patterns for news media and blogs. A stacked plot is presented for displaying the popularity of particular memes over time. A system for visualizing tags is described in <ref type="bibr" coords="2,233.28,498.79,9.51,8.12" target="#b2">[3]</ref>. The system characterizes the most interesting tags from an online image sharing community based on a sliding interval of time and provides an interactive visualization that allows the user to observe the temporal interestingness of tags as they evolve, at arbitrary scales in real time. Information about inter-relatedness of tags is not explored as the authors' focus is to show the latest, most interesting tags. A common characteristic across this related research is a focus on providing overview and generalization to a user through computational analysis and reduction of unstructured information to a set of specific features whose characteristics are conveyed in a high-level overview. Although HistoryFlow differs by focusing on a structured set of information, and representing changes to that structure, it effectively provides a high-level overview in which patterns of activity and dynamic changes are easily observed. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.2">Analytic Methods</head><p>The analysis of unstructured information in order to select a set of representative features is critical, as features that are not detected can not be shown or measured. Previous research in the visual analytics and information retrieval community has focused on methods of selecting features through the application of corpus-oriented methods that rate candidate features according to their ability to statistically discriminate between sets of documents within the corpus. <ref type="bibr" coords="2,318.00,77.71,14.87,8.12">[13] </ref>and <ref type="bibr" coords="2,353.88,77.71,10.43,8.12">[9] </ref> describe positive results of selecting statistically discriminating words across a corpus to define an index vocabulary for the corpus. While these approaches are useful in many applications, features that are significant for individual documents may be lost by such corpus-oriented methods. In the context of time, stories that span a week may be overshadowed by major news trends that span a year. Because new features are likely to be less common than established features, corpus-oriented methods are likely to overlook features as they first appear. A set of features based on corpus-oriented methods must be reevaluated when the corpus changes. Because corpora based on information streams change frequently, this incurs significant performance hurdles with real information streams. Reprocessing the entirety of the corpus may also wipe out mental models that a user has developed to understand, explore, and explain an information space. Several of these challenges to analysis of streaming data were addressed in <ref type="bibr" coords="2,359.16,267.67,9.51,8.12">[8]</ref>. The authors describe a visual analytics system that enables analysis of dynamic corpora. The system provides multiple visual analytic tools for investigating the current state of a document corpus continually aging out old increments and adding new increments for analysis. The system avoids scalability issues by maintaining a sliding window over time, removing old documents as time moves onward. As this limits how far back in time a user can look, a feature is provided that allows a user to save a copy of any current increment of an analysis. A limitation of that system is that it only represents a single state, and provides no facilities for tracking changes across multiple time increments. The set of features for any increment are selected through corpus-oriented methods, relying on overlap across and gradual change between increments to transition the user across increments. As a result, if many increments pass between a user's last interactions with the system, they may spend significant time reorienting to the new information and any change in context. </p><p>To avoid the limitations of corpus-oriented methods of feature selection, we focus our interest on methods of keyword extraction that operate on individual documents. Such document-oriented methods extract the same keywords from a document regardless of the current state of a corpus. Document-oriented methods therefore provide context-independent document features and are suited to corpora that change As commonly defined in the recent literature, keywords may be single terms or comprise multiple words and phrases that reflect a document's content. Keywords provide a compact summary of a document and have been applied to improve many information retrieval (IR) systems, such as digital libraries, by linking documents via keywords, hyperlinks, citations, quotations, and key phrases. Themail <ref type="bibr" coords="2,364.32,580.75,14.99,8.12">[16] </ref> provides an example of such a system as it enables exploration of email archives through keywords due to their ability to trigger user associations to a larger context. Another system , Phrasier <ref type="bibr" coords="2,368.88,610.63,13.79,8.12">[10]</ref>, lists documents related to a primary document's keyphrases, and supports the use of keyphrase anchors as hyperlinks between documents, enabling a user to quickly access related material. Keyphind <ref type="bibr" coords="2,391.56,640.51,10.43,8.12" target="#b3">[4] </ref> uses keyphrases from documents as the basic building block for an IR system. As described in <ref type="bibr" coords="2,505.80,650.47,13.70,8.12">[14]</ref>, key ideas may also be extracted and used to augment a system for browsing digital libraries of books using key terms extracted from popularly quoted passages. Linking documents through essential content such as keywords enables exploration of associations between documents independent of a static and pre-defined corpus. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3">ANALYTIC FRAMEWORK</head><p>Within this section we first define our method of feature selection, then we describe our method for computation and analysis of significant themes (CAST) and show application to a static document corpus for clarity, then describe how the analytic framework applies CAST to an information stream or dynamic corpus. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.1">Feature Selection</head><p>Many text analysis techniques focus on what distinguishes a text from its encompassing document corpus. When the information is streaming, the corpus is dynamic and can change significantly over time. Techniques that evaluate documents by discriminating features are only valid for a snapshot in time. In order to eliminate the influence of a transient context or state in the larger information space we apply computational methods for characterizing each document individually. Such methods produce information on what a document is about, independent of its current context. Analyzing documents individually also further enables analysis of massive information streams as multiple documents can be analyzed in parallel or across a distributed architecture. In order to extract content that is readily identifiable by users, we apply the technology Rapid Automatic Keyword Extraction (RAKE) described in <ref type="bibr" coords="3,140.88,280.51,14.87,8.12">[12] </ref>to extract keywords from individual documents. RAKE takes a simple set of input parameters to extract keywords from a single document. <ref type="figure" coords="3,201.12,300.43,32.92,8.12">Figure 1</ref>shows extracted keywords as keywords of a news article from Voice of America. We consider keywords to include one or more words such as </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Pakistan Muslim League-N leader Nawaz Sharif and criticized President Pervez Musharraf. </head><p>Keywords provide an advantage over other types of signatures as they are readily accessible to a user and can be easily applied to search other information spaces. The value of any particular keyword can be readily evaluated by a user for their particular interests and applied in multiple contexts. Furthermore, the direct correspondence of extracted keywords with the document text improves the accessibility of a user with the system. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.2">Computation and Analysis of Significant Themes</head><p>For a given corpus, whether static or representing documents within an interval of time, the extracted keywords are grouped into coherent themes by applying a hierarchical agglomerative clustering algorithm to a keyword similarity matrix based on keyword document associations in the corpus. The association of each keyword to documents within the corpus is measured as the document's response to the keyword, which is obtained by submitting each keyword as a query to a Lucene index populated with documents from the corpus. The query response of each document hit greater than 0.1 is accumulated in the keyword's document response vector. Lucene calculates document similarity according to the vector space model described in <ref type="bibr" coords="3,230.64,549.79,13.79,8.12">[13]</ref>. We refer the reader to <ref type="bibr" coords="3,92.28,559.87,10.43,8.12" target="#b4">[5] </ref>for more complete implementation details. In most cases the number of document hits to a particular keyword query is a small subset of the total number of documents in the index. Keyword document response vectors typically have fewer entries than there are documents in the corpus and are very heterogenous. The similarity between each unique pair of keywords is calculated as the Sorensen similarity coefficient of the keywords' respective document response vectors. The Sorensen similarity coefficient <ref type="bibr" coords="3,54.00,639.55,14.87,8.12">[13] </ref>is used due to its effectiveness on heterogeneous vectors and is identical to 1.0 -Bray-Curtis distance <ref type="bibr" coords="3,191.16,649.51,13.70,8.12">[14]</ref>, shown in equation (1). </p><formula>BC ab = ∑ |a i − b i | ∑(ai + b i ) (1) </formula><p> Coherent groups of keywords can then be calculated by clustering keywords by their similarity. Because the number of coherent groups may be independent of the number of keywords extracted, <ref type="figure" coords="3,318.00,500.71,30.11,8.12">Figure 1</ref> : Sample document from Voice of America and its keywords extracted by RAKE. we apply Ward's hierarchical agglomerative clustering algorithm <ref type="bibr" coords="3,318.00,554.83,14.87,8.12">[18] </ref>which does not require a pre-defined number of clusters. Ward's hierarchical clustering begins by assigning each element to its own cluster and then successively joins the two most similar clusters into a new, higher-level, cluster until a single top level cluster is created from the two remaining, least similar, ones. The decision distance dd i j between these last two clusters is typically retained as the maximum decision distance dd max for the hierarchy and can be used to evaluate the coherence cc n of lower level clusters in the hierarchy as shown in equation (2). </p><formula>cc n = 1 − dd n dd max (2) </formula><p> Clusters that have greater internal similarity will have higher coherence . Using a high coherence threshold prevents CAST from selecting clusters that include broadly used keywords such as president that are likely to appear in multiple unrelated stories. Clusters  with a coherence threshold of 0.65 or greater are selected as candidate themes for the corpus. Each candidate theme comprises keywords that typically return the same set of documents when applied as a query. These keywords occur in multiple documents together and may intersect other stories singly or together. We select the final set of themes for the corpus by assigning documents to their most highly associated theme. After all documents in the corpus have been assigned, we filter out any candidate themes for which no documents have been assigned. Keywords within each theme are then ranked by their associations to documents assigned within the theme. Hence the top ranked keyword for each theme best represents documents assigned to the theme and is used as the theme's label. Before elaborating on how CAST is applied to multiple time intervals , we briefly show application of CAST to a static corpus. The following section presents results on application of RAKE and CAST to the Multi-Perspective Question Answering (MPQA) Cor- pus <ref type="bibr" coords="4,68.64,511.63,9.60,8.12" target="#b0">[1]</ref>The majority of the remaining themes computed by CAST have fewer than four documents assigned, an expected result given the random selection of the remainder of documents in the MPQA Cor- pus. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.3">Describing Stories</head><p> We developed our analytic framework to operate on streaming information ; to extract essential content from documents as they are received and to calculate themes at defined time intervals. When the current time interval ends (one day in our evaluations), a set of keywords is selected from the extracted keywords and keyword document associations are measured for all documents published or received within the current and previous n intervals (n = 7 in our evaluations). Keywords are clustered into themes according to the similarity of their document associations, and each document occurring over the past n intervals is assigned to the theme for which it has the highest total response. The set of themes computed for the current interval are persisted along with their member keywords and document assignments . Overlap with previous and future themes may be evaluated against previous or future intervals by comparing overlap of keywords and document assignments. Themes that overlap with others across time together relate to the same story. Repeated co-occurrences of documents within themes across multiple intervals are meaningful as they indicate real similarity and relevance of content between those documents for those intervals. In addition to the expected addition of new documents to an existing story and aging out of documents older than n intervals, it is not uncommon for stories to gain or lose documents to other stories. Documents assigned to the same theme within one interval may be assigned to different themes in the next interval. This feature of how we develop and apply the data model to define themes at each interval enables our analytic framework to automatically adapt to future thematic changes and accommodates the reality that stories often intersect, split, and merge. In order to show its utility, we applied our analytic framework on documents within the TDT-2 corpus <ref type="bibr" coords="4,451.08,693.91,10.43,8.12" target="#b1">[2] </ref>tagged as originating from the Associated Press's (AP) World Stream program due to it's similarity to other news sources and information services of interest. <ref type="figure" coords="5,63.96,260.59,26.56,8.12" target="#tab_2">Table 2</ref> lists the CAST themes on January 12, 1998 for AP documents in the TDT-2 Corpus. The first column lists the count of documents assigned to each theme that were published before January 12. The second column lists each themes count of documents that were published on January 12. Comparing these counts across themes allows us to easily identify which stories are new for example chuan government, serena williams who is playing, men's match; which stories are the largest, for example hong kong and world swimming championships. In the following section, we describe two fundamental visual representations that provide greater insight into the characteristics of themes and stories over time. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4">VISUAL REPRESENTATION</head><p>The analytic framework we have described analyzes documents within time intervals; generating for each time interval a set of themes, each theme comprising a coherent set of keywords from that interval's documents, and having assigned documents from the previous n intervals. We describe two visual representations that yield insight to the temporal context of documents, themes, and stories for an information consumer. The first view, a portion of which is shown in <ref type="figure" coords="5,227.04,474.07,25.18,8.12" target="#tab_3">Table 3</ref>, represents the current time interval and its themes. The view presents each theme as a listing of its member documents in ascending order by date. This view has the advantage of simplicity. An observer can easily assess the magnitude of each theme, its duration, and documents that have been added each day. However, lacking from this view is the larger temporal context and information on how related themes have changed and evolved over previous days. To provide a temporal context we developed the story flow visualization whose structure follows that of Garofalo's graphic mentioned previously and described in <ref type="bibr" coords="5,183.36,574.03,13.70,8.12">[15]</ref> . The story flow visualization , a portion of which is shown in <ref type="figure" coords="5,190.80,583.99,29.98,8.12" target="#fig_0">Figure 2</ref>, shows for a set of time intervals, the themes computed for those intervals, and their assigned documents which may link themes over time into stories. The visualization places days across the horizontal axis and orders daily themes along the vertical axis by their assigned document count. For a given interval, each theme is labeled with its top keyword in italics and lists its assigned documents in descending order by date. Each document is labeled with its title on the day that it is first published (or received), and rendered as a line connecting its positions across multiple days. This preserves space and reinforces the importance and time of each document, as the document title is only shown in one location. Similar lines across time intervals represent flows of documents assigned to the same themes, related Referring to <ref type="figure" coords="5,375.12,382.27,32.50,8.12" target="#fig_0">Figure 2</ref>, which is showing computed themes for four days of AP documents from the TDT-2 APW corpus, we can see that the top story for the first three days is initially labeled pakistan and india but changes to nuclear tests on the following two days. The theme pakistan and india loses two documents to other themes on the following day. These are likely documents that do not relate directly to the theme nuclear tests and therefore were assigned to other stories as the earlier theme pakistan and india became more focused on nuclear tests. No documents published on June 2 are assigned to the nuclear tests theme. Another story that is moving up over the days begins as ethnic albanians and quickly becomes labeled as kosovo. Stories can skip days, as shown by the documents related to the broader tokyo stock price index themes that appear on June 2 and June 4. </p><p> Ordering schemes that take into account relative positions of related groups across days may minimize line crossings at interval boundaries. However we have chosen to consistently order themes for each interval by their number of assigned documents so that the theme order for each day is unaffected by future days. This preserves the organization of themes in the story flow visualization across days and supports information consumers' extended interaction over days and weeks. An individual or team would therefore be able to print out each day's story flow column with document titles and lines, and post that next to the previous day's columns. Such an approach would be unrestricted by monitor resolution and support interaction and collaboration through manual edits and notes on the paper hard copies. Each foot of wall space could hold up to seven daily columns, enabling a nine foot wall to hold two months worth of temporal context along a single horizontal span. </p><p> On a single high-resolution monitor, seven days are easily rendered as each daily column is allocated 300 pixels which accomodates most document titles. Longer time periods can be made accessible through the application of a scrolling function. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>06</head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>lebanon broader tokyo stock price index </head><p>Dollar edges lower, stocks fall in Tokyo trading </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>child labor </head><p>Child marchers breathe new life into old U.N. agency </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>israeli prime minister benjamin netanyahu </head><p>Saudi prince holds more talks on summit, Jordan wants moderate </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>leader suharto </head><p>Indonesia</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5">DISCUSSION</head><p> The following discussion explores the described analytic framework and story flow visualization on AP documents within the TDT-2 Corpus. For cases in which multiple documents with identical titles occurred on the same day, we included only the latest version within the analysis. The 10,671 analyzed AP documents span a 6 month period from January 4, 1998 to June 30, 1998. The AP documents span a range of subjects and primarily cover international topics. Major stories include the olympics, the world cup, iraq, kosovo, human rights, nuclear tests, and many others. <ref type="figure" coords="6,63.96,390.67,31.96,8.12">Figure 3</ref>shows the story flow visualization on four weeks of AP documents. At a macro level, it can be observed that a few stories dominate the first two weeks presented in <ref type="figure" coords="6,206.16,410.59,35.29,8.12">Figure 3a</ref>. On <ref type="bibr" coords="6,261.72,410.59,32.32,8.12;6,54.00,420.55,29.92,8.12">February 28, 1998</ref>, the top story essentially ends and only small themes are visible until March 5, 1998, in <ref type="figure" coords="6,167.88,430.51,37.72,8.12">Figure 3b</ref>when a new story starts to accumulate new documents. Over the next seven days, that story adds approximately 40 new documents. The motivated reader is encouraged to acquire an electronic version of this paper and zoom into <ref type="figure" coords="6,69.72,470.35,31.36,8.12">Figure 3</ref>at 500%. At this scale, the individual theme labels and document titles can be easily read and story dynamics observed. <ref type="figure" coords="6,63.96,491.71,32.92,8.12">Figure 4</ref>shows the story flow visualization on one week of AP documents. The main stories include world cup, kosovo, eu, english fans, and japanese yen. On June 15, kosovo and nato are separate stories that later merge on June 17. On June 20 the story is relabeled as kosovo albanians suggesting a new development. Also on June 20, the world cup game story splits out across multiple themes, iran, world cup finals, korea's choi yong-soo, players only to rejoin again on June 21. This is likely due to an increase in the number of documents published on June 20 that individually relate to specific sub-themes of world cup game such as specific countries and players. While story evolution for large stories is easy to identify, single articles and stories that last two to three days are more difficult to spot. This is not unexpected, as the story flow visualization is designed to show story evolution over time and gives priority to the larger themes in the layout. Themes that do not develop into stories are not optimally represented and would likely benefit from a selective filtering operation or a second visualization in which the main stories play a less dominant role. Anecdotal feedback from potential users suggest that a filtering mechanism would be welcome in order to minimize line crossings and enable investigation into specific stories and themes. It was also suggested that in application, the story flow visualization would likely be focused on a specific subject area, although the high-level overview was considered effective for users that only need to understand the major story dynamics. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6">CONCLUSIONS AND FUTURE WORK</head><p>We have described a novel analytic framework for automatically computing themes and tracking stories as they develop over time and have presented a fundamental visual representation upon which user interface designers can iterate interaction refinements for specific applications. We anticipate that systems applying these methods will enable information consumers to more effectively integrate new information and understand developments over time. Future work to build on the visual representation presented here will likely focus on identifying preferred interaction and selection capabilities to support information consumers' work flows. In this paper we presented contributions to the field of visual analytics ; a novel analytic framework for calculating themes based on automatically extracted keywords and documents from information streams, a data model that captures requisite temporal information for tracking and adapting to evolving stories, and a visual representation of story flow that conveys temporal context for an information space, enabling information consumers to rapidly identify change and investigate story evolution over time. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>02</head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>power supply company mercury energy </head><p>Power company concedes it may be at fault for city blackout. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>israeli prime minister benjamin netanyahu </head><p>Israel, Palestinians make progress on Palestinian airport </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>sunni muslim group </head><p>Three people killed in bloody gun battle Pakistan police arrest eight men in wake of religious attacks </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>gold medals </head><p>Four−time gold medalist dismayed at track and field today </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>chang nokia employs 36,600 people </head><p>Retransmitting to restore slugline. title </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>illegal logging scandal </head><p>Burmese refugees given one week to relocate or face Some royals reportedly wary of change </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>ethiopian−born saudi financier sheikh mohamed hussein al amoudi </head><p>African leaders, businessmen promote investment in continent </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>romanian 5,000−meter world champion ran </head><p>Szabo sets 2,000 mark, two women break pole vault mark Szabo breaks women's indoor 2,000 indoor mark </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>kurdish rebel group pkk </head><p>Police break up pro−Kurdish demonstration in </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>english fans </head><p>Marseille, Paris, Toulouse prepare security for matches Marseille gets set for second World Cup weekend </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>russian president boris yeltsin </head><p>Chubais back, says Russia needs dlrs 10 billion to 15 billion in </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>democratic party </head><p>Elections official says St. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Vincent and the Grenadines vote was </head><p>Poll shows solid support for major 'agreement' parties in N. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>detroit red wings south african president nelson mandela </head><p>Pope receives Mandela in Vatican </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>eritrean rebels au pair louise woodward arrived </head><p>Britain gives muted welcome mixed with digust to au pair's return </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>interfax news agency </head><p>Washington has no immediate solution for Ukraine's Turboatom </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>nba players </head><p>NBA to consider moratorium in labor dispute </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>west bank </head><p>Netanyahu: Israel is considering referendum on West Bank pullback </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>prominent political prisoners financial times−stock exchange 100−share index </head><p>London share prices lower at midday </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>au pair louise woodward arrived </head><p>Residents in Louise Woodward's hometown giving her breathing space </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>mandela stewart </head><p>Stewart stumbles but holds one−stroke lead at U.S. Open Stewart dances to first−round lead at Open </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>interfax news agency quoted chubais diplomatic compound </head><p>Belarus cuts water and power to ambassadors' residence </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>south african captain lucas radebe </head><p>Danes in shock after referee expels three from World Cup match vs. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>cart </head><p>Casey Martin rides into weekend play despite some poor driving </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>gambian foreign minister mohamed sedat jobe </head><p>Artillery </p></div><figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_0" coords="6,144.00,249.43,323.96,8.12"><head>Figure 2: </head><figDesc>Figure 2: Story flow visualization on four low volume days from the TDT-2 APW Corpus. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_1" validated="true" coords="4,54.00,54.79,504.02,241.67"><figDesc coords="4,54.00,54.79,504.02,8.12;4,54.00,64.75,241.16,8.12">Table 1: MPQA Topics and CAST Themes. Each row contains the defined topic and description within the Defined Topics column and the labeled theme and top keywords within the CAST Themes column.</figDesc><table coords="4,60.00,96.04,494.19,200.42">Defined Topics 
+CAST Themes 
+mugabe 
+mugabe's re-election (46) 
+2002 presidental election in Zimbabwe 
+zimbabwe's election, mugabe, mugabe's, president mugabe, mugabe's government 
+guantanamo 
+guantanamo prisoners (43) 
+U.S. holding prisoners in Guantanamo Bay 
+detainees as prisoners, detainees prisoners, prisoners of war, war prisoners, prisoners 
+kyoto 
+kyoto protocol on climate (40) 
+ratification of Kyoto Protocol 
+kyoto protocol, ratification of the kyoto protocol, 1997 kyoto protocol 
+venezuela 
+venezuela's president hugo chavez (37) 
+presidential coup in Venezuela 
+venezuelan president hugo chavez, president hugo chavez, president chavez, hugo chavez 
+settlements 
+israeli (34) 
+Israeli settlements in Gaza and West Bank 
+palestinian, israel, occupied palestinian, israeli occupation, palestinian people's 
+taiwan 
+china under which taiwan (31) 
+relations between Taiwan and China 
+taiwan, united states and taiwan, taiwan issue, taiwan policy, taiwan affairs, taiwan strait 
+axisofevil 
+axis of evil (28) 
+reaction to President Bush's 2002 State of the Union Address 
+north korea as axis, iran and north korea, iran or north korea, iraq and north korea, 
+humanrights 
+human rights (28) 
+reaction to U.S. State Department report on human rights 
+human rights report, annual human rights report, human rights violations, rights 
+spacestation 
+space station (28) 
+space missions of various countries 
+international space station, space, international space, space shuttle, russian space mission 
+argentina 
+argentina (12) 
+economic collapse in Argentina 
+argentina's, help argentina, argentine government, argentine, worried argentina 
+
+</table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_2" validated="false" coords="4,54.00,511.63,240.13,210.24"><figDesc coords="4,78.24,511.63,3.20,8.12;4,54.00,529.40,176.08,8.60;4,54.00,543.43,240.02,8.12;4,54.00,553.39,239.99,8.12;4,54.00,563.35,240.02,8.12;4,54.00,573.31,239.90,8.12;4,54.00,583.27,68.12,8.12;4,63.96,593.47,230.01,8.12;4,54.00,603.43,239.77,8.12;4,54.00,613.39,240.04,8.12;4,54.00,623.35,239.87,8.12;4,54.00,633.31,240.04,8.12;4,54.00,643.27,239.96,8.12;4,54.00,653.23,240.13,8.12;4,54.00,663.19,181.05,8.12">. 3.2.1 CAST Themes for the MPQA Corpus The MPQA Corpus consists of 535 news articles provided by the Center for the Extraction and Summarization of Events and Opinions in Text (CERATOPS). Articles in the MPQA Corpus are from 187 different foreign and U.S. news sources and date from June 2001 to May 2002. We applied RAKE to extract keywords from the title and text fields of documents in the MPQA Corpus and selected keywords from those extracted that occured in at least 2 documents. We then applied CAST to compute themes for the corpus. Of the 535 documents in the MPQA Corpus 327 were assigned to 10 themes which align with the 10 defined topics for the corpus as shown in Table 1. The number of documents that CAST assigned to each theme is shown in parentheses. As defined by CERATOPS:</figDesc><table coords="4,73.92,684.00,200.15,37.88">The majority of the articles are on 10 different topics, 
+but a number of additional articles were randomly se-
+lected (more or less) from a larger corpus of 270,000 
+documents. 
+
+</table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_3" validated="true" coords="5,54.96,54.79,237.97,170.39"><figDesc coords="5,54.96,54.79,237.97,8.12">Table 2: CAST Themes for 01/12/1998 and their document counts</figDesc><table coords="5,71.64,85.00,204.63,140.18">Assigned Docs 
+&lt; 01/12 
+01/12 
+Theme 
+1 
+5 
+chuan government 
+0 
+3 
+serena williams who is playing 
+0 
+3 
+men's match 
+0 
+2 
+stabilizing japan's shaken financial system 
+0 
+1 
+women's race 
+1 
+2 
+news agency 
+3 
+2 
+five-kilometer race 
+3 
+1 
+northern ireland 
+5 
+1 
+japanese prime minister ryutaro hashimoto 
+6 
+1 
+world cup 
+7 
+1 
+president suharto 
+9 
+3 
+world swimming championships 
+15 
+4 
+hong kong 
+
+</table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_4" validated="true" coords="5,318.00,54.79,239.96,319.16"><figDesc coords="5,318.00,54.79,239.80,8.12">Table 3: Documents Assigned to CAST Theme iraq on 02/14/1998</figDesc><table coords="5,318.00,84.65,239.96,289.30">Day 
+Document Title 
+02-07 
+U.N. to excavate weapons dumps in Iraq 
+02-07 
+Kuwaiti government to distribute gas masks in two days 
+02-07 
+U.N. to excavate dumps where chemical weapons and warheads buried 
+02-08 
+Saudi Arabia will not back military strike against Iraq 
+02-08 
+Egyptian Foreign Minister upbeat on diplomatic end to US-Iraq 
+02-08 
+Russian FM: Dispute over Iraq has not damaged U.S.-Russian 
+02-08 
+U.S. won't ask Saudis to allow attacks from their territory 
+02-08 
+Iraq says talks on weapons destruction making progress 
+02-09 
+Citing regional tensions, Annan cancels visit to the Middle East 
+02-09 
+Canada: No decision yet on commitment against Iraq 
+02-09 
+byline 
+02-09 
+control on Yeltsin-Annan remarks, other new material 
+02-09 
+Iraq launches campaign to rally Arab support 
+02-09 
+Iraq crisis at 'critical stage,' U.N. chief pushes for peaceful 
+02-10 
+Report: Lebanon tells Iraq to cooperate with weapons inspectors 
+02-10 
+Iraqi foreign minister seeks Syrian support in standoff 
+02-10 
+Precede MAJDAL SHAMS 
+02-10 
+Iraqi ambassador says Baghdad cannot meet Annan's proposed sales 
+02-10 
+Israel short on gas masks for children 
+02-11 
+Iraqi daily says Washington always determined to use force 
+02-11 
+Britain rejects latest Iraqi offer on weapons 
+02-11 
+Iraq puts oil export potential at 1.6 million barrels daily 
+02-11 
+Gulf foreign ministers meet to discuss unified stand on Iraq 
+02-11 
+BC-Iraq-Opposition 
+02-11 
+Santer says EU position will change if Iraq stays defiant 
+02-12 
+Iraqi foreign minister calls U.S. rejection 'a bluff' 
+02-12 
+UN advises vacationing staff to stay away from Iraq 
+02-13 
+American, Russian defense chiefs hold cordial talks at military 
+02-13 
+Iraq accuses U.S. of psychological warfare 
+02-13 
+U.S. envoy meets with Japanese leaders on Iraq 
+02-13 
+Foreign Office urges 'higher degree of caution' for travelers 
+02-13 
+Iraq dispute underlines strain in U.S.-Russia ties 
+02-14 
+U.S. envoy seeks China's support on Iraq 
+02-14 
+Demonstrators at U.S. Embassy in Japan urge no military attack 
+02-14 
+Iraq urges diplomacy, releases Egyptian prisoners 
+
+to the same story. As stories grow over days, they add more lines. 
+A document's line ends when it is no longer associated with any 
+themes. 
+
+</table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_5" validated="false" coords="6,54.23,53.77,446.78,80.68"><figDesc coords="6,86.72,53.77,36.73,10.71;6,203.39,53.77,45.91,10.71;6,329.25,53.77,45.91,10.71;6,455.10,53.77,45.91,10.71;6,54.23,70.85,41.33,4.87;6,55.30,76.76,102.84,4.46;6,54.23,91.36,18.24,4.87;6,54.23,102.08,34.49,4.87;6,55.30,107.99,81.38,4.46;6,55.30,113.12,79.68,4.46;6,54.23,121.19,21.94,4.87;6,54.23,129.58,74.94,4.87;6,180.09,70.85,29.07,4.87;6,180.09,84.83,16.24,4.87;6,181.15,90.74,111.12,4.46;6,181.15,95.87,93.06,4.46">/01/1998 06/02/1998 06/03/1998 06/04/1998 pakistan and india India denies it plans another nuclear test, urges nuclear talks lebanon ethnic albanian More deaths reported in Kosovo; thousands flee More deaths reported in Kosovo; hundreds flee world cup nicole mott's penalty corner drive nuclear tests kosovo Fleeing ethnic Albanians describe destruction from Serb offensive Romania and Macedonia ask for U.S. troops in Kosovo</figDesc><table></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_6" validated="false" coords="6,180.09,70.85,366.22,109.28"><figDesc coords="6,307.01,121.98,100.50,4.46;6,305.94,127.10,5.95,4.46;6,305.94,132.85,44.03,4.87;6,307.01,138.76,89.66,4.46;6,431.80,70.85,16.24,4.87;6,431.80,80.17,70.96,4.87;6,432.86,86.08,67.12,4.46;6,431.80,93.69,23.37,4.87;6,431.80,102.08,33.91,4.87;6,432.86,107.99,108.76,4.46;6,431.80,114.67,51.29,4.87;6,432.86,120.58,113.45,4.46">Imported autos sales in Japan down for 14th straight month title high−speed rail link Britain gets new deal to speed Channel Tunnel trains kosovo broader tokyo stock price index Dollar rises, stocks slip in Tokyo trading child labor water shortage New Zealand claims world first of extracting pure water from thin dejammet urged butler U.N. inspectors challenge Baghdad's claims it has destroyed illegal</figDesc><table coords="6,180.09,70.85,336.35,109.28">'s new leader unconcerned about past corruption 
+
+nicole mott's penalty corner drive 
+
+world cup 
+
+nuclear tests 
+
+U.S. ambassador: nuclear proliferation not only U.S. problem 
+
+kosovo 
+
+child labor 
+
+penalty corner 
+
+imported trucks plunged 47.9 percent 
+
+imported trucks plunged 47.9 percent 
+high−speed rail link 
+
+</table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_7" validated="false" coords="7,56.68,56.34,490.39,184.32"><figDesc coords="7,541.79,56.34,5.28,3.08;7,56.68,61.25,33.67,2.98;7,56.99,64.42,24.44,1.28;7,56.99,65.90,26.21,1.28;7,56.68,71.03,12.62,1.40;7,56.99,72.73,27.73,1.28;7,56.68,77.20,12.13,1.40;7,56.99,78.90,24.31,1.28;7,56.99,80.38,9.07,1.28;7,56.68,83.23,32.74,1.40;7,56.99,84.93,27.24,1.28;7,56.99,86.41,21.69,1.28;7,56.99,87.88,23.64,1.28;7,56.68,90.47,6.31,1.40;7,56.99,92.17,28.47,1.28;7,56.99,93.65,12.71,1.28;7,56.68,96.23,7.70,1.40;7,56.99,97.93,31.44,1.28;7,56.99,99.41,31.10,1.28;7,56.68,101.87,19.79,1.40;7,56.68,104.68,8.60,1.40;7,56.99,106.38,28.83,1.28;7,56.99,107.85,28.47,1.28;7,56.99,109.33,26.21,1.28;7,56.68,111.38,26.88,1.40;7,56.68,114.06,23.11,1.40;7,56.68,116.74,20.41,1.40;7,56.99,118.44,27.92,1.28;7,56.68,120.77,7.62,1.40;7,56.99,122.46,22.06,1.28;7,56.99,123.94,17.11,1.28;7,56.99,125.41,22.67,1.28;7,56.68,127.33,9.92,1.40;7,56.68,129.88,18.19,1.40;7,56.99,131.58,30.06,1.28;7,92.87,61.25,25.66,2.98;7,93.18,64.42,25.84,1.28;7,93.18,65.90,26.33,1.28;7,93.18,67.37,21.50,1.28;7,93.18,68.85,24.13,1.28;7,93.18,70.32,21.14,1.28;7,93.18,71.80,19.61,1.28;7,92.87,78.00,12.62,1.40;7,93.18,79.71,18.76,2.76;7,92.87,86.05,27.20,1.40;7,93.18,87.75,32.51,1.28;7,93.18,89.22,26.76,1.28;7,92.87,92.48,12.13,1.40;7,92.87,95.70,19.79,1.40;7,93.18,97.40,24.56,1.28;7,92.87,99.99,9.92,1.40;7,93.18,101.69,19.06,1.28;7,93.18,103.16,27.74,1.28;7,92.87,105.48,20.00,1.40;7,93.18,107.18,32.35,1.28;7,93.18,108.66,22.42,1.28;7,92.87,110.98,7.70,1.40;7,93.18,112.68,27.86,1.28;7,93.18,114.15,27.95,1.28;7,92.87,116.21,18.19,1.40;7,93.18,117.91,32.62,1.28;7,92.87,120.09,26.88,1.40;7,92.87,122.64,5.49,1.40;7,93.18,124.34,28.78,1.28;7,129.06,61.25,31.07,2.98;7,129.37,64.42,29.76,1.28;7,129.37,65.90,30.73,1.28;7,129.37,67.37,28.11,1.28;7,129.37,68.85,32.99,1.28;7,129.06,74.52,12.62,1.40;7,129.37,76.22,9.07,1.28;7,129.06,81.36,13.44,1.40;7,129.37,83.06,17.11,1.28;7,129.37,84.53,32.56,1.28;7,129.37,86.01,27.55,1.28;7,129.06,88.59,8.03,1.40;7,129.37,90.29,24.13,1.28;7,129.37,91.77,30.55,1.28;7,129.06,94.49,12.13,1.40;7,129.06,97.71,27.20,1.40;7,129.06,100.93,29.54,1.40;7,129.06,103.88,20.24,1.40;7,129.37,105.58,27.22,1.28;7,129.06,108.03,21.08,2.98;7,129.06,112.19,16.56,1.40;7,129.37,113.89,29.75,1.28;7,129.37,115.36,24.41,1.28;7,129.37,116.83,27.71,1.28;7,129.06,118.89,7.70,1.40;7,129.37,120.59,34.46,1.28;7,129.06,122.91,5.49,1.40;7,129.37,124.61,31.90,1.28;7,165.56,62.95,30.79,2.76;7,165.56,65.90,17.84,1.28;7,165.56,67.37,9.07,1.28;7,165.56,68.85,7.70,1.28;7,165.56,70.32,9.07,1.28;7,165.56,71.80,30.48,1.28;7,165.26,75.99,31.22,2.98;7,165.56,79.17,30.79,1.28;7,165.56,80.64,26.46,1.28;7,165.26,84.57,20.41,1.40;7,165.56,86.27,27.92,1.28;7,165.26,89.80,7.95,1.40;7,165.56,91.50,28.29,1.28;7,165.56,92.98,24.81,1.28;7,165.26,95.56,12.13,1.40;7,165.26,98.65,15.41,1.40;7,165.56,100.35,24.55,1.28;7,165.56,101.82,9.07,1.28;7,165.56,103.30,12.22,1.28;7,165.26,105.62,5.25,1.40;7,165.56,107.32,32.93,1.28;7,165.56,108.79,16.80,1.28;7,165.56,110.27,32.90,1.28;7,165.26,112.59,29.54,1.40;7,165.26,115.54,7.70,1.40;7,165.56,117.24,32.93,1.28;7,165.26,119.69,13.44,1.40;7,165.26,122.51,14.26,1.40;7,165.26,125.32,20.49,1.40;7,165.56,127.02,22.82,1.28;7,165.26,129.48,19.26,1.40;7,165.56,131.18,33.79,1.28;7,165.56,132.65,29.48,1.28;7,165.26,134.84,29.45,2.98;7,165.26,138.86,14.18,1.40;7,165.56,140.56,32.68,1.28;7,201.45,61.25,28.62,2.98;7,201.75,64.42,19.55,1.28;7,201.75,65.90,12.95,1.28;7,201.75,67.37,19.55,1.28;7,201.45,73.31,12.62,1.40;7,201.75,75.01,9.07,1.28;7,201.75,76.49,10.87,1.28;7,201.75,77.96,21.26,1.28;7,201.75,79.44,29.54,1.28;7,201.75,80.91,30.00,1.28;7,201.75,82.39,9.07,1.28;7,201.75,83.86,32.66,1.28;7,201.75,85.33,23.83,1.28;7,201.75,86.81,5.25,1.28;7,201.45,91.68,15.41,1.40;7,201.75,93.38,21.63,1.28;7,201.45,96.23,16.72,1.40;7,201.75,97.93,28.17,1.28;7,201.75,99.41,30.79,1.28;7,201.45,102.13,7.95,1.40;7,201.75,103.83,30.61,1.28;7,201.75,105.31,32.93,1.28;7,201.45,108.03,20.53,1.40;7,201.75,109.73,24.19,1.28;7,201.75,111.21,20.59,1.28;7,201.45,113.79,20.49,1.40;7,201.45,116.61,7.70,1.40;7,201.45,119.29,13.44,1.40;7,201.75,120.99,26.97,1.28;7,201.75,122.46,30.24,1.28;7,201.45,124.65,19.26,1.40;7,201.75,126.35,23.73,1.28;7,201.45,128.67,8.85,1.40;7,201.75,130.37,26.02,1.28;7,201.75,131.85,29.57,1.28;7,237.64,61.25,17.96,2.98;7,237.94,64.42,28.22,1.28;7,237.94,65.90,26.18,1.28;7,237.94,67.37,28.92,1.28;7,237.94,68.85,29.54,1.28;7,237.94,70.32,27.55,1.28;7,237.94,71.80,29.72,1.28;7,237.94,73.27,30.85,1.28;7,237.94,74.75,30.42,1.28;7,237.64,81.62,12.62,1.40;7,237.94,83.32,9.07,1.28;7,237.94,84.80,28.08,1.28;7,237.94,86.27,32.25,1.28;7,237.94,87.75,5.25,1.28;7,237.64,93.02,7.95,1.40;7,237.94,94.72,27.55,1.28;7,237.64,97.84,15.41,1.40;7,237.94,99.54,29.08,1.28;7,237.94,101.02,20.59,1.28;7,237.64,103.88,19.18,1.40;7,237.94,105.58,31.28,1.28;7,237.94,107.05,26.27,1.28;7,237.64,109.91,7.13,1.40;7,237.94,111.61,30.24,1.28;7,273.83,61.25,23.10,2.98;7,274.14,64.42,20.53,1.28;7,274.14,65.90,4.40,1.28;7,274.14,67.37,29.17,1.28;7,273.83,73.31,12.62,1.40;7,274.14,75.01,23.95,1.28;7,274.14,76.49,11.91,1.28;7,274.14,77.96,25.23,1.28;7,273.83,83.63,19.06,1.40;7,274.14,85.33,25.48,1.28;7,274.14,86.81,26.21,1.28;7,274.14,88.28,28.23,1.28;7,273.83,91.68,19.18,1.40;7,273.83,95.03,15.41,1.40;7,273.83,98.25,16.72,1.40;7,274.14,99.95,29.38,1.28;7,273.83,102.80,7.95,1.40;7,274.14,104.50,25.72,1.28;7,273.83,107.36,7.13,1.40;7,273.83,110.31,7.70,1.40;7,274.14,112.01,23.64,1.28;7,273.83,114.47,20.49,1.40;7,274.14,116.16,21.87,1.28;7,274.14,117.64,28.96,1.28;7,274.14,192.70,27.01,1.28;7,273.83,194.35,26.27,2.98;7,273.83,197.71,20.41,1.40;7,310.02,61.25,19.06,1.40;7,310.33,62.95,30.00,1.28;7,310.33,64.42,26.58,1.28;7,310.33,65.90,27.86,1.28;7,310.33,67.37,30.22,1.28;7,310.33,95.39,22.73,1.28;7,310.33,96.86,15.58,1.28;7,310.33,98.34,27.80,1.28;7,310.02,101.73,20.41,1.40;7,310.33,103.43,27.98,1.28;7,310.33,104.91,25.90,1.28;7,310.33,106.38,21.99,1.28;7,310.02,109.77,16.72,1.40;7,310.33,111.47,27.95,1.28;7,310.02,114.20,6.39,1.40;7,310.33,115.90,28.19,1.28;7,310.02,118.62,7.87,1.40;7,310.02,121.44,30.85,2.98;7,310.02,125.32,29.99,1.40;7,310.33,127.02,22.67,1.28;7,346.52,62.95,28.47,1.28;7,346.52,64.42,21.32,1.28;7,346.52,65.90,22.97,1.28;7,346.52,67.37,28.84,1.28;7,346.52,68.85,24.93,1.28;7,346.52,70.32,28.83,1.28;7,346.52,71.80,24.80,1.28;7,346.52,73.27,26.33,1.28;7,346.52,74.75,24.99,1.28;7,346.52,76.22,25.05,1.28;7,346.52,77.69,31.34,1.28;7,346.52,79.17,31.53,1.28;7,346.21,88.46,11.06,1.40;7,346.21,93.69,5.25,1.40;7,346.52,95.39,26.76,1.28;7,346.21,98.25,7.70,1.40;7,346.52,99.95,25.72,1.28;7,346.21,102.80,25.24,1.40;7,346.52,104.50,24.68,1.28;7,346.21,107.23,13.68,1.40;7,346.21,110.04,20.49,1.40;7,346.21,112.86,29.99,3.95;7,346.21,117.82,5.49,1.40;7,346.52,119.52,24.32,1.28;7,346.21,121.57,8.85,1.40;7,346.52,123.27,23.70,1.28">1998 iraq Iraq warns Kuwait to keep Americans out, vow to defend presidential Jordan determined to seal border to Iraqi refugees Chinese president worried about escalating Gulf crisis olympic gold medal Chinese skier leading women's aerials after preliminaries combined downhill Seizinger wins two downhill races; Wiberg second Ld−Writethru,0279 iraqi foreign minister mohammed saeed al−sahhaf Swedish minister 'pessimistic' over solution to Iraq crisis Iraqi, Kuwaiti envoys hold talks on Gulf crisis Iraqi foreign minister to meet with Chirac in Paris world cup Rangers say PSV's Advocaat is new coach; Gullit to PSV? U.S. aerialist injured in fall south korea South Korea's president−elect denies meeting Taiwanese leader Experts: North Korea appears to be easing stance toward Seoul nigerian−led intervention force armed forces Former top military official suspected of corruption released New military chief installed as riots flare again in Indonesia New military chief installed as troops watch for trouble georgian president eduard shevardnadze yasser arafat's palestinian authority iraqi president saddam hussein American troops conduct drills in Kuwait near Iraqi border south africa Johnstone holds on for victory in Dunhill PGA Johnstone wins South African PGA Fraud trial of disgraced ANC leader postponed harada needed foreign secretary robin cook Britain promises new campaign to lift Rushdie death sentence iraq Bahrain refuses U.S. access to bases for Iraq attack Yeltsin: Russia insists that Iraq meet U.N. resolutions U.N. makes plans, Kurds abandon northern Iraq camp Mubarak meets with Greek defense minister Hamas leaflet threatens attack if U.S. attacks Iraq Iraq blasts U.S. for interfering in Annan visit Report: Israel told Iraq it won't strike first olympic gold medal BULLETIN Gianni wins gold, another world record israeli prime minister benjamin netanyahu U.S. expected to announce Mideast peace ideas despite Iraq crisis Thousands of Palestinians still under Israeli occupation combined downhill nigerian−led intervention force Ecomog troops to extend control outside Freetown harada needed Japanese crowd cheers team to victory Japan clinches gold after record leaps by Okabe, Harada chinese news agency reported Tough−talking former general declares candidacy for governorship Authorities close 14,700 illegal mines in China south korea German finance minister praises South Korea for reforms Korean−American radio journalist fined dlrs 2,000 for libel foreign secretary robin cook Cook says Security Council very close to agreement on Annan Trip georgian president eduard shevardnadze sinn fein Sinn Fein faces banishment as others warn of IRA violence iraq Palestinian police arrest pro−Iraq demonstrators; new rally held In Romania, Italian president states opposition U.S. attack on Malaysia opposes military strikes against Iraq, urges diplomacy Iraqi opposition says ready to participate in change in Iraq Russia welcomes U.N. secretary general's planned visit to Baghdad olympic gold medal Ld−Writethru,0709 human rights groups Saudi beheaded for murdering wife Chiapas draws international attention as Mexican government calls Chinese dissidents demand political reforms, free unions central bank Devaluation fails to spark foreign currency market Indonesia still planning for currency board, bank governor says combined downhill israeli prime minister benjamin netanyahu foreign minister mohammed saeed al−sahhaf olympic ice hockey tournament Finland eliminates defending gold medalist Sweden 2−1 jump Two U.Stone, Bergoust sweep aerials gold 97 percent bosnian serbs Western Bosnian town symbolic of NATO's thorniest problem U.N. investigates arson cases in Croat−held Drvar U.N. investigate arson cases in Croat−held town of Drvar south korea U.S. Commerce Secretary: Asia must change the way it does business sinn fein Sinn Fein leaders hope judge can defend their seat in peace talks BULLETIN Head of North American league says ouster of Americans not a Finland a surprise entry in semifinals Ld−Writethru,0564 With AP Photos Ld−Writethru,0363 Germany wins women's biathlon relay against archrival Russia iraq Blast damages American car dealership; Iraq protest suspected Palestinian backlash could prove greater threat than Iraq attack U.N. reducing staff in Iraq as precaution against attack iraqi president saddam hussein U.N. relief workers start leaving as Iraq readies for Annan hong kong's Asian markets mostly rise with steep gains in South Korea Billionaire Li Ka−shing to leave blue−chip company combined downhill slalom and giant slalom Gerg surprises field with victory in women's slalom Ld−Writethru,0228 SHIGA KOGEN: in 1980. hun sen Cambodian resistance general looking for remains of missing Briton King to return to Cambodia in April Cambodian co−premier says fast admission into ASEAN will benefit foreign minister mohammed saeed al−sahhaf south korea South Korea's Samsung to sell heavy equipment business to Volvo, human rights groups central bank governor palestinian leader yasser arafat Police fire in the air to disperse pro−Iraq march president−elect kim dae−jung Report: South Korean agents responsible for 1973 kidnapping of then Report: South Korea's president−elect kidnapped by his own jakarta Shops burn in riot as students demand that government quit tokyo stock exchange Tokyo stocks mixed on receding hopes for stimulus package, dollar iraq Iraq tells Annan to be impartial in last−ditch peace mission Iraqi Kurds agree to exchange prisoners Annan leaves for Baghdad Gulf crisis keeping oil prices from sliding olympic gold medal Ld−Writethru,0566 NAGANO: the bronze. Hockey star is devastated by Canada's loss Rain forces cancellation of second heat of four−man bobsled Hasek shuts out Canada in shootout, Czechs advance to final Ld−Writethru,0503 Young Russian steals the show, becomes latest cross−country star Norway scores easy win as Japanese reign ends BULLETIN slalom and giant slalom Italy's Compagnoni wins third gold with ease hun sen ousted ranariddh Japanese envoy casts doubt on early Cambodian solution Cambodian military court sets date for Ranariddh's appearance hong kong's Customs officers arrest two men and seize 555,000 fake VCDs EU vice president calls for clear suffrage commitment in Hong Kong itar−tass news agency reported Belgian king thanks Yeltsin for welcome in Russia Nuclear reactor at power plant shuts down palestinian leader yasser arafat south korea human rights groups Group accuses officials of fueling anti−Chinese feelings Indonesia's new military chief warns of challenge as riot police president−elect kim dae−jung North Korea rejects ''six−nation joint declaration'' 1991 gulf war Report: Iraqis attack U.N. officers, take away their car Former defense minister: no chances of Iraqi attack on Israel iraq Marchers Protest action against Iraq Howard cancels overseas trip to follow movements in Gulf U.N. secretary−general 'rather optimistic' on Iraq talks U.N. secretary−general holds crucial talks with Iraqi leaders 20 injured as Jordanians clash with police in pro−Iraq protest U.N. has no food reserves in Iraq if war disrupts supplies Scattered pro−Iraq demonstrations in West Bank despite ban French foreign minister admits failed talks would end diplomatic Government gearing up to evacuate Filipinos from Middle East olympic gold medal Ld−Writethru,0512 Langen retains big lead in four−man heading into final run Germany wins men's closing relay of Olympic biathlon competition BULLETIN hong kong's Europeans: China seen as stability source in Asian crisis slalom and giant slalom Buraas wins men's slalom, Tomba watches from hotel room Olympics shaken by moderate earthquake indonesia's president suharto Report: Police claim they have uncovered plot to disrupt election Singapore paper: Suharto to postpone currency board nhl players Olympic gold medal match shows World Cup was no predictor iraq Annan plan could offer Iraq and U.S. a way out Foreign nationals preparing to leave Israel With Iraq Annan meets with Saddam for last−ditch talks to avert strike olympic gold medal Asians succeed in their neighborhood's Olympics Daehlie wins eighth gold Daehlie makes history while Russian women sweep secretary−general kofi annan Annan reaches agreement with Saddam in Baghdad Britain reacts cautiously to report of Iraq breakthrough U.N. spokesman: Annan on verge of breakthrough on Iraq indonesia's president suharto slalom and giant slalom hun sen ousted ranariddh Ranariddh's former military advisor denies fleeing Cambodia hong kong's Ethiopian Belay Wolashe wins New Airport Marathon nhl players south korea Englishman Edward Fryatt wins Malaysian Open palestinian leader yasser arafat Arafat hopeful of diplomatic resolution in Gulf Arafat hopeful of diplomatic resolution in Gulf; two injured in Netanyahu urges Russian against cooperation with Iran israeli Israeli planes rocket guerrilla bases in south Lebanon french president jacques chirac secretary−general kofi annan France says Annan took big step forward with Iraq agreement Yeltsin pleased with agreement between U.N. and Iraq Cook says if there is Iraq deal it's due to military pressure Despite Iraq pact, Palestinians keep up pro−Baghdad protests Olympic flame out, but afterglow burning bright Where was the thrill in Nagano? Olympic farewell: Images, stumbles _ and lots of weather iraqi president saddam hussein Israel worried that diplomatic solution won't eradicate Iraq Arab states welcome Annan accord to end Iraqi crisis Dates in Iraq's standoff over U.N. inspections hun sen ousted ranariddh Deposed premier's ally receives 10−year prison sentence strike iraq Jordanian troops arrest activists, seize arms in riot−hit city giant slalom kidnappers Shevardnadze agrees to talks with kidnappers's representative japanese foreign minister keizo obuchi arrived Yeltsin−Hashimoto meeting set for April 11−13 Clinton tells Israel Saddam will be forced to keep promises Palestinian official: Iraq emerged the winner India welcomes diplomatic breakthrough in Iraq Report: Israel had prepared response to Iraqi missile attack Israel had prepared response to Iraqi missile attack Yeltsin discusses Iraq deal with Chirac, Blair and U.N. chief Report: Two Kuwaitis released by Iraq return home Iraq trumpets victory, predicts quick lifting of sanctions Malaysian PM: Lift economic sanctions against Iraq Annan: smiles, waves as leaves Paris for New York Business as usual for U.S. soldiers _ along with hopes for peace Philippine president enters hospital for checkup, then meets Iraqi nagano olympics hun sen Two widows file suit against Hun Sen to fight for justice south korea Kim takes office with promises of democratic reforms hindu nationalist bharatiya janata party Court convenes legislature to test strength of rivals president fidel ramos palestinian leader yasser arafat kidnappers japanese foreign minister keizo obuchi arrived sri lanka Media watchdog asks government to punish guilty 1991 gulf war EU grants Iraq dlrs 11 million in humanitarian aid</figDesc><table coords="7,56.68,56.34,485.11,184.32">/16/1998 
+
+02/17/1998 
+02/18/1998 
+02/19/1998 
+02/20/1998 
+02/21/1998 
+02/22/1998 
+02/23/1998 
+02/24/1998 
+02/25/1998 
+02/26/1998 
+02/27/1998 
+02/28/1998 
+03/01/clerides's 40.1 percent 
+
+economic crisis 
+
+farrakhan 
+
+interfax news agency reported 
+
+gas masks 
+
+Israel has enough masks for tourists 
+
+clap skates brought 
+
+Clap, clap, clap not heard at the short track _ yet 
+
+ayatollah mohammad yazdi 
+
+Iranian cleric: U.S. wrestlers trip not a step toward diplomatic 
+Cleric says arrival of U.S. wrestlers not a step toward diplomatic 
+
+unprecedented dlrs 4.5 billion petrochemical joint venture 
+
+China calls anew on West to refrain from attacking Iraq 
+
+secretary general kofi annan 
+
+nato−led peace force 
+
+One American soldier injured in detonator explosion 
+Three American soldiers, one Swede injured in detonator explosion 
+
+pasha grishuk 
+
+Grishuk−Platov win second straight gold 
+
+montserrat living 
+mysterious white fiat uno linked 
+killed cabdriver zlatko popovic 
+riyadh al−qaysi picked 
+killed princess diana 
+special commission 
+hun sen 
+yaounde's military hospital 
+van roost 
+chase millrose games 
+san cristobal de las casas 
+united states and britain 
+security council resolutions 
+united arab emirates 
+
+Barge smuggling Iraqi diesel sinks off U.A.E. coast 
+
+exit poll gave clerides 51 percent votes 
+police say 
+chinese traders 
+
+armed forces 
+
+south africa 
+
+secretary−general kofi annan 
+
+foreign minister mohammed saeed al−sahhaf 
+
+France safer if it avoids striking Iraq, says minister 
+
+clerides's 40.1 percent 
+
+central bank 
+
+Philippine stocks, peso strengthen 
+
+los angeles 
+
+worst economic crisis 
+
+Indonesia's Suharto dismisses central bank governor amid economic 
+
+gas masks 
+
+world cup season 
+
+end canada's seven−year reign atop women's ice hockey 
+
+Ld−Writethru,0580 
+Americans claim first women's ice hockey gold, 3−1 
+
+san cristobal de las casas 
+
+Mexican rebel supporters demanding implementation of peace accord 
+
+president suharto installed 
+
+Indonesian troops patrol as police warn rioters will be shot 
+
+clap skates brought 
+
+ayatollah mohammad yazdi 
+
+farrakhan 
+
+unprecedented dlrs 4.5 billion petrochemical joint venture 
+
+swedish law 
+
+Ld−Writethru,0718 
+Ld−Writethru,0457 
+
+japanese government 
+
+Former Filipino sex slaves ask Japanese royals for help in 
+
+montserrat living 
+nato−led peace force 
+princess diana's death 
+yaounde's military hospital 
+chase millrose games 
+final 12 minutes 
+exit poll gave clerides 51 percent votes 
+united arab emirates 
+united states and britain 
+
+armed forces 
+
+secretary−general kofi annan 
+
+tokyo stock exchange 
+
+Dollar higher in Tokyo, Japanese stocks retreat 
+
+south africa 
+
+hun sen 
+
+Philippine president urges Sihanouk to return to Cambodia 
+Deposed premier to return next month to prepare for polls: aide 
+
+ayatollah ruhollah khomeini 
+
+gas masks 
+
+clerides's 40.1 percent 
+
+suu kyi 
+
+Philippine police halt protest against Burmese leader 
+
+georgian president eduard shevardnadze 
+
+unprecedented dlrs 4.5 billion petrochemical joint venture 
+
+worst economic crisis 
+
+interfax news agency reported 
+
+dutch flower growers 
+
+Dutch flower exporters criticize Japanese award bouquets 
+Dutch flower exporters criticize Japanese bouquets 
+
+italy's silvio fauner 
+
+Daehlie gets record seventh gold as Norway edges Italy 
+Ld−Writethru,0783 
+
+vienna allegedly entered children's tents 
+
+Police investigating sex abuse charges involving children 
+title 
+
+international monetary fund efforts 
+
+Russian premier optimistic on loan after talks with IMF's 
+
+end canada's seven−year reign atop women's ice hockey 
+nato−led peace force 
+japanese government 
+official antara news agency 
+
+Fire destroys 100 houses in Indonesian province 
+
+southeast asian nations 
+exit poll gave clerides 51 percent votes 
+west bank 
+world championship title games 
+military strike 
+
+olympic gold medal 
+
+97 percent bosnian serbs 
+
+deputy prime minister lee hsien loong 
+
+Singapore will give Indonesia export guarantees only if other 
+Singapore will give Indonesia export guarantees if other countries 
+Singapore banks face 30 percent drop in 1997 earnings 
+
+olympic ice hockey tournament 
+
+sinn fein 
+
+polling stations 
+
+ayatollah ruhollah khomeini 
+
+tomba fans 
+
+Ld−Writethru,0675 
+Ld−Writethru,0672 
+SHIGA KOGEN: in 2:40.67. 
+
+russian space station 
+
+Two Russians, French astronaut return to Earth 
+Two Russians, French astronaut depart Mir 
+
+japanese troops 
+
+Report: Japan says sex slave protest may result from 
+
+dutch flower growers 
+
+armed forces 
+
+suu kyi 
+
+left south africa 
+
+west bank 
+
+united nations resolutions 
+
+interfax news agency reported 
+
+leaking crude oil tanker permission 
+
+Azores port denies entry to leaking oil tanker 
+Lisbon port denies entry to leaking oil tanker 
+
+india's foreign ministry quoted prime minister inder kumar gujral 
+
+India tells French envoy that it opposes military strike against 
+Ira,0250q 
+
+arai 
+
+Japanese lawmaker under investigation commits suicide 
+
+14 parliamentary districts 
+
+Precede NEW DELHI 
+New polls ordered in violence−plagued eastern Indian state 
+
+french president jacques chirac 
+
+France optimistic about Annan mission to Baghdad 
+
+tueting sprawled helplessly 
+nato−led peace force 
+official antara news agency 
+italy's silvio fauner 
+technology minister bacharuddin jusuf habibie 
+vienna allegedly entered children's tents 
+worst economic crisis 
+powerful finance ministry 
+world cup events 
+canada's 18 
+international monetary fund efforts 
+world championship title games 
+gold medalist gianni romme 
+
+97 percent bosnian serbs 
+
+mobutu sese seko 
+
+Kabila visits Switzerland for ''private'' reasons 
+Kabili visits Switzerland for ''private'' reasons 
+
+worst economic crisis 
+
+Australia rejects request for temporary entry to Indonesian 
+
+deputy prime minister lee hsien loong 
+
+sinn fein 
+
+Sinn Fein to be expelled from Northern Ireland talks 
+
+russian space station 
+
+Mir's crew travels around station, successfully re−docks 
+
+swedish ice hockey federation 
+
+U.S. hockey players damaged rooms after losing 
+
+broader tokyo stock price index 
+
+121 polling stations 
+
+iraqi president saddam hussein 
+
+india's foreign ministry quoted prime minister inder kumar gujral 
+
+India says no to use of its space against Iraq 
+
+30−share philippine stock exchange index slipped 0.39 point 
+
+Philippine shares end mixed; peso weakens on Rubin comments 
+Philippine shares end mixed; peso weakens 
+
+tomba fans 
+
+dutch flower growers 
+
+women's downhill monday 
+
+airport spokesman yoshitaka tokoyoda 
+
+Police say nothing found in suspicious suitcase at Japan's Narita 
+POlice say nothing found in suspicious suitcase at Japan's Narita 
+
+tokyo foreign exchange market 
+
+Shares up 
+Dollar higher against yen in Tokyo 
+
+asian currencies 
+civil aeronautics administration 
+thrilling men's cross−country relay race 
+tueting sprawled helplessly 
+italy's silvio fauner 
+leaking crude oil tanker permission 
+vienna allegedly entered children's tents 
+senior burmese officials 
+arai 
+united nations resolutions 
+olympic record 
+
+Former East German rowing coach under scrutiny in Britain 
+
+canada's 18 
+west bank 
+powerful finance ministry 
+world cup events 
+world championship title games 
+
+hun sen ousted ranariddh 
+
+itar−tass news agency reported 
+
+hindu nationalist bharatiya janata party 
+
+Two people killed in bomb explosion. Heavy security for vote 
+
+1991 gulf war 
+
+president−elect kim dae−jung 
+
+philippine traders 
+
+south korea 
+
+97 percent bosnian serbs 
+
+deputy prime minister lee hsien loong 
+
+sinn fein 
+
+kidnappers 
+
+Georgia vows peaceful end to U.N. hostage standoff 
+
+congo president laurent kabila 
+
+russian space station 
+
+worst economic crisis 
+
+Indonesian police arrest five accused of carrying gasoline bombs 
+
+destroy iraq's secretive weapons program 
+
+REPEATING to fix garble 
+U.N.'s Annan begins crucial talks with Iraqi leaders 
+Iraq urges America to stay out of Annan's peace mission 
+
+tomba fans 
+
+dutch flower growers 
+
+india's foreign ministry quoted prime minister inder kumar gujral 
+
+broader tokyo stock price index 
+
+japanese foreign minister keizo obuchi arrived 
+
+Japanese foreign minister holds talks with Russian leadership 
+Japanese foreign minister arrives for talks with Russian 
+
+world record 
+
+George breaks women's pole vault record 
+
+airport spokesman yoshitaka tokoyoda 
+italy's silvio fauner 
+portuguese navy corvette 
+vienna allegedly entered children's tents 
+arai 
+world cup standings 
+french president jacques chirac 
+pink stucco guest house overlooking 
+
+U.N.'s Annan holds crucial talks with Iraqi leaders 
+
+dlrs 9.96 billion 
+world war ii 
+lee told parliament 
+relay bronze 
+powerful finance ministry 
+human rights watch 
+
+philippine traders 
+
+deputy prime minister lee hsien loong 
+
+worst economic crisis 
+
+congo president laurent kabila 
+
+kidnappers 
+
+japanese prime minister ryutaro hashimoto 
+
+Russian and Japanese foreign ministers reported to agree on Iraq 
+
+international space station 
+
+world cup standings 
+
+121 polling stations 
+
+chang 
+
+Philippoussis upsets top seed Rios, to meet Chang for title 
+
+united states 6−3 
+
+Miller, McNeil advance to USTA Challenger final 
+
+president boris yeltsin 
+
+1991 gulf war 
+
+Coalition provides political weight more than military muscle 
+
+world record 
+
+Gold for the Dutch, hope for the Americans 
+
+tomba fans 
+
+india's foreign ministry quoted prime minister inder kumar gujral 
+
+president−elect kim dae−jung 
+
+delta patriot missile battery 
+
+Retransmitting to delete FEA designator 
+Patriot missiles ready _ but U.S. troops hope they won't be fired 
+
+lee told parliament 
+
+Government warns Singaporeans against abusing maids 
+
+vote counting begins march 2 
+
+One killed in early voting in second phase of Indian elections. 
+
+interfax news agency reported 
+
+President released from hospital 
+
+airport spokesman yoshitaka tokoyoda 
+mapped iraq's presidential sites 
+mass−circulation dong−a ilbo 
+leaking crude oil tanker permission 
+missile 
+
+Cook says if there is Iraq deal, it's due to military pressure 
+Mubarak hails UN−Iraqi agreement 
+With Iraq 
+U.S. air show presence cut 3rd time because of Saddam 
+China expresses relief at Iraq settlement 
+Annan signs deal with Iraq to ease crisis over U.S. strike 
+Israel prefers diplomatic solution to Iraq crisis 
+U.N. judge falls off horse, delays testimony of ex−U.N. commander 
+Iraq says deal with U.N. is a defeat for America 
+Britain says Saddam has ''moved a long way'' 
+
+olympic gold medal 
+
+nagano olympics 
+
+30−share philippine stock exchange index slipped 0.39 point 
+
+Philippine stocks, peso weaken 
+
+1991 gulf war 
+
+japanese prime minister ryutaro hashimoto 
+
+Government spokesman: Japan didn't promise supplementary budget 
+
+congo president laurent kabila 
+
+worst economic crisis 
+
+narita airport 
+
+Police: False bomb threat made during Olympics 
+
+taiwanese leaders 
+
+Report: Taiwan's vice president on visit to Middle East 
+Report: Taiwanese Vice President on visit to Middle East 
+
+sri lanka 
+
+Separatist rebels attack military convoy, up to 70 reported killed 
+
+chang 
+
+united states 6−3 
+
+world record 
+
+iraqi deputy prime minister tariq aziz 
+
+Iraqis express relief, but fear attack could still occur 
+
+japanese 
+
+Weakened Asian tigers look for new Japanese investment 
+
+delta patriot missile battery 
+foreign ministry spokesman 
+west bank 
+palestinian police 
+news agency ctk reported 
+missile 
+world cup race 
+british foreign secretary robin cook 
+including presidential palaces 
+
+secretary−general kofi annan 
+
+</table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_8" validated="false" coords="7,56.65,61.25,504.65,310.05"><figDesc coords="7,382.71,62.95,30.36,1.28;7,382.40,71.84,7.95,1.40;7,382.71,73.54,24.19,1.28;7,382.40,77.07,30.94,2.98;7,382.71,80.24,30.79,1.28;7,382.71,81.72,13.44,1.28;7,382.40,84.44,5.25,1.40;7,382.40,87.66,14.01,1.40;7,382.71,89.36,30.31,1.28;7,382.71,90.83,27.40,1.28;7,382.40,93.02,8.85,1.40;7,382.40,95.70,10.16,1.40;7,382.71,97.40,29.39,1.28;7,382.40,99.59,20.49,1.40;7,382.71,101.29,30.06,1.28;7,382.40,103.47,8.03,1.40;7,382.71,105.17,31.71,1.28;7,382.40,107.23,27.20,1.40;7,382.40,109.64,30.33,2.98;7,382.71,112.81,23.92,1.28;7,382.40,114.60,28.13,2.98;7,418.90,62.95,27.22,1.28;7,418.90,64.42,28.29,1.28;7,418.90,65.90,28.28,1.28;7,418.60,74.52,7.95,1.40;7,418.60,77.60,5.25,1.40;7,418.60,80.55,25.24,1.40;7,418.90,82.25,27.74,1.28;7,418.60,84.71,7.46,4.08;7,418.90,89.09,19.19,1.28;7,418.60,91.41,8.77,1.40;7,418.60,94.09,37.61,1.40;7,418.90,95.79,30.42,1.28;7,418.90,97.26,24.68,1.28;7,418.90,98.74,8.98,1.28;7,418.90,100.21,28.47,1.28;7,418.60,101.87,25.73,3.81;7,418.90,105.98,29.60,1.28;7,418.60,108.03,13.44,1.40;7,418.60,110.44,20.49,1.40;7,418.90,112.14,29.88,1.28;7,418.60,114.20,15.32,1.40;7,418.90,115.90,32.29,1.28;7,418.60,117.82,12.78,3.68;7,418.60,122.37,10.90,1.40;7,418.60,124.52,19.18,1.40;7,418.60,126.66,7.54,1.40;7,418.90,128.36,28.41,1.28;7,418.60,130.15,32.49,1.40;7,418.90,131.85,15.03,1.28;7,418.60,133.32,13.52,3.05;7,418.90,136.67,30.76,1.28;7,455.09,71.39,26.61,1.28;7,455.09,72.87,31.16,1.28;7,454.79,75.19,7.83,1.40;7,455.09,76.89,22.72,1.28;7,455.09,78.36,30.72,1.28;7,454.79,80.69,14.91,1.40;7,455.09,82.39,27.56,1.28;7,454.79,84.71,7.54,1.40;7,455.09,86.41,21.26,1.28;7,454.79,88.73,7.46,1.40;7,454.79,91.41,5.25,1.40;7,455.09,93.11,28.99,1.28;7,454.79,95.43,13.11,1.40;7,455.09,97.13,25.08,1.28;7,454.79,99.32,37.61,1.40;7,455.09,101.02,26.46,1.28;7,454.79,103.21,25.48,1.40;7,454.79,105.75,21.06,1.40;7,454.79,108.17,27.20,1.40;7,455.09,109.86,29.32,1.28;7,454.79,111.78,8.44,3.68;7,454.79,116.34,12.78,1.40;7,454.79,118.62,10.90,1.40;7,454.79,120.77,12.46,1.40;7,455.09,122.46,22.42,1.28;7,455.09,123.94,23.82,1.28;7,454.79,125.59,19.18,1.40;7,454.79,127.74,11.14,1.40;7,455.09,129.43,20.59,1.28;7,455.09,130.91,28.35,1.28;7,491.29,62.95,21.87,1.28;7,491.29,64.42,27.31,1.28;7,491.29,65.90,19.61,1.28;7,490.98,68.35,18.03,1.40;7,490.98,71.44,25.24,1.40;7,491.29,73.14,23.34,1.28;7,491.29,74.61,29.20,1.28;7,491.29,76.09,24.86,1.28;7,490.98,78.41,13.03,1.40;7,490.98,81.36,7.78,1.40;7,490.98,84.17,8.52,4.22;7,491.29,88.69,28.41,1.28;7,490.98,91.01,37.61,1.40;7,491.29,92.71,32.56,1.28;7,490.98,95.03,29.42,2.98;7,491.29,98.20,20.16,1.28;7,490.98,100.39,17.17,2.98;7,490.98,104.41,13.93,1.40;7,491.29,106.11,31.50,1.28;7,490.98,108.30,16.72,1.40;7,491.29,110.00,22.73,1.28;7,491.29,111.47,30.61,1.28;7,527.17,61.25,16.13,2.98;7,527.17,65.94,25.24,1.40;7,527.48,67.64,28.11,1.28;7,527.17,70.63,18.03,1.40;7,527.17,73.98,15.49,1.40;7,527.48,75.68,22.73,1.28;7,527.17,78.54,5.25,1.40;7,527.48,80.24,23.09,1.28;7,527.48,81.72,29.97,1.28;7,527.17,83.90,30.40,1.40;7,527.48,85.60,33.82,1.28;7,527.48,87.08,33.18,1.28;7,527.48,88.55,27.83,1.28;7,527.17,90.47,15.65,1.40;7,527.48,92.17,31.96,1.28;7,527.17,94.36,7.54,1.40;7,527.17,96.90,7.29,1.40;7,527.17,99.45,10.24,1.40;7,527.17,101.87,12.29,1.40;7,527.48,103.56,25.97,1.28;7,527.17,105.62,30.65,1.40;7,527.48,107.32,27.43,1.28;7,527.48,108.79,28.23,1.28;7,527.17,110.58,13.11,1.40;7,527.17,112.86,21.06,1.40;7,527.48,114.56,29.02,1.28;7,527.48,116.03,25.90,1.28;7,527.17,117.68,8.52,1.40;7,527.48,119.38,31.28,1.28;7,527.17,121.17,13.20,1.40;7,527.48,122.87,25.36,1.28;7,56.95,282.30,9.86,1.27;7,56.95,283.75,21.04,1.27;7,56.95,285.21,27.74,1.27;7,56.65,288.16,15.29,1.38;7,56.95,289.84,27.00,1.27;7,56.65,292.53,19.81,1.38;7,56.95,294.20,26.35,1.27;7,56.95,295.66,28.46,1.27;7,56.95,297.11,31.71,1.27;7,56.65,299.41,25.20,2.94;7,56.65,303.64,13.51,1.38;7,56.95,305.32,21.04,1.27;7,56.65,307.61,5.18,1.38;7,56.65,310.25,11.24,1.38;7,56.95,311.93,30.45,1.27;7,56.95,313.39,19.95,1.27;7,56.95,314.84,26.77,1.27;7,56.65,316.74,16.90,1.38;7,56.95,318.41,32.44,1.27;7,56.65,320.44,27.49,1.38;7,56.95,322.12,28.09,1.27;7,56.95,323.57,26.53,1.27;7,56.95,325.03,33.16,1.27;7,92.66,273.97,29.03,1.27;7,92.36,276.92,27.07,2.94;7,92.36,281.55,19.81,1.38;7,92.66,283.23,14.35,1.27;7,92.66,284.68,26.38,1.27;7,92.36,287.37,11.24,1.38;7,92.66,289.05,28.76,1.27;7,92.36,291.47,11.24,1.38;7,92.66,293.15,28.58,1.27;7,92.66,294.60,30.45,1.27;7,92.36,296.89,9.54,1.38;7,92.36,299.67,13.91,1.38;7,92.66,301.35,22.43,1.27;7,92.36,303.64,16.90,4.03;7,92.36,308.80,16.50,1.38;7,92.66,310.48,22.85,1.27;7,92.36,312.63,9.87,1.38;7,92.66,314.31,32.68,1.27;7,92.36,316.47,30.24,1.38;7,92.66,318.15,20.20,1.27;7,92.36,320.17,20.91,1.38;7,92.66,321.85,24.41,1.27;7,92.66,323.31,15.98,1.27">More Germans suspected of helping Libyan weapons program gold medals Queen welcomes winningest Dutch Olympic team kim Kim Dae−jung's honeymoon ends in legislative spat over prime Former dissident assumes South Korea's presidency, promises With BC−Skorea−President hun sen worst economic crisis Indonesian students rally against president, defying police ban Philippines to give medicine to cash−strapped Indonesia 1991 gulf war bjp government Reports: controversial governor in Indian state may get axed palestinian leader yasser arafat Mubarak, Arafat talk about Mideast peace as Iraq crisis eases saudi arabia Saudi septuplets' parents refuse to take them home from hospital israeli prime minister benjamin netanyahu dallaire Ex−U.N. commander in Rwanda says mission poorly supplied Ex−U.N. commander in Rwanda begins testifying israeli Army arrests six Palestinians in sweep of stone−throwers Iraqi parliament holds special session on U.N.−Iraq deal France, US supplied Iraq with anthrax spores in the 1980s Inspectors will work quickly under new accord, Butler says gold medals hun sen hindu nationalist bharatiya janata party Political test for Hindu nationalists amid general elections police north korea Four North Koreans defect to the South president kim israeli secret service mossad involving telephone bugging Furor in Israel over leaking of Mossad operation in Switzerland Swiss say suspected Mossad operation uncovered Precede GENEVA Swiss say suspected Mossad operation in Bern uncovered israel power supply company mercury energy Blacked−out New Zealand city to get back to work next week israeli troop pullback palestinian leader yasser arafat Palestinian population has grown to 2.89 million, census says receiving 29 million yen Widow of Japanese lawmaker abandons plan to run in by−election dallaire sunni muslim group langebaan prints nokia employs 36,600 people israeli radio Israel holding intensive contacts with Switzerland following tirana's high−security prison ended early thursday Prison riot ends with no injured title japanese companies New dlrs 1 billion undersea fiber−optic cable to link Japan, U.S. Anti−election strike, protest shut down Kashmiri capital Pakistan warns India's Hindu nationalists may destabilize region kim jong−pil Thailand's Chatchai retains WBC flyweight title Korea's rival political parties break impasse over prime minister tokyo stock price index Japanese stocks advance for third day, U.S. dollar drops nagano city Nagano Paralympics tickets almost sold out north korea hun sen Deposed Cambodian premier declares unilateral cease−fire summer's world cup European police officials plot anti−hooligan strategy israeli secret service mossad involving telephone bugging Report: Mossad agents made noise, alerted neighbors palestinians battered israeli army jeeps power company mercury energy israeli prime minister benjamin netanyahu Israeli prime minister to visit Norway, discuss peace process dallaire police official sunni muslim group langebaan prints yeo told parliament Singapore parliament bans political party films Singapore parliament bans all political party films nokia employs 36,600 people kurdish guerrillas Gunmen wound 16 Turkish soldiers in raid Gunmen raid military outpost in Turkey, wound 16 soldiers Two British journalists said missing in Bosnia Three policemen in northern Mexico arrested for alleged 13 killed as speeding train rams into bus iraq's deputy prime minister hindu nationalist bharatiya janata party First Exit Poll puts Hindu nationalist party ahead First Exit Poll puts Hindu nationalist party ahead, but by less Troops, protesters, but no voters in India's Kashmir weapons inspectors dlrs 4 billion nagano human rights Government revokes printing license of weekly newspaper israeli secret service mossad involving telephone bugging Bumps in the night are undoing of Israeli spy agency's Swiss caper israeli Israel accused of foot−dragging on bid for Pollard's freedom Smuggled arms intercepted on Dead Sea kim Webb leads after course record 64 burmese government More Burmese troops move into Thailand as stand−off continues southeast asian countries Ramos warns of Chinese currency devaluation Asian finance chiefs meet in Jakarta to discuss economic crisis oil Iraqis collect full ration for March hindu nationalist bharatiya janata party Counting of votes begins as India awaits new government iraq's deputy prime minister southeast asian nations ASEAN asking U.N. for help to fight forest fires hun sen Amnesty: political killings continue in Cambodia Khmer Rouge blasts Cambodian leader's cease−fire proposal lower saxony governor gerhard schroeder won Governor Schroeder wins re−election _ and chance to challenge Kohl Governor Schroeder wins reelection _ and chance to challenge Kohl Left−leaning state leader seeks chance to challenge Kohl united states and britain Libyan and Arab League officials meet to coordinate on Lockerbie nagano city local police burmese troops government troops Australian troops to stay in Gulf until U.N. satisfied on norwegian prime minister kjell magne bondevik Netanyahu to discuss peace efforts during trip to Europe Netanyahu to discuss peace process during trip to Europe summer's world cup israel's unconditional withdrawal Political momentum gathers for Israeli pullout from Lebanon Report: Syria wants to resume peace talks with Israel human rights Paper: U.N. human rights chief prevented from meeting Khatami 543 contested seats Election officials prepare to begin counting of ballots With India−Elections Indians wrestle with conscience to vote BJP Counting of votes begins as India awaits new government southeast asian nations U.S. military will aid Asian stability amid economic crisis: german chancellor helmut kohl In the fight against Kohl, this candidate represents new Kohl faces tough, telegenic adversary for German elections Germany's unemployment protesters call demonstration this week oil Strong economy boosts chemicals group's net profit human rights abuses Thai authorities curb East Timor conference hun sen kosovo albanians Unrest among ethnic Albanians raises fear of war in Yugoslavia Kosovo violence raises fears of wider war Police breaks up demonstration of thousands in Kosovo hasna mohammed humair Mother of Saudi septuplets wants help before she takes them home yeltsin's spokesman sergei yastrzhembsky Israel's Sharansky meets Russia premier for talks on trade Only 10 Russian officials to retain personal bodyguards Yeltsin names replacements to Cabinet members fired over weekend U.N. council agrees on warning to Iraq but no green−light for kim Korean president names close aide as intelligence chief german chancellor helmut kohl REPEAT to fix garbled coding Police blame anti−nuke protesters for railway sabotage president suharto U.S. envoy delivers Clinton's reform message to Indonesian kosovo albanians Tens of thousands attend funeral of slain Kosovo Albanians Unrest among ethnic Albanians raises fear of war in Yugoslavia congress party deputy prime minister Taiwan's vice president arrives for hushed visit oil hasna mohammed humair southeast asian countries Sri Lanka to lure American and British investors hun sen's army Trial of deposed Cambodian premier Norodom Ranariddh underway norwegian prime minister kjell magne bondevik Turkish president arrives in Spain for talks winter 1998−1999 italian fashion Safe styles, futuristic fabrics mark Milan collections Top models regain Italian runway</figDesc><table coords="7,56.65,61.25,484.05,310.05">expulsion 
+
+delta patriot missile battery 
+wife lien fang yu 
+japanese minister 
+iraq's 1990 invasion 
+news agency ctk reported 
+olympic history 
+iraq fired 39 scud missiles 
+weapons inspectors 
+
+secretary−general kofi annan 
+
+power supply company mercury energy 
+
+sunni muslim group 
+
+soldiers fired live ammunition 
+
+langebaan prints 
+
+Oldest human footprints, damagaed by modern man, to go to museum 
+Oldest human footprints under man−made threat 
+
+nokia employs 36,600 people 
+kalandia refugee camp north 
+
+Army arrests six Palestinians in sweep against stone−throwers 
+PRECEDE Jerusalem 
+
+general staff tang fei 
+
+Taiwan's ex−air force chief promoted to chief of staff 
+Taiwan ex−air force chief promoted to chief of staff 
+
+north korea 
+
+Aid group: North Korea expects to run out of food in April 
+
+maryland murder suspect 
+
+Judge proposes Sheinbein return to United States voluntarily 
+In twist, defense lawyer says he disagrees with extradition law 
+
+delta patriot missile battery 
+wife lien fang yu 
+illegal logging scandal 
+missile 
+
+Report: Israel asking U.S. for expanded anti−missile funding 
+
+iraqi deputy prime minister tariq aziz 
+news agency ctk reported 
+weapons inspectors 
+
+secretary−general kofi annan 
+
+wife lien fang yu 
+general staff tang fei 
+illegal logging scandal 
+iraqi missile attack 
+israeli prime minister benjamin netanyahu 
+maryland murder suspect 
+soldier fired live bullets 
+iraqi deputy prime minister tariq aziz 
+regional economic crisis 
+
+secretary−general kofi annan 
+
+hindu nationalist bharatiya janata party 
+
+opposition parties 
+israeli radio 
+general staff tang fei 
+tirana's high−security prison ended early thursday 
+receiving 29 million yen 
+iraqi missile attack 
+maryland murder suspect 
+dlrs 7.8 billion 
+people's action party 
+west bank 
+
+local police 
+
+japanese stocks rose 
+
+palestinians battered israeli army jeeps 
+
+north korea 
+
+hun sen 
+
+Cambodians express cautious optimism about cease−fire 
+
+summer's world cup 
+
+oil fields 
+
+government troops 
+
+dallaire 
+
+uttar pradesh's chief minister 
+
+langebaan prints 
+amer mohammed rashid 
+
+Rashid: Iraq can't take full advantage of oil−for−food deal 
+Rashid: Iraq can't take full advantage of oil−for−food 
+
+dlrs 1.6 million 
+
+Pacific Northwest Ballet takes leap of faith in 25th season 
+
+yeo told parliament 
+general staff tang fei 
+tirana's high−security prison ended early thursday 
+maryland murder suspect 
+regional economic crisis 
+
+U.S. commander stresses gravity of Indonesian situation 
+
+political parties 
+people's action party 
+israel's foreign ministry 
+west bank 
+
+yeo told parliament 
+kurdish guerrillas 
+thai army 
+political parties 
+dlrs 20 million 
+people's action party 
+
+(a) 02/16/1998 -03/01/1998 
+
+03/02/1998 
+03/03/1998 
+03/04/1998 
+03/05/1998 
+03/06/1998 
+03/07/1998 
+03/08/1998 
+03/09/1998 
+03/10/1998 
+03/11/1998 
+03/12/1998 
+03/13/1998 
+03/14/1998 
+03/15/1998 
+
+secretary−general kofi annan 
+
+U.N. Council unanimously agrees on warning to Iraq 
+U.S. envoy: Iraq singled out for inspections because of its record 
+
+hindu nationalist bharatiya janata party 
+
+ambassador nizar hamdoon 
+
+U.S., Britain face opposition on Security Council warning to Iraq 
+U.N. takes up U.S.−backed resolution on Iraq 
+
+government troops 
+
+Netanyahu sends envoys to Washington to try and block U.S. plan 
+
+opium warlord khun sa 
+
+norwegian prime minister kjell magne bondevik 
+
+safari rally 
+
+Britain's Burns wins Safari Rally 
+
+saudi arabia 
+united states and britain 
+south lebanon 
+malaysia's prime minister 
+
+Malaysia says mass repatriation will not affect ASEAN ties 
+
+exit poll results 
+thai army 
+
+secretary−general kofi annan 
+
+trade minister tim fischer 
+
+Report: Asian crisis to hit Australian jobs next year 
+Australian report: new barriers threaten world trade, including 
+Report: Asian crisis to hit Australian jobs in late 98/99 
+
+cape town 
+
+Possible breakthrough in case of slain Swedish tourists 
+
+security council 
+
+Yeltsin merges security agencies, appoints new chief 
+France vague on ''severest consequences''; air strike debate 
+
+dlrs 4 billion 
+
+poll broadcast 
+
+luggage handlers staged short walkouts 
+
+Precede BONN 
+Massive public worker strike delays German commuters, air travel 
+
+1991 council resolution 
+
+U.N. council agrees on warning to Iraq 
+
+5 million greek orthodox 
+
+Improvement in condition of ailing Greek Orthodox leader 
+
+united states and britain 
+israel's unconditional withdrawal 
+u.n.−approved oil−for−food program 
+president bill clinton 
+interfax news agency reported 
+ambassador nizar hamdoon 
+major blocs began holding strategy sessions 
+
+iraq 
+
+Iraqi foreign minister due for talks on oil−for−food program 
+
+mossad agents 
+
+Netanyahu appoints Halevy as Mossad chief 
+Israeli officials deny report of Swiss assassination attempt 
+Report: Netanyahu to appoint Jordan mediator as Mossad chief 
+
+german chancellor helmut kohl 
+
+bosnian serbs 
+
+Serb war crimes suspect blames politicians 
+
+israeli prime minister benjamin netanyahu 
+
+Norway wants Mideast sides to respect Oslo agreement 
+
+kosovo albanians 
+
+hun sen's forces 
+
+Court finds deposed Cambodian premier guilty of arms smuggling 
+
+security council 
+
+bharatiya janata party 
+
+north korea 
+
+South Korea hints at early shipments of food aid to North Korea 
+
+norwegian prime minister kjell magne bondevik 
+
+party won 
+
+Inconclusive election leads to jockeying for power 
+
+dlrs 5.2 billion 
+
+Fast economy halts oil investments 
+
+winter 1998−1999 italian fashion 
+
+trade minister tim fischer 
+
+babies home 
+
+united states and britain 
+
+cape town 
+
+deputy prime minister 
+
+won weizman 
+
+Weizman re−elected as Israel's president 
+JERUSALEM: legislators abstained. 
+
+noor ahmed shah 
+
+Flash floods kill at least 75, another 250 people missing 
+
+puerto rico 
+
+Puerto Ricans wary of U.S. status deliberations 
+With Puerto Rico−Status 
+
+luggage handlers staged short walkouts 
+5 million greek orthodox 
+major blocs began holding strategy sessions 
+saudi arabia 
+
+Relative: No clue when British nurses will be freed 
+
+israel's unconditional withdrawal 
+ambassador nizar hamdoon 
+president bill clinton 
+interfax news agency reported 
+
+iraq 
+
+Delays still hamper Iraq's oil−for−food program 
+U.N. team under American Scott Ritter on its way to Iraq 
+
+kosovo albanians 
+
+PRISTINA: restore calm. 
+With BC−Yugoslavia−Kosovo 
+PRISTINA: Thursday's sweep. 
+Serb police announce 20 ''terrorists'' killed in crackdown. 
+Ethnic Albanian militants threaten revenge on Serbs 
+British Foreign Secretary to warn Yugoslav president on Kosovo 
+
+prime minister benjamin netanyahu 
+
+itar−tass news agency 
+
+Confederation expels controversial Chechen warlord 
+Lebed given spot on ballot for Siberian governorship 
+
+mossad agents 
+
+Swiss police reportedly looking for missing Lebanese man 
+
+bharatiya janata party 
+
+Socialist who may join India's government wants multinationals out 
+
+bosnian serbs 
+
+hun sen 
+
+Philippines urges Hun Sen to abide by Japanese election proposal 
+
+president suharto 
+
+yeltsin's spokesman sergei yastrzhembsky 
+
+Russia keeps up chorus of protest against Latvia 
+
+world court 
+
+Cameroon urges World Court to end territorial dispute 
+
+north korea 
+
+Report: Documents show spy agency operated against Kim 
+
+hasna mohammed humair 
+
+Saudi mother of septuplets not ready to cope with newborns 
+
+winter 1998−1999 italian fashion 
+
+trade minister tim fischer 
+
+emergency power 
+
+In Auckland's heart of darkness, businesses at risk of going under 
+
+won weizman 
+noor ahmed shah 
+luggage handlers staged short walkouts 
+deputy prime minister 
+puerto rico 
+security council 
+food 
+butler told cnn 
+interfax news agency reported 
+
+kosovo albanians 
+
+Annan expresses concern over Kosovo but UN to take a back seat for 
+Serb special police press Kosovo crackdown 
+Serb special police continue their crackdown in part of Kosovo 
+Serb police kill 20 Albanians in crackdown on separatists. 
+
+iraq 
+
+American U.N. expert starts his first day of weapons inspections in 
+
+israeli prime minister benjamin netanyahu 
+
+Israeli leader arrives in Norway 
+Former army chief says as Palestinian, he'd have been a terrorist 
+Israeli leader holds talks with Kohl in Germany 
+Contradictory polls suggest public confused over Lebanon 
+
+itar−tass news agency 
+
+mossad agents 
+
+After Mossad scandal fades, another spy agency hits headlines 
+
+world cup tickets 
+
+PRECEDE Brussels 
+French to hold on to tickets; foreigners condemned to small share 
+French to hold on to tickets; foreign fans condemned to small 
+
+hun sen 
+
+currency board plan 
+
+Report: Indonesia to decide economic plan after election 
+As rupiah slides, Indonesia's Suharto meets economic team 
+
+bosnian serbs 
+
+north korea 
+
+Seoul says no evidence to support rumors of unrest in North Korea 
+
+hans van den broek 
+
+EU Commissioner leaves without breakthrough 
+AP photo NIC−101 available 
+
+world cup finals 
+
+Final session canceled because of heavy snowfall 
+
+philippine stock exchange index 
+
+Asian stock markets close generally mixed 
+
+state madeleine albright 
+
+Ukraine cancels nuclear deal with Iran, pleases U.S. 
+U.S. wins Ukrainian pledges of export controls 
+
+broader tokyo stock price index 
+
+trade minister tim fischer 
+
+security council 
+
+won weizman 
+noor ahmed shah 
+luggage handlers staged short walkouts 
+emergency power 
+puerto rico 
+potential weapons sites 
+
+American Ritter resumes inspections in Iraq 
+
+80 percent 
+interfax news agency reported 
+
+kosovo albanians 
+
+Repeat 
+Serbia's Kosovo crisis raises fears in other parts of Europe 
+Federal president predicts 'slaughterhouse' in Kosovo 
+International watchdog seeks probe into possible war crimes in 
+Albright demands ''firm action'' against Serbia 
+Serbian police: Search for 'terrorists' still on in Kosovo 
+Albright issues warnings to Serbia, Iraq 
+
+israeli prime minister benjamin netanyahu 
+
+Netanyahu expresses vague optimism after Oslo talks 
+
+weapons inspectors 
+
+King Hussein tones down proposal for U.S.−Iraqi dialogue 
+American−led team inspects suspected weapons sites 
+
+world cup 
+
+Brazil's Scherer sets South American record in 50 fly 
+France's Burtin wins first DH; Maier clinches overall 
+
+mossad agents 
+
+human rights 
+
+world cup tickets 
+
+north korea 
+
+security council 
+
+puerto rico 
+
+Several homes flooded by heavy rains 
+NASA to renew rocket launches 
+
+hans van den broek 
+
+currency board plan 
+
+broader tokyo stock price index 
+
+unseeded siemerink gave krajicek 
+
+Siemerink knocks lackluster Krajicek 
+Siemerink knocks lackluster Krajicek out of ABN AMRO indoor 
+Siermerink knocks lackluster Krajicek out of ABN AMRO indoor 
+
+reigning world cup champion nicolas fontaine 
+
+Canada's Nicolas Fontaine wins freestyle aerials competition,0308 
+Canada's Nicolas Fontaine wins freestyle aerials competition 
+competition,0308 
+
+told conference organizer kirby jones 
+
+American businessmen look with longing at Cuba 
+Cuba urges U.S. businesses to oppose trade embargo 
+
+palestinian leader yasser arafat 
+
+Excerpts from Yasser Arafat's speech to lawmakers 
+Lawmakers lambaste Arafat for failing to follow up reform pledges 
+
+president aslan maskhadov 
+
+Chechnya: Release British hostages before president goes to London 
+
+peace 
+
+state madeleine albright 
+
+ahson 
+
+Police say man who married for love should be freed 
+
+emergency power 
+russian−designed nuclear reactors 
+
+Iran says Ukraine big loser for pulling out of nuclear deal 
+
+italian foreign minister lamberto dini 
+russian ambassador sergey lavrov 
+
+kosovo albanians 
+
+Demonstrations planned in Kosovo, world powers meet on crisis. 
+Serbs declare Kosovo siege over 
+Albania calls Moscow biased over Kosovo 
+Serbian police say Kosovo siege over 
+Precede PRISTINA 
+Serbian police maintain seal around targeted villages 
+Pope decries violence in Kosovo, oppression of women 
+Ethnic Albanians in Turkey protest Serb attacks in Kosovo 
+
+israeli prime minister benjamin netanyahu 
+
+Netanyahu ends four−nation Europe swing; Blair to visit 
+Austrian investors seek to build casino in Jericho 
+Netanyahu to present Blair with plan to reactivate peace process 
+
+weapons inspectors 
+
+bharatiya janata party 
+
+Hindu nationalists inch closer to power 
+
+world cup 
+
+chechnya's two−year war 
+
+Chechen president, headed for Britain, unharmed in car accident 
+
+itar−tass news agency 
+
+Three Chechens killed, livestock saved in gun battle 
+
+suharto 
+
+As outsiders worry, Indonesian legislators put confidence in 
+Suharto sees conflict between IMF reform and constitution: 
+
+world cup tickets 
+
+human rights 
+
+broader tokyo stock price index 
+
+Dollar, Japanese stocks rise in morning Tokyo trading 
+
+israeli troops 
+
+hans van den broek 
+
+US envoy arrives to promote resumption of stalled peace talks 
+
+security council 
+
+monday israel's trade minister natan sharansky 
+
+Israel's Sharon meets Jordanian leaders for talks on projects 
+Israel's Sharon arrives in Jordan for talks on joint projects 
+
+party won 
+
+unseeded siemerink gave krajicek 
+
+reigning world cup champion nicolas fontaine 
+
+currency board plan 
+
+state madeleine albright 
+
+told conference organizer kirby jones 
+
+peace 
+
+royal highness 
+
+</table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_9" validated="false" coords="7,54.00,272.29,504.04,441.53"><figDesc coords="8,203.22,699.68,3.38,12.24;8,203.22,690.01,3.38,8.86;8,203.22,683.89,3.38,5.32;8,203.22,676.64,3.38,6.45;8,203.22,673.42,3.38,2.42;8,203.22,665.04,3.38,7.57;8,203.22,655.21,3.38,9.02;8,203.22,644.27,3.38,10.14;8,211.10,699.11,3.69,13.61;8,211.10,691.54,3.69,6.48;8,211.10,679.45,3.69,11.02;8,215.59,699.52,3.38,12.40;8,215.59,685.18,3.38,13.53;8,215.59,672.94,3.38,11.43;8,215.59,667.30,3.38,4.83;8,215.59,664.08,3.38,2.42;8,215.59,660.05,3.38,3.22;8,215.59,652.97,3.38,6.28;8,223.12,707.89,7.86,4.83;8,227.60,700.97,3.38,6.12;8,227.60,697.74,3.38,2.42;8,227.60,692.91,3.38,4.03;8,227.60,681.96,3.38,10.15;8,227.60,673.74,3.38,7.41;8,227.60,670.52,3.38,2.42;8,227.60,662.62,3.38,7.09;8,227.60,655.86,3.38,5.96;8,227.60,648.45,3.38,6.60;8,227.60,627.91,3.38,19.73;8,231.49,704.03,3.38,7.89;8,231.49,697.74,3.38,5.48;8,231.49,688.24,3.38,8.70;8,231.49,683.41,3.38,4.03;8,231.49,676.00,3.38,6.61;8,231.49,672.77,3.38,2.42;8,231.49,664.24,3.38,7.73;8,231.49,652.48,3.38,10.95;8,231.49,646.52,3.38,5.15;8,231.49,636.86,3.38,8.86;8,235.38,703.22,3.38,8.70;8,235.38,697.58,3.38,4.83;8,235.38,688.88,3.38,7.89;8,235.38,676.48,3.38,11.60;8,235.38,668.75,3.38,6.93;8,235.38,663.92,3.38,4.03;8,235.38,656.83,3.38,6.28;8,235.38,653.61,3.38,2.42;8,235.38,643.94,3.38,8.86;8,235.38,633.79,3.38,9.34;8,239.26,702.41,3.38,9.50;8,239.26,693.07,3.38,8.53;8,239.26,677.45,3.38,14.81;8,239.26,667.63,3.38,9.02;8,239.26,653.77,3.38,13.05;8,239.26,647.17,3.38,5.80;8,245.38,699.33,3.69,13.39;8,245.38,686.15,3.69,12.10;8,249.87,706.92,3.38,4.99;8,249.87,697.58,3.38,8.53;8,249.87,684.21,3.38,12.56;8,249.87,670.36,3.38,13.05;8,249.87,658.28,3.38,11.27;8,249.87,642.17,3.38,15.31;8,249.87,630.57,3.38,10.79;8,253.75,698.87,3.38,13.05;8,253.75,689.85,3.38,8.22;8,253.75,686.79,3.38,2.25;8,253.75,678.25,3.38,7.73;8,253.75,675.03,3.38,2.42;8,253.75,667.62,3.38,6.61;8,253.75,651.03,3.38,15.79;8,253.75,643.78,3.38,6.44;8,260.58,700.19,3.69,12.53;8,260.58,683.12,3.69,15.99;8,260.58,673.62,3.69,8.42;8,260.58,661.52,3.69,11.02;8,265.06,703.22,3.38,8.70;8,265.06,695.65,3.38,6.76;8,265.06,686.79,3.38,8.06;8,265.06,678.41,3.38,7.57;8,265.06,668.75,3.38,8.86;8,268.95,703.22,3.38,8.70;8,268.95,700.00,3.38,2.42;8,268.95,692.91,3.38,6.28;8,268.95,682.12,3.38,9.99;8,268.95,671.00,3.38,10.31;8,268.95,666.97,3.38,3.22;8,268.95,653.21,3.38,12.96;8,268.95,641.61,3.38,10.79;8,121.23,608.93,3.38,7.57;8,121.23,602.01,3.38,6.12;8,121.23,588.31,3.38,12.89;8,121.23,580.58,3.38,6.93;8,121.23,574.46,3.38,5.32;8,121.23,567.53,3.38,6.12;8,121.23,561.41,3.38,5.32;8,121.23,544.67,3.38,15.94;8,125.11,610.86,3.38,5.64;8,125.11,601.68,3.38,8.38;8,125.11,594.27,3.38,6.60;8,125.11,587.83,3.38,5.64;8,125.11,582.19,3.38,4.83;8,125.11,570.75,3.38,10.63;8,125.11,566.88,3.38,3.06;8,125.11,562.70,3.38,3.38;8,125.11,558.51,3.38,3.38;8,125.11,550.14,3.38,7.57;8,125.11,544.02,3.38,5.32;8,125.11,531.45,3.38,11.76;8,143.60,604.58,7.86,12.73;8,148.09,595.72,3.38,8.05;8,148.09,586.05,3.38,8.86;8,148.09,582.83,3.38,2.42;8,148.09,576.07,3.38,5.96;8,148.09,569.62,3.38,5.64;8,148.09,558.35,3.38,10.47;8,148.09,553.51,3.38,4.03;8,148.09,539.34,3.38,13.37;8,148.09,534.35,3.38,4.18">American named new head of South African Airways ethiopia and eritrea Eritreans, Ethiopians welcome end to air raids eu EU back to the drawing board to make itself more people−friendly Greek veto dooms EU effort to revive relations with Turkey Money and power wrangles cloud EU drive to reunite Europe Finland ratifies Amsterdam Treaty, Schengen Pact security council Iraq rejects resolution stipulating longterm oil−for−food program Delegates gather in Rome to forge international court russian president boris yeltsin Yeltsin won't attend czar's funeral Yeltsin to chair Cabinet meeting on anti−crisis program World Cup: Hooligans could lose jobs, club membership Thai police: More than 100 arrested so far for World Cup gambling kosovo Yugoslav leader agrees to talks over Kosovo, but settlement still</figDesc><table coords="7,54.00,272.29,504.04,441.53">Istanbul 
+Police breaks up demonstration, tens injured in stampede 
+
+crew members found diving gear belonging 
+
+Tourism official applauds charges against tour boat operator 
+
+palestinian leader yasser arafat 
+dlrs 43 billion economic bailout 
+palestinian economy 
+ritter's team 
+
+U.N. team has visited six 'sensitive' sites 
+
+pope john paul ii 
+russian−designed nuclear reactors 
+italian foreign minister lamberto dini 
+russian ambassador sergey lavrov 
+
+kosovo albanians 
+
+Kosovo protests killing; relatives refuse bodies, demand autopsy 
+Conference on Kosovo adopts immediate and longer−term measures 
+Greece condemns 'secessionist tendencies' and repression in Kosovo 
+Bosnian Serb pleads guilty to rape at war crimes tribunal 
+Largest demonstration in 10 years in Kosovo as world powers meet 
+Largest demonstration in 10 years in Kosovo as powers meet 
+Germany says no suspension of deportations to Kosovo 
+
+israeli prime minister benjamin netanyahu 
+
+Jordan to ask Israel to abide by peace accords 
+Egyptian president: Netanyahu hasn't kept any promises 
+
+suharto 
+
+Indonesia's President Suharto: Asia's longest serving leader 
+Indonesia's Suharto gets new powers, is re−elected 
+
+security council 
+
+chechnya's two−year war 
+
+north korea 
+
+South Korean Red Cross proposes meeting with northern counterpart 
+
+breakaway turkish cypriot state 
+
+AP Photo available 
+
+northern ireland 
+
+Government frees IRA suspect wanted in Germany over mortar attack 
+Adams keeps Sinn Fein out of Belfast talks until he meets Blair 
+
+world cup tickets 
+
+world cup 
+
+israeli 
+
+Government will step up efforts to free Pollard 
+
+palestinian leader yasser arafat 
+
+Opposition chancellor candidate to visit Israel, Lebanon 
+
+teammate david coulthard 
+
+FIA rejects Australian GP protest but could ban arranged finishes 
+
+monday israel's trade minister natan sharansky 
+
+Israel's Sharansky meets Jordanian king, signs trade accords 
+
+hindu nationalist party 
+
+kurdish rebel group pkk 
+
+Report: Turkish Kurdish rebels may withdraw from northern Iraq 
+
+dlrs 43 billion economic bailout 
+
+Japan Minister: No plans to delay aid earmarked for Indonesia 
+
+party won 
+
+unseeded siemerink gave krajicek 
+
+reigning world cup champion nicolas fontaine 
+
+state madeleine albright 
+
+told conference organizer kirby jones 
+
+suspected weapons sites 
+
+peace 
+
+al−rai al−amm daily quoted sheik sabah al−ahmed al−sabah 
+
+Kuwait wants Iraq to admit invasion was a mistake, report 
+Kuwait wants Iraq to admit invasion was a mistake, minister says 
+
+trevor francis 
+
+Birmingham City manager withdraws resignation 
+
+german foreign minister klaus kinkel 
+pope john paul ii 
+royal highness 
+ethiopian−born saudi financier sheikh mohamed hussein al amoudi 
+romanian 5,000−meter world champion ran 
+crew members found diving gear belonging 
+russian−designed nuclear reactors 
+turkish foreign minister ismail cem 
+united front 
+
+kosovo 
+
+Don't underrate Western powers, Britain tells Milosevic 
+Kosovo protests killing; relatives refuse bodies, demand autopsy 
+War Crimes Court says it is investigating Kosovo violence 
+In Kosovo, like Bosnia, Russia seeks to soften sanctions against 
+
+president suharto 
+
+Chinese leaders congratulate Indonesia's Suharto 
+
+israeli prime minister benjamin netanyahu 
+
+Militant uses Israeli opposition leader's comments to justify acts 
+
+itar−tass news agency 
+
+Nearly 1,000 people hurt in falls on Moscow ice 
+Moscow mayor intent on restricting capital residents 
+Precede MOSCOW 
+
+saudi arabia's king fahd 
+
+Fahd in stable condition after undergoing gall bladder surgery 
+Fahd in stable condition after gall bladder surgery 
+
+downhill 
+
+Ld−Writethru,0699 
+Ld−Writethru 
+Street ambivalent about end to her ''roller coaster'' season 
+
+cyprus 
+
+Survey: offshore sector to shrink after Cyprus EU membership 
+
+broader tokyo stock price index 
+
+Japanese stocks fall, dollar edges higher in Tokyo 
+
+chechnya's two−year war 
+
+Commission should determine if Russia has claim to Chechnya 
+
+bharatiya janata party 
+
+How India's BJP may win the majority 
+Gandhi widow weighs political offer, as BJP musters needed support 
+
+northern ireland 
+
+peace 
+
+north korea 
+
+teammate david coulthard 
+
+war crimes tribunal 
+
+israeli 
+
+Israeli soldiers fire on Palestinian van at roadblock 
+
+security council resolutions 
+
+Head of Joints Chiefs says US troops ready to stay in Kuwait 
+
+nuclear waste 
+
+Standoff continues over shipload of nuclear waste 
+Governor bars ship carrying nuclear waste, protesters keep vigil 
+
+unseeded siemerink gave krajicek 
+
+reigning world cup champion nicolas fontaine 
+
+world cup 
+
+jordanian crown prince hassan 
+
+kurdish rebel group pkk 
+
+alicia alvarez gutierrez 
+
+Six months after Hurricane Pauline, Acapulco still struggling 
+
+al−rai al−amm daily quoted sheik sabah al−ahmed al−sabah 
+royal highness 
+trevor francis 
+romanian 5,000−meter world champion ran 
+cuba paid 
+german foreign minister klaus kinkel 
+crew members found diving gear belonging 
+palestinian leader yasser arafat 
+pope john paul ii 
+palestinian parliament 
+
+kosovo albanians 
+
+Albanians rebury victims; militants warn of new strikes 
+Prodi confirims Italy to back sanctions if Serbia doesn't allow 
+Kosovo's Albanians, outraged at common grave, rebury their dead 
+Russian Duma defends Serbs over Kosovo conflict 
+Kosovo's Albanians to rebury their dead 
+International Red Cross receives threats, pulls back foreign staff 
+Kosovo's Albanians try to rebury their dead; U.S. envoy holds 
+
+israeli prime minister benjamin netanyahu 
+
+Report: Annan bringing proposal for Israeli troop withdrawal from 
+
+human rights 
+
+Ailing Chinese dissident's parents appeal for his release 
+China to sign U.N. covenant on civil and political rights 
+Philippine government, Communist rebels agree on human rights 
+Turkish court acquits 10 policemen in torture case 
+
+president suharto 
+
+Speculation turns to make−up of new Indonesian cabinet 
+Australian aid conditional on Indonesia accepting IMF program 
+Former Cabinet minister chosen as deputy to Indonesia's Suharto 
+Philippine president: Suharto's re−election will help Indonesia's 
+
+itar−tass news agency 
+
+eu 
+
+EU using money and diplomacy to revive Mideast peace process 
+Spain to fight EU plans to place quotas on olive production 
+EU Commission adopts strategy on freer EU−US trade 
+
+meet british prime minister tony blair 
+
+Police crack down on alleged killers of Protestant, Catholic 
+Germany, denied extradition, asks Britain to prosecute IRA suspect 
+
+world cup 
+
+downhill title 
+
+Downhill winner crowned, but World Cup victory still coveted 
+
+israeli 
+
+In West Bank, burying the dead and bracing for new battle 
+Clashes in West Bank following roadblock shooting 
+
+saudi arabia's king fahd 
+
+broader tokyo stock price index 
+
+breakaway turkish cypriot state 
+
+palestinian leader yasser arafat 
+
+Italian President cancels trips to Israel and Syria 
+
+north korea 
+
+myanmar military 
+
+With AP Photos 
+Karen refugees rebuilding camp in wake of attack 
+
+auckland's mercury energy 
+
+Anger mounts over blackout; lawsuits and protest march in works 
+
+nyrup rasmussen 
+
+Social Democrats win narrow victory in cliffhanger election 
+Exit poll shows Social Dems, trying for reelection, in virtual dead 
+
+australian grand prix 
+
+kuwait wants iraq 
+
+Paper: Iraq won't accept Kuwaiti conditions for peace 
+
+jordanian crown prince hassan 
+
+kurdish rebel group pkk 
+
+thai government 
+
+Singapore's DBS acquires Thailand's Thai Danu Bank 
+
+police station 
+al−rai al−amm daily quoted sheik sabah al−ahmed al−sabah 
+nuclear waste 
+trevor francis 
+alicia alvarez gutierrez 
+romanian 5,000−meter world champion ran 
+pope john paul ii 
+west bank town 
+military police 
+dlrs 43 billion economic bailout 
+
+kosovo albanians 
+
+Ethnic Albanians reject Serb 
+b 
+
+03 02 1998 03 15 1998 
+
+F gu e 3 S o y flow v sua za on o ca cu a ed hemes and documen ass gnmen s o each day w h n a ou week pe od om he TDT 2 
+APW Co pus 
+
+6 S Hav e B He z e and L Nowe ThemeR ve V sua z ng heme 
+changes ove me n EEE Sympos um on n orma on V sua za on 
+2000 n oV s 2000 pages 115–123 2000 
+7 S Hav e E He z e P Wh ney and L Nowe ThemeR ve v sua 
+z ng hema c changes n a ge documen co ec ons EEE ransac 
+ons on v sua za on and compu er graph cs 8 1 9–20 2002 
+8 E He z e V C ow D Payne and A Tu ne Tu n ng he Bucke o 
+Tex n o a P pe n EEE Sympos um on n orma on V sua za on 
+2005 NFOV S 2005 pages 89–94 2005 
+9 K Jones A S a s ca n e p e a on o Te m Spec fic y and s Ap 
+p ca on n Re eva Journa o Documen a on 28 1 11–21 1972 
+10 S Jones and G Payn e Top c based b ows ng w h n a d g a b a y 
+us ng keyph ases n DL 99 Proceed ngs o he our h ACM con er 
+ence on D g a brar es pages 114–121 New Yo k NY USA 1999 
+ACM 
+11 J Leskovec L Backs om and J K e nbe g Meme ack ng and 
+he Dynam cs o he News Cyc e n Proceed ngs o he 15 h ACM 
+S GKDD n erna ona con erence on Know edge d scovery and da a 
+m n ng pages 497–506 ACM New Yo k NY USA 2009 
+12 S Rose D Enge N C ame and W Cow ey Tex M n ng chap 
+e Au oma c Keywo d Ex ac on om nd v dua Documen s John 
+W ey and Sons L d 2009 o appea 
+13 G Sa on A Wong and C S Yang A vec o space mode o au o 
+ma c ndex ng Commun ACM 18 11 613–620 1975 
+
+14 B N Sch and O Ko ak Exp o ng a d g a b a y h ough key 
+deas n JCDL 08 Proceed ngs o he 8 h ACM EEE CS o n con 
+erence on D g a brar es pages 177–186 New Yo k NY USA 
+2008 ACM 
+15 E Tu e and D Rob ns V sua exp ana ons G aph cs P ess Chesh e 
+Conn 1997 
+16 F V egas S Go de and J Dona h V sua z ng ema con en po 
+ay ng e a onsh ps om conve sa ona h s o es n Proceed ngs 
+o he S GCH con erence on Human Fac ors n compu ng sys ems 
+pages 979–988 ACM New Yo k NY USA 2006 
+17 F V egas M Wa enbe g and K Dave S udy ng coope a on and 
+confl c be ween au ho s w h h s o y flow v sua za ons n Proceed 
+ngs o he S GCH con erence on Human ac ors n compu ng sys 
+ems pages 575–582 ACM New Yo k NY USA 2004 
+18 J Wa d J H e a ch ca g oup ng o op m ze an ob ec ve unc on 
+Journa o he Amer can s a s ca assoc a on pages 236–244 1963 06/15/1998 
+
+06/16/1998 
+
+06/17/1998 
+
+06/18/1998 
+
+06/19/1998 
+
+06/20/1998 
+
+06/21/1998 
+
+world cup 
+
+World Cup: Moeller header puts Germans 1−0 ahead at halftime 
+World Cup: Romania beats Colombia 1−0 
+World Cup: France guards against concentration lapse ahead of Saudi 
+World Cup: unconvincing win sobers Yugoslavs 
+
+kosovo 
+
+EU adds ban on commercial flights to Serbia sanctions over Kosovo 
+Macedonians say NATO action brings sense of security 
+
+nato 
+
+Officials disagree on whether U.N. mandate needed for Kosovo 
+Russian defense minister rebukes U.S. commander over Kosovo 
+NATO allies trying to give Milosevic a lesson in power 
+UNHCR says helicopters may be used to help Kosovo refugees 
+Some Albanians say NATO shor of force is not enough 
+
+south africa's 
+
+zedillo 
+moshood abiola 
+english fans 
+
+World Cup: English fans celebrate in Spain 
+Violence flares again after England beats Tunisia 
+English, Tunisian fans clash, thwarting police measures 
+Government leaders condemn 'disgrace' of English troublemakers 
+
+World Cup: English hooligans back in business 
+
+portuguese colony 
+
+interfax news agency 
+
+Seventy−two forest fires registered near Moscow over weekend 
+
+frank de boer 
+tunisia chokri el ouaer 
+
+World Cup: In eye of the storm, England beats Tunisia 2−0 
+World Cup: England leads Tunisia 1−0 at halftime 
+
+detainees and all prisoners 
+
+Nigerian junta frees nine prominent political detainees 
+URGENT 
+
+national team 
+
+NBA players might be bounced from U.S. roster 
+
+mario stanic put 
+portuguese news agency lusa reported 
+paraguay jose luis chilavert 
+
+shin bet chief ami ayalon recently withdrew 
+french world cup organizing committee 
+detroit red wings 
+newly reconstituted police forces 
+
+Council meeting on Bosnia, expected to approve U.N. mission for a 
+
+butler 
+
+Chief inspector: Iraq close to being free from U.N. sanctions 
+
+palestinian authority 
+
+gave woodforde a second break 
+brian laudrup sliced open 
+jordan 
+tickets 
+military leader urged 
+
+5.2 seconds left 
+defense secretary william cohen 
+saudi arabia 
+
+world cup 
+
+More influence for Montenegro reformists in Yugoslav parliament 
+Milosevic agrees to negotiate with moderate Kosovo Albanian leader 
+Milosevic refuses to negotiate with KLA, says not affected by NATO 
+Milosevic agrees to negotiate over Kosovo political leader 
+
+nato 
+eu 
+
+EU leaders to urge Indonesia to free East Timor leader 
+Clinton phone call fails to lift EU−Turkey ties from deep freeze 
+EU says goodbye to Mandela _ amid plaudits and trade prods 
+EU bans fish, mollusk imports from Turkey 
+
+security council 
+russian president boris yeltsin 
+
+Kremlin and Moscow sign power−sharing agreement 
+Government to launch program to help coal miners 
+
+portuguese colony 
+
+eritrea 
+
+Ethiopia deports 500 Eritreans 
+
+detroit red wings 
+
+EDs: Combines previous and updates with quotes 
+Yzerman grabs two trophies as Red Wings win Cup 
+
+Red Wings sweep Capitals to win Stanley Cup 
+
+south african president nelson mandela 
+
+Soweto uprising remembered in rallies, peaceful gunfire 
+
+english fans 
+weak yen 
+
+Dollar weaker, Tokyo stocks higher in morning trading 
+
+interfax news agency 
+frank de boer 
+usa basketball 
+
+NBA players bounced from U.S. roster 
+
+germany's chancellor kohl 
+
+_REPEAT FOR ALL NEEDING_ 
+Summit budget battle sidelines launch of 'people's Europe', 
+
+sunday's game 
+
+World Cup: Valiant loss gives Japan confidence against Croatia 
+
+west bank 
+
+Israel says Palestinians stealing beehives 
+
+late dictator gen 
+mario stanic put 
+shin bet chief ami ayalon recently withdrew 
+tunisia chokri el ouaer 
+detainees and all prisoners 
+
+dlrs 200 million 
+
+World Bank mission reviews programs in Ukraine 
+Xerox to invest up to dlrs 30 million in Russia before 2000 
+
+national team 
+
+A mighty track team, and a turbulent time 
+
+jordan 
+butler 
+increasingly popular gambling vehicle 
+
+Thai police: more than 100 arrested so far for World Cup gambling 
+
+5.2 seconds left 
+palestinian authority 
+
+world cup game 
+
+Iran coach: Iran−US both need win in their big match to advance in 
+World Cup: Late Vastic strike earns Austria another 1−1 tie 
+Belgian captain Van der Elst injured in training 
+Asprilla dismissed from squad 
+World Cup: Croatian captain pulls muscle, out for Japan game 
+Consultant, two others arrested in ticket scam case 
+
+kosovo 
+
+Montenegro distances itself from Milosevic's Kosovo policy 
+Albanian president calls border shootings a provocation 
+
+eu 
+security council 
+
+Resolution submitted on Iraq spare parts 
+
+U.S. opposes independent world court prosecutor 
+
+russian president boris yeltsin 
+
+Emergency program, Chubais' possible appointment to fight crisis 
+Russian government defends plans for czar's funeral 
+
+tokyo stock exchange 
+
+Dollar plunges against yen in Tokyo, stocks rally 
+London share prices higher at midday 
+
+english fans 
+eritrean capital asmara 
+detroit red wings 
+
+Red Wings cap memorable season with a memorable finals 
+
+south african president nelson mandela 
+coach aime jacquet 
+
+World Cup: French heavily favored against desperate Saudis 
+
+prominent political prisoners 
+
+An angry Nigerian dissident, worn after prison term, returns home 
+
+interfax news agency 
+
+au pair louise woodward arrived 
+
+Louise Woodward arrives home 
+BULLETIN 
+
+Louise Woodward faces battle to rebuild life after conviction 
+
+diplomatic compound 
+
+Bizarre denouement in conflict over ambassadors' homes in Belarus 
+Belarus' president claims ownership of ambassadors' residence 
+
+mario stanic put 
+shin bet chief ami ayalon recently withdrew 
+late dictator gen 
+tunisia chokri el ouaer 
+nba players 
+west bank 
+tunisians tossed bottles 
+
+Ld−Writethru,0813 
+
+World Cup: Some of the delinquents were goaded into action 
+
+crowd booed pioline 
+
+EDS: retransmits with tennis in slug 
+French player kicked out for verbal abuse 
+
+strongman hun sen 
+
+Political killings condemned; opposition party to defy ban 
+Prince's party condemns killing of party workers 
+
+germany's chancellor kohl 
+
+German opposition leader holds Polish talks 
+
+airline suffered 4.2 billion yen 
+
+Two airline unions call off strikes; third to walk off as planned 
+
+tear gas 
+jordan 
+game 6 
+dlrs 50 million 
+national team 
+butler 
+foreign ministry 
+
+5.2 seconds left 
+
+world cup game 
+
+Nearly 15,000 tickets stolen; state phone company probing fraud 
+World Cup: Norway unbeaten in 16 games but disappointed 
+
+kosovo 
+security council 
+japanese yen 
+
+Dollar edges higher, stocks fall 
+Precede LONDON 
+China welcomes efforts to strengthen Japanese yen 
+Asian rallies fail to impress European markets 
+
+itar−tass news agency 
+
+eu 
+south korea's 
+
+Two Koreas may jointly celebrate liberation day in August 
+World Cup: Mexico prepares for Belgium, attacks reporters 
+
+</table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_10" validated="false" coords="8,116.75,240.78,352.50,185.69"><figDesc coords="8,345.40,415.45,7.86,11.02;8,349.88,404.07,3.38,11.28;8,349.88,391.67,3.38,11.60;8,349.88,385.72,3.38,5.15;8,349.88,375.73,3.38,9.18;8,349.88,366.87,3.38,8.05;8,349.88,362.84,3.38,3.22;8,349.88,357.37,3.38,4.67;8,349.88,349.95,3.38,6.61;8,349.88,341.74,3.38,7.41">yassin Report: Egyptian embassy tells Hamas leader he can enter Egypt</figDesc><table coords="8,116.75,240.78,352.50,185.69">dlrs 50 million 
+south africa 
+
+World Cup: Denmark and South Africa draw 1−1 in ''strange match'' 
+
+late dictator gen 
+tunisia chokri el ouaer 
+diplomatic compound 
+interfax news agency quoted chubais 
+
+Chubais calls for dlrs 10 billion to 15 billion in aid to Russia 
+BC−Russia−Economy, 1st Ld 
+
+tear gas 
+tunisians tossed bottles 
+crowd booed pioline 
+germany's chancellor kohl 
+strongman hun sen 
+
+airline suffered 4.2 billion yen 
+national team 
+premier sergei kiriyenko's cabinet 
+
+Communists denounce re−appointment of Chubais 
+
+financial crisis 
+
+12 players 
+increasingly popular gambling vehicle 
+
+foreign ministry 
+
+world cup game 
+
+World Cup violent play worries Brazil 
+World Cup: Nigeria into second round with 1−0 victory 
+World Cup: U.S. players happy at attention; Iran going for victory 
+Already qualified, Brazil still has revenge for motivation 
+World Cup: Japan seeks life−saving upset against Croatia 
+
+kosovo 
+
+Kosovo leader calls for NATO help, admits no control over KLA 
+World Cup: Troubled Yugoslavs look for joy with win against 
+Yugoslav minister commits to dialogue; Says Belgrade wants to join 
+
+eu 
+english fans 
+japanese yen 
+
+World finance officials meet to discuss Asian financial crisis 
+Trading in Long Term Credit Bank suspended after downgrade 
+
+interfax news agency 
+south korea 
+
+World Cup: Bergkamp back, Kluivert out as Dutch take on South 
+
+detroit red wings 
+netanyahu adviser david bar−illan 
+
+Newspaper mock referendum: two−thirds favor West Bank withdrawal 
+
+</table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_11" validated="false" coords="8,116.75,50.01,355.68,703.15"><figDesc coords="8,121.23,125.07,3.38,14.33;8,121.23,116.85,3.38,7.41;8,121.23,104.13,3.38,11.92;8,121.23,92.05,3.38,11.27;8,121.23,85.93,3.38,5.32;8,125.11,131.84,3.38,7.57;8,125.11,124.91,3.38,6.12;8,125.11,119.11,3.38,4.99;8,125.11,108.80,3.38,9.51;8,125.11,99.62,3.38,8.38;8,125.11,90.60,3.38,8.22;8,125.11,84.87,3.38,4.92;8,129.00,131.84,3.38,7.57;8,129.00,124.91,3.38,6.12;8,129.00,112.19,3.38,11.92;8,129.00,104.14,3.38,7.25;8,129.00,98.41,3.38,4.92;8,129.00,91.33,3.38,6.28;8,129.00,85.37,3.38,5.15;8,129.00,79.89,3.38,4.67;8,129.00,65.88,3.38,13.21;8,132.89,131.84,3.38,7.57;8,132.89,124.91,3.38,6.12;8,132.89,118.79,3.38,5.32;8,132.89,112.35,3.38,5.64;8,132.89,108.48,3.38,3.06;8,132.89,101.23,3.38,6.45;8,132.89,92.69,3.38,7.73;8,136.78,131.84,3.38,7.57;8,136.78,124.91,3.38,6.12;8,136.78,116.70,3.38,7.41;8,136.78,107.35,3.38,8.54;8,136.78,97.20,3.38,9.34;8,136.78,90.44,3.38,5.95;8,136.78,80.46,3.38,9.18;8,136.78,68.54,3.38,11.11;8,136.78,60.00,3.38,7.73;8,148.20,127.90,3.69,12.32;8,148.20,110.18,3.69,16.64;8,152.68,129.10,3.38,10.31;8,152.68,124.91,3.38,3.38;8,152.68,114.44,3.38,9.67;8,152.68,106.38,3.38,7.25;8,152.68,98.33,3.38,7.25;8,152.68,88.18,3.38,9.34;8,152.68,81.58,3.38,5.80;8,152.68,77.39,3.38,3.38;8,152.68,68.69,3.38,7.90;8,164.45,130.70,3.69,9.51;8,164.45,117.09,3.69,12.53;8,168.94,132.32,3.38,7.09;8,168.94,123.78,3.38,7.73;8,168.94,108.80,3.38,14.18;8,168.94,100.42,3.38,7.57;8,168.94,91.88,3.38,7.73;8,168.94,85.44,3.38,5.64;8,168.94,66.26,3.38,18.37;8,168.94,60.30,3.38,5.15;8,168.94,50.48,3.38,9.02;8,176.82,130.92,3.69,9.29;8,176.82,120.77,3.69,9.07;8,176.82,102.83,3.69,16.86;8,181.31,131.84,3.38,7.57;8,181.31,124.11,3.38,6.92;8,181.31,115.41,3.38,7.89;8,181.31,107.84,3.38,6.76;8,181.31,99.31,3.38,7.73;8,181.31,92.06,3.38,6.45;8,181.31,83.20,3.38,8.05;8,181.31,80.14,3.38,2.25;8,181.31,68.86,3.38,10.47;8,181.31,59.20,3.38,8.86;8,188.49,127.46,3.69,12.75;8,188.49,117.31,3.69,9.07;8,188.49,103.70,3.69,12.53;8,196.61,124.22,3.69,15.99;8,196.61,115.79,3.69,7.35;8,196.61,99.15,3.69,15.56;8,196.61,88.79,3.69,9.29;8,201.10,125.07,3.38,14.34;8,201.10,119.59,3.38,4.67;8,201.10,110.09,3.38,8.70;8,201.10,99.13,3.38,10.15;8,201.10,93.01,3.38,5.32;8,201.10,84.64,3.38,7.57;8,201.10,79.16,3.38,4.67;8,201.10,70.14,3.38,8.22;8,204.98,119.67,3.38,19.73;8,204.98,108.56,3.38,10.31;8,204.98,97.28,3.38,10.47;8,204.98,84.72,3.38,11.76;8,204.98,75.70,3.38,8.22;8,204.98,68.93,3.38,5.96;8,211.81,133.08,3.69,7.13;8,211.81,122.06,3.69,9.94;8,216.29,130.22,3.38,9.18;8,216.29,123.62,3.38,5.80;8,216.29,110.41,3.38,12.40;8,216.29,101.71,3.38,7.89;8,216.29,93.82,3.38,7.09;8,220.18,122.49,3.38,16.91;8,220.18,115.57,3.38,6.12;8,220.18,105.42,3.38,9.34;8,220.18,93.98,3.38,10.63;8,220.18,87.70,3.38,5.48;8,224.07,130.39,3.38,9.02;8,224.07,120.40,3.38,9.18;8,224.07,117.18,3.38,2.42;8,224.07,113.15,3.38,3.22;8,224.07,103.81,3.38,8.53;8,224.07,90.12,3.38,12.89;8,224.07,82.22,3.38,7.09;8,229.83,135.03,3.69,5.18;8,229.83,116.23,3.69,17.72;8,234.32,130.87,3.38,8.54;8,234.32,116.21,3.38,13.85;8,234.32,106.39,3.38,9.02;8,234.32,94.14,3.38,11.44;8,234.32,87.06,3.38,6.28;8,234.32,71.43,3.38,14.82;8,234.32,67.25,3.38,3.38;8,234.32,58.07,3.38,8.38;8,234.32,50.01,3.38,7.25;8,240.79,130.92,3.69,9.29;8,240.79,120.99,3.69,8.85;8,248.21,128.76,3.69,11.45;8,248.21,119.04,3.69,8.64;8,255.63,130.27,3.69,9.94;8,255.63,111.05,3.69,18.15;8,260.11,131.19,3.38,8.21;8,260.11,118.63,3.38,11.75;8,260.11,113.48,3.38,4.35;8,260.11,100.43,3.38,12.24;8,260.11,94.63,3.38,4.99;8,260.11,86.57,3.38,7.25;8,260.11,75.14,3.38,10.63;8,260.11,68.37,3.38,5.96;8,260.11,59.51,3.38,8.06;8,266.23,128.54,3.69,11.67;8,266.23,120.12,3.69,7.35;8,270.72,135.54,3.38,3.87;8,270.72,125.71,3.38,9.02;8,270.72,103.24,3.38,21.67;8,274.60,131.84,3.38,7.57;8,274.60,124.91,3.38,6.12;8,274.60,119.11,3.38,4.99;8,274.60,112.51,3.38,5.80;8,274.60,102.04,3.38,9.66;8,274.60,93.99,3.38,7.25;8,274.60,88.27,3.38,4.92;8,280.02,116.88,3.69,23.33;8,286.38,131.35,7.86,8.86;8,290.86,122.17,3.38,8.38;8,290.86,115.73,3.38,5.64;8,290.86,107.84,3.38,7.09;8,290.86,101.88,3.38,5.15;8,290.86,87.05,3.38,14.02;8,296.27,127.68,7.86,12.53;8,300.76,123.46,3.38,5.80;8,300.76,117.02,3.38,5.64;8,300.76,109.12,3.38,7.09;8,306.17,127.46,3.69,12.75;8,306.17,117.31,3.69,9.07;8,306.17,103.70,3.69,12.53;8,306.17,90.73,3.69,11.89;8,306.17,76.25,3.69,13.40;8,312.53,127.68,3.69,12.53;8,312.53,119.47,3.69,7.13;8,312.53,101.43,3.69,16.96;8,318.54,130.70,3.69,9.51;8,318.54,120.12,3.69,9.50;8,323.02,128.61,3.38,10.79;8,323.02,121.85,3.38,5.96;8,323.02,113.47,3.38,7.57;8,323.02,108.96,3.38,3.70;8,323.02,97.37,3.38,10.79;8,323.02,86.90,3.38,9.67;8,323.02,80.62,3.38,5.47;8,323.02,64.83,3.38,14.98;8,323.02,58.39,3.38,5.64;8,328.08,132.87,3.69,7.34;8,328.08,124.44,3.69,7.35;8,334.09,127.68,3.69,12.53;8,340.10,133.73,3.69,6.48;8,340.10,123.58,3.69,9.07;8,344.58,131.83,3.38,7.57;8,344.58,122.33,3.38,8.70;8,344.58,118.47,3.38,3.06;8,344.58,99.14,3.38,18.52;8,344.58,91.57,3.38,6.76;8,344.58,85.61,3.38,5.15;8,344.58,77.23,3.38,7.57;8,344.58,74.17,3.38,2.25;8,344.58,64.19,3.38,9.18;8,349.28,124.65,3.69,15.56;8,349.28,114.07,3.69,9.50;8,349.28,109.10,3.69,3.89;8,349.28,95.28,3.69,12.75;8,353.77,134.41,3.38,4.99;8,353.77,124.26,3.38,9.34;8,353.77,110.57,3.38,12.89;8,353.77,106.39,3.38,3.38;8,353.77,101.55,3.38,4.03;8,353.77,93.50,3.38,7.24;8,353.77,90.28,3.38,2.42;8,353.77,81.58,3.38,7.89;8,353.77,71.91,3.38,8.86;8,353.77,64.35,3.38,6.76;8,358.47,123.46,3.69,16.75;8,358.47,112.45,3.69,9.94;8,358.47,102.07,3.69,9.29;8,364.13,126.38,3.69,13.83;8,364.13,113.42,3.69,11.88;8,364.13,101.97,3.69,10.37;8,364.13,88.35,3.69,12.53;8,368.61,131.84,3.38,7.57;8,368.61,124.91,3.38,6.12;8,368.61,115.09,3.38,9.02;8,368.61,101.07,3.38,13.21;8,368.61,98.01,3.38,2.25;8,368.61,90.12,3.38,7.09;8,368.61,83.52,3.38,5.80;8,368.61,75.62,3.38,7.09;8,368.61,67.89,3.38,6.93;8,368.61,56.13,3.38,10.96;8,372.50,130.39,3.38,9.02;8,372.50,116.37,3.38,13.21;8,372.50,113.31,3.38,2.25;8,372.50,105.42,3.38,7.09;8,372.50,98.82,3.38,5.80;8,372.50,90.92,3.38,7.09;8,372.50,83.19,3.38,6.93;8,372.50,71.91,3.38,10.47;8,372.50,60.15,3.38,10.96;8,376.85,125.52,3.69,14.69;8,376.85,113.85,3.69,10.59;8,376.85,98.94,3.69,13.83;8,381.33,136.67,3.38,2.74;8,381.33,129.74,3.38,6.12;8,381.33,124.42,3.38,4.51;8,381.33,117.17,3.38,6.45;8,381.33,113.31,3.38,3.06;8,381.33,106.06,3.38,6.44;8,381.33,98.01,3.38,7.24;8,381.33,92.69,3.38,4.51;8,381.33,81.26,3.38,10.63;8,386.04,128.54,3.69,11.67;8,386.04,113.42,3.69,14.04;8,386.04,96.35,3.69,15.99;8,386.04,79.72,3.69,15.55;8,386.04,62.66,3.69,15.98;8,390.52,133.77,3.38,5.64;8,390.52,124.75,3.38,8.21;8,390.52,115.25,3.38,8.69;8,390.52,112.19,3.38,2.25;8,390.52,101.88,3.38,9.50;8,390.52,97.69,3.38,3.38;8,390.52,90.93,3.38,5.96;8,390.52,86.90,3.38,3.22;8,390.52,71.91,3.38,14.18;8,390.52,59.35,3.38,11.76;8,395.23,128.54,3.69,11.67;8,395.23,110.61,3.69,16.85;8,395.23,93.11,3.69,16.42;8,395.23,77.12,3.69,14.91;8,399.71,129.42,3.38,9.99;8,399.71,116.69,3.38,11.92;8,399.71,110.41,3.38,5.48;8,399.71,107.18,3.38,2.42;8,399.71,97.68,3.38,8.70;8,399.71,83.51,3.38,13.37;8,399.71,71.59,3.38,11.11;8,399.71,68.36,3.38,2.42;8,399.71,52.74,3.38,14.82;8,403.60,131.99,3.38,7.41;8,403.60,120.08,3.38,11.11;8,403.60,110.10,3.38,9.18;8,403.60,98.66,3.38,10.63;8,403.60,95.44,3.38,2.42;8,403.60,85.93,3.38,8.70;8,403.60,71.76,3.38,13.37;8,407.95,130.70,3.69,9.51;8,407.95,115.79,3.69,13.83;8,413.60,128.77,7.86,11.44;8,418.09,120.72,3.38,7.25;8,418.09,112.67,3.38,7.25;8,418.09,107.19,3.38,4.67;8,418.09,98.65,3.38,7.73;8,418.09,89.48,3.38,8.37;8,455.55,132.32,3.38,7.09;8,455.55,126.04,3.38,5.47;8,455.55,122.01,3.38,3.22;8,455.55,118.79,3.38,2.42;8,455.55,109.13,3.38,8.86;8,455.55,105.90,3.38,2.42;8,455.55,98.17,3.38,6.93;8,455.55,93.98,3.38,3.38;8,455.55,86.41,3.38,6.76;8,455.55,83.19,3.38,2.42;8,455.55,70.14,3.38,12.24;8,459.90,130.92,3.69,9.29;8,459.90,122.28,3.69,7.56;8,459.90,106.72,3.69,14.47;8,459.90,95.49,3.69,10.15;8,464.38,133.61,3.38,5.80;8,464.38,125.07,3.38,7.73;8,464.38,122.01,3.38,2.25;8,464.38,109.60,3.38,11.60;8,464.38,106.38,3.38,2.42;8,464.38,95.91,3.38,9.66;8,464.38,79.80,3.38,15.31;8,464.38,59.34,3.38,19.65;8,468.73,130.92,3.69,9.29;8,468.73,114.94,3.69,14.90;8,468.73,100.03,3.69,13.82;8,267.84,745.03,76.00,8.12">Sampson's future uncertain following Cup World Cup: Iran defeats United States 2−1 World Cup: Germany grabs 2−2 draw with late comeback World Cup: Cha fired as head coach World Cup: Saudi coach, players miss sacked Brazilian coach kosovo albanians Fighting for Kosovo roads rages despite calls for peace south korea's North Korea denounces South Korea over Independence Day festival tokyo stock exchange Dollar rises, Tokyo stock prices edge higher in morning trading interfax news agency president joao bernardo vieira Thousands flee Bissau fighting, only trickle find refuge Guinea−Bissau loyalists demand ceasefire before talks final round Barnes wins Canadian senior event Montgomerie can't escape heckling fans Woods looking to be 'major' contender again ms woodward Louise Woodward implies Eappens were responsible for baby's death asian crisis soccer team social democrats Czech socialists win elections, fear tough coalition talks ahead iranian fans AP Photos XWCLY103−107 World Cup: Iran wins political game 2−1 ambassadors cart Martin leaves U.S. Open with confidence stewart Janzen wins U.S. Open interfax news agency quoted chubais korea's choi yong−soo south africa Spencer says Diana TV program drained him; controversy over time shot players 150 riyals Three injured as demonstrators clash with police in Yemen ayatollah mirza ali gharavi Iraq blames foreigners for the killing of senior Iranian cleric blue−chip nikkei index regional prefect daniel cadoux World Cup: French policeman in coma after being hit by hooligan French policeman in coma after being hit by German hooligan sporadic power outages At least five dead as freak storm hits Moscow deputy treasury secretary lawrence summers U.S. official arrives in Jakarta for talks on Indonesian economy extend jerusalem municipal authority Cabinet approves plan to extend Jerusalem authority to settlements Egypt criticizes Israel's decision to extend Jerusalem south koreans holes Giggling golfer earns first LPGA victory Iraq's Aziz off to Madrid to lobby for lifting of sanctions world food program wants U.N. envoy in Baghdad to discuss oil−for−food implementation world currency markets Figure 4: 06/21/1998</figDesc><table coords="8,116.75,68.36,338.01,262.69">shells rain down on Guinea−Bissau capital 
+
+dlrs 50 million 
+usa basketball 
+west bank 
+yassin 
+blue−chip nikkei index 
+germany's chancellor kohl 
+
+Germany begins reluctant farewell to D−mark after 50 years 
+
+ernie els 
+tear gas 
+world's financial markets 
+
+U.S. looking for more from China in proposal for WTO membership 
+
+tunisians tossed bottles 
+crowd booed pioline 
+financial times−stock exchange 100−share index 
+strongman hun sen 
+
+airline suffered 4.2 billion yen 
+increasingly popular gambling vehicle 
+international financial organizations 
+
+kosovo albanians 
+
+Four Serbian policemen held by militants, fighting goes on 
+Four Serbian policemen held by militants 
+
+iran 
+
+Tight security in place for Iran−U.S. match 
+Iran says one of its senior cleric has been killed in Iraq 
+World Cup: Much more than a game: Politics, second round at stake 
+Soccer brings together Iranians from all sides of the political 
+
+english fans 
+
+No incidents reported in Toulouse as English fans trickle in 
+
+asian crisis 
+
+Hollway plays down dollar drop 
+
+south korea 
+interfax news agency 
+
+Kidnappers of Russian envoy make ransom demand 
+
+ms woodward 
+
+Louise Woodward has 'lots of answers,' mother says 
+
+oust president joao bernardo vieira 
+
+Post−colonial Guinea−bissau plunges into darkness 
+
+Rebels hold airport, gunfire rattles through Bissau 
+
+japanese yen 
+
+prime minister benjamin netanyahu 
+world cup finals 
+
+Saudi Arabia fires Brazilian coach Parreira 
+
+social democrats 
+
+Czech socialists win elections, fear tough coalition talks ahead 
+Initial results show socialists ahead in Czech elections 
+Exit polls have socalists leading in Czech early elections 
+
+korea's choi yong−soo 
+
+World Cup: Classy Dutch rout South Korea 5−0 
+World Cup: Dutch win 5−0 to eliminate Koreans 
+World Cup: Cocu, Overmars give Dutch 2−0 halftime lead 
+
+ambassadors 
+
+European Union ambassadors to leave Belarus 
+
+interfax news agency quoted chubais 
+players 
+
+With Sports−Soccer−Germany−Yugoslavia 
+
+keeper edwin van der sar 
+strongman hun sen 
+
+Other nations urge Cambodian parties not to boycott election 
+
+nation party 
+
+One Nation makes Asian Australians feel ''unwelcome:'' Howard 
+
+time shot 
+south african captain lucas radebe 
+cart 
+stewart 
+yassin 
+soccer game 
+100 pro−islamic students began saturday 
+
+Turkish students march to protest head scarf ban 
+Turkish students launch march head scarf ban 
+
+blue−chip nikkei index 
+
+tear gas 
+
+Police fire in air as protests in Yemen continue 
+
+sports fans 
+tunisians tossed bottles 
+crowd booed pioline 
+financial times−stock exchange 100−share index 
+ernie els 
+world currency markets 
+
+World financial officials urge Japan to revive economy 
+
+deputy treasury secretary lawrence summers 
+footed shot home 
+regional prefect jean−paul proust relented 
+
+world cup 
+
+100 pro−islamic students began saturday 
+john jairo toro 
+nation party 
+fans 
+regional prefect jean−paul proust relented 
+asian nations 
+
+</table></figure>
+		</body>
+		<back>
+
+			<div type="acknowledgement">
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>ACKNOWLEDGEMENTS </head><p> This work was supported by the National Visualization and Analytics Center (NVAC), a U.S. Department of Homeland Security Program operated by the Pacific Northwest National Laboratory. </p></div>
+			</div>
+
+			<div type="references">
+
+				<listBibl>
+
+<biblStruct coords="6,336.24,601.00,114.43,7.22"  xml:id="b0">
+	<analytic>
+		<title/>
+	</analytic>
+	<monogr>
+		<title level="j">CERATOPS. MPQA Corpus</title>
+		<imprint>
+			<date type="published" when="2009" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="6,336.24,610.36,221.82,7.22;6,336.24,619.84,221.70,7.22;6,336.24,629.32,181.27,7.22"  xml:id="b1">
+	<analytic>
+		<title level="a" type="main">The tdt-2 text and speech corpus</title>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<forename type="middle">C</forename>
+				<surname>David</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Graff</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Liberman</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Martey</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Strassel</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of DARPA Broadcast News Workshop</title>
+		<meeting>DARPA Broadcast News Workshop</meeting>
+		<imprint>
+			<publisher>Morgan Kaufmann</publisher>
+			<date type="published" when="1999" />
+			<biblScope unit="page" from="57" to="60" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="6,336.24,638.80,221.66,7.22;6,336.24,648.28,221.65,7.22;6,336.24,657.76,221.62,7.22;6,336.24,667.24,142.27,7.22"  xml:id="b2">
+	<analytic>
+		<title level="a" type="main">Visualizing tags over time</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Dubinko</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Kumar</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Magnani</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Novak</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Raghavan</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Tomkins</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">WWW &apos;06: Proceedings of the 15th international conference on World Wide Web</title>
+		<meeting><address><addrLine>New York, NY, USA</addrLine></address></meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="2006" />
+			<biblScope unit="page" from="193" to="202" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="6,336.24,676.72,221.59,7.22;6,336.24,686.08,221.53,7.22;6,336.24,695.56,143.59,7.22"  xml:id="b3">
+	<analytic>
+		<title level="a" type="main">Improving browsing in digital libraries with keyphrase indexes</title>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Gutwin</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Paynter</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">I</forename>
+				<surname>Witten</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Nevill-Manning</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<surname>Frank</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Decision Support Systems</title>
+		<imprint>
+			<biblScope unit="volume">27</biblScope>
+			<biblScope unit="issue">12</biblScope>
+			<biblScope unit="page" from="81" to="104" />
+			<date type="published" when="1999" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="6,336.24,705.04,221.59,7.22;6,336.24,714.52,158.47,7.22"  xml:id="b4">
+	<monogr>
+		<title level="m" type="main">Lucene in action. Action series</title>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<surname>Hatcher</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">O</forename>
+				<surname>Gospodnetic</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2004" />
+			<publisher>Manning Publications Co</publisher>
+			<pubPlace>Greenwich, CT</pubPlace>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+				</listBibl>
+			</div>
+		</back>
+	</text>
+</TEI>

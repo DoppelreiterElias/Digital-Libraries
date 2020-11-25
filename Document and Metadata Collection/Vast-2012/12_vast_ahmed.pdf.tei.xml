@@ -1,0 +1,1354 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.tei-c.org/ns/1.0 /home/pisenberg/grobid/grobid-home/schemas/xsd/Grobid.xsd"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+	<teiHeader xml:lang="en">
+		<encodingDesc>
+			<appInfo>
+				<application version="0.4.1" ident="GROBID" when="2016-09-09T13:44+0000">
+					<ref target="https://github.com/kermitt2/grobid">GROBID - A machine learning software for extracting information from scholarly documents</ref>
+				</application>
+			</appInfo>
+		</encodingDesc>
+		<fileDesc>
+			<titleStmt>
+				<title level="a" type="main">An Adaptive Parameter Space-Filling Algorithm for Highly Interactive Cluster Exploration</title>
+			</titleStmt>
+			<publicationStmt>
+				<publisher/>
+				<availability status="unknown"><licence/></availability>
+			</publicationStmt>
+			<sourceDesc>
+				<biblStruct>
+					<analytic>
+						<author>
+							<persName>
+								<forename type="first">Zafar</forename>
+								<surname>Ahmed</surname>
+							</persName>
+							<affiliation>
+								<orgName type="department">School of Computer Science and Center for Spatial Analysis</orgName>
+								<orgName type="institution">The University of Oklahoma</orgName>
+							</affiliation>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Chris</forename>
+								<surname>Weaver</surname>
+							</persName>
+							<affiliation>
+								<orgName type="department">School of Computer Science and Center for Spatial Analysis</orgName>
+								<orgName type="institution">The University of Oklahoma</orgName>
+							</affiliation>
+						</author>
+						<title level="a" type="main">An Adaptive Parameter Space-Filling Algorithm for Highly Interactive Cluster Exploration</title>
+					</analytic>
+					<monogr>
+						<imprint>
+							<date/>
+						</imprint>
+					</monogr>
+				</biblStruct>
+			</sourceDesc>
+		</fileDesc>
+		<profileDesc>
+			<textClass>
+				<keywords>
+					<term>Index Terms: D22 [Software Engineering]: Design Tools and Techniques—[User Interfaces]</term>
+					<term>H23 [Information Systems]: Database Management—[Languages]</term>
+					<term>H52 [Information Sys- tems]: Information Interfaces and Presentation—[User Interfaces]</term>
+				</keywords>
+			</textClass>
+			<abstract>
+				<p>For a user to perceive continuous interactive response time in a visu-alization tool, the rule of thumb is that it must process, deliver, and display rendered results for any given interaction in under 100 milliseconds. In many visualization systems, successive interactions trigger independent queries and caching of results. Consequently, computationally expensive queries like multidimensional clustering cannot keep up with rapid sequences of interactions, precluding visual benefits such as motion parallax. In this paper, we describe a heuristic prefetching technique to improve the interactive response time of KMeans clustering in dynamic query visualizations of mul-tidimensional data. We address the tradeoff between high interaction and intense query computation by observing how related interactions on overlapping data subsets produce similar clustering results , and characterizing these similarities within a parameter space of interaction. We focus on the two-dimensional parameter space defined by the minimum and maximum values of a time range manipulated by dragging and stretching a one-dimensional filtering lens over a plot of time series data. Using calculation of nearest neighbors of interaction points in parameter space, we reuse partial query results from prior interaction sequences to calculate both an immediate best-effort clustering result and to schedule calculation of an exact result. The method adapts to user interaction patterns in the parameter space by reprioritizing the interaction neighbors of visited points in the parameter space. A performance study on Mesonet meteorological data demonstrates that the method is a significant improvement over the baseline scheme in which interaction triggers on-demand, exact-range clustering with LRU caching. We also present initial evidence that approximate, temporary clustering results are sufficiently accurate (compared to exact results) to convey useful cluster structure during rapid and protracted interaction.</p>
+			</abstract>
+		</profileDesc>
+	</teiHeader>
+	<text xml:lang="en">
+		<body>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1">INTRODUCTION</head><p> Interactive cluster exploration is a topic of rapidly increasing interest in visual analytics and data mining. A wide variety of application domains require analysis of high dimensional data sets involving measurements spread across space and time. Techniques to facilitate highly interactive visualization clustering hold great promise to substantially increase the utility of analysis tools in such domains. For instance, ecologists often deal with tens to hundreds of data measurements in the development and validation of complex ecological models. Variation at different time scales is of central interest. Three kinds of rapid dynamic control over clustering are particularly desirable during interactive analysis of ecological data sets: selecting which variables to cluster and which to encode in displays; choosing and finely adjusting the time scale, typically days, seasons, or years; and moving a chosen time window forward or backward in time to observe changes at a given time scale <ref type="bibr" coords="1,537.50,218.73,9.52,8.02" target="#b1">[2]</ref>. Interaction plays a prominent role in visual analysis tools <ref type="bibr" coords="1,540.83,231.03,13.74,8.02" target="#b26">[27]</ref>. There are many kinds of interaction in information visualiza- tion <ref type="bibr" coords="1,334.97,250.96,13.74,8.02" target="#b30">[31]</ref>. Particularly common and useful patterns of interaction for multidimensional analysis include overview, zoom-and-filter, details-on-demand, and dynamic projection <ref type="bibr" coords="1,479.49,270.88,14.19,8.02" target="#b25">[26,</ref><ref type="bibr" coords="1,496.73,270.88,10.65,8.02" target="#b18"> 19]</ref>. When tools support continuous interaction through dynamic queries <ref type="bibr" coords="1,526.53,280.85,9.52,8.02" target="#b0">[1]</ref>, they facilitate perceptual comparison of data cross-sections in the hunt for interesting patterns. However, providing such support is difficult when query execution time exceeds limits for perception of visual continuity, commonly accepted to be around 100 milliseconds <ref type="bibr" coords="1,540.82,320.70,13.74,8.02" target="#b25">[26]</ref>. Providing effectively immediate query response to rapid interaction is a general problem. We focus here on the more specific problem of supporting highly interactive clustering of time-varying multidimensional data. Our goal is to reduce the effective response time of clustering so that every interaction triggers a temporally continuous and spatially seamless response. Rather than simply computing each cluster independently on demand, as in many cluster visualization tools, we support highly interactive cluster exploration by adapting repeated execution of the clustering algorithm to expected and actual interaction patterns. For continuous modes of interaction, particularly those for navigating views of quantitative data, it is common to have long sequences of interactions in the same mode. For example, users may drag (or stretch) a lens in a time series plot while exploring the effect of changing the position (or extent) of a time range of interest. The visualization system must filter the data set on the time range, run the clustering algorithm , render the results, and display them. Successive ranges, and the data subsets left after filtering on those ranges, often overlap to various extents. The amount of overlap depends upon the speed and direction of the interaction (in screen and data space coordinates). In this paper, we present an interaction-adaptive algorithm for cluster computation with best-effort immediate results. The algorithm indexes into a cache of prefetched clustering results to find the nearest clustering of the query point in an interaction parameter space. For time ranges, the set of all non-redundant data-containing ranges defines a two-dimensional parameter space of possible range values. For any given time range in the parameter space and a particular interaction type, we define the set of reachable time ranges as interaction neighbors, for instance all ranges that can be reached by dragging a lens in a time series plot to larger values of time. To provide best-effort immediate results without blocking or exhaustive precomputation, the algorithm prioritizes prefetching of clustering results by populating a finite-depth space filling tree of points in the parameter space. Any given range is either in the tree or is a space filling neighbor within a stack of progressively smaller triangular regions defined by the tree. The algorithm reprioritizes prefetching based on the relationships between the most recently requested clustering range, its interaction neighbors, and its membership in regions of the space filling tree. Background threads continuously <ref type="figure" coords="2,54.00,376.18,28.37,7.37">Figure 1</ref>: Mesomorph, a highly interactive tool for visual analysis of Mesonet <ref type="bibr" coords="2,327.68,376.18,13.29,7.37" target="#b10">[11] </ref>measurements over time. Lists and sliders allow selection of one or more clustering variables (A), the number of clusters (B), and two variables (C) to display in a scatter plot (D), two time series plots (E), and in other views. Sliders allow manual adjustment of the size of plotted points (F). A categorical color scheme represents cluster membership. Interaction with lenses in the time series plots triggers dynamic recomputation of clusters. compute and cache clustering results for ranges popped off of the front of a queue of prioritized ranges. For our first exploration of interaction-adaptive algorithms that we describe in this paper, we chose the KMeans algorithm. KMeans is well-established and well-understood, allowing us to focus on assessing our approach rather than the particulars of the clustering algorithm. We chose to apply our approach to similarly wellknown data from meteorology, namely that collected from Mesonet sites, for the same reason. We visualized the exhaustive clustering results to characterize typical patterns of clustering in time range parameter spaces. For Mesonet data, we observed large basins of attraction with relatively soft, noisy edges between them. Based on this observation, the best-effort character of our algorithm comes from assuming that an exact clustering result can be temporarily substituted with the clustering result of an " interactively nearby " neighbor in the parameter space if both points fall into a common region of similarity. We assume—admittedly based on limited evidence from a single case—that proximity/locality correlates with similarity, as in so many other phenomena. The approach thus decreases the time cost of the visualization interaction processing loop by reusing nearby previously computed clustering results. We start by describing one of several example tools that we have built for visual analysis of ecological data, focusing on key analysis tasks that our ecologist collaborators perform when using interactive querying to explore clusters. After summarizing related work on prefetching and interactive clustering, we discuss challenges and state assumptions made in the design of our interaction-adaptive prefetching algorithm. We then formally describe the algorithm, derive its computational complexity, and present a performance analysis for various practical and boundary test cases. We also discuss limitations of our algorithm and discuss the practicability of the assumptions that we made in our algorithm design. We conclude by considering utility and usability in terms of perceptual and interactive characteristics of cluster exploration, and future directions. of clusters change. Interactions can be repeated and interleaved. Even this simple scenario of data exploration reveals two challenges in developing highly interactive clustering approaches. First, effectively discerning patterns of cluster evolution during rapid interaction requires querying to be quick enough to produce perceptually immediate results. Second, genuine data-driven exploration over the space of possible time ranges is by definition a priori unpredictable , and anticipating future interaction behaviors precisely is hard. Interaction-adaptive algorithms address these challenges. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="13"></head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3">RELATED WORK</head><p>Prefetching is a broad topic and has been considered in interactive visualization from a variety of perspectives. We draw from longestablished foundations of caching and prefetching approaches used in intensive input/output systems <ref type="bibr" coords="3,174.70,203.05,14.19,8.02" target="#b23">[24,</ref><ref type="bibr" coords="3,191.26,203.05,11.21,8.02" target="#b17"> 18,</ref><ref type="bibr" coords="3,204.82,203.05,10.65,8.02" target="#b19"> 20]</ref>. Wu <ref type="bibr" coords="3,237.03,203.05,14.94,8.02" target="#b29">[30] </ref>describes a bitmap index to access large data sets efficiently. Godiva <ref type="bibr" coords="3,261.70,213.02,14.94,8.02" target="#b21">[22] </ref>provides a general-purpose API for prefetching data from a database for use in visual data exploration applications. Lipsa <ref type="bibr" coords="3,246.76,232.94,14.94,8.02" target="#b20">[21] </ref> uses dynamic chunking to prefetch data using knowledge about the behavior of previous accesses. Correa, et al. <ref type="bibr" coords="3,204.72,252.87,14.94,8.02" target="#b9">[10] </ref>describe the use of prefetching to render images at interactive frame rates. Interactionadaptive techniques differ from these by considering specific patterns of interaction and allowing display of approximate results. Doshi, et al. <ref type="bibr" coords="3,110.17,293.27,14.94,8.02" target="#b11">[12] </ref> describe one of the earliest techniques (implemented in XMDVtool <ref type="bibr" coords="3,135.59,303.24,14.34,8.02" target="#b27">[28]</ref> ) to use prefetching to achieve quick response during interactive visual exploration. The technique exploits the idea that a user's pattern of exploration exhibits regularity, but does not consider specific patterns of interaction or transient display of approximate results. It is primarily useful in cases in which the query results for a interaction can be constructed from the results of multiple previously cached results. Of the five prefetching strategies that they describe, the closest to ours assumes that the user is most likely to continue in the current interaction mode. Two other relevant strategies are hot regions, which performs poorly when the navigation space is large, and vectors, which predicts the direction of a movement based on previous movements' direction. As strategies designed for single interaction modes, all three are insufficient for integrating the results of multiple partial queries into a single query result during realistic interactive cluster exploration. Gerndt, et. al. <ref type="bibr" coords="3,116.26,453.23,14.94,8.02" target="#b12">[13] </ref> describe a parallelized caching and prefetching approach for visualization of fluid dynamics. Their prefetching scheme is based on externally specified ordering. A Markov prefetcher of Nth order predicts the most likely next block of data to be used based on stored information about the previous N blocks. The approach works poorly when the parameter space is extremely large; visually exploring users can switch between and revisit farflung locations in a sparse and seemingly haphazard fashion. ATLAS visualizes temporal data using a predictive caching and prefetching technique <ref type="bibr" coords="3,133.94,543.45,9.52,8.02" target="#b6">[7]</ref>. The direction-based prefetching strategy is similar to that in <ref type="bibr" coords="3,124.23,553.41,13.74,8.02" target="#b11">[12]</ref>, but handles six " directions " of interaction based on scrolling, zooming, and panning. Four of the six " directions " in our approach are stretches to a range extremum rather than a scroll or a uniform zoom. Although ATLAS prefetches only exact results, in principle our interaction-adaptive approach could be applied equally well to its particular modes of interaction. Jeong, et al. <ref type="bibr" coords="3,110.83,613.74,14.94,8.02" target="#b15">[16] </ref> describe data prefetching for interactive visualization of time-varying data. Isosurface extraction and rendering use a combination of CPU and GPU memory. A span space lattice maps minimum and maximum values of each calculated meta cell to a point on the lattice for prefetching. This data structure is similar to the space filling tree defined by mimima and maxima of time ranges. Intervals in the span space lattice are similarly uniform. Whereas the space scan lattice considers only active cell neighbors, interaction-adaptive prefetching uses interaction neighbors to exploit interaction-specific locality. </p><p>There has also been substantial progress in the specific area of interactive cluster exploration. Jeong, et al. <ref type="bibr" coords="3,473.34,57.88,14.94,8.02" target="#b16">[17] </ref> combine visualization with clustering to create tools for visual analysis of gene expression data, although sans support for rapid interaction in multiple views. Andrienko, et al. <ref type="bibr" coords="3,417.10,87.77,10.45,8.02" target="#b2">[3] </ref>and Guo, et al. <ref type="bibr" coords="3,482.05,87.77,14.94,8.02" target="#b13">[14] </ref> combine clustering with visual interaction for data with both geospatial and temporal attributes (making them attractive targets for application of our approach to other parameter spaces). DICON uses icon-based techniques to visualize multidimensional clusters <ref type="bibr" coords="3,486.80,127.62,9.52,8.02" target="#b5">[6]</ref>. Ankherst's <ref type="bibr" coords="3,547.55,127.62,10.45,8.02" target="#b3">[4] </ref>technique uses heuristic optimization to group dimensions of data. Choo's <ref type="bibr" coords="3,346.99,147.55,10.45,8.02" target="#b8">[9] </ref> dimensionality reduction technique preserves clustering . ClusterSculptor <ref type="bibr" coords="3,397.37,157.51,14.94,8.02" target="#b22">[23] </ref>and iVibrate <ref type="bibr" coords="3,464.13,157.51,10.45,8.02" target="#b7">[8] </ref> are integrated clustering frameworks in which users interact with entirely pre-computed cluster results. Users can validate and label clusters but cannot perform multidimensional drill-down to look for and analyze patterns and trends. In contrast, our approach offers the ability to select and change clustering dimensions and to interact with rich visualizations of clustering results, promising greater analysis utility overall. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4">INTERACTION PARAMETER SPACES</head><p>During interactive cluster exploration, the user performs several types of interactions. Our interaction-adaptive algorithm is designed specifically for interaction with a single range of time using a typical 1-D " lens " control. <ref type="figure" coords="3,438.05,282.15,30.42,8.02" target="#fig_1">Figure 2</ref>summarizes the allowed types of interaction. The user can drag the lens backward or forward , keeping the extent (length) of the time range constant. They can also stretch it backward or shrink it forward, thereby including or excluding temporal data points from the minimum side of the range. Similarly, they can stretch the lens forward or shrink it backward to include or exclude data points from the maximum side of the range. (In the lens control that we used, shrinking turns into stretching when the dragged edge passes through the undragged edge, and vice versa. We do not account for these cases explicitly.) Over the course of interaction with a lens, the user translates  : Navigation in the interaction parameter space for a moderately complex session involving replay of subsequences A and B. set of points in the parameter space where a user might visit next if they continue to perform that same type of interaction. Thus, if a user is currently dragging the time range, then drag forward and drag backward are two of only three kinds of interaction that are possible in the interaction state space; stopping the drag (such as by releasing a mouse button) is the third. <ref type="figure" coords="4,327.92,390.49,30.46,8.02" target="#fig_2">Figure 5</ref>shows a typical sequence of range interactions and the corresponding points in the parameter space. Each subsequence of interactions happens along a straight line through the parameter space. The distribution of points suggests two important characteristics of range interaction. First, a user visits the parameter space sparsely. Second, a user generally interacts in long subsequences. Each subsequence start point shows that many interaction neighbors are visited regardless of interaction type. Each time an interaction at a point invokes a query, the interaction neighbors of that point are more likely to be visited in the near future than other points in the parameter space. This suggests that interaction neighbors should be given high priority for computation. However, the user might stop the current subsequence of interactions and move to another region at any time. When that happens, the interaction neighbors should no longer be considered as high a priority. Balance is crucial. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5">ADAPTIVELY FILLING PARAMETER SPACES</head><p> In general, the objective of interaction adaptation is to deliver besteffort query results to the analyst as soon as possible. In the case of time ranges, symmetry allows us to use a finite-depth triangular space filling tree <ref type="bibr" coords="4,381.30,593.95,14.94,8.02" target="#b24">[25] </ref> overlaid on the (transformed) triangular parameter space. The triangular space filling tree is incrementally constructed by repeatedly subdividing the triangular region into smaller triangular regions. <ref type="figure" coords="4,414.78,623.84,30.06,8.02" target="#fig_3">Figure 6</ref>shows a triangular space filling tree that has four levels; the points in successive levels are represented as increasingly smaller and lighter circles. The tree fills up the triangular space more densely as levels are added. The algorithm combines two complementary sources of cluster results: (1) a set of interaction neighbors that adapt to interaction patterns to prefetch and deliver exact cluster results, and (2) a set of space filling neighbors that deliver best-effort clustering results at increasingly high resolution across the parameter space. Both sets of neighbors start to populate as soon as the user starts a sequence of interactions to filter a subset of data to cluster, select a set of variables to cluster upon, or change the number of clusters. To deliver best-effort clustering results as quickly as possible, we prioritize and cache results for the set of points in the space filling tree nearest to the interaction neighborhood of the currently visited point in the parameter space. The set is constructed by considering the space filling tree point at each level closest to the current interaction neighbors, doing so successively up to a threshold level. The resulting set of space filling neighbors ensures that the user will be able to visualize best-effort clustering results as soon as the clusters for the root of the space filling tree have been computed. To address the problem of sparse but highly structured interaction patterns, we maintain an additive priority scheme with multiple factors. First, the priority of a point in the parameter space increases if any of its interaction neighbors have been visited. Second, the priorities of interaction neighbors increase with more and more visits. Together, these mean that if the user continues in the same subsequence of interactions, eventually the priority of all the interaction neighbors will be high enough to move them to the front of the priority queue. The resulting immediate (or nearly immediate) calculation will provide exact clustering results that can be delivered the next time the user visits any of those points. During interaction, a user often ends a subsequence of interactions to move to a distant region in the parameter space. Interaction neighbors from previous subsequences start at the front of the queue. Many interactions might need to take place before interaction neighbors of newly visited points advance sufficiently in the queue. The result can be that only poorly representative clustering results are available to the visualization for an unacceptably long time. This is a limitation of simple additive prioritization. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6">INTERACTION-ADAPTIVE QUERYING</head><p> In this section, we describe our interaction-adaptive querying algorithm for the particular case of range selection of regularly gridded temporal data. We then describe how caching of query results and handling of interaction queries proceed in parallel. <ref type="figure" coords="5,236.81,653.56,26.26,8.02" target="#tab_1">Table 1</ref>summarizes the symbols and definitions used. The current visit point is the point in the parameter space that corresponds to the most recently selected time range. The interaction neighborhood is the set of all points in the parameter space that can be reached, up to the boundary of the parameter space, from the current visit point in the current interaction mode. For example, if visited as a result of interaction i, where r i = (r i,min , r i,max ) : 0 ≤ r i,min ≤ |D|−k and 0 ≤ r i,max ≤ |D| λ Distance threshold for space filling neighbors γ Distance threshold for nearest neighbors δ Priority adjustment to r i , where δ ∈ (0, 1) h Level in the space filling tree ρ h Parameter space resolution at level h P h Interactive parameter space at level h, </p><formula>where P h = N x × N y : N x , N y ∈ N, 0 ≤ N x ≤ |D| − k, k ≤ N y ≤ |D| N x &lt; N y , N y − k = N x mod(ρ h ), x ≡ r min , y ≡ r max F h Set </formula><p>of triangular space filling points down to level h (those within γ of any point in P h for some ρ h &gt;= γ) </p><formula>P α h (r) </formula><p>Neighbors of r in P h for interaction α at resolution ρ F α h (r) Neighbors of r in F h for interaction α at resolution ρ d(r, r i ) Euclidian distance between two ranges r and r i </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>the </head><p> current interaction mode is dragging, the interaction neighborhood is the set of all points that can be reached by dragging forward or dragging backward. For a current range r i and interaction type α, the interaction neighbors at level h of the space filling tree are: </p><formula>P α h (r) = {p ∈ P h : p x = r i,min , p y = r i,max , α(r i ) = α(r)} </formula><p>In the parameter space, the space filling neighborhood is the set of all points that occupy the same triangular region as the current visit point at some level in the space filling tree. Each triangular region has a space filling tree point located at its centroid. <ref type="figure" coords="5,527.85,411.53,30.15,8.02" target="#fig_3">Figure 6</ref>depicts the space filling tree points in a four-level space filling tree. If L is the diagonal length of the triangular parameter space, the maximum distance between a space filling tree point at level h and any point within its triangular region is at most </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>√ 5L </head><p>3 * 2 (h−1) . The space filling neighbors distance threshold, λ , determines the number of levels that need to be constructed in order for any point in P h to have a space filling neighbor within a distance of at most λ : </p><formula>λ = √ 5L 3 * 2 (h−1) ⇒ h = log 2 ( 2 √ 5L 3λ </formula><p>) </p><p>For a current range r i and interaction type α, the space filling neighbors at level h of the space filling tree are: </p><formula>F α h (r) = {p ∈ P h : p x = r i,min , p y = r i,max , λ ≤ d(r, r i ) ≤ |D|} </formula><p>Our algorithm maintains two data structures: a priority queue of queries and a cache of query results. The queue prioritizes all points in the parameter space for which results are not yet cached. Upon initialization of the algorithm/visualization, the queue is populated with all points of the parameter space using an initial priority calculated for each point (see Algorithm 1). A pool of background threads is then started to populate the cache over time; each thread repeatedly removes the highest priority query from the queue, computes the results of that query, then inserts the results into the cache using the queried range as a lookup key. Whenever an interaction results in a change of range, the queue is searched to find the interaction neighbors and the space filling neighbors of the corresponding point in the parameter space. The new range and its neighbors are reprioritized to reflect their increased relevance, then the cache is searched for a nearest neighbor insert p into Q at priority 0 10: end for result within a threshold distance, γ (see Algorithm 2). If there is such a result, it is returned (with its corresponding range) to the visualization for rendering as a best-effort result. The quality of the result depends on the locality of the query relative to the set of results that have been already computed by the background threads. The nearest neighbor result can be the exact query point, if results for that point have already been computed, or any other nearest neighbor in terms of Euclidian distance within the nearest neighbor distance threshold set by the user or system. Reprioritization of ranges follows an additive scheme in which, for each interaction, a small constant δ is added to the current priority of pertinant interaction neighbors and space filling neighbors. Consequently, both kinds of neighbors move towards the front in the queue. If interaction occurs for a long enough time in that region of the parameter space, the exact clustering results will be calculated for these two sets of points and thus exact clustering results will be available to visualize. Without interaction adaptation, the background routine would typically be executed for each interaction query, forcing the user to wait for the exact computation to finish and to be rendered in the visualization. With interaction adaptation , the user is immediately returned a best-effort result from the cache for each interaction's query. At the beginning of interaction , when too few nearest neighbors have been calculated for a desired region of interaction in the parameter space to have a neighbor within γ, the user must still wait for a result. But within a short period of interaction, interaction neighbors and the nearest space filling neighbors begin to populate the cache. The user starts to receive either at least approximate results if not exact ones. This repeats (with an increasingly warm cache) each time the user changes interaction type and moves to a new region in the parameter space. Regardless of whether the search query can find a result from the cache (whether exact or nearest neighbor), it reprioritizes the space filling neighbors and the interaction neighbors that correspond to the current visit point. The current visit point gets the highest priority of all. The interaction neighbors and the space filling neighbors </p><p>Algorithm 2 Reprioritize queue Q and search cache for neighbor </p><formula>1: levels ⇐ log 2 ( 2 √ 5L 3λ ) 2: for each p ∈ P α h (r) do 3: </formula><p>pValue ⇐ current priority of p </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>4: </head><p>pValue ⇐ pValue + δ 5: insert p into Q with priority pValue 6: end for 7: for h = 1 → levels do </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>8: </head><p>for each p ∈ F α h (r) do 9: insert p into Q with priority K * l levels </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>10: </head><p>end for 11: end for 12: Search Cache for r such that d(r, r ) &lt; γ 13: return r get the next highest priority. This reprioritization is simple and elegant in that the more the user interacts in a particular region of the parameter space using a particular type of interaction, the more that priority accumulates for the corresponding space filling neighbors and interaction neighbors, and thus the more quickly they get calculated to provide exact or nearby results to the user. The parameter space contains O(n 2 ) points. The implementation currently takes a modestly long time to initialize—several minutes for the Mesonet data—because building the priority queue involves calculating the priority of every point. (Straightforward parallelization of the initial priority calculation would mitigate this problem.) If n is the number of points in parameter space, searching the k &lt; n elements of the tree-based cache is O(logk). Reprioritization is O(p · log(n − k)) in which n − k is the number of elements in the priority queue and p is the size of either the set of interaction neighbors or the set of space filling neighbors. The overall search query thus returns results in amortized O(logn) time. tent coloring of cluster membership across interactions. We used Improvise <ref type="bibr" coords="7,138.26,69.96,14.94,8.02" target="#b28">[29] </ref>to implement and test our interaction adaptation approach on KMeans. Improvise has an flexible architecture for parameterizing dynamic queries in terms of interaction , a functional language for designing visualizations interactively , and an extensible library of views, simple data transformations , and more complex data queries. Improvise and our KMeans library are written in Java, and we use the JSI RTree library (http://sourceforge.net/projects/jsi/) to index the cache of nearest neighbors. This made it straightforward to add interaction adaptation for KMeans to Improvise and from there to design ecological data visualizations around multidimensional clustering, of which Mesomorph is the first (but not only) example. Mesomorph visualizes a sampling of Oklahoma Mesonet <ref type="bibr" coords="7,206.47,189.51,14.94,8.02" target="#b10">[11] </ref>mesoscale network data. Our data set consists of around 90 daily environmental variable measurements (such as maximum air temperature and wind speed) at 120 sensor towers in the state of Oklahoma from 1990– 2010. The temporal focus, multidimensional richness, and significant size of this data set (over 500K records) makes it well suited to KMeans and to analysis of interaction adaptation of clustering. We did find it necessary to reconfigure Improvise to generate and issue cluster queries to its data processing engine in regular intervals. For the sake of consistency in testing across interaction sessions—as well as for simpler quantitative analysis—we made the simplifying assumption that the user interactions themselves occur in a regular manner. Our idealized user performs 20 range interactions per second, giving an interval between interactions of 50 milliseconds. In practice, Improvise query handling lazily chases after the user's particular rhythms of interaction, which can involve significant variations in speed and even lengthy pauses to peruse a visually interesting state. While regular intervals certainly do not reflect actual interaction rhythms, our approach does not depend on any particular cadence of interaction (or lack of one), suggesting that the assumption of interaction regularity—not to be confused with data time regularity—is one that can be made without loss of generality and hence without significant impact on test results. The main goal of our testing is to characterize how adaptive KMeans computation varies as a function of the progression of interaction and the corresponding pattern of range changes. We first observed how our ecologist collaborators manipulate the time series ranges in Mesomorph to perform specific analysis tasks involving different time scales. We also collected actual interaction traces as they worked, and hope to use these (and additional) traces in future work. As an initial foray, however, we decided to analyze a more controlled space of variation in interaction patterns in the hopes of understanding the exemplar and edge cases of adaptation. For the former, we collected our own interaction traces during tasks similar to what our ecologist collaborators perform. For the latter , we synthesized both mode-constrained and pathological interaction sequences. We also concatenated traces to simulate repetitive and revisiting behaviors. <ref type="figure" coords="7,164.69,562.37,30.90,8.02" target="#fig_4">Figure 7</ref>shows the traces we used; each covers a different proportion and distribution of points in the parameter space. We replayed interaction traces with interaction adaptation on, varying either the number of background threads (n ∈ {1, 2, 5, 10, 20}) or distance threshold for nearest neighbors (γ ∈ {1, 3, 9, 27, 81, 243, 729, 2187}) and recording the number of cache hits over time. We applied convolution with a window size of 80 to remove " noise " and obtain a smoother curve of cache hits. <ref type="figure" coords="7,63.96,644.18,30.61,8.02" target="#fig_6">Figure 8</ref> plots cache hits for interaction sequence S4 as a function of the number of background threads. The sequence is a repeated pattern of shrinking the range backward from full down to zero width. For all thread counts, early interactions produce many misses and later ones produce mostly hits, as one might expect. Interestingly, the 20 thread curve does not show cache hits until later than for other thread counts (<ref type="figure" coords="7,177.84,703.96,28.32,8.02" target="#fig_6">Figure 8</ref> , A); larger relative contention for shared queue and cache structures at the onset appears to cause an initial performance inversion. Shortly after the user starts to repeat the pattern, adaptation for all thread counts sufficiently populates the cache so as to produce 100% cache hits (<ref type="figure" coords="7,515.10,445.34,26.09,8.02" target="#fig_6">figure 8</ref>, B). <ref type="figure" coords="7,327.92,456.59,31.80,8.02" target="#fig_8">Figure 9</ref>shows how cache hits vary with thread count for a more authentic interaction sequence, R2. Changes in interaction type result in navigation to different regions of the parameter space. While the first visit to a new region initially produces primarily cache misses even for many threads (<ref type="figure" coords="7,450.37,496.44,27.93,8.02" target="#fig_8">Figure 9</ref>, A), subsequent visits take advantage of earlier caching of results in that region (<ref type="figure" coords="7,526.50,506.41,28.14,8.02" target="#fig_8">Figure 9</ref>, B). Visiting an entirely new region can produce cache misses even when many threads have been populating the overall parameter space for awhile (<ref type="figure" coords="7,381.32,536.30,27.81,8.02" target="#fig_8">Figure 9</ref>, C). More threads lead to increased cache hits sooner, as expected. However, a modest number of threads may be sufficient; in this case, ten and 20 threads have essentially the same cache hit pattern for the last two thirds of the sequence. In 10, we see how increasing the threshold distance γ increases cache hit performance for R2. Repeated sequences A and B revisit previously visited regions of the parameter space, which benefits from the earlier population of the cache at higher resolution that occurs using a larger γ. The single background thread is insufficient to produce cache hits during subsequence C and D, probably because the priorities of points in their region of the parameter space remain dominated by those still being computed for A and B. This suggests the need to reconsider our simple additive prioritization model. Using the simpler interaction sequence S4, <ref type="figure" coords="8,231.27,583.89,36.48,8.02">Figure 11</ref>shows more clearly how performance varies for different values of γ compared to different numbers of threads. On the left, we can see that the algorithm produces cache hits more quickly as we increase the threshold; on the right, we can see that performance increases from one to ten threads then decreases for 15 and 20 threads. That there is such an obvious knee in scalability of parallelization is a surprising result. It suggests that it would be worth considering ways to allocate points in the parameter space to threads using a spatiotemporal model based on more than a loose notion of relative locality and first-come-first-served consumption off of a simple queue. Domination of the priority queue by stale regions in the parameter space appears to be a potentially substantial shortcoming of our current approach to interaction adaptation. Despite being extreme  edge cases, sequences such as S5 serve to readily reveal this shortcoming . Navigation through the parameter space (<ref type="figure" coords="8,496.51,403.80,32.35,8.02" target="#fig_1">Figure 12</ref>) occurs in a row-by-row pattern that minimizes locality. This pathological pattern systematically clogs the priority queue with an increasing number of exactly those queries least likely to be useful later, resulting in steadily worsening performance that is only forstalled by parallelization (<ref type="figure" coords="8,387.13,453.62,32.30,8.02" target="#fig_14">Figure 13</ref>). Identifying and characterizing such pathologies for simple geometries of parameter space navigation might help to address similar kinds of poor performance in their less virulent forms in natural interaction patterns like R2.  One way to better understand any given combination is to examine patterns of query results in the parameter space in terms of the general categories of exploration and analysis tasks that the interactions within that space aim to support. To better understand our own combination of time ranges and KMeans queries, we calculated a data set consisting of the KMeans clustering results for all points within the triangular range parameter space. Each record in the data set contains the coordinates of the centers of each cluster by number, rather than full cluster membership. We then visualize the " meta-clusters " calculated by performing KMeans clustering of the centers themselves (<ref type="figure" coords="9,128.62,364.58,32.59,8.02" target="#fig_15">Figure 14</ref> ). The pattern of meta-clusters suggests that the parameter space can be divided vertically into three regimes of short, medium, and long ranges. The long range regime typically consists of the major portion of a single meta-cluster that dominates the parameter space. The short range regimes typically consists of a set of localized clusters that overlap along the time axis. The medium range typically consists of noisy areas of transition between coherent meta-clusters. Strikingly, these patterns of coherence and transition seem to correspond directly to high-level visualization activities of overview, drill-down, and details <ref type="bibr" coords="9,265.90,454.24,13.74,8.02" target="#b25">[26]</ref>. Meta-clusters are coherent in the short and long regimes, suggesting that our assumption of similar query results for related parameters holds well at the time scales (range extents) that ecologists tend to look at. However, the existence of seemingly coherent metaclusters says relatively little about clusters themselves. The nearby clusters used in interactive adaptive clustering may not produce the same visual result as exact clusterings would. For example, the user might not experience the same shape dynamics during interactive cluster exploration. We compared best-effort clusters to the corresponding exact clusters using the Jaccard coefficient, a measure of similarity between sets based on common membership of sub- sets <ref type="bibr" coords="9,69.57,574.12,13.74,8.02" target="#b14">[15]</ref>. We split the Jaccard coefficient of cache hits into ten bins and assigned cache misses a Jaccard coefficient of 0. The highest bin (0.9–1.0) reflects high similarity of the best-effort cluster to the exact cluster. <ref type="figure" coords="9,103.14,604.01,34.39,8.02" target="#fig_2">Figure 15</ref>shows that the lowest bin (0.0–0.1) consists mostly of cache misses and that a high percentage of nearby clusters are similar to the exact cluster. We also see that outside the lowest bin, the distribution of Jaccard coefficients is largely insensitive to both λ and γ. This makes sense; in ecological data, most measurements vary smoothly over time (e.g., with the seasons). We can safely assume that nearby data points give clustering results which are close to the exact clustering result. User-centered evaluation is still needed for domain experts to validate the exact clusterings. The meta-clustering approach identifies potential areas of relative invariance in a parameter space. Knowledge of such invariances can inform both prioritization of queries and caching of <ref type="figure" coords="9,317.96,238.69,34.80,7.37" target="#fig_2">Figure 15</ref>: Jaccard coefficient distribution for different distance threshold values for pattern R2 (1956 data points). <ref type="figure" coords="9,350.05,279.76,33.35,8.02" target="#fig_15">Figure 14</ref>, for example, we can see that meta-clusters can be characterized as segmented (A), unitary (B), noisy (C), and dispersed (D). When a meta-cluster is sufficiently spatially coherent, one cluster result might serve to represent all points in the metacluster . Prioritization could focus on computing queries in the noisier (and hence more approximate) regions, and caching might minimize effective duplication by storing only representative cluster results where possible. An experimental extension of our KMeans adaptation algorithm performs progressive meta-clustering of accumulating cluster results as a means to explore these possibilities. In particular, our algorithm does not take into account finite storage . Query results for every point in the parameter space remain in the cache once added, but it would be impractical and often impossible to cache all results for larger data sets and higher dimensional parameter spaces. Another direction of future work is to develop a limited memory cache that works with the queue to determine the evolving priority of both cached and uncached results. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>overview drill-down and transitions </head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>= 2187 </head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>sults. In </head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="9">CONCLUSION</head><p>Interaction-adaptive prefetching is a generalizable approach that can serve best-effort results of slow queries to a visualization at interactive rates. In this paper, we describe the approach and its application to the particular case of KMeans clustering of multivariate data filtered on a time range. We analyze performance on a usefully large amount of data within an implemented visualization tool. A possible future extension of our work can be the exploration of higher dimensional and heterogeneous interaction parameter spaces. For example, a direct extension of our work can be a highly interactive system for geospatial cluster exploration in which the N vertices of a polygonal lasso define an N-dimensional parameter space. We also plan to explore the performance and effectiveness of prefetching using different types of prioritization functions to better anticipate the interaction patterns of users in particular parameter spaces. </p></div><figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_1" coords="3,317.96,703.02,240.05,8.02;3,317.96,712.48,231.32,7.56"><head>Figure 2: </head><figDesc>Figure 2: Interactions on range r i . Changes are constrained to a finite regular grid of resolution ρ corresponding to recorded time points. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_2" coords="4,54.00,119.28,240.04,7.37"><head>Figure 5</head><figDesc>Figure 3: Subsequences of interactions in a simple analysis session. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_3" coords="5,57.90,265.32,232.25,7.37"><head>Figure 6: </head><figDesc>Figure 6: Triangular space filling tree for a one-dimensional range. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_4" coords="7,317.96,382.21,240.04,7.37;7,317.96,391.67,232.87,7.37"><head>Figure 7: </head><figDesc>Figure 7: Examples of synthetic, constrained, natural, and repetitive interaction sequences used to test KMeans interaction adaptation. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_6" coords="7,332.60,712.55,210.75,7.37"><head>Figure 8: </head><figDesc>Figure 8: Cache hits for sequence S4, varying thread count. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_8" coords="8,68.43,169.22,211.19,7.37"><head>Figure 9: </head><figDesc>Figure 9: Cache hits for sequence R2, varying thread count. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_10" coords="8,86.40,305.15,175.25,7.56"><head>Figure 10: Figure 11: </head><figDesc>Figure 10: Cache hits for sequence R2, varying γ. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_11" coords="8,54.00,493.71,240.05,8.21;8,54.00,503.67,240.05,8.02;8,54.00,513.64,240.05,8.02;8,54.00,523.60,240.05,8.02;8,54.00,533.56,240.05,8.20;8,54.00,543.53,240.05,8.02;8,54.00,553.49,240.05,8.02;8,54.00,563.45,240.05,8.02;8,54.00,573.41,226.02,8.02;8,63.96,583.89,230.09,8.02;8,54.00,593.85,240.05,8.21;8,54.00,603.82,240.05,8.02;8,54.00,613.78,240.05,8.02;8,54.00,623.74,240.05,8.02;8,54.00,633.70,240.05,8.02;8,54.00,643.67,240.05,8.02;8,54.00,653.63,240.05,8.02;8,54.00,663.59,240.05,8.02;8,54.00,673.56,240.05,8.02;8,54.00,683.52,223.77,8.02;8,63.96,694.00,230.09,8.02;8,54.00,703.96,240.05,8.02;8,54.00,713.92,240.05,8.02"><head>Figure </head><figDesc>Figure 10, we see how increasing the threshold distance γ increases cache hit performance for R2. Repeated sequences A and B revisit previously visited regions of the parameter space, which benefits from the earlier population of the cache at higher resolution that occurs using a larger γ. The single background thread is insufficient to produce cache hits during subsequence C and D, probably because the priorities of points in their region of the parameter space remain dominated by those still being computed for A and B. This suggests the need to reconsider our simple additive prioritization model. Using the simpler interaction sequence S4, Figure 11 shows more clearly how performance varies for different values of γ compared to different numbers of threads. On the left, we can see that the algorithm produces cache hits more quickly as we increase the threshold; on the right, we can see that performance increases from one to ten threads then decreases for 15 and 20 threads. That there is such an obvious knee in scalability of parallelization is a surprising result. It suggests that it would be worth considering ways to allocate points in the parameter space to threads using a spatiotemporal model based on more than a loose notion of relative locality and first-come-first-served consumption off of a simple queue. Domination of the priority queue by stale regions in the parameter space appears to be a potentially substantial shortcoming of our current approach to interaction adaptation. Despite being extreme </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_13" coords="8,347.45,236.97,181.07,7.37"><head>Figure 12: </head><figDesc>Figure 12: Parameter space visits for sequence S5. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_14" coords="8,330.39,362.87,215.19,7.37"><head>Figure 13: </head><figDesc>Figure 13: Cache hits for sequence S5, varying thread count. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_15" coords="9,54.00,233.04,240.04,7.37"><head>Figure 14: </head><figDesc>Figure 14: Meta-clustering of cluster centers in the parameter space. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_2" validated="false" coords="5,366.42,284.61,143.12,7.37"><figDesc coords="5,366.42,284.61,143.12,7.37">Table 1: Algorithm terms with definitions.</figDesc><table></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_3" validated="false" coords="6,54.00,56.78,150.54,105.49"><figDesc coords="6,54.00,56.78,142.20,8.12">Algorithm 1 Initialize priority queue Q</figDesc><table coords="6,58.56,69.22,145.98,93.05">1: L ⇐ |D| 
+2: levels ⇐ log 2 ( 2 
+
+√ 
+5L 
+3λ 
+
+) 
+3: for h = 1 → levels do 
+
+4: 
+
+for each p ∈ F(P h ) do 
+
+5: 
+
+insert p into Q at priority levels−i 
+
+levels 
+
+6: 
+
+end for 
+7: end for 
+8: for each p / 
+∈ F(P h ) do 
+
+9: 
+
+</table></figure>
+
+			<note place="foot" n="2"> EXAMPLE: MESOMORPH Ecologists work with large data sets to develop and validate complex mathematical models of ecological systems. Analysis of timevarying dependencies between variables—such as temperature, humidity , and transpiration rate—helps them to develop new hypotheses about which relationships to incorporate into their models . Mesomorph (Figure 1) allows ecologists to explore the highdimensional space of relationships by interactively observing the evolution of pertinant multivariate clusters over time [2]. Mesomorph was originally designed for use with Mesonet meteorological data [11], but has been adapted to similar time-varying data sources such as Terrestrial ECOsystem (TECO) data from FLUXNET tower sites [5]. To pose a question about the evolution of relationships over time in Mesomorph, an ecologist drags or stretches a time range and observes clustering results. For example, the ecologist might want to analyze the shape dynamics of a particular number of clusters based on a set of selected attributes over various (often irregular) scales of time, such as years, seasons, or the durations of expected or observed phenomena. To do this, they stretch a time range lens to the desired extent and then drag it back and forth while looking at the scatter plot, observing how the shapes</note>
+
+			<note place="foot">Figure 4: Interaction parameter space of a one-dimensional time range. From current range r i (point s), six sets of interaction neighbors are reachable using the six allowed time range lens interactions. and scales the range repeatedly, generating subsequences of the six interaction types. For example, our ecologist collaborators often first stretch each side of the lens in succession to specify a time range covering a (variably long) season&apos;s worth of data. They then drag the lens back and forth to observe the effect of end-of-season variation on clustering. They then stretch the range to cover a full year, followed by a drag to position the lens over a single calendar year. The interactive visualization system invokes a query whenever there is a change in position or extent of the range, i.e., whenever the lens moves. Each interaction triggers an invocation of the clustering algorithm. Figure 3 shows an example of a typical series of subsequences of range interactions in a simple analysis session. We model a user&apos;s interaction with a set of adjustable visualization parameters as an interaction parameter space. A parameter space is defined by the dimensions of interaction; for instance, a slider and a pair of checkboxes defines a parameter space having one integer dimension, two boolean dimensions, and Nx2x2 points. In our case, the parameter space is a simple, two-dimensional cartesian coordinate system constrained to the minimum and maximum values of a time range. Valid points in the parameter space are the ranges that can be constructed using any two distinct times in the data. The X and Y coordinates of a point in the parameter space are the minimum and maximum values of the corresponding time range, respectively. For sake of mathematical symmetry—and to make visualizations of the parameter space easier to read—we transform the parameter space and contained points to a coordinate system in which the X-axis denotes the center of ranges and the Y-axis denotes the extent of ranges. As a result, the interaction neighborhoods of the six stretching and dragging modes of a given range radiate out from the range&apos;s point in a hexagonal pattern (Figure 4). The notion of interaction neighborhood is based on the observation that, during protracted visual analysis of temporal data using the lens control, users tend to interact in a given mode for a relatively long period of time, producing long subsequences of the same interaction type. We define interaction neighborhood as the</note>
+
+			<note place="foot" n="7"> INTERACTION ADAPTATION WITH KMEANS CLUSTERING Interaction adaptation allows one to temporarily sacrifice exactness to gain immediacy of query computation. Up to this point, we have presented it as a specific approach in terms of the form(s) of interaction supported, but general in terms of the vast universe of queries that are too slow to compute on demand on current hardware but that one may nevertheless desire to drive interactively. We do not attempt to take on the full question of generalizability in this paper. Instead, we proceed under the expectation that there is a large and interesting subset of analytically useful queries that exist in a &quot; sweet range &quot; of not-quite-interactive performance (of more than 100ms but less than many seconds) and that behave with locality (by producing similar results given similar data and parameter inputs), but that also may have idiosyncratic characteristics that require special handling to use with interaction adaptation. Here we consider one of many possible choices of query: KMeans clustering. KMeans has been the clustering method of choice in our recent collaborations with ecologists and meteorologists to develop new visual analysis tools like Mesomorph. It is easy to implement and well understood in application, allowing us to focus on broader issues of visualization design and application. For the same reasons, KMeans is an appropriate choice for an initial assessment of the technical practicality, analytic utility, and general usability of interaction adaptation approaches. Moreover, for the amounts of data and the time patterns of user interaction that we encounter in tools like Mesomorph, our black-box KMeans implementation on current hardware is neither too fast nor too slow, but rather &quot; just right &quot; for assessing the general applicability of interaction adaptation in terms of performance requirements. Each query takes more than the 100ms that would be tolerable to compute on demand, but less than the second-plus times that would start to make the rate of cache warming intolerably slow even for not-so-nearby clustering results. One wrinkle is that common flavors of KMeans (including our implementation) are not deterministic. Even for two identical consecutive clusterings of a data set, cluster membership is likely to change. In our visualization tools, we use color to encode cluster membership. This results in unpredictable and distracting changes of cluster color during interaction, degrading usability of continuous interaction and threatening to make any benefits of interaction adaptation irrelevant. For effective visual analysis using interactive cluster exploration, an analyst must be able to visually follow the size-shape changes of clusters during interaction. To mitigate this problem, we implemented cluster number reassignment by remembering cluster membership for each data item. In subsequent clusterings , we take the intersection of the sets of data points between previous and current clusterings, and reassign the cluster membership number by identifying cluster number changes between previous and current clusterings. Reassignment produces more</note>
+
+			<note place="foot" n="8"> DISCUSSION AND FUTURE WORK Although a poor substitute for analysis of a large corpus of actual interaction traces of ecologists doing genuine analysis using our visualization tools, the results of our limited testing provide a general sense of the performance characteristics of the interaction adaptation approach, and hence also provide a general expectation of interactivity. Utility and other aspects of usability are an entirely different matter, and need to be addressed in a future user-centered evaluation. The analytic utility of approximate cluster results is of central concern. One of our key assumptions is that a clustering result of a nearby set of data points is a suitable temporary analytic proxy for an exact result. We hypothesize that the immediacy of nearby query results can allow an analyst to perform useful tasks that entail visual scanning of paths in a parameter space to identify regions of interest, even if those results are too different from exact results to be useful for tasks that analyze details. Such a strong hypothesis calls for rigorous validation through usability evaluation and performance analysis. Moreover, such validation may be necessary for each new combination of interactive parameter space and interactively parameterized query. The space of potential combinations that might be of substantial use in visual exploration and analysis is likely to be enormous.</note>
+		</body>
+		<back>
+
+			<div type="acknowledgement">
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>ACKNOWLEDGEMENTS </head><p>This work is supported by National Science Foundation Award #0919466 and the State of Oklahoma Regents for Higher Education . We wish to express our gratitude to our collaborators on the EPSCoR Track-II cyberCommons project. We give special thanks to Jeff Basara for access to Mesonet data. Oklahoma Mesonet data are provided courtesy of the Oklahoma Mesonet, a cooperative venture between Oklahoma State University and The University of Oklahoma and supported by the taxpayers of Oklahoma. </p></div>
+			</div>
+
+			<div type="references">
+
+				<listBibl>
+
+<biblStruct coords="10,72.26,80.47,221.78,7.13;10,72.26,89.94,221.79,7.13;10,72.26,99.48,221.78,6.86;10,72.26,108.87,180.79,7.13"  xml:id="b0">
+	<analytic>
+		<title level="a" type="main">Dynamic queries for information exploration: An implementation and evaluation</title>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Ahlberg</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Williamson</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Shneiderman</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the Conference on Human Factors in Computing Systems (CHI)</title>
+		<meeting>the Conference on Human Factors in Computing Systems (CHI)<address><addrLine>Monterey, CA</addrLine></address></meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="1992-03" />
+			<biblScope unit="page" from="619" to="626" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,72.26,118.33,221.78,7.13;10,72.26,127.80,221.78,7.13;10,72.26,137.26,221.79,7.13;10,72.26,146.73,221.78,7.13;10,72.26,156.19,50.47,7.13"  xml:id="b1">
+	<analytic>
+		<title level="a" type="main">Steerable clustering for visual analysis of ecosystems</title>
+		<author>
+			<persName>
+				<forename type="first">Z</forename>
+				<surname>Ahmed</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Yost</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Mcgovern</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Weaver</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the International Workshop on Visual Analytics (EuroVA)</title>
+		<editor>S. Miksch and G. Santucci</editor>
+		<meeting>the International Workshop on Visual Analytics (EuroVA)<address><addrLine>Bergen, Norway</addrLine></address></meeting>
+		<imprint>
+			<publisher>The Eurographics Association</publisher>
+			<date type="published" when="2011-06" />
+			<biblScope unit="page" from="49" to="52" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,72.26,165.66,221.78,7.13;10,72.26,175.12,221.78,7.13;10,72.26,184.58,61.32,7.13"  xml:id="b2">
+	<analytic>
+		<title level="a" type="main">Interactive cluster analysis of diverse types of spatiotemporal data</title>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Andrienko</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Andrienko</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">SIGKDD Explorations Newsletter</title>
+		<imprint>
+			<biblScope unit="volume">11</biblScope>
+			<biblScope unit="issue">2</biblScope>
+			<biblScope unit="page" from="19" to="28" />
+			<date type="published" when="2009" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,72.26,194.05,221.78,7.13;10,72.26,203.51,221.78,7.13;10,72.26,212.98,221.78,7.13;10,72.26,222.44,221.78,7.13;10,72.26,231.91,25.38,7.13"  xml:id="b3">
+	<analytic>
+		<title level="a" type="main">Similarity clustering of dimensions for an enhanced visualization of multidimensional data</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Ankerst</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Berchtold</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<forename type="middle">A</forename>
+				<surname>Keim</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the IEEE Symposium on Information Visualization (InfoVis)</title>
+		<meeting>the IEEE Symposium on Information Visualization (InfoVis)<address><addrLine>Research Triangle Park, NC</addrLine></address></meeting>
+		<imprint>
+			<publisher>IEEE Computer Society</publisher>
+			<date type="published" when="1998" />
+			<biblScope unit="page">52</biblScope>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,72.26,241.37,221.78,7.13;10,72.26,250.84,221.78,7.13;10,72.26,260.30,221.78,7.13;10,72.26,269.76,221.78,7.13;10,72.26,279.23,221.78,7.13;10,72.26,288.69,221.78,7.13;10,72.26,298.16,221.78,7.13;10,72.26,307.62,191.93,7.13"  xml:id="b4">
+	<monogr>
+		<title level="m" type="main">FLUXNET: A new tool to study the temporal and spatial variability of ecosystem–scale carbon dioxide, water vapor, and energy flux densities</title>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Baldocchi</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<surname>Falge</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<surname>Gu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Olson</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Hollinger</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Running</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Anthoni</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Bernhofer</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Davis</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Evans</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Fuentes</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Goldstein</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Katul</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Law</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">X</forename>
+				<surname>Lee</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Y</forename>
+				<surname>Malhi</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Meyers</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Munger</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Oechel</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<forename type="middle">T</forename>
+				<surname>Paw</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Pilegaard</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<forename type="middle">P</forename>
+				<surname>Schmid</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Valentini</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Verma</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Vesala</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Wilson</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Wofsy</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2001" />
+			<publisher>Bulletin of the American Meteorological Society</publisher>
+			<biblScope unit="page" from="822415" to="2434" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,72.26,317.09,221.78,7.13;10,72.26,326.55,221.79,7.13;10,72.26,336.02,197.34,7.13"  xml:id="b5">
+	<analytic>
+		<title level="a" type="main">DICON: Interactive visual analysis of multidimensional clusters</title>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Cao</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Gotz</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Sun</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Qu</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Visualization and Computer Graphics</title>
+		<imprint>
+			<biblScope unit="volume">17</biblScope>
+			<biblScope unit="issue">12</biblScope>
+			<biblScope unit="page" from="2581" to="2590" />
+			<date type="published" when="2011-12" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,72.26,345.48,221.78,7.13;10,72.26,354.95,221.78,7.13;10,72.26,364.41,221.78,7.13;10,72.26,373.87,142.85,7.13"  xml:id="b6">
+	<analytic>
+		<title level="a" type="main">Maintaining interactivity while exploring massive time series</title>
+		<author>
+			<persName>
+				<forename type="first">S.-M</forename>
+				<surname>Chan</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<surname>Xiao</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Gerth</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Hanrahan</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the IEEE Symposium on Visual Analytics Science and Technology (VAST)</title>
+		<meeting>the IEEE Symposium on Visual Analytics Science and Technology (VAST)<address><addrLine>Columbus, OH</addrLine></address></meeting>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2008-10" />
+			<biblScope unit="page" from="59" to="66" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,72.26,383.34,221.78,7.13;10,72.26,392.80,221.79,7.13;10,72.26,402.27,150.76,7.13"  xml:id="b7">
+	<analytic>
+		<title level="a" type="main">iVIBRATE: Interactive visualization-based framework for clustering large datasets</title>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Chen</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<surname>Liu</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">ACM Transactions on Information Systems</title>
+		<imprint>
+			<biblScope unit="volume">24</biblScope>
+			<biblScope unit="issue">2</biblScope>
+			<biblScope unit="page" from="245" to="294" />
+			<date type="published" when="2006-04" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,72.26,411.73,221.78,7.13;10,72.26,421.20,221.79,7.13;10,72.26,430.66,221.78,7.13;10,72.26,440.13,148.47,7.13"  xml:id="b8">
+	<analytic>
+		<title level="a" type="main">Two-stage framework for visualization of clustered high dimensional data</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Choo</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Bohn</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Park</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the IEEE Symposium on Visual Analytics Science and Technology (VAST)</title>
+		<meeting>the IEEE Symposium on Visual Analytics Science and Technology (VAST)<address><addrLine>Atlantic City, NJ</addrLine></address></meeting>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2009-10" />
+			<biblScope unit="page" from="67" to="74" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,72.26,449.59,221.78,7.13;10,72.26,459.05,221.78,7.13;10,72.26,468.60,221.78,6.86;10,72.26,477.98,201.62,7.13"  xml:id="b9">
+	<analytic>
+		<title level="a" type="main">Visibility-based prefetching for interactive out-of-core rendering</title>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<forename type="middle">T</forename>
+				<surname>Correa</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">T</forename>
+				<surname>Klosowski</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<forename type="middle">T</forename>
+				<surname>Silva</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the IEEE Symposium on Parallel and Large-Data Visualization and Graphics</title>
+		<meeting>the IEEE Symposium on Parallel and Large-Data Visualization and Graphics<address><addrLine>Seattle, WA</addrLine></address></meeting>
+		<imprint>
+			<publisher>IEEE Computer Society</publisher>
+			<date type="published" when="2003-10" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,72.26,487.45,221.78,7.13;10,72.26,496.91,221.78,7.13;10,72.26,506.38,221.78,7.13;10,72.26,515.92,221.78,6.86;10,72.26,525.31,221.79,7.13;10,72.26,534.77,156.20,7.13"  xml:id="b10">
+	<analytic>
+		<title level="a" type="main">The Oklahoma mesonetwork — a 21st century project</title>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<forename type="middle">C</forename>
+				<surname>Crawford</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<forename type="middle">V</forename>
+				<surname>Brock</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<forename type="middle">L</forename>
+				<surname>Elliott</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<forename type="middle">W</forename>
+				<surname>Cuperus</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<forename type="middle">J</forename>
+				<surname>Stadler</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<forename type="middle">L</forename>
+				<surname>Johnson</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<forename type="middle">A</forename>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 8th International Conference on Interactive Information and Processing Systems for Meteorology , Oceanography, and Hydrology</title>
+		<meeting>the 8th International Conference on Interactive Information and Processing Systems for Meteorology , Oceanography, and Hydrology<address><addrLine>Atlanta, GA</addrLine></address></meeting>
+		<imprint>
+			<publisher>American Meteorological Society</publisher>
+			<date type="published" when="1992-01" />
+			<biblScope unit="page" from="27" to="33" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,72.26,544.24,221.78,7.13;10,72.26,553.70,221.78,7.13;10,72.26,563.24,221.78,6.86;10,72.26,572.63,195.62,7.13"  xml:id="b11">
+	<analytic>
+		<title level="a" type="main">Prefetching for visual data exploration</title>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<forename type="middle">R</forename>
+				<surname>Doshi</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<forename type="middle">A</forename>
+				<surname>Rundensteiner</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<forename type="middle">O</forename>
+				<surname>Ward</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the Eighth International Conference on Database Systems for Advanced Applications (DAS- FAA)</title>
+		<meeting>the Eighth International Conference on Database Systems for Advanced Applications (DAS- FAA)<address><addrLine>Washington, DC, USA</addrLine></address></meeting>
+		<imprint>
+			<publisher>IEEE Computer Society</publisher>
+			<date type="published" when="2003" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,72.26,582.09,221.78,7.13;10,72.26,591.56,221.78,7.13;10,72.26,601.02,221.78,7.13;10,72.26,610.49,221.78,7.13;10,72.26,619.95,98.44,7.13"  xml:id="b12">
+	<analytic>
+		<title level="a" type="main">VIRACOCHA: An efficient parallelization framework for large-scale CFD post-processing in virtual environments</title>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Gerndt</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Hentschel</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Wolter</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Kuhlen</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Bischof</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 2004 ACM/IEEE Conference on Supercomputing</title>
+		<meeting>the 2004 ACM/IEEE Conference on Supercomputing<address><addrLine>Pittsburgh, PA</addrLine></address></meeting>
+		<imprint>
+			<publisher>IEEE Computer Society</publisher>
+			<date type="published" when="2004" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,72.26,629.42,221.78,7.13;10,72.26,638.88,221.79,7.13;10,72.26,648.34,221.79,7.13;10,72.26,657.81,108.22,7.13"  xml:id="b13">
+	<analytic>
+		<title level="a" type="main">A visualization system for space-time and multivariate patterns (VIS-STAMP)</title>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Guo</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Chen</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<forename type="middle">M</forename>
+				<surname>Maceachren</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Liao</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Visualization and Computer Graphics</title>
+		<imprint>
+			<biblScope unit="volume">12</biblScope>
+			<biblScope unit="issue">6</biblScope>
+			<biblScope unit="page" from="1461" to="1474" />
+			<date type="published" when="2006-12" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,72.26,667.27,221.78,7.13;10,72.26,676.74,221.79,7.13;10,72.26,686.20,126.33,7.13"  xml:id="b14">
+	<analytic>
+		<title level="a" type="main">Distribution de la florine alpine dans la bassin de dranses et dans quelques regiones voisines</title>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Jaccard</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Bulletin de la Societe Vaudoise des Sciences Naturelles</title>
+		<imprint>
+			<date type="published" when="1901" />
+			<biblScope unit="page" from="241" to="272" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,72.26,695.67,221.78,7.13;10,72.26,705.13,221.78,7.13;10,72.26,714.60,221.78,7.13;10,336.22,58.56,141.96,7.13"  xml:id="b15">
+	<analytic>
+		<title level="a" type="main">Configurable data prefetching scheme for interactive visualization of large-scale volume data</title>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Jeong</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<forename type="middle">A</forename>
+				<surname>Navrátil</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<forename type="middle">P</forename>
+				<surname>Gaither</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Abram</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<forename type="middle">P</forename>
+				<surname>Johnson</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of SPIE (Visualization and Data Analysis)</title>
+		<meeting>SPIE (Visualization and Data Analysis)</meeting>
+		<imprint>
+			<date type="published" when="2012-01" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,336.22,68.02,221.78,7.13;10,336.22,77.49,221.78,7.13;10,336.22,86.95,144.78,7.13"  xml:id="b16">
+	<monogr>
+		<title level="m" type="main">Interactive visual analysis of time-series microarray data. The Visual Computer</title>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<forename type="middle">H</forename>
+				<surname>Jeong</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Darvish</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Najarian</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Yang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Ribarsky</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2008-10" />
+			<biblScope unit="page" from="1053" to="1066" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,336.22,96.42,221.78,7.13;10,336.22,105.88,221.79,7.13;10,336.22,115.35,221.78,7.13;10,336.22,124.81,19.83,7.13"  xml:id="b17">
+	<analytic>
+		<title level="a" type="main">Prefetching using Markov predictors</title>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Joseph</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Grunwald</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 24th Annual International Symposium on Computer Architecture (ISCA)</title>
+		<meeting>the 24th Annual International Symposium on Computer Architecture (ISCA)<address><addrLine>Denver, Colorado</addrLine></address></meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="1997" />
+			<biblScope unit="page" from="252" to="263" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,336.22,134.27,221.79,7.13;10,336.22,143.74,221.79,7.13;10,336.22,153.20,17.93,7.13"  xml:id="b18">
+	<analytic>
+		<title level="a" type="main">Information visualization and visual data mining</title>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<forename type="middle">A</forename>
+				<surname>Keim</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Visualization and Computer Graphics</title>
+		<imprint>
+			<biblScope unit="volume">8</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="100" to="107" />
+			<date type="published" when="2002" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,336.22,162.67,221.78,7.13;10,336.22,172.13,211.57,7.13"  xml:id="b19">
+	<analytic>
+		<title level="a" type="main">Optimal prediction for prefetching in the worst case</title>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Krishnan</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">S</forename>
+				<surname>Vitter</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">SIAM Journal on Computing</title>
+		<imprint>
+			<biblScope unit="volume">27</biblScope>
+			<biblScope unit="issue">6</biblScope>
+			<biblScope unit="page" from="1617" to="1636" />
+			<date type="published" when="1998" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,336.22,181.60,221.78,7.13;10,336.22,191.06,221.78,7.13;10,336.22,200.61,221.78,6.86;10,336.22,209.99,221.78,7.13;10,336.22,219.46,72.66,7.13"  xml:id="b20">
+	<analytic>
+		<title level="a" type="main">Dynamic chunking for out-of-core volume visualization applications</title>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<forename type="middle">R</forename>
+				<surname>Lipsa</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<forename type="middle">D</forename>
+				<surname>Bergeron</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<forename type="middle">M</forename>
+				<surname>Sparr</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<forename type="middle">S</forename>
+				<surname>Laramee</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 5th International Symposium on Advances in Visual Computing: Part II (ISVC)</title>
+		<meeting>the 5th International Symposium on Advances in Visual Computing: Part II (ISVC)<address><addrLine>Las Vegas, Nevada</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer-Verlag</publisher>
+			<date type="published" when="2009" />
+			<biblScope unit="page" from="117" to="128" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,336.22,228.92,221.78,7.13;10,336.22,238.38,221.79,7.13;10,336.22,247.93,221.78,6.86;10,336.22,257.31,178.35,7.13"  xml:id="b21">
+	<analytic>
+		<title level="a" type="main">Godiva: Lightweight data management for scientific visualization</title>
+		<author>
+			<persName>
+				<forename type="first">X</forename>
+				<surname>Ma</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Winslett</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Norris</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">X</forename>
+				<surname>Jiao</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Fiedler</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 20th International Conference on Data Engineering (ICDE)</title>
+		<meeting>the 20th International Conference on Data Engineering (ICDE)</meeting>
+		<imprint>
+			<publisher>IEEE Computer Society</publisher>
+			<date type="published" when="2004" />
+			<biblScope unit="page" from="434" to="447" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,336.22,266.78,221.78,7.13;10,336.22,276.24,221.78,7.13;10,336.22,285.79,221.78,6.86;10,336.22,295.17,221.79,7.13;10,336.22,304.64,80.55,7.13"  xml:id="b22">
+	<analytic>
+		<title level="a" type="main">Clustersculptor: A visual analytics tool for high-dimensional data</title>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<forename type="middle">J</forename>
+				<surname>Nam</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Y</forename>
+				<surname>Han</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Mueller</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Zelenyuk</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Imre</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the IEEE Symposium on Visual Analytics Science and Technology (VAST)</title>
+		<meeting>the IEEE Symposium on Visual Analytics Science and Technology (VAST)<address><addrLine>Sacramento, CA</addrLine></address></meeting>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2007-11-01" />
+			<biblScope unit="page" from="75" to="82" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,336.22,314.10,221.78,7.13;10,336.22,323.56,221.79,7.13;10,336.22,333.11,221.78,6.86;10,336.22,342.49,177.89,7.13"  xml:id="b23">
+	<analytic>
+		<title level="a" type="main">Informed prefetching and caching</title>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<forename type="middle">H</forename>
+				<surname>Patterson</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<forename type="middle">A</forename>
+				<surname>Gibson</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<surname>Ginting</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Stodolsky</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Zelenka</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the Fifteenth ACM Symposium on Operating Systems Principles (SIGOPS)</title>
+		<meeting>the Fifteenth ACM Symposium on Operating Systems Principles (SIGOPS)<address><addrLine>Colorado</addrLine></address></meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="1995" />
+			<biblScope unit="page" from="79" to="95" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,336.22,351.96,221.79,7.13;10,336.22,361.42,120.31,7.13"  xml:id="b24">
+	<analytic>
+		<title level="a" type="main">Sur une courbe, qui remplit toute une aire plane</title>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Peano</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Mathamatische Annalen</title>
+		<imprint>
+			<biblScope unit="volume">36</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="157" to="160" />
+			<date type="published" when="1890" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,336.22,370.89,221.78,7.13;10,336.22,380.35,221.78,7.13;10,336.22,389.82,221.78,7.13;10,336.22,399.28,19.26,7.13"  xml:id="b25">
+	<analytic>
+		<title level="a" type="main">The eyes have it: A task by data type taxonomy for information visualizations</title>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Shneiderman</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the IEEE Symposium on Visual Languages</title>
+		<meeting>the IEEE Symposium on Visual Languages<address><addrLine>Boulder, CO</addrLine></address></meeting>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="1996-09" />
+			<biblScope unit="page" from="336" to="343" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,336.22,408.75,221.78,7.13;10,336.22,418.21,221.79,7.13;10,336.22,427.67,70.33,7.13"  xml:id="b26">
+	<monogr>
+		<title level="m" type="main">Illuminating the Path: The Research and Development Agenda for Visual Analytics</title>
+		<editor>J. J. Thomas and K. A. Cook</editor>
+		<imprint>
+			<date type="published" when="2005-08" />
+			<publisher>IEEE Computer Society</publisher>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,336.22,437.14,221.78,7.13;10,336.22,446.60,221.79,7.13;10,336.22,456.07,214.29,7.13"  xml:id="b27">
+	<analytic>
+		<title level="a" type="main">XmdvTool: Integrating multiple methods for visualizing multivariate data</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<forename type="middle">O</forename>
+				<surname>Ward</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the IEEE Conference on Visualization (VIS)</title>
+		<meeting>the IEEE Conference on Visualization (VIS)</meeting>
+		<imprint>
+			<publisher>IEEE Computer Society Press</publisher>
+			<date type="published" when="1994" />
+			<biblScope unit="page" from="326" to="333" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,336.22,465.53,221.78,7.13;10,336.22,475.00,221.78,7.13;10,336.22,484.46,221.78,7.13;10,336.22,493.93,25.38,7.13"  xml:id="b28">
+	<analytic>
+		<title level="a" type="main">Building highly-coordinated visualizations in Improvise</title>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Weaver</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the IEEE Symposium on Information Visualization (InfoVis)</title>
+		<meeting>the IEEE Symposium on Information Visualization (InfoVis)<address><addrLine>Austin, TX</addrLine></address></meeting>
+		<imprint>
+			<publisher>IEEE Computer Society</publisher>
+			<date type="published" when="2004-10" />
+			<biblScope unit="page" from="159" to="166" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,336.22,503.39,221.78,7.13;10,336.22,512.85,221.79,7.13;10,336.22,522.40,221.78,6.86;10,336.22,531.78,221.78,7.13;10,336.22,541.25,59.26,7.13"  xml:id="b29">
+	<analytic>
+		<title level="a" type="main">Using bitmap index for interactive exploration of large datasets</title>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Wu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Koegler</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Chen</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Shoshani</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 15th International Conference on Scientific and Statistical Database Management (SSDBM)</title>
+		<meeting>the 15th International Conference on Scientific and Statistical Database Management (SSDBM)<address><addrLine>Cambridge, MA</addrLine></address></meeting>
+		<imprint>
+			<publisher>IEEE Computer Society</publisher>
+			<date type="published" when="2003-07" />
+			<biblScope unit="page" from="65" to="74" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,336.22,550.71,221.78,7.13;10,336.22,560.18,221.78,7.13;10,336.22,569.64,221.79,7.13;10,336.22,579.11,147.62,7.13"  xml:id="b30">
+	<analytic>
+		<title level="a" type="main">Toward a deeper understanding of the role of interaction in information visualization</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">S</forename>
+				<surname>Yi</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Y</forename>
+				<surname>Kang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">T</forename>
+				<surname>Stasko</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">A</forename>
+				<surname>Jacko</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Visualization and Computer Graphics</title>
+		<imprint>
+			<biblScope unit="volume">13</biblScope>
+			<biblScope unit="issue">6</biblScope>
+			<biblScope unit="page" from="1224" to="1231" />
+			<date type="published" when="2007-12" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+				</listBibl>
+			</div>
+		</back>
+	</text>
+</TEI>

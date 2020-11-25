@@ -1,0 +1,1345 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.tei-c.org/ns/1.0 /home/pisenberg/grobid/grobid-home/schemas/xsd/Grobid.xsd"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+	<teiHeader xml:lang="en">
+		<encodingDesc>
+			<appInfo>
+				<application version="0.4.1" ident="GROBID" when="2016-09-09T13:49+0000">
+					<ref target="https://github.com/kermitt2/grobid">GROBID - A machine learning software for extracting information from scholarly documents</ref>
+				</application>
+			</appInfo>
+		</encodingDesc>
+		<fileDesc>
+			<titleStmt>
+				<title level="a" type="main">Transforming Scagnostics to Reveal Hidden Features</title>
+			</titleStmt>
+			<publicationStmt>
+				<publisher/>
+				<availability status="unknown"><licence/></availability>
+				<date type="published" when="2014">DECEMBER 2014</date>
+			</publicationStmt>
+			<sourceDesc>
+				<biblStruct>
+					<analytic>
+						<author>
+							<persName>
+								<forename type="first">Tuan</forename>
+								<forename type="middle">Nhon</forename>
+								<surname>Dang</surname>
+							</persName>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Leland</forename>
+								<surname>Wilkinson</surname>
+							</persName>
+						</author>
+						<title level="a" type="main">Transforming Scagnostics to Reveal Hidden Features</title>
+					</analytic>
+					<monogr>
+						<title level="j" type="main">IEEE TRANSACTIONS ON VISUALIZATION AND COMPUTER GRAPHICS</title>
+						<imprint>
+							<biblScope unit="volume">20</biblScope>
+							<biblScope unit="issue">12</biblScope>
+							<date type="published" when="2014">DECEMBER 2014</date>
+						</imprint>
+					</monogr>
+					<idno type="DOI">10.1109/TVCG.2014.2346572</idno>
+					<note>1624</note>
+				</biblStruct>
+			</sourceDesc>
+		</fileDesc>
+		<profileDesc>
+			<textClass>
+				<keywords>
+					<term>Index Terms—Scagnostics</term>
+					<term>Scatterplot matrix</term>
+					<term>Transformation</term>
+					<term>High-Dimensional Visual Analytics</term>
+				</keywords>
+			</textClass>
+			<abstract>
+				<p>Fig. 1. Scatterplots derived from the Subway data: Different transformations are applied on the horizontal axis revealing different data patterns. In particular, the log and logit transformations reveal the existence of three distinct clusters. The leftmost cluster contains multiple instances of zero on the horizontal variable; the plot warns us that care must be taken in statistical modeling of this variable. These features are not evident in plots of the raw data. Abstract— Scagnostics (Scatterplot Diagnostics) were developed by Wilkinson et al., based on an idea of Paul and John Tukey, in order to discern meaningful patterns in large collections of scatterplots. The Tukeys&apos; original idea was intended to overcome the impediments involved in examining large scatterplot matrices (multiplicity of plots and lack of detail). Wilkinson&apos;s implementation enabled for the first time scagnostics computations on many points as well as many plots. Unfortunately, scagnostics are sensitive to scale transformations. We illustrate the extent of this sensitivity and show how it is possible to pair statistical transformations with scagnostics to enable discovery of hidden structures in data that are not discernible in untransformed visualizations.</p>
+			</abstract>
+		</profileDesc>
+	</teiHeader>
+	<text xml:lang="en">
+		<body>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1">INTRODUCTION</head><p> While interactive visualization systems have been said to be effective for conducting visual analytics on big data <ref type="bibr" coords="1,228.35,370.50,14.19,10.80" target="#b26">[28,</ref><ref type="bibr" coords="1,245.33,370.50,10.65,10.80" target="#b21"> 22]</ref>, the scale of many datasets precludes exploring visually every variable or relationship among variables. Consequently, systems designed for big data exploration need to filter irrelevant material and discriminate among alternatives in order to present meaningful visualizations in response to user queries. Among several approaches to this problem, Scagnos- tics <ref type="bibr" coords="1,68.27,430.27,14.94,10.80" target="#b41">[43] </ref>were designed to help users navigate through large collections of scatterplots in order to discern meaningful patterns. <ref type="figure" coords="1,250.07,440.23,30.01,10.80" target="#fig_0">Figure 2</ref>shows an example. The data in <ref type="figure" coords="1,105.08,584.33,29.65,10.80" target="#fig_0">Figure 2</ref>consist of hourly meteorological measurements (24 data points in each scatterplot) in 2008 from the Gulf of Maine <ref type="bibr" coords="1,54.00,604.25,13.74,10.80">[23]</ref>. There are 50,000 scatterplots derived from this dataset and our query was to find scatterplots with a high degree of " stringy " behavior. Using scagnostics, which parsimoniously encode significant features in the plots, we were able to locate these plots in real time. Suppose, however, that a stringy feature is embedded in a dense region of a scatterplot so that it is obscured from normal view. In this case, graph-theoretic scagnostics would be unable to detect this feature . If we were to enlarge the local subregion of the plot, however, we might detect this feature with scagnostics after the transformation. That conjecture is the subject of this paper. We propose to transform scagnostics nonlinearly to reveal hidden features. We evaluate the quality of transforms for a particular plot by measuring them against individual scagnostics; the higher the scagnostic value, the more suitable a given transform is for revealing it. The paper is structured as follows: We describe related work in the following section. Then we introduce our testbed and illustrate it on real datasets. We present test results in Performance. In our Conclusion , we argue that by going beyond classic statistical summaries (means, standard deviations, correlations, etc.), our approach makes it possible to uncover unusual distributions, mixtures of distributions, and other important features hidden in real datasets. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>@BULLET </head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2">RELATED WORK</head><p> We review in this section both feature-based characterizations of scatterplots and the use of transformations to reveal structure or improve statistical inference. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.1">Scagnostics</head><p>In 1989 at a workshop on Computational Statistics, Robustness, and Diagnostics, Paul Tukey presented an idea for characterizing scatter- plots <ref type="bibr" coords="1,336.93,644.30,9.52,10.80" target="#b6">[7]</ref>. He called it scagnostics in order to position it as a special case of what John Tukey had called cognostics. The Tukeys intended to characterize a collection of 2D scatterplots through a small number of measures of the pattern of points in these plots. These measures were designed to detect anomalies in density, shape, association, and other features. The Tukeys never published a paper on this topic. Researchers in the workshop were enthusiastic about the idea, although implementing it for larger scatterplots was not practical at the time. Some years later, Leland Wilkinson, who had been at the workshop , attended a session at the <ref type="bibr" coords="2,133.17,71.10,13.74,10.80" target="#b25">[27]</ref> . This method relied on classical statistics (means, medians, correlations, etc.) instead of the Tukeys' nonparametric shape descriptors (clumpy, monotonic, convex, etc.), but their implementation supported the effectiveness of charactering scatterplots in order to navigate a large corpus. Subsequently, Wilkinson decided to implement the original Tukey idea through nine Scagnostics defined on planar proximity graphs <ref type="bibr" coords="2,187.95,130.87,13.74,10.80" target="#b41">[43]</ref>. Wilkinson's scagnostics measures depend on proximity graphs that are all subsets of the Delaunay triangulation: the minimum spanning tree (MST), the alpha complex <ref type="bibr" coords="2,162.16,160.76,13.74,10.80" target="#b15">[16]</ref>, and the convex hull <ref type="bibr" coords="2,258.63,160.76,13.74,10.80" target="#b28">[30]</ref>. The scagnostics measures are named Outlying, Skewed, Clumpy, Dense, Striated, Convex, Skinny, Stringy, and Monotonic. <ref type="figure" coords="2,238.51,180.68,31.28,10.80" target="#fig_1">Figure 3</ref>shows some example scatterplots and their scagnostics. In particular, the scatterplots with a low score on the associated scagnostic are on the left while the scatterplots with a high score on the associated scagnostic are on the right. The implementation of scagnostics are described in detail in <ref type="bibr" coords="2,85.60,230.49,13.74,10.80" target="#b42">[44]</ref>.  Following Wilkinson's work, researchers developed scagnosticstype measures for parallel coordinates <ref type="bibr" coords="2,189.07,544.80,13.74,10.80" target="#b12">[13]</ref>, pixel displays <ref type="bibr" coords="2,263.66,544.80,13.74,10.80" target="#b24">[26]</ref>, 3D scatterplots <ref type="bibr" coords="2,88.08,554.76,13.74,10.80" target="#b18">[19]</ref>, and other graphics <ref type="bibr" coords="2,175.98,554.76,14.19,10.80" target="#b27">[29,</ref><ref type="bibr" coords="2,192.42,554.76,11.21,10.80" target="#b32"> 34,</ref><ref type="bibr" coords="2,205.87,554.76,6.47,10.80" target="#b0"> 1]</ref>. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.2">Transformations</head><p> Transformations have been exploited for a number of purposes in statistical and visual analytics. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.2.1">Statistical Transformations</head><p>The use of nonlinear transformations in statistics extends back more than a century. There have been three principal motivations for using these transformations prior to statistical analysis: stabilizing variance (mitigating the dependency between the means and variances in a family of distributions), normalizing or inducing symmetry (ameliorating the biasing effects of skewness on Gaussian statistical methods), and representing discrete data with a continuous model (e.g., logit and probit analysis). The classic variance stabilizing transformations have been the arcsine (angular) for proportions and the square root for counts <ref type="bibr" coords="2,265.85,714.28,9.52,10.80" target="#b2">[3]</ref> . Examples of normalizing transformations have been Fisher's z for corre- lations <ref type="bibr" coords="2,71.00,734.20,14.94,10.80" target="#b17">[18] </ref>and the Tukey ladder of powers set of re-expressions <ref type="bibr" coords="2,278.22,734.20,13.74,10.80" target="#b34">[36]</ref>. The famous Box-Cox power transformation <ref type="bibr" coords="2,468.53,51.17,10.45,10.80" target="#b5">[6] </ref>is a restriction on the Tukey ladder of powers designed for normally distributed variables (a rare circumstance with real data, despite its popularity in practice). The logit and probit transformations <ref type="bibr" coords="2,442.37,81.05,10.45,10.80" target="#b4">[5] </ref>are used as link functions to enable the fitting of continuous models to discrete data generated by distributions such as the Binomial. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.2.2">Interactive Graphical Transformations</head><p>Statistical software packages were the first to incorporate nonlinear transformations into interactive graphical displays <ref type="bibr" coords="2,496.30,142.52,14.19,10.80" target="#b36">[38,</ref><ref type="bibr" coords="2,514.13,142.52,11.21,10.80" target="#b33"> 35,</ref><ref type="bibr" coords="2,528.98,142.52,11.21,10.80" target="#b10"> 11,</ref><ref type="bibr" coords="2,543.82,142.52,10.65,10.80" target="#b39"> 41]</ref>. They chose the Tukey ladder of powers function. Tukey's function is of the form x * = x p ; the parameter p governs the members of the family. These packages use a slider control that maps to this parameter to enable real-time transformations of histograms. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.2.3">Lensing</head><p>Furnas <ref type="bibr" coords="2,333.82,213.96,14.94,10.80" target="#b19">[20] </ref> introduced a method for exploring local detail in visualizations (tables, scatterplots, etc.) that employed a lens model to magnify local detail. His method is general because it allows a lens to take a variety of shapes (circle, square, etc.) depending on the distance function chosen for specifying the geometry of the lens. Based on Furnas' idea, researchers have developed specialized lenses for handling very large trees, maps, tables, and documents <ref type="bibr" coords="2,432.18,273.73,13.74,10.80" target="#b9">[10]</ref>. The transitions between focus and context of these techniques are achieved through a single dimension (space). Sigma Lens <ref type="bibr" coords="2,406.26,293.65,14.94,10.80" target="#b22">[24] </ref> combines other dimensions (translucence and time) to achieve more efficient transitions. Pietriga et al. <ref type="bibr" coords="2,307.62,313.58,14.94,10.80" target="#b23">[25] </ref>extends Sigma Lenses framework to provide a unified model that makes it possible to define new focus+context interaction techniques as independent as possible of the representation and graphics library employed. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.2.4">Aspect Ratio Selection</head><p>Changing the aspect ratio of a plot is a linear transformation. In 1988, the problem of selecting the aspect ratio of a line chart was first discussed rigorously by Cleveland et al. <ref type="bibr" coords="2,446.75,394.97,9.52,10.80" target="#b8">[9]</ref>. The authors demonstrated how the choice of a line chart's aspect ratio can impact graphical perception of trends in time series data. They then proposed a technique called banking. The basic idea underlying this technique is that the slopes in a line chart are most readable when the average orientation of all line segments in a chart is 45 @BULLET . This suggests that the aspect ratio of plots could be determined by setting the median slope of all line segments to 1. They call this approach median absolute slope <ref type="bibr" coords="2,545.30,464.71,9.52,10.80" target="#b8">[9]</ref>. Cleveland later suggested a weighted version of this method, lengthweighted average orientation <ref type="bibr" coords="2,419.46,484.64,9.52,10.80" target="#b7">[8]</ref> . In this new version, the lengthweighted mean of the absolute orientations of the line segments is set to 45 degrees. Heer and Agrawala <ref type="bibr" coords="2,391.58,514.69,14.94,10.80" target="#b20">[21] </ref>extended Cleveland's work in two ways. First, the authors described 12 different banking algorithms that represent alternate optimization criteria for Cleveland's banking procedure. These criteria are designed to find an aspect ratio that further improves the visual perception of line segment orientations. Second, they developed multi-scale banking, a technique that combined spectral analysis and banking to 45 @BULLET to automate the selection of aspect ratios for different levels of granularity. This technique automatically identifies trends at various frequencies that may be of interest and then generates a banked chart for each of these scales. The above approaches for automatically selecting the aspect ratio of a line chart have several shortcomings. First, the way a curve is approximated by line segments can dramatically change the selected aspect ratio. Second, they don't preserve semantically symmetric shapes. To address these problems, Talbot et al. <ref type="bibr" coords="2,514.52,654.34,14.94,10.80" target="#b31">[33] </ref>offered a method for selecting the aspect ratio for line charts that minimizes the arc length of the plotted curve while keeping the area of the plot constant. This approach is parameterization invariant (redundant line vertices do not influence the result), robust to a wide range of inputs, and responsive to visual symmetries in the data. Recently, Fink et al. <ref type="bibr" coords="2,396.58,714.28,14.94,10.80" target="#b16">[17] </ref> extended Cleveland's aspect ratio argument to general scatterplots. The basic idea behind this method is to select an aspect ratio such that the resulting scatter plot optimizes W K a feature of a Delaunay triangulation on the points in the plot. The authors defined six different measures on the Delaunay triangulation. They chose the Delaunay triangulation because they believed it to be a conceptually meaningful structure for representing human perceptual grouping <ref type="bibr" coords="3,89.62,91.02,13.74,10.80" target="#b13">[14]</ref>. However, while the scagnostics features were based on the types of configurations statisticians and analysts attend to, and while the Cleveland paradigm was based on the accuracy of slope judgments, the measures used in this study were based on subjective judgments, by relative novices, of the " meaningfulness " of given plots under various aspect-ratio transformations. It is not clear how their methods could be appropriately applied to the wide range of configurations encountered in an exploratory data analysis environment. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3">SCAGNOSTIC TRANSFORMATIONS</head><p> Transforming variables affects densities, relative distances, and orientations of points within a scatterplot. Consequently, it has a significant impact on our ability to perceive patterns in the data. <ref type="figure" coords="3,249.23,212.28,30.42,10.80" target="#fig_2">Figure 4</ref>shows examples of the proximity graphs of square root and log transformations applied on the same set of data points in the New York City subway dataset <ref type="bibr" coords="3,110.63,242.16,13.74,10.80" target="#b38">[40]</ref>. The plotted variables are station versus ridership in 1918. Different proximity graphs produce different sets of scagnos- tics. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.1">Choice of Transformation</head><p> Choosing appropriate transformations must be guided by some justifiable principles. First of all, the classical statistical transformations arose out of experiences applying models based on theoretical distributions to real data; we should give them serious consideration. Second , the transformations we choose ought to cover the full range of negative to positive skewness as well as mixtures of distributions that are relatively symmetric. Third, we should take care to make our portfolio of transformations approximately mirror-symmetric; in a plot of x * against x, where x * is the transformed value of x, they should reflect around a diagonal representing the identity transformation. The transformations we chose are shown in <ref type="figure" coords="3,484.48,163.99,29.02,10.80" target="#fig_3">Figure 5</ref> The half transformation implements an aspect ratio of 1:2 when applied to Y and 2:1 when applied to X. The parameters for the logit and sigmoid functions govern their curvature; they were designed to make the curves mirror-symmetric and the slopes sufficient to cover areas not spanned by the other functions. We apply these 8 transformations independently on both X and Y axes. Therefore, we have 64 different combinations to consider when we compute scagnostics. Before transformation, the values are normalized to the unit interval (as in the original scagnostics paper <ref type="bibr" coords="3,546.85,407.19,13.44,10.80" target="#b41">[43]</ref>). After transformation, the values are renormalized to the unit interval. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.2">Datasets</head><p>We will illustrate the effects of these transformations mainly through real data examples. We use datasets retrieved from the UCI Repository <ref type="bibr" coords="3,316.62,714.29,10.45,10.80" target="#b3">[4] </ref>and other sources to demonstrate the performance of our approach. <ref type="figure" coords="3,316.62,724.25,26.08,10.80" target="#tab_1">Table 1</ref>summarizes prominent aspects of these datasets ordered by the number of attributes. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.3">Examples</head><p>In this section, we demonstrate the application on real datasets using a simple testbed. A user first selects a scagnostic measure such as Clumpy. The program then applies the combinations of transformations on the X and Y axes and computes the selected measure on each combination. <ref type="figure" coords="4,45.00,315.45,29.84,10.80" target="#fig_4">Figure 6</ref>(a) shows an example of computing the Striated measure on the Madelon data <ref type="bibr" coords="4,109.93,325.41,9.52,10.80" target="#b3">[4]</ref>. We have selected variable 41 vs. variable 48 to illustrate how transformations can reveal striations that are not evident in the raw plot. The gray color scale is adopted to highlight the Striated measure (dark plots are high Striated, white plots are low Striated). Because there are 1,042 data points highly concentrated in the middle of the scatterplot, we do not notice the striation; in fact, our impression is that the raw plot in the upper left is spherical Gaussian. Only after applying the sigmoid transformation do we discern the regular stripes in the middle. This plot is not based on Gaussians. <ref type="figure" coords="4,54.96,415.27,29.39,10.80" target="#fig_4">Figure 6</ref> (b) shows another example of computing the Striated measure on the Water Treatment data <ref type="bibr" coords="4,168.67,425.23,9.52,10.80" target="#b3">[4]</ref>. We have selected conductivity vs. suspended solids to primary settler. In this example, the striation is revealed when applying inverse on the X-axis. <ref type="figure" coords="4,45.00,476.93,30.01,10.80" target="#fig_6">Figure 7</ref> shows an example of the Clumpy measure on the Web Statistics data 1 . We have selected a pair of variables (mean of connecting time vs. standard deviation of connecting time) to illustrate the potential for discerning clusters after transformation. The gray color scale is adopted to highlight the Clumpy measure (dark backgrounds are high Clumpy, white backgrounds are low Clumpy). When we examine the inverse/inverse (or log/inverse) plot, the two clusters are most visible. The sigmoid tends to draw points apart, but it will not produce clusters when they do not exist in the data. Unless there is a margin at the center separating points, a gap will not appear under these transformations . This observation applies to nonlinear transformations used in SVMs as well. <ref type="figure" coords="4,104.22,586.72,30.91,10.80" target="#fig_7">Figure 8</ref> shows an example where sigmoid transformation reveals the three clusters which are not apparent in the regular scatterplot due to the high concentration of data points in the center of Y-axis. <ref type="figure" coords="4,45.00,648.38,30.33,10.80" target="#fig_8">Figure 9</ref>shows an example of the Dense measure applied to the Page Blocks data. We have selected a pair of variables to highlight this feature (eccentricity of the block (length / height) vs. total number of black pixels in the original bitmap of the block). As usual, the gray color scale is adopted to highlight the measure (black plots are high Dense, white plots are low Dense). The data points are colored by their classes. We note that the inverse/inverse transformation reveals class separation not evident in the regular scatterplot. 1 http://davis.wpi.edu/xmdv/datasets/webstats.html This is an especially interesting example because it illustrates the importance of transformation prior to classification when there are nonlinear boundaries separating classes. Support Vector Machines, for example, exploit nonlinear transformations in reproducing kernel Hilbert space in order to handle nonlinear margins between classes <ref type="bibr" coords="5,316.62,100.99,13.74,10.80" target="#b35">[37]</ref>. We ran a canonical discriminant analysis on these variables in SYSTAT <ref type="bibr" coords="5,351.43,110.95,13.74,10.80" target="#b40">[42]</ref>. The error rate on the untransformed variables was 61 percent (worse than chance)! The error rate on the inverse transformed variables was 28 percent. A denser scatterplot does not suggest class separation, but there is a better chance to separate classes when data points are spread out. We can also define a new feature, says class separation feature, which measures the overlapped area among alpha shapes of different classes <ref type="bibr" coords="5,316.62,181.45,13.74,10.80" target="#b37">[39]</ref>. That is, the use of our proposed approach is not limited to the nine scagnostics. We might define other measures specialized for an application domain and use the proposed approach to find the transformation maximizing/minimizing these features. Moreover, we can combine multiple features to highlight a pattern. For example, maximizing the Dense feature before minimizing overlapped area among alpha shapes of different classes results in better chances of finding class separation in a scatterplot. <ref type="figure" coords="5,316.62,664.47,35.34,10.80" target="#fig_9">Figure 10</ref>shows an example of the Outlying measure applied to the Sleep data <ref type="bibr" coords="5,357.70,674.43,9.52,10.80" target="#b1">[2]</ref>. We have selected the body weight and brain weight variables. This example gives us the opportunity to invert our usual process. In this case we want to find a transformation that minimizes outliers. Thus, we want to look at the frames with the lightest background . The log/log transformation is consistent with the appropriate statistical analysis of these two variables in the original paper and is indeed among the lightest of the frames. Note that this log/log plot linearizes the relationship as well. The so-called outliers in the raw plot (upper left) are not outliers after proper transformation. Since most transformations, such as square root, log, and inverse squeeze points together, most outliers are artifacts when these transformations are applied. We don't suggest to apply transformations to find outliers. <ref type="figure" coords="6,45.00,474.73,34.66,10.80" target="#fig_10">Figure 11</ref>shows an example of the Monotonic measure applied to the World Bank data 2 . We have selected rural population vs. urban population . The Monotonic is our only coefficient not based on a subset of the Delaunay graph. However similar to other visual features, a few outliers are sufficient to distort this property as depicted in the regular scatterplot (top left). The outliers in this case are China and India. In this example, the strong correlation of the two variables is revealed when we squeeze together initially high values (this helps to reduce the impact of outliers). </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.3.1">Striated</head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.3.2">Clumpy</head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.3.3">Dense</head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.3.4">Outlying</head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.3.5">Monotonic</head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4">PERFORMANCE</head><p>In this section we focus on evaluating the performance of scagnostics transformations. We investigated the performance of our approach on large data in terms of n (number of observations) and p (number of scatterplots). All tests were performed on a 2.3 GHz Intel Core i5, Mac OS X Version 10.7.5, 4 GB RAM running Java 1.6 and Processing 1.5.1. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.1">Overall Running Times</head><p>The graphs in <ref type="figure" coords="6,100.39,676.09,35.90,10.80" target="#fig_0">Figure 12</ref>show computation time broken down into the time to read and transform data, the time to bin the data points, and the time to compute scagnostics. Transformations are applied on one dimension at a time. Here are some observations from empirical analysis: @BULLET The bottleneck of our approach is at the stage of computing scagnostics. However, this stage is completely parallelizable. @BULLET The time for binning is linearly dependent on n. In contrast, the time for computing scagnostics is almost independent on n since the three proximity graphs are computed on binned data, not the original data points. @BULLET The scagnostics computation time for each dataset is linearly dependent on p. In <ref type="figure" coords="6,388.43,484.88,32.87,10.80" target="#fig_0">Figure 12</ref> , the two datasets at the bottom (Communities and Gas Sensor) contain the same number of variables (128 variables or 8,128 scatterplots), and contain respectively 1,994 and 3,600 observations. The two datasets on the top (Musk and Isolet) contain the same number of variables (167 variables or 13,861 scatterplots), and contain respectively 476 and 1,559 observations. On average, the scagnostics computation time for the Musk and Isolet datasets is nearly twice of the computation time for the Communities and the Gas Sensor datasets. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head> 4.2 Scagnostics computation times of different transformation combinations </head><p> We now inspect the Scagnostics computation times of different transformation combinations. The four datasets used in Section 4.1 are reused for this purpose. However, we use only the first 100 variables and the first 400 instances in each dataset so that we can compare the Scagnostics computation times across the four datasets. <ref type="figure" coords="6,317.58,673.61,35.12,10.80" target="#fig_1">Figure 13</ref>shows the test results. In particular, the matrices on the right show the Scagnostics computation times of 64 combinations. The layouts on the left summarize 4950 scatterplots (100 variables) in each dataset <ref type="bibr" coords="6,335.69,703.49,13.74,10.80" target="#b11">[12]</ref>. In other words, the layouts display 10 to 15 exemplar scatterplots (for each dataset) which represent 4950 scatterplots. The size of an exemplar scatterplot denotes the size of its cluster. Here are some observations from empirical analysis: <ref type="figure" coords="7,54.00,439.61,22.90,9.87" target="#fig_0">Fig. 12</ref>. Computation times (in minutes) for datasets retrieved from the UCI Repository: n is the number of observations and p is the number of scatterplots. @BULLET On average of the four datasets, the inverse/inverse transformation is the lowest computation time because this transformation combination tries to pull the data points into one corner of a scatterplot . This effect is prominent on the Isolet dataset. @BULLET With the same number observations (n=400), denser scatterplots require more time to compute scagnostics. In the left layouts of <ref type="figure" coords="7,73.92,560.61,34.10,10.80" target="#fig_1">Figure 13</ref>, the Isolet dataset contains much denser scatterplots compared to the Gas Sensor dataset. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.3">Demonstrative case study</head><p> This section presents a demonstration of our approach being meaningfully deployed in practice. We use the World Bank data. In particular, we inspect 100 variables in the Economy and Growth section, such as exports of goods and services, gross capital formation, and GDP per capita. We first obtain scagnostics of all scatterplots and their transformations . Then we compute the average for each transformation as depicted in <ref type="figure" coords="7,96.87,673.85,33.64,10.80" target="#fig_2">Figure 14</ref>. The plotted measure is Monotonic. The most significant gain on Monotonic is log/log transformation. This suggests that the data can benefit from the log/log transformation when we look for trends. In <ref type="figure" coords="7,74.84,714.28,34.29,10.80" target="#fig_3">Figure 15</ref>, we plot the first twelve variables in the data. The lower triangle shows the regular scatterplot matrix. The upper triangle shows their log/log transformation. The gray color scale is used  to highlight the Monotonic measure. The strong correlation of different economical sectors is distorted in the regular scatterplot matrix because of outliers (strong countries such as the US and China). </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5">CONCLUSION</head><p>We have presented a method for selecting the best transformation to reveal scagnostics hidden in a scatterplot. The basic idea behind our method is to use scagnostics as the measure of goodness for selecting a transformation. We illustrated our approach on real datasets in Section 3 and evaluated it in Section 4. While we developed a testbed for illustrating scagnostics transforms in this paper, we do not regard it as an end-user application. Instead, we believe that the algorithms outlined in this paper could be used to embed transformed scagnostics analytics in visual analytics platforms such as Jigsaw <ref type="bibr" coords="8,99.90,484.87,13.74,10.80" target="#b29">[31]</ref>, Tableau <ref type="bibr" coords="8,149.73,484.87,13.74,10.80" target="#b30">[32]</ref>, or Xmdv <ref type="bibr" coords="8,203.52,484.87,13.74,10.80" target="#b14">[15]</ref>. <ref type="figure" coords="8,54.96,494.96,37.05,10.80" target="#fig_4">Figure 16</ref>shows one possible interface that provides filtering, brushing and linking for exploratory scagnostics transformations. This figure is based on the Segment dataset from the UCI Repository <ref type="bibr" coords="8,282.68,514.88,9.52,10.80" target="#b3">[4]</ref>. In particular, <ref type="figure" coords="8,93.09,524.85,33.17,10.80" target="#fig_4">Figure 16</ref>(a) shows the scatterplot matrix of 20 variables in the Segment dataset. Each scatterplot is colored by its Dense score. In <ref type="figure" coords="8,54.88,544.77,33.04,10.80" target="#fig_4">Figure 16</ref>(b), we filter and display only the scatterplots which gain at least 0.3 on the Dense feature when applying transformations. The brushed cell is bordered in red. The transformation matrix plot in <ref type="figure" coords="8,280.43,564.69,14.95,10.80;8,45.00,574.65,68.35,10.80" target="#fig_4">Fig- ure 16(c) instantly</ref>shows the selected scatterplot under all pairs of transformations. We say instantly, because the scagnostic plots are buffered as thumbnail bitmaps at this stage of processing. Preprocessing involves computing all the scagnostics under all the transformations , which takes more time (see <ref type="figure" coords="8,167.64,614.50,32.82,10.80" target="#fig_0">Figure 12</ref>). This preprocessing step must be done only once for a given set of data, however. In <ref type="figure" coords="8,271.97,624.46,23.41,10.80;8,45.00,634.42,7.05,10.80" target="#fig_4">Figure  16</ref> (c), we also request to show the Dense scores on top of each transformed scatterplot. Data points are colored by their class attribute. One might ask what the difference is between our approach and the use of transformations in classical statistics or machine learning. First of all, any transformation used in an analytic must be evaluated in terms of a figure of merit. For classical statistical analyses, the figure of merit is the closeness of the distribution of residuals to a specified distribution (normal, exponential, etc.). In the case of the popular Box-Cox method for analysis of variance <ref type="bibr" coords="8,232.52,714.25,9.52,10.80" target="#b5">[6]</ref>, this figure is arrived at through maximum likelihood. In other cases, as in the Tukey ladder of powers, it is inspected through plots. Alternative evaluation criteria for classical or exploratory methods include linearity of the model, homoscedasticity, or independence of residuals. Scagnostics transformations involve a different figure of merit for each scagnostic, and none of these, to the best of our knowledge, is found in the analytic transformation literature. We have seen in some cases (e.g., the Dense measure) that a scagnostic transformation might be of use in standard parametric or nonparametric analyses. The primary goal of these transformations, however, is to serve a visual analytics strategy that usually precedes formal modeling. Visual analytics can be useful not only for guiding us to supportable conclusions, but also for guiding us to proper models. </p></div><figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_0" coords="1,54.00,553.14,250.38,9.87;1,54.00,562.61,151.30,9.87"><head>Fig. 2. </head><figDesc>Fig. 2. Scatterplots of barometric pressure vs. air temperature on days 43, 116, 273, and 315 in the Weather data. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_1" coords="2,45.00,514.39,240.13,9.87"><head>Fig. 3. </head><figDesc>Fig. 3. Some example scatterplots and their scagnostics measures. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_2" coords="3,54.00,695.27,250.38,9.87;3,54.00,704.73,250.38,9.87;3,54.00,714.20,250.38,9.87;3,54.00,723.66,250.38,9.87;3,54.00,733.13,196.26,9.87"><head>Fig. 4. </head><figDesc>Fig. 4. Visualization of the Subway data: Transforming a point set changes its Delaunay triangulation and the three geometric graphs. The top left frame is the unaltered scatterplot of station and subway ridership in New York City in 1918. The next two scatterplots are the results of applying square root and log transformations on X-axis. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_3" coords="3,316.62,652.38,116.36,9.87"><head>Fig. 5. </head><figDesc>Fig. 5. Transformation functions. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_4" coords="4,307.62,682.94,250.38,9.87;4,307.62,692.41,250.38,9.87;4,307.62,701.87,250.38,9.87;4,307.62,711.34,144.81,9.87"><head>Fig. 6. </head><figDesc> Fig. 6. Inspecting Striated measure on: a) The Madelon data: The selected variables are variable 41 vs. variable 48 b) The Water Treatment data: The selected variables are output conductivity vs. performance input suspended solids to primary settler. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_6" coords="5,54.00,348.06,250.38,9.87;5,54.00,357.52,250.38,9.87;5,54.00,366.99,250.38,9.87;5,54.00,376.45,70.67,9.87"><head>Fig. 7. </head><figDesc>Fig. 7. Inspecting the Clumpy measure on the Web Statistics data: The selected variables are mean of connecting time vs. standard deviation of connecting time. The two clusters are most visible in the inverse/inverse (or log/inverse) plot. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_7" coords="5,54.00,703.57,250.38,9.87;5,54.00,713.03,250.38,9.87;5,54.00,722.50,150.15,9.87"><head>Fig. 8. </head><figDesc>Fig. 8. Inspecting the Clumpy measure on the World Bank data: The plotted variables are energy use vs. CO2 emissions from liquid fuel consumption. Each data point is a country. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_8" coords="5,316.62,588.55,250.38,9.87;5,316.62,598.01,250.38,9.87;5,316.62,607.48,250.38,9.87;5,316.62,616.94,214.25,9.87"><head>Fig. 9. </head><figDesc>Fig. 9. Inspecting the Dense measure in the Page Blocks data: The selected variables are eccentricity of the block (length / height) vs. total number of black pixels in the original bitmap of the block. The data points are colored by their classes as depicted at the bottom. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_9" coords="6,45.00,416.07,250.38,9.87;6,45.00,425.54,181.99,9.87"><head>Fig. 10. </head><figDesc>Fig. 10. Inspecting the Outlying measure on the Sleep data: The selected variables are body weight vs. brain weight. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_10" coords="6,307.62,341.19,250.38,9.87;6,307.62,350.66,250.38,9.87;6,307.62,360.12,122.69,9.87"><head>Fig. 11. </head><figDesc>Fig. 11. Inspecting the Monotonic measure on the World Bank data: The selected variables are rural population vs. urban population in 2010. Each data point is a country. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_12" coords="7,316.62,505.95,250.38,9.87;7,316.62,515.41,168.09,9.87"><head>Fig. 13. </head><figDesc>Fig. 13. Computation times of different transformation combinations for four datasets retrieved from the UCI Repository. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_13" coords="7,316.62,716.38,250.38,9.87;7,316.62,725.85,138.42,9.87"><head>Fig. 14. </head><figDesc>Fig. 14. Average Monotonic for 100 variables in the Economy and Growth section of the World Bank data. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_14" coords="8,45.00,323.29,250.38,9.87;8,45.00,332.75,250.38,9.87;8,45.00,342.21,250.38,9.87;8,45.00,351.68,79.59,9.87"><head>Fig. 15. </head><figDesc> Fig. 15. Inspecting the Monotonic measure of 12 variables in the Economy and Growth section of the World Bank data. The lower triangle shows the regular scatterplot matrix. The upper triangle shows their log/log transformation. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_15" coords="8,307.62,725.10,250.38,9.87;8,307.62,734.56,245.30,9.87"><head>Fig. 16. </head><figDesc>Fig. 16. Possible application allowing filtering, brushing and linking. This figure is based on the Segment dataset from the UCI Repository. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_1" validated="false" coords="1,53.24,697.28,513.76,48.67"><figDesc coords="1,426.75,734.20,140.25,10.80">2003 InfoVis conference and described</figDesc><table coords="1,53.24,697.28,202.95,48.67">. D 
+11 Aug. 
+Nov. 2014. 
+
+Digital Object Identifier 10.1109/TVCG.2014.2346572 
+
+DANG AND 
+
+: TRANSFORMING SCAGNOSTICS TO REVEAL HIDDEN FEATURES 
+IL 
+K 
+INSON 
+1625 
+
+the Tukeys' idea. Jinwook Seo and Ben Shneiderman enthusiastically 
+picked up on this comment and presented a paper the following year 
+called Rank by Feature </table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_2" validated="false" coords="3,326.95,163.99,240.07,156.66"><figDesc coords="3,513.49,163.99,3.36,10.80;3,326.96,182.96,4.60,15.56;3,336.54,181.26,141.21,12.10;3,326.96,196.84,4.60,15.56;3,336.54,195.14,159.53,12.10;3,326.96,211.91,4.60,15.56;3,336.54,209.17,179.99,13.14;3,326.95,225.77,4.60,15.56;3,336.54,224.09,63.11,12.10;3,401.59,219.37,7.47,15.56;3,409.06,224.46,157.94,10.80;3,326.95,239.65,4.60,15.56;3,336.54,237.96,218.71,12.10">. @BULLET none: x * = x (leaves points unchanged) @BULLET half : x * = x/2 (squeezes all points together) @BULLET square: x * = x 2 (pulls points toward left of frame) @BULLET square root: x * = √ x (mildly pulls points toward right of frame) @BULLET log: x * = log(x) (strongly pulls points toward right of frame)</figDesc><table coords="3,326.96,251.84,240.06,68.82">@BULLET inverse: x  *  = 1/x (reverses scale and squeezes points into left of 
+frame) 
+
+@BULLET logit: x  *  = (log(x/(1 − x)) + 10)/20 (squeezes points toward 
+middle of frame) 
+
+@BULLET sigmoid: x  *  = 1/(1 + exp(−20x + 10)) (expands points away 
+from middle of frame) 
+
+</table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_3" validated="false" coords="4,45.00,57.74,250.38,139.70"><figDesc coords="4,45.00,57.74,250.38,9.87;4,45.00,67.20,104.95,9.87">Table 1. Characteristics of datasets used for testings and demonstrations in the following sections.</figDesc><table coords="4,61.02,76.66,218.35,120.78">Datasets 
+#Instances #Variables #Scatterplots 
+Sleep 
+62 
+10 
+45 
+Page Blocks 
+5,473 
+10 
+45 
+Segment 
+2,309 
+20 
+190 
+Web Statistics 
+300 
+22 
+231 
+Water Treatment 
+527 
+38 
+703 
+Subway 
+423 
+104 
+5,356 
+Communities 
+1,994 
+128 
+8,128 
+Gas Sensor 
+3,600 
+128 
+8,128 
+Musk 
+476 
+167 
+13,861 
+Isolet 
+1,559 
+167 
+13,861 
+Madelon 
+1,042 
+500 
+124,750 
+
+</table></figure>
+
+			<note place="foot" n="2"> http://data.worldbank.org/indicator</note>
+		</body>
+		<back>
+			<div type="references">
+
+				<listBibl>
+
+<biblStruct coords="9,72.26,195.66,232.12,9.60;9,72.26,205.13,170.19,9.60"  xml:id="b0">
+	<analytic>
+		<title level="a" type="main">Perception-based visual quality measures</title>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Albuquerque</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Eisemann</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Magnor</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">IEEE VAST</title>
+		<imprint>
+			<date type="published" when="2011" />
+			<biblScope unit="page" from="13" to="20" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,72.26,214.59,232.12,9.60;9,72.26,224.06,148.30,9.60"  xml:id="b1">
+	<analytic>
+		<title level="a" type="main">Sleep in mammals: Ecological and constitutional correlates</title>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Allison</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Cicchetti</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Science</title>
+		<imprint>
+			<biblScope unit="volume">194</biblScope>
+			<biblScope unit="page" from="732" to="734" />
+			<date type="published" when="1976" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,72.26,233.52,232.12,9.60;9,72.26,242.99,147.88,9.60"  xml:id="b2">
+	<analytic>
+		<title level="a" type="main">The transformation of poisson, binomial and negativebinomial data</title>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<surname>Anscombe</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Biometrika</title>
+		<imprint>
+			<biblScope unit="volume">35</biblScope>
+			<biblScope unit="page" from="246" to="254" />
+			<date type="published" when="1948" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,72.26,252.45,225.50,9.60"  xml:id="b3">
+	<monogr>
+		<title level="m" type="main">UCI machine learning repository</title>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Asuncion</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Newman</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2007" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,72.26,261.91,232.12,9.60;9,72.26,271.38,179.77,9.60"  xml:id="b4">
+	<analytic>
+		<title level="a" type="main">Application of the logistic function to bio-assay</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Berkson</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Journal of the American Statistical Association</title>
+		<imprint>
+			<biblScope unit="volume">39</biblScope>
+			<biblScope unit="page" from="357" to="365" />
+			<date type="published" when="1944" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,72.26,280.84,232.12,9.60;9,72.26,290.30,129.30,9.60"  xml:id="b5">
+	<analytic>
+		<title level="a" type="main">An analysis of transformations</title>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Box</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Cox</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Journal of the Royal Statistical Society, B</title>
+		<imprint>
+			<biblScope unit="volume">26</biblScope>
+			<biblScope unit="page" from="211" to="252" />
+			<date type="published" when="1964" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,72.26,299.77,232.12,9.60;9,72.26,309.23,207.49,9.60"  xml:id="b6">
+	<monogr>
+		<title level="m" type="main">Computing and Graphics in Statistics. IMA volumes in mathematics and its applications</title>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Buja</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Tukey</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="1991" />
+			<publisher>Springer-Verlag</publisher>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,72.26,318.70,232.12,9.60;9,72.26,328.16,232.11,9.60;9,72.26,337.63,17.93,9.60"  xml:id="b7">
+	<analytic>
+		<title level="a" type="main">A Model for Studying Display Methods of Statistical Graphics</title>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<forename type="middle">S</forename>
+				<surname>Cleveland</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Journal of Computational and Statistical Graphics</title>
+		<imprint>
+			<biblScope unit="volume">2</biblScope>
+			<biblScope unit="page" from="323" to="364" />
+			<date type="published" when="1993" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,72.26,347.09,232.12,9.60;9,72.26,356.56,232.12,9.60;9,72.26,366.02,60.00,9.60"  xml:id="b8">
+	<analytic>
+		<title level="a" type="main">The shape parameter of a two-variable graph</title>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<forename type="middle">S</forename>
+				<surname>Cleveland</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<forename type="middle">E</forename>
+				<surname>Mcgill</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Mcgill</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Journal of the American Statistical Association</title>
+		<imprint>
+			<biblScope unit="volume">83</biblScope>
+			<biblScope unit="page" from="289" to="300" />
+			<date type="published" when="1988" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,72.26,375.49,232.12,9.60;9,72.26,384.95,232.12,9.60;9,72.26,394.42,104.34,9.60"  xml:id="b9">
+	<analytic>
+		<title level="a" type="main">A review of overview+detail, zooming, and focus+context interfaces</title>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Cockburn</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Karlson</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<forename type="middle">B</forename>
+				<surname>Bederson</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">ACM Comput. Surv</title>
+		<imprint>
+			<biblScope unit="volume">41</biblScope>
+			<biblScope unit="issue">12</biblScope>
+			<biblScope unit="page" from="1" to="231" />
+			<date type="published" when="2009-01" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,72.26,403.88,232.12,9.60;9,72.26,413.35,232.12,9.60;9,72.26,422.81,232.12,9.60"  xml:id="b10">
+	<analytic>
+		<title level="a" type="main">Xgobi: Interactive dynamic graphics in the x window system with a link to s]</title>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<forename type="middle">B D F</forename>
+				<surname>Swayne</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Cook</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 1991 American Statistical Association Meetings</title>
+		<meeting>the 1991 American Statistical Association Meetings</meeting>
+		<imprint>
+			<publisher>American Statistical Association</publisher>
+			<date type="published" when="1991" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,72.26,432.28,232.12,9.60;9,72.26,441.74,232.12,9.60;9,72.26,451.20,75.37,9.60"  xml:id="b11">
+	<analytic>
+		<title level="a" type="main">Scagexplorer: Exploring scatterplots by their scagnostics</title>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<forename type="middle">N</forename>
+				<surname>Dang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<surname>Wilkinson</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 7th Pacific Visualization Symposium (PacificVis)</title>
+		<meeting>the 7th Pacific Visualization Symposium (PacificVis)</meeting>
+		<imprint>
+			<date type="published" when="2014" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,72.26,460.66,232.12,9.60;9,72.26,470.13,232.12,9.60;9,72.26,479.59,101.50,9.60"  xml:id="b12">
+	<analytic>
+		<title level="a" type="main">Pargnostics: Screen-space metrics for parallel coordinates</title>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Dasgupta</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Kosara</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Visualization and Computer Graphics</title>
+		<imprint>
+			<biblScope unit="volume">16</biblScope>
+			<biblScope unit="page" from="1017" to="2626" />
+			<date type="published" when="2010" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,72.26,489.06,232.12,9.60;9,72.26,498.52,232.12,9.60;9,72.26,507.99,44.94,9.60"  xml:id="b13">
+	<analytic>
+		<title level="a" type="main">The Perceptual Organization of Point Constellations</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Dry</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Navarro</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Preiss</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Lee</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Annual Meeting of the Cognitive Science Society</title>
+		<imprint>
+			<date type="published" when="2009" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,72.26,517.45,232.12,9.60;9,72.26,526.92,232.12,9.60;9,72.26,536.38,232.12,9.60;9,72.26,545.85,196.69,9.60"  xml:id="b14">
+	<analytic>
+		<title level="a" type="main">Xmdv-Tool: visual interactive data exploration and trend discovery of high dimensional data sets</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">Y E A</forename>
+				<surname>Rundensteiner</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<forename type="middle">O</forename>
+				<surname>Ward</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<forename type="middle">R</forename>
+				<surname>Doshi</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 2002 ACM SIGMOD international conference on Management of data</title>
+		<meeting>the 2002 ACM SIGMOD international conference on Management of data</meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="2002" />
+			<biblScope unit="page" from="631" to="631" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,72.26,555.31,232.12,9.60;9,72.26,564.78,232.12,9.60;9,72.26,574.24,60.00,9.60"  xml:id="b15">
+	<analytic>
+		<title level="a" type="main">On the shape of a set of points in the plane</title>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Edelsbrunner</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<forename type="middle">G</forename>
+				<surname>Kirkpatrick</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Seidel</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Information Theory</title>
+		<imprint>
+			<biblScope unit="volume">29</biblScope>
+			<biblScope unit="page" from="551" to="559" />
+			<date type="published" when="1983" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,72.26,583.71,232.12,9.60;9,72.26,593.17,232.12,9.60;9,72.26,602.64,232.12,9.60;9,72.26,612.10,17.93,9.60"  xml:id="b16">
+	<analytic>
+		<title level="a" type="main">Selecting the aspect ratio of a scatter plot based on its delaunay triangulation. Visualization and Computer Graphics</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Fink</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J.-H</forename>
+				<surname>Haunert</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Spoerhase</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Wolff</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on</title>
+		<imprint>
+			<biblScope unit="volume">19</biblScope>
+			<biblScope unit="issue">12</biblScope>
+			<biblScope unit="page" from="2326" to="2335" />
+			<date type="published" when="2013" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,72.26,621.57,232.12,9.60;9,72.26,631.03,232.12,9.60;9,72.26,640.49,63.98,9.60"  xml:id="b17">
+	<analytic>
+		<title level="a" type="main">The general sampling distribution of the multiple correlation coefficient</title>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Fisher</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Proceedings of the Royal Society of London, Series A</title>
+		<imprint>
+			<biblScope unit="volume">121</biblScope>
+			<biblScope unit="page" from="654" to="673" />
+			<date type="published" when="1928" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,72.26,649.95,232.12,9.60;9,72.26,659.42,188.30,9.60"  xml:id="b18">
+	<monogr>
+		<title level="m" type="main">Implementation of three-dimensional scagnostics</title>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<surname>Fu</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2009" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,72.26,668.88,232.12,9.60;9,72.26,678.35,232.12,9.60;9,72.26,687.81,134.38,9.60"  xml:id="b19">
+	<analytic>
+		<title level="a" type="main">Generalized fisheye views</title>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<forename type="middle">W</forename>
+				<surname>Furnas</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the SIGCHI Conference on Human Factors in Computing Systems, CHI &apos;86</title>
+		<meeting>the SIGCHI Conference on Human Factors in Computing Systems, CHI &apos;86<address><addrLine>New York, NY, USA</addrLine></address></meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="1986" />
+			<biblScope unit="page" from="16" to="23" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,72.26,697.28,232.12,9.60;9,72.26,706.74,232.12,9.60;9,72.26,716.21,17.93,9.60"  xml:id="b20">
+	<analytic>
+		<title level="a" type="main">Multi-scale banking to 45 degrees. Visualization and Computer Graphics</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Heer</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Agrawala</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on</title>
+		<imprint>
+			<biblScope unit="volume">12</biblScope>
+			<biblScope unit="issue">5</biblScope>
+			<biblScope unit="page" from="701" to="708" />
+			<date type="published" when="2006" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,72.26,725.67,232.12,9.60;9,72.26,735.14,160.61,9.60;9,316.62,52.10,250.38,9.60;9,334.88,62.46,164.58,8.35"  xml:id="b21">
+	<analytic>
+		<title level="a" type="main">Big-data visualization</title>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<forename type="middle">A</forename>
+				<surname>Keim</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Qu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">K.-L</forename>
+				<surname>Ma</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Computer Graphics and Applications Maine School of Marine Sciences. Weather dataset</title>
+		<imprint>
+			<biblScope unit="volume">33</biblScope>
+			<biblScope unit="page" from="20" to="21" />
+			<date type="published" when="2013" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,334.88,71.03,232.12,9.60;9,334.88,80.49,232.12,9.60;9,334.88,89.96,232.12,9.60;9,334.88,99.42,130.40,9.60"  xml:id="b22">
+	<analytic>
+		<title level="a" type="main">Sigma lenses: Focus-context transitions combining space, time and translucence</title>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<surname>Pietriga</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Appert</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the SIGCHI Conference on Human Factors in Computing Systems, CHI &apos;08</title>
+		<meeting>the SIGCHI Conference on Human Factors in Computing Systems, CHI &apos;08<address><addrLine>New York, NY, USA</addrLine></address></meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="2008" />
+			<biblScope unit="page" from="1343" to="1352" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,334.88,108.89,232.12,9.60;9,334.88,118.35,232.12,9.60;9,334.88,127.82,153.30,9.60"  xml:id="b23">
+	<analytic>
+		<title level="a" type="main">Representation-independent in-place magnification with sigma lenses</title>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<surname>Pietriga</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">O</forename>
+				<surname>Bau</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Appert</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Visualization and Computer Graphics</title>
+		<imprint>
+			<biblScope unit="volume">16</biblScope>
+			<biblScope unit="issue">3</biblScope>
+			<biblScope unit="page" from="455" to="467" />
+			<date type="published" when="2010-03" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,334.88,137.28,232.12,9.60;9,334.88,146.75,232.12,9.60;9,334.88,156.21,232.12,9.60;9,334.88,165.68,55.12,9.60"  xml:id="b24">
+	<analytic>
+		<title level="a" type="main">Pixnostics: Towards measuring the value of visualization</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Schneidewind</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Sips</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Keim</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of IEEE Symposium on Visual Analytics Science and Technology (VAST)</title>
+		<meeting>IEEE Symposium on Visual Analytics Science and Technology (VAST)<address><addrLine>Baltimore , MD</addrLine></address></meeting>
+		<imprint>
+			<date type="published" when="2006" />
+			<biblScope unit="page" from="199" to="206" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,334.88,175.14,232.12,9.60;9,334.88,184.60,232.12,9.60;9,334.88,194.07,76.60,9.60"  xml:id="b25">
+	<analytic>
+		<title level="a" type="main">A rank-by-feature framework for interactive exploration of multidimensional data</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Seo</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Shneiderman</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Information Visualization</title>
+		<imprint>
+			<biblScope unit="volume">4</biblScope>
+			<biblScope unit="issue">2</biblScope>
+			<biblScope unit="page" from="96" to="113" />
+			<date type="published" when="2005-07" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,334.88,203.53,232.12,9.60;9,334.88,212.99,78.81,9.60"  xml:id="b26">
+	<analytic>
+		<title level="a" type="main">The big picture for big data: Visualization</title>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Shneiderman</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Science</title>
+		<imprint>
+			<biblScope unit="volume">343</biblScope>
+			<biblScope unit="page">730</biblScope>
+			<date type="published" when="2014-02" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,334.88,222.46,232.12,9.60;9,334.88,231.92,232.12,9.60;9,334.88,241.39,60.00,9.60"  xml:id="b27">
+	<analytic>
+		<title level="a" type="main">Selecting good views of highdimensional data using class consistency</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Sips</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Neubert</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Lewis</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Computer Graphics Forum</title>
+		<imprint>
+			<biblScope unit="volume">28</biblScope>
+			<biblScope unit="page" from="831" to="838" />
+			<date type="published" when="2009" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,334.88,250.85,232.11,9.60;9,334.88,260.32,104.81,9.60"  xml:id="b28">
+	<monogr>
+		<title level="m" type="main">The Algorithm Design Manual</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<forename type="middle">S</forename>
+				<surname>Skiena</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="1998" />
+			<publisher>Springer-Verlag</publisher>
+			<pubPlace>New York, Inc., New York, NY, USA</pubPlace>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,334.88,269.78,232.12,9.60;9,334.88,279.25,232.12,9.60;9,334.88,288.71,49.81,9.60"  xml:id="b29">
+	<analytic>
+		<title level="a" type="main">Jigsaw: Supporting investigative analysis through interactive visualization</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Stasko</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Görg</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Z</forename>
+				<surname>Liu</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Information Visualization</title>
+		<imprint>
+			<biblScope unit="volume">7</biblScope>
+			<biblScope unit="issue">2</biblScope>
+			<biblScope unit="page" from="118" to="132" />
+			<date type="published" when="2008-04" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,334.88,298.18,196.35,9.60"  xml:id="b30">
+	<monogr>
+		<title/>
+		<author>
+			<persName>
+				<forename type="first">Tableau</forename>
+				<surname>Software</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<surname>Tableau</surname>
+			</persName>
+		</author>
+		<imprint/>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,334.88,307.64,232.12,9.60;9,334.88,317.11,232.12,9.60;9,334.88,326.57,81.25,9.60"  xml:id="b31">
+	<analytic>
+		<title level="a" type="main">Arc length-based aspect ratio selection . Visualization and Computer Graphics</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Talbot</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Gerth</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Hanrahan</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on</title>
+		<imprint>
+			<biblScope unit="volume">17</biblScope>
+			<biblScope unit="issue">12</biblScope>
+			<biblScope unit="page" from="2276" to="2282" />
+			<date type="published" when="2011" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,334.88,336.04,232.12,9.60;9,334.88,345.50,232.12,9.60;9,334.88,354.97,232.12,9.60;9,334.88,364.43,127.40,9.60"  xml:id="b32">
+	<analytic>
+		<title level="a" type="main">Automated analytical methods to support visual exploration of high-dimensional data</title>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Tatu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Albuquerque</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Eisemann</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Bak</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Theisel</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Magnor</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Keim</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Visualization and Computer Graphics</title>
+		<imprint>
+			<biblScope unit="volume">17</biblScope>
+			<biblScope unit="page" from="584" to="597" />
+			<date type="published" when="2011" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,334.88,373.89,232.12,9.60;9,334.88,383.35,232.12,9.60"  xml:id="b33">
+	<monogr>
+		<title level="m" type="main">LISP-STAT: An Object-Oriented Environment for Statistical Computing and Dynamic Graphics</title>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<surname>Tierney</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="1990" />
+			<publisher>John Wiley &amp; Sons</publisher>
+			<pubPlace>New York</pubPlace>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,334.88,392.82,232.12,9.60;9,334.88,402.28,139.04,9.60"  xml:id="b34">
+	<analytic>
+		<title level="a" type="main">On the comparative anatomy of transformations</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">W</forename>
+				<surname>Tukey</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Annals of Mathematical Statistics</title>
+		<imprint>
+			<biblScope unit="volume">28</biblScope>
+			<biblScope unit="page" from="602" to="632" />
+			<date type="published" when="1957" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,334.88,411.75,232.12,9.60;9,334.88,421.21,181.21,9.60"  xml:id="b35">
+	<monogr>
+		<title level="m" type="main">The Nature of Statistical Learning Theory</title>
+		<author>
+			<persName>
+				<forename type="first">V</forename>
+				<forename type="middle">N</forename>
+				<surname>Vapnik</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="1999" />
+			<publisher>Springer-Verlag</publisher>
+			<pubPlace>New York, Inc., New York, NY, USA</pubPlace>
+		</imprint>
+	</monogr>
+	<note>2nd. edition</note>
+</biblStruct>
+
+<biblStruct coords="9,334.88,430.68,204.53,9.60"  xml:id="b36">
+	<monogr>
+		<title level="m" type="main">Data Desk [computer software]</title>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Velleman</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="1998" />
+			<pubPlace>Ithaca, NY</pubPlace>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,334.88,440.14,232.12,9.60;9,334.88,449.61,232.12,9.60;9,334.88,459.07,232.12,9.60;9,334.88,468.54,110.47,9.60"  xml:id="b37">
+	<analytic>
+		<title level="a" type="main">Visual analytics of time dependent 2d point clouds</title>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Von Landesberger</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Bremm</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Rezaei</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Schreck</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 2009 Computer Graphics International Conference, CGI &apos;09</title>
+		<meeting>the 2009 Computer Graphics International Conference, CGI &apos;09<address><addrLine>New York, NY, USA</addrLine></address></meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="2009" />
+			<biblScope unit="page" from="97" to="101" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,334.88,478.00,232.12,9.60;9,334.88,488.36,126.33,9.88"  xml:id="b38">
+	<monogr>
+		<title level="m" type="main">New york city dataset</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<forename type="middle">O</forename>
+				<surname>Ward</surname>
+			</persName>
+		</author>
+		<imprint/>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,334.88,496.93,232.12,9.60;9,334.88,506.39,62.89,9.60"  xml:id="b39">
+	<analytic>
+		<title level="a" type="main">SYSTAT for Macintosh, Version 5.0</title>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<surname>Wilkinson</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">SYSTAT Inc</title>
+		<imprint>
+			<date type="published" when="1986" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,334.88,515.86,209.96,9.60"  xml:id="b40">
+	<analytic>
+		<title level="a" type="main">SYSTAT, Version 10</title>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<surname>Wilkinson</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">SPSS Inc</title>
+		<imprint>
+			<date type="published" when="1998" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,334.88,525.32,232.12,9.60;9,334.88,534.79,232.11,9.60;9,334.88,544.25,133.71,9.60"  xml:id="b41">
+	<analytic>
+		<title level="a" type="main">Graph-theoretic scagnostics</title>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<surname>Wilkinson</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Anand</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Grossman</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the IEEE Information Visualization 2005</title>
+		<meeting>the IEEE Information Visualization 2005</meeting>
+		<imprint>
+			<publisher>IEEE Computer Society Press</publisher>
+			<date type="published" when="2005" />
+			<biblScope unit="page" from="157" to="164" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,334.88,553.72,232.12,9.60;9,334.88,563.18,232.12,9.60;9,334.88,572.64,232.12,9.60;9,334.88,582.11,77.26,9.60"  xml:id="b42">
+	<analytic>
+		<title level="a" type="main">High-dimensional visual analytics: Interactive exploration guided by pairwise views of point distributions</title>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<surname>Wilkinson</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Anand</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Grossman</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Visualization and Computer Graphics</title>
+		<imprint>
+			<biblScope unit="volume">12</biblScope>
+			<biblScope unit="issue">6</biblScope>
+			<biblScope unit="page" from="1363" to="1372" />
+			<date type="published" when="2006" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+				</listBibl>
+			</div>
+		</back>
+	</text>
+</TEI>

@@ -1,0 +1,2001 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.tei-c.org/ns/1.0 /home/pisenberg/grobid/grobid-home/schemas/xsd/Grobid.xsd"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+	<teiHeader xml:lang="en">
+		<encodingDesc>
+			<appInfo>
+				<application version="0.4.1" ident="GROBID" when="2016-09-09T13:48+0000">
+					<ref target="https://github.com/kermitt2/grobid">GROBID - A machine learning software for extracting information from scholarly documents</ref>
+				</application>
+			</appInfo>
+		</encodingDesc>
+		<fileDesc>
+			<titleStmt>
+				<title level="a" type="main">Visual Traffic Jam Analysis Based on Trajectory Data</title>
+			</titleStmt>
+			<publicationStmt>
+				<publisher/>
+				<availability status="unknown"><licence/></availability>
+			</publicationStmt>
+			<sourceDesc>
+				<biblStruct>
+					<analytic>
+						<author>
+							<persName>
+								<forename type="first">Zuchao</forename>
+								<surname>Wang</surname>
+							</persName>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Min</forename>
+								<surname>Lu</surname>
+							</persName>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Xiaoru</forename>
+								<surname>Yuan</surname>
+								<roleName>Member, Ieee</roleName>
+							</persName>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Junping</forename>
+								<surname>Zhang</surname>
+								<roleName>Member, Ieee</roleName>
+							</persName>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Huub</forename>
+								<surname>Van De Wetering</surname>
+							</persName>
+						</author>
+						<title level="a" type="main">Visual Traffic Jam Analysis Based on Trajectory Data</title>
+					</analytic>
+					<monogr>
+						<imprint>
+							<date/>
+						</imprint>
+					</monogr>
+				</biblStruct>
+			</sourceDesc>
+		</fileDesc>
+		<profileDesc>
+			<textClass>
+				<keywords>Index Terms—Traffic visualization, traffic jam propagation</keywords>
+			</textClass>
+			<abstract>
+				<p>a b c d e Fig. 1. An overview of our system. (a) The spatial view shows the traffic jam density on each road of Beijing by color, and one traffic jam propagation graph is highlighted in black. (b) The embedded road speed views show the speed patterns of four roads in the highlighted black propagation graph. (c) The graph list view shows a list of sorted traffic jam propagation graphs. (d) The multi-faceted filter view allows filtering of propagation graphs by time and size. (e) The graph projection view shows the topological relationship of graph clusters, where graphs in the same cluster have very similar topology. Abstract—In this work, we present an interactive system for visual analysis of urban traffic congestion based on GPS trajectories. For these trajectories we develop strategies to extract and derive traffic jam information. After cleaning the trajectories, they are matched to a road network. Subsequently, traffic speed on each road segment is computed and traffic jam events are automatically detected. Spatially and temporally related events are concatenated in, so-called, traffic jam propagation graphs. These graphs form a high-level description of a traffic jam and its propagation in time and space. Our system provides multiple views for visually exploring and analyzing the traffic condition of a large city as a whole, on the level of propagation graphs, and on road segment level. Case studies with 24 days of taxi GPS trajectories collected in Beijing demonstrate the effectiveness of our system.</p>
+			</abstract>
+		</profileDesc>
+	</teiHeader>
+	<text xml:lang="en">
+		<body>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1">INTRODUCTION</head><p>Traffic jams form a serious problem in modern cities. They bring about considerable economic loss, increase travel times and aggravate pollution . Governments spend a great amount of money trying to monitor and understand traffic jams, but this seems difficult due to the complex nature of traffic jams. One of the complexities is unpredictability. Sometimes traffic jams occur, sometimes not. Another complexity is that traffic jams are dynamic and interrelated. Traffic jams can, for instance, propagate from one road on to other roads. Due to these @BULLET Zuchao Wang is with Key Laboratory of Machine Perception (Ministry of Education), and School of EECS, Peking University. E-mail: zuchao.wang@pku.edu.cn. @BULLET Min Lu is with Key Laboratory of Machine Perception (<ref type="bibr" coords="1,221.32,580.64,26.37,7.09">Ministry </ref> complexities, a fully automatic analysis of traffic jams is hard, requiring considerable experience and knowledge. In this work, we present a visual analysis system to study the patterns of traffic jams and their propagation. Our system combines automatic computation and human knowledge. We first extract traffic jams from GPS trajectories, from which we construct propagation graphs. Then we design a visual interface to explore both traffic jam patterns and the propagation of traffic jams. As far as we know, there is no previous work in visual analytics that deeply studies these traffic jam aspects. Traditional traffic jam detection methods are based on road side sensors , like induction loops or radar <ref type="bibr" coords="1,416.78,552.60,14.94,8.12" target="#b30">[31] </ref>and monitor only a few critical points <ref type="bibr" coords="1,318.30,562.56,13.74,8.12" target="#b24">[25]</ref>. A GPS based method, however, can theoretically monitor a complete road network. This enables us to better study traffic jam propagation. Furthermore, the installation of expensive road side devices is not required. Previous GPS based traffic jam detection methods either just study separate jams <ref type="bibr" coords="1,419.79,602.42,14.19,8.12" target="#b9">[10,</ref><ref type="bibr" coords="1,436.33,602.42,10.65,8.12" target="#b33"> 34]</ref>, therefore giving scattered traffic information of the road network, or being unable to attribute traffic jams to specific roads <ref type="bibr" coords="1,403.70,622.34,14.19,8.12" target="#b28">[29,</ref><ref type="bibr" coords="1,421.44,622.34,10.65,8.12" target="#b14"> 15]</ref>. Traffic jam data from these works are not suitable for visual exploration. In this work, we derive a road bound traffic jam dataset from GPS trajectory data, and structure the detected traffic jams by building propagation graphs. Our data is more suitable for visual exploration. In the visual interface, as shown in <ref type="figure" coords="1,440.53,672.43,30.37,8.12">Figure 1</ref>, we allow users to make multilevel exploration, from traffic patterns on a single road to the traffic jam condition in a whole city. We support various filtering techniques to query specific kinds of propagation graphs, and we allow users to compare them. Our major contributions are: </p><p>@BULLET We present a process to automatically extract traffic jams from noisy GPS trajectory data. Our data is structured and road bound, therefore suitable for visual exploration. @BULLET We design a visual interface to explore the traffic jams and their propagation. The exploration is multilevel, and supports filtering and comparison of traffic jam propagation graphs. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2">RELATED WORK</head><p>Our related work section is split into an analysis subsection on traffic event detection and two visual subsections on traffic visualization and propagation graph visualization. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.1">Traffic Event Detection</head><p>Perhaps the most commercialized technique to detect traffic events is by radar like sensors <ref type="bibr" coords="2,100.82,187.98,13.74,8.12" target="#b30">[31]</ref>. Analyzing video streams from a roadside camera also helps to understand the traffic <ref type="bibr" coords="2,182.33,197.94,14.19,8.12" target="#b52">[53,</ref><ref type="bibr" coords="2,199.69,197.94,10.65,8.12" target="#b21"> 22]</ref>. However, both techniques require the installation of high-cost devices, and can only monitor at fixed positions along the road. In contrast, the GPS technique is cheaper and able to monitor the whole road network. Therefore , much of recent research focuses on analyzing GPS trajectories. The data mining community has long been working on trajectory data. They have studied different kinds of patterns <ref type="bibr" coords="2,202.23,257.72,14.19,8.12" target="#b22">[23,</ref><ref type="bibr" coords="2,218.30,257.72,10.65,8.12" target="#b25"> 26]</ref>. See Zheng et al.'s book <ref type="bibr" coords="2,67.70,267.68,14.94,8.12" target="#b53">[54] </ref>for an overview. We are most interested in traffic jam detection. Traffic jams are important traffic events. They are usually characterized by long travel time, or, equivalently, low speed. Many traffic jam detection algorithms are based on road speed calculation <ref type="bibr" coords="2,178.84,307.53,13.74,8.12" target="#b17">[18]</ref>, or low speed vehicle cluster detection <ref type="bibr" coords="2,83.11,317.49,14.20,8.12" target="#b9">[10,</ref><ref type="bibr" coords="2,99.23,317.49,10.65,8.12" target="#b33"> 34]</ref> . Bauze et al.'s traffic monitor system also detects traffic jams by low speed <ref type="bibr" coords="2,135.36,327.45,13.75,8.12" target="#b12">[13]</ref>. We use a road speed calculation based method to detect traffic jams. It provides traffic situation data, not only in a few congested places and during a few periods, but it does so in much larger regions and periods. Such data is more suitable for free exploration. Our work is different from the works cited above, in that we focus on the propagation of traffic jams. Krogh et al. <ref type="bibr" coords="2,78.94,387.23,14.94,8.12" target="#b24">[25] </ref>have studied green waves on road stretches with signalized intersections. However, this differs from traffic jam propagation , and their scenario is much simpler than our city network. Recently , Zheng et al. published a paper <ref type="bibr" coords="2,163.58,417.12,14.94,8.12" target="#b28">[29] </ref> studying the causal interactions of traffic outliers. They first segment a city into medium sized regions, then study the traffic flows on the links between the regions. Outliers are detected and arranged as outlier trees. Our propagation graph construction uses the same idea, but our focus is on traffic jam events, not on outliers. A more important difference is that, traffic jams originally happen on roads, not on links between regions. So when users detect an anomalous link, it is difficult to explore and explain their results. Although in later work <ref type="bibr" coords="2,153.02,496.82,14.94,8.12" target="#b14">[15] </ref>they correlate the anomalous links to anomalous routes, it is still unclear where anomalies occur on long routes. In our results, we can directly see traffic jams propagating on roads, as they actually are. Our model is more suitable for visual analysis. The traffic condition in road networks can also be modelled by Probabilistic Graph Models (PGM) <ref type="bibr" coords="2,154.98,556.59,14.19,8.12" target="#b26">[27,</ref><ref type="bibr" coords="2,172.28,556.59,10.65,8.12" target="#b36"> 37]</ref>. This technique is able to learn the temporal change of traffic conditions for each road, and the spatial dependency between roads from historical data. Therefore, it can simulate the macro traffic, and can make predictions of future traffic conditions. However, here we mainly want to summarize the historical data, and support user explorations. Our traffic jam detection and propagation graph construction algorithm already summarize the historical traffic and their results are easy to understand and explore. In contrast, a PGM, although being more generic, has parameters that are harder to tune, and is harder to understand, explore and evaluate. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.2">Traffic Visualization</head><p>A major type of traffic data is trajectory data. In this case, all trajectory visualization techniques can be used. An overview of all trajectories is the first step in their visual analysis. It often requires aggregation. A density map <ref type="bibr" coords="2,80.13,706.44,14.94,8.12" target="#b50">[51] </ref>provides an overview by visual aggregation. It plots the trajectory density and helps identify " hot " spots. Density maps may also show the density of multi-variant trajectories <ref type="bibr" coords="2,242.59,726.36,14.94,8.12" target="#b41">[42] </ref>and extracted events <ref type="bibr" coords="2,83.73,736.33,13.74,8.12" target="#b40">[41]</ref>. Different from density maps, techniques such as spatial aggregation <ref type="bibr" coords="2,368.42,53.29,14.94,8.12" target="#b11">[12] </ref>and spatial-temporal aggregation <ref type="bibr" coords="2,510.43,53.29,9.71,8.12" target="#b5">[6,</ref><ref type="bibr" coords="2,523.55,53.29,11.95,8.12" target="#b42"> 43] </ref>provide overview by data aggregation. They discretize the spatial and temporal dimension into many regions, flows, or bins. Statistics are performed on each discrete spatial-temporal unit, e.g. a region in a time bin. This aggregated information is then visualized. Micro-behavior analysis is another common task. In this case, trajectories have to be treated individually. Hurter et al. <ref type="bibr" coords="2,473.76,113.85,14.94,8.12" target="#b20">[21] </ref>show how to select trajectories with specific position and attributes. Guo et al.<ref type="bibr" coords="2,521.99,123.81,13.52,8.12" target="#b18">[19] </ref>present a system to analyze the traffic at a road intersection. Liu et al. <ref type="bibr" coords="2,296.08,143.73,14.94,8.12" target="#b27">[28] </ref>present a system to study the route diversity in a city. Temporal information is critical in trajectory visualization. Space time cube <ref type="bibr" coords="2,321.98,164.44,14.19,8.12" target="#b19">[20,</ref><ref type="bibr" coords="2,338.16,164.44,11.21,8.12" target="#b23"> 24,</ref><ref type="bibr" coords="2,351.36,164.44,7.47,8.12" target="#b6"> 7] </ref>uses z-axis to represent the time, but suffers from visual clutter. A trajectory may also be represented as a timeline <ref type="bibr" coords="2,525.80,174.40,9.71,8.12" target="#b8">[9,</ref><ref type="bibr" coords="2,285.12,184.37,10.65,8.12" target="#b15"> 16]</ref>, but the spatial information is then largely lost. Events can be extracted from these time series <ref type="bibr" coords="2,401.27,194.33,13.74,8.12" target="#b10">[11]</ref>. For trajectory attributes, Tominski et al. <ref type="bibr" coords="2,439.16,205.07,14.95,8.12" target="#b45">[46] </ref>and von Landesberger et al. <ref type="bibr" coords="2,304.79,215.04,14.94,8.12" target="#b48">[49] </ref>have addressed their visual analysis problem. Some of the above cited works study the events of trajectories. However, none of them focuses on the interactions of these events, and none of them focuses on traffic jams. Our work aims to deeply study traffic jams and their interactions. Although most of the traffic visualizations use trajectory data, some use other types of sensor data. Pack et al. <ref type="bibr" coords="2,439.64,276.37,14.94,8.12" target="#b34">[35] </ref>study traffic incidents data. They design a linked view interface to visualize the spatial, temporal and multi-dimensional aspects of the incidents. Users are allowed to select, filter and cluster these incidents. Piringer et al. <ref type="bibr" coords="2,520.57,306.26,14.94,8.12" target="#b37">[38] </ref>study the surveillance videos in a tunnel. They automatically detect and prioritize different types of events and mark them in space and time. For each event, users can check the original videos. Both focus on traffic events, but none of them on the interactions of these events. Our work studies these interactions, and we use trajectory data, which requires different event detection algorithm. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.3">Propagation Graph Visualization</head><p> Propagation graphs may be visualized by animations and small multiples . However, these techniques have limitations <ref type="bibr" coords="2,475.75,411.78,13.74,8.12" target="#b38">[39]</ref>. Therefore, people also designed other visual metaphors. The spatial, temporal and topological aspects of the propagation graph can be visualized by separate techniques, like FlowMap <ref type="bibr" coords="2,411.97,441.67,13.75,8.12" target="#b47">[48]</ref>, Massive Sequence View <ref type="bibr" coords="2,520.57,441.67,14.94,8.12" target="#b46">[47] </ref>and graph layout <ref type="bibr" coords="2,348.89,451.63,13.74,8.12" target="#b43">[44]</ref>. It remains challenging to visualize all aspects in one view. In our work, we have applied the animation, flow map and graph layout techniques. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3">OVERVIEW</head><p>In this section, we first present the design requirements. After that we describe the input data, and define the traffic jam data model. Finally we present the system workflow. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.1">Design Requirement</head><p>To study traffic jams, we need a data model, according to which we extract and structure the traffic jam data. It should satisfy the following three requirements: R1: Complete We require that basic traffic jam information is available, including location and time. Besides, speed information should always be there, even when there is no traffic jam. It helps users to understand how traffic condition changes, and to check whether the traffic jam detection is appropriate. R2: Structured We require that the traffic jams in the model are interrelated: we are not only interested in individual traffic jams at separate locations and time, but also how these traffic jams are related, and how they propagate from one location to another. R3: Road bound We require the traffic jams to be defined on roads, and to propagate along the road network, as they are actually happening . This help users to associate the traffic jam data with their real world knowledge during visual exploration. A visual interface to explore and analyze the data model, should satisfy the following requirements. R4: Informative We require that the system shows all critical information of the traffic jams, including location, time, propagation path, size of the propagation, and the road speed. R5: Multi-level We require that the traffic jams can be explored at multiple levels. The lowest level should be the congestion behavior on a single road segment. Above that we require to analyze the traffic jam propagation among different road segments, and to compare different propagations. On the highest level, we require to study the congestion status of the whole city. R6: Filterable We require to filter traffic jams according to spatial, temporal properties, and size of propagation. In this way, we can focus on specific types of traffic jams, and make deeper analysis of them. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.2">Description of Input Data</head><p> We use GPS trajectory data and road network data as input, to calculate and analyze traffic jams. GPS trajectory data contains many trajectories. Each trajectory consists of a list of sampling points. Each sampling point has a position record (�longitude, latitude� for 2D data), time stamp time, speed magnitude velocity, moving direction vangle, and optionally a set of attributes �a 0 , a 1 , ...a n−1 �. These sampling points are sorted in time ascending order. Each part between two consecutive sampling points is called a trajectory segment. A road network consists of nodes and ways. Each node has a spatial position. It can be either an intersection or a shape point. Each way contains an ordered list of nodes that defines the spatial position and shape of the way. A way can be a one-way street or a two-way street. Our GPS dataset is a real taxi dataset recorded in the city of Beijing, which is prone to traffic jams. The dataset contains the GPS trajectories of 28,519 taxis. Estimated from a government report <ref type="bibr" coords="3,250.23,340.02,9.53,8.12" target="#b4">[5]</ref>, they include 43% of all licensed taxis in Beijing, and account for 7% of the traffic flow volume within Beijing's 4th Ring. The dataset spans 24 days, from March 2nd to 25th, 2009. It contains 379,107,927 sampling points, and the data size is 34.5GB. The only attribute is the boolean passengerState, indicating whether there are passengers in the taxi. The sampling rate is one point per 30 seconds. However, 60% of the sampling points are missing, so, two consecutive points frequently have a time difference of over 3 minutes. Our road network dataset comes from a query from Open- StreetMap's jXAPI <ref type="bibr" coords="3,105.71,440.31,13.75,8.12" target="#b16">[17]</ref>. We extract all roads in the spatial range from 116.109E to 116.673E and from 39.743N to 40.119N. This gives 40.9MB of data, containing 169,171 nodes, and 35,422 ways. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.3">Traffic Jam Data Model</head><p>Our model structures three types of information: the road speed, the traffic jams, and the relationships between traffic jams. In our model, the time is discretized into time bins. The two directions on a way are treated separately, each as a directed way (abbrev. as dWay). A dWay and a time bin are the smallest spatial and temporal unit. The road speed information gives a basic description of the road condition. For each dWay, at each time bin, there will be a speed record. The speed value can be empty if it can not be estimated. The traffic jam information summarizes all the detected traffic jams. It consists of a list of traffic jam events (abbrev. as events). An event is defined as a triple �d,t 0 ,t 1 �, where the dWay d is the location of the event and the integers t 0 and t 1 with t 0 ≤ t 1 are the start and end time bin of the event, respectively. So, the whole event takes place in the interval [t 0 ..t 1 ] that spans t 1 − t 0 + 1 time bins. The relationships between traffic jams are characterized by traffic jam propagation graphs (abbrev. as graphs). A graph is a directed network of events, defined as �V, E�, where V is a set of events, and E is a set of directed links between events. It is both acyclic and connected. A directed link is notated as e 1 → e 2 , meaning that event e 1 leads to e 2 , or equivalently, e 2 is caused by e 1 . An event can be caused by 0 or more events and can also lead to 0 or more events. For each graph, a spatial propagation path (abbrev. as path) can be derived, which is a directed network of dWays. It can have cycles. A link d 1 → d 2 in a path means that the corresponding traffic jam propagates from dWay d 1 to d 2 . </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.4">Work Flow</head><p>Our visual analysis work consists of two phases. The first phase is preprocessing, in which we start from the input data, and extract traffic jam data that fits our model. The second phase is visual exploration, in which we explore the preprocessed data. <ref type="figure" coords="3,445.89,96.96,30.60,8.12" target="#fig_1">Figure 2</ref>gives an overview of our system. We will explain the preprocessing phase in Section 4, and the visual exploration phase in Section 5. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4">PREPROCESSING</head><p> Our preprocessing phase consists of six steps. The first two steps improve the quality of the input data. In step 1 Road Network Processing, we improve the road network quality by filtering out irrelevant data, merging and splitting ways, and correcting errors. In step 2 GPS Data Cleaning, the trajectories are cleaned. One obvious thing is to remove GPS errors. To accurately estimate road speed later on, we also filter out stops that do not reflect traffic conditions, such as parking. To estimate road speed we perform another two steps. In step 3 Map Matching, we match GPS trajectories to the road network to correlate the trajectory speed with the road speed. After this step, each trajectory sampling point is mapped to one position on a dWay (not a lane), and each trajectory segment is mapped to a path on the road network. In step 4 Road Speed Calculation, we estimate the speed of a dWay at a time bin, based on the speed of the trajectories that map to it. This can be performed by averaging the trajectory speed. This estimation can be inaccurate due to, for instance, insufficient number of mapped trajectories, and incomplete filtering of parking cases in step 2. In the last two steps, propagation graphs are constructed on traffic jam events. In step 5 Traffic Jam Detection, traffic jam events are detected based on speed. For each dWay, an abnormally low speed for consecutive time bins, is considered as a traffic jam event. Finally, in step 6 Propagation Graph Construction, we predict the causal relationships between the detected traffic jam events, based on their spatial temporal relationship. In the rest of this section, we discuss the preprocessing steps in more detail. Further details on their parameter setting are in the ap- pendices. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.1">Road Network Processing</head><p>The road network data downloaded from OpenStreetMap not only contains highways, but also waterways, buildings, etc. Therefore, we first extract all drivable ways from the data. Then we filter out the tiny road pieces that are not connected to the major network, and ensure all roads connected together. After that, we hope that the heading relation between two dWay is clear and unidirectional. Therefore, we reconstruct the ways in the road network data, such that two ways can only intersect at their end points. In the reconstruction, we require that the length of each way is less than 1km, which ensures the spatial resolution. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.2">GPS Data Cleaning</head><p>For the GPS data, we remove five kinds of records: the irrelevant data, the erroneous data, the low sampling data, the non-jam stop data and the tiny trajectory data. We use a set of filters to achieve this. Data out of the spatial range of the road network is irrelevant and removed by filter F1. Problems in erroneous data with respect to time or position are removed by filters F2 and F3. They typically manifest as two records with identical time stamps or segments with high speed. F1: Unrealistic Coordinates We remove sampling points outside the range [116.109E, 116.673E] x <ref type="bibr" coords="3,418.13,645.70,64.45,8.12">[39.743, 40.119N]</ref>. F2: Duplicated Time Stamp If in a trajectory there are points with the same time stamp, we only keep the first occurrence and remove the other points with the same time stamp. F3: High Speed We consider a trajectory segment speed higher than 90km/h unrealistic. In such cases we remove the trajectory segment and split the trajectory into two parts. A low sampling rate results in trajectories with long segments or long time intervals. Our speed calculation is based on trajectory segments , so we require realistic speed change between the start and end In the preprocessing step, we extract traffic jam data from GPS trajectories and a road network. In the visual exploration step, we analyze the extracted traffic jams and their propagation. points of a segment for interpolating accurately. This is not possible in such cases. Therefore, filter F4 and F5 remove them. F4: Long Distance We remove segments with length over 2km. F5: Long Time We remove segments with time interval over 10min. Non-jam stop data are due to parking, passengers getting in or out of the car, and stopping to wait for passengers. This does not include waiting for green lights, because long time waiting for green light implies congestion. Filter F6 removes the first parking case and F7 removes the passenger cases. F6: Parking We assume taxis staying within a 50m radius during 30min are actually parking, and thus remove these points. F7: Waiting for Passenger We remove segments where the passengerState attribute changes. This splits trajectories into ones with constant passengerState. Then we remove stops at the beginning and end of the shorter trajectories, assuming that taxi drivers usually wait for new passengers immediately after dropping old ones, or that they wait until they have a new one. For stops at the beginning or at the end, we assume either a few points with identical positions, or a point with velocity equal to zero. F6 is implemented using a stop detection algorithm <ref type="bibr" coords="4,216.86,488.91,13.74,8.12" target="#b35">[36]</ref>. We do not plan to identify interesting spots as in the original paper, but parking stops, including the cases when GPS position seriously oscillates (<ref type="bibr" coords="4,258.55,508.84,14.35,8.12;4,22.50,518.80,42.83,8.12">Figure 3(Right)</ref>). Therefore, we just use the Euclidean distance in their algorithm, not the distance along the path. ��� Tiny trajectories are mostly small fragments generated by filters. By rendering them on the screen, we find that they can hardly be used. We remove them by filter F8. F8: Tiny Trajectory We remove all trajectories with at most 5 sampling points or less than 500m long. The filters are applied in the order: F1, F2, F3, F4, F5, F6, F7, where filter F8 is applied directly after each filter to remove tiny trajectories. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.3">Map Matching</head><p>We adopt the ST-matching algorithm <ref type="bibr" coords="4,422.07,299.98,14.94,8.12" target="#b29">[30] </ref>for map matching, since it is suitable for data with low sampling rate. However, the algorithm can not be directly used in our work, and we adapt it at three points. First of all, as most of the ways in our road network data do not have speed limit records, T-matching is impossible. Therefore, we only do S-matching. Analysis in the original paper <ref type="bibr" coords="4,443.67,349.79,14.94,8.12" target="#b29">[30] </ref> shows that the accuracy then drops by 2%. We consider that acceptable. Secondly, as our road network data has a few errors, such as wrong road directions and missing roads, we allow trajectory sampling points and trajectory segments to be unmatched. Otherwise, there would be many errors, as shown in <ref type="figure" coords="4,319.73,399.61,28.99,8.12">Figure 4</ref>. We assume a missing match is better than a wrong match, in terms of accurately estimating the road speed. Sampling points without candidate match points are considered unmatched. Trajectory segments with transmission probability V less than a threshold Δ are considered unmatched. Finally, we would match each trajectory sampling point to one position on one dWay, therefore we need to know the driving direction of the taxi at each sampling point. This is achieved in a post processing step by simply looking at the matched position of neighbouring sampling points. <ref type="figure" coords="4,285.12,586.83,19.85,7.64">Fig. 4</ref>. The map matching produces many errors, if we do not allow unmatch. One example is the red trajectory segment from sampling point A to B matching to a long blue path. This is due to missing roads. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.4">Road Speed Calculation</head><p> After mappping the trajectories to the road network, we can use trajectory speed to calculate road speed. In this step, we only use the matched parts of the trajectories. We choose a time bin size of 10min. For each dWay and for each time bin, we extract all taxi trajectories that pass the dWay within this time bin. We reconstruct the movement of the taxis assuming they follow the map matching result, and move at constant speed between two consecutive sampling points. Therefore, we can calculate an average travel speed for each taxi. After removing the taxis with exceptionally high speed (detected by an outlier detection algorithm <ref type="bibr" coords="4,338.97,726.37,9.41,8.12" target="#b0">[1]</ref>), we make an average of the average speeds on the remaining taxis and get the road speed. The speed averaging is per trajectory, not per sampling point. We also record support, which is the number of remaining taxis. The higher the support, the higher the accuracy of the road speed calculation. We define that a speed estimation is valid when support ≥ min support. The default value is min support = 5. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.5">Traffic Jam Detection</head><p>After calculating the road speed, we do a traffic jam event detection on each dWay. Our idea is to use a speed threshold per dWay based on an estimation of the free-flow speed of the dWay. A speed limit may be a good estimation. Unfortunately we do not have it in our data. Krogh et al. <ref type="bibr" coords="5,77.62,164.03,14.94,8.12" target="#b24">[25] </ref>estimate free-flow speed from non-peak hour speed records. However, in Beijing different dWays may have different nonpeak hours. Instead, we sort all valid speeds for a dWay in ascending order, and pick the speed value at the percentage F% position. Then each time bin on this dWay, with a valid speed less than percentage C% of the free flow speed, is said to have a low speed. The default parameter values, F = 85 and C = 45, give us 400,985 events. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.6">Propagation Graph Construction</head><p> Now we have extracted events for all dWays, we build the propagation graphs by defining directed links among events. We use a rule based method. We assume a directed link e 1 → e 2 exists if and only if </p><formula>e 1 .t 0 ≤ e 2 .t 0 ≤ e 1 .t 1 , </formula><p> and e 1 .d is immediately ahead of e 2 .d. The former statement is a temporal constraint, saying that when e 2 starts, e 1 is still happening. The latter statement is a spatial constraint, saying that the two events are spatially connected, and the traffic jams propagate backward. The backward propagation is our assumption, which means the traffic jam will propagate in a reverse direction to the direction of traffic flow. Although it is not firmly validated, many observations and experiments <ref type="bibr" coords="5,77.27,354.47,14.19,8.12" target="#b13">[14,</ref><ref type="bibr" coords="5,93.55,354.47,11.95,8.12" target="#b44"> 45] </ref>support this. We have this constraint because our temporal resolution is not high enough. When we observe two adjacent roads congest at the same time bin, it is not clear from the data which leads to which. In our road network, it is usually the case that one dWay is ahead of another. One exception is for the two directions on the same two-way street. We do not make any link between them, because such propagation is associated with a u-turn traffic flow. By experience, such u-turn traffic flow is usually not dominant in the total traffic flow volume, and not likely to propagate traffic jams. Besides, our test shows adding such links it will add considerable noise in the constructed graphs. We construct the graphs with a modified version of the STOTree algorithm <ref type="bibr" coords="5,68.40,474.11,14.94,8.12" target="#b28">[29] </ref> and end up with 226,227 graphs of which 162,429 contain only one event. We calculate the spatial propagation path and three size measures for each graph: number of events, time span, and total distance. The latter is the sum of the length in kilometers of all traffic jam events in the graph. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5">VISUALIZATION DESIGN</head><p>According to the design requirements in Section 3.1, we provide our system with five views (in four windows). We design a pixel-based road speed view (embedded in <ref type="figure" coords="5,147.87,565.73,30.20,8.12">Figure 1</ref>(b)) to show the speeds and events of one dWay. We design a graph list view (<ref type="figure" coords="5,210.03,575.69,28.16,8.12">Figure 1</ref>(c)) to show the propagation graphs, and the graph projection view (<ref type="figure" coords="5,230.51,585.65,28.29,8.12">Figure 1</ref>(e)) to show their topological relationships. We design a spatial view (<ref type="figure" coords="5,267.55,595.62,14.35,8.12;5,31.50,605.58,17.45,8.12">Fig- ure 1</ref> (a)) to show the traffic jam density on each dWay, and the propagation path of one highlighted graph. We also design a multi-faceted filter view (<ref type="figure" coords="5,73.90,625.50,28.23,8.12">Figure 1</ref>(d)), to filter the propagation graphs. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.1">Pixel Based Road Speed View</head><p>In our system, the road speeds and traffic jam events carry the low level traffic jam information. In designing a visualization for them, we have two concerns. Firstly, we need a compact visualization to be able to present multiple roads side by side for comparison. Secondly, according to our experience, road speed variation has strong daily and weekly patterns. It is important to present them in the analysis. With these concerns in mind, we design a table-like pixel based visualization for a dWay, as illustrated in <ref type="figure" coords="5,183.45,726.37,29.45,8.12">Figure 5</ref> (c). Each row represents a day, each column represents a 10 minutes time interval, and </p><p>(a) (b) </p><formula>(c) (d) </formula><p>(e) <ref type="figure" coords="5,294.12,277.24,18.89,7.64">Fig. 5</ref>. Road speed view showing the speeds and events for one dWay. For the green road in (a) the speed variation is shown in (c). Each row represents one day, and each column represents 10min in a day, so each cell is a time bin. Cell color represents the calculated speed, with the color scale in (b). We mark the extracted events by black boxes in (c). Instead of using black boxes, we can use cell size to mark the events, as shown in (d). The events involved in the currently highlighted propagation graph are highlighted in a thick black box. When filtering is applied, all irrelevant cells turn gray, as shown in (e). each cell represents a time bin. Optionally, the table can be divided into weekly blocks, by the black horizontal lines. We use cell color to represent the road speed on a dWay at the corresponding time bin. The color scale is given in <ref type="figure" coords="5,374.86,404.05,29.27,8.12">Figure 5</ref>(b): red represents low, and green high speed. For cells without a valid speed estimation, we use gray. Mouse hovering over a cell reveals detailed speed information, including the time of the cell, the speed value and its support between brackets. In order to show the events on this dWay, we draw black boxes on the road speed view. <ref type="figure" coords="5,371.84,454.17,29.60,8.12">Figure 5</ref>(c) illustrates this. The cells covered in the box correspond to the time bins in traffic jams. Specifically, the left/right boundary represents the start/end time of the event. If we are more interested in the events, than in the details of speed, we can use cell size to mark events, as shown in <ref type="figure" coords="5,447.90,494.02,29.83,8.12">Figure 5</ref>(d). We make the cells in traffic jam events, which we call event cells, bigger than the non-event cells. Events pop out in this style, and no black boxes are required to mark events. This is especially useful when we embed the road speed view in the spatial view, as shown in <ref type="figure" coords="5,475.34,533.87,29.81,8.12">Figure 1</ref>(b). Then, due to limited screen space, we have to compromise speed for event information. Using black boxes would seriously hide the cell color. In the road speed view, we can highlight a traffic jam propagation graph by clicking on an event, which then will be marked by a thick black box (<ref type="figure" coords="5,337.71,583.98,29.33,8.12">Figure 5</ref>(c),(d)). The propagation graph containing this event will be highlighted, and shown in the spatial view. We only show information for cells satisfying the filter, other cells turn gray, including non-event cells outside of the time range (defined by the temporal filters), and event cells not belonging to the selected propagation graphs. It is possible that an event outside the time range is not gray, as long as its corresponding propagation graph intersects with the time range. A filtered road speed view is shown in <ref type="figure" coords="5,502.66,654.03,28.51,8.12">Figure 5</ref>(e). </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.2">Graph List View</head><p>After showing the speeds and events on individual roads, we consider showing the propagation graphs. This is information on a higher level, and reveals the interactions of traffic jams on different roads. In designing the visualization to show the propagation graphs, we have two concerns. Firstly, there are many propagation graphs, but we can only show a few simultaneously on the screen. Secondly, we need to com-pare propagation graphs. We design the graph list view to fulfil the above requirements. To reduce the number of propagation graphs to show, we use filtering and sorting. We have a topology filter in the graph projection view (Section 5.3), a spatial filter in the spatial view (Section 5.1), and five histogram filters for time and size in the attribute filter view (Section 5.5). We only show propagation graphs satisfying these filters. When there are still too many graphs, we sort them and only show the top N graphs, usually with N ∈ <ref type="bibr" coords="6,138.36,133.23,13.93,8.97" target="#b9">[10,</ref><ref type="bibr" coords="6,153.31,133.79,10.28,8.12" target="#b49"> 50]</ref>. The sorting can be based on the number of events, the time span, or the total distance. To compare propagation graphs, we make a small multiple interface , as illustrated in <ref type="figure" coords="6,100.44,164.46,29.36,8.12">Figure 1</ref>(c). It shows the propagation graphs as icons. These icons are arranged in a matrix style. Each icon represents one graph, and shows its spatial propagation path, temporal information , and the three size measurements. Color of the propagation path shows the congestion time at each location, with red being 4 hours and orange being 10 min. When users highlight a graph icon, the path of this graph will be shown in detail in the spatial view. A more detailed design of the graph icon is illustrated in <ref type="figure" coords="6,174.67,234.20,29.98,8.12">Figure 6</ref>. The icon design and the matrix layout together allow side by side comparison of propagation graphs. However, in the matrix layout, two graphs that are far apart, are hard to compare. Therefore, we allow user to pin interesting graphs. Pinned graphs are listed separately as icons below the original icon matrix, which facilitates comparison, and allows reviewing at any time. Besides pinning, we allow users to select one graph and highlight all graphs that are spatially similar. The search for these similar graphs is limited to the visible top N graphs. The selected graph is put at the front of the graph list, while similar graphs are put immediately behind it, in decreasing similarity order. Icons for the selected graphs and its similar graphs have a red frame. We define the spatial similarity of two graphs, as the Jaccard coefficient <ref type="bibr" coords="6,168.10,353.76,10.46,8.12" target="#b1">[2] </ref>of their set of dWays. <ref type="figure" coords="6,22.50,471.33,20.25,7.64">Fig. 6</ref>. The graph icon shows concise information of a propagation graph, including the start/end time, the spatial propagation path, the size in terms of the number of events, the time span, and the total distance. It also indicates the highlight state and pin state of the graph. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.3">Graph Projection View</head><p>Also focusing on the propagation graph level, the graph projection view summarizes the topological information of the path of all graphs. However, the large number of graphs makes projection difficult. Our basic idea is to first divide graphs in topological clusters, then to project the clusters. To make clusters, we perform a topology preserving simplification on the path of each graph, by removing all mid-dWays, i.e. the dWays with both in-degree and out-degree being one. Then we calculate a feature vector for each simplified path </p><formula>�I 0 , O 0 , I 1 , O 1 , ..., I n , O n �</formula><p> , where I i is the number of nodes with indegree i, O i is the number of nodes with out-degree i, and n is the maximum of all in-degrees and out-degrees. Each dimension of the feature vector is normalized separately. Graphs with identical feature vectors are put in the same cluster. In our case, n = 4, and we get 212 clusters. For cluster projection, we use MDS <ref type="bibr" coords="6,205.49,666.59,13.74,8.12" target="#b51">[52]</ref>. The distance between two clusters is defined as the Euclidean distance between the feature vectors. The interface is shown in <ref type="figure" coords="6,179.88,686.52,29.75,8.12">Figure 1</ref>(e). Each cluster is rendered as a point, with color indicating the number of graphs it contains. Darker means more graphs. Mouse hover shows the exact number of graphs, with a rendering of the graph using the Sugiyama layout <ref type="bibr" coords="6,46.81,726.37,14.94,8.12" target="#b43">[44] </ref>of the OGDF library <ref type="bibr" coords="6,137.95,726.37,9.52,8.12" target="#b2">[3]</ref>. The propagation direction is from top to bottom. Users can also draw a lasso to filter graphs in this view. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.4">Spatial View</head><p> We require an overview of the traffic jams on a city level and a detailed inspection of propagation graphs. These tasks are achieved in the spatial view. See <ref type="figure" coords="6,360.80,86.57,29.00,8.12">Figure 1</ref>(a). The spatial density of a traffic jam is used to give a city-level overview. This density is defined on each dWay as the total congestion time on that dWay. We use color to encode the density: A dark red color means the dWay is most congested; a red color means less congested, followed by orange. A gray color represents no congestion. The path of the highlighted propagation graph, is rendered as a flow map in black. We are especially concerned about the topology of the path, e.g. the start/end points and merging/branching points. The start points are the dWays that " creates " the jams, while the end points are the dWays that " absorb " the jams. In branching points, congestion in one dWay propagates to at least two dWays. In merging points, congestion in one dWay results from at least two dWays. To highlight such features, we use black circles for the start points, and black arrows for the end points. The branching/merging points can be simply discovered by looking at the path. Besides watching the static path, users can also play an animation of the propagation. We allow users to check the speed and event information of multiple dWays, by embedding mini road speed views inside the spatial view. A green stippled line segment connects the mini road speed view and the dWay it represents. Users can create, move and delete the mini road speed views. Aligning them side by side allows a user to compare the speed patterns of roads. Users can draw a rubber-band rectangle to set a spatial filter for the graphs. This is indicated by a green rectangle in <ref type="figure" coords="6,457.87,326.02,28.79,8.12">Figure 1</ref>(a). They can also play trajectory animations. In this way, they can roughly validate the detected traffic jams, and make detailed observations. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.5">Multi-faceted Filter View</head><p>We provide five interactive histograms to make a dynamic query on the propagation graphs. This is illustrated in <ref type="figure" coords="6,445.12,386.93,28.95,8.12">Figure 1</ref> (d). The two histograms on the bottom show the temporal distribution of traffic jams. One by dates, and one by day times. On the top left corner of the date histogram, there are two buttons, allowing the users to observe data only in weekdays or weekends. The three histograms on top show the size distributions in terms of number of events, time span, and total distance. On each of the histograms, users can select a range. The five range queries on the histograms, plus the spatial query in the spatial view, and the topological filter in the graph projection view, form the whole filtering of our system. This filtering mechanism is a simplification of cross filtering <ref type="bibr" coords="6,373.14,486.56,13.74,8.12" target="#b49">[50]</ref>. Only propagation graphs satisfying all filters will be selected, and listed in the graph list view. We provide two visual modes for the histograms. In absolute mode (<ref type="figure" coords="6,288.89,516.53,28.50,8.12" target="#fig_3">Figure 7</ref>(a)), we only show the statistics of data passing the filter, in orange. The height of the bins is in a linear scale. In relative mode (<ref type="figure" coords="6,288.89,536.46,28.04,8.12" target="#fig_3">Figure 7</ref> (b)), we also show the statistics of all the data as a gray background . As the scale of all data and data passing the filter may differ a lot, the height of bins is in logarithmic scale. We mark the information of the highlighted propagation graph on the histograms. <ref type="figure" coords="6,505.24,566.35,30.26,8.12" target="#fig_3">Figure 7</ref>shows the mark in the date histogram (as a black triangle) and in the time histogram (as a time range covered by stipple lines). </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6">VISUALIZATION RESULTS AND CASE STUDY</head><p>Our system provides users with visual insights on complex traffic data from multiple perspectives. The following cases demonstrate the capabilities and effectiveness of our visual analysis system.  The main road in the North 3rd Ring is regularly congested at weekdays in the morning and afternoon. (c) This road is beside two primary schools, it is also congested at weekdays, but usually before 7:30am, when parents send their children to school. (d,e) The two directions of the tunnel just outside Beijing West Station congest at different times, one only in the morning, one only in the afternoon. (f) The road besides the new National Exhibition Center at Shunyi is congested when there are exhibitions. (g) The Airport Express is occasionally congested by unpredictable incidents. (h) The road to the east of Beijing Worker's Stadium is regularly congested at the night of Friday and Saturday. </p><formula>(a) (b) (c) (d) (e) (f) (g) (h) </formula><formula>A B C D G G H E J F L I K (a) </formula><formula>F E J L G I K H 2009-03-21 (d) </formula></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6.1">Case 1. Road Segment Level Exploration and Analysis</head><p> With the road speed view, our system provides users with an aggregated visualization of the traffic speed on a road segment. <ref type="figure" coords="8,241.89,76.45,31.01,8.12" target="#fig_4">Figure 8</ref>shows seven road segments (dWays) in Beijing. Each road speed view gives a clear visual summary of the traffic congestion patterns of that segment. We can observe that for most roads, the traffic starts to be visible around early morning 6:00 am, and most weekdays suffer morning and afternoon traffic peaks, while the traffic on weekends is much lighter. <ref type="figure" coords="8,51.06,136.22,29.60,8.12" target="#fig_4">Figure 8</ref>(b) shows a road segment of the North 3rd Ring with clearly a morning peak, when people go to work, and an evening peak, when people go back home. For roads close to a primary school, the morning peak comes earlier, as parents bring their children to school before they go to work (<ref type="figure" coords="8,112.69,176.07,28.69,8.12" target="#fig_4">Figure 8</ref>(c)). Figures 8(d) and (e), show the two opposite directions of a road with very different behaviors. The differences can be contributed to the directional traffic from home to work. <ref type="figure" coords="8,46.87,205.96,29.36,8.12" target="#fig_4">Figure 8</ref>(f) shows another pattern that is heavily influenced by local activities. The road is south of a large Exhibition Center, and congests only at days with exhibitions. While most of the congestions mentioned above have some regularity and predictability, some traffic jams occur more randomly. The road segment on the Airport Express (<ref type="figure" coords="8,46.99,255.78,28.51,8.12" target="#fig_4">Figure 8</ref>(g)) usually has smooth traffic, but can occasionally be congested by incidents. The road shown in <ref type="figure" coords="8,179.68,265.74,29.55,8.12" target="#fig_4">Figure 8</ref> (h) is east of Beijing Worker's Stadium, and hosts many bars. It has more traffic load throughout the night. Friday and Saturday have earlier heavy traffic in the evening, since people visit the bars earlier during weekends. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6.2">Case 2. Visual Propagation Graph Analysis</head><p> By filtering on temporal, spatial and size properties of traffic congestion propagation, users can explore different traffic jam propagation graphs with our visual interface. The detailed propagation can be examined in a road speed view. Figures 9(a) and </p><p>(b) show two different traffic congestion propagations. Figures 9(c) and (d) show their road speed. Congestion propagation in Figures 9(a) happened on a road named Lianhua Bridge on the west 3rd Ring of Beijing. Place A on the road was struck by a traffic congestion first. With a clear time delay segments B and C become, almost simultaneously, congested too. <ref type="figure" coords="8,22.50,415.69,29.18,8.12" target="#fig_5">Figure 9</ref>(b) presents a more complex traffic congestion propagation. It happened at the Badaling highway intersection on the north 5th Ring of Beijing. This propagation was caused by two sources: D and H. Firstly H was congested. Then congestions in I, J, and K occurred gradually with some delay. When D became congested, E, a branch of F was affected badly. At the same time, F became congested. When H was free from congestion, I to K were all free from congestion, too. E continued to be congested until D was relieved from traffic jams. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6.3">Case 3. Congestion Propagation Pattern Exploration</head><p>We enables users to compare traffic congestion propagation graphs in an area at different times. For example, Wanquanhe Bridge is located at the north-west corner of the 4th Ring in Beijing; see the right-bottom of <ref type="figure" coords="8,32.81,545.73,33.31,8.12">Figure 10</ref>(a). <ref type="figure" coords="8,84.81,545.73,34.02,8.12">Figure 10</ref>(b) shows the speed of a road segment on this bridge. Except for missing data on March 18, a strong periodicity is presented throughout the whole data set. On every weekday, traffic congestion occurs from about 7 a.m. till 10 a.m. In weekends, the traffic jam in the morning was replaced by one in the afternoon. To study propagations in the morning of weekdays in detail, we list them day by day, as shown in <ref type="figure" coords="8,110.35,605.50,32.75,8.12">Figure 10</ref> (a). We found that all these congestions originated from the road around Zhongguancun Science Park, an area with many high-tech enterprises. Although the traffic congestion propagation graphs differ by some branches, the main bodies of these graphs are the same, firstly from east to west and then to the south. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="7">DISCUSSION</head><p>The preprocessing steps in our system require many parameters. They are important to produce usable traffic jam data for further visual exploration . However, finding proper settings for these parameters is not trivial. Currently, we do so based on analysis of distributions, on experience , and on comparison to manually labelled data. We also perform sensitivity analysis on these parameters. Additionally, our visual interface gives users visual feedback of the extracted traffic jam data. </p><p>When users are not satisfied with the results, they can redo the last two steps of the preprocessing with different parameters. This takes approximately one minute for the Beijing taxi data on our workstation. Our work focuses on event analysis, and uses animation of moving objects to visually evaluate the detected traffic jams. Further analysis in space and time is possible. For instance, by clustering the road segments based on their speed change over time, or by clustering the time bins based on the spatial distribution of speed at that time. The space-in-time and time-in-space SOM <ref type="bibr" coords="8,427.78,134.22,10.45,8.12" target="#b7">[8] </ref>provides such techniques. We will consider it in the future. Our work studies the causal relationship, the propagation of traffic jams. However, studying the correlation of traffic conditions is also important. This can be done using PGMs. PGMs provide the possibility to predict the traffic condition in different roads at different times, based on current observations. It is also able to model negative correlations , which is obviously interesting. We consider incorporate the PGMs in our visual analysis. In intelligent transportation systems, pre-warning before accidents is more important than post-accident response, since it might help to save lives and costs. As for traffic jams, a traveller may expect that a route plan become more intelligent and adaptive. This obviously heavily depends on the prediction performance for traffic jams. Our current work is more on post-jam analysis. However, we plan to extend our system to include real-time prediction. Finally, it is challenging to summarize large number of propagation graphs. It is especially difficult to clearly put them in semantic clusters , simultaneously considering the spatial, temporal, size and topology aspects. Our system treats these aspects separately, and gives an overview in terms of each of them. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="8">CONCLUSION AND FUTURE WORK</head><p>In this work, we have presented an interactive visual analysis system to analyze traffic jams in a realistic large scale road network. We use 24 days of taxi GPS trajectories in Beijing and a corresponding street network from OpenStreetMap. In a data driven approach we clean the GPS trajectories from sensor errors and fix apparent errors in the road network. With the cleaned data we can accurately map the driving trajectories to the road network and subsequently, compute road speeds. After estimating free flow speed on each road segment, we automatically detect traffic jam events at roads based on relative lowroad-speed detection. The concatenation of these events in propagation graphs shows how a traffic jam propagates both in space to adjacent roads and in time. Based on the automatic computing results, we then build a visual interface for interactive exploration of the detected traffic jam information both in detail on a road segment as well as on a higher level in a spatial view on a map and in a small multiples view with propagation graphs. We support the analysis by efficient filtering of space, time, size and topology, and providing structured visualizations of the graphs through sorting by size and similarity. Finally, we provide a number of case studies that demonstrate the effectiveness of our system. Our system can provide users with insights from multiple levels and perspectives. Our future work includes improving the traffic jam model, support more analysis tasks, and enable real-time traffic prediction. We will also try better visual encodings for the propagation graphs. We consider to make a formal evaluation of our system. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>ACKNOWLEDGMENTS </head><p>The authors thank Datatang and OpenStreetMap for providing the data, and the anonymous reviewers for their valuable comments and suggestions. This work is supported by National NSFC Project (No. 61170204) and National NSFC Key Project (No. 61232012). </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>APPENDICES </head><p>Our preprocessing steps have many parameters. Correctly setting them is crucial, but not trivial. We discuss the parameter settings below. points, we find that they can not be convincingly matched to the road network. 500m 0.1% per 100m Same as above. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>A GPS Data Cleaning </head><p>Our GPS data cleaning relies on a set of filters. All of them try to remove erroneous or unusable data. An appropriate parameter setting aims to strike a balance between the percentage R of points removed and the noise level. We perform sensitivity analysis on most of them, showing how much more/less data will be removed, if the parameters change slightly. We use the One-at-a-time strategy <ref type="bibr" coords="9,218.89,241.49,9.52,8.12" target="#b3">[4]</ref>, and calculate the partial derivative of R for each parameter. We summarize the filter parameters in <ref type="figure" coords="9,83.13,261.42,25.72,8.12" target="#tab_1">Table 1</ref>. The current parameter setting removes 74.5% of the data, most of which are stops removed by F6 and F7. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>B Map Matching </head><p> The map matching result is analysed by comparison to manually labelled data, with Mao et al.'s technique <ref type="bibr" coords="9,181.39,313.38,13.74,8.12" target="#b31">[32]</ref>. We randomly choose 500 trajectories from our dataset, containing 14,632 sampling points and match them automatically. After manual correction with Unmatch being allowed, we consider the result as the " ground truth " . The map matching accuracy based on a " ground truth " is defined as: Accuracy = ∑ n i=1 |M i ∩ T i |/ ∑ n i=1 |M i ∪ T i |, where n is the number of trajectories, and M i and T i are the sets of directed ways for the i-th trajectory in the map matching result and the ground truth, respectively. We choose 400 of the 500 trajectories to estimate the best parameters: candidate search radius r, candidate number k, normal distribution standard deviation σ (we assume the mean µ is zero), and our minimum transmission probability Δ. The original STmatching paper <ref type="bibr" coords="9,91.72,433.17,14.94,8.12" target="#b29">[30] </ref>recommended r = 50m, k = 5, σ = 20m, and no Δ which is equivalent to Δ = 0.0. Testing the combinations with r ∈ {20m, 50m, 100m}, k ∈ {3, 5, 10}, σ ∈ {10m, 20m, 50m} and Δ ∈ {0.0, 0.2, 0.4, 0.6}, gave accuracy ranging from 81.6% to 91.7%. The best of these combinations (r = 50m, k = 5, σ = 20m, Δ = 0.2) gives a 92.6% accuracy on the remaining 100 trajectories, and is used by us to do the map matching. As a result, 5% of the sampling points and 7% of trajectory segments are unmatched. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>C Road Speed Calculation </head><p> The setting of parameter min support is a balance between the confidence level of the prediction and the number of speed estimates (See <ref type="figure" coords="9,31.50,554.86,34.51,8.12" target="#fig_7">Figure 11</ref>). If users want accurate data, then they choose a high value. If they want more data, a low value. Our default setting is min support = 5. Under this setting, given a ±4mph error bound, the theoretical confidence level <ref type="bibr" coords="9,134.43,584.74,14.94,8.12" target="#b32">[33] </ref>of calculated speed in freeways are guaranteed to be above 58% under all conditions, and 85% with normal traffic volume. However, the confidence level in arteries are quite low (44% and 72%). Users may change this setting. For each dWay, we define a Coverage value, which is the ratio of time bins with valid speed, i.e. support ≥ min support. <ref type="figure" coords="9,161.46,634.56,34.62,8.12" target="#fig_1">Figure 12</ref>shows the result. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>D Traffic Jam detection </head><p>The traffic jam detection result is also analysed by comparing with manually labelled data. We randomly select 50 freeway road segments (dWays) from the road network, within the 4th Ring of Beijing. We play an animation of one day traffic data, and manually label the congested time bins. This labelling is a bit subjective, since sometimes the road condition is between congestion and free flow, and sometimes the number of trajectories on that road is insufficient. In these situations, the results depend on human judgment. Still, we assume the labelled data is a " ground truth " , based on which we calculate an accuracy: Accuracy = ∑ n i=1 |S i ∩L i |/ ∑ n i=1 |S i ∪L i |, where n is the number of dWays, S i is the set of time bins detected as congested for the i-th dWay, and L i is the set of time bins labelled as congested in the " ground truth " for the i-th dWay. We use the labelled data to estimate the best parameters, including the speed percentage of free flow speed F, and of congestion speed C. We have tested F from 100 to 70 and C from 60 to 30, both at an interval of 5. The results are shown in <ref type="figure" coords="9,453.21,257.76,34.04,8.12" target="#fig_2">Figure 13</ref>. Although the combination of F = 75,C = 50 gives the highest accuracy, namely 79.7%, it is not stable. We choose a stable combination F = 85,C = 45, which gives 76.3% accuracy. The labelling provides a means to incorporate human preference in the traffic jam detection. For example, when users want only definite and serious traffic jams, they can relabel the 50 freeways accordingly, then re-estimate the parameters, and redo the traffic jam detection. The confidence level of speed calculation with different min support values, under different road conditions: freeway(n) and artery(n) with normal traffic volume, freeway(a) and artery(a) with very low/high traffic volume. (right) The relative number of speed estimation with different min support. <ref type="figure" coords="9,294.12,606.00,22.88,7.64" target="#fig_1">Fig. 12</ref>. The coverage of dWays in our data. <ref type="figure" coords="9,294.12,707.51,22.89,7.64" target="#fig_2">Fig. 13</ref>. Accuracy of event detection under different parameter settings. (left) Accuracy vs. F, under different C. (right) Accuracy vs. C, under different F. </p></div><figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_1" coords="4,22.50,261.76,513.04,7.64;4,22.50,271.23,268.14,7.64"><head>Fig. 2. </head><figDesc>Fig. 2. The work flow of our system. In the preprocessing step, we extract traffic jam data from GPS trajectories and a road network. In the visual exploration step, we analyze the extracted traffic jams and their propagation. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_2" coords="4,22.50,637.46,250.38,7.64;4,22.50,646.92,250.39,7.64;4,22.50,656.39,217.60,7.64"><head>Fig. 3. </head><figDesc>Fig. 3. (left) Stops removed by F6, with each sampling point represented by a red dot. (right) One stop with the sampling points connected by red lines. It spans 97min, and seems to oscillate due to GPS drift. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_3" coords="6,285.12,664.84,250.40,7.64;6,285.12,674.30,250.37,7.64;6,285.12,683.76,59.15,7.64"><head>Fig. 7. </head><figDesc>Fig. 7. Date and time histogram in absolute mode (a) and relative mode (b). The temporal information of the highlighted propagation graph is marked. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_4" coords="7,31.50,644.68,250.40,7.64;7,31.50,654.14,250.38,7.64;7,31.50,663.60,250.40,7.64;7,31.50,673.07,250.38,7.64;7,31.50,682.53,250.39,7.64;7,31.50,692.00,250.40,7.64;7,31.50,701.46,250.39,7.64;7,31.50,710.93,250.39,7.64;7,31.50,720.39,250.40,7.64;7,31.50,729.85,250.40,7.64;7,31.50,739.32,234.28,7.64"><head>Fig. 8. </head><figDesc>Fig. 8. (a) In Beijing, different roads have different traffic patterns. (b) The main road in the North 3rd Ring is regularly congested at weekdays in the morning and afternoon. (c) This road is beside two primary schools, it is also congested at weekdays, but usually before 7:30am, when parents send their children to school. (d,e) The two directions of the tunnel just outside Beijing West Station congest at different times, one only in the morning, one only in the afternoon. (f) The road besides the new National Exhibition Center at Shunyi is congested when there are exhibitions. (g) The Airport Express is occasionally congested by unpredictable incidents. (h) The road to the east of Beijing Worker's Stadium is regularly congested at the night of Friday and Saturday. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_5" coords="7,294.12,390.50,250.40,7.64;7,294.12,399.96,250.40,7.64;7,294.12,409.43,250.39,7.64;7,294.12,418.89,250.40,7.64;7,294.12,428.35,250.40,7.64;7,294.12,437.82,109.42,7.64"><head>Fig. 9. </head><figDesc>Fig. 9. Traffic congestion propagation and speed of road segments. (a) Congestion propagation in Lianhua Bridge on the West 3rd Ring of Beijing . (b) Congestion propagation in the Badaling highway intersection on the North 5th Ring of Beijing, where the red lines indicates the connection points of road segments. (c) Speed of road segments in (a). (d) Speed of road segments in (b). </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_6" coords="7,310.98,462.59,9.41,4.51"><head>Mon </head><figDesc></figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_7" coords="9,294.12,433.11,250.39,7.64;9,294.12,442.57,250.37,7.64;9,294.12,452.04,250.40,7.64;9,294.12,461.51,250.39,7.64;9,294.12,470.97,218.44,7.64"><head>Fig. 11. </head><figDesc>Fig. 11. Trade off of min support selection. (left) The confidence level of speed calculation with different min support values, under different road conditions: freeway(n) and artery(n) with normal traffic volume, freeway(a) and artery(a) with very low/high traffic volume. (right) The relative number of speed estimation with different min support. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_1" validated="false" coords="3,30.75,26.18,518.00,7.54"><figDesc coords="3,532.75,26.46,16.00,7.26;3,30.75,26.18,300.14,7.50">2161 WANG ET AL: VISUAL TRAFFIC JAM ANALYSIS BASED ON TRAJECTORY DATA</figDesc><table coords="4,41.83,73.93,452.64,162.88">Raw taxi 
+GPS Data 
+
+Raw Road 
+Network 
+
+Cleaned GPS 
+Data 
+
+Processed Road 
+Network 
+
+GPS Trajectories Matched 
+to the Road Network 
+
+Road Speed Data 
+
+Traffic Jam Event Data 
+
+Traffic Jam Propagation Graphs 
+
+GPS Traject tories Matched 
+torie 
+
+Speed 
+
+m Ev 
+
+ropag 
+
+Propagation Graphs of 
+Interest 
+
+One Propagation 
+Graph 
+
+Roads of Interest 
+
+Spatial Filter 
+Temporal and Size Filter 
+
+Propagation Graphs of 
+Interest 
+
+d 
+
+One Propagation 
+Graph 
+
+Roads of Interest 
+
+Propa 
+
+of Inte 
+
+Road Segment Level Exploration and Analysis 
+
+Time and Size Distribution Visu-
+alization of Propagation Graphs 
+
+City level Traffic Jam 
+Density Visualization 
+
+Propagation Graphs Comparison 
+Propagation Graph Level Exploration 
+
+GPS Data Cleaning Road Network Processing 
+
+</table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_5" validated="true" coords="9,32.04,59.43,511.96,95.97"><figDesc coords="9,32.04,59.43,511.96,7.64">Table 1. Parameter settings for GPS data cleaning filters. The remaining filters F1, F2, and F7, have R values 17%, 0.08%, and 13%, respectively.</figDesc><table coords="9,37.87,71.86,491.14,83.54">Filter 
+R% 
+Value 
+Sensitivity 
+Explanation 
+
+F3 
+0.42% 
+90km/h 
+0.0008% per 1km/h 
+Speed limits are between 30 to 120km/h. However, splitting high speed segments does not affect traffic jam extraction. 
+
+F4 
+3.0% 
+2km 
+0.2% per 0.1km 
+It corresponds to at least 3 dWays when matched to the road network. 
+
+F5 
+3.3% 
+10min 
+0.6% per 1min 
+It corresponds to 20 missing sampling points. 
+
+F6 
+62% 
+50m 
+0.3% per 10m 
+It covers 98.7% of the GPS drift errors, assuming it obeys a Gaussian distribution with standard deviation = 20m [40]. 
+
+30min 
+0.2% per 1min 
+We are not aware of traffic jams in Beijing, in which vehicles are completely stuck for over 30min. 
+
+F8 
+20% 
+5 points 
+1% per point 
+By rendering trajectories with less than 5 </table></figure>
+		</body>
+		<back>
+			<div type="references">
+
+				<listBibl>
+
+<biblStruct coords="10,40.76,74.50,233.84,7.22"  xml:id="b0">
+	<monogr>
+		<title level="m" type="main">Chauvenet&apos;s criterion. http://en.wikipedia.org/wiki/Chauvenet&apos;s criterion</title>
+		<imprint/>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,83.97,185.77,7.22"  xml:id="b1">
+	<monogr>
+		<title/>
+		<author>
+			<persName>
+				<forename type="first">Jaccard</forename>
+				<surname>Index</surname>
+			</persName>
+		</author>
+		<imprint/>
+	</monogr>
+	<note>en.wikipedia.org/wiki/Jaccard index</note>
+</biblStruct>
+
+<biblStruct coords="10,40.76,93.43,203.82,7.22"  xml:id="b2">
+	<monogr>
+		<title level="m" type="main">Open graph drawing framework</title>
+		<imprint/>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,102.90,221.95,7.22"  xml:id="b3">
+	<monogr>
+		<title level="m" type="main">Sensitivity analysis</title>
+		<imprint/>
+	</monogr>
+	<note>en.wikipedia.org/wiki/Sensitivity analysis</note>
+</biblStruct>
+
+<biblStruct coords="10,40.76,112.36,232.13,7.22;10,40.76,121.82,93.55,7.22"  xml:id="b4">
+	<monogr>
+		<title level="m" type="main">Beijing transportation research center: Annual report of beijing transportation development</title>
+		<imprint>
+			<date type="published" when="2010" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,131.29,232.12,7.22;10,40.76,140.75,208.35,7.22"  xml:id="b5">
+	<analytic>
+		<title level="a" type="main">Spatio-temporal aggregation for visual analysis of movements</title>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Andrienko</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Andrienko</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. IEEE VAST</title>
+		<meeting>. IEEE VAST</meeting>
+		<imprint>
+			<date type="published" when="2008" />
+			<biblScope unit="page" from="51" to="58" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,150.22,232.13,7.22;10,40.76,159.68,232.13,7.22;10,40.76,169.14,112.88,7.22"  xml:id="b6">
+	<analytic>
+		<title level="a" type="main">Poster: Dynamic time transformation for interpreting clusters of trajectories with space-time cube</title>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Andrienko</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Andrienko</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. IEEE VAST</title>
+		<meeting>. IEEE VAST</meeting>
+		<imprint>
+			<date type="published" when="2010" />
+			<biblScope unit="page" from="213" to="214" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,178.61,232.13,7.22;10,40.76,188.07,232.12,7.22;10,40.76,197.54,232.14,7.22;10,40.76,207.01,94.15,7.22"  xml:id="b7">
+	<analytic>
+		<title level="a" type="main">Space-in-time and time-in-space selforganizing maps for exploring spatiotemporal patterns</title>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Andrienko</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Andrienko</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Bremm</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Schreck</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Von Landesberger</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Bak</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Keim</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Comput. Graph. Forum</title>
+		<imprint>
+			<biblScope unit="issue">3</biblScope>
+			<biblScope unit="page" from="29913" to="922" />
+			<date type="published" when="2010" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,216.47,232.13,7.22;10,40.76,225.93,232.13,7.22;10,40.76,235.40,77.27,7.22"  xml:id="b8">
+	<analytic>
+		<title level="a" type="main">An event-based conceptual model for context-aware movement analysis</title>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Andrienko</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Andrienko</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Heurich</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Int. J. Geogr. Inf. Sci</title>
+		<imprint>
+			<biblScope unit="volume">25</biblScope>
+			<biblScope unit="issue">9</biblScope>
+			<biblScope unit="page" from="1347" to="1370" />
+			<date type="published" when="2011" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,244.86,232.14,7.22;10,40.76,254.33,232.13,7.22;10,40.76,263.79,232.14,7.22;10,40.76,273.26,49.82,7.22"  xml:id="b9">
+	<analytic>
+		<title level="a" type="main">From movement tracks through events to places: Extracting and characterizing significant places from mobility data</title>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Andrienko</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Andrienko</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Hurter</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Rinzivillo</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Wrobel</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. IEEE VAST</title>
+		<meeting>. IEEE VAST</meeting>
+		<imprint>
+			<date type="published" when="2011" />
+			<biblScope unit="page" from="161" to="170" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,282.72,232.13,7.22;10,40.76,292.18,232.12,7.22;10,40.76,301.65,80.80,7.22"  xml:id="b10">
+	<analytic>
+		<title level="a" type="main">Extracting events from spatial time series</title>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Andrienko</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Andrienko</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Mladenov</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Mock</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Poelitz</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Information Visualisation (IV)</title>
+		<imprint>
+			<date type="published" when="2010" />
+			<biblScope unit="page" from="48" to="53" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,311.11,232.14,7.22;10,40.76,320.58,232.14,7.22;10,40.76,330.05,37.87,7.22"  xml:id="b11">
+	<analytic>
+		<title level="a" type="main">Spatial generalization and aggregation of massive movement data</title>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Andrienko</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Andrienko</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Trans. Vis. Comput. Graph</title>
+		<imprint>
+			<biblScope unit="volume">17</biblScope>
+			<biblScope unit="issue">2</biblScope>
+			<biblScope unit="page" from="205" to="219" />
+			<date type="published" when="2011" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,339.50,232.14,7.22;10,40.76,348.97,232.13,7.22;10,40.76,358.44,225.80,7.22"  xml:id="b12">
+	<analytic>
+		<title level="a" type="main">Road traffic congestion detection through cooperative vehicle-to-vehicle communications</title>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Bauza</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Gozalvez</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Sanchez-Soriano</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. IEEE Conf. on Local Computer Networks</title>
+		<meeting>. IEEE Conf. on Local Computer Networks</meeting>
+		<imprint>
+			<date type="published" when="2010" />
+			<biblScope unit="page" from="606" to="612" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,367.90,232.13,7.22;10,40.76,377.37,94.06,7.22"  xml:id="b13">
+	<monogr>
+		<title level="m" type="main">Traffic waves, sometimes one driver can vastly improve traffic</title>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Beaty</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="1998" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,386.83,232.13,7.22;10,40.76,396.30,178.50,7.22"  xml:id="b14">
+	<analytic>
+		<title level="a" type="main">Inferring the root cause in road traffic anomalies</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Chawla</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Y</forename>
+				<surname>Zheng</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Hu</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. IEEE ICDM</title>
+		<meeting>. IEEE ICDM</meeting>
+		<imprint>
+			<date type="published" when="2012" />
+			<biblScope unit="page" from="141" to="150" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,405.76,232.13,7.22;10,40.76,415.22,232.15,7.22;10,40.76,424.69,17.94,7.22"  xml:id="b15">
+	<analytic>
+		<title level="a" type="main">Proximity-based visualization of movement trace data</title>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Crnovrsanin</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Muelder</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Correa</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">K.-L</forename>
+				<surname>Ma</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. IEEE VAST</title>
+		<meeting>. IEEE VAST</meeting>
+		<imprint>
+			<date type="published" when="2009" />
+			<biblScope unit="page" from="11" to="18" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,434.15,228.72,7.22"  xml:id="b16">
+	<monogr>
+		<title level="m" type="main">Openstreetmap jxapi</title>
+		<author>
+			<persName>
+				<forename type="first">I</forename>
+				<surname>Dees</surname>
+			</persName>
+		</author>
+		<imprint/>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,443.62,232.14,7.22;10,40.76,453.08,201.03,7.22"  xml:id="b17">
+	<analytic>
+		<title level="a" type="main">A network analysis of road traffic with vehicle tracking data</title>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Dong</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Pentland</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">AAAI Spring Symp.: HBM</title>
+		<imprint>
+			<date type="published" when="2009" />
+			<biblScope unit="page" from="7" to="12" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,462.54,232.14,7.22;10,40.76,472.01,232.12,7.22;10,40.76,481.47,232.14,7.22;10,40.76,490.94,17.94,7.22"  xml:id="b18">
+	<analytic>
+		<title level="a" type="main">Tripvista: Triple perspective visual trajectory analytics and its application on microscopic traffic data at a road intersection</title>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Guo</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Z</forename>
+				<surname>Wang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Yu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Zhao</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">X</forename>
+				<surname>Yuan</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. IEEE PacificVis</title>
+		<meeting>. IEEE PacificVis</meeting>
+		<imprint>
+			<date type="published" when="2011" />
+			<biblScope unit="page" from="163" to="170" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,500.41,232.13,7.22;10,40.76,509.87,98.75,7.22"  xml:id="b19">
+	<analytic>
+		<title level="a" type="main">What about people in regional science?</title>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Hägerstrand</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Papers in Regional Science</title>
+		<imprint>
+			<biblScope unit="volume">24</biblScope>
+			<biblScope unit="page" from="6" to="21" />
+			<date type="published" when="1970" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,519.33,232.13,7.22;10,40.76,528.80,232.11,7.22;10,40.76,538.26,133.16,7.22"  xml:id="b20">
+	<analytic>
+		<title level="a" type="main">Fromdady: Spreading aircraft trajectories across views to support iterative queries</title>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Hurter</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Tissoires</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Conversy</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Trans. Vis. Comput. Graph</title>
+		<imprint>
+			<biblScope unit="volume">15</biblScope>
+			<biblScope unit="issue">6</biblScope>
+			<biblScope unit="page" from="1017" to="1024" />
+			<date type="published" when="2009" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,547.73,232.14,7.22;10,40.76,557.19,232.13,7.22;10,40.76,566.66,97.86,7.22"  xml:id="b21">
+	<analytic>
+		<title level="a" type="main">Road traffic congestion in the developing world</title>
+		<author>
+			<persName>
+				<forename type="first">V</forename>
+				<surname>Jain</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Sharma</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<surname>Subramanian</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. ACM Symposium on Computing for Development</title>
+		<meeting>. ACM Symposium on Computing for Development</meeting>
+		<imprint>
+			<date type="published" when="2012" />
+			<biblScope unit="page" from="1" to="1110" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,576.12,232.13,7.22;10,40.76,585.58,232.14,7.22;10,40.76,595.05,139.74,7.22"  xml:id="b22">
+	<analytic>
+		<title level="a" type="main">On discovering moving clusters in spatio-temporal data</title>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Kalnis</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Mamoulis</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Bakiras</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. intl. conf. on Advances in Spatial and Temporal Databases</title>
+		<meeting>. intl. conf. on Advances in Spatial and Temporal Databases</meeting>
+		<imprint>
+			<date type="published" when="2005" />
+			<biblScope unit="page" from="364" to="381" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,604.51,232.13,7.22;10,40.76,613.98,107.67,7.22"  xml:id="b23">
+	<analytic>
+		<title level="a" type="main">Geotime information visualization</title>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Kapler</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Wright</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. IEEE InfoVis</title>
+		<meeting>. IEEE InfoVis</meeting>
+		<imprint>
+			<date type="published" when="2004" />
+			<biblScope unit="page" from="25" to="32" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,623.45,232.12,7.22;10,40.76,632.90,232.14,7.22;10,40.76,642.37,121.69,7.22"  xml:id="b24">
+	<analytic>
+		<title level="a" type="main">Trajectories for novel and detailed traffic information</title>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Krogh</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">O</forename>
+				<surname>Andersen</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Torp</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. ACM SIGSPATIAL International Workshop on GeoStreaming</title>
+		<meeting>. ACM SIGSPATIAL International Workshop on GeoStreaming</meeting>
+		<imprint>
+			<biblScope unit="page" from="32" to="39" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,651.83,232.13,7.22;10,40.76,661.30,232.14,7.22;10,40.76,670.77,137.70,7.22"  xml:id="b25">
+	<analytic>
+		<title level="a" type="main">Discovering relative motion patterns in groups of moving point objects</title>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Laube</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Imfeld</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Weibel</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">International Journal of Geographical Information Science</title>
+		<imprint>
+			<biblScope unit="volume">19</biblScope>
+			<biblScope unit="issue">6</biblScope>
+			<biblScope unit="page" from="639" to="668" />
+			<date type="published" when="2005" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,680.23,232.13,7.22;10,40.76,689.70,232.14,7.22;10,40.76,699.16,49.82,7.22"  xml:id="b26">
+	<analytic>
+		<title level="a" type="main">Scalable sparse bayesian network learning for spatial applications</title>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Liebig</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Korner</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>May</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. IEEE ICDM Workshops</title>
+		<meeting>. IEEE ICDM Workshops</meeting>
+		<imprint>
+			<date type="published" when="2008" />
+			<biblScope unit="page" from="420" to="425" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,708.62,232.13,7.22;10,40.76,718.09,188.93,7.22"  xml:id="b27">
+	<analytic>
+		<title level="a" type="main">Visual analysis of route diversity</title>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Liu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Y</forename>
+				<surname>Gao</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<surname>Lu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Liu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Qu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<forename type="middle">M</forename>
+				<surname>Ni</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. IEEE VAST</title>
+		<meeting>. IEEE VAST</meeting>
+		<imprint>
+			<date type="published" when="2011" />
+			<biblScope unit="page" from="171" to="180" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,727.55,232.13,7.22;10,40.76,737.02,232.14,7.22;10,303.38,53.98,129.72,7.22"  xml:id="b28">
+	<analytic>
+		<title level="a" type="main">Discovering spatiotemporal causal interactions in traffic data streams</title>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Liu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Y</forename>
+				<surname>Zheng</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Chawla</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Yuan</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">X</forename>
+				<surname>Xing</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of ACM SIGKDD</title>
+		<meeting>ACM SIGKDD</meeting>
+		<imprint>
+			<date type="published" when="2011" />
+			<biblScope unit="page" from="1010" to="1018" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,63.45,232.13,7.22;10,303.38,72.91,232.13,7.22;10,303.38,82.41,232.13,7.09;10,303.38,91.83,99.18,7.22"  xml:id="b29">
+	<analytic>
+		<title level="a" type="main">Mapmatching for low-sampling-rate gps trajectories</title>
+		<author>
+			<persName>
+				<forename type="first">Y</forename>
+				<surname>Lou</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Zhang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Y</forename>
+				<surname>Zheng</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">X</forename>
+				<surname>Xie</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Wang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Y</forename>
+				<surname>Huang</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. ACM SIGSPA- TIAL International Conference on Advances in Geographic Information Systems</title>
+		<meeting>. ACM SIGSPA- TIAL International Conference on Advances in Geographic Information Systems</meeting>
+		<imprint>
+			<date type="published" when="2009" />
+			<biblScope unit="page" from="352" to="361" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,101.30,232.13,7.22;10,303.38,110.77,232.10,7.22;10,303.38,120.23,38.54,7.22"  xml:id="b30">
+	<monogr>
+		<title level="m" type="main">How does google detect traffic congestion?</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Machay</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Media</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2013" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,129.70,232.14,7.22;10,303.38,139.16,232.14,7.22;10,303.38,148.62,142.15,7.22"  xml:id="b31">
+	<analytic>
+		<title level="a" type="main">Exploration of ground truth from raw gps data</title>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Mao</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Luo</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Tan</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<forename type="middle">M</forename>
+				<surname>Ni</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Xiao</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. ACM SIGKDD International Workshop on Urban Computing</title>
+		<meeting>. ACM SIGKDD International Workshop on Urban Computing</meeting>
+		<imprint>
+			<date type="published" when="2012" />
+			<biblScope unit="page" from="118" to="125" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,158.09,232.15,7.22;10,303.38,167.55,232.12,7.22;10,303.38,177.02,218.65,7.22"  xml:id="b32">
+	<monogr>
+		<title level="m" type="main">Statistical patterns of traffic data and sample size estimation</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Nezamuddin</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<surname>Crunkleton</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<forename type="middle">J</forename>
+				<surname>Tarnoff</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<forename type="middle">E</forename>
+				<surname>Young</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2009" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,186.49,232.14,7.22;10,303.38,195.95,232.14,7.22;10,303.38,205.41,232.14,7.22;10,303.38,214.87,192.25,7.22"  xml:id="b33">
+	<analytic>
+		<title level="a" type="main">Traffic jams detection using flock mining</title>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Ong</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<surname>Pinelli</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Trasarti</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Nanni</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Renso</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Rinzivillo</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<surname>Giannotti</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Machine Learning and Knowledge Discovery in Databases</title>
+		<meeting><address><addrLine>Berlin Heidelberg</addrLine></address></meeting>
+		<imprint>
+			<publisher>Springer</publisher>
+			<date type="published" when="2011" />
+			<biblScope unit="page" from="650" to="653" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,224.34,232.13,7.22;10,303.38,233.81,232.14,7.22;10,303.38,243.27,149.32,7.22"  xml:id="b34">
+	<analytic>
+		<title level="a" type="main">Ice– visual analytics for transportation incident datasets</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Pack</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Wongsuphasawat</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Vandaniker</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Filippova</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. IEEE Int. Conf. Inf. Reuse Integr</title>
+		<meeting>. IEEE Int. Conf. Inf. Reuse Integr</meeting>
+		<imprint>
+			<date type="published" when="2009" />
+			<biblScope unit="page" from="200" to="205" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,252.74,232.12,7.22;10,303.38,262.20,232.13,7.22;10,303.38,271.66,200.34,7.22"  xml:id="b35">
+	<analytic>
+		<title level="a" type="main">A clusteringbased approach for discovering interesting places in trajectories</title>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<forename type="middle">T</forename>
+				<surname>Palma</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">V</forename>
+				<surname>Bogorny</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Kuijpers</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<forename type="middle">O</forename>
+				<surname>Alvares</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. ACM symposium on Applied computing</title>
+		<meeting>. ACM symposium on Applied computing</meeting>
+		<imprint>
+			<date type="published" when="2008" />
+			<biblScope unit="page" from="863" to="868" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,281.13,232.12,7.22;10,303.38,290.59,209.37,7.22"  xml:id="b36">
+	<analytic>
+		<title level="a" type="main">Spatio-temporal models for sustainability</title>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Piatkowski</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Lee</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Morik</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. SustKDD Workshop within ACM KDD</title>
+		<meeting>. SustKDD Workshop within ACM KDD</meeting>
+		<imprint>
+			<date type="published" when="2012" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,300.06,232.12,7.22;10,303.38,309.52,232.15,7.22;10,303.38,318.99,17.94,7.22"  xml:id="b37">
+	<analytic>
+		<title level="a" type="main">Alvis: Situation awareness in the surveillance of road tunnels</title>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Piringer</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Buchetics</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Benedik</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. IEEE VAST</title>
+		<meeting>. IEEE VAST</meeting>
+		<imprint>
+			<date type="published" when="2012" />
+			<biblScope unit="page" from="153" to="162" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,328.45,232.13,7.22;10,303.38,337.91,232.14,7.22;10,303.38,347.38,94.65,7.22"  xml:id="b38">
+	<analytic>
+		<title level="a" type="main">Effectiveness of animation in trend visualization</title>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Robertson</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Fernandez</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Fisher</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Lee</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Stasko</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Trans. Vis. Comput. Graph</title>
+		<imprint>
+			<biblScope unit="volume">14</biblScope>
+			<biblScope unit="page" from="1325" to="1332" />
+			<date type="published" when="2008" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,356.85,232.13,7.22;10,303.38,366.31,232.08,7.22;10,303.38,375.77,120.00,7.22"  xml:id="b39">
+	<analytic>
+		<title level="a" type="main">Using gps and accelerometers in neighborhood research</title>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Rodriguez</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<surname>Shay</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<forename type="middle">A</forename>
+				<surname>Cohen</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">activelivingresearch.org/files/GPS- Accelerometers Workshop.pdf</title>
+		<imprint>
+			<date type="published" when="2008" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,385.23,232.14,7.22;10,303.38,394.70,232.13,7.22;10,303.38,404.17,223.89,7.22"  xml:id="b40">
+	<analytic>
+		<title level="a" type="main">Composite density maps for multivariate trajectories</title>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Scheepens</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Willems</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Van De Wetering</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Andrienko</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Andrienko</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Van Wijk</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Trans. Vis. Comput. Graph</title>
+		<imprint>
+			<biblScope unit="volume">17</biblScope>
+			<biblScope unit="issue">12</biblScope>
+			<biblScope unit="page" from="2518" to="2527" />
+			<date type="published" when="2011" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,413.63,232.13,7.22;10,303.38,423.10,232.13,7.22;10,303.38,432.56,145.41,7.22"  xml:id="b41">
+	<analytic>
+		<title level="a" type="main">Interactive visualization of multivariate trajectory data with density maps</title>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Scheepens</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Willems</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Van De Wetering</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Van Wijk</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. IEEE PacificVis</title>
+		<meeting>. IEEE PacificVis</meeting>
+		<imprint>
+			<date type="published" when="2011" />
+			<biblScope unit="page" from="147" to="154" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,442.02,232.13,7.22;10,303.38,451.49,222.94,7.22"  xml:id="b42">
+	<analytic>
+		<title level="a" type="main">Treemap cartography for showing spatial and temporal traffic patterns</title>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Slingsby</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Wood</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Dykes</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">J of Maps</title>
+		<imprint>
+			<biblScope unit="page" from="135" to="146" />
+			<date type="published" when="2010" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,460.95,232.14,7.22;10,303.38,470.42,232.13,7.22;10,303.38,479.88,71.30,7.22"  xml:id="b43">
+	<analytic>
+		<title level="a" type="main">Methods for visual understanding of hierarchical system structures</title>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Sugiyama</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Tagawa</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Toda</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Trans. Syst., Man, Cybern</title>
+		<imprint>
+			<biblScope unit="volume">11</biblScope>
+			<biblScope unit="issue">2</biblScope>
+			<biblScope unit="page" from="109" to="125" />
+			<date type="published" when="1981" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,489.35,232.13,7.22;10,303.38,498.81,232.13,7.22;10,303.38,508.27,232.14,7.22;10,303.38,517.74,161.30,7.22"  xml:id="b44">
+	<analytic>
+		<title level="a" type="main">Traffic jams without bottlenecksexperimental evidence for the physical mechanism of the formation of a jam</title>
+		<author>
+			<persName>
+				<forename type="first">Y</forename>
+				<surname>Sugiyama</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Fukui</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Kikuchi</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Hasebe</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Nakayama</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Nishinari</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Ichi Tadaki</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Yukawa</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">New Journal of Physics</title>
+		<imprint>
+			<biblScope unit="volume">10</biblScope>
+			<biblScope unit="issue">3</biblScope>
+			<biblScope unit="page">33001</biblScope>
+			<date type="published" when="2008" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,527.21,232.14,7.22;10,303.38,536.67,232.14,7.22;10,303.38,546.14,107.93,7.22"  xml:id="b45">
+	<analytic>
+		<title level="a" type="main">Stackingbased visualization of trajectory attribute data</title>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Tominski</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Schumann</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Andrienko</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Andrienko</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Trans. Vis. Comput. Graph</title>
+		<imprint>
+			<biblScope unit="volume">18</biblScope>
+			<biblScope unit="issue">12</biblScope>
+			<biblScope unit="page" from="2565" to="2574" />
+			<date type="published" when="2012" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,555.60,232.12,7.22;10,303.38,565.06,232.14,7.22;10,303.38,574.53,199.56,7.22"  xml:id="b46">
+	<analytic>
+		<title level="a" type="main">Reordering massive sequence views: Enabling temporal and structural analysis of dynamic networks</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Van Den Elzen</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Holten</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Blaas</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Van Wijk</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. IEEE PacificVis</title>
+		<meeting>. IEEE PacificVis</meeting>
+		<imprint>
+			<date type="published" when="2013" />
+			<biblScope unit="page" from="33" to="40" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,583.99,232.13,7.22;10,303.38,593.46,211.94,7.22"  xml:id="b47">
+	<analytic>
+		<title level="a" type="main">Flow map layout via spiral trees</title>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Verbeek</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Buchin</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Speckmann</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Trans. Vis. Comput. Graph</title>
+		<imprint>
+			<biblScope unit="volume">17</biblScope>
+			<biblScope unit="issue">12</biblScope>
+			<biblScope unit="page" from="2536" to="2544" />
+			<date type="published" when="2011" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,602.92,232.13,7.22;10,303.38,612.39,232.12,7.22;10,303.38,621.85,156.77,7.22"  xml:id="b48">
+	<analytic>
+		<title level="a" type="main">Visual analytics methods for categoric spatio-temporal data</title>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Von Landesberger</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Bremm</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Andrienko</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Andrienko</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Tekusova</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. IEEE VAST</title>
+		<meeting>. IEEE VAST</meeting>
+		<imprint>
+			<date type="published" when="2012" />
+			<biblScope unit="page" from="183" to="192" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,631.31,232.12,7.22;10,303.38,640.78,182.06,7.22"  xml:id="b49">
+	<analytic>
+		<title level="a" type="main">Cross-filtered views for multidimensional visual analysis</title>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Weaver</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Trans. Vis. Comput. Graph</title>
+		<imprint>
+			<biblScope unit="volume">16</biblScope>
+			<biblScope unit="issue">2</biblScope>
+			<biblScope unit="page" from="192" to="204" />
+			<date type="published" when="2010" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,650.25,232.13,7.22;10,303.38,659.71,189.42,7.22"  xml:id="b50">
+	<analytic>
+		<title level="a" type="main">Visualization of vessel movements</title>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Willems</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Van De Wetering</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Van Wijk</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Comput. Graph. Forum</title>
+		<imprint>
+			<biblScope unit="volume">28</biblScope>
+			<biblScope unit="issue">3</biblScope>
+			<biblScope unit="page" from="959" to="966" />
+			<date type="published" when="2009" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,669.18,232.13,7.22;10,303.38,678.63,189.89,7.22"  xml:id="b51">
+	<analytic>
+		<title level="a" type="main">Multivariate visualization using metric scaling</title>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<forename type="middle">C</forename>
+				<surname>Wong</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<forename type="middle">D</forename>
+				<surname>Bergeron</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. IEEE Visualization</title>
+		<meeting>. IEEE Visualization</meeting>
+		<imprint>
+			<date type="published" when="1997" />
+			<biblScope unit="page" from="111" to="118" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,688.10,232.12,7.22;10,303.38,697.57,232.13,7.22;10,303.38,707.03,232.14,7.22;10,303.38,716.50,17.94,7.22"  xml:id="b52">
+	<analytic>
+		<title level="a" type="main">Fuzzy c-means clustering and opposition-based reinforcement learning for traffic congestion identification</title>
+		<author>
+			<persName>
+				<forename type="first">Y</forename>
+				<surname>Yang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Z</forename>
+				<surname>Cui</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Wu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Zhang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">X</forename>
+				<surname>Xian</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Journal of Information and Computer Science</title>
+		<imprint>
+			<biblScope unit="volume">9</biblScope>
+			<biblScope unit="page" from="2441" to="2450" />
+			<date type="published" when="2012" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,725.96,232.12,7.22;10,303.38,735.42,49.06,7.22"  xml:id="b53">
+	<monogr>
+		<title level="m" type="main">Computing with spatial trajectories</title>
+		<editor>Y. Zheng and X. Zhou</editor>
+		<imprint>
+			<date type="published" when="2011" />
+			<publisher>Springer</publisher>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+				</listBibl>
+			</div>
+		</back>
+	</text>
+</TEI>

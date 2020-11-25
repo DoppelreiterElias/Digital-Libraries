@@ -1,0 +1,1063 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.tei-c.org/ns/1.0 /home/pisenberg/grobid/grobid-home/schemas/xsd/Grobid.xsd"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+	<teiHeader xml:lang="en">
+		<encodingDesc>
+			<appInfo>
+				<application version="0.4.1" ident="GROBID" when="2016-09-09T13:49+0000">
+					<ref target="https://github.com/kermitt2/grobid">GROBID - A machine learning software for extracting information from scholarly documents</ref>
+				</application>
+			</appInfo>
+		</encodingDesc>
+		<fileDesc>
+			<titleStmt>
+				<title level="a" type="main">INFUSE: Interactive Feature Selection for Predictive Modeling of High Dimensional Data</title>
+			</titleStmt>
+			<publicationStmt>
+				<publisher/>
+				<availability status="unknown"><licence/></availability>
+			</publicationStmt>
+			<sourceDesc>
+				<biblStruct>
+					<analytic>
+						<author>
+							<persName>
+								<forename type="first">Josua</forename>
+								<surname>Krause</surname>
+							</persName>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Adam</forename>
+								<surname>Perer</surname>
+							</persName>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Enrico</forename>
+								<surname>Bertini</surname>
+							</persName>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Josua</forename>
+								<surname>Krause</surname>
+							</persName>
+						</author>
+						<title level="a" type="main">INFUSE: Interactive Feature Selection for Predictive Modeling of High Dimensional Data</title>
+					</analytic>
+					<monogr>
+						<imprint>
+							<date/>
+						</imprint>
+					</monogr>
+					<idno type="DOI">10.1109/TVCG.2014.234648</idno>
+				</biblStruct>
+			</sourceDesc>
+		</fileDesc>
+		<profileDesc>
+			<abstract/>
+		</profileDesc>
+	</teiHeader>
+	<text xml:lang="en">
+		<body>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Abstract— </head><p>Predictive modeling techniques are increasingly being used by data scientists to understand the probability of predicted outcomes. However, for data that is high-dimensional, a critical step in predictive modeling is determining which features should be included in the models. Feature selection algorithms are often used to remove non-informative features from models. However, there are many different classes of feature selection algorithms. Deciding which one to use is problematic as the algorithmic output is often not amenable to user interpretation. This limits the ability for users to utilize their domain expertise during the modeling process. To improve on this limitation, we developed INFUSE, a novel visual analytics system designed to help analysts understand how predictive features are being ranked across feature selection algorithms, cross-validation folds, and classifiers. We demonstrate how our system can lead to important insights in a case study involving clinical researchers predicting patient outcomes from electronic medical records. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Index Terms—Predictive </head><p>modeling, feature selection, classification, visual analytics, high-dimensional data </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1">INTRODUCTION</head><p> The visualization research community has usually focused on developing techniques and systems to support the analysis of datasets, with limited analysis of the relationship between datasets and the construction of models on top of them. However, there are a growing number of data scientists interested in more than just interpreting their data: they want to understand their data and predictive probabilities associated with them. Providing visual support for this kind of task has become important as many existing applications on the market and in scientific settings need to solve problems that are predictive in nature, e.g. prediction of customer behavior, diseases, drug effectiveness.  Predictive modeling is defined as the process of developing a mathematical tool or model that generates an accurate prediction <ref type="bibr" coords="1,549.82,524.35,13.74,10.80" target="#b10">[10]</ref>. However, building an accurate predictive model is far from trivial. First, modelers must construct cohorts, or distinct groups, to divide their datasets into cases and controls. Then, they must use a feature construction technique to define the feature vector. Next, they must define the parameters for cross-validation to ensure the results are statistically valid and robust. Then, they need to choose a feature selection algorithm to extract the informative features and include them in a model. And finally, they need to choose a classifier to evaluate the predictiveness of the model. For each of these decisions, there are a variety of techniques for cohort construction, feature construction, cross-validation, features selection, and classification to choose from, and there are currently no systematic guidelines to decide which algorithms are most appropriate for which types of datasets. Making the wrong choices can cause predictive models to fail. Kuhn and John argue that many predictive models fail because, " predictive modelers often only explore relatively few models when searching for predictive relationships <ref type="bibr" coords="1,364.53,693.72,12.70,10.80">[...] </ref>due to either modeler's preference for, or knowledge of, or expertise in, only a few models or the lack of available software that would enable them to explore a wide range of techniques " <ref type="bibr" coords="1,549.82,713.64,13.74,10.80" target="#b10">[10]</ref>. We use these current limitations as motivation to research how visual analytics may improve the process of predictive modeling.  Our proposed research focuses on an important step in the predictive modeling pipeline: feature selection. When data is highdimensional , feature selection algorithms are often used to remove non-informative features from models. Again, the analyst is confronted with the decision of which feature selection algorithm to utilize , and even if the analyst decides to try out multiple types, the algorithmic output is often not amenable to user interpretation. This limits the ability for users to utilize their domain expertise during the modeling process. To improve on this limitation, we developed INFUSE (INteractive FeatUre SElection), a novel visual analytics system designed to help analysts understand how predictive features are being ranked across feature selection algorithms, cross-validation folds, and classifiers. We describe the tasks associated to the feature selection and understanding process and provide a design rationale for our solution . We also demonstrate, through case studies, how the system can lead to important insights for clinical researchers predicting patient outcomes from electronic medical records. Concretely, our contributions include: @BULLET A design and implementation of a predictive modeling exploration system, INFUSE, for understanding how predictive features are being ranked across feature selection algorithms, crossvalidation folds, and classifiers. @BULLET An Interactive Model Builder, where users can create customized models based on insights reached with INFUSE, and then have their results evaluated in comparison to automated methods. @BULLET A case study of domain experts using INFUSE to explore predictive models in electronic health records. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1"></head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2">MOTIVATION 2.1 Predictive Modeling in Healthcare</head><p>Predictive modeling is a common and important methodology used in medical informatics and healthcare research. For instance, it can be used to detect diseases in patients early before they progress <ref type="bibr" coords="2,269.12,564.79,10.45,10.80" target="#b3">[3] </ref>and to personalize treatment guidelines to understand which populations will benefit from an intervention <ref type="bibr" coords="2,165.70,584.71,9.52,10.80" target="#b8">[8]</ref>. In order to derive such insights and build successful predictive models, it is common for healthcare researchers to implement, evaluate, and compare many models with different parameters and algorithms. A common workflow for predictive models is a 5-step process, illustrated in <ref type="figure" coords="2,221.87,624.56,29.77,10.80">Figure 2</ref>: (1) cohort construction, (2) feature construction, (3) cross-validation, (4) feature selection, and (5) classification. There are currently few tools that support this complex workflow for predictive modelers. A recent platform, PARAllel predictive MOdeling (PARAMO) <ref type="bibr" coords="2,278.20,664.48,13.74,10.80" target="#b13">[13]</ref>, enables users to specify a small number of high-level parameters to support this 5-step workflow. PARAMO then uses Map-Reduce to execute these many tasks in parallel. After the models have been constructed and evaluated by classifiers, users can compare area under curve (AUC) scores of different models and select the ones with the highest predictive power. While this ability to construct and evaluate models at scale is an important breakthrough for clinical researchers, the clinical experts are still left out of the loop at each of these 5 stages, as each of the algorithms act as a black box. This type of workflow limits the ability of clinical researchers to use their domain knowledge to assist in the model building phase. While multiple models may have similar performance in terms of prediction accuracy, there is a desire to ensure that models with more clinically meaningful features are selected <ref type="bibr" coords="2,425.64,272.41,9.52,10.80" target="#b5">[5]</ref>. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.2">Running Example: Diabetes Prediction</head><p> In order to make our contributions concrete, we utilize a running example from our case study. Our case study involves a team of four clinical researchers interested in using predictive modeling on a longitudinal database of electronic medical records. The research team consisted of one MD researcher with a background in emergency medicine, and three PhD researchers with backgrounds in healthcare analytics. Their database features over 300,000 patients from a major healthcare provider in the United States. The team is interested in building a predictive model to predict if a patient is at risk of developing diabetes, a chronic disease of high blood sugar levels that causes serious health complications. From this database, the team constructs a cohort (Step 1) of 15,038 patients. 50% of these patients (7,519) are considered incident cases with a diagnosis of diabetes. Each case was paired with a control patient based on age, gender, and primary care physician resulting in 7,519 control patients without diabetes. From the medical records of these patients, they extract four meaningful types of features (Step 2): diagnoses, lab tests, medications, and procedures. In total, there were 1,627,736 diagnosis events (6,709 unique types), 361,026 lab events (193 types), 818,802 medication events (344 types), and 853,539 procedures (4,403 types). For our visualization, we only consider types of features that were picked by feature selection algorithms which results in 859 features to display. Next, in order to reduce the bias of the predictive models, the team uses 10 cross-validation folds (i.e. random samples) (Step 3) to divide the population randomly into 10 groups. After cohorts, features, and folds are defined, the clinical researchers are ready to use feature selection . The team has four feature selection algorithms implemented and available to them (Step 4): these include Information Gain and Fisher Score, which have been used extensively by the researchers, as well as two new ones which were recently implemented by their technologists: Odds Ratio and Relative Risk. Finally, the team evaluates each selected feature set as a model using four classifiers (Step 5): Logistic Regression, Decision Trees, Naive Bayes, and K-Nearest Neighbors. Typically, this team executes a pipeline of multiple feature selection algorithms, and chooses the model that ends up with the best scores from the classifier. Although this team has an interest in embedding domain knowledge into their models, their current platform for running predictive models does not have a user interface where users can view or edit the specific features that make up each model. Therefore, resulting models are typically not interpretable by domain experts, and do not support bringing in their medical expertise by prioritizing or removing features that may not be relevant to the disease they are modeling. <ref type="figure" coords="3,54.00,354.20,19.10,9.87">Fig. 3</ref>. An overview of INFUSE, a system for interactive feature selection. On the left, the Feature View provides a way to visualize an overview of all features grouped by type and then sorted by importance. The color key for the feature types and subtypes are shown at the bottom. The buttons and combo boxes at the bottom can be used to switch layouts and define the axes of the scatterplot view shown in <ref type="figure" coords="3,504.75,373.13,28.95,9.87" target="#fig_3">Figure 6</ref>. On the top-right, the List View provides a sorted list of all features, useful for selections. This list can be filtered using the search box above. Currently only features containing the term " gl " are shown. The remaining features are sorted by the number and position of the search term occurrences. On the bottom-right, the Classifier View (<ref type="figure" coords="3,173.23,401.52,27.62,9.87">Figure 7</ref>) provides access to the quality scores of each model. Users can also select features and build custom models with the Interactive Model Builder. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1615"></head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.3">Task Analysis</head><p> The data analysis team initially expressed an interest of having a visual analytics system to aid them in making sense of the complex information generated by the modeling pipeline. During our interviews we agreed to focus on the feature selection and classification steps, as they needed visualizations to reason about the effects of choosing different combinations of the available algorithms. Without such visualizations , the researchers ability to choose among different algorithms is ineffective. Through our interactions with the analysts we derived three main tasks that guided the design of INFUSE: </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3">RELATED WORK</head><p>While visualization of multidimensional data has traditionally focused more on the visualization of the data space, visualizing data features has important applications in real-world scenarios; especially when confronted with hundreds or even thousands of dimensions. In this context, visualization helps data analyst making sense of the feature space while including their background knowledge in the process. Visual feature selection can, for instance, help rank features according to predefined scores, detect similarities among dimensions (thus gauging intrinsic dimensionality of feature spaces), merge or combine features into composite features. In the following we review visualization literature that consider the specific problem of visualizing large sets of features. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.1">Visual Feature Selection</head><p>Several approaches to feature selection and dimensionality reduction, in general, exist in visualization. The early work of Guo <ref type="bibr" coords="4,244.74,240.10,10.45,10.80" target="#b7">[7] </ref>introduced the idea of visualizing relationships between features sets. His system is based on an interactive matrix view where rows and columns represent features and the cells are colored according to feature similarity (calculated as entropy and c 2 ). The matrix is automatically sorted to allow selection of subspaces (feature subsets) where data shows interesting clusters. Visual hierarchical dimension reduction <ref type="bibr" coords="4,254.06,299.88,14.94,10.80" target="#b22">[20] </ref>allows detection and grouping of similar features as well. The technique is based on a hierarchical clustering algorithm which clusters dimensions in terms of their similarity and present them in a sunburst visualization <ref type="bibr" coords="4,45.00,339.73,13.74,10.80" target="#b24">[22]</ref>. Users can interactively choose an aggregation level and use the aggregated dimensions to display data with the reduced set of dimensions . Johansson and Johansson <ref type="bibr" coords="4,161.42,359.65,10.45,10.80" target="#b9">[9] </ref>present an integrated environment based on parallel coordinates visualization where the number and order of dimensions (axes) presented at any time is guided by a ranking algorithm that takes into account associations as well as intrinsic interestingness of each feature to interactively choose how many features to visualize. Similar in spirit is the rank-by-feature framework <ref type="bibr" coords="4,280.44,409.47,14.94,10.80" target="#b14">[14] </ref>in which the data features are organized, ranked and visualized in 1D and 2D visual representations (e.g. histograms, bar charts and scatterplots ). The user can for instance inspect a matrix of feature pairs, ranked by one of the available ranking functions, and single out those that show interesting associations. A similar mechanism is also used in scagnostics <ref type="bibr" coords="4,98.20,469.24,14.94,10.80" target="#b23">[21] </ref>a quality metric approach <ref type="bibr" coords="4,210.24,469.24,10.45,10.80" target="#b4">[4] </ref>that ranks axis pairs according to the pattern/shape they create in a scatterplot visualization. More similar to the solution presented in this paper are visualizations that focus on plotting dimensions as data points in the visual representation (rather than, for example, as axes of a visualization where the data items represent records of a data table). Value and Relation Display visualizes data features as icons in a scatter plot visualization <ref type="bibr" coords="4,45.00,541.95,13.74,10.80" target="#b25">[23]</ref> . The icons are positioned using a multidimensional scaling algorithm which positions dimensions with similar distributions close together. The icons are designed to represent the distribution of the data values within the feature. Such a display allows to detect groups of similar dimensions and to construct multidimensional visualizations by subsetting the original feature space. Brushing Dimensions <ref type="bibr" coords="4,272.01,591.77,14.94,10.80" target="#b18">[18] </ref>is a similar approach where data features are plotted as dots in a scatter plot using descriptive statistics as axes (e.g. variance, median, kurtosis ). The plot is paired with a data item scatter plot which allows for data and feature linking and exploration. All of the methods described above are based on the calculation of statistical parameters from the data as a way to characterize and expose relationships between the features. Our approach differs in that INFUSE interacts directly with feature selection and classification algorithms to help in the discovery of predictive feature sets. A similar approach is found in SmartStripes <ref type="bibr" coords="4,170.29,694.37,13.74,10.80" target="#b11">[11]</ref>, a visual analytics system that allows tight interaction between feature selection algorithms and visualization . Our system differs in that our focus is on the comparison of the output of multiple feature selection algorithms rather than a single one. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.2">Visualization in Predictive Modeling</head><p>Visualization has also been used to aid in the creation of predictive models, not only in the selection of features that might be helpful in constructing such models. Visual construction and assessment of decision tree models have been the subject of a good number of works in the field. Ankerst et al., introduced the idea of using pixel-based visualization as a way to manually construct decision trees by giving the user the ability to observe class distributions within each node and to interactively select splitting points <ref type="bibr" coords="4,447.91,135.29,9.71,10.80" target="#b0">[1,</ref><ref type="bibr" coords="4,461.04,135.29,6.47,10.80" target="#b2"> 2]</ref> . A similar idea is proposed in PaintingClass a visualization technique to manually build a decision tree through interaction of parallel coordinates and multidimensional scaling techniques to identify coherent groups of multidimensional data <ref type="bibr" coords="4,364.82,175.14,13.74,10.80" target="#b17">[17]</ref>. More recently, BaobabView has been presented as a system to inspect and validate a classification model through a tree representation. The paper presents a thorough analysis of the number of tasks that visualization can support in this area and how they are covered by the proposed system <ref type="bibr" coords="4,424.64,214.99,13.74,10.80" target="#b19">[19]</ref>. While all the aforementioned systems focus largely on decision trees, visualization has been used in other classification and regression systems that leverage other prediction models. The iVisClassifier <ref type="bibr" coords="4,307.62,255.49,10.45,10.80" target="#b6">[6] </ref>for instance uses linear discriminant analysis (LDA), a supervised dimensionality reduction method, to project multidimensional data in a scatterplot visualization taking into account information provided by the data labels. The technique allows to visually link the highdimensional structure to the low-dimensional representation and build clusters. The clusters are then used to classify new data that is progressively introduced into the system to refine the model. Steed et al., in their cyclone trend analysis provide a parallel coordinates visualization that leverage computational analysis to identify features with high predictive power in stepwise regression tasks and allows to build predictive models for multidimensional climate data <ref type="bibr" coords="4,488.87,355.12,14.19,10.80" target="#b16">[16,</ref><ref type="bibr" coords="4,505.85,355.12,10.65,10.80" target="#b15"> 15]</ref>. Recently, a visual analytics system for regression analysis has been proposed by Mühlbacher and Piringer <ref type="bibr" coords="4,398.75,375.05,13.74,10.80" target="#b12">[12]</ref>. The system is more similar to our work in nature as it also focuses on the predictive power of feature sets and guides the user in the predictive modeling process. The main difference between this work and ours is our focus on classification rather than regression models and the use of multiple feature selection and classification models to better understand how features score across multiple models. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4">INFUSE</head><p> In this section, we describe the design of INFUSE, which aims to assist predictive modelers with the tasks introduced in Section 2.3. By providing visualizations for users to interpret the results of feature selection algorithms, as well as the ability to customize the models with domain knowledge that may have been missed by the automated algorithms , INFUSE provides a user-centric way of manipulating predictive models. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.1">Data and Design</head><p>We provide a brief overview of data types utilized by the system. A predictive model, in our setting, is a model trained and validated with machine learning using a high number of features as an input to train the model. These features are the primary data items of INFUSE. Each feature has a label representing the feature name (e.g. Diabetes), a category to which the feature belongs to (e.g. Diagnosis), and a subtype (e.g. Problem List, the health problems that led to the diagnosis). Feature selection algorithms receive as an input the whole set of existing features and return a subset of features selected and ranked according to their estimated predictive power. Since in our setting we use the output of multiple algorithms at once, each feature can further be described by the rankings they receive from all these algorithms (where features that are not selected are marked as unranked). Furthermore, since cross-validation is used, each feature actually gets ranked multiple times by each algorithm, leading to a total number of #feature selection algorithms ⇥ #folds ranks that quantitatively describe each feature. <ref type="figure" coords="5,54.00,158.31,22.71,9.87">Fig. 4.</ref> (a) The glyph representation of a feature in the INFUSE system . (b) Multiple models for each feature are represented as model sections. In this example, the feature is divided into four sections, as it was ranked by four feature selection algorithms (Information Gain, Fisher-Score, Relative Risk, and Odds Ratio.). (c) Each section is further divided into fold slices representing each of the cross-validation folds. Each fold slices features a inward-filling bar that represents the rank of this feature in that fold. A longer bar implies the feature has a better rank. If no bar appears, the feature was unranked in the fold, and thus did not meet the importance threshold. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Josua Krause </head><p>(a) </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Josua Krause </head><p>(b) </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Josua Krause </head><p>(c) </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Josua Krause </head><p>(d) shows a typical starburst glyph and (d) shows a matrix using luminance to show the ranks. Note that in (b) and (c) it is difficult to see that this feature is unranked in the third fold from the right in the top left quadrant. The values in (c) are difficult to read because there is no reference to how big the values are. Luminance, as used in (d) is a harder perceptual attribute for users to interpret and distinguish than length and area are, as used by the other glyphs. </p><p>The predictive models built using the output generated by feature selection also provide useful information that we use in our system. Each feature set generated by the process described above is used as an input to a classification algorithm. The algorithm builds a model that corresponds to the specific pair of feature set and classification algorithm used for its training. The classifier, in turn, can be described in terms of its performance using the Area Under Curve (AUC), a measure that is commonly used by modelers to give numerical performance scores to models <ref type="bibr" coords="5,152.11,542.80,13.74,10.80" target="#b10">[10]</ref>. The primary goal of INFUSE is to visualize this information so that users can understand the predictive power of features in their models. The user interfaces is organized around three main coordinated views as shown in <ref type="figure" coords="5,98.43,582.85,29.16,10.80">Figure 3</ref>: the Feature View provides a way to visualize an overview of all features providing information about their attributes and ranking received from feature selection; the List View provides a sorted list of all features to get easy access to their labels and to assist the user in searching features according to some predefined criteria like their name or category; the Classifier View provides access to the quality scores of each model built using the process described above. The views are coordinated so that selections in one view are propagated to all the other views. In the following we provide additional information about the design of each view. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.2">Feature View</head><p>The primary component of INFUSE is the Feature View, a zoomable visualization that displays all features as glyphs. Each glyph represents a feature from the original data set and is designed to provide the information outlined above. The main purpose of the feature view is to allow comparison between features and detection of interesting commonalities and differences in terms of how the algorithms rank them. The view allows the user to display the feature set according to two different configurable layouts: a grid layout (the default), which favors legibility, and a scatter plot layout which aims at laying out and grouping the features according to various statistics we collect from the ranks. In the following sections, we describe the design of the glyph as well as the different layouts. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.2.1">Feature Glyph Design</head><p> As described in Section 2.1, the features are ranked by multiple feature selection algorithms and across multiple cross-validation folds. INFUSE's glyph design embeds all of this information in a circular glyph that shows all the rankings obtained from each algorithm/fold pair. As shown in <ref type="figure" coords="5,383.52,197.53,29.25,10.80">Figure 4</ref>(a), the glyph is divided into equally-sized circular segments; where each segment represents one of the ranking algorithms. For instance, in <ref type="figure" coords="5,419.09,217.46,29.31,10.80">Figure 4</ref>(b), since the feature was ranked by four feature selection algorithms, the circular glyph is divided into four sections. Each of these sections are then divided further into a fold slice for each cross-validation fold. For instance, in <ref type="figure" coords="5,524.23,247.35,29.43,10.80">Figure 4</ref>(c), each feature selection algorithm was executed on 10 cross-validation folds, therefore there are 10 fold slices. Within each fold slice, there is an inward-growing bar (that is, starting from the perimeter and growing towards the center) that represents the rank of the feature in a particular fold. For example, in <ref type="figure" coords="5,543.59,298.09,23.41,10.80;5,316.62,308.05,3.34,10.80">Figure  4</ref>(c), the feature is higher ranked in Fold 3 than in Fold 4 as the bar in Fold 3 stretches closer towards the center than in Fold 4. Features that are unranked, because their scores are too low to meet the minimum threshold requirement of the algorithm, are represented as empty slices with no bars. We designed fold slices with inward-growing bars on purpose to help distinguishing between slices with empty values from those with low values. During our design iterations we realized in fact that outward pointing bars would make this distinction too hard to make. Since the information of whether a features is picked up by an algorithm is crucial for its interpretation we decided to opt for this design. Multiple glyph designs were considered and tested within INFUSE. For instance, <ref type="figure" coords="5,365.25,428.53,29.48,10.80" target="#fig_1">Figure 5</ref>(b) shows an example of a glyph where the fold slices grow from the center towards the perimeter. This makes it difficult to identify fold slices with poor ranks. Consider the situation where there is a lowly-ranked feature only ranked in one fold slice section. When zoomed-out, the glyph would just appear as a circle with a dot in the center, and the user would not know which model or fold ranked the feature. Furthermore, it is difficult to see in which fold a feature is unranked when the surrounding models rank the feature. Other glyph designs that were tried involve a star glyph (<ref type="figure" coords="5,524.41,508.23,28.65,10.80" target="#fig_1">Figure 5</ref>(c)) and a matrix glyph (<ref type="figure" coords="5,393.96,518.19,29.18,10.80" target="#fig_1">Figure 5</ref>(d)). The star glyph was less effective as users were not afforded a reference point for the maximum ranking and the design leads to some visual artifacts (like high density in the center and lower density in the outer part). The matrix glyph was less effective, as perceiving differences is more difficult when using luminance than length and area as we do in our final design. Users can gain more details about each section and slice by hovering over the region of interest to view an informative tooltip. Furthermore , an overview key is available to remind users of the position of each model type. The background color of the glyph corresponds to the subtype of the feature and a color key can also be shown as a reference to remember the meaning of the color coding (see bottom-left corner of <ref type="figure" coords="5,351.47,638.67,28.89,10.80">Figure 3</ref>). </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.2.2">Ranked Layout</head><p>The first layout available to users is the ranked layout, which arranges glyphs by their feature type, and sorts them by their overall importance . The name of the feature type is shown at the first position in the group, after that the features are laid out row-first in a grid-like manner, as shown in <ref type="figure" coords="5,394.55,724.25,29.62,10.80">Figure 3</ref>. This space-filling approach results in features that are always visible without overlaps. shows the median rank plotted against the importance. Notice that the plot looks similar to (a) since importance is a combination of the axes from (a). The axes in (c) are best rank versus average rank. Features can only appear below the diagonal. The standard deviation of the ranks is plotted against the importance in (d). The peak to the bottom right corner consists of features that are rarely picked and therefore have lower variance. The peak to the top right consists of features that are consistently high ranked. </p><p>Features within a group are sorted by their importance. Importance is computed as average rank with penalized unranked features: </p><formula>rank best = min m2M⇥V, f 2F [rank m ( f )] i( f ) = 1 |M ⇥V | [2 · rank best · unranked M⇥V ( f ) + Â m2M⇥V rank m ( f )] </formula><p>where M is the set of models, V is the set of cross-validation folds, F is the set of features, rank m ( f ) is the rank of a feature f in the combined model and cross-validation fold m, and unranked M⇥V ( f ) is the number of such combined models that did not choose f . Assume rank m ( f ) = 0 for unranked features f in the combined model m only when computing i( f ). Note that a small value for i( f ) means higher importance. The optimal value is 1. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.2.3">Scatterplot Layout</head><p>The second layout available to users is the scatterplot layout, where users can select choices for both axes of the scatterplot. The choices for axes include: By default, the average rank is chosen for the horizontal axis and the pick count is chosen for the vertical axis, as shown in <ref type="figure" coords="6,258.00,674.44,33.64,10.80">Figure 10</ref>. This combination of axes led to the most insights during the case studies . However, if users choose to select different axes or pivot to a different layout, animation is used for the transition. By using slow-in and slow-out animation, users are given time to anticipate the movement direction of the feature, and are able to track features during the transition easily. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.2.4">Interaction</head><p>The Feature View provides a number of interactions. Zooming and panning enables a user to get an overview of the displayed data and focus on the details of a small number of glyphs. This exploration can be reset by clicking on the " Reset View " button, or double clicking on the background. Double clicking on a feature glyph zooms in on the feature so that it fills the viewport. In addition, a tooltip is shown when a user hovers the mouse over a glyph. This tooltip provides information about the name, type, and subtype of the represented feature, as well as all of the statistical information used for the scatterplot layout . Hovering over a fold slice in the glyph gives further information about the feature selection algorithm, the cross-validation fold, and the feature's rank in question. In order to select features for interactive model building (see Section 4.5) the user can click on glyphs to toggle the selection or use a lasso gesture to select a group of features. As mentioned in the previous section, users can change the layout of the glyphs with the buttons below the Feature View. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.3">List View</head><p> A simple yet important view of features is the List View, which provides a sorted list of all features, useful for selecting features by name. Each list item contains the name of the features along with its glyph. The selection of a feature can be toggled in the list by clicking its list item. As the selection of features is linked between views, this sorted and labeled view supports users finding particular features of interest and highlighting them in the complementary views. The list view can be sorted in a few different ways. By default, features are first sorted by the type of the feature, then by its subtype, and finally by its name. Users can also sort the list by selection, which means currently selected features are displayed at the top and the unselected features appear after them. Within these groups, the features are then sorted by their importance. In addition to sorting, a user can filter the list view via the search box on the top. Search terms are separated by white-spaces and the list view shows all features that contain all search terms in the name, type, or sub-type. The results are ranked by the sum of the inverse positions of the search terms within the feature description. This favors terms occurring at the beginning of the feature's name and terms that occur multiple times in one feature description (see the top right panel of <ref type="figure" coords="6,307.62,669.15,30.14,10.80">Figure 3</ref>for an example query). </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.4">Classifier View</head><p>The Feature View and the List View both focus on supporting users to interpret the rankings of features across multiple predictive models. However, it is also important for users to understand the quality of each model in predicting the appropriate outcome. The Classifier View, <ref type="figure" coords="7,54.00,134.58,18.65,9.87">Fig. 7</ref> . The Classifier View displays the results of the classification algorithms for all models. Rows represent feature selection algorithms and columns represent classification algorithms. A more detailed description of the cells can be seen in <ref type="figure" coords="7,165.80,162.97,28.42,9.87" target="#fig_5">Figure 8</ref>. The currently selected model is highlighted in orange, and the results for the same fold in different feature selection algorithms are highlighted in yellow. When users select a model, the features that make up the model are highlighted in the Feature and List views. shown in the bottom-right panel of INFUSE, is where the quality of each the predictive models can be analyzed. Typically, predictive models are evaluated using classification algorithms which provide an AUC score (area under ROC curve, the sensitivity as function of the false positive rate). Perfect models will have an AUC score of 1, whereas random guessing will have an AUC score of 0.5. The Classifier View was designed to show AUC scores for each model and fold. As illustrated in <ref type="figure" coords="7,126.24,452.41,29.93,10.80">Figure 7</ref> , each row of the Classifier View represents the predictive model that resulted from each feature selection algorithm. Each column represents a classification algorithm. Multiple classifiers are used because there are a variety of techniques to evaluate models, and in order to avoid biases, INFUSE provides the ability to compare the output from multiple classifiers. Each cell, as shown in <ref type="figure" coords="7,149.75,512.44,29.74,10.80" target="#fig_5">Figure 8</ref>, has several components. On the left, there is a bar for each of the validation folds. The height of each bar corresponds to the AUC score for each fold. There is also a slightly thicker and darker bar immediately to the right of the fold bars, and its height represents the average value across all folds. This bar also features an error bar depicting the standard deviation across the folds. Finally, to the right of the bars, there is a numerical representation of the average AUC score. As this information is important for predictive modelers to reason about the quality of models, these values are given visual prominence. The bars, however, can be used to also reason about the quality across all folds. Rows are sorted by the average AUC scores across all classification algorithms, so more accurate predictive models appear at the top of this view. Users can interact with this view in several ways. Clicking on a fold bar selects all features that were a part of this model and highlights them in the List and Feature views. The selected fold bar is highlighted in orange, and other scores this fold received by the other classifiers are highlighted in yellow so that they can easily be compared (as shown in <ref type="figure" coords="7,138.94,692.03,32.13,10.80">Figure 7.</ref>) </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Josua </head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.5">Interactive Model Builder</head><p>One of the most important aspects of INFUSE is that in addition to allowing the comparison of models, it also enables the creation of new <ref type="figure" coords="7,316.62,204.71,19.03,9.87">Fig. 9</ref>. INFUSE's Interactive Model Builder allows users to select sets of features and measure its quality. Selected feature glyphs are highlighted by saturating their color. The List View is sorted to show the selected features by their importance. After a user has made their selections , they can evaluate their model by clicking the " Evaluate Model " button. This adds a new blue row to the the Classifier View, showing the results of the evaluation for the user-defined model. models based on insights. Users can select features for model building in a variety of ways. They can select all of the features from existing models by clicking on a model in the Classifier View. This will highlight and select all of the features that were used in the model. Users can then augment these lists, or start from an empty set, by selecting individual features when clicking on them in the Feature or List view. In order to select multiple features, a lasso selection technique is available in the Ranked and Scatterplot layouts. After a feature set has been collected, INFUSE can automatically evaluate the predictive performance of the user-defined model. By clicking the " Evaluate Model " button, the new model is scored across all cross-validation folds and classifiers, and the results are added in the Classifier panel as a new blue row. In the example in <ref type="figure" coords="7,533.71,410.91,29.92,10.80">Figure 9</ref>, the user-defined model out-performed the automated models and it is ranked at the top of the Classifier View. Note that the user created model does not appear in the glyph. This is due to the fact that the user does not need to rank the features in order to obtain a classification result and that the feature set is equal for all cross-validation folds. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5">CASE STUDY</head><p>Throughout our paper, we have used a running example of a team of clinical researchers using predictive modeling to classify patients at high risk of developing diabetes. In this section, we describe how INFUSE has led to a variety of insights when exploring the features of the models. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.1">Insight 1: Data issues</head><p>When the clinical researchers learned of INFUSE's capabilities to compare multiple feature selection algorithms, they decided to expand their pipeline's feature selection algorithms from 2 to 4. The team has used Information Gain and Fisher Score extensively in prior work, and typically uses these same techniques due to their familiarity and past success. Nonetheless, the diabetes dataset introduced in Section 2.2 was new to them, and they were unsure which techniques would be the most appropriate. So, they asked their technologists to implement two new techniques: Odds Ratio and Relative Risk. After all four algorithms were available, they executed their modeling pipeline using PARAMO <ref type="bibr" coords="7,430.54,664.48,14.94,10.80" target="#b13">[13] </ref> and connected the results to IN- FUSE. Instantly, the team was surprised at the patterns that the visualization made evident. The visualization indicated that there seemed to be little agreement between their two old algorithms, and their two new algorithms for the best features. The glyphs clearly indicated that many of the features were highly ranked by two of the four feature selection algorithms, and unranked by the other two, resulting in glyphs resembling alternating half-circles, as shown in <ref type="figure" coords="7,491.40,734.22,33.59,10.80" target="#fig_7">Figure 11</ref>. <ref type="figure" coords="8,45.00,264.10,23.58,9.87">Fig. 10</ref>. The scatterplot view allows users to compare multiple types of rankings. In the case study, users became curious of the medication features that were chosen by only half of the models. When reviewing these medications with domain experts, it became clear that features picked by the upper-half algorithms were as clinically significant as those picked by the bottom-half. This indicates that merging results from feature selection algorithms makes sense for this predictive model. was quick to note that the resulting accuracy across all four models were not significantly different, so this non-overlap would have probably gone unnoticed if the team just looked at resulting predictive scores at the end of the pipeline as they typically do. As INFUSE gave them the opportunity to examine multiple algorithms at the feature-level, they were curious as to why this trend of non-overlapping feature rankings occurred. They investigated the scores associated with each feature rank and noticed that many of the features had scores of @BULLET from the Relative Risk algorithm. It turned out there was a bug within the Relative Risk implementation where a divide by zero error could happen if a feature did not occur in any of the control patients. After fixing this bug, they noticed that much of the non-overlap still was evident. Looking more closely at the algorithms provided a reason why the two new algorithms behave very differently: they realized that both of the new algorithms only look at the presence and absence of the feature between the case and controls, and do not pay attention to the feature values in any other way (e.g. distribution of values). This is in contrast to the Fisher Score and Information Gain algorithms that take the actual feature values into account. This means that for features that are present in both case and control groups in the same proportion, there is no discrimination value. One of the team members mentioned, " Each feature selection algorithm captures different types of information. INFUSE allows you to see what the effect of that information is being captured and gives you insight into the robustness of your predictive model. " As different algorithms will make sense for different purposes depending on the dataset and goals, INFUSE provides an ability to inspect the features and determine which algorithms produce ranked sets of domain-relevant features. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.2">Insight 2: Clinically relevant features</head><p>After the data issues were solved, the researchers began investigating the content of the predictive features. Using the scatterplot view, they inspected all of the medications that were ranked by all feature selection algorithms and folds and found that they were antihyperglycemic medications, which are common treatments to lower the blood sugar of diabetes patients, and made clinical sense to be ranked high. However, looking towards the center of the scatterplot, where the features are only ranked by half of the algorithms and folds, the researchers noticed a cluster of medications that had half-circle patterns like those described above. This region is highlighted in <ref type="figure" coords="8,245.69,724.25,32.82,10.80">Figure 10</ref>. By mouse-hovering these features to read their names, it became clear that those ranked high by the upper-half of the circle (Information Gain and Fisher Score) were as clinically relevant and similar as those ranked by the bottom-half algorithms (Relative Risk and Odds Ratio). This provided feedback that in predictive modeling it is not safe to assume that one single feature selection algorithm is able to detect all possible interesting features and also that having a system like INFUSE allows them to build a much richer picture of what kind of feature sets may lead to effective modeling. Without such a tool they would be restricted at evaluating one single algorithm at a time or, at best, restricting the comparison to a small number of features. </p><p>After interacting with the system one of the team members said, " If you just use one feature selection algorithm, you're only getting certain types of features. INFUSE gives you a guide to what you might be missing. Using a combination type approach <ref type="bibr" coords="8,484.27,458.05,3.79,10.71">[</ref>The clinical team is now going to re-think their strategy about how they build predictive models and may consider using features by merging top ranked features from different types of feature selection algorithms . The researchers are convinced that by merging features, in addition to the interactive model building capability, their predictive models will be improved. There remains a great deal of research to further improve the analytical process of predictive modelers. INFUSE only focuses on the feature selection step of predictive modeling. Each of the other steps would benefit from a visual interface to explore and parameterize the pipeline as well. The search capabilities also have room for improvement by allowing more complex queries like features with a given range of ranks or features picked by a given algorithm, which would ease the task of finding relevant features for a user. Also, expanding the range of the search box to filter also in the Feature View may reduce the number of overlapping glyphs in the scatterplot view. Other clutter reduction techniques could also be available to users, such as a semantic zooming overlap resolution strategy that can jitter glyphs that overlap when the view is zoomed in. Finally, to date, this tool has been used extensively for predictive modeling on clinical data. However, INFUSE was designed to be domain-independent and can easily be used for other domains in need of high-dimensional predictive modeling. Our future work includes additional case studies in other domains to ensure the robustness of our tools. This would also give the opportunity to explore the scalability of the design. Typically, the number of cross-validation folds is not more than ten. However, certain analysts may wish to compare a larger number of feature selection algorithms which would decrease the amount of space available per algorithm in the glyph. While similarly-ranked features would still appear visually alike, it may become difficult to identify certain algorithms or folds without the help of interaction. The overall number of features also plays a role in scalability concerns. In conclusion, predictive modeling techniques are increasingly being used by data scientists to understand the probability of predicted outcomes. We present INFUSE, a tool that lets users interactively create predictive models. Typically, the predictive modeling pipeline leaves users out of the loop, and the algorithms operate as a black box. By giving users the power to interact with the results of feature selection, cross validation folds, and classifiers, INFUSE has shown promise to improve the predictive models of analysts. We further demonstrated how our system can lead to important insights in a case study involving clinical researchers predicting patient outcomes from electronic medical records. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Josua Krause </head></div><figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_0" coords="1,56.99,636.56,4.23,13.82;1,66.20,635.41,224.53,9.52;1,65.96,644.87,56.03,9.52;1,56.99,656.04,4.23,13.82;1,66.20,654.89,198.17,9.52;1,65.96,664.35,82.30,9.52;1,56.99,675.52,4.23,13.82;1,66.20,674.36,227.07,9.52;1,65.96,683.83,77.95,9.52;1,55.99,697.28,211.72,9.52;1,54.00,706.74,36.31,9.52;1,119.02,706.74,93.04,9.52;1,237.17,706.74,17.93,9.52;1,54.00,716.21,205.58,9.52;1,54.00,725.67,98.15,9.52"><head>@BULLET </head><figDesc>Josua Krause is with NYU Polytechnic School of Engineering. E-mail: jk4560@nyu.edu. @BULLET Adam Perer is with IBM T.J. Watson Research Center. E-mail: adam.perer@us.ibm.com. @BULLET Enrico Bertini is with NYU Polytechnic School of Engineering. E-mail: enrico.bertini@nyu.edu. Manuscript received 31 Mar. 2014; accepted 1 Aug. 2014 ate of publication 2014; date of current version 2014. For information on obtaining reprints of this article, please send e-mail to: tvcg@computer.org. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_1" coords="5,54.00,356.00,250.38,9.87;5,54.00,365.46,250.38,9.87;5,54.00,374.93,250.38,9.87;5,54.00,384.39,250.38,9.87;5,54.00,393.86,250.38,9.87;5,54.00,403.32,250.38,9.87;5,54.00,412.79,250.38,9.87;5,54.00,422.25,250.38,9.87;5,54.00,431.72,99.40,9.87"><head>Fig. 5. </head><figDesc>Fig. 5. Different glyph designs. (a) shows fold slices with bars growing from perimeter to center whereas (b) grows from center to perimeter. (c) shows a typical starburst glyph and (d) shows a matrix using luminance to show the ranks. Note that in (b) and (c) it is difficult to see that this feature is unranked in the third fold from the right in the top left quadrant. The values in (c) are difficult to read because there is no reference to how big the values are. Luminance, as used in (d) is a harder perceptual attribute for users to interpret and distinguish than length and area are, as used by the other glyphs. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_3" coords="6,45.00,191.14,513.00,9.87;6,45.00,200.61,513.00,9.87;6,45.00,210.07,513.00,9.87;6,45.00,219.54,513.00,9.87;6,45.00,229.00,513.00,9.87;6,45.00,238.47,507.54,9.87"><head>Fig. 6. </head><figDesc>Fig. 6. Different axis combinations for the scatter-plot layout. In (a) the average rank is plotted against the pick count. Most of the features appear in the lower half because features are rarely picked by more than two algorithms in this example. The bottom-right shows features that are only chosen by two models but were ranked very high by them. (b) shows the median rank plotted against the importance. Notice that the plot looks similar to (a) since importance is a combination of the axes from (a). The axes in (c) are best rank versus average rank. Features can only appear below the diagonal. The standard deviation of the ranks is plotted against the importance in (d). The peak to the bottom right corner consists of features that are rarely picked and therefore have lower variance. The peak to the top right consists of features that are consistently high ranked. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_4" coords="6,55.34,499.13,4.60,15.56;6,64.93,497.81,103.53,10.80;6,64.93,507.77,131.39,10.80;6,55.34,529.89,4.60,15.56;6,64.93,528.57,178.29,10.80;6,64.93,538.54,174.49,10.80;6,55.34,560.66,4.60,15.56;6,64.93,559.34,155.10,10.80;6,55.34,581.46,4.60,15.56;6,64.93,580.15,96.38,10.80;6,55.34,602.27,4.60,15.56;6,64.93,600.95,108.33,10.80;6,64.93,610.91,131.39,10.80;6,55.34,633.04,4.60,15.56;6,64.93,631.72,157.92,10.80;6,64.93,641.68,131.39,10.80"><head></head><figDesc>@BULLET the average rank of a feature (ignores unranked folds and models) @BULLET the pick count of the number of combined models and cross-validation folds that picked the feature @BULLET the importance of a feature (defined above) @BULLET the best rank of the feature @BULLET the median rank of the feature (ignores unranked folds and models) @BULLET the standard deviation of the feature's ranks (ignores unranked folds and models) </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_5" coords="7,54.00,274.43,250.38,9.87;7,54.00,283.89,250.38,9.87;7,54.00,293.36,250.38,9.87;7,54.00,302.82,250.38,9.87;7,54.00,312.29,250.38,9.87;7,54.00,321.75,250.38,9.87;7,54.00,331.22,250.38,9.87;7,54.00,340.68,197.53,9.87"><head>Fig. 8. </head><figDesc>Fig. 8. Each cell in the Classifier View represents the scores of a particular model by a particular classifier. On the left, there is a bar for each of the validation folds. The height of each bar corresponds to the AUC score for each fold. Immediately to the right of the fold bars, the thicker and darker bar and its height represents the average value across all folds. This bar also features an error bar depicting the standard deviation across the folds. Finally, to the right of the bars, there is a numerical representation of the average AUC score. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_6" coords="8,488.05,458.05,69.94,10.71;8,307.62,468.02,201.90,10.71"><head></head><figDesc>with the Interactive Model Builder] will lead to stronger predictive models. " </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_7" coords="8,307.62,687.71,250.38,9.87;8,307.62,697.18,250.38,9.87;8,307.62,706.64,250.38,9.87;8,307.62,716.11,244.73,9.87"><head>Fig. 11. </head><figDesc>Fig. 11. The clinical researchers found an interesting pattern among the glyphs indicating non-overlap of feature selection algorithm results. These features were highly ranked by 2 of the 4 feature algorithms, and unranked by the other 2, resulting in glyphs that resemble half-circles. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_1" validated="false" coords="2,44.68,29.62,445.17,6.53"><figDesc coords="2,44.68,29.62,445.17,6.53">KRAUSE ET AL.: INFUSE: INTERACTIVE FEATURE SELECTION FOR PREDICTIVE MODELING OF HIGH DIMENSIONAL DATA</figDesc><table coords="3,56.07,54.29,507.11,284.08">Josua Krause 
+
+IG 
+
+FS 
+
+OR 
+
+RR 
+
+Tree 
+LogisticRegression 
+NaiveBayesian 
+KNN 
+
+.6383 
+.6108 
+.6203 
+.4594 
+
+.6309 
+.6110 
+.6124 
+.4693 
+
+.5721 
+.5752 
+.5805 
+.5048 
+
+.5721 
+.5748 
+.5798 
+.5050 
+
+GLOM FILT RATE, EST 
+GLUCOCORTICOIDS 
+GLUCOSE 
+GLUCOSE -1 HOUR 
+GLUCOSE -2 HOUR 
+GLUCOSE -3 HOUR 
+GLUCOSE, 1 HOUR 
+GLUCOSE, 1/2 HOUR 
+GLUCOSE, 2 HOUR 
+GLUCOSE, 3 HOUR 
+GLUCOSE, TWO-HOUR POSTPRANDIAL 
+HEMOGLOBIN A1C/HEMOGLOBIN.TOTA 
+HYPERGLYCEMICS 
+ANTIHYPERGLY,INCRETIN MIMETIC(GLP-1 RECEP.AGONIST) 
+ANTIHYPERGLY, (DPP-4) INHIBITOR &amp; BIGUANIDE COMB. 
+ANTIHYPERGLYCEMIC, AMYLIN ANALOG-TYPE 
+ANTIHYPERGLYCEMIC, DPP-4 INHIBITORS 
+ANTIHYPERGLYCEMIC, INSULIN-RELEASE STIMULANT TYPE 
+ANTIHYPERGLYCEMIC, INSULIN-RESPONSE ENHANCER (N-S) 
+ANTIHYPERGLYCEMIC,BIGUANIDE TYPE(NON-SULFONYLUREA) 
+ANTIHYPERGLYCEMIC,INSULIN-REL STIM.&amp; BIGUANIDE CMB 
+ANTIHYPERGLYCM,INSUL-RESP.ENHANCER &amp; BIGUANIDE CMB 
+DIGITALIS GLYCOSIDES 
+Prim Open Angle Glaucoma 
+Hypoglycemia NOS 
+Abn Glucose Toler-Deliv 
+Abn Glucose-Antepartum 
+Pure Hyperglyceridemia 
+Abnormal Glucose NEC 
+Impaired Fasting Glucose 
+
+g l 
+
+Sort by selection 
+Sort by name 
+
+Evaluate Model 
+Reset View 
+Inward Pie Glyph 
+Pick Count 
+Average Rank 
+Switch Layout 
+
+DIAGNOSIS 
+
+PROCEDURE 
+
+Medication 
+
+Lab 
+
+PROCEDURE -Cpt code 
+
+Medication -Orders 
+
+Medication -Ingredient 
+
+Lab -Lab 
+
+DIAGNOSIS -ProblemList 
+
+DIAGNOSIS -HCC 
+
+</table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_6" validated="false" coords="7,52.42,29.49,514.94,715.53"><figDesc coords="7,532.92,734.22,34.08,10.80">The team</figDesc><table coords="7,52.42,29.49,514.94,6.53">1620 
+IEEE TRANSACTIONS ON VISUALIZATION AND COMPUTER GRAPHICS, VOL. 20, NO. 1 , 
+C 
+BER 2014 
+2 DE EM 
+
+Josua Krause 
+
+4 0 
+
+Pick Count 
+
+1 
+191 
+
+Average Rank 
+
+1 
+Josua Krause 
+
+</table></figure>
+
+			<note place="foot">Task1 -Comparison of feature selection algorithms. In data sets with thousands of features, it is important to have a quick way to understand how feature selection algorithms rank different features differently. Some of the typical questions the researchers ask are: &quot; Which features are consistently ranked highly by all the algorithms? &quot; ; &quot; How much do the algorithms differ in their ranking? &quot; ; &quot; Are there features that have a high rank with some algorithms and a low rank with some others? &quot; ; &quot; How robust are the rankings with respect to different data samples? &quot; Task 2 -Comparison of classification algorithms. The output of each feature selection algorithm is used to feed a series of classification algorithms. At the end of this process, the user is left with a F ⇥ C number of performance comparisons, where F is the number of feature selection algorithms and C the number of classification algorithms. Typical questions our researchers ask are: &quot; Which combinations of feature selection and classification algorithms give the best scores? &quot; ; &quot; Are there feature selection algorithms that score consistently better across the set of classification algorithms? &quot; ; &quot; Are there classification algorithms that score consistently better across the set of feature selection algorithms? &quot; ; &quot; Which sets of features are selected in the model(s) that give the highest performance? &quot; Task 3 -Manual selection and testing of new feature sets. Related to the last question of Task 2, the researchers see value in being able to add or remove features of interest from models. This is desired because there can be additional domain-relevant knowledge, beyond model performance, to introduce a desired feature or remove an undesired one. Typical questions our researchers ask are: &quot; How does the performance of the model increase or decrease if I remove or add these features? &quot; ; &quot; How does a new model compare to the models automatically built by the system? &quot; INFUSE was designed to support these three tasks by providing a visualization of large sets of features and how these features are used by the modeling algorithms. After several design iterations, we converged on a visual design where features are first-class citizens of the visual representation: that is, each visual object in the main view represents a feature and its design and layout reflects information obtained from the algorithms. A representation centered on features aligns well with the analysts&apos; mental model and makes features easily identifiable through their names. Each feature, in fact, represents real-world entities like medications, lab tests and diagnoses, that have rich semantics and can be easily identified and understood by domain experts.</note>
+
+			<note place="foot">KRAUSE ET AL.: INFUSE: INTERACTIVE FEATURE SELECTION FOR PREDICTIVE MODELING OF HIGH DIMENSIONAL DATA</note>
+		</body>
+		<back>
+
+			<div type="acknowledgement">
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>ACKNOWLEDGMENTS </head><p>The authors thank Kenney Ng for providing his expertise in predictive modeling. The authors also thank the anonymous healthcare institution who provided the data for the clinical researchers experiments. </p></div>
+			</div>
+
+			<div type="references">
+
+				<listBibl>
+
+<biblStruct coords="9,73.92,540.51,230.45,10.80;9,73.92,550.47,230.46,10.80;9,73.92,560.43,230.47,10.80;9,73.92,570.39,230.46,10.80"  xml:id="b0">
+	<analytic>
+		<title level="a" type="main">Visual classification: an interactive approach to decision tree construction</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Ankerst</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Elsen</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Ester</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H.-P</forename>
+				<surname>Kriegel</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the fifth ACM SIGKDD international conference on Knowledge discovery and data mining</title>
+		<meeting>the fifth ACM SIGKDD international conference on Knowledge discovery and data mining</meeting>
+		<imprint>
+			<biblScope unit="page" from="392" to="396" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,73.92,580.36,59.16,10.80"  xml:id="b1">
+	<analytic>
+		<title/>
+	</analytic>
+	<monogr>
+		<title level="j">ACM</title>
+		<imprint>
+			<biblScope unit="volume">3</biblScope>
+			<biblScope unit="issue">2</biblScope>
+			<date type="published" when="1999" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,73.92,601.76,230.45,10.80;9,73.92,611.72,230.46,10.80;9,73.92,621.68,230.46,10.71;9,73.92,631.64,230.46,10.80;9,73.92,641.61,34.61,10.80"  xml:id="b2">
+	<analytic>
+		<title level="a" type="main">Towards an effective cooperation of the user and the computer for classification</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Ankerst</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Ester</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H.-P</forename>
+				<surname>Kriegel</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the sixth ACM SIGKDD international conference on Knowledge discovery and data mining</title>
+		<meeting>the sixth ACM SIGKDD international conference on Knowledge discovery and data mining</meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="2000" />
+			<biblScope unit="page" from="179" to="188" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,73.92,663.00,230.45,10.80;9,73.92,672.97,230.46,10.80;9,73.92,682.93,168.60,10.80"  xml:id="b3">
+	<analytic>
+		<title level="a" type="main">Predictive data mining in clinical medicine: current issues and guidelines</title>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Bellazzi</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Zupan</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">International journal of medical informatics</title>
+		<imprint>
+			<biblScope unit="volume">77</biblScope>
+			<biblScope unit="issue">2 21</biblScope>
+			<biblScope unit="page" from="81" to="97" />
+			<date type="published" when="2008" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,73.92,704.33,230.45,10.80;9,73.92,714.29,230.46,10.80;9,73.92,724.25,230.46,10.80;9,73.92,734.22,96.87,10.80"  xml:id="b4">
+	<analytic>
+		<title level="a" type="main">Quality metrics in highdimensional data visualization: an overview and systematization. Visualization and Computer Graphics</title>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<surname>Bertini</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Tatu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Keim</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on</title>
+		<imprint>
+			<biblScope unit="volume">17</biblScope>
+			<biblScope unit="issue">12</biblScope>
+			<biblScope unit="page" from="2203" to="2212" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,336.54,51.18,230.46,10.80;9,336.54,61.14,230.46,10.71;9,336.54,71.10,108.53,10.80"  xml:id="b5">
+	<monogr>
+		<title level="m" type="main">Medical informatics: knowledge management and data mining in biomedicine</title>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Chen</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<forename type="middle">S</forename>
+				<surname>Fuller</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Friedman</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Hersh</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2006" />
+			<publisher>Springer</publisher>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,336.54,90.00,230.45,10.80;9,336.54,99.97,230.46,10.80;9,336.54,109.93,230.46,10.80;9,336.54,119.89,230.47,10.80;9,336.54,129.85,34.61,10.80"  xml:id="b6">
+	<analytic>
+		<title level="a" type="main">iVisClassifier: An interactive visual analytics system for classification based on supervised dimension reduction</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Choo</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Lee</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Kihm</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Park</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Visual Analytics Science and Technology (VAST), 2010 IEEE Symposium on</title>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2010" />
+			<biblScope unit="page" from="27" to="34" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,336.54,148.76,230.45,10.80;9,336.54,158.72,230.46,10.80;9,336.54,168.68,185.13,10.80"  xml:id="b7">
+	<analytic>
+		<title level="a" type="main">Coordinating computational and visual approaches for interactive feature selection and multivariate clustering</title>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Guo</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Information Visualization</title>
+		<imprint>
+			<biblScope unit="volume">2</biblScope>
+			<biblScope unit="issue">4</biblScope>
+			<biblScope unit="page" from="232" to="246" />
+			<date type="published" when="2001-03" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,336.54,187.58,230.45,10.80;9,336.54,197.54,230.46,10.80;9,336.54,207.51,206.82,10.80"  xml:id="b8">
+	<analytic>
+		<title level="a" type="main">Mining electronic health records: towards better research applications and clinical care</title>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<forename type="middle">B</forename>
+				<surname>Jensen</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<forename type="middle">J</forename>
+				<surname>Jensen</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Brunak</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Nature Reviews Genetics</title>
+		<imprint>
+			<biblScope unit="volume">13</biblScope>
+			<biblScope unit="issue">6 21</biblScope>
+			<biblScope unit="page" from="395" to="405" />
+			<date type="published" when="2012" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,336.54,226.41,230.45,10.80;9,336.54,236.37,230.46,10.80;9,336.54,246.33,230.46,10.80;9,336.54,256.29,57.03,10.80"  xml:id="b9">
+	<analytic>
+		<title level="a" type="main">Interactive dimensionality reduction through user-defined combinations of quality metrics</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Johansson</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Johansson</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE transactions on visualization and computer graphics</title>
+		<imprint>
+			<biblScope unit="volume">15</biblScope>
+			<biblScope unit="issue">31</biblScope>
+			<biblScope unit="page" from="993" to="1000" />
+			<date type="published" when="2009" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,336.54,275.19,230.45,10.80;9,336.54,285.16,145.69,10.80"  xml:id="b10">
+	<monogr>
+		<title level="m" type="main">Applied Predictive Modeling</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Kuhn</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Johnson</surname>
+			</persName>
+		</author>
+		<imprint>
+			<publisher>Springer</publisher>
+			<pubPlace>London, Limited, 2013</pubPlace>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,336.54,304.06,230.45,10.80;9,336.54,314.02,230.46,10.80;9,336.54,323.98,230.46,10.71;9,336.54,333.95,156.01,10.80"  xml:id="b11">
+	<analytic>
+		<title level="a" type="main">Guiding feature subset selection with an interactive visualization</title>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>May</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Bannach</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Davey</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Ruppert</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Kohlhammer</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">IEEE Conference on Visual Analytics Science and Technology (VAST)</title>
+		<imprint>
+			<date type="published" when="2001" />
+			<biblScope unit="page" from="111" to="120" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,336.54,352.85,230.45,10.80;9,336.54,362.81,230.47,10.80;9,336.54,372.77,230.46,10.80;9,336.54,382.73,34.61,10.80"  xml:id="b12">
+	<analytic>
+		<title level="a" type="main">A partition-based framework for building and validating regression models. Visualization and Computer Graphics</title>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Muhlbacher</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Piringer</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on</title>
+		<imprint>
+			<biblScope unit="volume">19</biblScope>
+			<biblScope unit="issue">12</biblScope>
+			<biblScope unit="page" from="1962" to="1971" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,336.54,401.63,230.45,10.80;9,336.54,411.60,230.46,10.80;9,336.54,421.56,230.46,10.80;9,336.54,431.52,178.34,10.80"  xml:id="b13">
+	<analytic>
+		<title level="a" type="main">PARAMO: A PARAllel predictive MOdeling platform for healthcare analytic research using electronic health records</title>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Ng</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Ghoting</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<forename type="middle">R</forename>
+				<surname>Steinhubl</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<forename type="middle">F</forename>
+				<surname>Stewart</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Malin</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Sun</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Journal of Biomedical Informatics</title>
+		<imprint>
+			<date type="published" when="2001-05" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,336.54,450.42,230.45,10.80;9,336.54,460.39,230.46,10.80;9,336.54,470.35,127.27,10.80"  xml:id="b14">
+	<analytic>
+		<title level="a" type="main">A rank-by-feature framework for interactive exploration of multidimensional data</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Seo</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Shneiderman</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Information Visualization</title>
+		<imprint>
+			<biblScope unit="volume">4</biblScope>
+			<biblScope unit="issue">31</biblScope>
+			<biblScope unit="page" from="96" to="113" />
+			<date type="published" when="2005" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,336.54,489.25,230.45,10.80;9,336.54,499.21,230.46,10.80;9,336.54,509.17,230.47,10.80;9,336.54,519.14,161.87,10.80"  xml:id="b15">
+	<analytic>
+		<title level="a" type="main">Tropical cyclone trend analysis using enhanced parallel coordinates and statistical analytics</title>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<forename type="middle">A</forename>
+				<surname>Steed</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<forename type="middle">J</forename>
+				<surname>Fitzpatrick</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">E</forename>
+				<surname>Swan</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Jankun-Kelly</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Cartography and Geographic Information Science</title>
+		<imprint>
+			<biblScope unit="volume">36</biblScope>
+			<biblScope unit="issue">32</biblScope>
+			<biblScope unit="page" from="251" to="265" />
+			<date type="published" when="2009" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,336.54,538.04,230.45,10.80;9,336.54,548.00,230.46,10.80;9,336.54,557.96,230.46,10.80;9,336.54,567.93,230.46,10.71;9,336.54,577.89,121.52,10.80"  xml:id="b16">
+	<analytic>
+		<title level="a" type="main">Guided analysis of hurricane trends using statistical processes integrated with interactive parallel coordinates</title>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<forename type="middle">A</forename>
+				<surname>Steed</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Swan</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Jankun-Kelly</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<forename type="middle">J</forename>
+				<surname>Fitzpatrick</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Visual Analytics Science and Technology</title>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2009" />
+			<biblScope unit="page" from="19" to="26" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,336.54,596.79,230.45,10.80;9,336.54,606.75,230.46,10.80;9,336.54,616.71,230.46,10.71;9,336.54,626.68,230.46,10.80;9,336.54,636.64,174.58,10.80"  xml:id="b17">
+	<analytic>
+		<title level="a" type="main">PaintingClass: Interactive Construction , Visualization and Exploration of Decision Trees</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<forename type="middle">T</forename>
+				<surname>Teoh</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">K.-L</forename>
+				<surname>Ma</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the Ninth ACM SIGKDD International Conference on Knowledge Discovery and Data Mining, KDD &apos;03</title>
+		<meeting>the Ninth ACM SIGKDD International Conference on Knowledge Discovery and Data Mining, KDD &apos;03<address><addrLine>New York, NY, USA</addrLine></address></meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="2003" />
+			<biblScope unit="page" from="667" to="672" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,336.54,655.54,230.46,10.80;9,336.54,665.50,230.46,10.80;9,336.54,675.46,230.46,10.80;9,336.54,685.43,84.91,10.80"  xml:id="b18">
+	<analytic>
+		<title level="a" type="main">Brushing dimensions– a dual visual analysis model for high-dimensional data</title>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Turkay</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Filzmoser</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Hauser</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE transactions on visualization and computer graphics</title>
+		<imprint>
+			<biblScope unit="volume">17</biblScope>
+			<biblScope unit="issue">12</biblScope>
+			<biblScope unit="page" from="2591" to="2600" />
+			<date type="published" when="2001-03" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,336.54,704.33,230.45,10.80;9,336.54,714.29,230.46,10.80;9,336.54,724.25,230.46,10.71;9,336.54,734.22,117.04,10.80"  xml:id="b19">
+	<analytic>
+		<title level="a" type="main">BaobabView: Interactive construction and analysis of decision trees</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Van Den Elzen</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">J</forename>
+				<surname>Van Wijk</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Visual Analytics Science and Technology (VAST), 2011 IEEE Conference on</title>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<biblScope unit="page" from="151" to="160" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,52.69,29.99,15.40,6.53;9,201.45,29.99,302.04,6.53;9,520.15,29.99,47.48,6.53"  xml:id="b20">
+	<analytic>
+		<title/>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE TRANSACTIONS ON VISUALIZATION AND COMPUTER GRAPHICS</title>
+		<imprint>
+			<biblScope unit="volume">20</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<date type="published" when="2014" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,497.33,29.99,38.46,6.53"  xml:id="b21">
+	<monogr>
+		<title/>
+		<author>
+			<persName>
+				<forename type="first">De</forename>
+				<surname>Em</surname>
+			</persName>
+		</author>
+		<imprint/>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,64.92,51.18,230.45,10.80;10,64.92,61.14,230.46,10.80;10,64.92,71.10,230.46,10.80;10,64.92,81.07,230.46,10.80;10,64.92,91.03,94.38,10.80"  xml:id="b22">
+	<analytic>
+		<title level="a" type="main">Interactive hierarchical dimension ordering, spacing and filtering for exploration of high dimensional datasets</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Wang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Peng</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<forename type="middle">O</forename>
+				<surname>Ward</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<forename type="middle">A</forename>
+				<surname>Rundensteiner</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Information Visualization , 2003. INFOVIS 2003. IEEE Symposium on</title>
+		<imprint>
+			<publisher>IEEE</publisher>
+			<date type="published" when="2003" />
+			<biblScope unit="page" from="105" to="112" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,64.92,108.96,230.45,10.80;10,64.92,118.92,200.58,10.80"  xml:id="b23">
+	<analytic>
+		<title level="a" type="main">Graph-Theoretic Scagnostics</title>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<surname>Wilkinson</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Anand</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<forename type="middle">L</forename>
+				<surname>Grossman</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">INFOVIS</title>
+		<imprint>
+			<date type="published" when="2005" />
+			<biblScope unit="page">21</biblScope>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,64.92,136.86,230.45,10.80;10,64.92,146.82,230.46,10.80;10,64.92,156.78,230.46,10.80;10,64.92,166.74,106.84,10.80"  xml:id="b24">
+	<analytic>
+		<title level="a" type="main">Interactive hierarchical displays: a general framework for visualization and exploration of large multivariate data sets</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Yang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<forename type="middle">O</forename>
+				<surname>Ward</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<forename type="middle">A</forename>
+				<surname>Rundensteiner</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Computers &amp; Graphics</title>
+		<imprint>
+			<biblScope unit="volume">27</biblScope>
+			<biblScope unit="issue">31</biblScope>
+			<biblScope unit="page" from="265" to="283" />
+			<date type="published" when="2003" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,64.92,184.68,230.45,10.80;10,64.92,194.64,230.46,10.80;10,64.92,204.60,230.46,10.80;10,64.92,214.57,230.46,10.80;10,64.92,224.53,49.47,10.80"  xml:id="b25">
+	<analytic>
+		<title level="a" type="main">Value and Relation Display for Interactive Exploration of High Dimensional Datasets</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Yang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Patro</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Huang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Mehta</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<forename type="middle">O</forename>
+				<surname>Ward</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<forename type="middle">A</forename>
+				<surname>Rundensteiner</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">IEEE Symposium on Information Visualization</title>
+		<imprint>
+			<publisher>IEEE Computer Society</publisher>
+			<date type="published" when="2004" />
+			<biblScope unit="page" from="73" to="80" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+				</listBibl>
+			</div>
+		</back>
+	</text>
+</TEI>

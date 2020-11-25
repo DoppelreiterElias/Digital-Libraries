@@ -1,0 +1,1777 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.tei-c.org/ns/1.0 /home/pisenberg/grobid/grobid-home/schemas/xsd/Grobid.xsd"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+	<teiHeader xml:lang="en">
+		<encodingDesc>
+			<appInfo>
+				<application version="0.4.1" ident="GROBID" when="2016-09-09T13:48+0000">
+					<ref target="https://github.com/kermitt2/grobid">GROBID - A machine learning software for extracting information from scholarly documents</ref>
+				</application>
+			</appInfo>
+		</encodingDesc>
+		<fileDesc>
+			<titleStmt>
+				<title level="a" type="main">A Partition-Based Framework for Building and Validating Regression Models</title>
+			</titleStmt>
+			<publicationStmt>
+				<publisher/>
+				<availability status="unknown"><licence/></availability>
+			</publicationStmt>
+			<sourceDesc>
+				<biblStruct>
+					<analytic>
+						<author>
+							<persName>
+								<forename type="first">Thomas</forename>
+								<forename type="middle">M</forename>
+							</persName>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Harald</forename>
+								<surname>Piringer</surname>
+							</persName>
+						</author>
+						<title level="a" type="main">A Partition-Based Framework for Building and Validating Regression Models</title>
+					</analytic>
+					<monogr>
+						<imprint>
+							<date/>
+						</imprint>
+					</monogr>
+				</biblStruct>
+			</sourceDesc>
+		</fileDesc>
+		<profileDesc>
+			<textClass>
+				<keywords>
+					<term>Index Terms—Regression</term>
+					<term>model building</term>
+					<term>visual knowledge discovery</term>
+					<term>feature selection</term>
+					<term>data partitioning</term>
+					<term>guided visualization</term>
+				</keywords>
+			</textClass>
+			<abstract>
+				<p>Visualizing the distribution of a city&apos;s natural gas consumption over features and feature pairs Relevance ranking of features Relevance ranking of feature pairs a c b Fig. 1. Analyzing relationships using our framework: The conditional distribution of the dependent variable natural gas consumption is visualized over partitioned input features (a) and feature pairs (b), which are ranked by measures quantifying their relevance (c). Abstract—Regression models play a key role in many application domains for analyzing or predicting a quantitative dependent variable based on one or more independent variables. Automated approaches for building regression models are typically limited with respect to incorporating domain knowledge in the process of selecting input variables (also known as feature subset selection). Other limitations include the identification of local structures, transformations, and interactions between variables. The contribution of this paper is a framework for building regression models addressing these limitations. The framework combines a qualitative analysis of relationship structures by visualization and a quantification of relevance for ranking any number of features and pairs of features which may be categorical or continuous. A central aspect is the local approximation of the conditional target distribution by partitioning 1D and 2D feature domains into disjoint regions. This enables a visual investigation of local patterns and largely avoids structural assumptions for the quantitative ranking. We describe how the framework supports different tasks in model building (e.g., validation and comparison), and we present an interactive workflow for feature subset selection. A real-world case study illustrates the step-wise identification of a five-dimensional model for natural gas consumption. We also report feedback from domain experts after two months of deployment in the energy sector, indicating a significant effort reduction for building and improving regression models.</p>
+			</abstract>
+		</profileDesc>
+	</teiHeader>
+	<text xml:lang="en">
+		<body>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1">INTRODUCTION</head><p> Regression analysis is a statistical technique for modeling a quantitative dependent variable Y as a function of one or more continuous or categorical independent variables X 1 to X n . Common applications of regression models include prediction and sensitivity analysis of Y with respect to changes of independent variables. The field of tistical learning has developed many types of regression models and techniques supporting the process of model selection <ref type="bibr" coords="1,489.51,606.02,13.72,8.06" target="#b19">[21]</ref> . This process comprises identifying suitable values for model-specific parameters as well as selecting a minimal descriptive subset of independent variables, also known as feature subset selection <ref type="bibr" coords="1,468.54,635.91,14.87,8.06" target="#b17">[19] </ref>(we use the term feature as a synonym for independent variable in this paper). Benefits of having a minimal number of features include an improved model interpretability, reduced training times, and a reduced probability of overfitting while still providing an accurate fit <ref type="bibr" coords="1,460.85,675.75,13.70,8.06" target="#b19">[21]</ref>. In general, the trade-off between model complexity and accuracy explains one challenge in building regression models. Another challenge arises from the inability of incorporating domain knowledge into common automatic feature selection techniques (e.g., step-wise re- gression <ref type="bibr" coords="1,326.21,726.40,13.50,8.06" target="#b11">[13]</ref>). As different techniques may yield different results and often reflect aspects of the training data rather than domain knowledge, <ref type="figure" coords="2,22.50,163.65,19.41,7.53">Fig. 2</ref>. Synthetic examples motivating goals of our framework. (a -c) Local variations of the conditional distribution of a dependent variable Y 1 explain X1 as relevant due to a non-monotonic relationship with Y 1, X2 as locally relevant, and X3 as irrelevant. Green rectangles indicate local dispersion and gray rectangles show global dispersion of Y 1 as measured by interquartile ranges. (d) Another dependent variable Y 2 is explained by the interaction of two features X4 and X5. " automated variable selection procedures are no substitute for careful thought " <ref type="bibr" coords="2,57.19,222.02,9.50,8.06" target="#b0">[1]</ref>. Additionally, many types of regression models imply structural assumptions (e.g., linear relationships). Knowledge about complex or local relationships (see <ref type="figure" coords="2,155.55,241.95,26.10,8.06">Fig. 2a</ref>and b) as well as about interactions of variables (see <ref type="figure" coords="2,130.12,251.91,25.06,8.06">Fig. 2d</ref>) is thus crucial for selecting an appropriate model type and for identifying suitable transformations of variables such as the logarithm, polynomial basis expansions (e.g., </p><formula>X 2 = X 2 1 ) or binary operations (e.g., X 3 = X 1 · X 2 )</formula><p>. According to recent studies of Kandel et al. <ref type="bibr" coords="2,109.02,291.74,13.77,8.06" target="#b22">[24]</ref>, feature selection and transformation are two of the most time-consuming challenges in data analysis. This paper proposes an interactive framework for building regression models addressing these challenges. The approach combines a visualization of relationships between features and a quantitative target and a quantification of these relationships for ranking them by relevance. Using derived quantities like residuals as target supports different tasks of model building including feature subset selection, model validation, and model comparison. A central goal is to enable the identification of complex relationships (e.g., having discontinuities or local extrema) and local relationships (i.e., features explaining the target across a part of their domain, see <ref type="figure" coords="2,161.91,401.32,23.11,8.06">Fig. 2b</ref>). To achieve this goal, a key idea is partitioning the feature space into disjoint regions for visualization and for quantification, providing an adjustable level of detail between a point-wise and a global analysis <ref type="bibr" coords="2,179.23,431.21,13.78,8.06" target="#b27">[29]</ref> . The framework supports inspecting individual features as well as pairs of features in order to enable the discovery of arbitrary bivariate interactions (see <ref type="figure" coords="2,244.21,451.13,20.10,8.06">Fig. 1</ref>). The application background motivating this work is the need for accurate prediction models in the energy sector. Most figures of this paper and an exemplary case study (Sec. 5.1) refer to predicting the consumption of natural gas in a large city. In this domain, a precise knowledge of the combined effects of meteorological and other factors on the consumption is crucial for minimizing costs and guaranteeing supply. Operating on generic continuous or categorical data, however, the proposed framework is not limited to any domain but addresses very general issues of regression analysis and knowledge discovery. Specifically, the contributions of this paper include: @BULLET techniques for ranking variables and pairs of variables by their usefulness in predicting a quantitative target. @BULLET a design space of partition-based visualizations showing local structures in the target distribution over one or two variables. @BULLET applications of the framework for model validation and comparison , and an interactive workflow for feature selection. @BULLET an evaluation of the framework based on a case study of a realworld modeling task and user feedback after two months of deployment in the energy sector. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2">RELATED WORK</head><p> Interactive pattern discovery and model building are key issues of Visual Analytics. Examples include clustering <ref type="bibr" coords="2,186.08,696.50,13.76,8.06" target="#b28">[30]</ref>, classification <ref type="bibr" coords="2,255.65,696.50,13.81,8.06" target="#b45">[47]</ref>, and learning distance functions <ref type="bibr" coords="2,136.76,706.46,9.50,8.06" target="#b7">[8]</ref> . This paper focuses on regressionrelated tasks, such as feature selection and model validation. Regression has traditionally been a key issue in statistics, resulting in a variety of model types <ref type="bibr" coords="2,121.62,736.35,14.99,8.06" target="#b19">[21] </ref>as well as methods supporting model selection <ref type="bibr" coords="2,318.89,212.07,13.71,8.06" target="#b17">[19]</ref>, model comparison <ref type="bibr" coords="2,406.02,212.07,13.71,8.06" target="#b25">[27]</ref>, and model validation <ref type="bibr" coords="2,501.76,212.07,13.72,8.06" target="#b41">[43]</ref> . Numerous measures have been proposed for quantifying relationships, many of them being limited to certain classes such as linear or monotonic relationships (e.g., Pearson correlation). As a more general indicator , the Maximum Information Coefficient (MIC) measures the mutual information of two features based on partitioning them at multiple resolutions <ref type="bibr" coords="2,340.24,271.84,13.82,8.06" target="#b35">[37]</ref>. Similar to our approach, the partitioning of MIC largely avoids structural assumptions, but we do not require a categorization of the dependent variable. More importantly, quantifying a relationship by a single value incurs a loss of information which may hide important structural aspects, e.g., due to data quality issues. For this reason, a comparison of multiple measures is advisable <ref type="bibr" coords="2,500.29,321.64,9.55,8.06" target="#b0">[1]</ref>. The Rank-by-Feature Framework (RbFF) <ref type="bibr" coords="2,444.29,333.77,14.88,8.06" target="#b37">[39] </ref>has been proposed as an interactive approach to support a comparison of statistical measures in combination with a visualization of qualitative aspects. The ability to handle univariate and bivariate measures and the good scalability for high-dimensional data motivated us to adopt the layout of the RbFF for our framework. However, the RbFF was neither designed to support regression-related tasks in general, nor the detection of relationships to a quantitative target in particular. The same is true for other techniques supporting an exploration of high-dimensional data by ranking visualizations based on screen-space metrics <ref type="bibr" coords="2,452.32,423.42,13.81,8.06" target="#b48">[50]</ref>, class consistency measures <ref type="bibr" coords="2,320.70,433.38,13.79,8.06" target="#b39">[41]</ref>, and the interestingness of point clouds <ref type="bibr" coords="2,480.05,433.38,13.80,8.06" target="#b42">[44]</ref>. A variety of approaches addresses the identification of multidimensional relationships in a more general sense. Besides common multivariate visualization techniques like scatterplot matrices <ref type="bibr" coords="2,505.59,465.30,14.90,8.06" target="#b9">[11] </ref>and parallel coordinates <ref type="bibr" coords="2,359.20,475.27,13.81,8.06" target="#b21">[23]</ref> , some approaches explicitly denote a quantitative dependent variable. Guo et al. <ref type="bibr" coords="2,428.46,485.23,15.00,8.06" target="#b16">[18] </ref>support the discovery of multivariate trends. An interactive visualization of the model parameter space enables to detect multiple trends but is limited to linear models . Barlowe et al. <ref type="bibr" coords="2,351.76,515.11,10.45,8.06" target="#b2">[3] </ref>display distributions of partial derivatives for an identification of multi-dimensional relationships. The authors describe an interactive workflow for model construction, dimension reduction, and knowledge discovery. However, the interpretation of the visualizations may require significant training and it remains unclear in how far distributions of partial derivatives convey complex local structures. Other approaches support an exploration of relationships based on visualizing high-dimensional scalar functions by showing topological structures <ref type="bibr" coords="2,323.23,594.92,14.86,8.06" target="#b14">[16] </ref>or projections based on slicing <ref type="bibr" coords="2,458.06,594.92,14.29,8.06" target="#b46">[48,</ref><ref type="bibr" coords="2,475.51,594.92,10.70,8.06" target="#b43"> 45]</ref> . While useful for understanding an existing model, most tasks related to model building are not directly supported by such visualizations. While some approaches address sensitivity analysis <ref type="bibr" coords="2,481.18,626.84,14.22,8.06" target="#b15">[17,</ref><ref type="bibr" coords="2,497.48,626.84,6.46,8.06" target="#b8"> 9]</ref> , providing dedicated support for regression-related tasks has received little attention in Visual Analytics so far. Friendly uses shaded mosaic dis- plays <ref type="bibr" coords="2,305.95,656.73,14.87,8.06" target="#b13">[15] </ref>to visualize averaged model residuals or target values across combinations of categorical dimensions. Described as a static diagram , this approach does not address aspects of high-dimensional data such as ranking and iterative feature selection. Moreover, handling continuous variables is not discussed. Berger et al. <ref type="bibr" coords="2,471.30,696.57,10.55,8.06" target="#b5">[6] </ref>use regression models for a continuous exploration of sampled parameter spaces, but do not cover model building. HyperMoVal <ref type="bibr" coords="2,442.86,716.50,15.01,8.06" target="#b30">[32] </ref> addresses the validation of regression models by relating validation data to function graphs of models based on slicing. However, this point-wise level of detail is inappropriate to provide an overview over local structures. Partition-based visualization techniques address this shortcoming by providing an intermediate level of detail. Converting continuous data to a frequency-based representation is often referred to as bin- ning <ref type="bibr" coords="3,49.86,93.27,13.79,8.06" target="#b38">[40]</ref> . The goal is reducing complexity and ensuring the scalability for many data samples while preserving local structures to some degree. Variable binned scatterplots adapt bin size to the characteristics of the data for visualizing large data without overlapping <ref type="bibr" coords="3,264.63,123.15,13.82,8.06" target="#b18">[20]</ref>. Slingsby et al. <ref type="bibr" coords="3,84.17,133.11,14.88,8.06" target="#b40">[42] </ref> explored the effects of alternative layouts in spacefilling hierarchical displays to show multiple aspects of large multivariate datasets. We provide a discussion of different layouts for partition-based visualizations of 1D and 2D domains in the context of regression. Using partitioning for iterative feature subset selection, the work by May et al. <ref type="bibr" coords="3,70.74,192.88,14.99,8.06" target="#b27">[29] </ref>is most similar to ours. Mutual information measures between a target and partitioned features are visualized individually for each partition to show the local relevance while global aggregates rank features by relevance. Operating on a categorical target, their approach also supports classification while the required categorization of continuous targets introduces a problematic loss of detail for regression . In contrast, our framework does not categorize the target. This enables the visualization of local distributions as required for many tasks in regression. Moreover, our framework supports pairs of features as needed for detecting interactions between features. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3">A PARTITION-BASED FRAMEWORK FOR REGRESSION</head><p>This section introduces our framework for regression-related tasks. The approach is to support an exploration of relationships between a feature space X of continuous or categorical independent variables X 1 to X n and a quantitative target T . As shown in <ref type="figure" coords="3,222.17,340.46,20.82,8.06">Fig. 1</ref>, the main layout elements of our framework comprise tables of measures quantifying the relevance for individual features (1D) and pairs of features (2D) with respect to T as well as corresponding small-multiple visualizations conveying structural details of relationships. These visualizations include a list of plots (1D) and a half-diagonal matrix of plots showing all pair-wise combinations of features (2D). Ordering a table by a measure also ranks the corresponding small-multiple visualization as a guidance to potentially relevant plots (inferring an ordering for the matrix is discussed in previous work <ref type="bibr" coords="3,190.52,430.12,13.48,8.06" target="#b29">[31]</ref>). The basis of visualization and ranking is the fact that relationships between a feature X i or a pair of features X i , X j (henceforth abbreviated as X i <ref type="bibr" coords="3,48.90,457.70,14.30,11.66;3,63.78,457.70,2.75,11.66">[, X j ]</ref> ) and T manifest in local variations of the conditional distribution P(T |X i <ref type="bibr" coords="3,82.86,467.66,14.30,11.66;3,97.74,467.66,3.00,11.66">[, X j ]</ref>) (see <ref type="figure" coords="3,124.89,470.06,20.70,8.06">Fig. 2</ref>). Expressing the local mean values of the conditional distribution as a function is the fundamental concept of regression <ref type="bibr" coords="3,96.99,489.98,13.82,8.06" target="#b19">[21]</ref> . The key idea of our framework is approximating P(T |X i <ref type="bibr" coords="3,70.26,497.54,14.30,11.66;3,85.14,497.54,3.00,11.66">[, X j ]</ref>) by partitioning the one-or two-dimensional domains into disjoint regions. Inspired by May et al. <ref type="bibr" coords="3,197.05,509.90,13.84,8.06" target="#b27">[29]</ref>, the rationale is to provide an adjustable and computationally efficient level of intermediate detail between a point-wise and a global analysis. The subsequent sections describe different aspects of partitionbased exploration of relationships: Section 3.1 discusses general considerations and approaches to partitioning X i <ref type="bibr" coords="3,196.74,557.30,14.30,11.66;3,211.62,557.30,2.38,11.66">[, X j ]</ref> . Section 3.2 describes partition-based visualizations that approximate the conditional distribution of T . Section 3.3 discusses a partition-based quantification of relevance. In addition to exploring relationships between X and a user-selected dependent variable Y (i.e., T = Y ), Section 3.4 describes the application of our framework to common tasks in statistical modeling by using various derived quantities as T . Details on how to perform the partitioning, the visualization, the ranking, and the application are to a large degree independent of each other and can be extended separately, which is the motivation for us to refer to our approach as a framework. Section 3.5 then extends this framework to support an interactive workflow for feature subset selection. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.1">Partitioning</head><p>X i <ref type="bibr" coords="3,112.86,683.78,14.30,11.66;3,127.74,683.78,2.48,11.66">[, X j ] </ref>This section discusses general aspects of partitioning X i <ref type="bibr" coords="3,228.06,694.10,14.30,11.66;3,242.94,694.10,2.48,11.66">[, X j ] </ref>which are the basis for partition-based visualization and ranking in subsequent sections. In computer science, subdivision is a key concept to reduce a complex problem to a set of more simple ones. In the context of multidimensional data, examples of hierarchical subdivision include search algorithms <ref type="bibr" coords="3,360.89,53.42,15.00,8.06" target="#b10">[12] </ref>and image processing <ref type="bibr" coords="3,460.23,53.42,13.71,8.06" target="#b36">[38]</ref> . In statistics, treebased methods in general <ref type="bibr" coords="3,388.96,63.38,15.01,8.06" target="#b19">[21] </ref>and regression trees in particular have received substantial attention in literature due to their ability to flexibly capture relationships of complex structure <ref type="bibr" coords="3,447.16,83.31,9.71,8.06" target="#b6">[7,</ref><ref type="bibr" coords="3,459.07,83.31,10.68,8.06" target="#b12"> 14]</ref>. Our approach to approximate P(T |X i <ref type="bibr" coords="3,441.54,92.18,14.30,11.66;3,456.42,92.18,3.00,11.66">[, X j ]</ref> ) is inspired by regression trees in that an adaptation to complex structures is based on considering disjoint regions of X i <ref type="bibr" coords="3,401.94,112.10,14.30,11.66;3,416.82,112.10,2.48,11.66">[, X j ] </ref> separately from each other. However , we have different goals and constraints than most approaches to building regression trees. Rather than building an accurate regression tree for prediction, the goal of our approach is to locally approximate P(T |X i <ref type="bibr" coords="3,319.38,151.94,14.30,11.66;3,334.26,151.94,3.00,11.66">[, X j ]</ref>) for a potentially large number of features. Due to this goal, an individual partitioning is required for each X i <ref type="bibr" coords="3,483.78,161.90,14.30,11.66;3,498.66,161.90,2.38,11.66">[, X j ]</ref>, as opposed to applying the same partitioning to all features <ref type="bibr" coords="3,463.39,174.26,13.66,8.06" target="#b32">[34]</ref> . The result of partitioning X i <ref type="bibr" coords="3,334.98,181.82,14.30,11.66;3,349.86,181.82,2.48,11.66">[, X j ] </ref>is a set of disjoint regions where any data sample is contained in one region. For one-dimensional partitioning, each region is described by either a category if X i is categorical or an interval if X i is continuous. For two-dimensional partitioning, these restrictions independently apply to X i and X j , i.e., a region of two continuous features is an axis-aligned rectangle. Besides simplicity, the main reason for these restrictions is to enable a flexible visualization (see Sec. 3.2). We identified three requirements for partitioning X i <ref type="bibr" coords="3,492.06,252.98,14.30,11.66;3,506.94,252.98,2.51,11.66">[, X j ]</ref> : 1) General applicability: Assumptions about the distribution of X i <ref type="bibr" coords="3,527.10,262.94,14.30,11.66;3,541.98,262.94,2.48,11.66">[, X j ] </ref> should be avoided. 2) Fast computation: In the sense of Visual Analytics , the ultimate goal is to provide an interactive framework enabling workflows which tightly couple user-centric and computation-centric steps (see Sec. 3.5). Significant delays should thus be avoided when users change T , X or partition-specific parameters. Therefore, partitioning all X i <ref type="bibr" coords="3,340.14,322.70,14.30,11.66;3,355.02,322.70,2.48,11.66">[, X j ] </ref>should be feasible within at most a few seconds also in case of a large number of features for 1D and especially 2D analysis. 3) Adjustability: The degree of detail should be adjustable intuitively. This implies that regions should have a similar size in some sense in order to make regions comparable for a given distribution of data. Concerning adjustability, the size of a region can be interpreted in different ways, i.e., as the size in the domain of X i <ref type="bibr" coords="3,475.26,383.90,14.30,11.66;3,490.14,383.90,2.38,11.66">[, X j ]</ref>, or as the size with respect to the number of data samples. As a consequence, our framework supports two different approaches for partitioning X i <ref type="bibr" coords="3,524.94,403.82,14.30,11.66;3,539.82,403.82,2.38,11.66">[, X j ]</ref>. Domain-uniform partitioning. This approach subdivides each continuous feature X i into N intervals of equal domain size between the minimum and the maximum of X i . The parameter N thus adjusts the degree of detail of the partitioning. For categorical features, the categorization is taken as subdivision. For feature pairs, the regions are the Cartesian product of the individual subdivisions of X i and X j . Domainuniform partitioning has linear effort and is very fast. However, the distribution of data samples within X i <ref type="bibr" coords="3,428.82,483.50,14.30,11.66;3,443.70,483.50,2.48,11.66">[, X j ] </ref>is ignored. While this may be desirable, it is generally a problem in the presence of outliers and non-uniform distributions. Specifically, many resulting regions may be empty or contain a statistically insignificant number of samples. Frequency-uniform partitioning. The goal of this approach is to define regions containing an identical (or at least similar) number of data samples, i.e., having a same relative frequency. Inspired by Kd- trees <ref type="bibr" coords="3,313.13,557.07,9.61,8.06" target="#b4">[5]</ref>, the key concept is based on a binary hierarchical subdivision of continuous features by recursively splitting the data at the median of the respective subset of samples. In order to be also applicable to ordinal data, our consideration is that data samples having identical values in X i <ref type="bibr" coords="3,337.62,594.50,14.30,11.66;3,352.50,594.50,2.48,11.66">[, X j ] </ref>must be assigned to the same region. In this case, we shift the splitting location into the direction that generates more equally-sized subsets. For nominal data, the categorization is taken as the subdivision even for differently sized categories. For feature pairs, the subdivisions of X i and X j are interleaved, starting with the feature where the median is closer to the center of the domain. In case of a categorical feature X i and a continuous X j , the approach splits X j separately for each category of X i , i.e., the subdivision of X i is done first. The recursion stops if either (1) the entire subset of data samples has identical values in X i <ref type="bibr" coords="3,401.94,684.14,14.30,11.66;3,416.82,684.14,2.48,11.66">[, X j ] </ref>or (2) a split would create at least one region having less than a user-defined minimal significance S min of data samples, or (3) the recursion of any dimension has reached a maximal depth D max . The reason for criterion 3 is to enforce a comparable degree of detail for any feature X i in different pair-wise combinations X i , X j and X i , X k which is largely independent of X j and X k . Without criterion 3, X j being categorical could lead to a much more fine-grained subdivision of X i than achieved for X k being continuous. In general, D max is the key parameter for adjusting the degree of detail while S min ensures the significance for subsequent processing independently of the number of data samples. An alternative to domain-uniform and frequency-uniform partitioning could be to maximize homogeneity of a region with respect to the structure of P(T |X i <ref type="bibr" coords="4,93.54,344.78,14.30,11.66;4,108.42,344.78,2.75,11.66">[, X j ]</ref>), as done for building regression trees <ref type="bibr" coords="4,260.20,347.18,9.53,8.06" target="#b6">[7]</ref>. However, finding optimal positions for splitting involves more computational effort, contradicting our requirement of fast computation. Moreover, changing T in the course of a workflow also requires a complete re-computation of the partitioning, which is not the case for domain-and frequency-uniform partitioning. For these reasons, our implementation of the framework currently does not support partitioning approaches that depend on the structure of P(T |X i <ref type="bibr" coords="4,225.42,414.50,14.30,11.66;4,240.30,414.50,2.75,11.66">[, X j ]</ref> ). Conceptually , however, supporting these approaches would be compatible with the visualization and ranking mechanisms described below, provided that the shape of the resulting regions complies with the requirements stated above. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.2">Partition-Based Visualization of Relationships</head><p>As motivated above, the key idea of our framework is to support an analysis of local variations of the conditional distribution P(T |X i <ref type="bibr" coords="4,252.06,494.18,14.30,11.66;4,266.94,494.18,3.00,11.66">[, X j ]</ref>) by partitioning X i <ref type="bibr" coords="4,87.90,504.14,14.30,11.66;4,102.78,504.14,2.48,11.66">[, X j ] </ref>into disjoint regions. This section discusses considerations regarding the representation of this partitioning for visualization. As opposed to quantitative relevance measures (see Sec. 3.3), the goal of the visualization is to convey qualitative aspects of relationships such as location, shape, and significance of structures. In addition to considerations regarding the partitioning itself as discussed in Sec. 3.1, we identified two central design issues regarding partition-based visualizations of P(T |X i <ref type="bibr" coords="4,165.78,573.86,14.30,11.66;4,180.66,573.86,2.83,11.66">[, X j ]</ref>): How to layout regions within a plot, and how to visually represent P(T |X i <ref type="bibr" coords="4,205.62,583.82,14.30,11.66;4,220.50,583.82,2.75,11.66">[, X j ]</ref>). Frequency-uniform partitioning / frequency-preserving layout. This is the most effective combination to compensate for non-uniform distributions and outliers. A sufficient degree of detail is provided also for very dense regions. The layout ensures a sufficient size for perceiving the result at the cost of introducing a potentially significant distortion regarding the location of regions in X i <ref type="bibr" coords="5,203.94,195.50,14.30,11.66;5,218.82,195.50,2.38,11.66">[, X j ]</ref>. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.2.2">Representation</head><p>After assigning a size and location to each region R k , a key design issue concerns the visualization of the distribution P(T |X i <ref type="bibr" coords="5,242.58,233.18,14.30,11.66;5,257.46,233.18,2.75,11.66">[, X j ]</ref>). We distinguish between visualizing features and pairs of features (<ref type="figure" coords="5,256.05,245.54,19.28,8.06" target="#fig_1">Fig. 3</ref>). Visualization of P(T |X i ). While the X-axis is used to represent the domain or the relative frequencies, the Y-axis depicts P(T |X i ). Many options have been proposed in literature to visualize univariate distributions, e.g., variants of box plots <ref type="bibr" coords="5,192.03,285.50,14.27,8.06" target="#b44">[46,</ref><ref type="bibr" coords="5,209.34,285.50,11.87,8.06" target="#b33"> 35] </ref>and color-based histograms <ref type="bibr" coords="5,73.37,295.46,13.80,8.06" target="#b26">[28]</ref>. Very similar to box plots, our approach displays the median (black line), the quartiles (dark gray) and the 0.05 and 0.95 percentiles (light gray). As the main benefit, visualizing the median along multiple regions resembles familiar function graphs and the local dispersion is directly readable. The main drawback concerns the inability to adequately visualize multi-modal distributions. Visualization of P(T |X i , X j ). In this case, the layout defines both axes and the visual proportions of each region may vary significantly, making a direct representation of P(T |X i , X j ) difficult. In order to limit the visual complexity, our current implementation visualizes a single distribution measure at a time by color, i.e., the average, the median, the variance, or the interquartile range. Depending on the task, the user may choose between a linear and a diverging transfer function (see Sec. 3.4) and may adjust its scaling. In future work, we intend to experiment with techniques for displaying multiple aspects of P(T |X i , X j ) at the same time, e.g., using saliency to display variance. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.3">Partition-Based Relevance Ranking of Features</head><p> While the visualization of relationships provides qualitative information , many applications also require quantitative measures. In particular , a purely visual inspection of a high-dimensional feature space X is impractical especially for a pair-wise analysis. This section thus discusses methods for ranking X i <ref type="bibr" coords="5,141.54,510.02,14.30,11.66;5,156.42,510.02,2.48,11.66">[, X j ] </ref> by quantitative measures that express the relevance for P(T |X i <ref type="bibr" coords="5,138.90,519.98,14.30,11.66;5,153.78,519.98,2.75,11.66">[, X j ]</ref>). In statistics, a common approach to automated feature selection is based on fitting a regression model for each candidate and ranking respective goodness-of-fit measures (also known as wrapper approach to feature ranking <ref type="bibr" coords="5,206.18,552.27,13.40,8.06" target="#b25">[27]</ref>). We adapt this approach by building a separate model Q X i <ref type="bibr" coords="5,190.14,563.87,8.10,9.07;5,198.90,568.18,1.38,4.42;5,200.82,563.87,1.93,9.07">[,X j ] </ref>for each X i <ref type="bibr" coords="5,247.26,559.82,14.30,11.66;5,262.14,559.82,2.48,11.66">[, X j ] </ref>in a way that flexibly adapts to the structure of P(T |X i <ref type="bibr" coords="5,209.58,571.82,14.30,11.66;5,224.34,571.82,2.75,11.66">[, X j ]</ref>). As discussed in Sec. 3.1, regression trees comply with this requirement <ref type="bibr" coords="5,256.26,584.18,9.68,8.06" target="#b6">[7,</ref><ref type="bibr" coords="5,269.93,584.18,11.99,8.06" target="#b19"> 21] </ref>and are used as the model type of Q X i <ref type="bibr" coords="5,178.62,595.79,8.10,9.07;5,187.38,600.10,1.38,4.42;5,189.30,595.79,1.93,9.07">[,X j ] </ref>. More specifically, we build piece-wise linear regression trees in order to exploit local linear- ity <ref type="bibr" coords="5,43.02,615.50,13.79,8.06" target="#b34">[36]</ref>. The hierarchical subdivision of Q X i <ref type="bibr" coords="5,188.46,617.03,8.10,9.07;5,197.22,621.34,1.38,4.42;5,199.14,617.03,1.93,9.07">[,X j ] </ref>(i.e., the tree) is based on frequency-uniform partitioning in order to enable an adaptation to non-uniform distributions. Conceptually, however, piece-wise linear models in our framework may be based on any subdivision approach, including domain-uniform partitioning or hierarchical subdivision approaches seeking optimal splits (see Sec. 3.1). The partitioning can be chosen independently for the visualization and the ranking, as they address different goals and face different constraints. In automated approaches to model building, feature ranking is often used to incrementally refine an existing model M by adding or removing features (known as forward-or backward step-wise selection) <ref type="bibr" coords="5,264.63,716.44,13.82,8.06" target="#b19">[21]</ref>. This typically involves fitting variants of M that differ by the added or removed feature. In contrast, our ranking quantifies the relevance of </p><formula>X i [, X j ] for P(T |X i [, X j ]</formula><p>) without making assumptions about the source of T (see Sec. 3.4). If used for interactively building a model M (Sec. 3.5), the models Q X i <ref type="bibr" coords="5,390.90,315.71,8.10,9.07;5,399.66,320.02,1.38,4.42;5,401.70,315.71,1.93,9.07">[,X j ] </ref>are independent from M with respect to the model type and complexity. Being used for an approximation of relevance rather than for prediction, Q X i <ref type="bibr" coords="5,445.50,337.07,8.10,9.07;5,454.26,341.38,1.38,4.42;5,456.18,337.07,1.93,9.07">[,X j ] </ref> also has a different purpose . For this reason, shortcomings of our type of regression trees are less problematic in our case, including discontinuities and a suboptimal choice of split-points by frequency-uniform partitioning. After fitting Q X i <ref type="bibr" coords="5,361.74,378.83,8.10,9.07;5,370.50,383.14,1.38,4.42;5,372.42,378.83,1.93,9.07">[,X j ] </ref>, the quantification of relevance is based on the goodness-of-fit measure R 2 which is well-known and can be computed with linear effort <ref type="bibr" coords="5,359.45,400.22,9.52,8.06" target="#b0">[1]</ref>. Conceptually, integrating additional measures into our framework is straightforward (e.g., correlation measures). As a general issue of statistical learning, model selection faces a trade-off between maximizing accuracy and minimizing model complexity , also known as the bias – variance trade-off <ref type="bibr" coords="5,481.21,440.54,13.68,8.06" target="#b19">[21]</ref>. In our case, the ability of Q X i <ref type="bibr" coords="5,358.26,452.15,8.10,9.07;5,367.02,456.46,1.38,4.42;5,369.06,452.15,1.93,9.07">[,X j ] </ref>to adapt to high-frequency structures depends on the number of splits which is determined by the parameter D max as introduced in Sec. 3.1 (see <ref type="figure" coords="5,404.62,471.86,21.84,8.06" target="#fig_3">Fig. 4</ref>). While a coarse subdivision is less prone to noise, the detection of complex structures may require a fine-grained subdivision. An appropriate model complexity thus depends on P(T |X i <ref type="bibr" coords="5,354.78,499.34,14.30,11.66;5,369.66,499.34,3.00,11.66">[, X j ]</ref>) and on domain knowledge about the features. In statistics, a common approach to analyze the effect of increasing model complexities is by plotting them against error metrics as curves (see <ref type="figure" coords="5,311.97,531.63,31.11,8.06" target="#fig_5">Fig. 5a).</ref>Motivated by this approach, we compute a sequence </p><formula>Seq{Q X i [,X j ] } of models Q X i [,X j ] for each X i [, X j ] </formula><p>for increasing values of D max , and we compute R 2 measures for all variants of Q X i <ref type="bibr" coords="5,511.74,556.31,8.10,9.07;5,520.50,560.62,1.38,4.42;5,522.42,556.31,1.93,9.07">[,X j ] </ref>. As shown in <ref type="figure" coords="5,350.60,566.54,19.76,8.06" target="#fig_5">Fig. 5</ref>, detecting high-frequency relationships requires more splits while the number of splits has hardly any effect on lowfrequency relationships and irrelevant features. This holds as long as each leaf contains a significant number of samples, as ensured by the parameter S min of frequency-preserving partitioning. For this reason, the ability to detect complex structures depends on the overall number of data samples, which is true in general for statistical learning <ref type="bibr" coords="5,521.17,626.30,13.83,8.06" target="#b19">[21]</ref>. The result of the quantification is shown as a table where columns represent increasing complexities of Q X i <ref type="bibr" coords="5,441.90,648.35,8.10,9.07;5,450.66,652.66,1.38,4.42;5,452.58,648.35,1.93,9.07">[,X j ] </ref>and rows correspond to the features or pairs of features X i <ref type="bibr" coords="5,419.10,656.30,14.30,11.66;5,433.98,656.30,2.48,11.66">[, X j ] </ref>(see <ref type="figure" coords="5,456.69,658.70,23.93,8.06" target="#fig_5">Fig. 5c</ref>). Each row thus represents a goodness-of-fit curve which is visually indicated by the background color of cells (see <ref type="figure" coords="5,407.54,678.62,24.13,8.06" target="#fig_5">Fig. 5b</ref>). Vertically, each column can be considered a cut through the curves that can be used for ordering the table and for ranking the coordinated small-multiple display. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.4">Applying the Framework to Model Building Tasks</head><p> The previous sections focused on task-independent concepts for ranking and visualizing relationships between features and a general  titative target T . This section describes the application of the framework to common tasks in statistical modeling. The key idea is using different derived quantities as T . Henceforth, Y denotes actual observations of a dependent variable andˆYandˆ andˆY M denotes corresponding predictions of Y by a model M. We identified the following set of tasks: @BULLET Identification of explaining features (T = Y ). Relating feature candidates to actual observations of Y helps in determining the features or pair-wise combinations of features having the strongest explanatory power (see <ref type="figure" coords="6,165.66,337.82,20.43,8.06">Fig. 1</ref> ). The direct visualization of P(Y |X i <ref type="bibr" coords="6,93.90,345.38,14.30,11.66;6,108.78,345.38,3.00,11.66">[, X j ]</ref>) resembles 1D and 2D function plots which typically makes the interpretation straightforward for domain experts . However, dominating relationships tend to obscure less distinct relationships for ranking and visualization (e.g., the effect of Temperature is dominating in <ref type="figure" coords="6,175.61,387.63,19.68,8.06">Fig. 1</ref>). @BULLET Analysis of prediction bias (T = Y − ˆ Y M ). Visualizing the residuals of M reveals areas of over-or underestimation, i.e., the local bias of M. An appropriate scaling of T should be symmetric around the neutral value 0. In 2D, we use a diverging transfer function as suggested for this purpose <ref type="bibr" coords="6,177.56,442.47,14.97,8.06" target="#b47">[49] </ref>(see <ref type="figure" coords="6,210.42,442.47,22.84,8.06" target="#fig_6">Fig. 6a</ref> ). The prediction bias provides important information for detecting effects currently not captured by M. This includes relevant features being not yet part of M, in which case the prediction bias supports incremental feature selection (see Sec. 3.5). Another application is detecting an insufficient model complexity. For instance, modeling a non-linear effect of X i by a linear term will show distinct areas of over-and underestimation in plots of X i . In general, consulting the shape and size of areas comprising visually similar regions may facilitate identifying suitable transformations of features for model building. Conversely, small and incoherent areas often indicate noise rather than real effects. @BULLET Assessment of prediction accuracy (T = |Y − ˆ Y M |). Visualizing the distribution of residual magnitudes of M reveals local differences in the prediction quality, exposing badly fitted areas. @BULLET Comparison of two models (T = |Y − ˆ Y M1 | − |Y − ˆ Y M2 |). Visualizing the point-wise difference of residual magnitudes of the models M1 and M2 provides an overview of local model superiority (see <ref type="figure" coords="6,85.29,631.82,24.21,8.06" target="#fig_6">Fig. 6b</ref> ). The sign of the regional average of T indicates which model tends to be locally better (negative for M1, positive for M2), while the magnitude indicates by how much. The scaling of T is symmetric around 0, suggesting a diverging transfer function. Typical applications include model selection and the identification of composite models. In this case, ranking supports the selection of useful classifiers and the visualization may suggest decision boundaries. @BULLET Exposing uncertainty of model ensembles (T = Var( ˆ Y M1 ... ˆ Y Mn )). In this case, T is the point-wise variance of predictions of Y by the models M1 to Mn. In other words, for the k th record of the dataset, the n predictionsˆypredictionsˆ predictionsˆy k M1 tô y k Mn are aggregated by their variance or other measures of dispersion. Sources of model ensembles include different training data sets, variation of model-specific parameters, and different types of prediction models. A common application of ensemble data is analyzing the uncertainty of a prediction <ref type="bibr" coords="6,518.25,303.99,13.70,8.06" target="#b20">[22]</ref>. Our framework supports the identification of areas in 1D or 2D feature sub-spaces causing uncertainty (see <ref type="figure" coords="6,462.10,323.91,23.34,8.06" target="#fig_6">Fig. 6c</ref>). It should be noted that the tasks involving models operate solely on point-wise predictions of these models. They neither make assumptions about M, nor is access to an evaluable representation of M required . This makes the framework applicable to the validation and comparison of any type of quantitative prediction from any source. In the context of renewable energy, assessing and comparing forecasts of meteorological quantities from different providers is of great practical importance (e.g., day-ahead forecasts of temperature at a specific location ). In this case, the prediction is based on physical rather than statistical models. Analysts in the energy sector do not have access to such models themselves, but still, the framework has successfully been applied for assessment and (composite) selection of providers. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.5">Interactive Feature Subset Selection</head><p> This section describes extensions to the framework supporting an interactive workflow for feature selection (Sec. 5.1 illustrates an example ). The principle of the workflow is based on forward selection of features in step-wise regression <ref type="bibr" coords="6,400.95,507.29,9.54,8.06" target="#b0">[1]</ref>. The key idea is to iteratively add features and transformations thereof to a model predicting a dependent variable Y . Each iteration seeks to reduce the remaining variance while ensuring that the selection is reasonable according to the domain knowledge of the user. In contrast to previous sections, this workflow requires the ability to create an evaluable regression model M for any number of features by fitting M to existing training data. A prerequisite of the workflow is thus the availability of training data D T . In order to avoid overfitting, we also support the discrimination of separate validation data D V for visualization, goodness-of-fit quantification and ranking. Both D T and D V must contain known values of Y . We distinguish between two stages: During initial model identification , M does not yet exist and the framework shows the actual observations (i.e., T = Y ). The goal of this stage is to verify the existence of useful features, potentially inferring a particular regression model type from the structure of relationships, and building an initial model M 1 based on a relevant feature or pair of features. The subsequent model refinement stage analyzes the local bias of a current version M i of the model (i.e., </p><formula>T = Y − ˆ Y M i </formula><p>). The goal of this stage is to identify relevant additional (transformations of) features for fitting M i+1 by extending the independent variables of M i and continuing with model refinement, or to quit the workflow. Our framework supports both stages, e.g., comparing different measures for ranking (pairs of) features with respect to T and partitioning the data for visualization depending on the distribution of samples. Features can be added to M i by clicking on their visual representation. This triggers the fitting of M i+1 which is set as the current model variant after completion, updating the ranking and visualization to consider the residuals of M i+1 . As a desirable effect, including a feature in M i+1 reduces the explanatory power of redundantly correlated features which are ranked lower in the next iteration as well. During model refinement, a list called Quantitative Model Overview (QMO) displays the root-mean-square-error (RMSE) and optionally also the global bias (i.e., the average of Y − ˆ Y M i ) for all variants of M. The QMO thus quantifies the gained accuracy for each iteration. Being computed on D V , increasing model complexities may cause increasing values of the RMSE, which is a typical stopping criterion <ref type="bibr" coords="7,252.92,172.94,13.78,8.06" target="#b19">[21]</ref>. Additional feature candidates can be added to the investigation at any time, as well as transformations of features. An example offered by our implementation is a user-defined categorization of continuous values. This can facilitate the modeling of differently structured areas by fitting separate models for different parts of the data (i.e., building treed models, see Sec. 5.1). Other examples include bivariate feature transformations like multiplication in order to model interactions, as well as simple transformations like squaring and taking the logarithm. However, the interactive specification of transformations is a topic in its own right and details are beyond the scope of this paper. There are several options for extending the workflow. First, visualizing M i as a high-dimensional function during model refinement provides additional means for validation. Our implementation of the framework offers an interactive visualization based on hyper- slices <ref type="bibr" coords="7,54.65,323.67,14.88,8.06" target="#b30">[32] </ref> for this purpose (see Sec. 4). Second, multivariate visualizations like parallel coordinates help to relate the distribution of residuals across multiple variants of M. Third, it may often be reasonable to return to previous variants of M and to try out and compare different choices of features, e.g., if the QMO shows only modest gains of accuracy. Our implementation preserves previous model variants and supports back-ward steps. However, providing an adequate visual support for hierarchical branching of models is up to future work. A limitation of assessing single X i <ref type="bibr" coords="7,172.26,401.66,14.30,11.66;7,187.14,401.66,2.48,11.66">[, X j ] </ref> for step-wise model refinement is that useful higher-dimensional interactions of individually weak features might not get noticed. In contrast to best-subset selection methods (e.g. see Hastie <ref type="bibr" coords="7,139.60,433.95,13.52,8.06" target="#b19">[21]</ref>), manual step-wise selection is not guaranteed to produce feature subsets yielding a minimal RMSE, especially in the context of high-dimensional data (|X| | 10). However, a model with the minimal RMSE is not necessarily the best choice in a given application context. Additional reasons for choosing a step-wise approach are a superior run-time performance, comprehensibility and straightforward incorporation of expert knowledge. While identifying two-dimensional interactions is supported directly, a detection of higher-dimensional interactions is left for future work (see Section 6). An application by real users (Sec. 5) has shown that this workflow supports two tasks. First, it supports interactive feature selection for building interpretable regression models. Conceptually, the workflow is applicable to any type of regression model. However, training times of at most several seconds are beneficial for smooth working. As the second task, the workflow supports the detection of more subtle relationships which are otherwise masked by more dominating effects. In this case, the model itself is of less interest, as it is rather used to subtract dominating effects from the data, exposing more subtle ones. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4">SYSTEM INTEGRATION AND IMPLEMENTATION</head><p>Our framework has been implemented as part of Visplore, a system for visual exploration and model building. Additional views of Visplore like histograms, scatterplots, and parallel coordinates support a flexible analysis of multivariate data by linked ad-hoc selections and derived data columns. In context of model building, they enable an interactive specification of training and validation data for ensuring an appropriate data quality (e.g., by removing outliers). Regression models can be identified and managed by the user. Supported types of models currently include generalized linear models, support vector regression based on the library LIBSVM <ref type="bibr" coords="7,184.94,726.40,13.71,8.06">[10]</ref>, and piece-wise linear regression trees. Internally, a common interface for fitting and evaluation enables an integration of additional model types. An implementation of HyperMoVal <ref type="bibr" coords="7,378.08,63.39,14.88,8.06" target="#b30">[32] </ref>supports a detailed point-wise validation of identified regression models (see <ref type="figure" coords="7,424.09,73.35,22.76,8.06">Fig. 7i</ref> ). All parts of Visplore implement a multi-threading architecture <ref type="bibr" coords="7,438.17,83.32,15.00,8.06" target="#b31">[33] </ref>to maintain interactivity regardless of the data size and the effort of involved computations. In case of the proposed framework, multi-threading is used for computing the relevance measures and the visualization. Intermediate results such as subsets of plots or ranking measures are displayed as soon as they become available in order to minimize delays. All parts are written in C++ and use OpenGL for rendering. Regarding the performance of frequency-uniform partitioning, storing the order of values for each feature as a re-usable index enables an efficient implementation also for analyzing feature pairs. Specifically, computing the indices of 35 continuous features and 42869 data samples took 0.03 seconds in our implementation (recorded on an Intel i7-2600k CPU @ 3,4 Ghz). Computing the partitioning with D max set to 10 and S min set to 8 took another 0.19 seconds for the 35 features (1D) and 3.30 seconds for all 630 feature pairs (2D). Regarding the performance of ranking, computing the measures took additionally 0.38 seconds in 1D and 11.8 seconds in 2D. As a computationally cheaper yet less accurate alternative to fitting a linear model per region , fitting a constant model (i.e., the median value of each region) only took 0.15 seconds in 1D and 4.44 seconds in 2D. In general, computing percentiles of the distribution P(T, X i <ref type="bibr" coords="7,452.34,280.10,14.30,11.66;7,467.22,280.10,3.00,11.66">[, X j ]</ref>) as also required for visualization benefits from storing the order of T as an index, enabling linear effort and re-usage across all X i <ref type="bibr" coords="7,430.02,300.02,14.30,11.66;7,444.90,300.02,2.38,11.66">[, X j ]</ref>. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5">EVALUATION</head><p>For evaluating our framework, Sec. 5.1 demonstrates a case study of interactive feature selection in the energy sector. Sec. 5.2 then reports user feedback by 11 analysts after two months of deployment. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.1">Case Study: Modeling Natural Gas Consumption</head><p>This section demonstrates our framework by building a regression model predicting the natural gas consumption of a large city as the dependent variable Y . Based on real data, this case study has been conducted by an analyst in the energy sector to investigate the influence of meteorological and calendric aspects as the independent variables X. This represents a direct application of the workflow described in Sec. 3.5. The data comprise hourly measurements for approximately five years (42869 samples) which are split into three years of training data D T and two years of validation data D V (annually interleaved). For initial model identification, the 1D overview shows the conditional distribution of the consumption for each feature, i.e. T = Y (<ref type="figure" coords="7,297.50,487.35,23.95,8.06">Fig. 7a</ref>). Ranking the features by relevance immediately identifies Temperature and Day of Year as having a dominant effect on the target . Comparing their measures shows a slightly higher relevance of Temperature for coarse subdivisions while the relevance of Day of Year increases with the level of detail and exceeds Temperature for D max = 5 (<ref type="figure" coords="7,333.50,537.14,22.88,8.06">Fig. 7b</ref>). Knowing that the data only comprises 5 years, the analyst considers Temperature as the more useful feature for an initial model M1. Since the visualization suggests a non-linear relationship with at least one point of inflection, M1 is fitted based on D T as a third degree polynomial, i.e., a linear model including squared and cubic basis expansions. The Quantitative Model Overview shows an RMSE of 24853 units for D V (<ref type="figure" coords="7,381.99,596.90,23.59,8.06">Fig. 7c</ref>), confirming the information gain by M1 as compared to the standard deviation of Y (52812 units). Building M1 updates the 1D overview for an analysis of its residuals for D V in order to identify effects explaining the remaining variance , i.e., T = Y − ˆ Y M1 (<ref type="figure" coords="7,382.59,636.74,23.11,8.06">Fig. 7d</ref>). Temperature now ranks much lower as well as Day of Year, whose effect is partly captured by M1 due to correlation with Temperature. In contrast, the ranking now identifies Hour as most relevant for the target. The visualization of the conditional distribution shows a consumption profile as a function having multiple local extrema (e.g., a distinct rise to a morning peak). This complex structure precludes simple low-degree polynomial basis expansions as before. Instead, the analyst categorizes Hour into morning <ref type="bibr" coords="7,294.06,716.43,33.00,8.06">[0am,6am</ref>), day <ref type="bibr" coords="7,353.94,716.43,35.06,8.06">[6am,8pm</ref>) and evening [8pm-0am) in order to build M2 as a treed linear model. For each identified category of Hour, M2 thus comprises a separate function including linear, squared, and cubic predicted consumption too low (yellow) due to wind-chill factor at &lt;10°C different consumption on weekends coherent area of superiority of M4 <ref type="figure" coords="8,22.50,432.93,19.64,7.53">Fig. 7</ref>. A case study for model building. (a, b) Ranked overviews suggest Temperature as most relevant for predicting the target Natural Gas Consumption by a model M1. (c, d) Analyzing the local prediction bias suggests Hour as additional feature for reducing the error measure RMSE. (e, f) Frequency-preserving layout reveals the insignificance of a trend caused by a non-uniform distribution of Wind Speed. (g) Analyzing the local prediction bias for feature pairs reveals multiple interactions that inform further model refinements (c). (h) Comparing two model variants enables an assessment of local model superiority. (i) Additional views support an application of the final model for sensitivity analysis. terms for Temperature as well as linear and squared terms for Hour. This enables a substantial reduction of the RMSE to 14384 units. </p><p>Another update of the 1D overview to analyze the residuals of M2 </p><formula>(T = Y − ˆ Y M2 ) </formula><p>shows that the effect of Hour is captured well (<ref type="figure" coords="8,243.34,522.50,22.67,8.06">Fig. 7e</ref>). Being correlated with Hour, the relevance of the feature Global Radiation is also reduced while Day of Year, Wind Speed, and a classification of days into weekends and working days lead the ranking. The visualization of Wind Speed suggests a strong effect which seemingly contradicts its ranking below Day of Year. However, switching the layout to frequency-preserving reveals the low significance of high wind speeds due to the sparsity of the data (<ref type="figure" coords="8,159.65,592.23,22.30,8.06">Fig. 7f</ref>). Since no single feature seems to explain the remaining variance well, the analyst now turns to inspecting pair-wise interactions of features in the 2D overview. </p><p>Considering the average local prediction bias (T = Y − ˆ Y M2 ) for visualization and ranking in fact suggests useful pair-wise interactions of Day of Year, Temperature and Wind Speed (<ref type="figure" coords="8,192.62,646.70,25.41,8.06">Fig. 7g</ref> shows the matrix for the five top-ranking features). The top-ranking pair reveals that the effect of Temperature significantly depends on the time of the year. Another plot shows a substantial underestimation for high wind speeds at low temperatures. The analyst hypothesizes that the reason might be a meteorological effect known as " wind-chill factor " . While previous 1D overviews indicated a general tendency of increased consumption at high wind speed, the analysis of interactions enables a more comprehensive understanding of the influence of Wind Speed. Furthermore, 1D and 2D views suggest a general overestimation of the consumption on weekends, e.g., due to the different consumption by industry. Capturing these effects by refining M2 enables a further reduction of the RMSE for D V (<ref type="figure" coords="8,404.43,507.86,23.60,8.06">Fig. 7c</ref>): M3 extends M2 by adding cubic, squared and linear terms for Day of Year and refines the regression tree by a discrimination of summer (April to Sept.) and winter (remaining months). M4 further refines the tree based on Weekend. Finally, M5 extends M4 by adding linear, squared, and cubic terms for Wind Speed plus interactions of the form A·B, A 2 ·B and A·B 2 between Wind Speed and Temperature to account for the wind-chill factor. Compared to M4, however, the significant additional complexity of M5 only reflects in a modest reduction of the RMSE. In order to validate the superiority of M5, assigning the difference of residual magnitudes as target of the 2D overview enables a local comparison of M4 and M5 </p><formula>(T = |Y − ˆ Y M4 | − |Y − ˆ Y M5 |). </formula><p>In order to compensate for non-uniform distributions of features like Temperature and Wind Speed, the analyst applies the frequency-based partitioning and the frequency-preserving layout (<ref type="figure" coords="8,393.59,656.67,23.86,8.06">Fig. 7h</ref> ). While the dominance of yellow tones confirms the superiority of M5 for large parts of the domain, the visualization also indicates areas where M4 is superior. The analyst is surprised that considering Wind Speed increased the prediction accuracy especially for weekends while a coherent blue area in the combination of Day of Year and Temperature indicates a negative effect for certain temperatures especially during spring and summer. In general, however, the analyst is satisfied with M5 as the final result of the workflow. An implementation of HyperMoVal <ref type="bibr" coords="8,476.88,736.36,15.03,8.06" target="#b30">[32] </ref>as an addi-tional view of the system enables a detailed follow-up analysis of M5, e.g. regarding a sensitivity analysis of natural gas consumption and a model-based detection of outlying data samples (<ref type="figure" coords="9,208.24,73.34,22.69,8.06">Fig. 7i</ref>). </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.2">User Feedback</head><p>Our framework has been deployed to 11 experts of two companies in the energy sector, i.e., an IT-service provider and a national power grid operator. The growing share of renewable energy and the advent of smart grids increasingly necessitate accurate prediction for risk management in this field. The experts have been dealing with prediction models for years and use MARS <ref type="bibr" coords="9,156.40,154.35,15.01,8.06" target="#b12">[14] </ref>as the prevailing model type. They have been using our framework on a daily basis for two months. While operational models are still built using external software, the experts employ our framework for the identification of useful features, interactions, and transformations of features as well as for the validation and comparison of identified (MARS-)models. Before using our framework, these tasks were based on the inspection of data tables, static graphics, and correlation coefficients in tools like Excel and Matlab. They reported that generating, validating and comparing models was intransparent and required extensive trial-anderror . Establishing and validating hypotheses for new data or new models required approximately the work of one day. According to the experts, our framework enables them to obtain the same insights within half an hour. A formerly empirical process of knowledge acquisition has been turned into a systematic one, saving substantial amounts of time. They consider the involved visualization as intuitive and fast to interpret and also suitable for a presentation to decision-makers and other stake holders. One expert stated that the process of communicating findings and arguing model deficiencies to end customers in the energy sector has been sped up from hours or even days to minutes using our visualizations. Technologically, one analyst claimed that our ranking mechanism is more helpful in analyzing relationships than previously used correlation metrics, as it unveils non-linear structures of arbitrary shape. The 1D-and 2D-visualizations are consulted at a ratio of around 30:70 percent during the analysis, as interactions of two or more features generally play a very important role. The analysts generally prefer domainuniform partitioning and -layout for their superior interpretability, but they usually employ the frequency-preserving approaches to check the significance of unexpected findings. In conclusion, the interviewed domain experts envision a high relevance of our framework for the energy sector. Their key suggestion for future work concerned a direct integration of the model type MARS in our framework. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6">DISCUSSION AND FUTURE WORK</head><p>As the key idea of Visual Analytics, our framework tightly integrates visualization, computation, and interaction at three levels. First, quantitative measures based on regression trees rank visualizations by relevance . Second, visualizing derived quantities supports diverse tasks in model building. Third, tightly coupling model visualization with model training enables an efficient loop of incremental discovery, refinement , and validation. Our framework thus supports all elements of the Visual Analytics Process as described by Keim et al. <ref type="bibr" coords="9,235.16,576.51,13.78,8.06" target="#b24">[26]</ref>. Furthermore, our framework addresses all six high-level tasks of visualization-based knowledge discovery as defined by Amar and Stasko <ref type="bibr" coords="9,58.97,606.87,9.70,8.06" target="#b1">[2]</ref>: 1) It exposes uncertainty of single models by showing the local variance of their residuals and of model ensembles by visualizing their point-wise variance. 2) It concretizes relationships by depicting and quantifying the conditional distribution of targets over domains of features and pairs of features. 3) It supports to formulate cause and effect by explicitly distinguishing between dependent and independent variables and expressing their relationship as regression model for investigation. 4) It directly addresses the determination of domain parameters by the workflow for step-wise feature selection. 5) It enables a multivariate explanation by considering pair-wise interactions between features as well as via the identification of multidimensional regression models. 6) It confirms hypotheses which are formulated as target dimensions or prediction models by visualizing the local structure of their conditional distribution. Regarding scalability, a key benefit of partitioning is to avoid clutter for any number of data samples. The goal to enable interactive workflows restricts the computational complexity of methods for partitioning and ranking, which informed several design decisions as discussed in previous sections. The achieved performance supports tens of thousands of data samples and dozens of features even for a pairwise analysis (see the measurements in Sec. 4) and can further be increased by using piece-wise constant rather than linear regression trees for ranking. In fact, sparse data is much more limiting the detection of significant relationships than large data which is a general problem of statistical learning <ref type="bibr" coords="9,388.40,153.06,13.70,8.06" target="#b19">[21]</ref>. Due to ranking features by relevance, the framework scales well for an individual inspection of truly highdimensional data (i.e., hundreds of dimensions). A pair-wise analysis is inherently more challenging due to a quadratic growth of combinations . However, ranking also supports this case and enables to show only the most relevant part of the matrix. Operating on generic categorical and continuous data, the approach is generally applicable to regression tasks in any domain. While the examples and the evaluation in this paper refer to the energy sector , preliminary tests also indicated a direct applicability to regression tasks in engineering, process optimization, and clinical trial analysis. We see many directions for future work. 1) Partition-based ranking is conceptually also applicable to higher-order interactions but faces challenges regarding the exponential growth of combinations and the visualization. We intend to address these aspects for triples of features involving volume visualization for representation. 2) We intend to design and evaluate concepts to simultaneously visualize bias and variance of distributions in 2D. 3) While the current workflow supports a rather linear process for model building, we intend to design concepts for addressing a hierarchical process, i.e., supporting multiple model variants as refinements of a common base model. 4) The identification of feature transformations is currently solely based on the interpretation of the visualization by the user. An automated suggestion of suitable transformations could be an important help. 5) As suggested by the experts evaluating our approach, we intend to integrate additional types of regression models (e.g., MARS <ref type="bibr" coords="9,498.20,402.11,14.29,8.06" target="#b12">[14]</ref>) or even support a direct integration with statistics software such as R <ref type="bibr" coords="9,516.39,412.07,13.74,8.06" target="#b23">[25]</ref>. 6) While explicitly designed for regression, we intend to investigate an adaptation of the framework for classification. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="7">CONCLUSION</head><p> This paper proposed a partition-based framework to support multiple tasks related to building regression models. As a key benefit, the framework provides a global overview over local relationships of any structure for features and pairs of features. We described a model-based method for quantifying relationships that provides guidance by ranking relationships for an efficient investigation of highdimensional feature spaces. Both ranking and visualization flexibly adapt to non-uniform distributions as well as categorical features, and are computationally sufficiently inexpensive to scale for large and high-dimensional data. We discussed the application to a variety of tasks in building and validating regression models. A workflow for interactive model building enables a seamless integration of domain knowledge in the selection of features and transformations, and it supports a discovery of subtle relationships by compensating for dominant effects using regression. A real-world case study illustrated the application for building a complex model, and feedback by analysts in the energy sector suggested a significant effort reduction for model building . Motivated by these results, we believe that our framework will have a positive impact on regression in many fields. </p></div><figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_0" coords="4,156.39,70.79,39.60,6.65;4,128.31,70.66,24.18,6.83;4,203.19,70.66,32.37,6.83;4,91.47,100.96,6.83,24.18;4,26.86,82.78,6.40,39.19;4,91.47,179.98,6.83,32.38;4,91.60,141.63,6.65,21.21;4,300.94,237.13,46.88,6.40;4,418.93,234.71,68.40,6.65;4,36.78,124.86,46.88,6.40;4,36.87,172.33,38.03,6.40;4,36.87,180.63,46.88,6.40;4,431.86,70.84,39.57,6.65;4,399.82,70.71,24.18,6.83;4,476.79,70.71,32.37,6.83;4,363.87,101.31,6.83,24.18;4,363.87,180.26,6.83,32.38;4,364.01,141.96,6.65,21.19;4,290.70,67.65,6.40,37.26;4,306.04,109.88,34.20,6.40;4,29.27,51.81,224.63,11.92;4,137.87,234.75,75.23,6.65;4,284.23,51.81,243.06,11.92;4,300.94,155.55,38.03,6.40;4,300.94,163.84,37.26,6.40;4,300.94,197.48,38.03,6.40;4,300.94,205.77,34.20,6.40;4,30.95,207.31,34.20,6.40;4,30.95,215.61,47.46,6.40;4,30.95,223.90,42.63,6.40"><head>1D consumption percentiles (y-axis) / global radiation (x-axis) target percentile plots 2D avg. consumption (color) / day (x-axis) and temperature (</head><figDesc></figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_1" coords="4,22.50,249.81,512.98,7.53;4,22.50,259.17,265.90,8.23;4,288.90,257.40,10.03,10.36;4,299.58,262.10,1.66,5.30;4,302.10,257.40,4.38,10.36"><head>Fig. 3. </head><figDesc>Fig. 3. Our design space of partition-based visualizations of relationships. While domain-preserving layouts are more intuitive to interpret, frequency-preserving layouts compensate for non-uniform distributions of X i [,X j ]. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_3" coords="5,31.50,123.57,250.50,7.53;5,31.50,133.05,200.82,9.23;5,233.34,133.05,2.22,7.53"><head>Fig. 4. </head><figDesc> Fig. 4. The goodness-of-fit varies with the number of recursive subdivisions performed by a piece-wise linear ranking model Q X i . </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_5" coords="5,294.06,247.05,181.50,9.22;5,478.74,245.90,65.27,8.69;5,294.06,256.53,250.28,7.53;5,294.06,266.01,250.32,7.53;5,294.06,275.49,19.50,9.23;5,316.86,275.49,210.50,7.53"><head>Fig. 5. </head><figDesc>Fig. 5. The effect of increasing the complexity of Q X i on the measure R 2 for three features. (a, b) Goodness-of-fit curves as common in statistics are indicated by grayscales in our framework. They show the complexity of Q X i required to capture relationships of different frequencies (c). </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_6" coords="6,22.50,215.25,512.99,7.53;6,22.51,224.73,513.10,7.53;6,22.51,234.21,304.75,7.53"><head>Fig. 6. </head><figDesc>Fig. 6. Derived quantities as target T support different tasks in building regression models. (a) Residuals show the local prediction bias of a model, i.e., a tendency towards over-or under-estimation. (b) The difference of residual magnitudes indicates local superiority for a pair of models. (c) The point-wise variance of predictions by multiple models represents their local uncertainty. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_2" validated="false" coords="6,35.37,51.35,481.51,90.80"><figDesc coords="6,35.37,51.35,94.36,7.18;6,196.08,51.35,137.86,7.18;6,358.53,51.35,152.10,7.18">a) Analyzing prediction bias b) Comparing two point-wise predictions c) Exposing uncertainty of model ensembles</figDesc><table coords="6,36.47,62.22,480.40,79.93">model residuals (Y -Y M ) 
+superior accuracy indicator 
+variance across 5 models 
++ 
+M 2 
+0 
+-
+M 1 
+
+local over-estimation 
+
+local under-estimation 
+
+^ 
+
+M2 generally more accurate 
+
+local superiority of M1 
+
+generally high variance 
+
+increased local uncertainty 
+
+</table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_3" validated="false" coords="8,23.59,52.03,493.95,373.12"><figDesc coords="8,460.15,419.19,36.20,5.97;8,461.49,359.27,35.12,5.97;8,439.40,297.11,78.14,5.97">Temperature Wind Speed Temperature x Wind Speed</figDesc><table coords="8,23.59,52.03,490.73,372.23">Consumption 
+
+Consumption 
+
+Consumption 
+
+domain-
+preserving layout 
+
+frequency-
+preserving layout 
+
+a 
+
+b 
+
+c 
+d 
+e 
+f 
+
+g 
+h 
+i 
+
+Consumption of natural gas 
+over single features 
+
+Residuals of model M1 over single features 
+Residuals of model M2 over single features 
+
+Residuals of model M2 over feature pairs 
+Superiority indicator T = |Y -Y M4 | -|Y -Y M5 | 
+
+^ 
+^ 
+
+</table></figure>
+
+			<note place="foot">MÜHLBACHER AND PIRINGER: A PARTITION-BASED FRAMEWORK FOR BUILDING AND VALIDATING REGRESSION MODELS</note>
+
+			<note place="foot" n="3">.2.1 Layout As for partitioning, the size of each region R k can either be interpreted as the covered part of the domain X i [, X j ] or as the number of contained samples, i.e., the relative frequency of R k . Our framework consequently discriminates two options for using the visual attribute space in order to assign a size and a location to each R k . As will be discussed below, these layout options affect the X-axis for 1D domains and both axes for 2D domains (see Fig. 3). Domain-preserving layout. Space is used to linearly represent the domain X i [, X j ] between the minimal and maximal values of data samples in X i [, X j ]. As for traditional function plots, extents of structures in X i [, X j ] are thus directly perceptible. Frequency-preserving layout. Space is used to represent the relative frequency of each region, i.e., the X-axis in the 1D case or the entire plot in the 2D case represent 100% of the data. This layout thus generates a space-filling visualization as discussed extensively in the literature [4]. In 2D, the layout depends on how the data has been partitioned . For frequency-uniform partitioning, we directly represent the hierarchical structure of the subdivision, i.e., at each hierarchy level, the split of the respective axis is proportional to the frequency of the hierarchy nodes. For domain-uniform partitioning, we first subdivide the visual space in proportion to the feature being distributed more uniformly, and then to the other one (compare to Mosaic plots [15]). The benefit of a frequency-preserving layout is the optimal utilization of visual space and the direct perception of the significance of regions. The main drawback is a difficult interpretation regarding the extents and relative positions of regions in X i [, X j ]. In our framework, options for partitioning X i [, X j ] and for layout can be chosen independently from each other. This defines a design space of partition-based visualizations where each combination has different advantages and disadvantages (see Fig. 3). In general, a suitable partitioning for visualization depends on the distribution of data samples. Less uniform distributions typically increase the necessity of distortion by frequency-uniform partitioning in order to guarantee a significant degree of detail for dense areas. To ensure flexibility, the partitioning granularity is controlled by the user. As a commonly used choice, we set the default number of splits per dimension to 4 √ n for domain-uniform mode, with n being the number of samples. For frequency-uniform mode, we use D max = 4 and S min = 10 as default subdivision limits. A suitable layout depends on the task. In context of model building, for example, detecting transformations benefits from a domain-preserving layout, while assessing the significance of local structures requires a frequency-preserving layout. We briefly discuss each combination individually: Domain-uniform partitioning / domain-preserving layout. In our experience, this combination is the easiest to interpret. While particularly useful if large parts of X i [, X j ] are uniformly distributed, entirely disregarding the frequency of regions introduces a visual bias for non-uniform distributions and makes it very sensitive to outliers. Frequency-uniform partitioning / domain-preserving layout. This combination may be a suitable compromise to avoid distortion for non-uniform distributions. It is less sensitive to outliers which are included in outer regions. As a non-intuitive aspect, however, the different size of regions may falsely suggest a different significance and makes very dense regions difficult to perceive. Domain-uniform partitioning / frequency-preserving layout. This combination is suitable if domain-uniform partitioning is required for application-specific reasons, but the significance must be visualized due to a non-uniform distribution of X i [, X j ]. However, the partitioning may provide an insufficient resolution for dense regions.</note>
+		</body>
+		<back>
+
+			<div type="acknowledgement">
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>ACKNOWLEDGMENTS </head><p>This work has been supported by the Austrian Funding Agency (FFG) within the scope of the COMET K1 program. Thanks go to all project participants of Hakom and Austrian Power Grid AG, and to E. Gröller, M. Buchetics, S. Pajer, and J. Kehrer for valuable comments. </p></div>
+			</div>
+
+			<div type="references">
+
+				<listBibl>
+
+<biblStruct coords="10,40.74,74.62,231.80,7.17;10,40.74,83.98,94.64,7.17"  xml:id="b0">
+	<monogr>
+		<title level="m" type="main">Statistical Methods for the Social Sciences. Pearson, fourth edition</title>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Agresti</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Finlay</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2007" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.75,93.45,232.08,7.17;10,40.74,102.93,232.03,7.17;10,40.74,112.41,230.94,7.17"  xml:id="b1">
+	<analytic>
+		<title level="a" type="main">A knowledge task-based framework for design and evaluation of information visualizations</title>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<forename type="middle">A</forename>
+				<surname>Amar</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">T</forename>
+				<surname>Stasko</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. IEEE Symp. on Information Visualization</title>
+		<meeting>. IEEE Symp. on Information Visualization</meeting>
+		<imprint>
+			<date type="published" when="2004" />
+			<biblScope unit="page" from="143" to="150" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.71,121.88,231.58,7.17;10,40.75,131.36,232.27,7.17;10,40.75,140.84,231.93,7.17;10,40.75,150.31,49.76,7.17"  xml:id="b2">
+	<analytic>
+		<title level="a" type="main">Multivariate visual explanation for high dimensional datasets</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Barlowe</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Zhang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Y</forename>
+				<surname>Liu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Yang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<forename type="middle">J</forename>
+				<surname>Jacobs</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. of the 3rd IEEE Symp. on Visual Analytics Science and Technology</title>
+		<meeting>. of the 3rd IEEE Symp. on Visual Analytics Science and Technology</meeting>
+		<imprint>
+			<date type="published" when="2008" />
+			<biblScope unit="page" from="147" to="154" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.71,159.67,231.78,7.17;10,40.75,169.15,232.07,7.17;10,40.75,178.62,110.81,7.17"  xml:id="b3">
+	<analytic>
+		<title level="a" type="main">Capturing the design space of sequential space-filling layouts</title>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Baudel</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Broeskema</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Trans. on Visualization and Computer Graphics</title>
+		<imprint>
+			<biblScope unit="volume">18</biblScope>
+			<biblScope unit="issue">12</biblScope>
+			<biblScope unit="page" from="2593" to="2602" />
+			<date type="published" when="2012-12" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.75,188.10,231.72,7.17;10,40.75,197.57,157.99,7.17"  xml:id="b4">
+	<analytic>
+		<title level="a" type="main">Multidimensional binary search trees used for associative searching</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">L</forename>
+				<surname>Bentley</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Commun. ACM</title>
+		<imprint>
+			<biblScope unit="volume">18</biblScope>
+			<biblScope unit="issue">9</biblScope>
+			<biblScope unit="page" from="509" to="517" />
+			<date type="published" when="1975" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.75,207.05,231.51,7.17;10,40.75,216.53,231.79,7.17;10,40.75,225.88,147.91,7.17"  xml:id="b5">
+	<analytic>
+		<title level="a" type="main">Uncertainty-aware exploration of continuous parameter spaces using multivariate prediction</title>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Berger</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Piringer</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Filzmoser</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<surname>Gröller</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Comput. Graph. Forum</title>
+		<imprint>
+			<biblScope unit="volume">30</biblScope>
+			<biblScope unit="issue">3</biblScope>
+			<biblScope unit="page" from="911" to="920" />
+			<date type="published" when="2011" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.72,235.36,232.14,7.17;10,40.75,244.84,154.97,7.17"  xml:id="b6">
+	<monogr>
+		<title level="m" type="main">Classification and Regression Trees</title>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<surname>Breiman</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Friedman</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Olshen</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Stone</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="1984" />
+			<publisher>Wadsworth and Brooks</publisher>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.72,254.31,231.99,7.17;10,40.75,263.79,232.11,7.17;10,40.75,273.27,217.02,7.17"  xml:id="b7">
+	<analytic>
+		<title level="a" type="main">Dis-function: Learning distance functions interactively</title>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<forename type="middle">T</forename>
+				<surname>Brown</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Liu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<forename type="middle">E</forename>
+				<surname>Brodley</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Chang</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. of the IEEE Conf. on Visual Analytics Science and Technology</title>
+		<meeting>. of the IEEE Conf. on Visual Analytics Science and Technology</meeting>
+		<imprint>
+			<date type="published" when="2012" />
+			<biblScope unit="page" from="83" to="92" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.75,282.74,232.03,7.17;10,40.75,292.22,231.89,7.17;10,40.75,301.58,158.94,7.17;10,22.51,311.05,25.50,7.17;10,67.62,311.05,20.70,7.17;10,108.10,311.05,11.42,7.17;10,139.17,311.05,7.28,7.17;10,165.93,311.05,13.03,7.17;10,238.17,311.05,34.73,7.17;10,40.76,320.53,212.21,7.17"  xml:id="b8">
+	<analytic>
+		<title level="a" type="main">Flow-based scatterplots for sensitivity analysis</title>
+		<author>
+			<persName>
+				<forename type="first">Y.-H</forename>
+				<surname>Chan</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Correa</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">K.-L</forename>
+				<surname>Ma</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. of the IEEE Conf</title>
+		<editor>10] C. Chang and C. Lin. LIB-SVM</editor>
+		<meeting>. of the IEEE Conf</meeting>
+		<imprint>
+			<date type="published" when="2010" />
+			<biblScope unit="page" from="43" to="50" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.72,330.01,231.83,7.17;10,40.76,339.48,113.60,7.17"  xml:id="b9">
+	<analytic>
+		<title/>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Cleveland</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<forename type="middle">E</forename>
+				<surname>Mcgill</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Dynamic Graphics for Statistics. Wadsworth and Brooks/Cole</title>
+		<imprint>
+			<date type="published" when="1988" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,348.96,231.72,7.17;10,40.76,358.44,212.14,7.17"  xml:id="b10">
+	<monogr>
+		<title level="m" type="main">Introduction to Algorithms</title>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<forename type="middle">H</forename>
+				<surname>Cormen</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Stein</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<forename type="middle">L</forename>
+				<surname>Rivest</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<forename type="middle">E</forename>
+				<surname>Leiserson</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2001" />
+			<publisher>McGraw-Hill Higher Education</publisher>
+		</imprint>
+	</monogr>
+	<note>2nd. edition</note>
+</biblStruct>
+
+<biblStruct coords="10,40.72,367.91,232.24,7.17;10,40.76,377.27,232.09,7.17;10,40.76,386.74,33.79,7.17"  xml:id="b11">
+	<analytic>
+		<title level="a" type="main">Multiple regression analysis</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<forename type="middle">A</forename>
+				<surname>Effroymson</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Mathematical Models for Digital Computers</title>
+		<editor>A. Ralston and H. S. Wilf</editor>
+		<imprint>
+			<date type="published" when="1960" />
+			<biblScope unit="page" from="191" to="203" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.71,396.22,232.18,7.17;10,40.75,405.70,90.07,7.17"  xml:id="b12">
+	<analytic>
+		<title level="a" type="main">Multivariate adaptive regression splines</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">H</forename>
+				<surname>Friedman</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">The Annals of Statistics</title>
+		<imprint>
+			<biblScope unit="volume">19</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="1" to="67" />
+			<date type="published" when="1991" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.72,415.17,232.12,7.17;10,40.75,424.65,231.95,7.17;10,40.75,434.13,88.75,7.17"  xml:id="b13">
+	<analytic>
+		<title level="a" type="main">Extending mosaic displays: Marginal, conditional, and partial views of categorical data</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Friendly</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Journal of Computational and Graphical Statistics</title>
+		<imprint>
+			<biblScope unit="volume">8</biblScope>
+			<biblScope unit="page" from="373" to="395" />
+			<date type="published" when="1999" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.70,443.60,231.94,7.17;10,40.75,452.96,232.08,7.17;10,40.75,462.44,144.55,7.17"  xml:id="b14">
+	<analytic>
+		<title level="a" type="main">Visual Exploration of High Dimensional Scalar Functions</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Gerber</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Bremer</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">V</forename>
+				<surname>Pascucci</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Whitaker</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Trans. on Visualization and Computer Graphics</title>
+		<imprint>
+			<biblScope unit="volume">16</biblScope>
+			<biblScope unit="issue">6</biblScope>
+			<biblScope unit="page" from="1271" to="1280" />
+			<date type="published" when="2010" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.73,471.91,231.91,7.17;10,40.75,481.39,232.12,7.17;10,40.75,490.87,224.94,7.17"  xml:id="b15">
+	<analytic>
+		<title level="a" type="main">Pointwise local pattern exploration for sensitivity analysis</title>
+		<author>
+			<persName>
+				<forename type="first">Z</forename>
+				<surname>Guo</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Ward</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<surname>Rundensteiner</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Ruiz</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. of the IEEE Conf. on Visual Analytics Science and Technology</title>
+		<meeting>. of the IEEE Conf. on Visual Analytics Science and Technology</meeting>
+		<imprint>
+			<date type="published" when="2011" />
+			<biblScope unit="page" from="131" to="140" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,500.34,231.58,7.17;10,40.75,509.82,232.02,7.17;10,40.75,519.18,232.01,7.17;10,40.75,528.65,17.83,7.17"  xml:id="b16">
+	<analytic>
+		<title level="a" type="main">Model space visualization for multivariate linear trend discovery</title>
+		<author>
+			<persName>
+				<forename type="first">Z</forename>
+				<surname>Guo</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<forename type="middle">O</forename>
+				<surname>Ward</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<forename type="middle">A</forename>
+				<surname>Rundensteiner</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. of the 4th IEEE Symp. on Visual Analytics Science and Technology</title>
+		<meeting>. of the 4th IEEE Symp. on Visual Analytics Science and Technology</meeting>
+		<imprint>
+			<date type="published" when="2009" />
+			<biblScope unit="page" from="75" to="82" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.72,538.13,232.00,7.17;10,40.75,547.61,226.99,7.17"  xml:id="b17">
+	<analytic>
+		<title level="a" type="main">An introduction to variable and feature selection</title>
+		<author>
+			<persName>
+				<forename type="first">I</forename>
+				<surname>Guyon</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Elisseeff</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Journal of Machine Learning Research</title>
+		<imprint>
+			<biblScope unit="volume">3</biblScope>
+			<biblScope unit="page" from="1157" to="1182" />
+			<date type="published" when="2003-03" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.72,557.08,231.97,7.17;10,40.76,566.56,224.71,7.17"  xml:id="b18">
+	<analytic>
+		<title level="a" type="main">Variable Binned Scatter Plots</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<forename type="middle">C</forename>
+				<surname>Hao</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">U</forename>
+				<surname>Dayal</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Sharma</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Keim</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Janetzko</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Information Visualization</title>
+		<imprint>
+			<biblScope unit="volume">9</biblScope>
+			<biblScope unit="issue">3</biblScope>
+			<biblScope unit="page" from="194" to="203" />
+			<date type="published" when="2010" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.72,576.03,231.83,7.17;10,40.77,585.51,184.26,7.17"  xml:id="b19">
+	<monogr>
+		<title level="m" type="main">The Elements of Statistical Learning, Second Edition</title>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Hastie</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Tibshirani</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Friedman</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2009" />
+			<publisher>Springer</publisher>
+			<pubPlace>New York Inc.</pubPlace>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.73,594.87,232.01,7.17;10,40.76,604.36,231.95,7.25;10,40.74,614.02,216.53,7.17"  xml:id="b20">
+	<analytic>
+		<title level="a" type="main">Uncertainty and sensitivity analysis for models of complex systems</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">C</forename>
+				<surname>Helton</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Computational Methods in Transport: Verification and Validation</title>
+		<editor>F. Graziani</editor>
+		<imprint>
+			<publisher>Springer</publisher>
+			<date type="published" when="2008" />
+			<biblScope unit="page" from="207" to="228" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.70,623.49,232.04,7.17;10,40.74,632.97,232.06,7.17;10,40.74,642.45,107.70,7.17"  xml:id="b21">
+	<analytic>
+		<title level="a" type="main">Parallel coordinates for visualizing multidimensional geometry</title>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Inselberg</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Dimsdale</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. of CG International &apos;87)</title>
+		<meeting>. of CG International &apos;87)</meeting>
+		<imprint>
+			<date type="published" when="1987" />
+			<biblScope unit="page" from="25" to="44" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.69,651.92,232.01,7.17;10,40.74,661.40,231.84,7.17;10,40.74,670.76,162.55,7.17"  xml:id="b22">
+	<analytic>
+		<title level="a" type="main">Enterprise data analysis and visualization: An interview study</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Kandel</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Paepcke</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Hellerstein</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Heer</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Trans. on Visualization and Computer Graphics</title>
+		<imprint>
+			<biblScope unit="volume">18</biblScope>
+			<biblScope unit="issue">12</biblScope>
+			<biblScope unit="page" from="2917" to="2926" />
+			<date type="published" when="2012" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.68,680.23,232.07,7.17;10,40.74,689.71,231.85,7.17;10,40.74,699.18,232.11,7.17;10,40.74,708.66,153.06,7.17"  xml:id="b23">
+	<analytic>
+		<title level="a" type="main">A generic model for the integration of interactive visualization and statistical computing using R</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Kehrer</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<forename type="middle">N</forename>
+				<surname>Boubela</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Filzmoser</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Piringer</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. of the IEEE Conf. on Visual Analytics Science and Technology</title>
+		<meeting>. of the IEEE Conf. on Visual Analytics Science and Technology</meeting>
+		<imprint>
+			<date type="published" when="2012" />
+			<biblScope unit="page" from="233" to="234" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.71,718.14,232.02,7.17;10,40.74,727.61,232.10,7.17;10,40.74,736.97,231.88,7.17;10,303.42,54.05,17.83,7.17"  xml:id="b24">
+	<analytic>
+		<title level="a" type="main">Visual analytics: Scope and challenges</title>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<forename type="middle">A</forename>
+				<surname>Keim</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<surname>Mansmann</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Schneidewind</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Thomas</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Ziegler</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Visual Data Mining</title>
+		<editor>S. J. Simoff, M. H. Böhlen, and A. Mazeika</editor>
+		<imprint>
+			<publisher>Springer</publisher>
+			<date type="published" when="2008" />
+			<biblScope unit="page" from="76" to="90" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,63.41,232.01,7.17;10,303.41,72.89,124.63,7.17"  xml:id="b25">
+	<analytic>
+		<title level="a" type="main">Wrappers for feature subset selection</title>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Kohavi</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<forename type="middle">H</forename>
+				<surname>John</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Artificial Intelligence</title>
+		<imprint>
+			<biblScope unit="volume">97</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="273" to="324" />
+			<date type="published" when="1997" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.36,82.36,232.00,7.17;10,303.41,91.84,232.24,7.17;10,303.41,101.32,186.66,7.17"  xml:id="b26">
+	<analytic>
+		<title level="a" type="main">Time histograms for large, timedependent data</title>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Kosara</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<surname>Bendix</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Hauser</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. of the 6th Joint IEEE TCVG -EUROGRAPHICS Symp. on Visualization</title>
+		<meeting>. of the 6th Joint IEEE TCVG -EUROGRAPHICS Symp. on Visualization</meeting>
+		<imprint>
+			<date type="published" when="2004" />
+			<biblScope unit="page" from="45" to="54" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.39,110.79,231.91,7.17;10,303.42,120.27,232.02,7.17;10,303.42,129.63,231.91,7.07;10,303.42,139.10,69.81,7.17"  xml:id="b27">
+	<analytic>
+		<title level="a" type="main">Guiding feature subset selection with an interactive visualization</title>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>May</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Bannach</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Davey</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Ruppert</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Kohlhammer</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. of the IEEE Conf. on Visual Analytics Science and Technology</title>
+		<meeting>. of the IEEE Conf. on Visual Analytics Science and Technology</meeting>
+		<imprint>
+			<date type="published" when="2011" />
+			<biblScope unit="page" from="111" to="120" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.41,148.58,231.70,7.17;10,303.41,158.05,232.01,7.17;10,303.41,167.53,231.91,7.07;10,303.41,177.01,61.88,7.17"  xml:id="b28">
+	<analytic>
+		<title level="a" type="main">Clustersculptor: A visual analytics tool for high-dimensional data</title>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<forename type="middle">J</forename>
+				<surname>Nam</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Y</forename>
+				<surname>Han</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Mueller</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Zelenyuk</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Imre</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. of the 2nd IEEE Symp. on Visual Analytics Science and Technology</title>
+		<meeting>. of the 2nd IEEE Symp. on Visual Analytics Science and Technology</meeting>
+		<imprint>
+			<date type="published" when="2007" />
+			<biblScope unit="page" from="75" to="82" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.39,186.48,231.99,7.17;10,303.40,195.96,231.65,7.17;10,303.40,205.32,231.71,7.07;10,303.40,214.79,111.90,7.17"  xml:id="b29">
+	<analytic>
+		<title level="a" type="main">Quantifying and comparing features in high-dimensional datasets</title>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Piringer</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Berger</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Hauser</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. of the 6th International Conf. on Coordinated &amp; Multiple Views in Exploratory Visualization (CMV2008)</title>
+		<meeting>. of the 6th International Conf. on Coordinated &amp; Multiple Views in Exploratory Visualization (CMV2008)</meeting>
+		<imprint>
+			<date type="published" when="2008" />
+			<biblScope unit="page" from="240" to="245" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,224.27,231.90,7.17;10,303.40,233.75,232.04,7.17;10,303.40,243.22,94.03,7.17"  xml:id="b30">
+	<analytic>
+		<title level="a" type="main">Hypermoval: Interactive visual validation of regression models for real-time simulation</title>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Piringer</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Berger</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Krasser</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Comput. Graph. Forum</title>
+		<imprint>
+			<biblScope unit="volume">29</biblScope>
+			<biblScope unit="issue">3</biblScope>
+			<biblScope unit="page" from="983" to="992" />
+			<date type="published" when="2010" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,252.70,231.66,7.17;10,303.41,262.18,232.12,7.17;10,303.41,271.65,219.11,7.17"  xml:id="b31">
+	<analytic>
+		<title level="a" type="main">A multi-threading architecture to support interactive visual exploration</title>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Piringer</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Tominski</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Muigg</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Berger</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Trans. on Visualization and Computer Graphics</title>
+		<imprint>
+			<biblScope unit="volume">15</biblScope>
+			<biblScope unit="issue">6</biblScope>
+			<biblScope unit="page" from="1113" to="1120" />
+			<date type="published" when="2009-11" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.39,281.01,231.90,7.17;10,303.42,290.49,232.03,7.17"  xml:id="b32">
+	<analytic>
+		<title level="a" type="main">Global model analysis by parameter space partitioning</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<forename type="middle">A</forename>
+				<surname>Pitt</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Kim</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<forename type="middle">J</forename>
+				<surname>Navarro</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">I</forename>
+				<surname>Myung</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Psychological Review</title>
+		<imprint>
+			<biblScope unit="volume">113</biblScope>
+			<biblScope unit="page" from="57" to="83" />
+			<date type="published" when="2006" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.39,299.96,231.85,7.17;10,303.43,309.44,231.87,7.17;10,303.43,318.92,33.67,7.17"  xml:id="b33">
+	<analytic>
+		<title level="a" type="main">Visualizing summary statistics and uncertainty</title>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Potter</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Kniss</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<forename type="middle">F</forename>
+				<surname>Riesenfeld</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<forename type="middle">R</forename>
+				<surname>Johnson</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Comput. Graph. Forum</title>
+		<imprint>
+			<biblScope unit="volume">29</biblScope>
+			<biblScope unit="issue">3</biblScope>
+			<biblScope unit="page" from="823" to="832" />
+			<date type="published" when="2010" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,328.39,232.05,7.17;10,303.43,337.87,232.08,7.17;10,303.43,347.34,51.89,7.17"  xml:id="b34">
+	<analytic>
+		<title level="a" type="main">Learning with continuous classes</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">R</forename>
+				<surname>Quinlan</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. of the 5th Australian Joint Conf. on Artificial Intelligence</title>
+		<meeting>. of the 5th Australian Joint Conf. on Artificial Intelligence</meeting>
+		<imprint>
+			<date type="published" when="1992" />
+			<biblScope unit="page" from="343" to="348" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,356.70,231.86,7.17;10,303.43,366.18,231.85,7.17;10,303.43,375.65,231.55,7.17;10,303.43,385.13,17.83,7.17"  xml:id="b35">
+	<analytic>
+		<title level="a" type="main">Detecting novel associations in large data sets</title>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<forename type="middle">N</forename>
+				<surname>Reshef</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Y</forename>
+				<forename type="middle">A</forename>
+				<surname>Reshef</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<forename type="middle">K</forename>
+				<surname>Finucane</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<forename type="middle">R</forename>
+				<surname>Grossman</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Mcvean</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<forename type="middle">J</forename>
+				<surname>Turnbaugh</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<forename type="middle">S</forename>
+				<surname>Lander</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Mitzenmacher</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<forename type="middle">C</forename>
+				<surname>Sabeti</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Science</title>
+		<imprint>
+			<biblScope unit="issue">6062</biblScope>
+			<biblScope unit="page" from="3341518" to="1524" />
+			<date type="published" when="2011" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.40,394.61,232.15,7.17;10,303.43,404.08,135.07,7.17"  xml:id="b36">
+	<analytic>
+		<title level="a" type="main">The quadtree and related hierarchical data structures</title>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Samet</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">ACM Computing Surveys</title>
+		<imprint>
+			<biblScope unit="volume">16</biblScope>
+			<biblScope unit="issue">2</biblScope>
+			<biblScope unit="page" from="187" to="260" />
+			<date type="published" when="1984" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.40,413.56,232.02,7.17;10,303.43,422.92,231.82,7.17;10,303.43,432.39,231.95,7.17;10,303.43,441.87,95.94,7.17"  xml:id="b37">
+	<analytic>
+		<title level="a" type="main">A rank-by-feature framework for unsupervised multidimensional data exploration using low dimensional projections</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Seo</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Shneiderman</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. IEEE Symp</title>
+		<meeting>. IEEE Symp</meeting>
+		<imprint>
+			<date type="published" when="2004" />
+			<biblScope unit="page" from="65" to="72" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.40,451.35,231.95,7.17;10,303.43,460.84,81.54,7.34"  xml:id="b38">
+	<monogr>
+		<title level="m" type="main">Density Estimation for Statistics and Data Analysis</title>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<forename type="middle">W</forename>
+				<surname>Silverman</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="1986" />
+			<publisher>Chapman and Hall</publisher>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.39,470.49,231.97,7.17;10,303.42,479.97,232.09,7.17;10,303.42,489.45,85.99,7.17"  xml:id="b39">
+	<analytic>
+		<title level="a" type="main">Selecting good views of high-dimensional data using class consistency</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Sips</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Neubert</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">P</forename>
+				<surname>Lewis</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Hanrahan</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Comput. Graph. Forum</title>
+		<imprint>
+			<biblScope unit="volume">28</biblScope>
+			<biblScope unit="issue">3</biblScope>
+			<biblScope unit="page" from="831" to="838" />
+			<date type="published" when="2009" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.39,498.80,231.94,7.17;10,303.42,508.28,231.98,7.17;10,303.42,517.76,121.51,7.17"  xml:id="b40">
+	<analytic>
+		<title level="a" type="main">Configuring Hierarchical Layouts to Address Research Questions</title>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Slingsby</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Dykes</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Wood</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Trans. on Visualization and Computer Graphics</title>
+		<imprint>
+			<biblScope unit="volume">15</biblScope>
+			<biblScope unit="issue">6</biblScope>
+			<biblScope unit="page" from="977" to="984" />
+			<date type="published" when="2009" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.37,527.23,232.02,7.17;10,303.42,536.71,139.96,7.17"  xml:id="b41">
+	<analytic>
+		<title level="a" type="main">Validation of regression models: Methods and examples</title>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Snee</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Technometrics</title>
+		<imprint>
+			<biblScope unit="volume">19</biblScope>
+			<biblScope unit="issue">4</biblScope>
+			<biblScope unit="page" from="415" to="428" />
+			<date type="published" when="1977-11" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.39,546.18,231.98,7.17;10,303.43,555.66,231.87,7.17;10,303.43,565.14,232.12,7.17;10,303.43,574.49,231.73,7.07;10,303.43,583.97,106.74,7.17"  xml:id="b42">
+	<analytic>
+		<title level="a" type="main">Combining automated analysis and visualization techniques for effective exploration of high-dimensional data</title>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Tatu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Albuquerque</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Eisemann</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Schneidewind</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Theisel</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Magnor</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Keim</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. of the 4th IEEE Symp. on Visual Analytics Science and Technology</title>
+		<meeting>. of the 4th IEEE Symp. on Visual Analytics Science and Technology</meeting>
+		<imprint>
+			<date type="published" when="2009" />
+			<biblScope unit="page" from="59" to="66" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.39,593.45,232.15,7.17;10,303.42,602.92,231.78,7.17;10,303.42,612.40,232.12,7.17;10,303.42,621.88,205.99,7.17"  xml:id="b43">
+	<analytic>
+		<title level="a" type="main">Tuner: Principled parameter finding for image segmentation algorithms using visual response surface exploration</title>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Torsney-Weir</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Saad</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Möller</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H.-C</forename>
+				<surname>Hege</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Weber</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J.-M</forename>
+				<surname>Verbavatz</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Trans. on Visualization and Computer Graphics</title>
+		<imprint>
+			<biblScope unit="issue">12</biblScope>
+			<biblScope unit="page" from="171892" to="1901" />
+			<date type="published" when="2011" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.42,631.35,206.24,7.17"  xml:id="b44">
+	<monogr>
+		<title level="m" type="main">Exploratory Data Analysis</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">W</forename>
+				<surname>Tukey</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="1977" />
+			<publisher>Addison-Wesley</publisher>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,640.83,231.88,7.17;10,303.43,650.19,232.00,7.17;10,303.43,659.66,224.94,7.17"  xml:id="b45">
+	<analytic>
+		<title level="a" type="main">Baobabview: Interactive construction and analysis of decision trees</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Van Den Elzen</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">J</forename>
+				<surname>Van Wijk</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. of the IEEE Conf. on Visual Analytics Science and Technology</title>
+		<meeting>. of the IEEE Conf. on Visual Analytics Science and Technology</meeting>
+		<imprint>
+			<date type="published" when="2011" />
+			<biblScope unit="page" from="151" to="160" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,669.14,231.97,7.17;10,303.44,678.62,231.93,7.17;10,303.44,688.09,49.64,7.17"  xml:id="b46">
+	<analytic>
+		<title level="a" type="main">HyperSlice: Visualization of Scalar Functions of Many Variables</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Van Wijk</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Van Liere</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. of the 4th Conf. on Visualization</title>
+		<meeting>. of the 4th Conf. on Visualization</meeting>
+		<imprint>
+			<date type="published" when="1993" />
+			<biblScope unit="page" from="119" to="125" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.41,697.57,232.00,7.17;10,303.44,707.05,104.82,7.17"  xml:id="b47">
+	<monogr>
+		<title level="m" type="main">Information Visualization: Perception for Design</title>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Ware</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2004" />
+			<publisher>Morgan Kaufmann Publishers Inc</publisher>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.40,716.40,231.90,7.17;10,303.44,725.88,231.91,7.17;10,303.43,735.36,61.88,7.17"  xml:id="b48">
+	<analytic>
+		<title level="a" type="main">Graph-Theoretic Scagnostics</title>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<surname>Wilkinson</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Anand</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Grossman</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. IEEE Symp</title>
+		<meeting>. IEEE Symp</meeting>
+		<imprint>
+			<date type="published" when="2005" />
+			<biblScope unit="page" from="21" to="28" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+				</listBibl>
+			</div>
+		</back>
+	</text>
+</TEI>

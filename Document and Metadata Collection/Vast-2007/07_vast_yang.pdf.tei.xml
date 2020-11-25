@@ -1,0 +1,935 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.tei-c.org/ns/1.0 /home/pisenberg/grobid/grobid-home/schemas/xsd/Grobid.xsd"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+	<teiHeader xml:lang="en">
+		<encodingDesc>
+			<appInfo>
+				<application version="0.4.1" ident="GROBID" when="2016-09-09T13:38+0000">
+					<ref target="https://github.com/kermitt2/grobid">GROBID - A machine learning software for extracting information from scholarly documents</ref>
+				</application>
+			</appInfo>
+		</encodingDesc>
+		<fileDesc>
+			<titleStmt>
+				<title level="a" type="main">Analysis Guided Visual Exploration of Multivariate Data</title>
+			</titleStmt>
+			<publicationStmt>
+				<publisher/>
+				<availability status="unknown"><licence/></availability>
+			</publicationStmt>
+			<sourceDesc>
+				<biblStruct>
+					<analytic>
+						<author>
+							<persName>
+								<forename type="first">Di</forename>
+								<surname>Yang</surname>
+							</persName>
+							<affiliation>
+								<orgName type="institution">Worcester Polytechnic Institute</orgName>
+							</affiliation>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Elke</forename>
+								<forename type="middle">A</forename>
+								<surname>Rundensteiner</surname>
+							</persName>
+							<affiliation>
+								<orgName type="institution">Worcester Polytechnic Institute</orgName>
+							</affiliation>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Matthew</forename>
+								<forename type="middle">O</forename>
+								<surname>Ward</surname>
+							</persName>
+							<affiliation>
+								<orgName type="institution">Worcester Polytechnic Institute</orgName>
+							</affiliation>
+						</author>
+						<title level="a" type="main">Analysis Guided Visual Exploration of Multivariate Data</title>
+					</analytic>
+					<monogr>
+						<imprint>
+							<date/>
+						</imprint>
+					</monogr>
+				</biblStruct>
+			</sourceDesc>
+		</fileDesc>
+		<profileDesc>
+			<textClass>
+				<keywords>
+					<term>Visual Analytics, Visual Knowledge Discovery, Dis-</term>
+					<term>covery Management, Analysis Guided Exploration</term>
+					<term>Index Terms: H52 [Information Interfaces and Presentation]:</term>
+					<term>User Interfaces—Graphical user interfaces H28 [Database Man-</term>
+					<term>agement]: Database Applications—Data mining I53 [Pattern</term>
+					<term>Recognition]: Clustering—Similarity Measures</term>
+				</keywords>
+			</textClass>
+			<abstract>
+				<p>Visualization systems traditionally focus on graphical representation of information. They tend not to provide integrated analytical services that could aid users in tackling complex knowledge discovery tasks. Users&apos; exploration in such environments is usually impeded due to several problems: 1) valuable information is hard to discover when too much data is visualized on the screen; 2) Users have to manage and organize their discoveries off line, because no systematic discovery management mechanism exists; 3) their discoveries based on visual exploration alone may lack accuracy; 4) and they have no convenient access to the important knowledge learned by other users. To tackle these problems, it has been recognized that analytical tools must be introduced into visualization systems. In this paper, we present a novel analysis-guided exploration system, called the Nugget Management System (NMS). It leverages the collaborative effort of human comprehensibility and machine computations to facilitate users&apos; visual exploration processes. Specifically, NMS first extracts the valuable information (nuggets) hidden in datasets based on the interests of users. Given that similar nuggets may be rediscovered by different users, NMS consolidates the nugget candidate set by clustering based on their semantic similarity. To solve the problem of inaccurate discoveries, localized data mining techniques are applied to refine the nuggets to best represent the captured patterns in datasets. Lastly, the resulting well-organized nugget pool is used to guide users&apos; exploration. To evaluate the effectiveness of NMS, we integrated NMS into Xmd-vTool, a freeware multivariate visualization system. User studies were performed to compare the users&apos; efficiency and accuracy in finishing tasks on real datasets, with and without the help of NMS. Our user studies confirmed the effectiveness of NMS.</p>
+			</abstract>
+		</profileDesc>
+	</teiHeader>
+	<text xml:lang="en">
+		<body>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1">INTRODUCTION</head><p> Visualization systems traditionally focus on building graphical depictions of relationships among information in a human comprehensible format. By doing so, they help their users to better understand the information. This means the users can either learn some facts that are not easy to discover without the graphical depiction, or the users' knowledge to some facts can become deeper or more precise. The usefulness of visualization systems has been well es- tablished <ref type="bibr" coords="1,88.63,617.31,36.04,8.97">[22, ?, 18]</ref>. Recently, visual analytics <ref type="bibr" coords="1,421.42,403.01,14.94,8.97" target="#b19">[20] </ref> has been employed to solve complex knowledge discovery tasks in many important fields of human society, ranging from homeland security and credit fraud detection to financial market analysis. Solving such tasks usually requires analysts to perform complicated and iterative sense-making processes <ref type="bibr" coords="1,317.95,452.83,14.19,8.97" target="#b10">[11,</ref><ref type="bibr" coords="1,334.30,452.83,10.65,8.97" target="#b11"> 12]</ref> . Thus, it has been recognized that relying on analysts' perceptual power alone to conduct visual exploration may not always be the most effective method to solve these problems. To fully support visual analytics, visualization systems have to be improved by tackling some key challenges. Here, while we use simple examples in <ref type="figure" coords="1,391.38,504.07,30.83,8.97" target="#fig_0">Figure 1</ref>-4 to illustrate the these challenges, our goal over time is to support a rich set of patterns, including clusters, outliers and association rules. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>1) Overloaded Displays: </head><p>When too much information is visualized on the screen, effective knowledge discovery is difficult. For example, as shown in <ref type="figure" coords="1,534.60,543.92,23.41,8.97;1,317.95,553.88,3.36,8.97" target="#fig_0">Figure  1</ref> , when a dataset, even with modest numbers of records and dimensions , is visualized, overloaded displays can make knowledge discovery a time-consuming process. 2) Disorganized Discoveries: Since there is no systematic discovery management mechanism provided by visualization systems themselves, users have to manage and organize their discoveries off line on their own. For example , some users, either due to rich domain knowledge or after a long time of exploration, may be able to identify the patterns (e.g., the cluster highlighted in red in <ref type="figure" coords="1,420.76,633.58,29.17,8.97">Figure 2</ref>). But unfortunately, she may not be able to store it in the system nor easily retrieve it for future exploration. Even if the systems provide some simple recording functionality, since a pattern may be repeatedly visited by a single user or even multiple users, redundant recordings may be generated (e.g., the clusters in Figures 3 and 4 are very similar). Such redundancy causes information overload that may hinder the future use of those recordings. 3) Inaccurate Discoveries: Discoveries found by user's perceptual power alone may be inaccurate. For example, the " clusters " found by users in Figures 3 and 4 are actually subparts of a complete cluster depicted in <ref type="figure" coords="2,198.08,67.20,29.78,8.97">Figure 2</ref>. Such inaccurate discoveries may lead to low-quality decision making (i.e., this user may miscount the population of the whole cluster, if she works on the " partial cluster " in <ref type="figure" coords="2,139.39,97.09,29.82,8.97">Figure 3</ref>). 4) Isolated Knowledge: Even if valuable knowledge may have already been uncovered, there is no convenient mechanism for users to access and share it, not to mention conduct collaborative visual analytics. For example, a user interested in " clusters " in the dataset may spend a lot of time to find the one mentioned in <ref type="figure" coords="2,135.58,146.91,29.98,8.97">Figure 2</ref>, even if it may have already been previously discovered. Previous efforts to tackle these problems can be roughly classified into two categories. 1) User-driven: In this category, while the knowledge discovery process still relies on users' perceptual power, a variety of visual interaction mechanisms, such as zooming, filtering , color coding and dynamic querying, are offered by the visualization systems to facilitate exploration <ref type="bibr" coords="2,206.74,218.76,9.71,8.97" target="#b1">[2,</ref><ref type="bibr" coords="2,219.33,218.76,10.65,8.97" target="#b21"> 22]</ref>. Our framework applies these techniques to allow users to best use their perceptual power during visual exploration. 2) Data-driven: Data-driven techniques aim to expedite knowledge discovery with the help of the analytical power of machines. Data mining algorithms <ref type="bibr" coords="2,250.38,258.61,14.19,8.97" target="#b26">[27,</ref><ref type="bibr" coords="2,266.63,258.61,11.21,8.97" target="#b13"> 14,</ref><ref type="bibr" coords="2,279.90,258.61,10.65,8.97" target="#b9"> 10]</ref>, which detect useful patterns or rules in large datasets, fulfill an important role here. These techniques will be employed in our framework to improve the accuracy of discoveries. More recently, some initial efforts have emerged to take advantage of both human perceptual abilities and computational power of computers to deal with the challenging process of knowledge dis- covery <ref type="bibr" coords="2,81.11,330.47,13.75,8.97" target="#b19">[20]</ref>. Visual data mining (VDM) <ref type="bibr" coords="2,205.36,330.47,9.71,8.97" target="#b8">[9,</ref><ref type="bibr" coords="2,218.05,330.47,11.95,8.97" target="#b12"> 13] </ref>involves users in the mining process itself, rather than being carried out completely by machines. In VDM, visualizations are utilized to support a specific mining task or display the results of a mining algorithm, such as association rule mining. However, VDM offers little help for knowledge organization and management, thus does not support an iterative and comprehensive sense-making process. Our framework takes a different approach from VDM, that is, we put users at the first stage of knowledge discovery process and only apply data mining techniques as secondary method to refine and enhance what the users have already identified as interesting during their initial exploration. <ref type="bibr" coords="2,113.60,440.06,14.94,8.97" target="#b10">[11] </ref>proposed interactive tools to manage both the existing information and the synthesis of new analytic knowledge for sense-making in visualization systems. This work so far has not paid much attention on how to consolidate the users' discoveries . Collaborative visual analytics <ref type="bibr" coords="2,184.85,479.92,14.94,8.97" target="#b11">[12] </ref>introduced computational power into the sense-making process with a focus on supporting the exchange of information among team members. In this work, we design, implement and evaluate a novel analysis-guided exploration system, called the Nuggets Management System (NMS), which leverages the collaborative effort of human intuition and computational analysis to facilitate the process of visual analytics. Specifically, NMS first extracts nuggets based on both the explicit and implicit indication of users' interest. To eliminate possible redundancy among the collected nuggets, NMS combines similar nuggets by conducting nugget clustering. Then, data mining techniques are applied to refine the nuggets and thus improve their accuracy in capturing patterns present in the dataset. We provide a rich set of functionalities to manage the nuggets. With them, nuggets can be maintained automatically (e.g., out-of-date nuggets can be pruned by the system) or by the users (e.g., users can attach annotations <ref type="bibr" coords="2,136.87,641.43,14.94,8.97" target="#b14">[15] </ref>to nuggets to facilitate nugget retrieval and sharing). Lastly, the well-organized nugget pool will be used to guide users' exploration in both user-and system-initiated manners. As a general framework for analysis-guided exploration of multivariate data, NMS can be incorporated into any multivariate visualization system. To verify the feasibility of NMS, we have integrated it into XmdvTool <ref type="bibr" coords="2,142.74,703.32,13.74,8.97" target="#b21">[22]</ref>, a freeware tool developed at WPI for visual exploration and analysis of multivariate data sets. The main contributions of this paper are: @BULLET We describe user studies evaluating the effectiveness of NMS. The user study demonstrates that NMS is able to enhance both the efficiency and accuracy of knowledge discovery tasks. The remainder of this paper is organized as follows: Section 2 introduces the Nugget Extraction. Section 3 describes the techniques used in Nugget Combination. Nugget Refinement techniques are discussed in Section 4. Sections 5 and 6 presents our ideas on Nugget Maintenance and Nugget Guided Exploration respectively. Finally, we describe experimental evaluation in Section 7. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2">NUGGET EXTRACTION 2.1 Definition of Nuggets</head><p>Generally, a nugget is some valuable information extracted from the dataset, typically some subpart of the whole dataset, which could be clusters, outliers, association and any other patterns. Additional attributes of a nugget, such as a name and annotations, can be attached to it as well. For the purpose of this paper, a nugget N is defined by a range query Q over a particular dataset D as well as the result of this query, namely the result dataset </p><formula>" ; Q(D) ⊆ D. A </formula><p>more extensive range of nugget types will be considered in our future work. The concept of nuggets is independent of the display methods in multivariate visualization systems, such as Parallel Coordinates, Scatterplots and Glyphs <ref type="bibr" coords="2,455.54,543.49,13.74,8.97" target="#b21">[22]</ref> . Without loss of generality , we use Parallel Coordinates, which is a widely used method, to demonstrate the examples in this paper. Thus visually a nugget appears as a blue band across the axes, which represents the query ranges on each dimension, and the red (highlighted) lines that indicate the selected records (result) of the query. As shown in Figures 2, 3 and 4, users can specify different queries by adjusting the lower and upper bounds of the blue band (selection ranges). Users can also hide some dimensions if they are not interested in them. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.2">Nugget Extraction Based on User Interest</head><p>Nugget extraction can be achieved by observing users' exploration process (user-driven) or by conducting analysis of the patterns existing in the data (data-driven). The NMS framework is compatible with the nuggets derived using either of these two methods. Data mining algorithms for pattern detection have been extensively studied in the KDD community <ref type="bibr" coords="2,418.49,703.31,14.19,8.97" target="#b9">[10,</ref><ref type="bibr" coords="2,434.95,703.31,7.47,8.97" target="#b4"> 5] </ref>and any of these methods could be plugged into our framework. Here, we instead focus on nugget extraction via user-driven methods. The main benefit of user-driven methods is that we can bring into play the advantage of human perceptual and cognitive abilities to identify patterns in a knowledge discovery process, which is in fact one of the main reasons for developing visualization systems. Similar to other systems <ref type="bibr" coords="3,153.37,107.87,14.20,8.97" target="#b10">[11,</ref><ref type="bibr" coords="3,169.86,107.87,10.65,8.97" target="#b11"> 12]</ref>, users can explicitly indicate if a particular piece of information is of interest. This is done by explicitly saving the given query and labeling it by a persistent nugget name. NMS provides a rich set of functionalities to let users input, edit, and remove the nuggets as further discussed in Section 5. A non-intrusive alternative to explicit indication is implicit indication, a method found in intelligent systems <ref type="bibr" coords="3,192.11,167.65,9.71,8.97" target="#b6">[7,</ref><ref type="bibr" coords="3,204.25,167.65,6.47,8.97" target="#b3"> 4]</ref>. In NMS, nuggets can be extracted automatically by observing a user's exploration. " Visiting time " is one factor <ref type="bibr" coords="3,144.14,187.57,10.45,8.97" target="#b6">[7] </ref>used as the main indicator of a user's interest during visual analysis. NMS extracts a nugget if a user spends a long time visiting (querying over and looking at) a subpart of the dataset. For example, if a subpart shown in <ref type="figure" coords="3,249.71,217.45,30.15,8.97">Figure 2</ref>has been visited for a long time by a single user or repeatedly visited by one or more users, NMS will flag this data subset as a potential nugget. Problems that could be caused by such log mining, such as redundancy, out-of-date nuggets, and misinterpretation of users' interests, will be tackled in Sections 3 and 5. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3">NUGGET COMBINATION</head><p>Relying on nugget extraction alone suffers from several problems. 1) Nugget redundancy may arise, because as the users navigate in the datasets by moving the sliders which control the range query boundaries, similar nuggets with slightly different boundaries are likely to represent the same data features. 2) An excessively large nugget pool generated during a long exploration period may make it difficult for users to access individual nuggets, because searching for nuggets of potential interest may become increasingly timeconsuming . 3) Continuous growth of the nugget population may lead to low system performance. An efficient method is needed to keep the nugget pool of modest size yet with high representativeness . Several techniques, such as sampling <ref type="bibr" coords="3,215.88,413.71,9.52,8.97" target="#b2">[3]</ref>, filtering <ref type="bibr" coords="3,263.16,413.71,14.94,8.97" target="#b18">[19] </ref>and clustering <ref type="bibr" coords="3,91.60,423.67,10.46,8.97" target="#b4">[5] </ref>of nuggets may be employed to achieve this goal. After careful comparison, we chose clustering, which groups similar nuggets and generates representatives for each group. This is because when constructing a representative for each group, clustering techniques consider and combine the features of all the group members, while filtering and sampling techniques tend to just pick an " important " group member as their representative. Since in many cases, we can hardly tell which nugget is more important than others, constructing a representative which " speaks " for every nugget in a group makes more sense than just picking one. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.1">Distance Metrics</head><p> Clustering aims to group objects based on their similarities. It requires a distance measure that best expresses the domain specific similarity between objects. To solve this problem, we developed distance metrics to effectively capture the distance between any pair of nuggets. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.1.1">Query Distance</head><p>Nuggets are defined by both queries and their results. So, naturally, nuggets that are defined by similar queries should be considered to be more similar than those defined by rather different queries. Thus our problem can be transformed into determining how to quantify the similarity of queries. The major principle utilized in previous work <ref type="bibr" coords="3,107.78,676.71,14.19,8.97" target="#b22">[23,</ref><ref type="bibr" coords="3,124.38,676.71,11.95,8.97" target="#b23"> 24] </ref>for measuring query similarity (QS) can be summarized as: </p><formula>QS(A, B) = QA ∩ QB QA ∪ QB (1) </formula><p>Here QS(A,B) represents the query similarity between Nugget A and Nugget B, and QA and QB are the qualifiers of these two queries. For example, given QA: select * from X where X.height =<ref type="bibr" coords="3,321.58,87.13,39.89,8.97">[5.25:5.85]</ref>, QB: select * from X where X.height=<ref type="bibr" coords="3,513.28,87.13,41.00,8.97">[5.45:6.15]</ref>, then we have QA ∩ QB = 5.85 − 5.45 = 0.40, QA ∪ QB = 6.15 − 5.25 = 0.9, QS=0.4/0.9=0.44. We adopt this idea as the basic principle for our query similarity measure on individual dimensions. We have also studied several important refinements to this basic idea, which enhance it to handle different types of domains (discrete , continuous, nominal) and at best level capture the visual similarity of nuggets. We have also extended the previous metric defined for a single dimension to now be applicable for multiple dimensions . Details of these techniques can be found in <ref type="bibr" coords="3,513.26,176.79,13.74,8.97" target="#b24">[25]</ref>. After we've normalized the acquired query similarities (between 0-1), we can easily calculate the query distances (QD) as shown in Formula 2: </p><formula>QD(A, B) = 1 − QS(A, B) ( 2) </formula><p>3.1.2 Data Distance However, nuggets are not only characterized by their queries (profile ), but also by the results of the queries obtained when applying the queries to a particular dataset (content). </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>As shown in Figures 5 </head><p>Figure 5: A nugget capturing a cluster in the " Iris " dataset <ref type="figure" coords="3,447.31,396.61,27.97,7.96">Figure 6</ref>: A nugget with no data record included and 6, two nuggets generated by very similar queries may be rather different in terms of actual data content. The former contains a cluster , while the latter is empty. Clearly, we need to enhance the capability of our distance metrics by also considering the " contents " of the nuggets. Now, the problem we must solve can be viewed as a general date analysis problem. That is, given two subsets of a multi-dimensional dataset, how can we measure the distance between them. Previous work to tackle such problems <ref type="bibr" coords="3,518.18,494.10,14.20,8.97" target="#b16">[17,</ref><ref type="bibr" coords="3,535.86,494.10,11.21,8.97" target="#b15"> 16,</ref><ref type="bibr" coords="3,550.55,494.10,7.47,8.97" target="#b7"> 8] </ref> can be classified into two main categories: statistic and transformcost approaches. Below, we will introduce our proposed algorithm based on extending a basic transform cost algorithm. In transform-cost approaches, the distance between two objects is expressed as the minimum cost of transforming one object to another . A well known algorithm that relies on Transform Cost is the Nearest Neighbor Measure (NNM) <ref type="bibr" coords="3,447.57,563.84,13.74,8.97" target="#b16">[17]</ref>. But unfortunately, NNM is a population-insensitive algorithm. It may lead to bad comparison results in our case, because comparing nuggets with different populations is going to be the norm in our work. To solve this problem , we propose a new algorithm called the Exact Transformation Measure (ETM). First, we formulate the problem. Given dataset D, |D| = m, and datasets A and B, </p><formula>A ⊆ D, B ⊆ D, |A| = a, |B| = b, 0 ≤ a ≤ b ≤ m, |A ∩ B| = l, |B| − |A ∩ B| = n. </formula><p>Assume data points in D can be viewed as geometrically distributed in the value space based on their values in different dimensions. Our goal is to transform A to be exactly equal to B with minimum cost. To solve this problem, simply moving data points in A to their nearest neighbors in B will fail in many cases, because it is neither globally optimal nor sensitive to population. Thus, in order to achieve the transformation with minimum cost, we define three types of operations: By using " Move " and " Add " , we are guaranteed to always be able to transform A to B, since A always has a smaller or equal sized population to that of B. However, simply relying on " Move " and " Add " will impose " forced matches " , which may not always lead to the capture of the real distance between two datasets. <ref type="figure" coords="4,270.66,179.96,23.41,8.97;4,54.00,189.92,4.48,8.97" target="#fig_2">Figure  7</ref>shows an example of two 2-dimensional datasets where moving and adding are not sufficient to make a cost effective transformation plan. As shown in <ref type="figure" coords="4,144.61,209.85,30.03,8.97" target="#fig_2">Figure 7</ref>, given datasets A and B whose Figure 8: Transforming A to B with, moving, adding &amp;deleting members are represented as white and black points respectively, by using " Move " and " Add " only, we have to match some data points in A with data points in B that are far away from them. In the worst case, the existence of a few " outlier " data points that do not have a " near neighbor " close to them will eliminate opportunities for many other data points to be matched with their real nearest neighbors. To deal with this disadvantage of " forced matches " , we use a " Delete " operation. With it, we no longer need to suffer from " forced matches " , because for a given data point in A, " Move " is no longer the only option for it. We can choose to " Delete " , if moving it will bring too much global cost. However, how to make an optimal transformation plan, which has the minimum cost, is still a complex problem. In order to tackle this problem, we need to study the cost of each operation first. Cost(M<ref type="bibr" coords="4,192.61,482.47,20.01,8.97">[x,y]</ref>): The cost of moving a data point x to y is equal to the normalized Euclidean distance between x and y (between 0-1). COA: Cost of adding a new point and COD: Cost of deleting an existing point are both estimated values that have a negative association with |A|. Our heuristics for estimation are discussed in depth in <ref type="bibr" coords="4,184.03,532.28,13.75,8.97" target="#b24">[25]</ref>. Having set the costs of all our transfer operations, we now establish our solution for finding an optimal (most cost-effective) transformation plan. We note that making such an optimal transformation plan is non-trivial. Fortunately, the Hungarian Assignment <ref type="bibr" coords="4,279.13,572.96,14.94,8.97" target="#b20">[21] </ref>which was designed for finding minimum cost bipartite matches, provides a good approach to solve this problem. The algorithm takes an n × n matrix as input. Each row in the matrix represents a data point in A, and each column represents a data point in B. Then each entry is filled with the distance between the row and the column it belongs to. The algorithm returns a minimum cost match in O(n 3 ) time. Other issues that need to tackled when applying this algorithm to our case can be found in <ref type="bibr" coords="4,189.99,652.67,14.94,8.97" target="#b24">[25] </ref>Once we make a proper input matrix, the Hungarian Assignment Method will generate an output matrix representing the optimal matches. When the output matrix has been produced, by simply summing all the values in the input matrix entries that match an entry location with a " 0 " in its output matrix, and dividing the sum by |B|, we get the Data Distance (DD) between two nuggets. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.1.3">Nugget Distance</head><p>Finally, we combine the Query Distance (QD<ref type="bibr" coords="4,479.52,68.64,23.12,11.66">[X,Y ]</ref> ) and Data Distance (DD<ref type="bibr" coords="4,354.55,78.60,23.12,11.66">[X,Y ]</ref>) to present the Nugget Distance (ND<ref type="bibr" coords="4,517.02,78.60,23.14,11.66">[X,Y ]</ref> ) between any pair of nuggets X and Y. ND<ref type="bibr" coords="4,327.90,105.88,23.50,11.66">[X,Y ] </ref></p><formula>= α · QD[X,Y ] + β · DD[X,Y ] ( α + β = 1) (3) </formula><p>Since QD and DD are both normalized (between 0 to 1), ND will be normalized as well. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.2">Nugget Clustering</head><p>Once we have learned the distances between nuggets, any generic clustering algorithm [10, 5, 27] can be applied to conduct nugget clustering. To provide a real time clustering service for our nugget pool, we employ incremental clustering algorithms <ref type="bibr" coords="4,508.18,194.94,9.71,8.97" target="#b4">[5,</ref><ref type="bibr" coords="4,520.98,194.94,11.95,8.97" target="#b26"> 27] </ref>in our system. Further discussion on the specific clustering algorithm used in our system can be found in <ref type="bibr" coords="4,427.61,214.86,13.74,8.97" target="#b24">[25]</ref> . The clustering process consolidates our nugget pool by removing redundant nuggets while keeping good representativeness. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4">NUGGET REFINEMENT 4.1 Benefits from Nugget Refinement</head><p> In this section, we'll introduce the novel concept of using data mining techniques to refine the candidate nuggets extraced from users' logs. Such a refinement can be performed when a nugget was made because users were searching for some identifiable pattern types, such as clusters or outliers. For example, assume a user was searching for a cluster in the dataset, and for some reason, she missed part of it (<ref type="figure" coords="4,340.06,338.65,28.80,8.97" target="#fig_3">Figure 9</ref>). Then, NMS will refine the nugget to capture the complete cluster (<ref type="figure" coords="4,383.00,348.62,31.96,8.97" target="#fig_0">Figure 10</ref>). Nugget refinement offers two main advantages over both pure log analysis or mining techniques of the data itself. Firstly, log analysis techniques, for example, the nugget extraction introduced in Section 2, rely on users' actions only, without any help from computational analysis of the datasets and their properties. Thus they may lack accuracy in nugget specification. While nugget refinement likely improves the accuracy by exploiting both of them. Secondly, even assuming the system knows the specific pattern type a user is interested in, in many cases the user is not searching for all possible patterns but only for certain patterns of this type. This makes running expensive global pattern detection algorithms not cost effective and unrelated patterns detected may even cost users more effort to isolate the useful ones. In this work, we chose density-based clustering <ref type="bibr" coords="4,408.77,623.41,14.94,8.97" target="#b9">[10] </ref>and distance-based outlier detection <ref type="bibr" coords="4,317.95,633.37,14.94,8.97" target="#b13">[14] </ref>as our sample pattern detection algorithms, which are popular algorithms in data mining field. However, the specific patterns and the refinement methods we propose below are only some of the possible ways that the nugget refinement could be carried out. Other refinement methods could equally be plugged into our framework. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.2">Techniques for Nugget Refinement</head><p>The refinement process is divided into two phases, called the match and refine phases. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.2.1">Match phase</head><p>In this phase, we aim to match the identified nuggets with patterns " around them " within the data space. In other words, our goal is to determine which patterns users were searching for when these specific nuggets were made. In this work, we concentrate nuggets refinement on two important pattern types, clusters and outliers. We first formally define the concept of " Match " . The concept of " Match " is used to judge whether some data patterns or the major parts of these patterns primarily contribute to a nugget. If it is the case, we call the nugget and these patterns " matched " . The nuggets may be " matched " with more than one pattern. Or, put differently, a nugget may contain several patterns. Technically, to match a nugget with patterns, we have to compute two important factors that each represent one side of the match: @BULLET Participation Rate (PR) : A pattern P should be matched with a nugget N, only if most of its members, if not all, participate in (covered by) the nugget. For example, in <ref type="figure" coords="5,231.46,225.94,33.07,8.97" target="#fig_0">Figure 11</ref>, for the cluster at the left side, data points 2, 3, 4, 5, 6 are covered by the nugget. So, we use PR to present how much of a pattern P is covered by a nugget N. </p><formula>PR(N, P) = P.population ∩ N.population P.population (4) </formula><p>@BULLET Contribution Rate (CR) : Since " match " is two-directional, while PR just expresses one direction, namely, nugget to pattern , we introduce CR to capture the opposite direction, from patterns to nugget. This shows how much a pattern or a partial pattern contributes to the nugget. Moreover, because a nugget is decided by a query and the results of this query (selected data), we consider both the selected area and data population of the pattern and the nugget when calculating CR. </p><formula>CR(N, P) = P.area ∩ N.area 2 * N.area + P.population ∩ N.population 2 * N.population (5) </formula><p>Next we show a specific example of how to calculate PR and CR between a nugget and a cluster (the left side cluster on <ref type="figure" coords="5,251.00,419.42,32.75,8.97" target="#fig_0">Figure 11</ref>). </p><formula>@BULLET Clusters MatchRate(C, N) = ∑ 1≤i≤n PR(C i , N) * CR(C i , N) &gt; T (6) </formula><p> Where C i 's are all the cluster patterns covered or partially convered by the nugget. T is a threshold which decides whether the nugget and the patterns match. In this case, a nugget is matched with one or more clusters. In other words, the main components of this nugget are clusters. </p><formula>@BULLET Outliers MatchRate(O, N) = ∑ 1≤i≤n CR(O i , N) &gt; T (7) </formula><p>Where O i 's are all the outlier patterns covered by the nugget. T is the same threshold we use in Formula 6. In this case, a nugget is matched with one or more outliers. In other words, the main components of this nugget are outliers. Here, we need to point out that although we still follow the notion of PR and CR as we did in the cluster cases, the way we calculate them is a little different. First, since an outlier pattern only has one data member, the PR for an outlier pattern is always 1. So we omit it from Formula 7. Second, the way we present pattern boundaries of outlier patterns is different also. As shown in <ref type="figure" coords="5,403.90,303.22,33.03,8.97" target="#fig_0">Figure 12</ref>, the pattern area of an outlier is a (hyper) square area, where the distance from it to any boundary equals the maximum distance (among all the dimensions) between it to its nearest neighbor. All the other calculation processes remain the same as those for the cluster cases. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>@BULLET No Specific Pattern </head><p>It is also possible that a nugget can be matched with neither clusters nor outliers. In this case, the nugget belongs to the " No Specific Pattern " category. Expanding the library of recognized patterns is an important part of our future work. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.2.2">Refinement Phase</head><p>The match phase reveals to us what type of patterns that a user was likely searching for. If a nugget is classified into the first two categories mentioned above, we finish nugget refinement using the following two steps, called splitting (if necessary) and modification. Splitting: If a nugget is composed of more than one pattern, we could split it into several new nuggets, each representing one pattern only. Because we already know all patterns the users was searching for from the match phase, simply putting all the members of each pattern into a new nugget will finish this job. Modification: For the nuggets representing a single pattern only, the modification process becomes simple also, because we just need to make the nugget boundaries exactly the same as the pattern boundaries. In <ref type="figure" coords="5,391.66,553.95,38.79,8.97" target="#fig_0">Figures 13</ref>and 14, we show the new nuggets </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5">NUGGET MAINTENANCE</head><p>In this section, we will discuss maintenance of the nugget pool. The nugget pool, which holds the nuggets collected during users' exploration, can be viewed as a database about users' insights about a specific dataset. Specifically, each nugget, namely the " tuple " in this database, is stored as an query specification annotated with additional attributes, as further discussed below. To faciliate users' further exploration, the nugget pool has to be built as an efficient , well-organized and user-friendly knowledge base. In our system , we build different types of indices to support quick access to nuggets. By providing different search features, nuggets can be easily located by searching on partial or complete query specifications or additonal attributes (e.g., names of nuggets). For example, a user can search for all the nuggets about the " car " dataset ( a real dataset with 7 dimensions), which satisfy that the query range on dimension " cylinder " is between 4 and 8, or the names of the nuggets contain the string " high performance " . NMS also provides the service to explicitly classify nuggets based on their characteristics , such as implicitly or explicitely indicated or types of patterns contained. Users can quickly narrow their search by browsing into different categories. Besides organization of nugget pool, another important aspect of nugget maintenance is " clean up " of useless nuggets. Over the duration of the exploration, two potential hazards may leave useless nuggets in the nugget pool. 1) Out-of-date Nuggets: Some out-ofdate nugget extracted early on and no longer of interest may become an unnecessary burden. 2) Misinterpreted Nuggets: Some nuggets may have been wrongly learned by misinterpreting users' interests. To exclude these useless nuggets from our nugget pool, we introduce the concept of " vitality " . Generally, the " vitality " of a nugget reflects the importance of this nugget. We use accumulated " visiting time " as its main indicator. A similar idea can be found in the literature <ref type="bibr" coords="6,101.86,380.44,9.71,8.97" target="#b4">[5,</ref><ref type="bibr" coords="6,113.84,380.44,6.47,8.97" target="#b0"> 1]</ref> . Specifically, each nugget obtains an initial " vitality " when it is extracted. This " vitality " fades as users' exploration period increases. A nugget can also gain " vitality " through two methods. 1) Being Directly Visited: If a nugget is retrieved by a user from the nugget pool, the time that this user spent on it contributes to its " vitality " increase. 2) Being Indirectly Visited: An existing nugget is indirectly visited if a similar new nugget is combined into it. This existing nugget absorbs the initial " vitality " of the new one as the increase of its own. Thus, briefly, nuggets created recently or visited frequently will have higher " vitalities " , while those extracted a long time ago and never visited thereafter will have lower ones. Once the " vitality " of a nugget drops below a certain threshold, the nugget retires from the system. In NMS, such a natural " evolution " process of nuggets can be controlled by users. NMS allows users to cease, quicken, or slow down the " evolution " by setting different parameters, such as initial " vitality " , fading rate, and increasing rate. Besides such macrocontrol , users can also directly manipulate any individual nugget. For example, users can mark a nugget as crucial, indicating that it should never be expired from the system. They could also directly delete some useless nuggets. Since the concept of " vitality " is to indicate the importance of nuggets, it may also provide meaningful hints for users' exploration in the nugget pool. For example, users could rank the nuggets by their " vitalities " , and thus easily retrieve the " hottest " nuggets, which have received most attention. Nugget maintenance leaves many opportunities for our future work, including: 1) How to give proper rights to multiple users working on the same nugget pool. 2) How to automatically learn and modify the parameters controlling nugget pool " evolution " during users' exploration . </p><p>with and without the help of NMS. Also, we have observed and analyzed the stability of NMS through our user studies. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="7.1">Experimental Setup</head><p>For all the user studies, we use an HP Pavilion laptop computer with 1.6MHz CPU and 512M memory. NMS is integrated in XmdvTool 7.0, which is the latest version of this multivariate visualization sys- tem <ref type="bibr" coords="7,69.28,128.43,13.75,8.97" target="#b21">[22]</ref>. Users: 17 subjects, all WPI students from various majors, participated in our user studies. Those in the NMS group were also given the basic idea of how NMS works and made familiar with the interfaces. Three real datasets were employed in our user studies . They are the " Iris " dataset (4 dimensions, 150 records); the " Cars " dataset (7 dimensions, 392 records); and the " Aaup " dataset (14 dimensions, 1161 records). Tasks: Users were asked to finish five knowledge discovery tasks. Each of the tasks requires users to study a dataset and answer a question about the dataset. These questions ranged from straightforward ones, such as, " in the car dataset, which origin has the highest average MPG? " , to complex ones, such as, " How many clusters exist in the " Cars " dataset on 3 dimensions: Cylinders, Horsepower and Origin? " . Methodology: In this user study, users were not allowed to communicate information about the user study through any other channel except NMS at any time before, during, or after the user study. This is to make sure that users can only solve the tasks based on their own exploration and the help from NMS (if available). A uniform training process was designed to give the basic idea of how NMS works and made users familiar with the interfaces of NMS. All the users were encouraged to finish the tasks as quickly and correctly as possible. No fixed time limit was inforced. Users were asked to finish the tasks in the same sequence as the tasks appeared on the task sheet. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="7.2">Users' Time Efficiency</head><p>To compare users' efficiency of finishing this given set of tasks with and without help of NMS, we randomly divide the twelve users into four groups, three per group. Each user is asked to finish the same five tasks. Among these 4 groups, users of group 1 were asked to finish the tasks without NMS, while the other three groups (2-4) were supported by NMS. Members of each group were randomly given a sequence number ranging from 1 to 3, which represents the user's sequence of solving the problems in his/her group. For example , once a user from group 1 receives the sequence number 2, he/she will be the second one in group 1 to finish the tasks. Group members were encouraged to use the functionalities of NMS (if available) to manage and share their discoveries with later users. <ref type="figure" coords="7,59.05,498.50,35.38,8.97" target="#fig_0">Figure 16</ref>shows the time used by each user and group to finish <ref type="figure" coords="7,140.50,663.46,33.62,8.97" target="#fig_0">Figure 16</ref>, groups 2, 3, and 4 (with NMS) spent noticeable less time (around 50 percent) than group 1 (without NMS). Such time savings due to the second and the third users, given that the first users all worked from scratch. Although NMS did facilitate their job, managing discoveries needed time. However , once the nuggets were extracted during the exploration by the first users, the exploration processes of the second and the third users largely benefited from the nugget pool. To better support our analysis, we compared the time used by six users working from scratch (three members of group 1, and three first users of each other groups) and by the other six users working with guidance of the nugget pool (the second and third users of groups 2,3 and 4). <ref type="figure" coords="7,383.96,260.72,34.08,8.97" target="#fig_0">Figure 17</ref> shows that the later six users with guidance of nugget pool were working much more efficiently. Specifically , the minimum, maximum, and the average time spent by these users are all much less than those who worked from scratch. The standard deviation is lower too. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="7.3">Accuracy of Accomplished Tasks</head><p> We also studied the effect of NMS on the accuracy of the accomplished tasks. Among the five tasks we mentioned earlier, tasks 2 to 5 are straightforward problems. Users gave correct answers, although spending different amounts of time on them. However, task 1 is a common but complex knowledge discovery problem. Since not all the clusters can be easily found, in our user study the answer provided by the users varied. <ref type="figure" coords="7,425.58,390.73,34.81,8.97" target="#fig_0">Figure 18</ref> shows the number of clusters found by each user and also the number of clusters that actually exist. Two facts can be observed from <ref type="figure" coords="7,461.78,410.65,33.90,8.97" target="#fig_0">Figure 18</ref>: 1) The number <ref type="figure" coords="7,317.95,552.84,32.50,7.96" target="#fig_0">Figure 18</ref>: Comparison of users' accuracy of finishing complex task with and without help from NMS of clusters correctly found by users working with NMS are generally closer to the number of actual clusters. 2) The later users in each group are more likely to find all existing nuggets compared to the earlier ones. These two facts show the promise of NMS indeed improving the accuracy of the tasks accomplished by the users. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="7.4">Stability of NMS</head><p>Lastly, we consider NMS's stability, meaning how well it performs after long-term use. To give a preliminary evaluation of this, we asked a 7-user group to solve the five tasks mentioned earlier. We analyzed the population of the nugget pool after use by each user. The change of the nugget pool population is shown in <ref type="figure" coords="7,520.41,693.35,33.86,8.97" target="#fig_0">Figure 19</ref>. The comparison of average number of nuggets identified by the 7 users for each task and the estimated number of nuggets needed for each task is shown in <ref type="figure" coords="8,149.60,57.24,33.90,8.97" target="#fig_0">Figure 18</ref>. The " Estimated " number of nuggets is given based on our own experience of how many nuggets are needed for each task. From <ref type="figure" coords="8,169.57,77.17,38.01,8.97" target="#fig_0">Figures 18</ref>and 19, we observe two facts: One, the average number of nuggets formed by each user for each question is generally a little higher than estimated (<ref type="figure" coords="8,271.46,404.33,22.63,8.97;8,54.00,414.30,7.10,8.97">Figure  20</ref>). Two, the populations of the nugget pools are relatively stable during users' exploration (<ref type="figure" coords="8,150.57,424.26,32.14,8.97" target="#fig_0">Figure 19</ref>). Thus although some useless nuggets may be generated during exploration, they are usually only small portions of the whole nugget pool. Thus, this is indication that the population of the nugget pool is not likely to degenerate dramatically during a long-term use. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="8">CONCLUSION</head><p>In this paper, we introduce a framework for analysis-guided visual exploration of multivariate data. Our system (NMS) leverages the collaborative effort of human intuition and machine computations to extract, combine, refine and maintain the valuable information hidden in large datasets. Finally, a well-organized nugget pool can be used to guide users exploration. Our preliminary evaluations indicate that NMS may greatly improve users time efficiency when solving knowledge discovery tasks. It may also be able to enhance users accuracy of finishing these tasks, although more complicated tasks are needed to validate this. Lastly, NMS works in a stable manner during explorations by a sequence of users. This shows its promise of working well during long-term exploration. More comprehensive user studies which involve more users and more complex tasks will be one of the directions for our future work.</p></div><figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_0" coords="1,317.95,246.48,110.41,7.96;1,317.95,255.95,104.42,7.96"><head>Figure 1: </head><figDesc> Figure 1: " Cars " dataset visualized with Parallel Coordinates </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_1" coords="1,447.31,359.75,110.39,7.96;1,447.31,369.21,97.74,7.96"><head>Figure 4: </head><figDesc>Figure 4: Another similar yet not identical " partial cluster " </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_2" coords="4,54.00,319.83,110.41,7.96;4,54.00,329.30,100.41,7.96"><head>Figure 7: </head><figDesc>Figure 7: Trasforming A to B with moving and adding only </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_3" coords="4,317.95,454.72,110.40,7.96;4,317.95,464.19,110.41,7.96;4,317.95,473.65,69.26,7.96"><head>Figure 9: </head><figDesc> Figure 9: A nugget which captures the main body of a cluster but misses part of it </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_4" coords="5,54.00,546.27,110.40,7.96;5,54.00,555.73,110.40,7.96;5,54.00,565.19,27.46,7.96"><head>Figure 11: </head><figDesc> Figure 11: A nugget which captures the main bodies of two clusters </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_5" coords="5,317.95,675.27,110.40,7.96;5,317.95,684.74,110.41,7.96;5,317.95,694.20,23.47,7.96"><head>Figure 13: </head><figDesc>Figure 13: The refined nuggets which each capture a complete cluster </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_6" coords="7,66.45,642.03,215.13,7.96;7,54.00,663.46,240.05,8.97;7,54.00,673.42,240.08,8.97;7,54.00,683.39,240.07,8.97;7,54.00,693.35,240.04,8.97;7,54.00,703.31,240.05,8.97;7,54.00,713.28,240.09,8.97"><head>Figure 16: </head><figDesc>Figure 16: Comparison of users' efficiency in different groups the tasks. As shown in Figure 16, groups 2, 3, and 4 (with NMS) spent noticeable less time (around 50 percent) than group 1 (without NMS). Such time savings due to the second and the third users, given that the first users all worked from scratch. Although NMS did facilitate their job, managing discoveries needed time. However , once the nuggets were extracted during the exploration by the </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_7" coords="7,317.95,160.59,240.01,7.96;7,317.95,170.05,59.71,7.96"><head>Figure 17: </head><figDesc>Figure 17: Comparison of users' efficiency with and without guidance from nugget pool </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_8" coords="8,81.91,217.25,184.19,7.96"><head>Figure 19: </head><figDesc>Figure 19: Evolution of nugget populations over time </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_1" validated="false" coords="2,317.95,432.10,240.08,71.76"><figDesc coords="2,317.95,432.10,240.07,11.66;2,317.95,443.86,229.93,9.81;2,551.03,442.07,6.98,11.66;2,317.95,452.03,7.97,11.66;2,325.93,456.66,5.04,6.97;2,331.45,452.03,6.98,11.66;2,338.43,453.82,21.41,10.19;2,360.33,452.03,6.98,11.66;2,367.31,457.04,3.49,6.97;2,371.28,452.03,22.37,11.98;2,397.28,452.03,17.75,11.66;2,415.03,457.04,1.94,6.97;2,417.81,452.03,6.98,11.66;2,424.78,453.82,18.31,10.19;2,443.94,452.03,6.98,11.66;2,450.92,457.04,3.49,6.97;2,454.90,452.03,34.89,11.66;2,493.02,452.03,17.75,11.66;2,510.77,456.66,3.49,6.97;2,514.75,452.03,6.98,11.66;2,521.72,453.82,19.86,10.19;2,542.07,452.03,6.98,11.66;2,549.05,457.04,3.49,6.97;2,553.02,452.03,4.99,11.66;2,317.95,461.99,18.92,11.66;2,336.88,466.62,5.04,6.97;2,342.41,461.99,19.88,11.98;2,363.11,461.99,32.39,11.66;2,395.95,461.99,162.06,11.66;2,317.95,473.75,162.32,9.81;2,480.79,471.96,6.98,11.66;2,487.76,473.75,30.59,10.19;2,518.87,471.96,6.98,11.66;2,525.84,473.75,32.16,10.19;2,317.95,483.71,240.08,8.97;2,317.95,491.88,21.63,11.66;2,339.59,496.51,3.10,6.97;2,343.19,491.88,6.98,11.66;2,350.16,493.67,17.92,10.19;2,368.60,491.88,6.98,11.66;2,375.57,496.89,3.49,6.97;2,379.55,491.88,130.07,11.66;2,510.13,491.88,6.98,11.66;2,517.10,493.67,22.95,10.19;2,540.58,491.88,6.98,11.66;2,547.55,493.67,5.59,10.19">Q(D). N = {D, Q, Q(D)}; The query Q selects all items from the dataset D for where the following constraints hold: D.A m = [A m .b l : A m .b h ], D.A l = [A l .b l : A l .b h ], ..., D.A n = [A n .b l : A n .b h ]; {D.A m , D.A l , ..., D.A n } ⊆ dimensions of D. Q(D) projects these queried dimensions from selected items. A x .b l and A x .b h are the lower bound and the upper bound of the query ranges on attribute A x , [A x .b l : A x .b h ] denotes a range of values " from A x .b l to A x .b h</figDesc><table></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_2" validated="false" coords="4,64.33,55.44,229.73,74.11"><figDesc coords="4,64.33,55.44,229.72,11.66;4,73.93,67.20,14.70,8.97;4,64.33,86.67,229.73,11.66;4,73.93,98.42,96.55,8.97;4,64.33,117.90,125.50,11.66">@BULLET Move(x, y): given x ∈ A, y ∈ B, move x to the position where y lies. @BULLET Add(x, y): given y ∈ B, add a new data point x to A at the same position where y lies. @BULLET Delete(x) x ∈ A, delete x from A.</figDesc><table></table></figure>
+
+			<note place="foot" n="6"> NUGGET-GUIDED EXPLORATION Nugget-guided exploration makes use of the nuggets we have learned to facilitate the knowledge discovery process. Figure 15 shows a screen shot of our prototype system. As we mentioned earlier, nuggets, as important carriers of valuable information, can be augmented with different kinds of additional attributes. Besides &quot; vitality &quot; , names and annotations are examples of other attributes that can enrich the meaning of nuggets. For example, when exploring a dataset about &quot; arriving passengers &quot; , a border control officer finds a nugget that represents a cluster existing in dimensions of &quot; nationality &quot; , &quot; arriving time &quot; , and &quot; criminal records &quot; , she can give the nugget a meaningful name (i.e., &quot; Suspicious Passengers Group &quot; ), and attach an annotation about her concerns to this passenger group. Such attached information will not only make it more convenient to retrieve this nugget, but also makes her nuggets shareable with other users. Meanwhile, statistical information, such as the number of data records included and average values on each dimension, can be automatically computed and attached to the nugget. Nugget-guided exploration can be carried out in both user-and system-initiated modes. 1) User-initiated: Within this mode, users take the initiative to search and retrieve nuggets when they desire to. As mentioned earlier, NMS provides functionalities, such as sorting and querying on statistic information, keyword based search on additional attributes, to help users quickly access the nuggets of interest . Moreover, as our users are working with visualization systems, which hold the natural advantages of constructing graphic presentations to information, we could re-apply these visualization techniques to our nugget pool. For example, pixel oriented techniques [26] could be adopted to visualize our nugget pool in a condensed format, while VaR [26] could be employed to display the similarity between nuggets. With them, users could observe the whole nugget pool in a single screen and quickly learn the interrelations among nuggets. 2) System-initiated: NMS can take the initiative also when guiding users&apos; exploration. Such guidance will be given based on watching the users&apos; exploration. For example, when a user is querying a subpart of the dataset that is similar to one of the existing nuggets, NMS could inform the user that previous users have already found a nugget similar to what she is looking for. Other sophisticated services and HCI issues will be studied in our future work, including: How to provide hint to users about potential useful information in an as non-intrusive way as possible. How to build hierarchical structures among nuggets based on their interrelation (e.g., some nuggets may be subparts of a bigger nugget). How to guide users based on their profiles using collaborative filtering techniques [6]. Figure 15: A screen shot from the NMS prototype when looking for clusters hidden in the dataset 7 USER STUDIES In order to show the effectiveness of NMS, we have performed user studies to compare users efficiency and accuracy when solving tasks</note>
+		</body>
+		<back>
+
+			<div type="acknowledgement">
+			</div>
+
+			<div type="references">
+
+				<listBibl>
+
+<biblStruct coords="8,72.25,704.55,221.78,7.97;8,72.26,714.02,201.96,7.97"  xml:id="b0">
+	<analytic>
+		<title level="a" type="main">A framework for clustering evolving data streams</title>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<forename type="middle">C</forename>
+				<surname>Aggarwal</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Han</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Wang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<forename type="middle">S</forename>
+				<surname>Yu</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">VLDB</title>
+		<imprint>
+			<date type="published" when="2003" />
+			<biblScope unit="page" from="81" to="92" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.21,57.98,221.80,7.97;8,336.21,67.45,49.82,7.97"  xml:id="b1">
+	<analytic>
+		<title level="a" type="main">Multidimensional detective</title>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Inselberg</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. of IEEE InfoVis</title>
+		<meeting>. of IEEE InfoVis</meeting>
+		<imprint>
+			<date type="published" when="1997" />
+			<biblScope unit="page" from="100" to="107" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.21,76.91,221.80,7.97;8,336.21,86.38,156.95,7.97"  xml:id="b2">
+	<analytic>
+		<title level="a" type="main">A perceptually based adaptive sampling algorithm</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<forename type="middle">R</forename>
+				<surname>Bolin</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<forename type="middle">W</forename>
+				<surname>Meyer</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">SIGGRAPH</title>
+		<imprint>
+			<date type="published" when="1998" />
+			<biblScope unit="page" from="299" to="309" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.21,95.84,221.79,7.97;8,336.21,105.30,221.81,7.97;8,336.21,114.77,183.13,7.97"  xml:id="b3">
+	<analytic>
+		<title level="a" type="main">Visualization of navigation patterns on a web site using model-based clustering</title>
+		<author>
+			<persName>
+				<forename type="first">I</forename>
+				<surname>Cadez</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Heckerman</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Meek</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Smyth</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>White</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. of ACM SIGKDD</title>
+		<meeting>. of ACM SIGKDD</meeting>
+		<imprint>
+			<date type="published" when="1998" />
+			<biblScope unit="page" from="280" to="284" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.21,124.23,221.79,7.97;8,336.21,133.70,141.45,7.97"  xml:id="b4">
+	<analytic>
+		<title level="a" type="main">Incremental clustering for dynamic information processing</title>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<surname>Can</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">ACM Trans. Inf. Syst</title>
+		<imprint>
+			<biblScope unit="volume">11</biblScope>
+			<biblScope unit="issue">2</biblScope>
+			<biblScope unit="page" from="143" to="164" />
+			<date type="published" when="1993" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.21,143.16,221.79,7.97;8,336.21,152.62,221.79,7.97;8,336.21,162.09,17.94,7.97"  xml:id="b5">
+	<analytic>
+		<title level="a" type="main">An item-based collaborative filtering framework featuring case based reasoning</title>
+		<author>
+			<persName>
+				<forename type="first">Z</forename>
+				<surname>Chedrawy</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<forename type="middle">S R</forename>
+				<surname>Abidi</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">IC-AI</title>
+		<imprint>
+			<date type="published" when="2005" />
+			<biblScope unit="page" from="286" to="292" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.21,171.55,221.81,7.97;8,336.21,181.02,182.53,7.97"  xml:id="b6">
+	<analytic>
+		<title level="a" type="main">Implicit interest indicators</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Claypool</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Le</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Wased</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Brown</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Intelligent User Interfaces</title>
+		<imprint>
+			<date type="published" when="2001" />
+			<biblScope unit="page" from="33" to="40" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.21,190.49,221.79,7.97;8,336.21,199.95,132.59,7.97"  xml:id="b7">
+	<analytic>
+		<title level="a" type="main">Detecting changes in xml documents</title>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Cobena</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Abiteboul</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Marian</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">ICDE</title>
+		<imprint>
+			<date type="published" when="2002" />
+			<biblScope unit="page" from="41" to="52" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.21,209.41,221.81,7.97;8,336.21,218.87,221.79,7.97;8,336.21,228.34,98.85,7.97"  xml:id="b8">
+	<analytic>
+		<title level="a" type="main">From visual data exploration to visual data mining: A survey</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<forename type="middle">C F</forename>
+				<surname>De Oliveira</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Levkowitz</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Trans. on Vis. and Computer Graphics</title>
+		<imprint>
+			<biblScope unit="volume">9</biblScope>
+			<biblScope unit="issue">3</biblScope>
+			<biblScope unit="page" from="378" to="394" />
+			<date type="published" when="2003" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.21,237.81,221.81,7.97;8,336.21,247.27,221.80,7.97;8,336.21,256.74,90.76,7.97"  xml:id="b9">
+	<analytic>
+		<title level="a" type="main">A density-based algorithm for discovering clusters in large spatial databases with noise</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Ester</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H.-P</forename>
+				<surname>Kriegel</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Sander</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">X</forename>
+				<surname>Xu</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">KDD</title>
+		<imprint>
+			<date type="published" when="1996" />
+			<biblScope unit="page" from="226" to="231" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.20,266.19,221.80,7.97;8,336.21,275.66,186.89,7.97"  xml:id="b10">
+	<analytic>
+		<title level="a" type="main">Interactive visual synthesis of analytic knowledge</title>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Gotz</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Zhou</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">V</forename>
+				<surname>Aggarwal</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Proc IEEE VAST</title>
+		<imprint>
+			<biblScope unit="page" from="51" to="58" />
+			<date type="published" when="2006" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.21,285.13,221.81,7.97;8,336.21,294.59,221.79,7.97;8,336.21,304.06,49.82,7.97"  xml:id="b11">
+	<analytic>
+		<title level="a" type="main">Collaborative visual analytics: Inferring from the spatial organization and collaborative use of information</title>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Keel</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE VAST</title>
+		<imprint>
+			<biblScope unit="page" from="137" to="144" />
+			<date type="published" when="2006" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.20,313.51,221.80,7.97;8,336.21,322.98,192.24,7.97"  xml:id="b12">
+	<analytic>
+		<title level="a" type="main">Information visualization and visual data mining</title>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<forename type="middle">A</forename>
+				<surname>Keim</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Trans. on Vis. and Computer Graphics</title>
+		<imprint>
+			<biblScope unit="volume">7</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="100" to="107" />
+			<date type="published" when="2002" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.20,332.45,221.82,7.97;8,336.21,341.91,190.41,7.97"  xml:id="b13">
+	<analytic>
+		<title level="a" type="main">Distance-based outliers: Algorithms and applications</title>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<forename type="middle">M</forename>
+				<surname>Knorr</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<forename type="middle">T</forename>
+				<surname>Ng</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">V</forename>
+				<surname>Tucakov</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">VLDB J</title>
+		<imprint>
+			<biblScope unit="volume">8</biblScope>
+			<biblScope unit="page" from="3" to="4237" />
+			<date type="published" when="2000" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.21,351.38,221.82,7.97;8,336.21,360.84,221.78,7.97;8,336.21,370.30,93.86,7.97"  xml:id="b14">
+	<analytic>
+		<title level="a" type="main">Question answering from the web using knowledge annotation and knowledge mining techniques clustering</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Lin</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Katz</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. CIKM</title>
+		<meeting>. CIKM</meeting>
+		<imprint>
+			<date type="published" when="2003" />
+			<biblScope unit="page" from="116" to="123" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.21,379.77,221.80,7.97;8,336.21,389.23,151.63,7.97"  xml:id="b15">
+	<analytic>
+		<title level="a" type="main">Approximate string matching in ldap based on edit distance</title>
+		<author>
+			<persName>
+				<forename type="first">C.-C</forename>
+				<surname>Pan</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">K.-H</forename>
+				<surname>Yang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T.-L</forename>
+				<surname>Lee</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">IPDPS</title>
+		<imprint>
+			<date type="published" when="2002" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.21,398.70,221.81,7.97;8,336.21,408.17,208.22,7.97"  xml:id="b16">
+	<analytic>
+		<title level="a" type="main">Optimal bit allocation via the generalized bfos algorithm</title>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<forename type="middle">A</forename>
+				<surname>Riskin</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Information Theory</title>
+		<imprint>
+			<biblScope unit="volume">37</biblScope>
+			<biblScope unit="issue">2</biblScope>
+			<biblScope unit="page" from="400" to="412" />
+			<date type="published" when="1991" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.21,417.62,221.79,7.97;8,336.21,427.09,214.70,7.97"  xml:id="b17">
+	<analytic>
+		<title level="a" type="main">Tree visualization with tree-maps: A 2d space-filling approach</title>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Shneiderman</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">ACM Trans on Graphics</title>
+		<imprint>
+			<biblScope unit="volume">11</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="92" to="99" />
+			<date type="published" when="1992-01" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.21,436.55,221.81,7.97;8,336.21,446.02,161.76,7.97"  xml:id="b18">
+	<analytic>
+		<title level="a" type="main">Adaptive information filtering algorithms</title>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<forename type="middle">R</forename>
+				<surname>Tauritz</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">I</forename>
+				<forename type="middle">G</forename>
+				<surname>Sprinkhuizen-Kuyper</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">IDA</title>
+		<imprint>
+			<date type="published" when="1999" />
+			<biblScope unit="page" from="513" to="524" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.20,455.49,221.82,7.97;8,336.21,464.95,221.79,7.97;8,336.21,474.41,78.15,7.97"  xml:id="b19">
+	<monogr>
+		<title level="m" type="main">Illuminating the Path: The Research and Development Agenda for Visual Analytics</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">J</forename>
+				<surname>Thomas</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<forename type="middle">A</forename>
+				<surname>Cook</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2005" />
+			<publisher>IEEE Computer Society</publisher>
+			<pubPlace>Los Alamitos CA</pubPlace>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.20,483.87,221.79,7.97;8,336.21,493.34,203.83,7.97"  xml:id="b20">
+	<analytic>
+		<title level="a" type="main">The hungarian method for the assignment problem</title>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Tranbarger</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<forename type="middle">P</forename>
+				<surname>Schoenberg</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Naval Research Logistic Quarterly</title>
+		<imprint>
+			<biblScope unit="volume">12</biblScope>
+			<biblScope unit="issue">2</biblScope>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.21,502.81,221.82,7.97;8,336.21,512.27,196.13,7.97"  xml:id="b21">
+	<analytic>
+		<title level="a" type="main">Xmdvtool: Integrating multiple methods for visualizing multivariate data</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Ward</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. of Visualization &apos;94</title>
+		<meeting>. of Visualization &apos;94</meeting>
+		<imprint>
+			<date type="published" when="1994" />
+			<biblScope unit="page" from="326" to="359" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.21,521.73,221.80,7.97;8,336.21,531.20,161.23,7.97"  xml:id="b22">
+	<analytic>
+		<title level="a" type="main">Clustering user queries of a search engine</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Wen</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Nie</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Zhang</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">World Wide Web</title>
+		<imprint>
+			<date type="published" when="2001" />
+			<biblScope unit="page" from="162" to="168" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.20,540.66,221.80,7.97;8,336.21,550.14,221.80,7.97;8,336.21,559.60,117.43,7.97"  xml:id="b23">
+	<analytic>
+		<title level="a" type="main">Clustering user queries of a search engine</title>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Xue</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Zeng</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Z</forename>
+				<surname>Chen</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Ma</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Y</forename>
+				<surname>Yu</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc of the European Conference on Information Retrieval</title>
+		<meeting>of the European Conference on Information Retrieval</meeting>
+		<imprint>
+			<date type="published" when="2005" />
+			<biblScope unit="page" from="330" to="344" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.20,569.07,221.80,7.97;8,336.21,578.53,221.78,7.97;8,336.21,587.99,75.70,7.97"  xml:id="b24">
+	<analytic>
+		<title level="a" type="main">Nugget discovery in visual exploration environments by query consolidation</title>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Yang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<forename type="middle">A</forename>
+				<surname>Rundensteiner</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<forename type="middle">O</forename>
+				<surname>Ward</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. CIKM</title>
+		<meeting>. CIKM</meeting>
+		<imprint>
+			<date type="published" when="2007" />
+		</imprint>
+	</monogr>
+	<note>to. appear</note>
+</biblStruct>
+
+<biblStruct coords="8,336.20,597.46,221.79,7.97;8,336.21,606.92,221.81,7.97;8,336.21,616.39,184.25,7.97"  xml:id="b25">
+	<analytic>
+		<title level="a" type="main">Value and relation display for interactive exploration of high dimensional datasets</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Yang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Patro</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Huang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Mehta</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<forename type="middle">O</forename>
+				<surname>Ward</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<forename type="middle">A</forename>
+				<surname>Rundensteiner</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">InfoVis</title>
+		<imprint>
+			<date type="published" when="2004" />
+			<biblScope unit="page" from="73" to="80" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.21,625.85,221.79,7.97;8,336.21,635.31,221.78,7.97;8,336.21,644.78,85.46,7.97"  xml:id="b26">
+	<analytic>
+		<title level="a" type="main">Birch: an efficient data clustering method for very large databases</title>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Zhang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Ramakrishnan</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Livny</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">SIGMOD Record</title>
+		<imprint>
+			<biblScope unit="volume">25</biblScope>
+			<biblScope unit="issue">2</biblScope>
+			<biblScope unit="page" from="103" to="117" />
+			<date type="published" when="1996" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+				</listBibl>
+			</div>
+		</back>
+	</text>
+</TEI>

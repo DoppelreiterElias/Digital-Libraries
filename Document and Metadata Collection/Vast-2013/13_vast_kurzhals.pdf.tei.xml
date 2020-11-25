@@ -1,0 +1,1572 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.tei-c.org/ns/1.0 /home/pisenberg/grobid/grobid-home/schemas/xsd/Grobid.xsd"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+	<teiHeader xml:lang="en">
+		<encodingDesc>
+			<appInfo>
+				<application version="0.4.1" ident="GROBID" when="2016-09-09T13:47+0000">
+					<ref target="https://github.com/kermitt2/grobid">GROBID - A machine learning software for extracting information from scholarly documents</ref>
+				</application>
+			</appInfo>
+		</encodingDesc>
+		<fileDesc>
+			<titleStmt>
+				<title level="a" type="main">Space-Time Visual Analytics of Eye-Tracking Data for Dynamic Stimuli</title>
+			</titleStmt>
+			<publicationStmt>
+				<publisher/>
+				<availability status="unknown"><licence/></availability>
+			</publicationStmt>
+			<sourceDesc>
+				<biblStruct>
+					<analytic>
+						<author>
+							<persName>
+								<forename type="first">Kuno</forename>
+								<surname>Kurzhals</surname>
+								<roleName>Student Member, Ieee</roleName>
+							</persName>
+							<affiliation>
+								<orgName type="department">Computer Society</orgName>
+							</affiliation>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Daniel</forename>
+								<surname>Weiskopf</surname>
+								<roleName>Member, Ieee</roleName>
+							</persName>
+							<affiliation>
+								<orgName type="department">Computer Society</orgName>
+							</affiliation>
+						</author>
+						<title level="a" type="main">Space-Time Visual Analytics of Eye-Tracking Data for Dynamic Stimuli</title>
+					</analytic>
+					<monogr>
+						<imprint>
+							<date/>
+						</imprint>
+					</monogr>
+				</biblStruct>
+			</sourceDesc>
+		</fileDesc>
+		<profileDesc>
+			<textClass>
+				<keywords>
+					<term>Index Terms—Eye-tracking</term>
+					<term>space-time cube</term>
+					<term>dynamic areas of interest</term>
+					<term>spatiotemporal clustering</term>
+					<term>motion-compensated heat map</term>
+				</keywords>
+			</textClass>
+			<abstract>
+				<p>Fig. 1. Space-time cube visualization of eye-tracking data for a video stimulus, enriched by spatiotemporal clustering of eye fixations. Abstract—We introduce a visual analytics method to analyze eye movement data recorded for dynamic stimuli such as video or animated graphics. The focus lies on the analysis of data of several viewers to identify trends in the general viewing behavior, including time sequences of attentional synchrony and objects with strong attentional focus. By using a space-time cube visualization in combination with clustering, the dynamic stimuli and associated eye gazes can be analyzed in a static 3D representation. Shot-based, spatiotemporal clustering of the data generates potential areas of interest that can be filtered interactively. We also facilitate data drill-down: the gaze points are shown with density-based color mapping and individual scan paths as lines in the space-time cube. The analytical process is supported by multiple coordinated views that allow the user to focus on different aspects of spatial and temporal information in eye gaze data. Common eye-tracking visualization techniques are extended to incorporate the spatiotemporal characteristics of the data. For example, heat maps are extended to motion-compensated heat maps and trajectories of scan paths are included in the space-time visualization. Our visual analytics approach is assessed in a qualitative users study with expert users, which showed the usefulness of the approach and uncovered that the experts applied different analysis strategies supported by the system.</p>
+			</abstract>
+		</profileDesc>
+	</teiHeader>
+	<text xml:lang="en">
+		<body>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1">INTRODUCTION</head><p>The use of eye-tracking in various fields of research is a commonly accepted method to gain insight into how people look at certain stimuli . In psychology, the analysis of recorded eye-gaze data can lead to a deeper understanding of human cognitive processes <ref type="bibr" coords="1,235.71,587.68,13.74,8.02" target="#b15">[16]</ref>. For the analysis of visualization designs, eye-tracking can be used, for example , to gain insight into the viewers' exploration strategies of tree di- agrams <ref type="bibr" coords="1,60.15,617.57,13.74,8.02" target="#b9">[10]</ref>, or for the analysis of e-learning technologies <ref type="bibr" coords="1,246.42,617.57,13.74,8.02" target="#b29">[31]</ref>. The main focus in eye-tracking research in the past lies on the analysis of @BULLET Kuno Kurzhals is with the Visualization Research Center (VISUS), static stimuli such as images. Therefore, numerous methods exist to visualize fixations and scan paths of data recorded for static stimuli. For the analysis of dynamic stimuli such as video sequences, however, the number of available visualization methods is very limited and often , those techniques are not very effective. Animated heat maps, bee swarms, or just the recorded gaze paths are provided in the software packages of vendors such as Tobii <ref type="bibr" coords="1,422.09,617.11,10.45,8.02" target="#b2">[3] </ref>and SMI <ref type="bibr" coords="1,469.82,617.11,9.52,8.02" target="#b1">[2]</ref> . With the definition of dynamic Areas Of Interest (AOIs), common metrics such as fixations counts can be applied to time-dependent stimuli. For further details, see the survey of common metrics for eye-tracking data by Poole and Ball <ref type="bibr" coords="1,349.16,656.96,13.74,8.02" target="#b28">[30]</ref>. In general, the analysis of eye-tracking records from timedependent data can either be achieved by watching the video with the afore mentioned visualization methods, or by statistical analysis of AOIs and gaze data. Watching the whole video to find interesting sequences can be time-consuming and exhausting for the analyst. Statistical analysis of AOIs requires either a reliable detection algorithm to find them, or tedious manual editing. Although future im-provements in the field of computer vision could provide techniques to successfully identify all objects and regions of possible interest, human observation is still needed for semantic interpretation. For the analyst, it would be more efficient to look at a representation of the whole video at once and find interesting frame sequences without a sequential search through each frame. An interesting sequence could be a shot from a movie that draws the attention of many viewers to one certain region at once—a phenomenon called attentional synchrony <ref type="bibr" coords="2,161.52,133.44,13.74,8.02" target="#b37">[39]</ref>. Automatic analysis could summarize these scenes, but it would lack semantic interpretation of the scene context. Our design provides the possibility to find such regions by interactive filtering and additionally shows motion patterns of traced objects. The Space-Time Cube (STC) helps identify and interpret these patterns in the spatiotemporal domain. Gaze direction changes to other positions after cuts in video scenes can also be interpreted easily with the provided visualization. Additionally, spatiotemporal clustering of data points identifies AOIs that can be filtered by the cluster size. This method helps find multiple AOIs in a time sequence and shows which objects received more attention. We provide a method to analyze eye-tracking data recorded from static or dynamic stimuli within a space-time visualization with the focus on the analysis of multiple viewer recordings of videos. Our design combines an automatic algorithm to cluster gaze data of numerous viewers and a visualization that summarizes the whole data set. By interactive cluster and density filtering, users can identify time spans of high attentional synchrony as well as multiple regions of interest. The STC visualizes the spatiotemporal data in a static 3D representation. By interactive translation and rotation of the data set, data points and clusters can be interpreted in their original domain. To overcome problems of occlusion and depth perception, the design provides additional wall projections that can be adjusted individually. Our interactive visualization approach is combined with computerbased analysis techniques from computer vision and data-mining. In particular, it includes low-level computer vision techniques like optical flow estimation, high-level analysis of shot detection, as well as spatiotemporal clustering. Our key contribution is the unified spatiotemporal analysis of eyegaze data in the spatiotemporal context of the dynamic stimulus. In this sense, our visual analytics approach is different from generic spatiotemporal analysis that does not incorporate the driving visual stimulus . Besides this fundamental contribution, we provide a couple of technical contributions as components of our visual analytics system: a motion-compensated version of eye-gaze heat maps, a variant of STC (see <ref type="figure" coords="2,59.88,483.21,30.39,8.02" target="#fig_13">Figure 1</ref> ) with improved visualization of spatial and temporal context, and spatiotemporal clustering that includes information from shot detection for better results. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2">RELATED WORK</head><p>For the analysis of video material, the use of eye-tracking can provide valuable information to understand the viewing behavior of users. Tien and Zheng <ref type="bibr" coords="2,62.02,556.74,14.94,8.02" target="#b39">[41] </ref> measured gaze overlaps of a video that showed a surgical task to compare experts' gaze with the gaze of trainees. Goldstein et al. <ref type="bibr" coords="2,44.76,576.66,14.94,8.02" target="#b18">[19] </ref>examined similarities in the viewing behavior of several users to identify centers of interest in movie scenes. Marchant et al. <ref type="bibr" coords="2,22.50,596.59,14.94,8.02" target="#b25">[27] </ref>described an approach to investigate the influence of directorial techniques on film viewers' experience. Smith and Henderson <ref type="bibr" coords="2,257.93,606.55,14.94,8.02" target="#b37">[39] </ref> compared the degree of attentional synchrony between static and dynamic scenes. We provide visualization techniques that can be used to support the quantiative means of analysis from those papers, such as time-spans of high attentional synchrony. Numerous methods exist to visualize eye-tracking data. Holmqvist et al. <ref type="bibr" coords="2,43.53,666.68,14.94,8.02" target="#b20">[21] </ref>provide a comprehensive guide to methods and measures. Generally, heat maps <ref type="bibr" coords="2,102.20,676.65,9.71,8.02" target="#b6">[7,</ref><ref type="bibr" coords="2,114.80,676.65,11.21,8.02" target="#b14"> 15,</ref><ref type="bibr" coords="2,128.89,676.65,11.95,8.02" target="#b45"> 47] </ref> are used to display aggregated eyetracking data. Tsang et al. <ref type="bibr" coords="2,117.20,686.61,14.94,8.02" target="#b41">[43] </ref>provide a tree-like visualization for the exploration and comparison of sequential gaze orderings. Raschke et al. <ref type="bibr" coords="2,33.56,706.53,14.94,8.02" target="#b30">[32] </ref>introduced the parallel scan-path visualization to facilitate the comparison of eye-tracking data between several users. In the context of visual analytics, Andrienko et al. <ref type="bibr" coords="2,155.65,726.46,10.45,8.02" target="#b4">[5] </ref> provide a detailed methodology for eye-movement data. We adopt many of the standard visualizations ; see Section 4 for more details on the components integrated in our design. The STC is used in various fields of research. Gatalsky et al. <ref type="bibr" coords="2,520.55,73.31,14.94,8.02" target="#b17">[18] </ref>describe its application to event data in a geographical context. Chen et al. <ref type="bibr" coords="2,296.32,93.24,14.94,8.02" target="#b11">[12] </ref>and Botchen et al. <ref type="bibr" coords="2,381.68,93.24,10.45,8.02" target="#b7">[8] </ref>represent video content in 3D to depict individual objects and motion events. However, they do not include eye-tracking data in their representations. We adopt the 3D space-time video representation as context, but add the visualization of the eyegaze data. In the context of eye-tracking, Li et al. <ref type="bibr" coords="2,461.74,133.09,14.94,8.02">[26] </ref>describe the use of the STC to visualize eye-trajectories. They focus on the analysis of static stimuli. For the application to dynamic stimuli, Duchowski and McCormick <ref type="bibr" coords="2,345.64,162.97,14.94,8.02" target="#b13">[14] </ref>describe a space-time representation of Volumes Of Interest for aggregated eye movement trajectories. We extend the concept for dynamic stimuli and provide different data representations in addition to the mentioned eye-trajectories. Clustering of eye-tracking data is already used when fixations are identified in raw data. Salvucci and Goldberg <ref type="bibr" coords="2,455.35,212.79,14.94,8.02" target="#b32">[34] </ref> describe a taxonomy for different fixation identification algorithms. For the clustering of multiple user gaze data, Sawahata et al. <ref type="bibr" coords="2,443.24,232.71,14.94,8.02" target="#b34">[36] </ref>and Mital et al. <ref type="bibr" coords="2,520.55,232.71,14.94,8.02" target="#b26">[28] </ref> use a Gaussian Mixture Model. We use the mean-shift clustering approach for gaze data, according to Santella and DeCarlo <ref type="bibr" coords="2,489.77,252.64,14.94,8.02" target="#b33">[35] </ref>because it is robust to noise and does not require a preset number of clusters. However, we are not aware of any previous cluster method that would respect shot boundaries from shot detection algorithms. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3">DESIGN OVERVIEW</head><p>Our design uses multiple coordinated views <ref type="bibr" coords="2,449.18,313.57,14.94,8.02" target="#b31">[33] </ref> to show the different aspects of spatiotemporal eye-tracking and stimulus data, as they are particularly helpful for analyzing this kind of data <ref type="bibr" coords="2,487.56,333.49,9.52,8.02" target="#b3">[4]</ref> . We provide a visual interface for analytics with adjustable and detachable components. <ref type="figure" coords="2,336.04,353.42,30.99,8.02" target="#fig_0">Figure 2</ref>shows a screenshot of the system. The main components are: </p><p> (a) Viewer controls: This control panel allows the individual adjustment of the visualization view, depending on the analytical task. The data point representation (Section 5.2) and the cluster representation (Section 5.4) can be enabled separately or together. The video preview, the projection walls, and the overview walls can be enabled and adjusted in size. Each projection wall can be set to show projections of data points or cluster. </p><p> (b) Visualization view: The visualization view consists of two components . The main component is the interactively explorable STC. It visualizes the eye-tracking and video data in their original spatiotemporal domain. The second component is the video preview that shows data points and AOIs as known from standard analysis tools. </p><p>(c) Video controls: To navigate through the STC, this panel provides a time slider, frame-wise navigation, and a play button. For analysis tasks related to cuts in the video, shot boundary frames can be jumped to directly, an approach that is also used in the work of Li et al. <ref type="bibr" coords="2,320.77,564.85,13.74,8.02" target="#b24">[25]</ref>. </p><p>(d) Parameter controls: Interactive filtering and data drill-down can be performed by parameter adjustment in this panel. The first slider determines the scaling of the STC and the projection walls along the time axis. By adjusting the kernel size, data points can be filtered frame-wise by their distance to their center of mass. For the cluster representation, depicted clusters can be filtered by their size. A histogram shows the number of clusters in relation to the cluster size. Cluster size relates to the total amount of data points within a cluster, not to its spatial extent. </p><p> (e) User list: Each recorded viewer is listed and selectable for individual or multiple scan paths analysis. A qualitative scheme of 8 colors created by ColorBrewer 2.0 <ref type="bibr" coords="2,439.42,699.45,14.94,8.02" target="#b19">[20] </ref>is applied in a cyclic fashion to distinguish between scan paths of different viewers. </p><p>The design was developed in a formative process. In several short sessions with two visualization and eye-tracking experts, the analytical methods, the visualization design, and the usability in general were improved, according to their comments. We combine standard eye-tracking visualizations (Section 4) with extended analysis methods that we have developed for dynamic stimuli (Section 5). According to the visual analytics mantra <ref type="bibr" coords="3,222.70,436.19,13.74,8.02" target="#b23">[24]</ref>, we provide an automatic analysis of the gaze data by clustering and interactive filtering by cluster size. Data points can be filtered by their spatial density. In addition, automatic computer vision techniques such as optical flow estimation and shot detection allow us to off-load analysis work to the computer. The viewers' gaze direction can be influenced through abrupt cuts <ref type="bibr" coords="3,130.47,495.96,13.74,8.02" target="#b10">[11]</ref>. Therefore, it is necessary to define shot boundaries for further analysis. We use a shot boundary detection algorithm in order to support shot-based clustering and analysis related to shot boundaries. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4">STANDARD EYE-TRACKING VISUALIZATION</head><p>In our visual analysis approach, we included established visualization methods for eye-tracking data. These methods allow for an easy adoption of the design, since the analyst is already familiar with several of its components. Also, the established methods are needed to cover a wide collection of different analysis tasks (see Section 7.5). </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Heat Maps </head><p>Heat maps in eye-tracking research are commonly used to provide a qualitative impression of the users' gaze distribution. For static images , the aggregation of gaze positions over the observation time is expressive, resulting in a static heat map. For the generation of heat maps, we integrated the algorithm and color mapping described by Blignaut <ref type="bibr" coords="3,65.13,676.65,9.52,8.02" target="#b5">[6]</ref> . The principle of static heat maps can be applied to dynamic stimuli to summarize the distribution of attention, but video material with numerous cuts and various camera angles, such as Hollywood movies, can produce heat maps that bear little to no meaning. Ways to overcome this problem are either to create heat maps of very short sequences or to use dynamic heat maps. We provide the possibility to create a static heat map of a user-defined time-span as well as a dynamic heat map visualization during the playback of the video. Additionally, the user can generate a motion-compensated heat map, a novel technique that uses optical flow information to bundle data points at observed objects (Section 5.5). </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Scan Paths </head><p>The individual history of each participant's gaze can be visualized by scan paths. 2D and 3D scan path visualizations can be found in different variants, as mentioned in Section 2. We integrated the scan paths of each viewer in our design. They can be enabled individually to investigate the viewing behavior. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Areas of Interest </head><p> With AOIs, statistical analysis of the data is possible. Common eyemovement metrics such as fixations per AOI or percentage of participants fixating an AOI can be used to retrieve objective information <ref type="bibr" coords="3,294.12,556.01,13.74,8.02" target="#b28">[30]</ref>. Generally, the analysts have to define regions that they want to examine with an appropriate metric. Applying clustering algorithms to recorded eye-tracking data of video material with unknown AOIs provides valuable information about the regions that have been examined by the viewers and might be of interest for the analyst. <ref type="figure" coords="3,514.06,595.86,30.43,8.02" target="#fig_1">Figure 3</ref> shows an example where the attention of many viewers was concentrated on a driving car. The number inside the AOIs (see also <ref type="figure" coords="3,521.08,615.79,23.41,8.02;3,294.12,625.75,3.73,8.02" target="#fig_0">Figure  2</ref>) provides information about the cluster size (see Section 5.4). All of these methods are integrated in our design and can be enabled individually. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5">EXTENDED ANALYSIS</head><p> This section describes modified, extended, or new methods that are included to facilitate the analysis of eye-tracking data for dynamic stim- uli. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.1">Space-Time Cube Visualization</head><p>Recording eye-movement data over time generates spatiotemporal data that can be analyzed in various ways. Commercial analysis tools provide visualization methods that are overlaid on top of the original stimulus and can be watched as a video. Especially the investigation of long video sequences becomes a time-consuming task with these methods. As an alternative, the static representation of spatiotemporal data within an STC reduces the effort to find time sequences of potential interest. Patterns of synchronous eye movement, as well as the existence and number of potential AOIs can easily be recognized. By providing a freely rotatable 3D visualization, the analyst can explore the data in its original domain. A slice inside the STC represents the current video frame. Its position is freely rotatable and movable to investigate the data around it. With the video controls, the analyst can navigate through the video by using the time-slider, frame-wise navigation, shot boundary frames, or the playback function. Changing the frame position translates the STC relative to the video frame slice along the time axis, providing an easy method to analyze selected time-spans in the video. In the context of video analysis, the time axis typically shows the highest visual expansion . Therefore, zooming and scaling of the time axis enables the user to explore the data as an overview as well as in detail. 3D visualizations can be afflicted with perceptual issues resulting from occlusion, distortion, and inaccurate depth perception. To address these problems, we provide the user with the possibility to adjust the camera individually in order to resolve possible occlusions in the STC. We also adapted the idea of 2D wall projections (<ref type="figure" coords="4,220.88,480.91,28.59,8.02" target="#fig_2">Figure 4</ref>) from ExoVis, introduced by Tory and Swindells <ref type="bibr" coords="4,181.97,490.87,13.74,8.02" target="#b40">[42]</ref>. With an adjustable scale and distance to the STC, the walls represent 2D overviews of the data without being occluded by the main visualization. A slider moves through the walls, to indicate the current position in the video. Each of the two walls can be adjusted to show either the data points (Section 5.2) or cluster projections (Section 5.4). Two small walls provide an overview of the whole video, independent from the current time-scale. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.2">Data Point Representation</head><p>Eye-tracking data, provided as raw measurement data or as prefiltered fixations, can be mapped to video frames, corresponding to the timestamp of the data. This provides a maximal set of data points per frame equal to the number of recorded viewers. However, due to saccades or measurement problems, a subset of the data points is usually not available . Bearing this fact in mind, the visualization is designed to analyze eye-tracking data of numerous viewers simultaneously, providing enough data points for interpretation. Presenting the data points in the STC already gives an impression of the data distribution and especially of sequences with similar eyemovement . Attentional synchrony can indicate events of high saliency. By determining the distance d of each point to the center of mass per frame, we can calculate a value v(d) = e −0.5( d </p><formula>σ ) 2 ∈ [0, 1]. </formula><p>The value v defines the transparency and the color of a data point. The same color mapping as for the heat maps (Section 4) is used. By reducing the kernel size σ in the parameter controls, sparse data points in the space-time visualization fade out, facilitating the identification of dense regions. <ref type="figure" coords="4,295.08,286.47,31.34,8.02" target="#fig_2">Figure 4</ref>shows an example scene. Data points with a red color indicate a distance close to their frame's center of mass. When many viewers simultaneously looked at a small area, a large number of data points appear red and remain even when the kernel size is reduced. This representation can also reveal motion patterns of objects tracked by several viewers. However, sequences with sparse data could also be interesting to examine. To this end, the cluster representation can be used (Section 5.4). </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.3">Shot Boundary Detection</head><p>Depending on the video material that has to be investigated, finding shots is useful before clustering to find special patterns, related to cuts. Manual annotation of shot boundaries would require the analyst to examine the complete video first, which would be very time-consuming. Therefore, we decided to include a computer vision technique that uses optical flow to find shot boundaries automatically. A shot is defined by a contiguous recording of one or more video frames depicting a continuous action in time and space <ref type="bibr" coords="4,417.59,458.38,13.74,8.02" target="#b27">[29]</ref> . Cuts between shots can either be manually marked or, as often preferred, detected automatically by an algorithm. Automatic shot boundary detection is an important pre-processing step in video analysis <ref type="bibr" coords="4,419.90,488.26,13.74,8.02" target="#b36">[38]</ref> . From the numerous different approaches that exist, we decided to use optical flow information similar to the method described by Bruno and Pellerin <ref type="bibr" coords="4,479.63,508.19,10.45,8.02" target="#b8">[9] </ref>because it is more reliable than the histogram-based approaches. In our implementation , a cut is detected by high disturbance in the optical flow. The optical flow is calculated by the method of Farnebäck <ref type="bibr" coords="4,483.71,538.08,13.74,8.02" target="#b16">[17]</ref>, provided by OpenCV <ref type="bibr" coords="4,330.44,548.04,9.52,8.02" target="#b0">[1]</ref>. A shot boundary is depicted by a red arrow on the time axis of the STC. In the video controls (<ref type="figure" coords="4,401.79,654.18,28.53,8.02" target="#fig_3">Figure 5</ref>), a key-frame represents the boundary. By picking one of the key-frames, the space-time visualization jumps to the corresponding position on the time axis, providing an efficient method to examine shot changes. With the shot boundaries defined, the data can now be clustered to extract new information. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.4">Cluster Analysis</head><p>Using clustering algorithms to identify interesting regions in a data set is common practice <ref type="bibr" coords="4,359.81,736.42,13.74,8.02" target="#b22">[23]</ref>. To find regions of potential interest in the recorded gaze data, we choose a clustering algorithm that fulfills the following requirements: 1. Unknown number of clusters: The number of data points that have to be clustered can vary, depending on two factors: the number of participants for whom data was recorded; and the length of the stimulus presentation. Defining a proper number of clusters is not intuitive, even if these factors are known. Therefore, we decided to use an algorithm that requires no predefined number of clusters and uses more intuitive parameters. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.">Parameterization:</head><p> A parameterizable clustering approach allows the user to define the granularity of the clusters. Therefore, the adjustable parameters have to be intuitively understandable. The algorithm should depend on two controllable parameters that determine the spatial and temporal extents of the clusters. </p><p> The mean shift algorithm performs without a preset number of clusters and can be parametrized in space and time independently. Therefore , it fits the requirements and is suitable for the clustering of the data. Mean shift clustering is widely used for feature space analysis in the field of computer vision <ref type="bibr" coords="5,143.83,250.96,13.74,8.02" target="#b12">[13]</ref>. Santella and DeCarlo <ref type="bibr" coords="5,244.48,250.96,14.94,8.02" target="#b33">[35] </ref>introduced its application to eye-tracking data. We adopt their algorithm and extend it to take into account the shot boundaries. To this end, the spatiotemporal gaze points are separated for each shot. After this separation, mean shift clustering is independently executed for each shot to obtain cluster information. This method helps identify special behavior on shot boundaries of a video. As an example, it is known that a center bias exists that is related to cuts <ref type="bibr" coords="5,48.45,330.66,13.74,8.02" target="#b42">[44]</ref>. This short time-span of orientation to the center, as well as short periods of gaze reorientation after a cut, can only be investigated by taking cuts into account. Clustering the video without shot boundary information could falsely count these few data points after the cut to the cluster of the previous shot. With the shot boundary information, the few data points become a separate cluster that can be visualized to indicate the described behavior much better. The found clusters are visualized in two different ways: </p><p>@BULLET Cluster hull: We create axis-aligned boxes around all data points of a cluster for every time-step because they represent the most common convention for AOI representation. The boxes are connected after applying an exponentially weighted moving av- erage <ref type="bibr" coords="5,73.38,455.92,14.94,8.02" target="#b21">[22] </ref>to their size, in order to provide a smooth pursuit for the AOI representation. They create a hull around the cluster data points. The spatial extent provides information about changes in the spatial density of the data points in the cluster over time: " thick " cluster hulls correspond to a wide spread of points and, thus, low density—and vice versa. @BULLET AOI representation: By projecting the cluster hull of a time step to the corresponding video frame, dynamic AOIs provide information about the distribution of attention on different regions or objects. The cluster size is measured by the number of data points it contains. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.5">Motion-Compensated Heat Maps</head><p>With motion-compensated heat maps, we introduce a new approach to summarize eye-tracking data of dynamic stimuli. A motioncompensated heat map shows high values for observed objects in motion . For example, imagine an object moving through the video from the right to the left side. Assuming all viewers would always observe the object, the resulting heat map of this time-span would show a uniform distribution along the movement trail of the object. In contrast, the motion-compensated heat map would show high values only on the object that was observed, indicating the high amount of attention spent on this object. The creation of a motion-compensated heat map can be described by a particle tracing in time-dependent fields <ref type="bibr" coords="5,194.11,700.83,14.94,8.02">[46] </ref>as follows: </p><p> 1. The optical flow between consecutive frames in the video is calculated (here, the optical flow for shot detection can be reused, see Section 5.3). It is described by a time-dependent vector field.  2. The analysts have to define a time-span they want to be summa- rized. </p><p>3. A key-frame within this time-span has to be picked. It defines the end for the particle tracing and serves as a representative for the sequence. 4. Each gaze-point within the time-span is traced along the flow until the key-frame position is reached. 5. The traced end positions are used to create a heat map that is blended together with the representative key-frame. <ref type="figure" coords="5,304.08,415.62,29.84,8.02" target="#fig_4">Figure 6</ref> shows a comparison between a conventional and a motioncompensated heat map, created for the same frames of a video. In the video, a red circle moved from right to left. The viewers were asked to follow the circle during its movement. The measured data is distributed along the motion path and no high values remain on the circle itself. The motion-compensated heat map transports the majority of the data points along the optical flow, showing the hot spot with the highest value on the circle itself. The motion path can still be recognized , providing summarizing information about the movement and which object was attended to. <ref type="figure" coords="5,304.08,515.26,31.28,8.02" target="#fig_5">Figure 7</ref>shows a real-world example: Both heat maps represent a short sequence (7 sec) with a driving car and five persons in the background. In this sequence, the car receives most of the attention. Due to the dynamic changes in the scene, the conventional heat map is hard to interpret and the existing hot spot seems to lie on two persons, which would be a misinterpretation. The motion-compensated heat map adjusts the data points along with the object movement, the hot spot lies on the car. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6">USE CASES</head><p> Our visual analytics framework provides different methods to identify spatial and temporal regions of potential interest. Our approach is generic and can be used with any image or video. Only the use for individual videos such as recordings of interactive tools or head-mounted eye-tracking devices is limited so far because the recorded data cannot be synchronized easily between viewers, which is a prerequisite to analyzing common eye-gaze behavior of groups of viewers. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6.1">Attentional Synchrony</head><p>With the data point representation, users can adjust the kernel size σ (Section 5.2) to filter the data interactively. Time-spans with sparse data fade out as the kernel size is reduced and only dense points remain . With this method, the video can be searched for time-spans with dense data point distribution, indicating that the viewers' attention was drawn to the same region at the same time. This attentional synchrony can be interesting for various reasons. For example, commercials could be analyzed if the video draws attention to the intended object, or if another object in the scene receives too much attention. <ref type="figure" coords="6,22.50,103.20,31.42,8.02" target="#fig_6">Figure 8</ref>illustrates an example of high attentional synchrony. The video shows a commercial that presents pictures of different consumer products (see Section 7.1). The picture of a bottle of eau de toilette leads every viewer to concentrate on the small area of the label, in order to read it. In the data point representation, this short time-span is clearly visible, even when the kernel size is small. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6.2">Multiple AOIs</head><p>Attentional synchrony leads to very few clusters during its occurrence. In contrast, no synchrony results in numerous, smaller clusters. This situation might happen, for example, when multiple objects appear on the screen and every viewer investigates each object in a different order. Detecting the objects as separate AOIs is therefore possible, cluster size information and a heat map can then be used to examine, which object is more interesting. <ref type="figure" coords="6,141.26,471.11,29.84,8.02" target="#fig_7">Figure 9</ref>shows an example situation. The video is the same as in the previous example; in this part of the video, however, three objects appeared at the same time on the screen. The time-span with these three objects is clearly visible in the cluster representation. Looking at the cluster size information and the corresponding heat map, we can assume that the camera and the coffee machine received more attention than the cell phone. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6.3">Shot Boundary Examination</head><p>With the shot boundary frames, the analyst can jump directly to the cuts in a video and examine if changes in the viewers' gaze direction are noticeable. <ref type="figure" coords="6,77.07,583.44,34.25,8.02" target="#fig_13">Figure 10</ref>shows an example from the second test video that was used for the analysis task (Section 7.1). The excerpt shows a small cluster of data points at the same position as the cluster before the cut. This indicates that most of the viewers' gazes remained at the old position for 16 frames, and then the viewers began to reorient their gaze in the new shot. This visualization can help identify such latencies, but it could also be used to visualize the center bias after cuts, reported by Tseng et al. <ref type="bibr" coords="6,129.12,653.18,13.74,8.02" target="#b42">[44]</ref>. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="7">QUALITATIVE USER STUDY</head><p>To evaluate our design, we performed separate testing sessions with 5 visualization experts; three of them have advanced knowledge of eyetracking analysis. Each session took about 45–60 minutes to complete, including an introduction and an exploration phase. First, the different views and the design of the system were explained for an example scene and the participants explored it to make themselves familiar with <ref type="figure" coords="6,285.12,423.23,22.77,7.37" target="#fig_13">Fig. 10</ref> . Shot boundary examination: After the cut (red arrow), the viewers' gazes remained at the old position (green cluster). the design. Possible use cases as described in Section 6 were explained to prepare the participants for the following task: </p><p>@BULLET Analysis Task: To obtain useful and instructive feedback, the participants had to perform an analysis on a new, realistic data set in which they should find the 10 most interesting time-spans, based on their opinion. Attentional synchrony, distribution of attention on multiple AOIs, and viewing behavior at shot boundaries were mentioned as examples that could be of interest. The participants were free to switch between different representations as needed. Each of their findings was listed consecutively by the participants with a frame-span and a description of the discovered event. During the task, the think aloud method <ref type="bibr" coords="6,443.99,596.80,14.94,8.02" target="#b43">[45] </ref> was used to gain insight into the analysis process of the participant. After the task, a questionnaire was used to obtain additional information on the different representations. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="7.1">Test Data</head><p> The test videos were recorded from regular television program, providing a variety of different aspects to analyze. The recorded material comprised 13 clips from commercials, TV shows, and movies. No video clip was significantly longer than 90 seconds. Each video was upscaled to 720 pixels in height, the width was adjusted respectively. Upscaling was performed to show the videos on a Tobii T60 XL eyetracker with a 24 " screen (resolution: 1920 × 1200) at a distance of 65 centimeters from the eyes. In separate 20-minutes sessions, 16 volunteers watched the videos consecutively. As viewing behavior can be related to a given task <ref type="bibr" coords="7,116.06,53.38,13.74,8.02" target="#b38">[40]</ref>, we instructed all viewers to watch each video attentively and then summarize the main plot of each video. With this task, we reduced inattentiveness and encouraged an explorative viewing behavior. As an introduction, we showed a credit card commercial where different consumer products appeared successively on the screen. Some of them turned up alone, others together. We used this video to explain the functionality of the visualization and to show the use cases (Section 6). Due to copyright issues, <ref type="figure" coords="7,171.53,133.10,30.93,8.02" target="#fig_6">Figure 8</ref>and <ref type="figure" coords="7,221.50,133.10,30.93,8.02" target="#fig_7">Figure 9</ref>contain illustrative images of the actual video. For the analysis task, we chose a promotional video for a new car (as seen in all figures except for Figures 6, 8, and 9). This kind of video aims to draw much attention to the product that is promoted. It can be assumed that the cuts and the arrangement of shots were carefully planned by the director. Analytical findings could show to which extent the director's intentions were reflected in the viewing behavior of the viewers. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="7.2">Questionnaire</head><p>The questionnaire consisted of 9 items, concerning the representation of data points and clusters as well as the STC visualization in general. Additional comments could be listed at the end of the questionnaire. We used a 6-point Likert-scale from " I don't agree " (scale = 1) to " I agree " (scale = 6) with the option to give no answer. Each participant rated all statements. Concerning the data point and cluster representation , the following statements had to be rated: @BULLET Usability: The visualization was helpful to solve the task. The data point representation (mean = 4.40, standard deviation = 1.34) was rated worse than the cluster representation (mean = 5.40, sd = 0.55). @BULLET Comprehensibility: The visualization was easy to interpret. The data point representation (mean = 5.20, sd = 0.84) and the cluster representation (mean = 5.0, sd = 0.71) were rated simi- larly. For the general use of the design, three statements were rated: @BULLET STC navigation: The navigation with the STC was easy to understand (mean = 5.4, sd = 0.55). @BULLET Key-frame navigation: The key-frames were helpful to navigate through the video (mean = 4.4, sd = 1.52 ). @BULLET Projection walls: The projection walls were helpful to understand the spatial distribution of the data (mean = 5.6, sd = 0.8). Comparing the representation of data points and clusters, the results indicate that the cluster representation was considered more helpful than the data point representation. All participants were able to interpret both representations without any problems. According to the comments and ratings, the general use of the STC and the video navigation was easy to understand. Identification problems in the 3D visualization could be resolved by looking at the projection walls. Therefore, the projection walls were rated very good by almost all participants. Lower ratings for the key-frame navigation result from the fact that not every participant was interested in direct shot boundary investigation and used the key-frames at all. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="7.3">Exploration Strategies</head><p>During the task, the participants were asked to think aloud what they wanted to find out and what they did to achieve this. This method provides essential information about the general usability of the design and insight into the individual strategies during the analytical process. For the following description, we refer to individual participants as P1–P5. Given the same introduction, the participants started with a blank STC and could decide on their own, how to begin the analysis. We identify three different approaches for the first steps in the analytical process: </p><p> @BULLET Sequential analysis: P3 and P4 investigated the static representation only for a short time. Afterward, they began to proceed sequentially through the video. P3 started directly at the beginning and used the slider to navigate through video shot by shot. P3 claimed to be a regular user of video cutting software and that sequential analysis was the usual approach. During the task, P3 mainly concentrated on the bottom wall projections of nearly all clusters at once and the video preview. Only for further investigations , P3 reduced the number of clusters. P4 looked at the cluster overview first, than used the time slider to fast-forward through video. During the analysis, P4 tended to look mainly at the video preview with cluster AOIs activated. To find time-spans with distributed attention, P4 used the cluster representation. Using this strategy, P4 discovered and examined mainly the time-spans in the video that showed landscapes. P4 mentioned that the data point representation seemed very appealing, but during the task P4 almost forgot to use it. Both participants were familiar with eye-tracking, although their experience was mainly restricted to the analysis of static stimuli. </p><p> @BULLET Large clusters first: P1 and P2 investigated the cluster representation first and used the filter function to remove small clusters. Beginning with the largest cluster, they examined successively time-spans that contained them. P1 used the data point representation only for a short time, and concentrated mainly on the clusters . Although P1 had no further experience with the analysis of eye-tracking data, P1 was able to proceed very fast by cluster examination . P2 used the 3D cluster representation in combination with the projected data points on both walls. After investigating the 3 largest clusters, P2 began to search for time-spans with multiple clusters. P2 had experience with eye-tracking analysis. </p><p> @BULLET Data point investigation: P5 began with the data point representation . By looking at the data points in the 3D visualization and on the walls, P5 discovered the motion trails, resulting from the pursuit of the car while it was driving through the scene. After P5 had investigated these time-spans, P5 switched to the cluster representation in 3D but kept the data point projections on both walls. P5 proceeded by investigating time-spans where the data points were more widely distributed. </p><p>In general, each participant used the data point representation and the cluster representation during the task, but the main focus was on the clusters. This strategy reflects the results from the questionnaire, because the cluster representation was rated more helpful to search for interesting sequences. P3 and P5 reported that they used both representations to identify cuts and camera pans. The time-scale was mainly used for short time-spans; the participants preferred to see the STC completely during the exploration. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="7.4">Findings</head><p> The participants were asked to identify the 10 most interesting timespans . Independent from the individual exploration strategy, the most common findings were: @BULLET Introduction: The promotional video was presented within a TV show. At the beginning, the host of the show can be seen for a short time-span, then the promotional video fades in (<ref type="figure" coords="7,521.86,618.70,22.63,8.02;7,314.05,628.67,7.97,8.02" target="#fig_8">Figure  11</ref>) . The participants discovered a high concentration of the viewers' gazes on the face of the host shortly before the shot boundary. In the following shot, the gaze remained in this region and examined the station-logo first. </p><p>@BULLET First appearance of the car: The first appearance of the car is a very salient event (<ref type="figure" coords="7,400.02,686.61,32.51,8.02" target="#fig_0">Figure 12</ref>). P1 described it as kind of a salvation from disorientation. In the previous shot, the camera pans to the right, leading to a gaze distribution on the edge of the screen, indicating an exploration of the new objects that appear in the scene. Then, the shot with the car fades in, concentrating all attention on the car surrounded by a halo. @BULLET Tracing the car: The video contains 3 major shots that show the car driving from one side of the screen to the other. These shots result in a high concentration of the viewers' gazes primarily on the car. This yields a clearly recognizable motion signature in the data point representation (<ref type="figure" coords="8,150.95,466.83,32.13,8.02" target="#fig_1">Figure 13</ref>). Likewise, some of the largest clusters indicate this motion. @BULLET Landscape exploration: Between the shots with the car, Mediterranean landscapes are shown for short time-spans (<ref type="bibr" coords="8,258.52,706.53,14.35,8.02;8,42.43,716.50,21.28,8.02">Figure 14</ref>). To identify these scenes, data points and clusters were examined. The clusters were also used to identify the most important AOIs within these scenes.  @BULLET Appearance of the spokesperson: Another salient event appears towards the end of the clip (<ref type="figure" coords="8,429.09,261.72,32.21,8.02" target="#fig_3">Figure 15</ref>). During the video, persons appear only in the background and faces are hard to recognize . Therefore, when the spokesperson finally appears, he attracts much attention. Visit http://go.visus.uni-stuttgart.de/stva to watch a supporting video. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="7.5">Review Session</head><p>To compare the new eye-tracking visualizations with state-of-the-art methods and to identify task-related limitations, we hosted an additional group session with the three experts who had advanced knowledge of eye-tracking analysis. The review session was held after a time lapse (thirteen weeks after the testing session) and took about 45 minutes. The test data from the first session was presented to make the participants familiar with the system again. They were asked to assess the common existing eye-tracking visualizations for video analysis without predefined AOIs, as well as the new ones provided in our system, in terms of their suitability for different tasks. A predefined set of analysis tasks concerning the overview of the data <ref type="bibr" coords="8,518.31,646.76,13.74,8.02" target="#b35">[37]</ref>, the identification of AOIs, the evolution of attention over time, and the extraction of general viewing strategies of multiple users <ref type="bibr" coords="8,508.45,666.68,10.45,8.02" target="#b4">[5] </ref>was used for an initial assessment. The participants were encouraged to state additional tasks along with an assessment of the different visualizations for those tasks. For the assessment, we included common existing visualizations techniques: bee swarm, dynamic heat map, and gaze replay. Motion-compensated heat maps, the data points display, and the cluster visualization represent the new methods for the assess- ment. <ref type="figure" coords="8,308.07,736.42,26.42,8.02" target="#tab_1">Table 1</ref>shows the results of the assessment.  Compared to the common visualization techniques, the new methods provide a data overview that is most useful with the data point and cluster representations. For the estimation of the current distribution of attention in a specific frame, all visualizations were rated useful except for the data point representation. The participants mentioned that the intersection of points with the video plane in the STC was not sufficient for this task. For the comparison of attention on objects over time, all visualization techniques except for the bee swarm were considered to be suitable. The cluster representation was rated very useful for identifying attentional synchrony as well as multiple AOIs. Finding multiple user groups is a complicated task; here, the new methods were considered not useful. However, the existing visualization techniques provide only little support for this task, too. In this case, additional visualization techniques are required. For the two tasks concerning the focusing on objects, the new visualization methods were considered useful; from the common existing methods, only the gaze replay was considered useful for both tasks. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="8">CONCLUSION</head><p>We have presented a new approach to analyzing eye-tracking data of videos or other dynamic stimuli with a space-time visualization in combination with computer vision algorithms. Our design provides multiple views that allow the user to focus on different aspects of the data. The data point representation or the cluster representation provides an overview of the whole video without the need to watch it completely. Filtering clusters by size and data points by spatial density is an effective method to find time-spans of potential interest. With the expert feedback during the development of our system, we were able to improve the usability of the design. The following qualitative user study led to interesting insights that helped understand how our design was used for analysis tasks. It showed that the participants adopted different strategies for the analysis of the data. This could be related to analytical processes they are used to perform. Our design supports the different strategies and the results indicate that these individual approaches can lead to similar findings in the data. In combination with standard eye-tracking visualizations, the system extends the possibilities for the analysis of eye-tracking data of dynamic stimuli without predefined dynamic AOIs. For future work, we plan to perform a longitudinal study. The investigation of exploration strategies over several sessions is of special interest. It could show if participants change their strategies, depending on their experience or the type of video material. We also plan to extend the analytical methods of our design. Including additional dynamic AOI information allows the use of common eye-tracking metrics as well as new possibilities for visual data representation. Audio analysis could help interpret events of short attentional synchrony that cannot be explained by visual aspects. </p></div><figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_0" coords="3,31.50,355.73,513.00,7.37;3,31.50,365.19,167.63,7.37"><head>Fig. 2. </head><figDesc>Fig. 2. Design components: (a) viewer controls; (b) space-time visualization view; (c) video controls with key-frames for single shots; (d) parameter controls; (e) user list for scan path visualization. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_1" coords="4,22.50,200.86,250.38,7.37;4,22.50,210.32,250.38,7.37;4,22.50,219.79,93.88,7.37"><head>Fig. 3. </head><figDesc> Fig. 3. Areas of Interest: Axis-aligned boxes represent regions of potential interest. Yellow dots (as marked by the white arrow) represent the gaze points of the viewers. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_2" coords="4,285.12,206.12,250.38,7.37;4,285.12,215.58,250.38,7.37;4,285.12,225.05,250.38,7.37;4,285.12,234.51,176.64,7.37"><head>Fig. 4. </head><figDesc> Fig. 4. Data point representation: Moments of high attentional synchrony are clearly visible and motion signatures can be recognized. Additionally , the wall projections provide 2D information of the data as well as an overview of the current position in the video. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_3" coords="4,285.12,614.46,250.38,7.37;4,285.12,623.92,19.49,7.37"><head>Fig. 5. </head><figDesc> Fig. 5. Time controls: Key-frames allow direct navigation to shot bound- aries. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_4" coords="5,294.12,108.62,250.38,7.37;5,294.12,118.08,189.49,7.37"><head>Fig. 6. </head><figDesc>Fig. 6. A conventional heat map (left) and a motion-compensated heat map (right) of a red circle that moves from right to left. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_5" coords="5,294.12,215.46,250.38,7.37;5,294.12,224.93,250.38,7.37;5,294.12,234.39,250.38,7.37;5,294.12,243.85,250.38,7.37;5,294.12,253.32,250.38,7.37;5,294.12,262.78,37.98,7.37"><head>Fig. 7. </head><figDesc>Fig. 7. Car driving from the tower to the left side of the screen: The conventional heat map (left) provides only little useful information about the dynamic AOIs and could lead to misinterpretations because the hot spot lies on two persons. The motion-compensated heat map (right) conveys the information on which object (the car) most of the attention was spent. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_6" coords="6,22.50,349.40,250.38,7.37;6,22.50,358.86,250.38,7.37;6,22.50,368.33,18.16,7.37"><head>Fig. 8. </head><figDesc> Fig. 8. Attentional synchrony: Dense regions in the data point representation indicate time-spans where all attention was concentrated on one area. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_7" coords="6,285.12,229.53,250.38,7.37;6,285.12,238.99,250.38,7.37;6,285.12,248.46,82.36,7.37"><head>Fig. 9. </head><figDesc>Fig. 9. Multiple AOIs: Three clusters in the same time-span indicate that three different AOIs exist. The corresponding heat map shows the distribution of attention. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_8" coords="8,22.50,200.37,250.38,7.37;8,22.50,209.83,16.96,7.37"><head>Fig. 11. </head><figDesc>Fig. 11. Introduction: High attentional synchrony on the face and the logo. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_9" coords="8,22.50,384.64,250.38,7.37;8,22.50,394.10,203.18,7.37"><head>Fig. 12. </head><figDesc> Fig. 12. First appearance of the car: The second largest cluster represents the AOI on the car when it appears for the first time. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_10" coords="8,22.50,644.77,250.38,7.37;8,22.50,654.24,250.38,7.37;8,22.50,663.70,35.89,7.37"><head>Fig. 13. </head><figDesc>Fig. 13. Tracing the car: The largest cluster describes the tracing of the car. The data points on the walls clearly show the motion signature of this event. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_11" coords="8,285.12,203.14,250.38,7.37;8,285.12,212.61,250.38,7.37;8,285.12,222.07,23.36,7.37"><head>Fig. 14. </head><figDesc>Fig. 14. Landscape exploration: Multiple AOIs were investigated. The lighthouse seemed to get more attention than the other objects in this scene. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_12" coords="8,285.12,463.78,250.38,7.37;8,285.12,473.25,136.85,7.37"><head>Fig. 15. </head><figDesc>Fig. 15. Appearance of the spokesperson: When the person fades in, nearly all attention is drawn to his face. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_13" coords="9,31.50,59.66,513.00,7.37;9,31.50,69.13,368.41,7.37;9,55.17,77.90,170.08,31.84"><head>Table 1. </head><figDesc>Suitability of different eye-tracking visualizations for various analysis tasks. Tasks marked by (*) were added by the participants. Each combination of visualization and task was rated either with '-' : not useful, '+' : useful or '++' : very useful. </figDesc></figure>
+
+			<note place="foot">IEEE TRANSACTIONS ON VISUALIZATION AND COMPUTER GRAPHICS, VOL. 19, NO. 12, DECEMBER 2013</note>
+
+			<note place="foot">KURZHALS AND WEISKOPF: SPACE-TIME VISUAL ANALYTICS OF EYE-TRACKING DATA FOR DYNAMIC STIMULI</note>
+		</body>
+		<back>
+
+			<div type="acknowledgement">
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>ACKNOWLEDGMENTS </head><p>This work was funded by the German Research Foundation (DFG) as part of the SFB 716 / D.5 at the University of Stuttgart. </p></div>
+			</div>
+
+			<div type="references">
+
+				<listBibl>
+
+<biblStruct coords="9,312.38,235.48,157.51,7.13"  xml:id="b0">
+	<monogr>
+		<title/>
+		<author>
+			<persName>
+				<surname>Opencv</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2013" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,312.38,244.94,232.12,7.13;9,312.38,254.41,17.93,7.13"  xml:id="b1">
+	<monogr>
+		<title level="m" type="main">SMI BeGaze eye tracking analysis software</title>
+		<imprint>
+			<date type="published" when="2013" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,312.38,263.87,146.30,7.13"  xml:id="b2">
+	<analytic>
+		<title/>
+	</analytic>
+	<monogr>
+		<title level="m">Tobii Studio 3.2</title>
+		<imprint>
+			<date type="published" when="2013" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,312.38,273.34,232.12,7.13;9,312.38,282.80,162.60,7.13"  xml:id="b3">
+	<monogr>
+		<title level="m" type="main">Visualization of Time-Oriented Data</title>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Aigner</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Miksch</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Schumann</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Tominski</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2011" />
+			<publisher>Springer</publisher>
+			<pubPlace>London, UK</pubPlace>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,312.38,292.26,232.12,7.13;9,312.38,301.73,232.12,7.13;9,312.38,311.19,206.07,7.13"  xml:id="b4">
+	<analytic>
+		<title level="a" type="main">Visual analytics methodology for eye movement studies</title>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Andrienko</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Andrienko</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Burch</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Weiskopf</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Visualization and Computer Graphics</title>
+		<imprint>
+			<biblScope unit="volume">18</biblScope>
+			<biblScope unit="issue">12</biblScope>
+			<biblScope unit="page" from="2889" to="2898" />
+			<date type="published" when="2012" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,312.38,320.66,232.12,7.13;9,312.38,330.12,232.12,7.13;9,312.38,339.59,145.25,7.13"  xml:id="b5">
+	<analytic>
+		<title level="a" type="main">Visual span and other parameters for the generation of heatmaps</title>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Blignaut</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 2010 Symposium on Eye-Tracking Research &amp; Applications</title>
+		<meeting>the 2010 Symposium on Eye-Tracking Research &amp; Applications</meeting>
+		<imprint>
+			<date type="published" when="2010" />
+			<biblScope unit="page" from="125" to="128" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,312.38,349.05,232.12,7.13;9,312.38,358.52,232.12,7.13"  xml:id="b6">
+	<analytic>
+		<title level="a" type="main">Informative or misleading? Heatmaps deconstructed</title>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Bojko</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Human-Computer Interaction. New Trends</title>
+		<imprint>
+			<biblScope unit="page" from="30" to="39" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,312.38,377.45,232.12,7.13;9,312.38,386.91,232.12,7.13;9,312.38,396.37,221.57,7.13"  xml:id="b7">
+	<analytic>
+		<title level="a" type="main">Action-based multifield video visualization</title>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<forename type="middle">P</forename>
+				<surname>Botchen</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Bachthaler</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<surname>Schick</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Chen</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Mori</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Weiskopf</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Ertl</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Visualization and Computer Graphics</title>
+		<imprint>
+			<biblScope unit="volume">14</biblScope>
+			<biblScope unit="issue">4</biblScope>
+			<biblScope unit="page" from="885" to="899" />
+			<date type="published" when="2008" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,312.38,405.84,232.12,7.13;9,312.38,415.30,232.12,7.13;9,312.38,424.77,176.72,7.13"  xml:id="b8">
+	<analytic>
+		<title level="a" type="main">Video shot detection based on linear prediction of motion</title>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<surname>Bruno</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Pellerin</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the IEEE International Conference on Multimedia and Expo</title>
+		<meeting>the IEEE International Conference on Multimedia and Expo</meeting>
+		<imprint>
+			<date type="published" when="2002" />
+			<biblScope unit="page" from="289" to="292" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,312.38,434.23,232.12,7.13;9,312.38,443.70,232.12,7.13;9,312.38,453.16,232.12,7.13;9,312.38,462.63,114.78,7.13"  xml:id="b9">
+	<analytic>
+		<title level="a" type="main">Evaluation of traditional, orthogonal, and radial tree diagrams by an eye tracking study</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Burch</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Konevtsova</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Heinrich</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Höferlin</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Weiskopf</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Visualization and Computer Graphics</title>
+		<imprint>
+			<biblScope unit="volume">17</biblScope>
+			<biblScope unit="issue">12</biblScope>
+			<biblScope unit="page" from="2440" to="2448" />
+			<date type="published" when="2011" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,312.38,472.09,232.12,7.13;9,312.38,481.55,213.94,7.13"  xml:id="b10">
+	<analytic>
+		<title level="a" type="main">Visual causes versus correlates of attentional selection in dynamic scenes</title>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Carmi</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<surname>Itti</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Vision Research</title>
+		<imprint>
+			<biblScope unit="volume">46</biblScope>
+			<biblScope unit="issue">26</biblScope>
+			<biblScope unit="page" from="4333" to="4345" />
+			<date type="published" when="2006" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,312.38,491.02,232.12,7.13;9,312.38,500.48,232.12,7.13;9,312.38,509.95,173.00,7.13"  xml:id="b11">
+	<analytic>
+		<title level="a" type="main">Visual signatures in video visualization</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Chen</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Botchen</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Hashim</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Weiskopf</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Ertl</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">I</forename>
+				<surname>Thornton</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Visualization and Computer Graphics</title>
+		<imprint>
+			<biblScope unit="volume">12</biblScope>
+			<biblScope unit="issue">5</biblScope>
+			<biblScope unit="page" from="1093" to="1100" />
+			<date type="published" when="2006" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,312.38,519.41,232.12,7.13;9,312.38,528.88,232.12,7.13;9,312.38,538.34,110.82,7.13"  xml:id="b12">
+	<analytic>
+		<title level="a" type="main">Mean shift: A robust approach toward feature space analysis</title>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Comaniciu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Meer</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Pattern Analysis and Machine Intelligence</title>
+		<imprint>
+			<biblScope unit="volume">24</biblScope>
+			<biblScope unit="issue">5</biblScope>
+			<biblScope unit="page" from="603" to="619" />
+			<date type="published" when="2002" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,312.38,547.81,232.12,7.13;9,312.38,557.27,232.11,7.13;9,312.38,566.74,69.95,7.13"  xml:id="b13">
+	<analytic>
+		<title level="a" type="main">Gaze-contingent video resolution degradation</title>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Duchowski</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Mccormick</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of Photonics West&apos;98 Electronic Imaging</title>
+		<meeting>Photonics West&apos;98 Electronic Imaging</meeting>
+		<imprint>
+			<date type="published" when="1998" />
+			<biblScope unit="page" from="318" to="329" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,312.38,576.20,232.12,7.13;9,312.38,585.66,232.12,7.13;9,312.38,595.13,195.44,7.13"  xml:id="b14">
+	<analytic>
+		<title level="a" type="main">Aggregate gaze visualization with real-time heatmaps</title>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Duchowski</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Price</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Meyer</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Orero</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the Symposium on Eye Tracking Research and Applications</title>
+		<meeting>the Symposium on Eye Tracking Research and Applications</meeting>
+		<imprint>
+			<date type="published" when="2012" />
+			<biblScope unit="page" from="13" to="20" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,312.38,604.59,232.12,7.13;9,312.38,614.06,232.12,7.13;9,312.38,623.52,17.93,7.13"  xml:id="b15">
+	<analytic>
+		<title level="a" type="main">A breadth-first survey of eye-tracking applications</title>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<forename type="middle">T</forename>
+				<surname>Duchowski</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Behavior Research Methods, Instruments, &amp; Computers</title>
+		<imprint>
+			<biblScope unit="volume">34</biblScope>
+			<biblScope unit="issue">4</biblScope>
+			<biblScope unit="page" from="455" to="470" />
+			<date type="published" when="2002" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,312.38,632.99,232.12,7.13;9,312.38,642.45,232.12,7.13;9,312.38,651.92,100.06,7.13"  xml:id="b16">
+	<analytic>
+		<title level="a" type="main">Two-frame motion estimation based on polynomial expansion</title>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Farnebäck</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 13th Scandinavian conference on Image analysis</title>
+		<meeting>the 13th Scandinavian conference on Image analysis</meeting>
+		<imprint>
+			<date type="published" when="2003" />
+			<biblScope unit="page" from="363" to="370" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,312.38,661.38,232.12,7.13;9,312.38,670.85,232.12,7.13;9,312.38,680.31,232.12,7.13"  xml:id="b17">
+	<analytic>
+		<title level="a" type="main">Interactive analysis of event data using space-time cube</title>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Gatalsky</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Andrienko</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Andrienko</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the Eighth International Conference on Information Visualisation IV</title>
+		<meeting>the Eighth International Conference on Information Visualisation IV</meeting>
+		<imprint>
+			<date type="published" when="2004" />
+			<biblScope unit="page" from="145" to="152" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,312.38,689.77,232.12,7.13;9,312.38,699.24,232.12,7.13;9,312.38,708.70,116.88,7.13"  xml:id="b18">
+	<analytic>
+		<title level="a" type="main">Where people look when watching movies: Do all viewers look at the same place?</title>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Goldstein</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Woods</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<surname>Peli</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Computers in Biology and Medicine</title>
+		<imprint>
+			<biblScope unit="volume">37</biblScope>
+			<biblScope unit="issue">7</biblScope>
+			<biblScope unit="page" from="957" to="964" />
+			<date type="published" when="2007" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="9,312.38,718.17,232.12,7.13;9,312.38,727.63,232.12,7.13;9,312.38,737.10,17.93,7.13"  xml:id="b19">
+	<analytic>
+		<title level="a" type="main">ColorBrewer.org: an online tool for selecting colour schemes for maps</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Harrower</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Brewer</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">The Cartographic Journal</title>
+		<imprint>
+			<biblScope unit="volume">40</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="27" to="37" />
+			<date type="published" when="2003" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,54.06,232.12,7.13;10,40.76,63.52,232.12,7.13;10,40.76,72.99,134.63,7.13"  xml:id="b20">
+	<monogr>
+		<title level="m" type="main">Eye Tracking: A Comprehensive Guide to Methods and Measures</title>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Holmqvist</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Nyström</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Andersson</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Dewhurst</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Jarodzka</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Van De Weijer</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2011" />
+			<publisher>Oxford University Press</publisher>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,82.45,232.12,7.13;10,40.76,91.92,135.43,7.13"  xml:id="b21">
+	<analytic>
+		<title level="a" type="main">The exponentially weighted moving average</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">S</forename>
+				<surname>Hunter</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Journal of Quality Technology</title>
+		<imprint>
+			<biblScope unit="volume">18</biblScope>
+			<biblScope unit="issue">4</biblScope>
+			<biblScope unit="page" from="203" to="210" />
+			<date type="published" when="1986" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,101.38,232.12,7.13;10,40.76,110.85,135.24,7.13"  xml:id="b22">
+	<analytic>
+		<title level="a" type="main">Data clustering: A review</title>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<forename type="middle">K</forename>
+				<surname>Jain</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<forename type="middle">N</forename>
+				<surname>Murty</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<forename type="middle">J</forename>
+				<surname>Flynn</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">ACM Computing Surveys</title>
+		<imprint>
+			<biblScope unit="volume">31</biblScope>
+			<biblScope unit="issue">3</biblScope>
+			<biblScope unit="page" from="264" to="323" />
+			<date type="published" when="1999" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,120.31,232.12,7.13;10,40.76,129.78,232.12,7.13;10,40.76,139.24,205.13,7.13"  xml:id="b23">
+	<analytic>
+		<title level="a" type="main">Visual analytics: Scope and challenges</title>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Keim</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<surname>Mansmann</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Schneidewind</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Thomas</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Ziegler</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Visual Data Mining</title>
+		<imprint>
+			<date type="published" when="2008" />
+			<biblScope unit="page" from="76" to="90" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,148.70,232.12,7.13;10,40.76,158.17,232.12,7.13;10,40.76,167.63,136.59,7.13;10,22.50,177.06,56.97,7.17;10,76.15,177.10,196.73,7.13;10,40.76,186.56,232.12,7.13;10,40.76,196.03,226.62,7.13"  xml:id="b24">
+	<analytic>
+		<title level="a" type="main">Browsing digital video Visual exploration of eye movement data using the space-time-cube</title>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<forename type="middle">C</forename>
+				<surname>Li</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Gupta</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<surname>Sanocki</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<surname>He</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Y</forename>
+				<surname>Rui</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the SIGCHI Conference on Human Factors in Computing Systems Proceedings of the 6th International Conference on Geographic Information Science</title>
+		<editor>26] X. Li, A. C ¸ ¨ oltekin, and M.-J. Kraak</editor>
+		<meeting>the SIGCHI Conference on Human Factors in Computing Systems the 6th International Conference on Geographic Information Science</meeting>
+		<imprint>
+			<date type="published" when="2000" />
+			<biblScope unit="page" from="169" to="176" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,205.49,232.12,7.13;10,40.76,214.96,232.12,7.13;10,40.76,224.42,104.86,7.13"  xml:id="b25">
+	<analytic>
+		<title level="a" type="main">Are you seeing what I&apos;m seeing? An eye-tracking evaluation of dynamic scenes</title>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Marchant</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Raybould</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Renshaw</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Stevens</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Digital Creativity</title>
+		<imprint>
+			<biblScope unit="volume">20</biblScope>
+			<biblScope unit="issue">3</biblScope>
+			<biblScope unit="page" from="153" to="163" />
+			<date type="published" when="2009" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,233.88,232.12,7.13;10,40.76,243.35,232.12,7.13;10,40.76,252.81,53.35,7.13"  xml:id="b26">
+	<analytic>
+		<title level="a" type="main">Clustering of gaze during dynamic scene viewing is predicted by motion</title>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Mital</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Smith</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Hill</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<surname>Henderson</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Cognitive Computation</title>
+		<imprint>
+			<biblScope unit="volume">3</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="5" to="24" />
+			<date type="published" when="2011" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,262.28,232.12,7.13;10,40.76,271.74,182.79,7.13"  xml:id="b27">
+	<analytic>
+		<title level="a" type="main">Video shot detection and characterization for video databases</title>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<forename type="middle">V</forename>
+				<surname>Patel</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">I</forename>
+				<forename type="middle">K</forename>
+				<surname>Sethi</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Pattern Recognition</title>
+		<imprint>
+			<biblScope unit="volume">30</biblScope>
+			<biblScope unit="page" from="583" to="592" />
+			<date type="published" when="1997" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,281.21,232.12,7.13;10,40.76,290.67,232.12,7.13;10,40.76,300.14,137.00,7.13"  xml:id="b28">
+	<analytic>
+		<title level="a" type="main">Eye tracking in HCI and usability research</title>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Poole</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<surname>Ball</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Encyclopedia of Human Computer Interaction</title>
+		<imprint>
+			<date type="published" when="2006" />
+			<biblScope unit="page" from="211" to="219" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,309.60,232.12,7.13;10,40.76,319.07,232.12,7.13;10,40.76,328.53,232.12,7.13;10,40.76,337.99,146.73,7.13"  xml:id="b29">
+	<analytic>
+		<title level="a" type="main">Visualisation and analysis of multiuser gaze data: Eye tracking usability studies in the special context of e-learning</title>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Rakoczi</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Pohl</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 12th IEEE International Conference on Advanced Learning Technologies</title>
+		<meeting>the 12th IEEE International Conference on Advanced Learning Technologies</meeting>
+		<imprint>
+			<date type="published" when="2012" />
+			<biblScope unit="page" from="738" to="739" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,347.46,232.12,7.13;10,40.76,357.00,232.12,6.86;10,40.76,366.39,89.44,7.13"  xml:id="b30">
+	<analytic>
+		<title level="a" type="main">Parallel scan-path visualization</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Raschke</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">X</forename>
+				<surname>Chen</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Ertl</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the Symposium on Eye Tracking Research and Applications</title>
+		<meeting>the Symposium on Eye Tracking Research and Applications</meeting>
+		<imprint>
+			<date type="published" when="2012" />
+			<biblScope unit="page" from="165" to="168" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,375.85,232.12,7.13;10,40.76,385.32,232.12,7.13;10,40.76,394.78,232.12,7.13;10,40.76,404.25,17.93,7.13"  xml:id="b31">
+	<analytic>
+		<title level="a" type="main">State of the art: Coordinated multiple views in exploratory visualization</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Roberts</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the International Conference on Coordinated and Multiple Views in Exploratory Visualization</title>
+		<meeting>the International Conference on Coordinated and Multiple Views in Exploratory Visualization</meeting>
+		<imprint>
+			<date type="published" when="2007" />
+			<biblScope unit="page" from="61" to="71" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,413.71,232.12,7.13;10,40.76,423.17,232.12,7.13;10,40.76,432.64,151.45,7.13"  xml:id="b32">
+	<analytic>
+		<title level="a" type="main">Identifying fixations and saccades in eye-tracking protocols</title>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<forename type="middle">D</forename>
+				<surname>Salvucci</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">H</forename>
+				<surname>Goldberg</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the Symposium on Eye Tracking Research and Applications</title>
+		<meeting>the Symposium on Eye Tracking Research and Applications</meeting>
+		<imprint>
+			<date type="published" when="2000" />
+			<biblScope unit="page" from="71" to="78" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,442.10,232.12,7.13;10,40.76,451.57,232.12,7.13;10,40.76,461.03,205.40,7.13"  xml:id="b33">
+	<analytic>
+		<title level="a" type="main">Robust clustering of eye movement recordings for quantification of visual interest</title>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Santella</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Decarlo</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the Symposium on Eye Tracking Research and Applications</title>
+		<meeting>the Symposium on Eye Tracking Research and Applications</meeting>
+		<imprint>
+			<date type="published" when="2004" />
+			<biblScope unit="page" from="27" to="34" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,470.50,232.12,7.13;10,40.76,479.96,232.12,7.13;10,40.76,489.43,232.12,7.13;10,40.76,498.89,37.86,7.13"  xml:id="b34">
+	<analytic>
+		<title level="a" type="main">Determining comprehension and quality of tv programs using eye-gaze tracking</title>
+		<author>
+			<persName>
+				<forename type="first">Y</forename>
+				<surname>Sawahata</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Khosla</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Komine</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Hiruma</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Itou</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Watanabe</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Y</forename>
+				<surname>Suzuki</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Y</forename>
+				<surname>Hara</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Issiki</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Pattern Recognition</title>
+		<imprint>
+			<biblScope unit="issue">5</biblScope>
+			<biblScope unit="page" from="411610" to="1626" />
+			<date type="published" when="2008" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,508.36,232.12,7.13;10,40.76,517.82,232.12,7.13;10,40.76,527.28,130.53,7.13"  xml:id="b35">
+	<analytic>
+		<title level="a" type="main">The eyes have it: A task by data type taxonomy for information visualizations</title>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Shneiderman</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the IEEE Symposium on Visual Languages</title>
+		<meeting>the IEEE Symposium on Visual Languages</meeting>
+		<imprint>
+			<date type="published" when="1996" />
+			<biblScope unit="page" from="336" to="343" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,536.75,232.12,7.13;10,40.76,546.21,232.12,7.13;10,40.76,555.68,125.00,7.13"  xml:id="b36">
+	<analytic>
+		<title level="a" type="main">Video shot boundary detection: Seven years of TRECVid activity</title>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<forename type="middle">F</forename>
+				<surname>Smeaton</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Over</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<forename type="middle">R</forename>
+				<surname>Doherty</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Computer Vision and Image Understanding</title>
+		<imprint>
+			<biblScope unit="volume">114</biblScope>
+			<biblScope unit="issue">4</biblScope>
+			<biblScope unit="page" from="411" to="418" />
+			<date type="published" when="2010" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,565.14,232.12,7.13;10,40.76,574.61,149.52,7.13"  xml:id="b37">
+	<analytic>
+		<title level="a" type="main">Attentional synchrony in static and dynamic scenes</title>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Smith</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Henderson</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Journal of Vision</title>
+		<imprint>
+			<biblScope unit="volume">8</biblScope>
+			<biblScope unit="issue">6</biblScope>
+			<biblScope unit="page" from="773" to="773" />
+			<date type="published" when="2008" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,584.07,232.12,7.13;10,40.76,593.54,187.53,7.13"  xml:id="b38">
+	<monogr>
+		<title level="m" type="main">Yarbus, eye movements, and vision. i-Perception</title>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Tatler</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<surname>Wade</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Kwan</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Findlay</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Velichkovsky</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2010" />
+			<biblScope unit="page" from="7" to="27" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,603.00,232.12,7.13;10,40.76,612.47,232.12,7.13;10,40.76,621.93,189.47,7.13"  xml:id="b39">
+	<analytic>
+		<title level="a" type="main">Measuring gaze overlap on videos between multiple observers</title>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Tien</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<forename type="middle">S</forename>
+				<surname>Atkins</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Zheng</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the Symposium on Eye Tracking Research and Applications</title>
+		<meeting>the Symposium on Eye Tracking Research and Applications</meeting>
+		<imprint>
+			<date type="published" when="2012" />
+			<biblScope unit="page" from="309" to="312" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,631.39,232.12,7.13;10,40.76,640.86,232.12,7.13;10,40.76,650.32,61.98,7.13"  xml:id="b40">
+	<analytic>
+		<title level="a" type="main">Comparing ExoVis, orientation icon, and inplace 3D visualization techniques</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Tory</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Swindells</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of Graphics Interface</title>
+		<meeting>Graphics Interface</meeting>
+		<imprint>
+			<date type="published" when="2003" />
+			<biblScope unit="page" from="57" to="64" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,659.79,232.12,7.13;10,40.76,669.25,232.12,7.13;10,40.76,678.72,108.80,7.13"  xml:id="b41">
+	<analytic>
+		<title level="a" type="main">eSeeTrack – visualizing sequential fixation patterns</title>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<forename type="middle">Y</forename>
+				<surname>Tsang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Tory</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Swindells</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Visualization and Computer Graphics</title>
+		<imprint>
+			<biblScope unit="volume">16</biblScope>
+			<biblScope unit="issue">66</biblScope>
+			<biblScope unit="page" from="953" to="962" />
+			<date type="published" when="2010" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,688.18,232.12,7.13;10,40.76,697.65,232.12,7.13;10,40.76,707.11,111.90,7.13"  xml:id="b42">
+	<analytic>
+		<title level="a" type="main">Quantifying center bias of observers in free viewing of dynamic natural scenes</title>
+		<author>
+			<persName>
+				<forename type="first">P.-H</forename>
+				<surname>Tseng</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Carmi</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">I</forename>
+				<forename type="middle">G</forename>
+				<surname>Cameron</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<forename type="middle">P</forename>
+				<surname>Munoz</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<surname>Itti</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Journal of Vision</title>
+		<imprint>
+			<biblScope unit="volume">9</biblScope>
+			<biblScope unit="issue">7</biblScope>
+			<biblScope unit="page" from="1" to="16" />
+			<date type="published" when="2009" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,716.57,232.12,7.13;10,40.76,726.04,232.12,7.13;10,40.76,735.50,67.52,7.13"  xml:id="b43">
+	<monogr>
+		<title level="m" type="main">The Think Aloud Method: A Practical Guide to Modelling Cognitive Processes</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<forename type="middle">W</forename>
+				<surname>Van Someren</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Y</forename>
+				<forename type="middle">F</forename>
+				<surname>Barnard</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Sandberg</forename>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="1994" />
+			<publisher>Academic Press</publisher>
+			<pubPlace>London</pubPlace>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,285.12,54.06,250.38,7.13;10,303.38,63.52,232.12,7.13;10,303.38,72.99,120.57,7.13"  xml:id="b44">
+	<analytic>
+		<title level="a" type="main">Overview of flow visualization</title>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Weiskopf</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Erlebacher</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">The Visualization Handbook</title>
+		<editor>C. D. Hansen and C. R. Johnson</editor>
+		<meeting><address><addrLine>Amsterdam</addrLine></address></meeting>
+		<imprint>
+			<publisher>Elsevier</publisher>
+			<date type="published" when="2005" />
+			<biblScope unit="page" from="261" to="278" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,82.45,232.12,7.13;10,303.38,92.00,232.12,6.86;10,303.38,101.38,61.98,7.13"  xml:id="b45">
+	<analytic>
+		<title level="a" type="main">Fixation maps: quantifying eye-movement traces</title>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<forename type="middle">S</forename>
+				<surname>Wooding</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the Symposium on Eye Tracking Research and Applications</title>
+		<meeting>the Symposium on Eye Tracking Research and Applications</meeting>
+		<imprint>
+			<date type="published" when="2002" />
+			<biblScope unit="page" from="31" to="36" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+				</listBibl>
+			</div>
+		</back>
+	</text>
+</TEI>

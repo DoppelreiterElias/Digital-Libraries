@@ -1,0 +1,1255 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.tei-c.org/ns/1.0 /home/pisenberg/grobid/grobid-home/schemas/xsd/Grobid.xsd"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+	<teiHeader xml:lang="en">
+		<encodingDesc>
+			<appInfo>
+				<application version="0.4.1" ident="GROBID" when="2016-09-09T13:46+0000">
+					<ref target="https://github.com/kermitt2/grobid">GROBID - A machine learning software for extracting information from scholarly documents</ref>
+				</application>
+			</appInfo>
+		</encodingDesc>
+		<fileDesc>
+			<titleStmt>
+				<title level="a" type="main">Visual Analytics for Model Selection in Time Series Analysis</title>
+			</titleStmt>
+			<publicationStmt>
+				<publisher/>
+				<availability status="unknown"><licence/></availability>
+			</publicationStmt>
+			<sourceDesc>
+				<biblStruct>
+					<analytic>
+						<author>
+							<persName>
+								<forename type="first">Markus</forename>
+								<forename type="middle">B ¨</forename>
+								<surname>Ogl</surname>
+							</persName>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Wolfgang</forename>
+								<surname>Aigner</surname>
+							</persName>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Peter</forename>
+								<surname>Filzmoser</surname>
+							</persName>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Tim</forename>
+								<surname>Lammarsch</surname>
+							</persName>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Silvia</forename>
+								<surname>Miksch</surname>
+							</persName>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Alexander</forename>
+								<surname>Rind</surname>
+							</persName>
+						</author>
+						<title level="a" type="main">Visual Analytics for Model Selection in Time Series Analysis</title>
+					</analytic>
+					<monogr>
+						<imprint>
+							<date/>
+						</imprint>
+					</monogr>
+				</biblStruct>
+			</sourceDesc>
+		</fileDesc>
+		<profileDesc>
+			<textClass>
+				<keywords>
+					<term>Index Terms—Visual analytics</term>
+					<term>model selection</term>
+					<term>visual interaction</term>
+					<term>time series analysis</term>
+					<term>coordinated &amp; multiple views</term>
+				</keywords>
+			</textClass>
+			<abstract>
+				<p>1 2 3 Fig. 1. TiMoVA provides visual guidance for domain experts in the task of model selection, by (1) enabling to choose a certain range of interest in the time series, (2) supporting the model selection interactively via the visual interface, and (3) visualizing the model transitions and giving immediate visual feedback of the model output for the iterative refinements. For more details see Figure 5. Abstract—Model selection in time series analysis is a challenging task for domain experts in many application areas such as epidemiology , economy, or environmental sciences. The methodology used for this task demands a close combination of human judgement and automated computation. However, statistical software tools do not adequately support this combination through interactive visual interfaces. We propose a Visual Analytics process to guide domain experts in this task. For this purpose, we developed the TiMoVA prototype that implements this process based on user stories and iterative expert feedback on user experience. The prototype was evaluated by usage scenarios with an example dataset from epidemiology and interviews with two external domain experts in statistics. The insights from the experts&apos; feedback and the usage scenarios show that TiMoVA is able to support domain experts in model selection tasks through interactive visual interfaces with short feedback cycles.</p>
+			</abstract>
+		</profileDesc>
+	</teiHeader>
+	<text xml:lang="en">
+		<body>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1">INTRODUCTION</head><p> Statistical time series analysis is a challenging task performed by experts in different domains. A practical application scenario is, for example , a public health official predicting the number of people that need to be treated because of cardiovascular reasons in the next year. Another scenario is to be prepared for the number of patients suffering from seasonal flu. The datasets to be analyzed are obtained from observations collected over time, optimally at periodic and equally spaced intervals and ideally without missing values. Such a dataset is called a time series. A range of methods, algorithms, and models to analyze these time series exist in the literature <ref type="bibr" coords="1,167.91,534.41,9.71,8.02" target="#b3">[4,</ref><ref type="bibr" coords="1,179.69,534.41,6.72,8.02" target="#b5"> 6,</ref><ref type="bibr" coords="1,188.50,534.41,6.72,8.02" target="#b6"> 7,</ref><ref type="bibr" coords="1,197.29,534.41,11.21,8.02" target="#b14"> 15,</ref><ref type="bibr" coords="1,210.57,534.41,10.64,8.02" target="#b35"> 37]</ref>. Moreover, they are implemented in most common software tools for statistical computing . In our work we focus on the most prominent and large class of models, namely ARIMA and seasonal ARIMA models <ref type="bibr" coords="1,243.77,564.29,9.52,8.02" target="#b6">[7]</ref>. These models are applied in a variety of practical application domains. The huge amount of work discussing ARIMA models reflects the importance of this model class <ref type="bibr" coords="1,125.21,594.18,9.71,8.02" target="#b3">[4,</ref><ref type="bibr" coords="1,137.83,594.18,6.72,8.02" target="#b5"> 6,</ref><ref type="bibr" coords="1,147.46,594.18,6.72,8.02" target="#b6"> 7,</ref><ref type="bibr" coords="1,157.09,594.18,11.21,8.02" target="#b14"> 15,</ref><ref type="bibr" coords="1,171.20,594.18,11.21,8.02" target="#b15"> 16,</ref><ref type="bibr" coords="1,185.31,594.18,11.95,8.02" target="#b35"> 37] </ref> and there exists an established process for model selection known as Box-Jenkins method- ology <ref type="bibr" coords="1,54.65,614.11,9.52,8.02" target="#b5">[6]</ref> . We present and discuss this methodology and the theoretical underpinnings briefly in Section 3. However, currently available software tools do not appropriately support the workflow of the Box- Jenkins methodology, as we argue in Section 2. Therefore, support for domain experts would be beneficial for working on model selection in time series analysis. A potential way to overcome the above-mentioned shortcomings is, in the spirit of Visual Analytics (VA), to " combine automated analysis techniques with interactive visualizations " <ref type="bibr" coords="1,468.42,504.35,14.19,8.02" target="#b20">[21,</ref><ref type="bibr" coords="1,485.66,504.35,10.64,8.02" target="#b38"> 40]</ref>. This raises the question of how to use VA methods to support the task of model selection for time series analysis. According to the characteristics of design studies <ref type="bibr" coords="1,346.26,534.24,14.19,8.02">[27,</ref><ref type="bibr" coords="1,362.36,534.24,10.64,8.02" target="#b33"> 35]</ref>, we need a comprehensive understanding of the domain problem. We provide its characterization to judge our solution and analyze the tasks in Section 3. In Section 4 we identify the target users, formulate the requirements for the tasks, and specify the data used in time series analysis. The main objective of this work is to use well-established information visualization techniques <ref type="bibr" coords="1,400.49,595.48,9.71,8.02" target="#b0">[1,</ref><ref type="bibr" coords="1,412.95,595.48,11.95,8.02" target="#b10"> 11] </ref>and apply them to the particular target problem. For this reason, we defined a VA process based on existing VA process descriptions <ref type="bibr" coords="1,406.78,615.41,14.19,8.02" target="#b20">[21,</ref><ref type="bibr" coords="1,423.66,615.41,11.95,8.02" target="#b24"> 25] </ref>and implemented a prototype to facilitate it. The design and implementation of the VA process and the prototype were iteratively refined and judged by experts in information visualization and statistics using formative evaluation of user experience <ref type="bibr" coords="1,335.63,655.26,13.74,8.02" target="#b23">[24]</ref>. We present the results of this refinement process in Section 5, where we discuss the VA process description and our prototype . We named our prototype TiMoVA, which is an abbreviation of Time series analysis, Model selection, and VA. In addition to the formative evaluation and the iterative design, we evaluated the final version of the prototype by defining usage scenarios and applying the prototype to an example dataset. We present the evaluation in Section 6, where we apply the usage scenarios on an example dataset. Furthermore, we also evaluated the user experience by performing a feedback session with two external domain experts. We used this informal user feedback to argue how our target users assess TiMoVA <ref type="bibr" coords="2,75.39,73.31,13.74,8.02" target="#b23">[24]</ref>. In the discussion of the results (Section 5) and the evaluation (Section 6), we describe the visual encodings and interaction mechanisms used in the prototype and how they fulfill our requirements. In particular, the main contributions of our paper (Section 7) address issues of interactive visual guidance to ease the model selection in time series analysis by @BULLET selecting the model order inside the autocorrelation and partial autocorrelation function plot, where the domain experts get the information about the model order, @BULLET providing immediate visual feedback of the model results to the domain expert while adjusting the model order, and @BULLET visualizing the model transitions to enable the domain experts to decide whether or not the model improves. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2">RELATED WORK</head><p>Following the design study methodology <ref type="bibr" coords="2,174.33,233.67,14.19,8.02">[27,</ref><ref type="bibr" coords="2,191.37,233.67,10.64,8.02" target="#b33"> 35]</ref>, we apply existing and known VA methods and process descriptions to the domain problem of model selection in time series analysis. We based our work on the techniques for visualizing time-oriented data <ref type="bibr" coords="2,216.56,263.56,9.71,8.02" target="#b0">[1,</ref><ref type="bibr" coords="2,229.53,263.56,11.95,8.02" target="#b10"> 11] </ref>and use state-of-the-art VA process descriptions <ref type="bibr" coords="2,166.70,273.52,14.19,8.02" target="#b20">[21,</ref><ref type="bibr" coords="2,183.14,273.52,11.21,8.02" target="#b24"> 25,</ref><ref type="bibr" coords="2,196.58,273.52,10.64,8.02" target="#b38"> 40]</ref>. All major mathematical and statistical software tools implement the state-of-the-art methods and models for time series analysis, which we describe briefly in Section 3. We considered tools, like the R project for statistical computing <ref type="bibr" coords="2,139.61,313.37,13.74,8.02" target="#b28">[30]</ref>, SAS JMP <ref type="bibr" coords="2,196.85,313.37,13.74,8.02" target="#b32">[34]</ref>, MATLAB <ref type="bibr" coords="2,255.69,313.37,13.74,8.02" target="#b37">[39]</ref>, EVIEWS <ref type="bibr" coords="2,59.12,323.33,13.74,8.02" target="#b19">[20]</ref>, Mathematica <ref type="bibr" coords="2,128.76,323.33,13.74,8.02" target="#b40">[42]</ref>, Stata <ref type="bibr" coords="2,169.51,323.33,13.74,8.02" target="#b36">[38]</ref>, and Gretl <ref type="bibr" coords="2,226.47,323.33,13.74,8.02" target="#b13">[14]</ref>. Except for the R base package all these tools support time series analysis and models by menu driven user interfaces. The separate calculations and visualizations need to be initiated by the user either by menus and input forms, or by command line methods. What all these approaches are missing, is the guidance to browse and visually compare models directly when selecting the model. Instead it is necessary to either decide on a set of models or compute a whole bunch of models and arrange them in visualizations by hand to compare them. To summarize, they do not support the repeated execution of the separate steps in the iterative Box-Jenkins methodology <ref type="bibr" coords="2,150.40,422.96,10.45,8.02" target="#b5">[6] </ref>well. One notable solution is the x12GUI <ref type="bibr" coords="2,169.27,432.92,14.94,8.02" target="#b22">[23] </ref>package for R. It offers an interactive graphical user interface for the x12 <ref type="bibr" coords="2,200.59,442.89,14.94,8.02" target="#b21">[22] </ref>package, which provides a wrapper function to the X-12-ARIMA software. The focus of their approach is to explore the time series and the results of the seasonal time series adjustment as well as to enable the user to do interactive manual editing of outliers <ref type="bibr" coords="2,152.10,482.74,13.74,8.02" target="#b22">[23]</ref>. However, the user interface supports the user in selecting a time series and adjusting the parameters for the X-12-ARIMA call using form-based input only. It also provides a history for computed models, which allows for loading previous settings but not to browse and directly compare them. Because we have the very specific target problem of model selection in statistical time series analysis, to our knowledge, there is only distantly related work in VA, as for example TimeSearcher <ref type="bibr" coords="2,234.07,552.48,9.71,8.02" target="#b8">[9,</ref><ref type="bibr" coords="2,245.88,552.48,11.95,8.02" target="#b9"> 10] </ref>and the work for visual-interactive time series preprocessing <ref type="bibr" coords="2,226.16,562.44,9.52,8.02" target="#b2">[3]</ref> . Both approaches apply VA methods to time-oriented data, but differ in the tasks and their solutions. Motivated by these findings, we give the necessary background information in the following section to characterize and specify our target problem in more detail and ground our motivation further. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3">PROBLEM CHARACTERIZATION</head><p>In this section we provide the characterization of the domain problem <ref type="bibr" coords="2,22.50,653.06,14.94,8.02" target="#b33">[35] </ref>and discuss the tasks necessary for the model selection. Example Dataset and Task. An important domain where time series analysis is used is public health and epidemiology. We have chosen a dataset from this domain for the evaluation in Section 6.1 and illustrate a possible analysis task in the following. The dataset contains the daily number of deaths from cardiovascular disease of people aged 75 and older in Los Angeles for the years 1987 to 2000 from the NMMAPS study <ref type="bibr" coords="2,118.80,726.46,14.19,8.02" target="#b27">[29,</ref><ref type="bibr" coords="2,135.39,726.46,10.64,8.02" target="#b31"> 33]</ref> . A possible scenario is that a public health official needs to predict the expected number of death from <ref type="figure" coords="2,285.12,228.98,18.98,7.37">Fig. 2</ref> . Box-Jenkins Methodology. An iterative process for model selection of time series <ref type="bibr" coords="2,349.91,238.45,8.31,7.37" target="#b6">[7]</ref>. See Section 3.1 for details about the process. cardiovascular disease to start a prevention program. To do the prediction , the health official has to find a model based on the given data. The Box-Jenkins methodology is a standard method to solve this task. We describe this methodology in <ref type="figure" coords="2,405.18,299.93,30.13,8.02">Figure 2</ref>and in the following. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.1">Box-Jenkins Methodology</head><p>The Box-Jenkins methodology <ref type="bibr" coords="2,399.50,331.87,10.45,8.02" target="#b5">[6] </ref>is an iterative process to select an adequate model for a given time series (see <ref type="figure" coords="2,451.48,341.83,30.06,8.02">Figure 2</ref>). It has been widely used in time series analysis and is an established method for model selection <ref type="bibr" coords="2,345.25,361.76,9.71,8.02" target="#b3">[4,</ref><ref type="bibr" coords="2,357.88,361.76,6.72,8.02" target="#b6"> 7,</ref><ref type="bibr" coords="2,367.53,361.76,11.21,8.02" target="#b14"> 15,</ref><ref type="bibr" coords="2,381.65,361.76,10.64,8.02" target="#b35"> 37]</ref>. To find or select a model for a given time series, it is according to Box et al. <ref type="bibr" coords="2,427.32,371.72,10.45,8.02" target="#b6">[7] </ref>necessary to: (1) Use the incomplete theoretical knowledge about the underlying mechanisms and the experience from theory and practice to consider a useful general class of models. By general class of models Box et al. <ref type="bibr" coords="2,336.87,411.79,10.45,8.02" target="#b6">[7] </ref> mean any subclass combination of ARIMA and seasonal ARIMA model components. Fitting these models directly to data, would be too extensive and time consuming. </p><p>(2) Apply methods to select an appropriate parsimonious (see below) model by deciding on the model order. This determines the number of parameters in the model and gives some rough estimates for them. </p><p>(3) Fit the model to the data and estimate its parameters. </p><p>(4) Finally, check the model with diagnostics to uncover possible lacks of fit and find their causes. These steps are repeated until an adequate model is found, which can subsequently be used for forecasting (see <ref type="figure" coords="2,435.01,521.60,28.89,8.02">Figure 2</ref>). The method is sometimes reduced to a simplified version <ref type="bibr" coords="2,518.31,531.79,13.74,8.02" target="#b14">[15]</ref>, where the decision for a general class of models (1) and the identification of a model that can be tentatively entertained (2) are combined and entitled as model specification. Step (3) is renamed to model fitting and step (4) to model diagnostics. We present a more detailed description of these separate steps in Section 3.3, 3.4, and 3.5. The crux of model selection is summarized in the famous quote of George Box that " Essentially, all models are wrong, but some are useful " <ref type="bibr" coords="2,313.49,611.71,37.38,8.02">[5, p. 424]</ref>. When introducing the Box-Jenkins methodology, Box and Jenkins <ref type="bibr" coords="2,347.12,621.67,10.45,8.02" target="#b5">[6] </ref> use a language that indicates that there is a " useful " and " adequate " model for a time series, but we cannot assume that it is a " true " or " correct " model. The uncertainty of such models is put straight by using the term " tentatively entertaining a model " <ref type="bibr" coords="2,507.79,651.56,10.45,8.02" target="#b3">[4] </ref>(see Section 3.4). Principle of Parsimony. An important principle in the model selection process is the principle of parsimony <ref type="bibr" coords="2,445.64,686.61,9.52,8.02" target="#b6">[7]</ref>. It is described by the paraphrased quote of Albert Einstein " everything should be made as simple as possible but not simpler " <ref type="bibr" coords="2,412.92,706.53,32.10,8.02">[4, p. 18]</ref>. In the process of model selection this means that if there are different candidate models to adequately represent the time series, the model with the least parameters is preferable <ref type="bibr" coords="2,331.92,736.42,13.74,8.02" target="#b14">[15]</ref> . In this section, we presented the methodology how to find an adequate model for a given time series. This methodology was introduced for a specific class of models <ref type="bibr" coords="3,139.21,73.31,9.52,8.02" target="#b5">[6]</ref>, which we describe in the following section. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.2">ARIMA and Seasonal ARIMA Models</head><p> With classical regression it is often not possible to explain a time series sufficiently <ref type="bibr" coords="3,90.02,132.61,13.74,8.02" target="#b35">[37]</ref>. Therefore, alternative models exist. We briefly describe the key ideas of the different models and explain them without presenting the full details of the formal definition of these models. These formal definitions and the details are not necessary to understand and argue the design choices and explain the interpretation of the visual representations in Section 5 and 6. For more details and the formal definitions we refer to the literature in time series analysis <ref type="bibr" coords="3,31.50,202.35,9.71,8.02" target="#b3">[4,</ref><ref type="bibr" coords="3,43.45,202.35,6.72,8.02" target="#b5"> 6,</ref><ref type="bibr" coords="3,52.42,202.35,6.72,8.02" target="#b6"> 7,</ref><ref type="bibr" coords="3,61.38,202.35,11.21,8.02" target="#b14"> 15,</ref><ref type="bibr" coords="3,74.83,202.35,10.64,8.02" target="#b35"> 37]</ref>. Autoregressive (AR) models explain the current value x t as a function of p past values in the time series. The number of past values p is also called model order, therefore an AR(p) model is an autoregressive model of order p. Moving average (MA) models explain the current value x t as a linear combination of the current white noise term and the q past white noise terms. The number of past white noise terms is again called the model order, therefore, an MA(q) model is a moving average model of order q. In some cases it is problematic to model a time series with only AR or only MA models, because it would demand a high-order model with many parameters. This is in conflict with the principle of parsimony. For these cases, Box and Jenkins <ref type="bibr" coords="3,157.79,324.51,10.45,8.02" target="#b5">[6] </ref> presented autoregressive moving average (ARMA) models. To achieve parsimony, ARMA models combine the ideas of AR and MA models. An autoregressive moving average ARMA(p, q) model of order p and q, is the combination of an AR(p) model part of order p and a MA(q) model part of order q. It is possible to apply this class of models if the time series is stationary, which means that there is no seasonal effect or trend. In many practical cases, a time series is non-stationary due to trends. It is possible to transform this time series to a stationary time series by applying a differencing operation, sometimes called detrending . To recover the original time series, the differenced time series needs to be aggregated, or also called integrated. These models are called autoregressive integrated moving average (ARIMA) models. An ARIMA(p, d, q) means that the dth difference of the time series is an ARMA(p, q) model. To include seasonal terms in a model it is necessary to combine an ordinary non-seasonal ARIMA model with an ARIMA model that is extended to the seasonal period s. Therefore, the AR and the MA models are extended to the time shifts, called lag, of the seasonal period s and use capital letters P and Q for the seasonal model order. The seasonal difference D is also applied like the non-seasonal difference d, but with time shifts of the seasonal period s, called seasonal lag. Thus the additive seasonal effects are removed. The resulting models are called seasonal autoregressive integrated moving average (SARIMA) models and are denoted as ARIMA(p, d, q) × (P, D, Q) s . After introducing the Box-Jenkins methodology in Section 3.1 and the class of models used in that methodology in this section, we discuss the separate steps of this iterative model selection process in the following Sections 3.3, 3.4, and 3.5. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.3">Model Specification</head><p>For the task of model specification, the goal is to decide on a class of models that could be appropriate for the given time series, select the level of differencing and determine the order of the model which specifies the number of parameters used in the model. The first step to achieve this goal is to take a look at the given time series. Usually this is done by viewing the time series in a line plot. After applying all required transformations, such as a difference operation or log transformation, the autocorrelation function (ACF) and partial autocorrelation function (PACF) plots are checked to support the decision of the model order. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.4">Model Fitting</head><p>In the previous section, we discussed how we select and configure the model order. The result is a model, for example a seasonal ARIMA(p, d, q) × (P, D, Q) s model, where the level of difference d, the level of the seasonal difference D, the seasonal length s, the number of parameters p and q, as well as the number of seasonal parameters P and Q are set according to the steps presented above. Note that the parameters p, q, P, and Q determine the order of the model, which is the number of parameters. The differences d and D are transformations to the time series. Box et al. <ref type="bibr" coords="4,173.82,146.28,10.45,8.02" target="#b6">[7] </ref>use the term tentatively entertained model for this. Once the model is identified, it is fitted to the time series data to estimate the unknown parameters of the model. There are several methods to estimate the parameters. The most important one is the maximum likelihood-estimation. Other methods are the method of moments, the least squares estimation, and the unconditional least squares. For details and theoretical discussion we refer to <ref type="bibr" coords="4,22.50,216.01,3.55,8.02">[</ref></p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.5">Model Diagnostics</head><p>To evaluate how well the model represents the underlying time series, model diagnostic methods are applied. The model is diagnosed by analyzing the residuals, which means the remaining part that is not explained by the model. The exploratory analysis of the residuals is done by plots as shown in (4a-d) of <ref type="figure" coords="4,149.06,285.72,28.74,8.02" target="#fig_1">Figure 5</ref>. If the model is well fitted to the time series, the remaining part is expected to behave like white noise. This is assessed in four ways: (4a) The standardized residuals are plotted over time. Any non-random episodes can unveil a remaining underlying process. (4b) The ACF of the residuals is calculated and plotted over the lags to check that there is no remaining structure in the residuals. (4c) If the model is well fitted, the standardized residuals are expected to be standard normally distributed. This distribution is checked by the quantile-quantile plot <ref type="bibr" coords="4,182.36,365.43,13.74,8.02" target="#b10">[11]</ref>. (4d) The plot of the Ljung-Box statistic <ref type="bibr" coords="4,94.01,375.39,9.71,8.02" target="#b7">[8,</ref><ref type="bibr" coords="4,106.11,375.39,11.95,8.02" target="#b25"> 26] </ref>is a test that helps to check if the residuals for each lag are independent. If for all lags the p-values are not significant for a pre-specified significance level, indicated by the dashed line, it can be assumed that there is no remaining autocorrelation within the residuals. If all this is fulfilled, the model is well specified, otherwise the model needs to be readjusted. A clear decision is often not possible and is based on human judgement and experience. Information Criteria. In addition to the diagnostic plots it is possible to examine information criteria. They provide a good basis to decide on the fitness of the model. Criteria that are often used include Akaike's information criterion (AIC), its bias corrected form, the AICc, and the Bayesian information criterion (BIC) <ref type="bibr" coords="4,226.02,488.46,13.74,8.02" target="#b35">[37]</ref> . In contrast to the AICc, which does behave very well for smaller samples, the BIC is well suited for larger samples. In order to get an adequate model, as introduced in Section 3.1, the goal is to select a number of parameters for the model, thus minimizing the criteria. Based on these values for different models, it is possible to decide on one of them tentatively . For more details on the information criteria we refer to <ref type="bibr" coords="4,258.67,548.23,14.19,8.02;4,22.50,558.19,35.70,8.02">[37, p. 50–53]</ref>. We show such information criteria in the graphical user interface of TiMoVA in area (5) of <ref type="figure" coords="4,148.61,568.16,29.01,8.02" target="#fig_1">Figure 5</ref>. According to our findings about the domain problem, related work, and expert feedback, we conclude that these tasks are currently cumbersome to execute by domain experts. It is evident, that combining the computations and visualizations with additional intuitive interactions and visual feedback improves the way to accomplish these tasks and supports the domain experts in their work. To achieve this, we analyzed the requirements and present them in the following section. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4">REQUIREMENTS ANALYSIS</head><p>In this section we explicitly describe our target users, distill the tasks and challenges for model selection discussed in Section 3 and formulate them using user stories as well as present the data used. Target Users. Our target users are domain experts in any field using time series analysis, for example biology, chemistry, epidemiology , economy, or environmental research. The users have to be knowledgeable in statistics and time series analysis. These skills are required to interpret and understand the visual representations of the time series and the time series models as well as the model fitting and the selection criteria. Tasks. User stories help to formulate the requirements in a way that is easy to use in discussions within the project team, with customers , or other stakeholders. User stories evolved from the extreme programming (XP) software development methodology <ref type="bibr" coords="4,509.76,118.21,10.45,8.02" target="#b1">[2] </ref>and have an important role in other lean and agile software development methodologies <ref type="bibr" coords="4,339.69,138.14,14.19,8.02" target="#b11">[12,</ref><ref type="bibr" coords="4,355.65,138.14,10.64,8.02" target="#b12"> 13]</ref>. Usually in the beginning only high-level goals and requirements with a broad coverage are known. These goals and requirements are formulated as user stories. Through the process of refinement, the high-level user stories are broken down iteratively to smaller user stories until they are very specific. The high-level user stories with the broad coverage are also called epics <ref type="bibr" coords="4,473.33,187.95,14.19,8.02" target="#b11">[12,</ref><ref type="bibr" coords="4,489.77,187.95,10.64,8.02" target="#b12"> 13]</ref>. We formulated and refined the user stories in the repetitive meetings of the project team and throughout the formative evaluation. We used these user stories to formulate the VA process and implement the prototype. The stories are written from the perspective of our target users. The high-level goal is formulated in the following epic: As a domain expert (user), I want to find an adequate model for a given time series so that I can use that model for different purposes, e.g., forecasting. User stories are defined to get a more detailed understanding of the requirements <ref type="bibr" coords="4,334.17,288.18,13.94,8.02" target="#b12">[13]</ref>: @BULLET As a domain expert (user), I want to select a certain region in the time series so that I can use any subregion of the time series for the model selection step. @BULLET ..., I want to see all important visualizations of the time series and the model so that I can decide on the model and assess how well the model fits the time series with one glimpse. @BULLET ..., I want to adjust the model orders at the place where the visualization provides the information about these model orders so that I can intuitively find an adequate model. @BULLET ..., I want to include and exclude the seasonal components of the model and the seasonal parameter inputs so that I can compare the seasonal influence and if no seasonal components are needed, they do not distract me. @BULLET ..., I want to see how a new selected model compares to the previous model so that I can decide if one model is better than the other. Time Series Data. The considered data for our work are time series as introduced in Section 1. We assume to have univariate data values observed at equidistant discrete time intervals without missing values. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5">VA FOR MODEL SELECTION IN TIME SERIES ANALYSIS</head><p>In Section 3 we discussed the characterization and tasks of the problem domain. We identified VA as a basis to define a VA process description to overcome the stated problems. In this section and the following Section 6 we rely on our findings to present the main contributions and results of our work. To do so, we provide the description of a tailored VA process in Section 5.1 that is used for the implementation of the prototype. In Section 5.2 we provide the final design and a discussion of the design choices and interaction techniques in the prototype. These results are designed and implemented to fulfill the requirements specified in Section 4. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.1">VA Process Description for Model Selection</head><p>The basis of our VA process description for model selection is the Box-Jenkins methodology presented in <ref type="figure" coords="4,426.94,656.72,29.98,8.02">Figure 2</ref> and discussed in Section 3.1. The process description we show in <ref type="figure" coords="4,443.95,666.68,29.61,8.02" target="#fig_2">Figure 4</ref>is the application of the VA process for time-oriented data <ref type="bibr" coords="4,433.68,676.65,14.94,8.02" target="#b24">[25] </ref>on the domain problem of model selection in time series analysis. The goal of the process is to select an adequate model for a given time series. The details of the theoretical underpinnings of this process in statistical time series analysis are briefly discussed in Section 3. In the following we describe the VA process for model selection in detail to prepare the reader for the discussion in Section 5.2.3 about the connection between the graphical user interface of the prototype (<ref type="figure" coords="5,147.15,354.55,28.43,8.02" target="#fig_1">Figure 5</ref>), the VA process description for model selection (<ref type="figure" coords="5,105.94,364.51,28.33,8.02" target="#fig_2">Figure 4</ref>) and the Box-Jenkins methodology (<ref type="bibr" coords="5,267.52,364.51,14.35,8.02;5,31.50,374.47,16.93,8.02">Figure 2</ref>). The time series in <ref type="figure" coords="5,109.79,387.62,30.66,8.02">Figure 2</ref>is Data provided as Input in <ref type="figure" coords="5,248.98,387.62,29.53,8.02" target="#fig_2">Figure 4</ref>. The Domain Knowledge is based on experience and Prior Analyses. The Interactive Visual Interface is used to visualize the Data (D i ) to decide on the class of models and adjust the number of parameters as well as the level of differencing. To interpret the Interactive Visual Interfaces, the Domain Knowledge about time series analysis (K t ) and about visualizations of time series and time series models (K p ) is used. Based on this knowledge and the visual representations of the time series and time series model, the Hypotheses are formed (V t ). By adjusting the level of differencing (A d ) and the order of the model (A p ), the Hypotheses are refined. Based on the Hypotheses the model is estimated with the given parameters (B m ) to build a model based on the  shows the VA process for selecting the model iteratively, to find an adequate model for a given time series. This process description is based on the VA process for time-oriented data <ref type="bibr" coords="5,109.34,735.25,12.41,7.37" target="#b24">[25]</ref>. input Data (A i ). The resulting model is analyzed using the Domain Knowledge about time series models and model diagnostics (K m ) as well as the visualizations of the standardized residuals, information criteria, and model parameters (V d ). In this iterative refinement of the process, Insights are gained by (1) interpreting the Interactive Visual Interfaces (I v ) deciding the fitness of the underlying model that is visualized, (2) the parameter estimations which lead to the adequate model (I m ), and (3) the refinement process of the Hypotheses building (I h ). The result is a model with estimated parameters, that is adequate for the given time series, and can be used for forecasting. The Area of User Interaction is highlighted in gray and indicates the process steps, where the user is part of the process through user interaction. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.2">TiMoVA Prototype</head><p> Based on the VA process description above and the user stories (Section 4) we implemented our TiMoVA prototype. We refined our design along with the formulation of the user stories to quickly develop a working prototype and acquire user feedback <ref type="bibr" coords="5,465.57,525.42,13.74,8.02" target="#b33">[35]</ref>. Here we present the final version. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.2.1">Implementation Choices</head><p> Before we discuss the design choices and implementation ideas in detail , we highlight the most important design decisions for our prototype . We implemented the prototype in Java. For the dynamic visualizations , we used the software framework prefuse <ref type="bibr" coords="5,474.26,596.66,13.74,8.02" target="#b17">[18]</ref>. As an API for time-oriented data we used TimeBench, a software library for timeoriented data <ref type="bibr" coords="5,342.92,616.59,13.74,8.02" target="#b29">[31]</ref>. One important decision was to use the R project for statistical com- puting <ref type="bibr" coords="5,320.54,636.65,14.94,8.02" target="#b28">[30] </ref>as a comprehensive toolkit for time series analysis and other calculation tasks. R provides a broad variety of methods known from literature and our prototype is designed in a way that allows us to use these methods for the statistical computations. Using Java/R Interface (JRI) enables us to use R in combination with Java. JRI is part of the rJava package <ref type="bibr" coords="5,370.76,686.47,14.94,8.02" target="#b39">[41] </ref>in R. We chose Java, because with prefuse, we have more possibilities regarding interactivity than implementing in R. Furthermore the extensibility and interconnectivity of our other projects using TimeBench is given. Because the calculations in time series analysis can be very timeconsuming , especially with large datasets, it is important that the user interface is still responsive to user input, while calculations are carried out. This is achieved by using Java threads and caching, which allow the computer to pre-compute models and provide them upon request. As a result, the user interface shows good reaction times for user input, even when the calculations are running in the background. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.2.2">Graphical User Interface</head><p> The graphical user interface of the prototype is based on the workflow of the VA process description we defined in Section 5.1. The visualizations are inspired by the visualizations used in R and by wellestablished visualization techniques <ref type="bibr" coords="6,154.34,156.73,9.71,8.02" target="#b0">[1,</ref><ref type="bibr" coords="6,166.66,156.73,10.64,8.02" target="#b10"> 11]</ref> . We extended these visualizations so that the user is able to interactively select the models. The result is a prototype that implements the VA process for model selection in time series analysis. The TiMoVA prototype consists of coordinated and multiple views <ref type="bibr" coords="6,22.50,207.01,13.74,8.02" target="#b30">[32]</ref>. An overview of the graphical user interface and the five areas is shown in <ref type="figure" coords="6,56.69,216.97,29.91,8.02" target="#fig_1">Figure 5</ref> and in the supplementary video of the usage scenarios in Section 6.1. In <ref type="figure" coords="6,98.63,226.93,28.82,8.02" target="#fig_1">Figure 5</ref>, (1) displays the time series plotted over time (time series plot). In this view it is possible to explore the time series and select a certain range that is used for the model selection. This range selection is shown in the upper left corner (1) of <ref type="figure" coords="6,240.26,256.82,29.25,8.02">Figure 1</ref>are shown in more detail. These are the areas for the configuration of the model order. In the toolbox the max lag input changes the number of lags in the ACF/PACF plot below and in the ACF plot of the residuals in area (4b). The Include Seasonal Parameters check box enables or disables the configuration of the seasonal component in the model, which also enables or disables the input for the Seasonal Span, as well as the Seasonal Difference slider. With the Difference slider and the Seasonal Difference slider the numbers for the parameter d and seasonal parameter D are selected. The continuous vertical lines in <ref type="figure" coords="6,32.14,436.61,30.55,8.02">Figure 6</ref>can be dragged along the x-axis to select the order of the model, which is synonymous with the number of parameters. There is one vertical line for p, which is the order of the autoregressive part of the model AR(p). There is another vertical line for q, which is the order of the moving average part of the model MA(q). If the seasonal components are enabled by the check box, two additional continuous vertical lines appear, one for P, which is the order of the autoregressive part of the seasonal component of the model AR(P) s , and another one for Q, which is the order of the moving average part of the seasonal component of the model MA(Q) s . The seasonal span s can be adjusted using the Seasonal Span spin box in the toolbox. TiMoVA shows visual representations for the model diagnostics (4a-d) and (5), in order to evaluate the fitness of the model for the given time series. In this area the results of the parameter estimation are shown. We discussed the model diagnostics and the visual representations used for this task in Section 3.5. The goal is to visually explore the remaining part of the time series that is not described by the model, and check if it is likely to be white noise. The visual representation of the standardized residuals in the user interface of the prototype is inspired by the representation used in R. In <ref type="figure" coords="6,228.61,626.37,30.60,8.02" target="#fig_1">Figure 5</ref>the area displaying the plots for the analysis of the residuals are numbered with (4a-d). See Section 3.5 for the details on these plots. In addition to the residual analysis, we included the information criteria, as introduced in Section 3.5, in the design of TiMoVA. The information criteria table (5) in <ref type="figure" coords="6,135.87,676.65,30.04,8.02" target="#fig_1">Figure 5</ref>shows a history of previously selected models. The first column represents the color used in the transitions of the residual plots. The second column describes the model and the other columns show the values of the model information criteria . The cells of the model criteria are colored according to their value indicating whether this criterion for this model is better (minimum) or worse compared to the others in the model history. The legend is <ref type="figure" coords="6,285.12,150.83,19.34,7.37">Fig. 6</ref>. Model Selection Toolbox and ACF Plot. The toolbox at the top and the four continuous vertical lines are used to select the time series model. In this figure they are set to p = 2, q = 1, Q = 0, and P is currently moved from P = 1 to P = 2, which is the final model configuration for this time series. The user interface supports the user to focus on the seasonal lags by changing the color and reducing the opacity at the non-seasonal lags. </p><p>shown below this table. Residual analysis and tests for white noise, which are essentially tests for the randomness of a dataset, are manifold in statistics and there are many implementations of these methods in R. In our implementation of the prototype we focused on the standard tests and visualizations used in the literature for time series analysis <ref type="bibr" coords="6,479.23,290.10,9.71,8.02" target="#b3">[4,</ref><ref type="bibr" coords="6,490.87,290.10,6.72,8.02" target="#b5"> 6,</ref><ref type="bibr" coords="6,499.52,290.10,6.72,8.02" target="#b6"> 7,</ref><ref type="bibr" coords="6,508.17,290.10,11.21,8.02" target="#b14"> 15,</ref><ref type="bibr" coords="6,521.29,290.10,10.64,8.02" target="#b35"> 37]</ref>. It is desirable to enable the user to adjust and customize which tests and visualizations she or he wants to use in the process. This is a possible feature to include in the future work. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head> 5.2.3 Connecting the VA Process Description and the Box- Jenkins methodology </head><p>In this paragraph, we describe how the VA process description defined in Section 5.1 is implemented in TiMoVA. We explain in detail how the user interface facilitates the VA process and creates short feedback cycles for the task of model selection. For each transition in the process , we provide the corresponding labels from <ref type="figure" coords="6,459.05,403.43,29.39,8.02" target="#fig_2">Figure 4</ref>, the number of origin from the original Box-Jenkins methodology in <ref type="figure" coords="6,487.80,413.40,29.07,8.02">Figure 2</ref>, and the number of the affected area in the user interface in <ref type="figure" coords="6,487.57,423.36,29.59,8.02" target="#fig_1">Figure 5</ref>. By viewing the plots in the user interface, we decide on a general class of models (<ref type="figure" coords="6,327.44,443.29,28.70,8.02">Figure 2</ref>: (1); D i ,V t ). By adjusting the level of difference and the number of model parameters (<ref type="figure" coords="6,426.46,453.25,28.95,8.02" target="#fig_1">Figure 5</ref>: 2, </p><formula>3; A d , A p ,V t )</formula><p>, we identify a so called tentatively entertained model (<ref type="figure" coords="6,467.93,463.21,28.69,8.02">Figure 2</ref>: (2); B m ). The adjustment of the relevant faders triggers the system to estimate the parameters of the model (<ref type="figure" coords="6,394.59,483.14,29.03,8.02">Figure 2</ref> : (3); A i ) and show the resulting diagnostics immediately in the user interface (<ref type="figure" coords="6,470.41,493.10,29.08,8.02" target="#fig_1">Figure 5</ref>: 4a-d, 5; <ref type="figure" coords="6,285.12,503.06,29.94,8.02">Figure 2</ref>: </p><formula>(4); V d , D i ,V t ). The insights gained (I h , I v , I m ) </formula><p> and the application of the domain knowledge (K t , K p , K m ) are part of the user interaction, but not part of the user interface. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.2.4">Interactive Guided Model Selection Environment</head><p> In Section 5.2.2 we introduced the time series plot and the range selection as shown in the upper left corner (1) of <ref type="figure" coords="6,462.06,566.59,29.84,8.02">Figure 1</ref>. The main interaction in this area is the navigation through the time series and the selection of a specific time interval. The horizontal range slider on the bottom allows the user to zoom in and navigate through the time series. When changing the zoom level on the range slider, the time axis is adjusted to show a suitable resolution of time. Details about the time points are provided on demand when moving the mouse cursor to its position. It is possible to specifically select a time interval that is used for the model selection. The user can select, resize, move, and remove the selection using the mouse cursor. The user can select whether or not the selection is connected to the other views using the Synchronize Displays button shown in <ref type="figure" coords="6,380.42,676.18,29.53,8.02">Figure 6</ref>. If it is linked to the other views, they are recomputed and the visualizations are updated as soon as the region changes. This feature enables the user to select a certain smaller region of interest from a larger time series for the model selection task and keep a fast reaction time for the model parameter estimation even for larger time series. Another important design requirement was to visualize the change  in the plots when adjusting the model order and give the user the control over these transitions. This is supported by direct manipulation <ref type="bibr" coords="7,31.50,616.87,14.94,8.02" target="#b34">[36] </ref>using sliders for the level of difference and continuous vertical lines for the model parameters. To focus on the change in the resulting plots, we use animated transitions <ref type="bibr" coords="7,167.17,636.80,14.94,8.02" target="#b18">[19] </ref>and different colors that are consistent in the coordinated and multiple views <ref type="bibr" coords="7,213.21,646.76,13.74,8.02" target="#b30">[32]</ref>. This process is shown in <ref type="figure" coords="7,77.24,656.72,31.09,8.02" target="#fig_4">Figure 7</ref>and the supplementary video. Once the slider or a vertical line is dragged from one value in the direction of the next value, the parameters of the new model are calculated and the plots are seamlessly faded from one display to another by using alpha blending of the bars, points, and lines. The colors for the plots are selected by using ColorBrewer2 <ref type="bibr" coords="7,107.19,706.53,13.74,8.02" target="#b16">[17]</ref>. We used this tool to get a qualitative color scheme, which is easy to distinguish on a screen. This set of colors is used as an endless cyclic sequence for the coloration of the plots. This ensures that each parameter combination is a different color, and the fading process uses always two separate colors. The toolbox to adjust the parameters and the continuous vertical lines in the ACF/PACF plot are shown in <ref type="figure" coords="7,451.84,73.70,30.14,8.02">Figure 6</ref>. By default the check box to include the seasonal parameters is disabled. In this case, the seasonal span and the seasonal difference input are disabled and the vertical lines for the order of the seasonal autoregressive and the moving average component of the model are not visible. This ensures that the user does not accidentally fit a seasonal model, if a non-seasonal model is needed. By ticking the check box the inputs are enabled and the vertical lines in the ACF/PACF plot for the seasonal order appear. That also ensures to first consider simpler non-seasonal models according to the principle of parsimony and keep the users attention to the relevant class of models. In <ref type="figure" coords="7,314.34,183.68,29.56,8.02" target="#fig_4">Figure 7</ref>, we show the fading process when changing the order of the model by dragging one of the continuous vertical lines in the ACF/PACF plot. When sliding the vertical lines for the seasonal order P and Q in the ACF/PACF plot shown in <ref type="figure" coords="7,460.70,213.57,29.51,8.02">Figure 6</ref>, the prototype supports focusing the seasonal lags in the ACF/PACF plot by setting the non-seasonal lags to another color and opacity level. Thus the user can more easily decide the seasonal order of the model. When adjusting the level of differencing we also change the underlying data for the ACF/PACF plot. In this case the ACF/PACF plot and the residual plots are fading from the current to the new configuration. All four residual analysis plots, area (4a-d) in <ref type="figure" coords="7,466.69,283.70,28.70,8.02" target="#fig_1">Figure 5</ref>, are included in the interactive fading process presented before. When the user modifies the model configuration, the residual plots are fading from one to the other continuously. This enables the user to see the changes of the model configuration and evaluate if the model fitness improves or worsens. This process is shown in <ref type="figure" coords="7,418.61,333.52,29.01,8.02" target="#fig_4">Figure 7</ref>. The information criteria for all previously and currently selected models are shown in area (5) of <ref type="figure" coords="7,408.38,353.83,29.95,8.02" target="#fig_1">Figure 5</ref>as described in Section 5.2.2. This history stack is filled during the model selection process. The coloring to immediately find the minimal information criteria is readjusted if a new model is added to the table. So for each transition we can see the values of the criteria which are supported by the color if it is better or worse than the previous one. Additionally, it is possible to see which are the best models according to the information criteria at each point in the model selection task. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.2.5">Discussion of Design Rationales</head><p>The key idea for the layout of the TiMoVA user interface is to map the Box-Jenkins methodology and its workflow. This way of working and thinking is well-established and known by our target users, the domain experts. The main intention to use established standard visualization techniques for the separate steps in the Box-Jenkins methodology, is to avoid confusion and benefit from the experience the domain experts already have. By using familiar visualizations that they know really well, the domain experts can profit from the combination, layout, and especially the interactions of TiMoVA. In this stage of our work this was our goal and is our contribution. For future work it would be exciting to experiment with more advanced visualization techniques, use and include them in TiMoVA in order to further improve the task of model selection in time series analysis. Another requirement was to use appropriate interactions in TiMoVA , so that it is easy and intuitive for the target users and they can concentrate on their task of model selection. According to Heer and Robertson <ref type="bibr" coords="7,334.01,616.48,14.94,8.02" target="#b18">[19] </ref>animated transitions in statistical data graphics are a way to engage the users and improve the perception of changes. They also suggest using alpha blending as a solution for possible occlusion. Because of their findings, we apply animated transitions in TiMoVA and use alpha blending because occlusions may occur in the transitions . These transitions are triggered and steered directly by the user inside the ACF/PACF plot. One limitation of showing the transitions with animated diagnostic plots is that you actually compare the current model to one of the next possible models. Usually this is good enough because you immediately see if the more specific sub-model you think of is better or worse and by this preview the domain expert can decide if it is worth to go into this direction. To overcome the limitation of comparing only two models we provide a history table with all previously and currently considered models and the corresponding information criteria as shown in area (5) of <ref type="figure" coords="8,107.53,73.31,30.32,8.02" target="#fig_1">Figure 5</ref> and in more detail in the supplementary material. With this overview it is possible to compare more than two models according to their information criteria. In our design we planned for future work to enable the user to select up to three models and load their standardized residuals in the diagnostic plots to directly compare them visually. This should be sufficient, because according to Nazem <ref type="bibr" coords="8,59.16,133.09,42.27,8.02">[28, p. 307] </ref>in about 87% of the time series only one or two models remain in the shortlist for adequate models and in about 97.6% three or less models remain. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6">EVALUATION</head><p>During the design and implementation phase we evaluated the results by formative evaluations during repetitive meetings of the design team. This iterative refinement process was judged by the team members, experts in information visualization and statistics, and the user expe- rience <ref type="bibr" coords="8,47.01,224.93,14.94,8.02" target="#b23">[24] </ref>was discussed by performing demonstrations. In addition to this repetitive internal assessment, the user experience was evaluated by informal user feedback <ref type="bibr" coords="8,139.57,244.86,14.94,8.02" target="#b23">[24] </ref>consulting two external domain experts. Besides this first level of evaluation, we evaluated the prototype by defining usage scenarios and applying the prototype on an example dataset. We explain the example dataset below and apply the usage scenarios in Section 6.1. We discuss the insights gained from both levels of evaluation, what we learned, and how we can improve our solution further in Section 6.2. Accordingly we assess the usability and applicability of our solution for its target users. Example Dataset. In Section 3 we introduced the example dataset of the daily number of deaths from cardiovascular disease from the NMMAPS study <ref type="bibr" coords="8,100.29,349.14,14.19,8.02" target="#b27">[29,</ref><ref type="bibr" coords="8,117.32,349.14,10.64,8.02" target="#b31"> 33]</ref>. The original dataset contains the data of different cities in the United States of America, but we focused on the number of cardiovascular disease deaths in Los Angeles only. The relevant columns in the dataset are date and cvd, which is the daily number of deaths from cardiovascular disease. There are no missing values in the dataset. For the evaluation of the prototype, we aggregate the time series to get monthly sums. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6.1">Usage Scenarios</head><p> Based on the requirement analysis in Section 4 we used the user stories and defined two usage scenarios for the evaluation. The first one is the high-level task of model selection. The second one is the task of selecting a range in the time series before selecting a model. We describe how the prototype is applied on the example dataset to solve these tasks. We demonstrate the usage scenarios from the perspective of a fictional domain expert. Because it is difficult to show the interactivity and visual feedback in static pictures, we support the textual description with the transitions in two of the residual plots in <ref type="figure" coords="8,240.69,519.89,28.82,8.02" target="#fig_4">Figure 7</ref>. To clarify the interactions and how all visual representations behave during the transitions, we provide a supplementary video 1 with audio narration. Another supplementary material shows the model diagnostic area from TiMoVA for each of the five transitions that we discuss in the following. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6.1.1">Model Selection</head><p>Following the Box-Jenkins methodology presented in Section 3.1, we first consider the time series plot and the autocorrelation function (ACF) and partial autocorrelation function (PACF) plot. According to the time series plot in TiMoVA (<ref type="figure" coords="8,152.12,630.85,28.54,8.02" target="#fig_1">Figure 5</ref> ), we assume that no differencing operation (see Section 3.2) may be needed, because the time series seems to be stationary. Moving the difference slider confirms that the change in the ACF/PACF plot, as well as the residual analysis plots is marginal and, therefore, supports this hypothesis. We evaluate the ACF/PACF plot, (3) in <ref type="figure" coords="8,178.35,680.79,29.52,8.02" target="#fig_1">Figure 5</ref>, according to the behavior of the non-seasonal order of the model in <ref type="figure" coords="8,207.71,690.75,25.51,8.02">Table 1</ref>. We show the transitions of this usage scenario in <ref type="figure" coords="8,169.97,700.71,30.96,8.02" target="#fig_4">Figure 7</ref>beneath each other with the color code explained in the information criteria table in area (5) of <ref type="figure" coords="8,47.35,720.64,30.23,8.02" target="#fig_1">Figure 5</ref>. For the non-seasonal component of the model we In addition, the information criteria in area (5) of <ref type="figure" coords="8,483.81,479.80,31.32,8.02" target="#fig_1">Figure 5</ref>indicate that we found an adequate model. We selected the model with the minimum values for the AIC, AICc and BIC using TiMoVA. This goes along with the diagnostics based on the visualization of the standardized residuals. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6.1.2">Range Selection</head><p>TiMoVA enables the user to select a range of the time series, as we show in the upper left corner (1) of <ref type="figure" coords="8,409.36,562.39,28.57,8.02">Figure 1</ref>. A possible usage scenario is to select a trend that starts and ends at a defined point in the time series and to consider only this trend for model selection. In the following usage scenario we want to consider only the range starting with November 1994 and ending with the last data point in the time series. We select the model as described in the previous section . Compared to the complete time series we get a slightly different model, which is simpler and with fewer parameters. We get an intermediate model with p = 2 and seasonal P = 1. The ACF plot of the residuals indicates a remaining seasonal autocorrelation. In this case we consider a seasonal difference of D = 1 as a possible solution to remove this autocorrelation in the residuals. Sliding the seasonal difference fader, improves this model. Finally, we get a model with the following configuration: ARIMA(p = 2, </p><formula>d = 0, q = 0) × (P = 1, D = 1, Q = 0) s=12 </formula><p>Consulting the information criteria for this model supports that we have found an adequate model. In addition to the insights gained from the application of TiMoVA in these two usage scenarios, we discuss the results of the user feedback in the following section. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6.2">Evaluating User Experience</head><p>For the evaluation of the user experience <ref type="bibr" coords="9,192.27,96.68,14.94,8.02" target="#b23">[24] </ref> we rely on the insights gained from the internal formative evaluation and iterative design during the design and implementation phase, where we had repetitive meetings and discussions on the intermediate stages, and on the demonstration session with two external domain experts who are employed as scientists in an institution for statistics research. They both hold a master in mathematics and one a PhD in statistics. The informal evaluation <ref type="bibr" coords="9,70.82,166.42,14.94,8.02" target="#b23">[24] </ref>was performed by demonstrating the prototype with a well-known dataset for time series analysis. The domain experts gave immediate feedback to the features of TiMoVA. This feedback was noted on paper and reflected after the demonstration session, which lasted about one hour. We included the feedback in the design and implementation. We discuss the remaining suggestions in this section and consider them for future work in Section 7. In this reflection our findings from the usage scenarios are included as well. A very useful feature according to the domain experts is the overview displaying all separate steps of the Box-Jenkins methodology . It provides all information necessary to decide on an adequate model. Because the model selection relies on the behavior of the ACF/PACF plot, it is very helpful to directly select the model order inside this ACF/PACF plot using the continuous vertical lines. The visual support of focusing on the seasonal lags for the selection of the seasonal component in the model was considered very beneficial. Another beneficial feature according to the domain experts is the immediate visualization and preview of the model results when changing the model order and especially the visualization of the transition from one model to another. This enables the domain experts to directly compare the current model to the new model and decide whether the model improves or not. A further benefit is the possibility to select a certain region of interest from a larger time series and consider only this subregion for the model selection task. This is not only very nice for selecting a representative or interesting subregion, but also to have faster reaction times even for originally larger time series. There are also suggestions to further improve our work. The domain experts would like to see more statistics of the residuals on demand . The numbers are available in memory as a result of the computations and including them in the graphical user interface is going to be future work. Domain experts sometimes prefer to perform different tests and statistics for the residual analysis and would like to customize the selection from a set of test statistics using the graphical user interface. Our solution is prepared for this kind of request and implemented in a way to ensure exchangeable test statistics. One suggestion during the iterative design and implementation phase was to include a history of the previously selected models and enable the user to get an overview and reload certain models. We included this concept in the design and the result is shown in area (5) of <ref type="figure" coords="9,41.41,556.24,29.21,8.02" target="#fig_1">Figure 5</ref> . This feature of getting an overview on the previously selected models and compare more than two models on a more abstract level is very beneficial. The concept of loading certain models as an overlay in the diagnostic plots is considered as useful and a way to further improve the implementation. Another feature demanded, is to show how the model performs. This is usually done by taking the first part of the time series and use the model to forecast a certain time range or repetitive single step ahead forecasts. This forecast is then shown along the given time series with the according confidence boundaries. At the moment we focused on the first part in time series analysis, which is finding an adequate model, and not the application of this model. Although the extension of using these forecasts as overlay in the time series plot is considered for further work. What we learned from the evaluation is that for the target users, with at least a basic knowledge in statistics and time series analysis (ARIMA models), TiMoVA is easy to learn and understandable. For others it is necessary to study time series analysis in order to understand and interpret the visualizations. We achieved this in TiMoVA, as discussed already in Section 5.2.5, by focusing on the knowledge and experience the domain experts already have and support them with a well-established way of working and thinking, familiar visualizations, and appropriate interactions. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="7">CONCLUSION AND FUTURE WORK</head><p>The goal of our work is to use VA to support domain experts in the process of model selection. We identified that for the class of ARIMA and seasonal ARIMA models in the Box-Jenkins methodology there is no technique or tool that supports the workflow of the process in an intuitive and user-friendly way. Applying VA methods to this domain problem showed that we can support this task with interactive visual interfaces, short feedback cycles, and the visualization of the model transitions. By evaluating our work, we discovered that the resulting VA process description and the TiMoVA prototype enables the domain expert to do easy and intuitive visual exploration and selection of time series models. These benefits are achieved by @BULLET enabling the domain expert to select the model order interactively via the visual interface, inside the ACF/PACF plot, which provides a first idea of the model order, @BULLET giving the domain expert immediate visual feedback of the model results while selecting the model order, and @BULLET helping domain experts with the visualization of the model transitions to decide whether or not the model improves. We also showed that the interactions are appropriate for the task and that the domain experts profit from the usage of a well-established model selection methodology and visualizations from their domain. In Section 6.2 we discussed the insights gained from the evaluation of our results and developed ideas for future work. One improvement was to include information criteria measures in the graphical user interface in a history. Another idea for future work is to enable using this history to load any previous model and compare two of them. Further improvement is to extend the prototype to directly support different statistical methods for the residual analysis and enable the user to customize the residual analysis for their needs. The diagnostic of the time series model is currently limited to the diagnostic plots. For future work, it would be interesting to include the performance of the model for forecasting the diagnostic step. Our solution is limited to data with equally spaced time series without missing values. In practical applications, the data often contains missing values and/or are not equally spaced. For future research we consider these limitations as inspiration to apply VA for model selection in time series with missing values and provide visual support for the methods to estimate them. Another interesting challenge for future work is to foresee the model selection support for multivariate time series. Therefore, it is necessary to consider appropriate visualization techniques for this kind of data. The final model we found in our usage scenarios is rated as a rather complex model by our domain expert. Finding this model using existing statistical software tools would have been very cumbersome and time consuming. Working with TiMoVA reduced the number of models considered, because the immediate visual feedback excluded already certain subclasses of models early in the model selection pro- cess. Based on the insights from the evaluation, we discovered that the well-established visualizations used in the prototype have the benefit that the domain experts are used to work with these visual encodings. Therefore, they can focus on the task of model selection, which is guided by TiMoVA and improves their work. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>ACKNOWLEDGMENTS </head><p>This work was supported by the Austrian Science Fund (FWF) through HypoVis, project number: P22883, the Austrian Federal Ministry of Economy, Family and Youth via CVAST, a Laura Bassi Centre of Excellence , project number: 822746, and the Vienna University of Technology by the Doctoral College for Environmental Informatics. </p></div><figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_0" coords="4,26.05,216.01,59.00,8.02"><head></head><figDesc>37, p. 121–140]. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_1" coords="5,31.50,285.43,513.00,7.37;5,31.50,294.90,513.00,7.37;5,31.50,304.36,513.00,7.37;5,31.50,313.83,513.00,7.37;5,31.50,323.29,188.71,7.37"><head>Fig. 5. </head><figDesc>Fig. 5. TiMoVA Overview. The figure is showing the coordinated and multiple views in the user interface, where (1) is the time series plot (input data), (2) the model selection toolbox, (3) the ACF/PACF plot as well as further model selection, (4a-d) the residual analysis plots, and (5) the model history including the information criteria. The plots in the area for the residual analysis are (4a) the standardized residuals over time, (4b) the ACF of the residuals over the lags, (4c) the quantile of the standardized residuals against the quantile of the standard normal distribution, and (4d) the p-values of the Ljung-Box statistics over lags. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_2" coords="5,31.50,706.85,250.38,7.37;5,31.50,716.32,250.38,7.37;5,31.50,725.78,250.38,7.37;5,31.50,735.25,93.35,7.37"><head>Fig. 4. </head><figDesc> Fig. 4. VA Process for Model Selection. The figure shows the VA process for selecting the model iteratively, to find an adequate model for a given time series. This process description is based on the VA process for time-oriented data [25]. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_3" coords="6,269.50,256.82,3.36,8.02;6,22.50,266.78,250.37,8.02;6,22.50,276.75,250.37,8.02;6,22.50,286.71,250.37,8.02;6,22.50,296.67,250.37,8.02;6,22.50,306.63,250.37,8.02;6,22.50,316.60,250.37,8.02;6,22.50,326.56,186.53,8.02;6,32.46,336.99,240.41,8.02"><head></head><figDesc>. The details of the interactions for the range selection are discussed in Section 5.2.4. The toolbox in area (2) and the ACF/PACF plot in area (3) are used for the model selection. In the ACF/PACF plot (3) the user can adjust the number of model parameters directly within the plot. The plots in area (4a-d) show the results of the parameter estimation as the plots for the residual analysis. The table in area (5) displays the model history including the information criteria. In Figure 6 the model selection toolbox (2) and the ACF plot (3) </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_4" coords="7,31.50,527.51,250.38,7.37;7,31.50,536.97,250.38,7.37;7,31.50,546.44,250.38,7.37;7,31.50,555.90,250.38,7.37;7,31.50,565.37,240.61,7.37"><head>Fig. 7. </head><figDesc>Fig. 7. Transitions of Model Selection in Elected Residual Plots. We show the change when selecting a new model in two elected residual visualizations, the ACF and the normal quantile-quantile plot of the standardized residuals. This enables the user to evaluate whether or not the new model improves. Each numbered row represents one transition. </figDesc></figure>
+
+			<note place="foot">Fig. 3. ACF and PACF over Lags. The behavior of the lags enables domain experts to decide on the order of the model according to Table 1. This plot displays the example dataset (see Section 6) from the NMMAPS study [29, 33]. ACF/PACF Plot. The ACF plot is a spike graph, which is a special type of bar chart, of the ACF as a function over lags. The PACF plot is likewise the PACF as a function over lags. For the formal definition of the ACF and the PACF we refer again to the literature in time series analysis [4, 6, 7, 15, 37] and give a description of the basic ideas in the following: The ACF is the correlation between any two values in a time series with a specific time shift, called lag. The PACF is the correlation between any two points with a specific lag, where the linear effects of the points in between is removed. This PACF plot combined with the ACF plot, where this linear dependence is included, is called ACF/PACF plot and enables us to choose the number of parameters for the model. In addition to the time series plot, the ACF/PACF plot provides a first idea for the level of difference and seasonal difference. In Figure 3 we show an example ACF/PACF plot. The ACF and PACF are plotted on the y-axes and the lags on the x-axes. In this case the labels are seasonal lags, which means that one lag represents one seasonal cycle. The non-seasonal lags are fractions of one, depending on the seasonal length. For example, in a dataset with 12 months in one year and a seasonal length of 12, the seasonal lags are 1, 2, . . . and the non-seasonal lags are 1 12 , 2 12 , . . . . Using the definitions of the autoregressive models, moving average models, ACF, and PACF it is possible to identify the basic behavior of the ACF and the PACF for AR, MA, and ARMA models [37]. Likewise , it is possible to describe the behavior for the seasonal component of the model in a similar way. The behavior is shown in Table 1. If we consider the seasonal lags 1, 2, . . . in Figure 3, we notice that the ACF plot is tailing off and in the PACF plot cuts off at lag 2. According to Table 1 this indicates, that an adequate model for the seasonal component could be an AR(2) 12 model. Continuing this for the non-seasonal lags, we get a set of possible adequate models. Table 1. ACF and PACF Behavior for ARMA and Seasonal ARMA Models [37]. The behaviors of the ACF and the PACF indicate which class of model and what number of parameters could be adequate for the non-seasonal and seasonal part of the model. AR(p) MA(q) ARMA(p, q) ACF Tails off Cuts off after lag q Tails off PACF Cuts off after lag p Tails off Tails off AR(P) s MA(Q) s ARMA(P, Q) s ACF* Tails off at lags k · s Cuts off after lag Qs Tails off at lags k · s PACF* Cuts off after lag Ps Tails off at lags k · s Tails off at lags k · s * where k · s are multiples of s, for k = 1, 2, . . .</note>
+
+			<note place="foot" n="1"> http://www.cvast.tuwien.ac.at/TiMoVA (July 30, 2013) decide to have a mixed ARMA model. When sliding the parameter p, the diagnostic plots shows that the adjustment of the non-seasonal AR model to order p = 1 results in a more random appearance of the residual time series plot, a more straight line behavior in the normal quantile-quantile plot, and lower lags in the non-seasonal lags of the ACF plot (Transition 1 in Figure 7). In addition to further improvement of those residual plots, the Ljung-Box statistics shows more lags with p-values significantly different from zero, if the order is changed to p = 2 (Transition 2 in Figure 7). See the supplementary image and video for further details on this. For both transitions we can see in area (5) of Figure 5 how the information criteria improve. The result is the model configuration p = 2, which is an AR(2) model. By adding a MA component of order q = 1 to the model (Transition 3 in Figure 7) we get the diagnostic plots for the assumed mixed ARMA model with p = 2 and q = 1. This configuration advances the model to show more randomness in the diagnostic plots of the standardized residuals, which strengthens the assumption that they are standard normal distributed. The information criteria in area (5) of Figure 5 get minimal worse when adding the MA component q = 1, but according to the behavior of the ACF/PACF plot in Figure 5 we assume a mixed ARMA model for the non-seasonal part. To see more details of these transitions, we provide all of them for the diagnostic plots in a supplementary image and in the supplementary video. The seasonal behavior is not covered by the model yet. Therefore, the next step is to adjust the seasonal parts of the model. We consider an autoregressive model, because sliding the parameter P highlights the seasonal lags and unveils the cut off on seasonal lag 2 in the PACF. This indicates, when consulting Table 1 for the behavior of the seasonal order of the model, that the seasonal component is likely to have order P = 2. Sliding from seasonal order P = 0 to P = 1 (Transition 4 in Figure 7) and from P = 1 to P = 2 (Transition 5 in Figure 7), shows the improvement of the selected model. In area (5) of Figure 5 we also recognize the abrupt improvement in the information criteria when including the seasonal component with P = 1 and the gradual improvement for the transition from P = 1 to P = 2. With this configuration , we get a seasonal model of the following form: ARIMA(p = 2, d = 0, q = 1) × (P = 2, D = 0, Q = 0) s=12 Including the estimated parameters of the model, we get the following time series model: (1 − 0.3068B 12 − 0.5444B 24 )(1 + 0.3143B − 0.3112B 2 )x t = (1 − 0.9072B)w t</note>
+		</body>
+		<back>
+			<div type="references">
+
+				<listBibl>
+
+<biblStruct coords="10,40.76,74.58,232.12,7.13;10,40.76,84.05,162.60,7.13"  xml:id="b0">
+	<monogr>
+		<title level="m" type="main">Visualization of Time-Oriented Data</title>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Aigner</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Miksch</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Schumann</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Tominski</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2011" />
+			<publisher>Springer</publisher>
+			<pubPlace>London, UK</pubPlace>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,93.51,232.12,7.13;10,40.76,102.97,111.84,7.13"  xml:id="b1">
+	<monogr>
+		<title level="m" type="main">Extreme Programming Explained: Embrace Change</title>
+		<author>
+			<persName>
+				<forename type="first">K</forename>
+				<surname>Beck</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2000" />
+			<publisher>Addison- Wesley</publisher>
+			<pubPlace>Reading, MA, USA</pubPlace>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,112.44,232.12,7.13;10,40.76,121.90,232.12,7.13;10,40.76,131.37,232.12,7.13;10,40.76,140.83,232.12,7.13;10,40.76,150.30,17.93,7.13"  xml:id="b2">
+	<analytic>
+		<title level="a" type="main">Visualinteractive preprocessing of time series data</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Bernard</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Ruppert</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">O</forename>
+				<surname>Goroll</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>May</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Kohlhammer</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. SIGRAD, Interactive Visual Analysis of Data</title>
+		<editor>A. Kerren and S. Seipel</editor>
+		<meeting>. SIGRAD, Interactive Visual Analysis of Data<address><addrLine>Växjö, Sweden</addrLine></address></meeting>
+		<imprint>
+			<publisher>Linköping University Electronic Press</publisher>
+			<date type="published" when="2012" />
+			<biblScope unit="page" from="39" to="48" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,159.76,232.12,7.13;10,40.76,169.23,182.33,7.13"  xml:id="b3">
+	<monogr>
+		<title level="m" type="main">Time Series Analysis and Forecasting by Example</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Bisgaard</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Kulahci</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2011" />
+			<publisher>John Wiley &amp; Sons</publisher>
+			<pubPlace>Hoboken, NJ, USA</pubPlace>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,178.69,232.12,7.13;10,40.76,188.15,150.39,7.13"  xml:id="b4">
+	<monogr>
+		<title level="m" type="main">Empirical Model Building and Response Surfaces</title>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<forename type="middle">E P</forename>
+				<surname>Box</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">N</forename>
+				<forename type="middle">R</forename>
+				<surname>Draper</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="1987" />
+			<publisher>John Wiley &amp; Sons</publisher>
+			<pubPlace>NY, USA</pubPlace>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,197.62,232.12,7.13;10,40.76,207.08,174.00,7.13"  xml:id="b5">
+	<monogr>
+		<title level="m" type="main">Time Series Analysis: Forecasting and Control</title>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<forename type="middle">E P</forename>
+				<surname>Box</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<forename type="middle">M</forename>
+				<surname>Jenkins</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="1970" />
+			<pubPlace>Holden-Day ; San Francisco, CA, USA</pubPlace>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,216.55,232.12,7.13;10,40.76,226.01,232.12,7.13;10,40.76,235.48,44.06,7.13"  xml:id="b6">
+	<monogr>
+		<title level="m" type="main">Time Series Analysis: Forecasting and Control</title>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<forename type="middle">E P</forename>
+				<surname>Box</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<forename type="middle">M</forename>
+				<surname>Jenkins</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<forename type="middle">C</forename>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2008" />
+			<publisher>John Wiley &amp; Sons</publisher>
+			<pubPlace>Hoboken, NJ, USA</pubPlace>
+		</imprint>
+	</monogr>
+	<note>4th. edition</note>
+</biblStruct>
+
+<biblStruct coords="10,40.76,244.94,232.12,7.13;10,40.76,254.41,232.12,7.13;10,40.76,263.87,213.20,7.13"  xml:id="b7">
+	<analytic>
+		<title level="a" type="main">Distribution of residual autocorrelations in autoregressive-integrated moving average time series models</title>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<forename type="middle">E P</forename>
+				<surname>Box</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<forename type="middle">A</forename>
+				<surname>Pierce</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Journal of the American Statistical Association</title>
+		<imprint>
+			<biblScope unit="issue">332</biblScope>
+			<biblScope unit="page" from="651509" to="1526" />
+			<date type="published" when="1970" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,273.34,232.12,7.13;10,40.76,282.80,232.12,7.13;10,40.76,292.26,100.95,7.13"  xml:id="b8">
+	<analytic>
+		<title level="a" type="main">Interactive pattern search in time series</title>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Buono</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Aris</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Plaisant</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Khella</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Shneiderman</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. Conf. Visualization and Data Analysis</title>
+		<meeting>. Conf. Visualization and Data Analysis</meeting>
+		<imprint>
+			<date type="published" when="2005" />
+			<biblScope unit="page" from="175" to="186" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,301.73,232.12,7.13;10,40.76,311.19,232.12,7.13;10,40.76,320.66,232.12,7.13;10,40.76,330.12,210.75,7.13"  xml:id="b9">
+	<analytic>
+		<title level="a" type="main">Similarity-based forecasting with simultaneous previews: A river plot interface for time series forecasting</title>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Buono</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Plaisant</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Simeone</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Aris</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Shneiderman</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Shmueli</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Jank</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. Conf. Information Visualisation (IV)</title>
+		<meeting>. Conf. Information Visualisation (IV)</meeting>
+		<imprint>
+			<publisher>IEEE Computer Society</publisher>
+			<date type="published" when="2007" />
+			<biblScope unit="page" from="191" to="196" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,339.59,230.58,7.13"  xml:id="b10">
+	<monogr>
+		<title level="m" type="main">Visualizing Data</title>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Cleveland</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="1993" />
+			<publisher>Hobart Press</publisher>
+			<pubPlace>Summit, NJ, USA</pubPlace>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,349.05,232.12,7.13;10,40.76,358.52,158.85,7.13"  xml:id="b11">
+	<monogr>
+		<title level="m" type="main">User Stories Applied: For Agile Software Development</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Cohn</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2004" />
+			<publisher>Addison-Wesley</publisher>
+			<pubPlace>Redwood City, CA, USA</pubPlace>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,367.98,232.12,7.13;10,40.76,377.45,173.63,7.13"  xml:id="b12">
+	<monogr>
+		<title level="m" type="main">Succeeding with Agile: Software Development Using Scrum</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Cohn</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2010" />
+			<publisher>Addison-Wesley</publisher>
+			<pubPlace>Upper Saddle River, NJ, USA</pubPlace>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,386.91,232.12,7.13;10,40.76,396.37,232.12,7.13;10,40.76,405.84,170.37,7.13"  xml:id="b13">
+	<monogr>
+		<title level="m" type="main">Gretl: GNU Regression, Econometric and Time-series Library -User&apos;s Guide, Version 1.9</title>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Cottrell</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Lucchetti</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2013-03-20" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,415.30,232.12,7.13;10,40.76,424.77,232.12,7.13;10,40.76,434.23,17.93,7.13"  xml:id="b14">
+	<monogr>
+		<title level="m" type="main">Time Series Analysis. With Applications in R. Springer Texts in Statistics</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">D</forename>
+				<surname>Cryer</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">K.-S</forename>
+				<surname>Chan</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2008" />
+			<publisher>Springer</publisher>
+			<pubPlace>New York, NY, USA</pubPlace>
+		</imprint>
+	</monogr>
+	<note>2nd. edition</note>
+</biblStruct>
+
+<biblStruct coords="10,40.76,443.70,232.11,7.13;10,40.76,453.16,92.13,7.13"  xml:id="b15">
+	<monogr>
+		<title level="m" type="main">Time series analysis</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">D</forename>
+				<surname>Hamilton</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="1994" />
+			<publisher>Princeton University Press</publisher>
+			<pubPlace>Princeton , New Jersey, USA</pubPlace>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,462.63,232.12,7.13;10,40.76,472.09,231.59,7.13"  xml:id="b16">
+	<analytic>
+		<title level="a" type="main">Colorbrewer.org: An online tool for selecting colour schemes for maps</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Harrower</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Brewer</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Cartographic Journal</title>
+		<imprint>
+			<biblScope unit="volume">40</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<biblScope unit="page" from="27" to="37" />
+			<date type="published" when="2003" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,481.55,232.12,7.13;10,40.76,491.02,232.12,7.13;10,40.76,500.48,179.44,7.13"  xml:id="b17">
+	<analytic>
+		<title level="a" type="main">Prefuse: A toolkit for interactive information visualization</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Heer</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<forename type="middle">K</forename>
+				<surname>Card</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">A</forename>
+				<surname>Landay</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. SIGCHI Conf. Human Factors in Computing Systems (CHI)</title>
+		<meeting>. SIGCHI Conf. Human Factors in Computing Systems (CHI)</meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="2005" />
+			<biblScope unit="page" from="421" to="430" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,509.95,232.12,7.13;10,40.76,519.41,232.12,7.13;10,40.76,528.88,77.26,7.13"  xml:id="b18">
+	<analytic>
+		<title level="a" type="main">Animated Transitions in Statistical Data Graphics</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Heer</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<forename type="middle">G</forename>
+				<surname>Robertson</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Trans. Visualization and Computer Graphics</title>
+		<imprint>
+			<biblScope unit="volume">13</biblScope>
+			<biblScope unit="issue">6</biblScope>
+			<biblScope unit="page" from="1240" to="1247" />
+			<date type="published" when="2007" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,538.34,232.12,7.13;10,40.76,547.81,117.77,7.13"  xml:id="b19">
+	<monogr>
+		<title level="m" type="main">Version 8</title>
+		<author>
+			<persName>
+				<forename type="first">Ihs</forename>
+				<surname>Global</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<surname>Inc</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<surname>Eviews</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2013-03-20" />
+			<pubPlace>Irvine, CA</pubPlace>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,557.27,232.12,7.13;10,40.76,566.74,232.12,7.13;10,40.76,576.20,106.84,7.13"  xml:id="b20">
+	<analytic>
+		<title/>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Keim</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Kohlhammer</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<surname>Ellis</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<surname>Mansmann</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Mastering The Information Age -Solving Problems with Visual Analytics. Eurographics</title>
+		<meeting><address><addrLine>Goslar, Germany</addrLine></address></meeting>
+		<imprint>
+			<date type="published" when="2010" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,585.66,232.12,7.13;10,40.76,595.13,232.12,7.13;10,40.76,604.59,190.00,7.13"  xml:id="b21">
+	<monogr>
+		<title level="m" type="main">x12: X12 -wrapper function and structure for batch processing, 2012. R package version 1.0-3</title>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Kowarik</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Meraner</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2013-03-12" />
+			<biblScope unit="page">12</biblScope>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,614.06,232.12,7.13;10,40.76,623.52,232.12,7.13;10,40.76,632.99,232.12,7.13;10,40.76,642.45,137.47,7.13"  xml:id="b22">
+	<analytic>
+		<title level="a" type="main">Interactive adjustment and outlier detection of time dependent data in R</title>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Kowarik</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Meraner</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Schopfhauser</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Templ</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Conf. European Statisticians, Work Session Statistical Data Editing. United Nations -Economic Commission for Europe</title>
+		<imprint>
+			<date type="published" when="2012" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,651.92,232.12,7.13;10,40.76,661.38,232.12,7.13;10,40.76,670.84,202.09,7.13"  xml:id="b23">
+	<analytic>
+		<title level="a" type="main">Empirical studies in information visualization: Seven scenarios</title>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Lam</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<surname>Bertini</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Isenberg</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Plaisant</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Carpendale</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Trans. Visualization and Computer Graphics</title>
+		<imprint>
+			<biblScope unit="volume">18</biblScope>
+			<biblScope unit="issue">9</biblScope>
+			<biblScope unit="page" from="1520" to="1536" />
+			<date type="published" when="2012" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,680.31,232.12,7.13;10,40.76,689.77,232.12,7.13;10,40.76,699.24,232.12,7.13;10,40.76,708.70,232.12,7.13;10,40.76,718.17,30.77,7.13"  xml:id="b24">
+	<analytic>
+		<title level="a" type="main">Towards a concept how the structure of time can support the visual analytics process</title>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Lammarsch</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Aigner</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Bertone</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Miksch</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Rind</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. Int. Workshop Visual Analytics (EuroVA) in conjunction with EuroVis</title>
+		<editor>S. Miksch and G. Santucci</editor>
+		<meeting>. Int. Workshop Visual Analytics (EuroVA) in conjunction with EuroVis</meeting>
+		<imprint>
+			<date type="published" when="2011" />
+			<biblScope unit="page" from="9" to="12" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,40.76,727.63,232.12,7.13;10,40.76,737.10,136.58,7.13;10,285.12,54.06,250.38,7.13;10,303.38,63.52,232.12,7.13;10,303.38,72.99,232.12,7.13;10,303.38,82.45,49.05,7.13"  xml:id="b25">
+	<analytic>
+		<title level="a" type="main">On a measure of lack of fit in time series models Process and pitfalls in writing information visualization research papers</title>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<forename type="middle">M</forename>
+				<surname>Ljung</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">G</forename>
+				<forename type="middle">E P</forename>
+				<surname>Box</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Information Visualization</title>
+		<editor>A. Kerren, J. Stasko, J.-D. Fekete, and C. North</editor>
+		<imprint>
+			<publisher>Springer</publisher>
+			<date type="published" when="1978" />
+			<biblScope unit="page" from="297" to="303" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,91.92,232.12,7.13;10,303.38,101.38,232.12,7.13;10,303.38,110.85,52.32,7.13"  xml:id="b26">
+	<monogr>
+		<title level="m" type="main">Applied Time Series Analysis for Business and Economic Forecasting. Statistics: Textbooks and Monographs</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<forename type="middle">M</forename>
+				<surname>Nazem</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="1988" />
+			<publisher>Marcel Dekker, Inc</publisher>
+			<pubPlace>NY, USA</pubPlace>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,120.31,232.12,7.13;10,303.38,129.78,57.34,7.13"  xml:id="b27">
+	<monogr>
+		<title level="m" type="main">The NMMAPSdata package. R News</title>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<forename type="middle">D</forename>
+				<surname>Peng</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<forename type="middle">J</forename>
+				<surname>Welty</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2004" />
+			<biblScope unit="page" from="10" to="14" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,139.24,232.12,7.13;10,303.38,148.70,232.12,7.13;10,303.38,158.17,17.93,7.13"  xml:id="b28">
+	<monogr>
+		<title level="m" type="main">R: A Language and Environment for Statistical Computing. R Foundation for Statistical Computing</title>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Development</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">Core</forename>
+				<surname>Team</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2012" />
+			<pubPlace>Vienna, Austria</pubPlace>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,167.63,232.12,7.13;10,303.38,177.10,232.12,7.13;10,303.38,186.56,232.12,7.13;10,303.38,196.03,87.43,7.13"  xml:id="b29">
+	<analytic>
+		<title level="a" type="main">TimeBench: A data model and software library for visual analytics of time-oriented data</title>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Rind</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Lammarsch</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">W</forename>
+				<surname>Aigner</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Alsallakh</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Miksch</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Trans. Visualization and Computer Graphics</title>
+		<imprint>
+			<biblScope unit="volume">19</biblScope>
+			<biblScope unit="issue">12</biblScope>
+			<biblScope unit="page">2013</biblScope>
+		</imprint>
+	</monogr>
+	<note>forthcoming</note>
+</biblStruct>
+
+<biblStruct coords="10,303.38,205.49,232.12,7.13;10,303.38,214.96,232.12,7.13;10,303.38,224.42,232.12,7.13;10,303.38,233.88,31.14,7.13"  xml:id="b30">
+	<analytic>
+		<title level="a" type="main">State of the art: Coordinated &amp; multiple views in exploratory visualization</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">C</forename>
+				<surname>Roberts</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. Conf. Coordinated and Multiple Views in Exploratory Visualization (CMV)</title>
+		<meeting>. Conf. Coordinated and Multiple Views in Exploratory Visualization (CMV)</meeting>
+		<imprint>
+			<publisher>IEEE Computer Society</publisher>
+			<date type="published" when="2007" />
+			<biblScope unit="page" from="61" to="71" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,243.35,232.12,7.13;10,303.38,252.81,232.12,7.13;10,303.38,262.28,232.12,7.13;10,303.38,271.74,124.20,7.13"  xml:id="b31">
+	<analytic>
+		<title level="a" type="main">The national morbidity, mortality, and air pollution study. Part I: Methods and methodologic issues</title>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<forename type="middle">M</forename>
+				<surname>Samet</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<surname>Dominici</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<forename type="middle">L</forename>
+				<surname>Zeger</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Schwartz</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<forename type="middle">W</forename>
+				<surname>Dockery</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Research Report</title>
+		<imprint>
+			<biblScope unit="volume">94</biblScope>
+			<date type="published" when="2000" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,281.21,232.11,7.13;10,303.38,290.67,232.12,7.13;10,303.38,300.14,20.59,7.13"  xml:id="b32">
+	<analytic>
+		<title/>
+	</analytic>
+	<monogr>
+		<title level="m">SAS Institute Inc. JMP 10 Modeling and Multivariate Methods. SAS Institute Inc</title>
+		<meeting><address><addrLine>Cary, NC</addrLine></address></meeting>
+		<imprint>
+			<date type="published" when="2012-03-20" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,309.60,232.12,7.13;10,303.38,319.07,232.12,7.13;10,303.38,328.53,162.60,7.13"  xml:id="b33">
+	<analytic>
+		<title level="a" type="main">Design study methodology: Reflections from the trenches and the stacks</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Sedlmair</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Meyer</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">T</forename>
+				<surname>Munzner</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Trans. Visualization and Computer Graphics</title>
+		<imprint>
+			<biblScope unit="volume">18</biblScope>
+			<biblScope unit="issue">12</biblScope>
+			<biblScope unit="page" from="2431" to="2440" />
+			<date type="published" when="2012" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,337.99,232.12,7.13;10,303.38,347.46,143.44,7.13"  xml:id="b34">
+	<analytic>
+		<title level="a" type="main">Direct Manipulation: A Step Beyond Programming Languages</title>
+		<author>
+			<persName>
+				<surname>Shneiderman</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Computer</title>
+		<imprint>
+			<biblScope unit="volume">16</biblScope>
+			<biblScope unit="issue">8</biblScope>
+			<biblScope unit="page" from="57" to="69" />
+			<date type="published" when="1983" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,356.92,232.12,7.13;10,303.38,366.39,232.12,7.13;10,303.38,375.85,91.07,7.13"  xml:id="b35">
+	<monogr>
+		<title level="m" type="main">Time Series Analysis and its Applications . With R examples. Springer Texts in Statistics</title>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<forename type="middle">H</forename>
+				<surname>Shumway</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<forename type="middle">S</forename>
+				<surname>Stoffer</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2011" />
+			<publisher>Springer</publisher>
+			<pubPlace>New York, NY, USA</pubPlace>
+		</imprint>
+	</monogr>
+	<note>3rd. edition</note>
+</biblStruct>
+
+<biblStruct coords="10,303.38,385.32,232.12,7.13;10,303.38,394.78,227.57,7.13"  xml:id="b36">
+	<monogr>
+		<title level="m" type="main">Stata Statistical Software: Release 12. StataCorp LP, College Station, TX</title>
+		<author>
+			<persName>
+				<surname>Statacorp</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2011-03-20" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,404.25,232.12,7.13;10,303.38,413.71,160.80,7.13"  xml:id="b37">
+	<analytic>
+		<title/>
+	</analytic>
+	<monogr>
+		<title level="j">The MathWorks Inc. MATLAB</title>
+		<imprint>
+			<date type="published" when="2009" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,423.17,232.12,7.13;10,303.38,432.64,232.12,7.13;10,303.38,442.10,127.45,7.13"  xml:id="b38">
+	<monogr>
+		<title level="m" type="main">Illuminating the Path: The Research and Development Agenda for Visual Analytics</title>
+		<editor>J. J. Thomas and K. A. Cook</editor>
+		<imprint>
+			<date type="published" when="2005" />
+			<publisher>IEEE Computer Society</publisher>
+			<pubPlace>Los Alamitos, CA, USA</pubPlace>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,451.57,232.12,7.13;10,303.38,461.03,232.11,7.13;10,303.38,470.50,67.95,7.13"  xml:id="b39">
+	<monogr>
+		<title level="m" type="main">rjava: Low-level r to java interface R package version 0.9-3</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Urbanek</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2011-03-14" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,303.38,479.96,232.12,7.13;10,303.38,489.43,232.12,7.13;10,303.38,498.89,20.59,7.13"  xml:id="b40">
+	<monogr>
+		<title level="m" type="main">Version 9.0.1</title>
+		<author>
+			<persName>
+				<forename type="first">Wolfram</forename>
+				<surname>Research</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<surname>Inc</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<surname>Mathematica</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2013-03-20" />
+			<pubPlace>Champaign, IL</pubPlace>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+				</listBibl>
+			</div>
+		</back>
+	</text>
+</TEI>

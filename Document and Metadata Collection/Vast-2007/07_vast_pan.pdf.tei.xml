@@ -1,0 +1,670 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.tei-c.org/ns/1.0 /home/pisenberg/grobid/grobid-home/schemas/xsd/Grobid.xsd"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+	<teiHeader xml:lang="en">
+		<encodingDesc>
+			<appInfo>
+				<application version="0.4.1" ident="GROBID" when="2016-09-09T13:37+0000">
+					<ref target="https://github.com/kermitt2/grobid">GROBID - A machine learning software for extracting information from scholarly documents</ref>
+				</application>
+			</appInfo>
+		</encodingDesc>
+		<fileDesc>
+			<titleStmt>
+				<title level="a" type="main">FemaRepViz: Automatic Extraction and Geo-Temporal Visualization of FEMA National Situation Updates</title>
+			</titleStmt>
+			<publicationStmt>
+				<publisher/>
+				<availability status="unknown"><licence/></availability>
+			</publicationStmt>
+			<sourceDesc>
+				<biblStruct>
+					<analytic>
+						<author>
+							<persName>
+								<forename type="first">Chi-Chun</forename>
+								<surname>Pan</surname>
+							</persName>
+							<affiliation>
+								<orgName type="institution">The Pennsylvania State University</orgName>
+							</affiliation>
+						</author>
+						<author>
+							<persName>
+								<forename type="first">Prasenjit</forename>
+								<surname>Mitrat</surname>
+							</persName>
+							<affiliation>
+								<orgName type="institution">The Pennsylvania State University</orgName>
+							</affiliation>
+						</author>
+						<title level="a" type="main">FemaRepViz: Automatic Extraction and Geo-Temporal Visualization of FEMA National Situation Updates</title>
+					</analytic>
+					<monogr>
+						<imprint>
+							<date/>
+						</imprint>
+					</monogr>
+				</biblStruct>
+			</sourceDesc>
+		</fileDesc>
+		<profileDesc>
+			<textClass>
+				<keywords>
+					<term>visual analytics, geo-temporal visualization, text pro-</term>
+					<term>cessing, knowledge discovery, geospatial analytics</term>
+					<term>Index Terms: H42 [INFORMATION SYSTEMS APPLICA-</term>
+					<term>TIONS]: Types of Systems Decision support;</term>
+				</keywords>
+			</textClass>
+			<abstract>
+				<p>An architecture for visualizing information extracted from text documents is proposed. In conformance with this architecture, a toolkit, FemaRepViz, has been implemented to extract and visualize temporal, geospatial, and summarized information from FEMA National Update Reports. Preliminary tests have shown satisfactory accuracy for FEMARepViz. A central component of the architecture is an entity extractor that extracts named entities like person names, location names, temporal references, etc. FEMARepViz is based on FactXtractor, an entity-extractor that works on text documents. The information extracted using FactXtractor is processed using GeoTagger, a geographical name disambiguation tool based on a novel clustering-based disambiguation algorithm. To extract relationships among entities, we propose a machine-learning based algorithm that uses a novel stripped dependency tree kernel. We illustrate and evaluate the usefulness of our system on the FEMA National Situation Updates. Daily reports are fetched by FEMARepViz from the FEMA website, segmented into coherent sections and each section is classified into one of several known incident types. We use ConceptVista, Google Maps and Google Earth to visualize the events extracted from the text reports and allow the user to interactively filter the topics, locations, and time-periods of interest to create a visual analytics toolkit that is useful for rapid analysis of events reported in a large set of text documents.</p>
+			</abstract>
+		</profileDesc>
+	</teiHeader>
+	<text xml:lang="en">
+		<body>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1.1">FEMA National Situation Reports</head><p>The FEMA National Situation Updates contain information from a variety of sources including federal agencies, state and local government , and the news media. The reports are designed to provide in formation useful for emergency management planning and operational activities. Situation reports generally cover weather reports , earthquake activities, wildfire, and other incidents around the United States. The reports include location names indicating where the incidents happened. Sometimes persons or organizations involved in the incidents are also included in the reports. The richness of geographical information makes the FEMA National Situation Updates an excellent dataset for geo-temporal information analysis. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1.2">Our Contributions</head><p>The key contributions of this paper are: 1. We design an information extraction system to automatically process text documents and create concept maps and geotemporal visualization. We demonstrate the usefulness of our system with the FEMA National Situation Updates. 2. We present a novel stripped dependency tree kernel for entity relation extraction. 3. We present a heuristic algorithm for location name disambiguation . We use simple rules and propose a clustering algorithm to determine the coordinates of locations. </p><p>The rest of the paper is organized as follows. The overview of system architecture is described in section 3 and technical details are presented in section 4. In section 2 we discuss related work. Finally we discuss future work in section 5 and conclude in section 6. 2 RELATED WORK RSOE HAVARIA AlertMap<ref type="bibr" coords="2,151.53,244.51,11.98,10.94" target="#b3">[4] </ref>is a world-wide disaster information system. The system reports real-time event updates for a variety of incidents such as earthquake, active volcano, and tropical storms. However, unlike our system, RSOE HAVARIA AlertMap collects structured data from different data sources. Every event has been classified by its data source (such as European flu data from EISS and Volcano information from SWVRC) and come with detailed information such as timestamp and location coordinates. Although our system is focused on processing unstructured data, in the future , it can be enhanced to utilize information from structured data sources for, say identifying event co-reference. HEALTHmap<ref type="bibr" coords="2,109.12,354.37,14.91,10.94" target="#b1">[2] </ref> is a global disease information system that collects disparate data sources and provides a visualization of the current state of infectious diseases and their effect on human and animal health. The system gathers unstructured text from Google News, ProMED-maill, and alerts from the World Health Organi- zation2 and EuroSurveillance3. HEALTHmap processes text and extracts disease names and the location names appearing in the text. Locations are limited to countries and some major cities in certain countries. HEALTHmap is a customized system for a specialized domain of events, while our system is designed to process a broad range of events. Zelenko, et al., <ref type="bibr" coords="2,124.99,464.23,13.26,10.94" target="#b17">[18] </ref>proposed using tree kernels over shallow parsing trees to extract person-affiliation and organization-location relations. They created data samples by performing shallow parsing over sentences. Compared with deep parsing techniques, the results from shallow parsing are more reliable <ref type="bibr" coords="2,228.91,504.05,12.57,11.05" target="#b18">[19]</ref>. The kernels then compare similarity between parse trees by recursively matching nodes between two parse trees starting from the root nodes. In their experiments, kernel-based approaches have better performance than feature-based approaches with several different learning algorithms. Culotta and Sorensen <ref type="bibr" coords="2,145.99,564.11,13.32,11.05" target="#b10">[11] </ref> defined a slightly more general version of tree kernels than that proposed by Zelenko, et al., <ref type="bibr" coords="2,261.79,574.05,13.32,11.15" target="#b17">[18] </ref>with a richer sentence representation. Their kernels are based on dependency trees instead of syntactic parse trees. Dependency trees include more information by considering syntactic relations between words. The experimental results show the dependency tree kernels have good precision but low recall on the ACE 2004 corpus. They combined a bag-of-words kernel into the dependency tree kernel to boost the performance. Harabagiu, et al., <ref type="bibr" coords="2,226.03,643.87,13.32,11.26" target="#b12">[13] </ref> combined dependency trees with shallow semantic parsing and reported average Fl-score of 78.41% on ACE 2004 corpus<ref type="bibr" coords="2,226.14,663.07,14.55,12.20" target="#b16">[17]</ref>. Greenwood and Stevenson <ref type="bibr" coords="2,110.89,673.75,13.32,11.26" target="#b11">[12] </ref><ref type="figure" coords="3,233.04,237.37,27.51,12.10">Figure 1</ref>: Overviewx and the user's activities can be logged for future improvement of the extraction from text. To provide the functionality of the three modules indicated above our system utilizes three main components: FactXtractor GeoTagger, and FEMARepViz. Every component is designed as a standalone web service to ensure system flexibility and interoper- ability. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.1">Information Extraction</head><p>FactXtractor is an information extraction web service for Named Entity Recognition (NER) and Entity Relation Extraction (RE). FactXtractor processes text documents using an open source text processing platform (GATE<ref type="bibr" coords="3,149.12,391.23,12.72,11.36">[l]</ref>) and identifies entity relations using Stripped Dependency Tree kernels. <ref type="figure" coords="3,183.24,401.57,29.52,10.94">Figure 2</ref>shows the major steps of the processing flow. The input of FactXtractor is a document or a set of documents in plain text format. First, the text is processed by a shallow parser to get parts of speech (PoS) tags. In addition it identifies other linguistics features such as noun chunks and verb groups. In the second step, we use the Named Entity Tagger provided by GATE to extract named entities. Next, a deep parser processes the text to construct dependency trees. Syntactic relationships (subject-verb-object) can be easily extracted using dependency trees. FactXtractor extracts relationships using the Stripped Dependency Tree Kernels. The output of FactXtractor is a graph of the extracted entities and their relationships formatted in OWL <ref type="bibr" coords="3,284.28,511.37,8.88,10.94" target="#b6">[7] </ref>(see <ref type="figure" coords="3,71.52,521.17,29.50,11.15" target="#fig_5">Figure 7</ref> ). This extracted graph can be visualized with Con- ceptVista4. We will discuss the methods used in FactXtractor in section 4. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.2">Geographical Name Disambiguation</head><p>GeoTagger <ref type="figure" coords="3,392.40,532.33,29.40,11.15">Figure 3</ref>illustrates the information processing flow and connections between the web services. <ref type="bibr" coords="3,416.48,711.63,16.18,11.68" target="#b9">[10] </ref>(SVM) and Perceptron<ref type="bibr" coords="3,515.22,711.79,10.80,11.47" target="#b5">[6]</ref><ref type="bibr" coords="4,159.48,458.37,12.53,11.68" target="#b10">[11]</ref>. A node in a dependency tree is the corresponding word or words in the original sentence. The dependence between words could be verb-subject, verb-object, verbadjective , etc. First we process each sentence by NLP tools to obtain the dependency information, named entities and word features such as PoS tags. We then generate a dependency tree for every pair of named entities in a sentence. A similarity score between two trees can be computed recursively from the roots of the trees (see <ref type="bibr" coords="4,71.34,537.97,13.44,11.78" target="#b10">[11] </ref>for details). One important observation of dependency trees is that if a node does not contain a descendant with a relation argument in its subtree , the node usually will not be involved in the relationship between entities. For example, in <ref type="figure" coords="4,173.64,580.19,29.70,11.26" target="#fig_2">Figure 5</ref>, removing the node "a" from both trees will not change the fact that the two trees are similar to each other. Based on this observation, we define the concept of stripped dependency tree (SDT) as follows: an SDT is a subtree of a dependency tree. Every node in an SDT has at least one descendant node that is a relation argument of a relation. We only consider binary relations in this paper. Hence, each relation has two relation arguments . For example, in a relation (Pittsburgh, located in, Pennsylvania ), Pittsburgh and Pennsylvania are the relation arguments. Nodes are removed if they do not have a descendant with relation argument. Stripping a dependency tree can be done in 0(n) with a depth first search (DFS), where n is the number of nodes in the dependency tree. Because we have to perform a DFS to find the imum subtree that contains the specified entities, adding the node elimination will not increase the computational complexity. Note that there will be no non-matching nodes in the SDT. Hence, there is no difference between the contiguous tree kernel and the sparse tree kernel for SDT. The advantages of SDTs are as follows: </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4">METHODS</head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.1">Named Entity Recognition</head><p> 1. The SDT is computationally efficient. We can use the continuous tree kernel algorithm to compute the result. An SDT usually has fewer nodes than the original dependency tree.  Some important information may be discarded when a dependency tree is converted to an SDT. For example, a sentence "John likes Mary." should not be matched with "John doesn't like Mary.". To handle this, and to improve the performance of the algorithm, we have made some enhancements; we describe them below. We use MINIPAR to parse each sentence; we then generate a dependency tree for the sentence using output of MINIPAR. MINI- PAR can achieve about 88% in precision and 80% in recall for determining dependency relationships7. By linking each word with its head word of the MINIPAR output, dependency trees can be created for all the sentences. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Relations </head><p>Example loc, locatedin, loc (Seattle, locatedin, Washington) per, work for, org (Steve Jobs, work for, Apple) org, orgBasedin, loc (Microsoft, orgBased in, Redmond) per, live in, loc (Bush, live in, D.C.) per, kill, per (Oswald, kill, JFK) </p><p>For each node, we assign a set of features generated by GATE. We used the features used by Culotta and Sorensen <ref type="bibr" coords="5,247.56,595.73,12.62,10.94" target="#b10">[11]</ref> . To improve the performance, we added some additional features. They are orthography, word root, verb voice, verb negation, and synonyms obtained from WordNet. <ref type="figure" coords="5,175.44,625.49,26.52,10.94" target="#tab_3">Table 3</ref>lists all the features that we used in our experiments. Note that we represent WordNet hypemym and synonym set by their set-id. WordNet will give a list of hypernym sets ordered by estimated frequency and likewise for the synonym sets. We use both hypernym and synonym sets to capture the semantics of words. We have implemented the tree kernel algorithms in Java and used it in an SVM. We augment the LibSVM<ref type="bibr" coords="5,196.04,695.19,13.72,11.05" target="#b8">[9] </ref><ref type="figure" coords="5,367.74,600.05,26.34,10.94" target="#tab_2">Table 2</ref>shows examples for each relation. Since our extractor already captured the Subject-Verb-Object structure using dependency trees, we only trained the SVM for the first four rela- tions. We compared the tree-kernels results with the best results published in <ref type="bibr" coords="5,351.84,650.67,13.32,11.05" target="#b14">[15] </ref>obtained using a linear programming algorithm. The F1 is computed by considering both precision and recall. Precision is the ratio of the number of correctly predicted positive answers to the number of total predicted positive answers. Recall is the ratio of the number of correctly predicted positive answers to the number 8available at ttp:H1l2r.cs.uiuc.edu/-cogcomp/Data/ER/conllO4.corp <ref type="figure" coords="6,64.08,452.45,27.00,10.94" target="#tab_4">Table 4</ref>shows the performance comparison between F1 scores for both LP and SVM with tree kernels using 5-fold crossvalidation . The results indicate that tree kernel approaches outperform the linear programming approach for all relations tagged in the testing corpus. The tree kernel with SDT further improved the original dependency tree kernel described in <ref type="bibr" coords="6,229.68,501.79,13.06,11.78" target="#b0">[ 1]</ref>. As shown in 4, combining contiguous tree kernel with SDT did not improve the precision very much. The recall of the tree kernel with SDT is 3% to 8% better than the original dependency tree kernel. By reducing noise introduced by unnecessary nodes in dependency trees, the tree kernel performed better prediction for identifying relations between entities. We also experimented with different values for the decay factor A. Our observations are in line with those observed by Culotta and Sorensen <ref type="bibr" coords="6,145.26,581.53,12.58,11.78" target="#b10">[11]</ref>. The performance did not vary much with different A values. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.3">Geo-Coding</head><p> Grounding a location name with a correct coordinate is challenging . Essentially, we want to disambiguate places with the same name such as "Springfield" to the unambiguous "Springfield, IL" and "Springfield, PA". If additional information is not available, the geo-coding for "Springfield" becomes arbitrary. In our system, we have implemented a dedicated component called GeoTagger that is used for geo-coding tasks. GeoTagger takes a short text as input then determines a geographical scope for the text. The geographical scope of a text segment is determined based on the locations with higher certainty. We define geographical scope in four levels: World, Continent, Country , and Province. For each text segment, the largest geographical scope will be used to select candidate coordinates. For example, if "United States", "Pennsylvania" and "Georgia" are extracted from a text segment, then the geographical scope is determined at the "Country" level. Determining the geographical scope for a text can eliminate unlikely candidate locations. For example, if the highest geographical scope is "Country" and two countries, the "United States" and "Germany" have been extracted from the text, then only locations within these two countries will be considered in the disambiguation algorithm. Even within a geographical scope, each location name could have several candidate locations. We perform geo-spatial disambiguation based on the following intuition: Location names that occur close together in the same document segment refer to places that are geographically close. For each location name, GeoTagger obtains the latitude-longitude of all possible places with the same location name, provided the place is within the geographical scope. GeoTagger then clusters locations such that each cluster contains only one occurrence of a location with a particular location name. That is, two Springfields cannot belong to one cluster, because the objective of clustering is to separate the possible locations and choose the location that is closest to the other (possibly non-ambiguous) location names. The clustering algorithm works as follows. For each location name n in a set of location names N, we construct a list of latitudelongitudes of places with the name n. GeoTagger uses the k-means clustering algorithm with a parameter k to control the maximum number of clusters. The distance between two points is computed using the Euclidean distance between their coordinates. The result of the k-means algorithm is a one-to-one mapping between location names and their coordinates. The algorithm is listed in Algorithm 1. GeoTagger increments the value of k starting from k 2 until clusters are obtained that cover all location names in the set N such that no cluster contains two locations with the same name.  Despite the simplicity of our geographical names disambiguation algorithm, the algorithm works reasonably well on the situation reports. However, geographical names that refer to large areas such as "Great Plains" or " The Mississippi River" may create difficulty since we only consider point-to-point distances. Extension of GeoTagger to handle non-point locations is left as future work. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.4">Document Segmentation and Topic Classification</head><p>We use the n-gram language model described in <ref type="bibr" coords="7,228.24,401.79,13.32,11.05" target="#b13">[14] </ref> for topic classification . The classification model estimates the maximum likelihood for a sequence of words by computing conditional probability of previous n -1 words. A category then can be decided by picking c* C C = tcl .ci .. , CC } that has the largest posterior probability given the text with the following equation. where D is the text segment. We use the DynamicLMClassifier implementation in LingPipe<ref type="bibr" coords="7,153.92,502.29,11.15,11.05" target="#b2">[3]</ref>. Text segments will be classified into one of nine categories that commonly appear in situation reports . The categories include disease, noticeable, snow, wildfire, earthquake, rain, thunderstorm, winter storm, and others. The noticeable category includes some uncommon incidents deserving of notice such as tornadoes, power plane exploding, and chemical leakage. 20 text segments are manually selected in each category as training corpus. Our preliminary evaluation indicates the topic classification model could achieve 93% accuracy. For text documents where the topics are not known or manually labeled training examples are not available, a clustering based topic detection <ref type="bibr" coords="7,91.56,611.85,8.76,11.36" target="#b4">[5] </ref>and text segmentation algorithm can be employed <ref type="bibr" coords="7,54.66,621.27,12.57,11.99" target="#b15">[16]</ref>. </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.5">Geo-temporal Visualization</head><p> We provide the following visualization capabilities with FE- MARepViz. First, the extracted graph between named entities that is generated as an OWL <ref type="bibr" coords="7,113.40,682.23,8.88,11.05" target="#b6">[7] </ref>file can be displayed with ConceptVista (<ref type="figure" coords="7,271.77,682.07,22.11,11.26;7,54.06,692.07,2.98,11.05" target="#fig_5">Figure  7</ref> ). In the named entity graph, entities are color-coded for their entity type. Links between entities indicate relations among them. The ConceptVista visualization is useful for users to grasp the key concepts (people/organization/location) within the reports without reading them. Second, FEMARepViz visualizes the situation reports using Google Earth. From each report, events are detected using the segmentation algorithm mentioned above and geo-coded. Each event is represented using an icon that shows the type of event that occurred (using one icon for each of the known categories listed above). Geocoded incidents will be generated in Google Earth KML format and upload to Google Earth by a Network Link. If a particular event occurred in multiple places, the icon for that event is shown at all the locations on Google Earth. By using a right-click of the mouse, an user can see a summary of the event associated with an icon on a translucent pane that is hidden once the next icon is clicked. Each situation report has a date associated with it. FEMARepViz extracts the first date entity in each report and takes it to be the date the report was published. A timestamp is added to each incident to indicate the temporal relationship between incidents. Our user interface has a time-slide wedge using which an user can change the timeline and examine the incidents that happened during the time period around the world (<ref type="figure" coords="7,428.85,578.53,27.87,11.15" target="#fig_7">Figure 8</ref>). Third, Google Earth is used to display the extracted information similarly to Google Map. However, in this version, the user can use a frame at the left-hand side to select topics, people, location and time that is of interest. This allows the user to filter out the entire set of events and display only a set of events that are of interest to the user. Moreover, Google Earth allows users to play the dated events as an animation. The feature is useful for visualizing a sequence of events such as spreading of a wildfire or movement of a hurricane over different locations. casting modules are under development. Periodic Incidents Forecasting: Periodic incidents can be predicted with time series analysis such as moving average or exponential smoothing. Incidents periodically appear in situation reports such as weather conditions are usually with seasonal factors. Hence, seasonal adjustment is necessary for forecasting. Using time series analysis we can predict the likelihood for periodic incidents in a region. Correlated Incidents Forecasting: Some incidents may occur conditionally after other incidents. For example, a flood may happen in some region after heavy rain. Tornadoes may be caused by unusual heat or thunderstorms. Such correlation can be found in historical reports and used to forecast future incidents. Although our relation extraction and geographical names disambiguation algorithms work reasonably well on the testing corpus and the situation reports, we will conduct more experiments to justify the significance of the performance improvement. Moreover, we will add more data sources with varying reliability and types of events including ProMED Mail, Global Disaster Alert and Coordination System, news media, and Internet blogs. 6 CONCLUSION We present an architecture and an implementation of a system that can be used to automatically extract information from vast amounts of textual data and present the extracted information visually to end-users. We use FEMA National Situation Updates as our test bed to demonstrate the usefulness of our system. Our system, FE- MARepViz utilizes an entity-relationship extractor, FactXtractor, to extract named entities and links entities with syntactic and semantic relations. Named entity graphs can be created to visualize entity relations. Furthermore, we use GeoTagger to resolve geographical ambiguity and create geo-temporal visualizations with FEMARepViz and Google Earth. </p><p>Since there is no computational approach that can achieve human-level accuracy for complex information extraction tasks, visualization could be a solution to bridge the gap between fully automated extraction and search systems and manual data processing. We believe that our system can benefit users who have needs to analyze massive geo-temporal information in an efficient manner. We conjecture that our system architecture can form the basis for future visual analytics systems over text data, especially for information with important geo-spatial and temporal attributes. Homeland Security Program, under the auspices of the Northeast Regional Visualization and Analytics Center (NEVAC). NVAC is operated by the Pacific Northwest National Laboratory (PNNL), a U.S. Department of Energy Office of Science laboratory. </p></div><figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_1" coords="4,232.80,334.27,146.94,10.20"><head></head><figDesc>Figure 3: Information processing workflow </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_2" coords="4,318.72,561.85,239.04,10.64;4,318.36,571.25,148.08,10.94"><head>Figure 5: </head><figDesc>Figure 5: Dependency trees for "John bought a house near Seattle" and "Mary quickly found a car in Chicago". </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_3" coords="5,151.20,318.05,309.60,10.31"><head>2. Figure 4: </head><figDesc>Figure 4: Processed FEMA National Situation Updates from Feb 3, 2007 to Feb 6, 2007. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_4" coords="6,54.72,357.61,238.80,10.52;6,54.36,367.19,64.92,10.63"><head>Figure 6: </head><figDesc>Figure 6: A fragment of the FEMA National Situation Updates with entities highlighted </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_5" coords="7,102.84,357.13,406.68,10.52"><head>Figure 7: </head><figDesc>Figure 7: The Concept map generated from the segment of the FEMA National Situation Updates shown in Figure 6 </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_6" coords="7,132.42,471.62,3.60,8.31;7,151.56,468.08,63.06,15.78;7,165.30,477.25,11.94,9.26"><head></head><figDesc>c argmax{Pr(cjD)} ceC </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_7" coords="8,54.66,214.93,238.86,10.52;8,54.30,224.53,121.92,10.52"><head>Figure 8: </head><figDesc> Figure 8: Geo-temporal visualization with Google Earth from February 4th 2007 to February 6th 2007. </figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_1" validated="false" coords="3,54.12,76.48,503.76,647.68"><figDesc coords="3,97.44,573.35,196.08,11.26;3,54.18,583.21,239.70,11.24;3,54.18,593.03,239.40,12.04;3,54.36,602.79,236.82,12.46;3,54.12,613.29,239.46,11.36;3,54.42,623.49,22.62,10.73;3,81.72,619.39,27.96,16.41;3,113.28,623.25,180.72,11.91;3,54.18,633.35,239.58,11.26;3,54.12,643.21,239.64,11.44;3,54.12,652.89,239.16,12.31;3,54.12,663.21,239.88,11.36;3,54.18,673.17,239.52,11.81;3,64.92,690.42,186.42,15.89">is a geocoding Web service. GeoTagger maps a location name that appears in text to its correct co-ordinates on a map GeoTagger uses the U S Geological Survey (USGS) Geographic Names Information System (GNIS)5 for U S locations National Geospatial-Intelligence Agency (NGA) GEOnet Names Server (GNS)T for locations outside U.S., and Google Map for global locations . We use Google Map as a secondary reference because GNIS and GEOnet contain many locations which are only used in local For example State College MS is listed in GNIS but is not listed in Google Map. If a location is listed in GNIS or GEOnet but not in Google Map, we do not consider it as a candidate 4available at httt Hwww geovista psu.edo/Con eptVISTA</figDesc><table coords="3,65.04,76.48,492.84,647.68">5 http-/Hgeonames.usgs.gov/pls/gnispublic/ 
+
+6http:/Hearth-info.nga.mil/gns/html/index.html 
+
+X 
+Users 
+
+ents -. 
+
+FBrowsi ngX 
+
+. 4 
+
+?edback. 
+
+z of system architecture 
+
+Figure 2: Text Processing Flow 
+
+for assigning location names. We will discuss the details in section 
+
+4. 
+FEMARepViz is a visualization generation Web service for the 
+FEMA Situation Reports. FEMARepViz processes situation re-
+ports using FactXtractor and GeoTagger. Processed reports are 
+stored in a repository and can be retrieved by a Web interface. The 
+output is a KML document that provides dynamic updates and inter-
+active visualization. </table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_2" validated="false" coords="3,318.00,589.25,239.88,134.06"><figDesc coords="3,318.00,589.25,239.58,11.89;3,318.24,599.41,239.34,11.75;3,318.12,609.61,239.52,11.15;3,318.00,619.15,239.88,12.10;3,318.12,628.84,239.40,13.15;3,318.36,639.25,239.40,11.48;3,318.12,649.21,216.00,11.22;3,318.24,667.25,129.60,12.22;3,318.00,681.75,239.64,11.68;3,318.24,691.60,239.52,12.83;3,318.36,701.67,239.52,11.68;3,318.36,711.63,98.12,11.68">We use GATE[ 1] to extract named entities GATE is distributed with an Information Extraction component set called ANNIE AN- NIE contains a rule-based engine. ANNIE extracts nauned entities using gazetteers and language features like Part of Speech etc The named entities we extracted include person, location, organization, and time. Table 1 shows the performance evaluation of the GATE named entity extraction module on the CoNLL 2004 corpus. 4.2 Entity Relation Extraction We use an approach applying kernel methods on dependency trees for relation extraction. Kernel methods are widely used in a variety of machine learning problems with many popular algorithms such as Support Vector Machines</figDesc><table></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_3" validated="false" coords="5,85.32,501.67,176.64,10.20"><figDesc coords="5,85.32,501.67,176.64,10.20">Table 2: Annotated relations in the training corpus.</figDesc><table></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_4" validated="false" coords="5,64.86,355.65,493.14,367.56"><figDesc coords="5,213.60,695.19,80.28,11.05;5,64.86,710.91,152.76,12.31;5,348.60,355.65,178.20,10.10">implementation to use 7http://www.cs.ualberta.ca/ lindek/minipar.htm Table 3: List of feature assigned to each tree node.</figDesc><table coords="5,318.12,365.21,239.88,245.78">Feature 
+Example 
+word 
+John 
+POS 
+NN 
+General POS 
+N 
+Entity type 
+Person 
+Relation argument 
+
+arg, 
+
+WordNet hypernym 
+4274300 
+WordNet synonym 
+4274300 
+Orthography 
+upperlnitial 
+Chunk tag 
+NP 
+Word root 
+john 
+Verb voice 
+active 
+Verb negation 
+yes 
+
+the tree kernels. We use the CoNLL 04 corpus8 to evaluate the 
+
+performance of tree kernels. The corpus consists of articles from 
+several different sources such as WSJ and AP. There are 5925 sen-
+tences in the corpus. Among those sentences, 5336 named entities 
+and 2040 binary relations are manually annotated. The annotated 
+named entities include 1685 persons, 1968 locations, 978 organi-
+zations and 705 others. The relations between those named entities 
+include 406 locatedin, 394 work for, 451 orgBasedin, 521 livein, 
+and 268 kill. </table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_6" validated="false" coords="7,54.06,61.97,503.58,80.26"><figDesc coords="7,54.06,61.97,503.58,10.31;7,54.36,71.13,129.84,10.73">Table 4: Comparison of relations classification results demonstrating improvement of our tree kernel + SDT method over the existing LP method[1 5] for the CoNLL 04 corpus.</figDesc><table coords="7,154.44,80.69,301.08,61.55">Relations 
+LP 
+tree kernel 
+tree kernel + SDT 
+Prec. Rec. 
+F1 
+Prec. Rec. 
+F1 
+Prec. Rec. 
+F1 
+located in 
+54.5 64.0 58.9 78.6 58.4 67.0 79.7 61.5 69.4 
+work for 
+69.2 50.5 58.4 77.7 61.2 68.5 76.3 65.1 70.2 
+orgBased in 76.7 50.3 60.7 67.2 55.6 60.8 71.3 60.1 65.2 
+live in 
+60.7 57.0 58.8 74.0 57.1 64.4 79.6 58.9 67.7 
+
+</table></figure>
+
+			<note place="foot" n="1"> http://www.promedmail.org 2http://www.who.int/csr/alertresponse/en/ 3http://www.eurosurveillance.org/ by using linked chain patterns and structural similarity measurement . Their approach can improve the performance over iterations; nonetheless the maximum F-score is only 0.329 due to low recall. Roth and Yih [15] described a linear programming (LP) framework to detect named entities and entity relations. Unlike most NLP systems with pipelined architectures, their approach considers outcomes of different but mutually dependent classifiers simultaneously . The learning algorithm is a variation of the Winnow algorithm . They annotated the TREC data set with named entities and relations and then used the LP framework on it. Their results indicate that by optimizing the global interests instead of concentrating on task-specific constraints and accumulating errors within pipeline processes, the performance improved significantly. Bunescu and Mooney [8] proposed a shortest path dependency kernel which outperformed tree kernels on the ACE 2004 corpus. Their approach treats the directed dependency graph as an undirected graph and finds the shortest path between two entities. Then they compare the shortest path example with a Cartesian product kernel to compute the number of common features on the path. The key idea of the shortest dependency path is to consider only the information relevant to entity relations. The advantage of dependency path kernels is that they do not consider the depth of entity nodes, hence they yield better recall. However, their approach only considers the predicate-argument structures between words. Entities in sentences such as &quot;While in Paris, John never visited the Louvre.&quot; may never be linked. Our novel approach combines the advantages of dependency tree kernels and that of an information elimination technique similar to that proposed by Bunescu and Mooney [8]. We propose to use stripped dependency trees. We show by empirical evaluation on the same data set used in [ 15] that our approach has better precision and improved recall than the dependency tree kernel proposed by Culotta [11]. 3 SYSTEM ARCHITECTURE As shown in Figure 1, our system has the following major components:(a )Text Extraction and Processing Module, (b) Disambiguation Module, and (c) Visualization and User Interaction Module. The text extraction and processing module processes a set of documents and extracts named entities (like person, place, and organization names). It also segments a text into different contiguous segments having the same topic. The extraction module also detect events. For the current application, segmenting the document itself based on topics resulted in segregating the different events and we did not have to perform complex temporally-based event detection. The disambiguation module is responsible for disambiguating named entities. For person names, the role of the disambiguation module is to establish which names refer to the same person, e.g., &quot;Mohandas Gandhi&quot; and &quot;M.K. Gandhi&quot;, or if the same name actually refers to different people, e.g., two occurrences of &quot;James Smith&quot; may refer to different people in two different contexts. This module is also responsible for coreference resolution. The disambiguation module processes geographical named entities and using the information available about the contexts in which they occur, disambiguates the geographical named entity to an exact location. For example, it would generate an exact latitude and longitude for a reference to the town &quot;Springfield&quot; using the context information to derive which of the several &quot;Springfield&quot;&apos;s in the U.S.A. (or beyond ) it is. The visualization module presents the information extracted from the text on a map for a particular time-point (or time-period). The user can interact with this module to filter the data being displayed based on topics, time periods, geographical locations, or people of interest. The user can provide feedback to correct incorrect items shown on the map, e.g., to move a displayed event from one location to another. The feedback provided by the user</note>
+
+			<note place="foot" n="5"> FUTURE WORK In the future, we plan to build statistical analysis modules on top of our information extraction system. Currently, two types of</note>
+		</body>
+		<back>
+
+			<div type="acknowledgement">
+			</div>
+
+			<div type="references">
+
+				<listBibl>
+
+<biblStruct coords="8,336.48,117.13,154.98,9.89;8,336.36,126.63,52.20,9.78"  xml:id="b0">
+	<analytic>
+		<title level="a" type="main">General architecture for text engineering</title>
+	</analytic>
+	<monogr>
+		<title level="j">GATE</title>
+		<imprint/>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.36,136.09,136.26,9.89"  xml:id="b1">
+	<monogr>
+		<title/>
+		<author>
+			<persName>
+				<surname>Healthmap</surname>
+			</persName>
+		</author>
+		<imprint/>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.24,145.33,138.41,10.20"  xml:id="b2">
+	<monogr>
+		<title/>
+		<author>
+			<persName>
+				<surname>Lingpipe</surname>
+			</persName>
+		</author>
+		<imprint/>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.36,155.17,91.08,9.89;8,336.36,163.97,161.77,10.63"  xml:id="b3">
+	<monogr>
+		<title/>
+		<author>
+			<persName>
+				<forename type="first">Rsoe</forename>
+				<surname>Havaria Alertmap</surname>
+			</persName>
+		</author>
+		<imprint/>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.72,173.89,192.72,9.92"  xml:id="b4">
+	<monogr>
+		<title level="m" type="main">On-line new event detection and tracking</title>
+		<imprint>
+			<date type="published" when="1998" />
+			<publisher>ACM Press</publisher>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.36,183.29,221.40,10.09;8,336.48,192.85,221.22,10.01;8,336.36,202.33,181.68,9.89"  xml:id="b5">
+	<monogr>
+		<title level="m" type="main">Theoretical foundations of the potential function method in pattern recognition learning . Automation and Remote Control</title>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Aizerman</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">E</forename>
+				<forename type="middle">M</forename>
+				<surname>Braverman</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<forename type="middle">I</forename>
+				<surname>Rozoner</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="1964" />
+			<biblScope unit="page" from="821" to="837" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.66,211.65,220.98,10.22;8,336.36,221.29,221.40,9.89;8,336.24,230.77,108.60,9.89"  xml:id="b6">
+	<monogr>
+		<title level="m" type="main">Owl web ontology language reference</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Bechhofer</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<surname>Van Harmelen</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Hendler</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">I</forename>
+				<surname>Horrocks</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Mcguinness</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Patel-Schneider</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<surname>Stein</surname>
+			</persName>
+		</author>
+		<imprint>
+			<biblScope unit="page">3</biblScope>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.36,240.21,221.52,10.10;8,336.48,249.73,221.22,9.89;8,336.36,259.09,221.76,10.09;8,336.12,268.57,169.92,9.92"  xml:id="b7">
+	<analytic>
+		<title level="a" type="main">A shortest path dependency kernel for relation extraction</title>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<forename type="middle">C</forename>
+				<surname>Bunescu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<forename type="middle">J</forename>
+				<surname>Mooney</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the Human Language Technology Conference and Conference on Empirical Methods in Natural Language Processing</title>
+		<meeting>the Human Language Technology Conference and Conference on Empirical Methods in Natural Language Processing</meeting>
+		<imprint>
+			<date type="published" when="2005-10" />
+			<biblScope unit="page" from="724" to="731" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.54,277.99,221.58,10.20;8,336.36,287.47,121.44,10.20;8,336.36,296.99,129.00,9.99"  xml:id="b8">
+	<monogr>
+		<title level="m" type="main">LIBSVM: a library for support vector machines</title>
+		<author>
+			<persName>
+				<forename type="first">C.-C</forename>
+				<surname>Chang</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C.-J</forename>
+				<surname>Lin</surname>
+			</persName>
+		</author>
+		<imprint>
+			<date type="published" when="2001" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.48,306.17,220.98,10.31;8,336.48,315.97,68.46,9.92"  xml:id="b9">
+	<analytic>
+		<title level="a" type="main">Support-vector networks</title>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Cortes</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">V</forename>
+				<surname>Vapnik</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Machine Learning</title>
+		<imprint>
+			<date type="published" when="1995" />
+			<biblScope unit="page" from="273" to="297" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.36,325.31,221.34,9.99;8,336.36,334.97,73.44,9.88"  xml:id="b10">
+	<analytic>
+		<title level="a" type="main">Dependency tree kernels for relation extraction</title>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Culotta</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Sorensen</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">ACL</title>
+		<imprint>
+			<date type="published" when="2004" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.36,344.27,221.34,9.99;8,336.36,353.69,221.34,10.31;8,336.36,363.19,221.16,10.20;8,336.60,372.67,221.04,10.20;8,336.36,382.37,12.24,9.68"  xml:id="b11">
+	<analytic>
+		<title level="a" type="main">Improving semi-supervised acquisition of relation extraction patterns Association for Computational Linguis- tics</title>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<forename type="middle">A</forename>
+				<surname>Greenwood</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">M</forename>
+				<surname>Stevenson</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the Workshop on Information Extraction Beyond The Document</title>
+		<meeting>the Workshop on Information Extraction Beyond The Document<address><addrLine>Sydney, Australia</addrLine></address></meeting>
+		<imprint>
+			<date type="published" when="2006-07" />
+			<biblScope unit="page" from="29" to="35" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.66,391.65,220.98,10.10;8,336.48,400.99,221.52,10.20;8,336.24,410.45,221.82,10.31;8,337.08,419.97,121.20,10.10"  xml:id="b12">
+	<analytic>
+		<title level="a" type="main">Shallow semantics for relation extraction</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<forename type="middle">M</forename>
+				<surname>Harabagiu</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<forename type="middle">A</forename>
+				<surname>Bejan</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Morarescu</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the Nineteenth International Joint Conference on Artificial Intelligence (IJCAI &apos;05)</title>
+		<meeting>the Nineteenth International Joint Conference on Artificial Intelligence (IJCAI &apos;05)<address><addrLine>Edinburgh, Scotland, UK</addrLine></address></meeting>
+		<imprint>
+			<date type="published" when="2005" />
+			<biblScope unit="page" from="1061" to="1066" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.24,429.23,221.46,10.32;8,336.48,438.97,220.92,10.18;8,336.24,448.41,221.88,10.10;8,336.48,458.01,221.10,10.10;8,336.72,466.89,221.16,10.46;8,336.48,476.85,97.32,10.10"  xml:id="b13">
+	<analytic>
+		<title level="a" type="main">Language and task independent text categorization with simple language models</title>
+		<author>
+			<persName>
+				<forename type="first">F</forename>
+				<surname>Peng</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Schuurmans</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Wang</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">NAACL &apos;03: Proceedings of the 2003 Conference of the North American Chapter ofthe Associationfor Computational Linguistics on Human Language Technology</title>
+		<meeting><address><addrLine>Morristown, NJ, USA</addrLine></address></meeting>
+		<imprint>
+			<publisher>Association for Computational Linguistics</publisher>
+			<date type="published" when="2003" />
+			<biblScope unit="page" from="110" to="117" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.36,486.21,221.40,10.10;8,336.36,495.69,221.10,10.10;8,336.48,505.37,17.16,9.68"  xml:id="b14">
+	<analytic>
+		<title level="a" type="main">A linear programming formulation for global inference in natural language tasks</title>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Roth</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">W.-T</forename>
+				<surname>Yih</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of CoNLL</title>
+		<meeting>CoNLL</meeting>
+		<imprint>
+			<date type="published" when="2004" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.36,514.69,221.34,10.01;8,336.36,524.17,221.40,10.18;8,336.48,533.61,221.64,10.10;8,335.88,542.95,221.88,10.20;8,336.60,552.59,211.44,9.99"  xml:id="b15">
+	<analytic>
+		<title level="a" type="main">Topic segmentation with shared topic detection and alignment of multiple documents</title>
+		<author>
+			<persName>
+				<forename type="first">B</forename>
+				<surname>Sun</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">P</forename>
+				<surname>Mitra</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">L</forename>
+				<forename type="middle">C</forename>
+				<surname>Giles</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">J</forename>
+				<surname>Yen</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">H</forename>
+				<surname>Zha</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">SIGIR &apos;07: Proceedings of the 30th annual international ACM SIGIR conference on Research and development in information retrieval</title>
+		<meeting><address><addrLine>New York, NY, USA</addrLine></address></meeting>
+		<imprint>
+			<publisher>ACM Press</publisher>
+			<date type="published" when="2007" />
+			<biblScope unit="page" from="199" to="206" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.36,561.57,221.52,10.50;8,336.84,571.35,103.56,10.41"  xml:id="b16">
+	<analytic>
+		<title/>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<forename type="middle">M</forename>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">multilingual training corpus. Linguistic Data Consortium</title>
+		<meeting><address><addrLine>Philadelphia</addrLine></address></meeting>
+		<imprint>
+			<date type="published" when="2004" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.36,580.93,221.34,10.09;8,336.36,590.43,221.04,10.41;8,336.48,600.17,17.16,9.68"  xml:id="b17">
+	<analytic>
+		<title level="a" type="main">Kernel methods for relation extraction</title>
+		<author>
+			<persName>
+				<forename type="first">D</forename>
+				<surname>Zelenko</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">C</forename>
+				<surname>Aone</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">A</forename>
+				<surname>Richardella</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Journal ofMachine Learning Research</title>
+		<imprint>
+			<biblScope unit="volume">3</biblScope>
+			<biblScope unit="page" from="1083" to="1106" />
+			<date type="published" when="2003" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="8,336.66,609.31,221.10,10.20;8,336.48,618.77,221.76,10.31;8,335.88,628.43,221.76,9.99;8,336.36,637.81,221.52,10.18;8,336.24,647.39,36.72,9.99"  xml:id="b18">
+	<analytic>
+		<title level="a" type="main">Extracting relations with integrated information using kernel methods</title>
+		<author>
+			<persName>
+				<forename type="first">S</forename>
+				<surname>Zhao</surname>
+			</persName>
+		</author>
+		<author>
+			<persName>
+				<forename type="first">R</forename>
+				<surname>Grishman</surname>
+			</persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">ACL &apos;05: Proceedings of the 43rd Annual Meeting on Association for Computational Linguistics</title>
+		<meeting><address><addrLine>Morristown, NJ, USA</addrLine></address></meeting>
+		<imprint>
+			<publisher>Association for Computational Linguistics</publisher>
+			<date type="published" when="2005" />
+			<biblScope unit="page" from="419" to="426" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+				</listBibl>
+			</div>
+		</back>
+	</text>
+</TEI>
