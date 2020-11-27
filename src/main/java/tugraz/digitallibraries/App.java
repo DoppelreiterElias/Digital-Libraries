@@ -1,5 +1,6 @@
 package tugraz.digitallibraries;
 
+import edu.uci.ics.jung.graph.UndirectedSparseMultigraph;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -20,6 +21,7 @@ public class App extends Application {
         scene = new Scene(loadFXML("primary"), 640, 480);
         stage.setScene(scene);
         stage.show();
+
     }
 
     static void setRoot(String fxml) throws IOException {
@@ -32,7 +34,18 @@ public class App extends Application {
     }
 
     public static void main(String[] args) {
+
+        UndirectedSparseMultigraph<Integer, String> g = new UndirectedSparseMultigraph<>();
+
+        g.addVertex(1);
+        g.addVertex(2);
+        g.addEdge("helo", 1,2);
+        System.out.println("starting");
+
+
         launch();
     }
+
+
 
 }

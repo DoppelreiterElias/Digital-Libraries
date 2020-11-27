@@ -1,18 +1,19 @@
-package tugraz.digitallibraries;
+package tugraz.digitallibraries.dataclasses;
 
-public class Autor {
+// Author of a paper
+public class Author {
 
     private String[] forenames;
     private String[] surnames;
 
-    public Autor(String[] forenames, String[] surnames)
+    public Author(String[] forenames, String[] surnames)
     {
         this.forenames = forenames;
         this.surnames = surnames;
     }
 
 
-    public Autor(){}
+    public Author(){}
 
     public String[] getForenames() {
         return forenames;

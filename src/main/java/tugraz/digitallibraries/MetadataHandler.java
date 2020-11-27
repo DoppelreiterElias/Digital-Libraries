@@ -4,6 +4,10 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import tugraz.digitallibraries.dataclasses.Author;
+import tugraz.digitallibraries.dataclasses.MetadataEntry;
+import tugraz.digitallibraries.dataclasses.Reference;
+import tugraz.digitallibraries.graph.GraphCreator;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -11,15 +15,29 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+
+// has all papers here
 public class MetadataHandler {
 
-    private List<MetadataEntry> Metadata;
+    private ArrayList<MetadataEntry> Metadata;
+    private GraphCreator graphCreator;
 
     public MetadataHandler() {
 
         Metadata = new ArrayList<MetadataEntry>();
     }
 
+    public MetadataHandler(ArrayList<String> directorypath) {
+
+        Metadata = new ArrayList<MetadataEntry>();
+        AddMultipleMetadataEntry(directorypath);
+
+
+        // create graph from data
+        graphCreator = new GraphCreator();
+        //graphCreator.createCoAuthorGraph(Metadata);
+        graphCreator.createCitationGraph(Metadata);
+    }
 
     public MetadataEntry AddMetadataEntry(String filepath) {
         return createMetadataEntry(filepath);
@@ -35,6 +53,13 @@ public class MetadataHandler {
             entry = createMetadataEntry(filepath[i]);
         }
         return entry;
+    }
+
+    public void AddMultipleMetadataEntry(ArrayList<String> filepath) {
+
+        for(String s : filepath) {
+            createMetadataEntry(s);
+        }
     }
 
 
@@ -141,7 +166,7 @@ public class MetadataHandler {
             nList = eElement.getElementsByTagName("author");
 
 
-            List<Autor> autors = new ArrayList<Autor>();
+            List<Author> authors = new ArrayList<Author>();
 
             for (int temp = 0; temp < nList.getLength(); temp++) {
                 nNode = nList.item(temp);
@@ -149,7 +174,7 @@ public class MetadataHandler {
                 if (nNode.getNodeType() == Node.ELEMENT_NODE) {
                     eElement = (Element) nNode;
 
-                    Autor autor = new Autor();
+                    Author author = new Author();
 
                     String[] first_name = new String[eElement.getElementsByTagName("forename").getLength()];
                     for (int i = 0; i < eElement.getElementsByTagName("forename").getLength(); i++) {
@@ -177,17 +202,19 @@ public class MetadataHandler {
                     System.out.print("\n");
                     */
 
-                    autor.setForenames(first_name);
-                    autor.setSurnames(last_name);
+                    author.setForenames(first_name);
+                    author.setSurnames(last_name);
 
-                    autors.add(autor);
+                    // TODO: a Query if the author exists in any other Paper, then add this author also for this paper instead of creating a new one
+
+                    authors.add(author);
                 }
             }
 
-            entry.setAutors(autors);
+            entry.setAuthors(authors);
 
         } catch (Exception e) {
-            entry.setAutors(null);
+            entry.setAuthors(null);
         }
     }
 
@@ -295,13 +322,13 @@ public class MetadataHandler {
                 // Authors of Reference
                 NodeList nlAuthor = eElement.getElementsByTagName("author");
 
-                List<Autor> autors = new ArrayList<Autor>();
+                List<Author> authors = new ArrayList<Author>();
 
                 for (int iauthor = 0; iauthor < nlAuthor.getLength(); iauthor++) {
                     Node nAuthor = nlAuthor.item(iauthor);
                     Element eAuthor = (Element) nAuthor;
 
-                    Autor autor = new Autor();
+                    Author author = new Author();
 
                     String[] first_name = new String[eAuthor.getElementsByTagName("forename").getLength()];
                     for (int i = 0; i < eAuthor.getElementsByTagName("forename").getLength(); i++) {
@@ -329,13 +356,13 @@ public class MetadataHandler {
                     System.out.print("\n");
                     */
 
-                    autor.setForenames(first_name);
-                    autor.setSurnames(last_name);
+                    author.setForenames(first_name);
+                    author.setSurnames(last_name);
 
-                    autors.add(autor);
+                    authors.add(author);
                 }
 
-                reference.setAutors(autors);
+                reference.setAutors(authors);
 
                 references.add(reference);
             }
