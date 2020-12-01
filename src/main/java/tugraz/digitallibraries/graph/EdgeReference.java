@@ -7,7 +7,7 @@ import tugraz.digitallibraries.dataclasses.Reference;
 public class EdgeReference {
 
     private Reference reference;
-    Pair<Author, Author> authors; // don't know if really necessary because Edge already has the pair of authors as attribute
+    Pair<Author, Author> authors; // don't know if really necessary, currently null
 
     public EdgeReference(Reference ref) {
         this.reference = ref;

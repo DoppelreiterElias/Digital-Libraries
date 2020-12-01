@@ -5,6 +5,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import tugraz.digitallibraries.dataclasses.Author;
+import tugraz.digitallibraries.dataclasses.AuthorType;
 import tugraz.digitallibraries.dataclasses.MetadataEntry;
 import tugraz.digitallibraries.dataclasses.Reference;
 import tugraz.digitallibraries.graph.GraphCreator;
@@ -13,6 +14,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -20,6 +23,7 @@ import java.util.List;
 public class MetadataHandler {
 
     private ArrayList<MetadataEntry> Metadata;
+    private HashMap<String, Author> authorMap = new HashMap<>();
     private GraphCreator graphCreator;
 
     public MetadataHandler() {
@@ -35,8 +39,9 @@ public class MetadataHandler {
 
         // create graph from data
         graphCreator = new GraphCreator();
-        //graphCreator.createCoAuthorGraph(Metadata);
+        graphCreator.createCoAuthorGraph(Metadata);
         graphCreator.createCitationGraph(Metadata);
+
     }
 
     public MetadataEntry AddMetadataEntry(String filepath) {
@@ -204,10 +209,17 @@ public class MetadataHandler {
 
                     author.setForenames(first_name);
                     author.setSurnames(last_name);
+                    author.setAuthorType(AuthorType.PaperAuthor);
 
-                    // TODO: a Query if the author exists in any other Paper, then add this author also for this paper instead of creating a new one
-
-                    authors.add(author);
+                    // Check if we already have imported the author  - key is "<firstname>,<lastname>"
+                    Author author_found = findExistingAuthor(author);
+                    if(author_found == null) { // not found
+                        addAuthorToAuthorMap(author);
+                        authors.add(author);
+                    }
+                    else {
+                        authors.add(author_found);
+                    }
                 }
             }
 
@@ -216,6 +228,22 @@ public class MetadataHandler {
         } catch (Exception e) {
             entry.setAuthors(null);
         }
+    }
+
+    private void addAuthorToAuthorMap(Author author) {
+
+        if(author == null)
+            return;
+        String key = Arrays.toString(author.getForenames()) + "," + Arrays.toString(author.getSurnames());
+        authorMap.put(key, author);
+    }
+
+    private Author findExistingAuthor(Author author) {
+
+        if(author == null)
+            return null;
+        String key = Arrays.toString(author.getForenames()) + "," + Arrays.toString(author.getSurnames());
+        return authorMap.get(key); // also returns null if not found
     }
 
 
@@ -358,8 +386,17 @@ public class MetadataHandler {
 
                     author.setForenames(first_name);
                     author.setSurnames(last_name);
+                    author.setAuthorType(AuthorType.ReferenceAuthor);
 
-                    authors.add(author);
+                     //Check if we already have imported the author - key is "<firstname>,<lastname>"
+                    Author author_found = findExistingAuthor(author);
+                    if(author_found == null) { // not found
+                        addAuthorToAuthorMap(author);
+                        authors.add(author);
+                    }
+                    else {
+                        authors.add(author_found);
+                    }
                 }
 
                 reference.setAutors(authors);
