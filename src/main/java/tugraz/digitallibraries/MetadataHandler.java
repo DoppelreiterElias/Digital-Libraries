@@ -44,6 +44,10 @@ public class MetadataHandler {
 
     }
 
+    public GraphCreator getGraphCreator() {
+        return graphCreator;
+    }
+
     public MetadataEntry AddMetadataEntry(String filepath) {
         return createMetadataEntry(filepath);
     }

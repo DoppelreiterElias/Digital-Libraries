@@ -15,6 +15,10 @@ public class EdgePaper {
         this.paper = paper;
     }
 
+    public EdgePaper() {
+        this.paper = null;
+    }
+
     // shallow copy because we want that edges refers to the same object
     public EdgePaper(EdgePaper edge, Author a1, Author a2) {
         this.paper = edge.paper;
