@@ -1,7 +1,7 @@
 package tugraz.digitallibraries.graph;
 
-import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
-import edu.uci.ics.jung.graph.UndirectedSparseMultigraph;
+import edu.uci.ics.jung.graph.DirectedSparseGraph;
+import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 import edu.uci.ics.jung.graph.util.EdgeType;
 import tugraz.digitallibraries.dataclasses.Author;
 import tugraz.digitallibraries.dataclasses.MetadataEntry;
@@ -12,43 +12,35 @@ import java.util.List;
 
 public class GraphCreator {
 
-
-    UndirectedSparseMultigraph<Author, EdgePaper> coAuthorGraph;
-    DirectedSparseMultigraph<Author, EdgeReference> citationGraph;
-
-    public GraphCreator() {
-
-        coAuthorGraph = new UndirectedSparseMultigraph<>();
-        citationGraph = new DirectedSparseMultigraph<>();
-    }
+    private ArrayList<MetadataEntry> metadata;
+    UndirectedSparseGraph<Author, EdgeCoAuthorship> coAuthorGraph;
+    DirectedSparseGraph<Author, EdgeCitation> citationGraph;
 
     public GraphCreator(ArrayList<MetadataEntry> list) {
-        coAuthorGraph = new UndirectedSparseMultigraph<>();
-        citationGraph = new DirectedSparseMultigraph<>();
-
-        createCoAuthorGraph(list);
-        createCitationGraph(list);
+        coAuthorGraph = new UndirectedSparseGraph<>();
+        citationGraph = new DirectedSparseGraph<>();
+        this.metadata = list;
     }
 
-    public UndirectedSparseMultigraph<Author, EdgePaper> getCoAuthorGraph() {
+    public UndirectedSparseGraph<Author, EdgeCoAuthorship> getCoAuthorGraph() {
         return coAuthorGraph;
     }
 
-    public void setCoAuthorGraph(UndirectedSparseMultigraph<Author, EdgePaper> co_author_graph) {
+    public void setCoAuthorGraph(UndirectedSparseGraph<Author, EdgeCoAuthorship> co_author_graph) {
         this.coAuthorGraph = co_author_graph;
     }
 
-    public DirectedSparseMultigraph<Author, EdgeReference> getCitationGraph() {
+    public DirectedSparseGraph<Author, EdgeCitation> getCitationGraph() {
         return citationGraph;
     }
 
-    public void setCitationGraph(DirectedSparseMultigraph<Author, EdgeReference> citation_graph) {
+    public void setCitationGraph(DirectedSparseGraph<Author, EdgeCitation> citation_graph) {
         this.citationGraph = citation_graph;
     }
 
-    public void createCoAuthorGraph(ArrayList<MetadataEntry> list) {
+    public void createCoAuthorGraph() {
 
-        for(MetadataEntry paper : list) {
+        for(MetadataEntry paper : metadata) {
 
             // create current authors of the paper as vertices
             List<Author> current_authors = paper.getAuthors();
@@ -59,13 +51,20 @@ public class GraphCreator {
             if(current_authors.size() < 2)
                 continue;
 
-            // create edges between all authors of this paper
-            EdgePaper current_edge = new EdgePaper(paper);
-
+            // create edges between authors. If a edge already exists between 2 authors the paper will be added to the paperList
             for(int i = 0; i < current_authors.size(); i++) {
                 for(int j = i + 1; j < current_authors.size(); j++) {
-                    coAuthorGraph.addEdge(current_edge, current_authors.get(i), current_authors.get(j), EdgeType.UNDIRECTED);
-                    current_edge = new EdgePaper(current_edge);
+                    EdgeCoAuthorship existing_edge = coAuthorGraph.findEdge(current_authors.get(i),current_authors.get(j));
+                    if(existing_edge != null) // edge between authors already exists
+                    {
+                        System.out.println("adding paper to existing edge");
+                        existing_edge.addPaperToEdge(paper);
+                    }
+                    else {
+                        EdgeCoAuthorship current_edge = new EdgeCoAuthorship(paper);
+                        boolean success = coAuthorGraph.addEdge(current_edge, current_authors.get(i), current_authors.get(j), EdgeType.UNDIRECTED);
+                        assert !success;
+                    }
                 }
             }
             System.out.println("finished paper: " + paper.getFile_path());
@@ -75,9 +74,9 @@ public class GraphCreator {
 
 
 
-    public void createCitationGraph(ArrayList<MetadataEntry> list) {
+    public void createCitationGraph() {
 
-        for(MetadataEntry paper : list) {
+        for(MetadataEntry paper : metadata) {
 
             // create vertices - authors
             List<Author> current_authors = paper.getAuthors();
@@ -95,11 +94,18 @@ public class GraphCreator {
                 }
 
                 // create edges from each Paper Author to each Referenced Author
-                EdgeReference current_edge = new EdgeReference(reference);
                 for(Author paper_author : current_authors) {
                     for(Author ref_author : authors_of_referenced_paper) {
-                        citationGraph.addEdge(current_edge, paper_author, ref_author, EdgeType.DIRECTED);
-                        current_edge = new EdgeReference(current_edge);
+                        EdgeCitation existing_edge = citationGraph.findEdge(paper_author, ref_author);
+                        if(existing_edge != null) { // already exists an edge between these two
+                            System.out.println("adding reference allready exists");
+                            existing_edge.addReferenceToEdge(reference);
+                        }
+                        else {
+                            EdgeCitation current_edge = new EdgeCitation(reference);
+                            boolean success = citationGraph.addEdge(current_edge, paper_author, ref_author, EdgeType.DIRECTED);
+                            assert !success;
+                        }
                     }
                 }
             }

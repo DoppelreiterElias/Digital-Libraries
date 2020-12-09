@@ -8,7 +8,6 @@ import tugraz.digitallibraries.dataclasses.Author;
 import tugraz.digitallibraries.dataclasses.AuthorType;
 import tugraz.digitallibraries.dataclasses.MetadataEntry;
 import tugraz.digitallibraries.dataclasses.Reference;
-import tugraz.digitallibraries.graph.GraphCreator;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -24,7 +23,7 @@ public class MetadataHandler {
 
     private ArrayList<MetadataEntry> Metadata;
     private HashMap<String, Author> authorMap = new HashMap<>();
-    private GraphCreator graphCreator;
+
 
     public MetadataHandler() {
 
@@ -36,17 +35,12 @@ public class MetadataHandler {
         Metadata = new ArrayList<MetadataEntry>();
         AddMultipleMetadataEntry(directorypath);
 
-
-        // create graph from data
-        graphCreator = new GraphCreator();
-        graphCreator.createCoAuthorGraph(Metadata);
-        graphCreator.createCitationGraph(Metadata);
-
     }
 
-    public GraphCreator getGraphCreator() {
-        return graphCreator;
+    public ArrayList<MetadataEntry> getMetadata() {
+        return this.Metadata;
     }
+
 
     public MetadataEntry AddMetadataEntry(String filepath) {
         return createMetadataEntry(filepath);
