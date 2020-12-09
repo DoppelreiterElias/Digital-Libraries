@@ -1,4 +1,11 @@
-tugraz/digitallibraries/SecondaryController.class
-module-info.class
-tugraz/digitallibraries/PrimaryController.class
+tugraz/digitallibraries/MainController.class
+tugraz/digitallibraries/jungtest.class
+tugraz/digitallibraries/XMLTestMein.class
 tugraz/digitallibraries/App.class
+tugraz/digitallibraries/Reference.class
+tugraz/digitallibraries/MainController$1.class
+tugraz/digitallibraries/MetadataHandler.class
+tugraz/digitallibraries/MetadataEntry.class
+tugraz/digitallibraries/Autor.class
+tugraz/digitallibraries/SecondaryController.class
+tugraz/digitallibraries/PrimaryController.class
