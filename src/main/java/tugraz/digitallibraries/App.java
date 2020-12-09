@@ -31,7 +31,7 @@ public class App extends Application {
     public void start(Stage stage) throws IOException {
 
 
-        NetworkCreator.createNetwork();
+        NetworkCreator.createNetwork("Document and Metadata Collection");
         ArrayList<Graph>  graphs  = NetworkCreator.createGraphs();
 
         JFrame frame = showGraph(graphs.get(0));

@@ -15,8 +15,8 @@ public class NetworkCreator {
 
     private NetworkCreator() { }
 
-    public static void createNetwork() {
-        ArrayList<String> files = ListAllFilesFromFolder("Document and Metadata Collection");
+    public static void createNetwork(String subfoldername) {
+        ArrayList<String> files = ListAllFilesFromFolder(subfoldername);
         metadataHandler = new MetadataHandler(files);
     }
 
