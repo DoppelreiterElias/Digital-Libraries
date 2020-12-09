@@ -8,6 +8,7 @@ import javafx.scene.text.Font;
 
 
 import javafx.embed.swing.SwingNode;
+import javafx.stage.Window;
 
 import javax.swing.*;
 import java.net.URL;
@@ -44,25 +45,7 @@ public class MainController implements Initializable
     private Color x23;
 
 
-    @FXML
-    private SwingNode swingNode;
-
     public void initialize(URL location, ResourceBundle resources)
     {
-        swingNode = new SwingNode();
-        createAndSetSwingContent(swingNode);
-        graphAnchor.getChildren().add(swingNode);
-    }
-
-    private void createAndSetSwingContent(final SwingNode swingNode)
-    {
-        SwingUtilities.invokeLater(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                swingNode.setContent(new JButton("Click me!"));
-            }
-        });
     }
 }
