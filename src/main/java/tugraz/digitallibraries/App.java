@@ -1,6 +1,6 @@
 package tugraz.digitallibraries;
 
-import edu.uci.ics.jung.algorithms.layout.CircleLayout;
+import edu.uci.ics.jung.algorithms.layout.FRLayout;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
@@ -33,6 +33,9 @@ public class App extends Application {
 
         NetworkCreator.createNetwork("Document and Metadata Collection");
         ArrayList<Graph>  graphs  = NetworkCreator.createGraphs();
+
+        // TODO: graph weighting of edges
+        // TODO: check if better matching if middlename ignoring
 
         JFrame frame = showGraph(graphs.get(0));
 //        createAndSetSwingContent(swingNode);
@@ -76,7 +79,8 @@ public class App extends Application {
 
     private JFrame showGraph(Graph g) {
 
-        CircleLayout layout = new CircleLayout(g);
+//        ISOMLayout layout = new ISOMLayout(g);
+        FRLayout layout = new FRLayout(g);
 
         layout.setSize(new Dimension(900,900));
 //        BasicVisualizationServer<Integer,String> vv = new BasicVisualizationServer<Integer,String>(layout);

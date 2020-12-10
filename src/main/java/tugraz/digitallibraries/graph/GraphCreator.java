@@ -57,7 +57,7 @@ public class GraphCreator {
                     EdgeCoAuthorship existing_edge = coAuthorGraph.findEdge(current_authors.get(i),current_authors.get(j));
                     if(existing_edge != null) // edge between authors already exists
                     {
-                        System.out.println("adding paper to existing edge");
+//                        System.out.println("adding paper to existing edge");
                         existing_edge.addPaperToEdge(paper);
                     }
                     else {
@@ -98,7 +98,7 @@ public class GraphCreator {
                     for(Author ref_author : authors_of_referenced_paper) {
                         EdgeCitation existing_edge = citationGraph.findEdge(paper_author, ref_author);
                         if(existing_edge != null) { // already exists an edge between these two
-                            System.out.println("adding reference allready exists");
+//                            System.out.println("adding reference allready exists");
                             existing_edge.addReferenceToEdge(reference);
                         }
                         else {

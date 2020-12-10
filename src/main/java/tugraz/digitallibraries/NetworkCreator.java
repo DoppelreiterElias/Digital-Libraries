@@ -13,7 +13,14 @@ public class NetworkCreator {
     private static GraphCreator graphCreator;
     private static MetadataHandler metadataHandler;
 
-    private NetworkCreator() { }
+    //--------------------------------------------------------------------------------------------------
+    // only to import a smaller dataset
+    private static final boolean USE_SMALL_DATASET = false;
+    private static int NR_PAPERS = 10; // nr paper to import - only if USE_SMALL_DATASET = true
+    //--------------------------------------------------------------------------------------------------
+
+
+    private NetworkCreator() { } // private because a static class
 
     public static void createNetwork(String subfoldername) {
         ArrayList<String> files = ListAllFilesFromFolder(subfoldername);
@@ -55,11 +62,13 @@ public class NetworkCreator {
             e.printStackTrace();
         }
 
-        boolean USE_SMALL_DATASET = false;
 
-        if(USE_SMALL_DATASET) {
+        if(USE_SMALL_DATASET && files.size() >= NR_PAPERS) {
             ArrayList<String> tmp_list = new ArrayList<>();
-            tmp_list.add(files.get(1));
+            for(int i = 0; i < NR_PAPERS; i++) {
+                tmp_list.add(files.get(i));
+            }
+
             return tmp_list;
         }
         return files;
