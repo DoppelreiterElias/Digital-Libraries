@@ -10,13 +10,13 @@ import javafx.embed.swing.SwingNode;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
-
 /**
  * JavaFX App
  */
@@ -25,36 +25,31 @@ public class App extends Application {
     private static Scene scene;
 
     // swing node is a javaFX element, we can insert into swingNode java swing elements, and make them in javafx visible
-    final SwingNode swingNode = new SwingNode();
+    final SwingNode swing_node_ = new SwingNode();
 
     @Override
     public void start(Stage stage) throws IOException {
 
 
-        NetworkCreator.createNetwork("Document and Metadata Collection");
-        ArrayList<Graph>  graphs  = NetworkCreator.createGraphs();
 
         // TODO: graph weighting of edges
         // TODO: check if better matching if middlename ignoring
-
-        JFrame frame = showGraph(graphs.get(0));
-//        createAndSetSwingContent(swingNode);
-
         // TODO: https://stackoverrun.com/de/q/11457654
 
-        scene = new Scene(loadFXML("primary"), 640, 480);
+        scene = new Scene(loadFXML("main_view"), 640, 480);
         stage.setScene(scene);
         stage.show();
 
+        AnchorPane anchor = (AnchorPane)scene.lookup("#graphAnchor");
+        anchor.getChildren().add(swing_node_);
+
+        createAndSetSwingContent();
     }
 
-    static void setRoot(String fxml) throws IOException {
-        scene.setRoot(loadFXML(fxml));
-    }
-
-    private static Parent loadFXML(String fxml) throws IOException {
+    private Parent loadFXML(String fxml) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
-        return fxmlLoader.load();
+        Parent scene_loaded = fxmlLoader.load();
+        return scene_loaded;
     }
 
     public static void main(String[] args) {
@@ -65,38 +60,52 @@ public class App extends Application {
 
 
     // function to show how to insert swingNode
-    private void createAndSetSwingContent(final SwingNode swingNode) {
+
+    private void createAndSetSwingContent()
+    {
+        NetworkCreator.createNetwork("Document and Metadata Collection");
+        ArrayList<Graph>  graphs  = NetworkCreator.createGraphs();
+
         SwingUtilities.invokeLater(new Runnable() {
             @Override
-            public void run() {
-                JPanel panel = new JPanel();
-                panel.add(new JButton("Click me!"));
-                swingNode.setContent(panel);
+            public void run()
+            {
+
+                showGraph(graphs.get(0), swing_node_);
             }
         });
     }
 
 
-    private JFrame showGraph(Graph g) {
+
+    private JFrame showGraph (Graph g, SwingNode node)
+    {
 
 //        ISOMLayout layout = new ISOMLayout(g);
         FRLayout layout = new FRLayout(g);
 
-        layout.setSize(new Dimension(900,900));
-//        BasicVisualizationServer<Integer,String> vv = new BasicVisualizationServer<Integer,String>(layout);
+        layout.setSize(new
 
-        VisualizationViewer<Integer,String> vv = new VisualizationViewer<Integer,String>(layout);
-        vv.setPreferredSize(new Dimension(950,950));
+                Dimension(900, 900));
+        //        BasicVisualizationServer<Integer,String> vv = new BasicVisualizationServer<Integer,String>(layout);
+
+        VisualizationViewer<Integer, String> vv = new VisualizationViewer<Integer, String>(layout);
+        vv.setPreferredSize(new
+
+                Dimension(950, 950));
 
         DefaultModalGraphMouse gm = new DefaultModalGraphMouse();
         gm.setMode(ModalGraphMouse.Mode.TRANSFORMING);
         vv.setGraphMouse(gm);
 
         JFrame frame = new JFrame("Simple Graph View");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.getContentPane().add(vv);
-        frame.pack();
-        frame.setVisible(true);
+        //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        swing_node_.setContent(vv);
+
+        //        frame.getContentPane().add(vv);
+        //        frame.pack();
+        //        frame.setVisible(true);
         return frame;
     }
 
