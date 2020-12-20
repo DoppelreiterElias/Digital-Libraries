@@ -10,8 +10,10 @@ import javafx.embed.swing.SwingNode;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import tugraz.digitallibraries.ui.CustomGraphMousePlugin;
 
 import javax.swing.*;
 import java.awt.*;
@@ -95,14 +97,19 @@ public class App extends Application {
                 Dimension(950, 950));
 
         DefaultModalGraphMouse gm = new DefaultModalGraphMouse();
-        gm.setMode(ModalGraphMouse.Mode.TRANSFORMING);
-        vv.setGraphMouse(gm);
+        //gm.setMode(ModalGraphMouse.Mode.TRANSFORMING);
+        //vv.setGraphMouse(gm);
 
         JFrame frame = new JFrame("Simple Graph View");
         //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         swing_node_.setContent(vv);
 
+        CustomGraphMousePlugin ev_handler = new CustomGraphMousePlugin();
+
+        swing_node_.addEventHandler(MouseEvent.MOUSE_PRESSED , ev_handler);
+        swing_node_.addEventHandler(MouseEvent.MOUSE_RELEASED , ev_handler);
+        swing_node_.addEventHandler(MouseEvent.MOUSE_DRAGGED , ev_handler);
         //        frame.getContentPane().add(vv);
         //        frame.pack();
         //        frame.setVisible(true);

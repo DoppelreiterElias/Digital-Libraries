@@ -1,4 +1,4 @@
-package tugraz.digitallibraries;
+package tugraz.digitallibraries.ui;
 
 import java.io.IOException;
 import javafx.fxml.FXML;
