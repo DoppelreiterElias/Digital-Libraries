@@ -7,12 +7,14 @@ import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
 import javafx.application.Application;
 import javafx.embed.swing.SwingNode;
+import javafx.event.EventType;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import org.w3c.dom.events.EventListener;
 import tugraz.digitallibraries.ui.CustomGraphMousePlugin;
 
 import javax.swing.*;
@@ -96,16 +98,18 @@ public class App extends Application {
 
                 Dimension(950, 950));
 
-        DefaultModalGraphMouse gm = new DefaultModalGraphMouse();
+        //DefaultModalGraphMouse gm = new DefaultModalGraphMouse();
         //gm.setMode(ModalGraphMouse.Mode.TRANSFORMING);
         //vv.setGraphMouse(gm);
 
         JFrame frame = new JFrame("Simple Graph View");
         //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+        vv.removeMouseListener(vv.getGraphMouse());
+
         swing_node_.setContent(vv);
 
-        CustomGraphMousePlugin ev_handler = new CustomGraphMousePlugin();
+        CustomGraphMousePlugin ev_handler = new CustomGraphMousePlugin(vv);
 
         swing_node_.addEventHandler(MouseEvent.MOUSE_PRESSED , ev_handler);
         swing_node_.addEventHandler(MouseEvent.MOUSE_RELEASED , ev_handler);
