@@ -6,6 +6,7 @@ import tugraz.digitallibraries.graph.GraphCreator;
 import java.io.File;
 import java.util.ArrayList;
 
+import static tugraz.digitallibraries.graph.GraphUtils.*;
 
 // static class
 public class NetworkCreator {
@@ -13,11 +14,7 @@ public class NetworkCreator {
     private static GraphCreator graphCreator;
     private static MetadataHandler metadataHandler;
 
-    //--------------------------------------------------------------------------------------------------
-    // only to import a smaller dataset
-    private static final boolean USE_SMALL_DATASET = false;
-    private static int NR_PAPERS = 10; // nr paper to import - only if USE_SMALL_DATASET = true
-    //--------------------------------------------------------------------------------------------------
+
 
 
     private NetworkCreator() { } // private because a static class
@@ -41,6 +38,10 @@ public class NetworkCreator {
         graphs.add(graphCreator.getCitationGraph());
 
         return graphs;
+    }
+
+    public static GraphCreator getGraphCreator() {
+        return graphCreator;
     }
 
 

@@ -4,6 +4,8 @@ package tugraz.digitallibraries.dataclasses;
 // Author of a paper
 public class Author {
 
+    private static int counter = 0;
+    private int id;
     private String[] forenames;
     private String[] surnames;
     AuthorType authorType;
@@ -11,20 +13,26 @@ public class Author {
 
     public Author(String[] forenames, String[] surnames)
     {
+        this.id = counter++;
         this.forenames = forenames;
         this.surnames = surnames;
     }
 
     public Author(String[] forenames, String[] surnames, AuthorType type) {
+        this.id = counter++;
         this.forenames = forenames;
         this.surnames = surnames;
         this.authorType = type;
     }
 
 
-    public Author(){}
+    public Author(){
+        this.id = counter++;
+    }
 
     public Author(AuthorType type) {
+
+        this.id = counter++;
         this.authorType = type;
     }
 
@@ -54,4 +62,6 @@ public class Author {
     public AuthorType getAuthorType() {
         return this.authorType;
     }
+
+    public int getId() {return this.id; }
 }

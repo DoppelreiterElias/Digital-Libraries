@@ -14,12 +14,33 @@ public class GraphCreator {
 
     private ArrayList<MetadataEntry> metadata;
     UndirectedSparseGraph<Author, EdgeCoAuthorship> coAuthorGraph;
+    private int coAuthorMaxDegree = 0;
+    private int coAuthorMaxEdgeWith = 1;
+
     DirectedSparseGraph<Author, EdgeCitation> citationGraph;
+    private int citationMaxDegree = 0;
+    private int citationMaxEdgeWith = 1;
 
     public GraphCreator(ArrayList<MetadataEntry> list) {
         coAuthorGraph = new UndirectedSparseGraph<>();
         citationGraph = new DirectedSparseGraph<>();
         this.metadata = list;
+    }
+
+    public int getCoAuthorMaxDegree() {
+        return this.coAuthorMaxDegree;
+    }
+
+    public int getCitationMaxDegree() {
+        return this.citationMaxDegree;
+    }
+
+    public int getCoAuthorMaxEdgeWith() {
+        return this.coAuthorMaxEdgeWith;
+    }
+
+    public int getCitationMaxEdgeWith() {
+        return this.citationMaxEdgeWith;
     }
 
     public UndirectedSparseGraph<Author, EdgeCoAuthorship> getCoAuthorGraph() {
@@ -59,11 +80,19 @@ public class GraphCreator {
                     {
 //                        System.out.println("adding paper to existing edge");
                         existing_edge.addPaperToEdge(paper);
+                        if(coAuthorMaxEdgeWith < existing_edge.getWeight())
+                            coAuthorMaxEdgeWith = existing_edge.getWeight();
                     }
                     else {
                         EdgeCoAuthorship current_edge = new EdgeCoAuthorship(paper);
                         boolean success = coAuthorGraph.addEdge(current_edge, current_authors.get(i), current_authors.get(j), EdgeType.UNDIRECTED);
                         assert !success;
+                        int current_degree_i = coAuthorGraph.inDegree(current_authors.get(i));
+                        int current_degree_j = coAuthorGraph.inDegree(current_authors.get(i));
+                        if(coAuthorMaxDegree < current_degree_i)
+                            coAuthorMaxDegree = current_degree_i;
+                        if(coAuthorMaxDegree < current_degree_j)
+                            coAuthorMaxDegree = current_degree_j;
                     }
                 }
             }
@@ -100,11 +129,19 @@ public class GraphCreator {
                         if(existing_edge != null) { // already exists an edge between these two
 //                            System.out.println("adding reference allready exists");
                             existing_edge.addReferenceToEdge(reference);
+                            if(citationMaxEdgeWith < existing_edge.getWeight())
+                                citationMaxEdgeWith = existing_edge.getWeight();
                         }
                         else {
                             EdgeCitation current_edge = new EdgeCitation(reference);
                             boolean success = citationGraph.addEdge(current_edge, paper_author, ref_author, EdgeType.DIRECTED);
                             assert !success;
+                            int current_degree_i = citationGraph.inDegree(paper_author);
+                            int current_degree_j = citationGraph.inDegree(ref_author);
+                            if(citationMaxDegree < current_degree_i)
+                                citationMaxDegree = current_degree_i;
+                            if(citationMaxDegree < current_degree_j)
+                                citationMaxDegree = current_degree_j;
                         }
                     }
                 }

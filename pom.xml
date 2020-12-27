@@ -8,6 +8,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
+        <jung.version>2.0.1</jung.version>
     </properties>
     <dependencies>
         <dependency>
@@ -28,27 +29,27 @@
         <dependency>
             <groupId>net.sf.jung</groupId>
             <artifactId>jung-api</artifactId>
-            <version>2.1.1</version>
+            <version>${jung.version}</version>
         </dependency>
         <dependency>
             <groupId>net.sf.jung</groupId>
             <artifactId>jung-graph-impl</artifactId>
-            <version>2.1.1</version>
+            <version>${jung.version}</version>
         </dependency>
         <dependency>
             <groupId>net.sf.jung</groupId>
             <artifactId>jung-visualization</artifactId>
-            <version>2.1.1</version>
+            <version>${jung.version}</version>
         </dependency>
         <dependency>
             <groupId>net.sf.jung</groupId>
             <artifactId>jung-algorithms</artifactId>
-            <version>2.1.1</version>
+            <version>${jung.version}</version>
         </dependency>
         <dependency>
             <groupId>net.sf.jung</groupId>
             <artifactId>jung-io</artifactId>
-            <version>2.1.1</version>
+            <version>${jung.version}</version>
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
@@ -59,6 +60,11 @@
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-swing</artifactId>
             <version>16-ea+4</version>
+        </dependency>
+        <dependency>
+            <groupId>net.sourceforge.collections</groupId>
+            <artifactId>collections-generic</artifactId>
+            <version>4.01</version>
         </dependency>
 
     </dependencies>
