@@ -49,7 +49,7 @@ public class EdgeCoAuthorship {
 
     @Override
     public String toString() {
-        return new String(authors.getKey().getSurnames() + "<->" + authors.getValue().getSurnames());
+        return new String(authors.getKey().getSurname() + "<->" + authors.getValue().getSurname());
     }
 
 }

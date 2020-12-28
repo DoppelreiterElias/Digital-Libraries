@@ -6,6 +6,7 @@ import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
 import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
+import edu.uci.ics.jung.visualization.renderers.DefaultEdgeLabelRenderer;
 import edu.uci.ics.jung.visualization.renderers.DefaultVertexLabelRenderer;
 import edu.uci.ics.jung.visualization.renderers.Renderer;
 import org.apache.commons.collections15.Transformer;
@@ -29,6 +30,9 @@ public class GraphVisualizer {
 
     protected Transformer<Author, String> vertex_label_none = new ConstantTransformer(null);
     protected Transformer<Author, String> vertex_label;
+
+    protected Transformer<EdgeCoAuthorship, String> edge_label_none = new ConstantTransformer(null);
+    protected Transformer<EdgeCoAuthorship, String> edge_label;
 
     protected DefaultModalGraphMouse gm = new DefaultModalGraphMouse();
 
@@ -54,6 +58,8 @@ public class GraphVisualizer {
         setVertexColor();
         setVertexSize(g);
         setVertexLabel();
+
+        setEdgeLabel();
         setEdgeSize();
 
 
@@ -120,6 +126,39 @@ public class GraphVisualizer {
         vv.getRenderContext().setVertexLabelTransformer(vertex_label);
     }
 
+    public void showEdgeLabels() {
+        vv.getRenderContext().setEdgeLabelTransformer(edge_label);
+    }
+
+    public void hideEdgeLabels() {
+        vv.getRenderContext().setEdgeLabelTransformer(edge_label_none);
+    }
+
+    private void setEdgeLabel() {
+
+        final Color vertexLabelColor = Color.ORANGE;
+        DefaultEdgeLabelRenderer edgeLabelRenderer =
+            new DefaultEdgeLabelRenderer(vertexLabelColor)
+            {
+                @Override
+                public <V> Component getEdgeLabelRendererComponent(
+                    JComponent vv, Object value, Font font,
+                    boolean isSelected, V vertex)
+                {
+                    super.getEdgeLabelRendererComponent(
+                        vv, value, font, isSelected, vertex);
+                    setForeground(vertexLabelColor);
+                    return this;
+                }
+            };
+
+
+        vv.getRenderContext().setEdgeLabelRenderer(edgeLabelRenderer);
+
+        edge_label = new ToStringLabeller<EdgeCoAuthorship>();
+        showEdgeLabels();
+
+    }
     private void setVertexLabel() {
 
         final Color vertexLabelColor = Color.WHITE;

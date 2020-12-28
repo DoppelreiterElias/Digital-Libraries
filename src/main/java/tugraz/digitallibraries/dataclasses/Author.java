@@ -72,6 +72,10 @@ public class Author {
         return this.fullname;
     }
 
+    public String getSurname() {
+        return String.join(" ", this.surnames);
+    }
+
     public void createFullName() {
         if(forenames == null || surnames == null)
         {
