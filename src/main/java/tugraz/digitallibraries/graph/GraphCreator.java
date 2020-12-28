@@ -3,6 +3,7 @@ package tugraz.digitallibraries.graph;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 import edu.uci.ics.jung.graph.util.EdgeType;
+import javafx.util.Pair;
 import tugraz.digitallibraries.dataclasses.Author;
 import tugraz.digitallibraries.dataclasses.MetadataEntry;
 import tugraz.digitallibraries.dataclasses.Reference;
@@ -74,6 +75,8 @@ public class GraphCreator {
 
             // create edges between authors. If a edge already exists between 2 authors the paper will be added to the paperList
             for(int i = 0; i < current_authors.size(); i++) {
+                if(current_authors.get(i).getForenames().length == 0 && current_authors.get(i).getSurnames().length == 0)
+                    System.out.println("no name here");
                 for(int j = i + 1; j < current_authors.size(); j++) {
                     EdgeCoAuthorship existing_edge = coAuthorGraph.findEdge(current_authors.get(i),current_authors.get(j));
                     if(existing_edge != null) // edge between authors already exists
@@ -82,9 +85,12 @@ public class GraphCreator {
                         existing_edge.addPaperToEdge(paper);
                         if(coAuthorMaxEdgeWith < existing_edge.getWeight())
                             coAuthorMaxEdgeWith = existing_edge.getWeight();
+                        assert existing_edge.authors.getKey() == current_authors.get(i) || existing_edge.authors.getValue() == current_authors.get(i);
+                        assert existing_edge.authors.getKey() == current_authors.get(j) || existing_edge.authors.getValue() == current_authors.get(j);
                     }
                     else {
                         EdgeCoAuthorship current_edge = new EdgeCoAuthorship(paper);
+                        current_edge.authors = new Pair<>(current_authors.get(i),current_authors.get(j));
                         boolean success = coAuthorGraph.addEdge(current_edge, current_authors.get(i), current_authors.get(j), EdgeType.UNDIRECTED);
                         assert !success;
                         int current_degree_i = coAuthorGraph.inDegree(current_authors.get(i));

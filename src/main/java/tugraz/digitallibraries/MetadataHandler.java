@@ -184,30 +184,33 @@ public class MetadataHandler {
                         first_name[i] = eElement.getElementsByTagName("forename").item(i).getTextContent();
                     }
 
-                    /*
-                    System.out.print("First Names: ");
-                    for (int i = 0; i < first_name.length; i++) {
-                       System.out.print(first_name[i] + " ");
-                    }
-                   System.out.print("\n");
-                    */
-
                     String[] last_name = new String[eElement.getElementsByTagName("surname").getLength()];
                     for (int i = 0; i < eElement.getElementsByTagName("surname").getLength(); i++) {
                         last_name[i] = eElement.getElementsByTagName("surname").item(i).getTextContent();
                     }
 
-                    /*
-                    System.out.print("surname Name: ");
-                    for (int i = 0; i < last_name.length; i++) {
-                        System.out.print(last_name[i] + " ");
-                    }
-                    System.out.print("\n");
-                    */
-
                     author.setForenames(first_name);
                     author.setSurnames(last_name);
+                    author.createFullName();
                     author.setAuthorType(AuthorType.PaperAuthor);
+
+                    removeInvalidCharsFromNames(author);
+                    if(!validAuthor(author)) // empty author - do not append
+                        continue;
+
+//                    System.out.print("First Names: ");
+//                    for (int i = 0; i < first_name.length; i++) {
+//                        System.out.print(first_name[i] + " ");
+//                    }
+//                    System.out.print("\n");
+//
+//
+//                    System.out.print("surname Name: ");
+//                    for (int i = 0; i < last_name.length; i++) {
+//                        System.out.print(last_name[i] + " ");
+//                    }
+//                    System.out.print("\n");
+
 
                     // Check if we already have imported the author  - key is "<firstname>,<lastname>"
                     Author author_found = findExistingAuthor(author);
@@ -226,6 +229,38 @@ public class MetadataHandler {
         } catch (Exception e) {
             entry.setAuthors(null);
         }
+    }
+
+    // remove all chars like '+'
+    private void removeInvalidCharsFromNames(Author author) {
+        for(int i = 0; i < author.getForenames().length; i++) {
+            String s = author.getForenames()[i];
+            author.getForenames()[i] = s.replaceAll("[^a-zA-Z0-9\\s\\-]", "");
+        }
+
+        for(int i = 0; i < author.getSurnames().length; i++) {
+            String s = author.getSurnames()[i];
+            author.getSurnames()[i] = s.replaceAll("[^a-zA-Z0-9\\s\\-]", "");
+        }
+    }
+
+    // remove empty names as authors
+    private boolean validAuthor(Author author) {
+
+        if(author.getForenames().length == 0 && author.getSurnames().length == 0)
+            return false;
+        if(author.getForenames().length == 1 && author.getForenames()[0].equals("+") && author.getSurnames().length == 0)
+            return false;
+        if(author.getSurnames().length == 1 && author.getSurnames()[0].equals("+") && author.getForenames().length == 0)
+            return false;
+        if(author.getForenames().length == 1 && author.getForenames()[0].equals(" ") && author.getSurnames().length == 0)
+            return false;
+        if(author.getSurnames().length == 1 && author.getSurnames()[0].equals(" ") && author.getForenames().length == 0)
+            return false;
+        if(author.getSurnames().length == 1 && author.getSurnames()[0].equals(" ") &&
+            author.getForenames().length == 1 && author.getForenames()[0].equals(" "))
+            return false;
+        return true;
     }
 
     private void addAuthorToAuthorMap(Author author) {
@@ -384,6 +419,7 @@ public class MetadataHandler {
 
                     author.setForenames(first_name);
                     author.setSurnames(last_name);
+                    author.createFullName();
                     author.setAuthorType(AuthorType.ReferenceAuthor);
 
                      //Check if we already have imported the author - key is "<firstname>,<lastname>"

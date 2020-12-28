@@ -8,6 +8,7 @@ public class Author {
     private int id;
     private String[] forenames;
     private String[] surnames;
+    private String fullname;
     AuthorType authorType;
 
 
@@ -16,6 +17,7 @@ public class Author {
         this.id = counter++;
         this.forenames = forenames;
         this.surnames = surnames;
+        createFullName();
     }
 
     public Author(String[] forenames, String[] surnames, AuthorType type) {
@@ -23,6 +25,7 @@ public class Author {
         this.forenames = forenames;
         this.surnames = surnames;
         this.authorType = type;
+        createFullName();
     }
 
 
@@ -31,9 +34,9 @@ public class Author {
     }
 
     public Author(AuthorType type) {
-
         this.id = counter++;
         this.authorType = type;
+        createFullName();
     }
 
     public String[] getForenames() {
@@ -64,4 +67,25 @@ public class Author {
     }
 
     public int getId() {return this.id; }
+
+    public String getFullname() {
+        return this.fullname;
+    }
+
+    public void createFullName() {
+        if(forenames == null || surnames == null)
+        {
+            this.fullname = new String("");
+            return;
+        }
+        String fornames = String.join(" ", this.forenames);
+        String lastnames = String.join(" ", this.surnames);
+
+        this.fullname = new String(String.join(",", fornames, lastnames));
+    }
+
+    @Override
+    public String toString() {
+        return fullname;
+    }
 }

@@ -14,7 +14,7 @@ public class EdgeCoAuthorship {
 
     private int id;
     private ArrayList<MetadataEntry> papers = new ArrayList<>();
-    Pair<Author, Author> authors; // don't know if really necessary because Edge already has the pair of authors as attribute
+    Pair<Author, Author> authors;
 
 
     public EdgeCoAuthorship(MetadataEntry paper) {
@@ -46,5 +46,10 @@ public class EdgeCoAuthorship {
         return papers;
     }
 
+
+    @Override
+    public String toString() {
+        return new String(authors.getKey().getSurnames() + "<->" + authors.getValue().getSurnames());
+    }
 
 }

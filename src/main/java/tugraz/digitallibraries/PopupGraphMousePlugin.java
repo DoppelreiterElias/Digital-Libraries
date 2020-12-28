@@ -4,6 +4,7 @@ import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.AbstractPopupGraphMousePlugin;
 import tugraz.digitallibraries.dataclasses.Author;
+import tugraz.digitallibraries.graph.EdgeCoAuthorship;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -34,22 +35,23 @@ public class PopupGraphMousePlugin extends AbstractPopupGraphMousePlugin
     @Override
     @SuppressWarnings("unchecked")
     protected void handlePopup(MouseEvent e) {
-        final VisualizationViewer<Author, Number> vv = (VisualizationViewer<Author, Number>) e
+        final VisualizationViewer<Author, EdgeCoAuthorship> vv = (VisualizationViewer<Author, EdgeCoAuthorship>) e
             .getSource();
         Point2D p = e.getPoint();// vv.getRenderContext().getBasicTransformer().inverseViewTransform(e.getPoint());
 
-        GraphElementAccessor<Author, Number> pickSupport = vv.getPickSupport();
+//        System.out.println("click at " +  p.getX() + " " + p.getY());
+        GraphElementAccessor<Author, EdgeCoAuthorship> pickSupport = vv.getPickSupport();
         if (pickSupport != null) {
             final Author v = pickSupport.getVertex(vv.getGraphLayout(), p.getX(), p.getY());
             if (v != null) {
-                System.out.println("found author " + v.getForenames()[0] + " " + v.getSurnames()[0]);
+                System.out.println("found author " + v.getFullname());
                 JPopupMenu popup = new JPopupMenu();
                 popup.add(new AbstractAction("Open Author") {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-
                         System.out.println("action performed" + e.getActionCommand());
                         // TODO: open author into detailed view
+
                         vv.repaint();
                     }
                 });
@@ -62,20 +64,22 @@ public class PopupGraphMousePlugin extends AbstractPopupGraphMousePlugin
                 });
                 popup.show(vv, e.getX(), e.getY());
             } else {
-                System.out.println("no author here");
-                final Number edge = pickSupport.getEdge(vv.getGraphLayout(), p.getX(),
-                    p.getY());
+
+                final EdgeCoAuthorship edge = pickSupport.getEdge(vv.getGraphLayout(), p.getX(), p.getY());
                 if (edge != null) {
+                    System.out.println("found edge " + edge);
                     JPopupMenu popup = new JPopupMenu();
                     popup.add(new AbstractAction(edge.toString()) {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            System.err.println("got " + edge);
+                            System.out.println("action performed" + e.getActionCommand());
                         }
                     });
                     popup.show(vv, e.getX(), e.getY());
 
                 }
+                else
+                    System.out.println("no author or edge here");
             }
         }
     }
