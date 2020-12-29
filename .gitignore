@@ -24,3 +24,12 @@ hs_err_pid*
 target/classes/module-info.class
 .idea/uiDesigner.xml
 .idea/uiDesigner.xml
+
+/build/*
+/build
+
+.idea/
+.idea/*
+
+/target/
+/target/*
