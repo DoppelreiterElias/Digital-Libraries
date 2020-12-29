@@ -1,4 +1,4 @@
-package tugraz.digitallibraries;
+package tugraz.digitallibraries.ui;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
