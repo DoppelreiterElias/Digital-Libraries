@@ -1,0 +1,25 @@
+Features:
+
+Button für Picking/Transformation mode wechseln
+Checkbox für show/hide names
+Neuer Tab für Co-Author Graph
+Search Results nach links
+Dafür Details einbauen
+Search by Keyword
+
+
+Author Details: 
+
+Author Name
+List View mit allen Papers
+Liste mit Co-Authoren 
+List mit zitierten Papers
+
+Paper Details:
+
+Paper Name
+Keywords
+Publication Date
+Authoren
+
+
