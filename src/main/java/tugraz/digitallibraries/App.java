@@ -10,7 +10,6 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import tugraz.digitallibraries.dataclasses.Author;
-import tugraz.digitallibraries.graph.EdgeCitation;
 import tugraz.digitallibraries.graph.EdgeCoAuthorship;
 import tugraz.digitallibraries.graph.GraphCreator;
 import tugraz.digitallibraries.graph.GraphVisualizer;
@@ -84,8 +83,9 @@ public class App extends Application {
 
     private void showCitationGraph(final Graph g)
     {
-        VisualizationViewer<Author, EdgeCitation> vv = graphVisualizer.createCitationVisualizer(g);
-        swing_node_.setContent(vv);
+        // todo make citation graph similar to coauthor graph
+//        VisualizationViewer<Author, EdgeCitation> vv = graphVisualizer.createCitationVisualizer(g);
+//        swing_node_.setContent(vv);
     }
 
 

@@ -180,12 +180,24 @@ public class GraphVisualizer {
         vv.getRenderContext().setVertexLabelRenderer(vertexLabelRenderer);
         vv.getRenderer().getVertexLabelRenderer().setPosition(Renderer.VertexLabel.Position.AUTO);
         vertex_label = new ToStringLabeller<Author>();
+
+        // make names bold
+        vv.getRenderContext().setVertexFontTransformer(new VertexFontTransformer<Author>());
+
         showVertexLabels();
     }
 
     public VisualizationViewer<Author, EdgeCitation> createCitationVisualizer(Graph g) {
 
         return null;
+    }
+
+
+    private final static class VertexFontTransformer<E> implements Transformer<E, Font> {
+        @Override
+        public Font transform(E e) {
+            return new Font("Helvetica", Font.BOLD, 12);
+        }
     }
 
 }

@@ -52,6 +52,7 @@ public class PopupGraphMousePlugin extends AbstractPopupGraphMousePlugin
                         System.out.println("action performed" + e.getActionCommand());
                         // TODO: open author into detailed view
 
+
                         vv.repaint();
                     }
                 });
@@ -67,7 +68,7 @@ public class PopupGraphMousePlugin extends AbstractPopupGraphMousePlugin
 
                 final EdgeCoAuthorship edge = pickSupport.getEdge(vv.getGraphLayout(), p.getX(), p.getY());
                 if (edge != null) {
-                    System.out.println("found edge " + edge);
+                    System.out.println("found edge " + edge.toString());
                     JPopupMenu popup = new JPopupMenu();
                     popup.add(new AbstractAction(edge.toString()) {
                         @Override
