@@ -124,4 +124,10 @@ public class MetadataEntry {
     public void setFile_path(String file_name) {
         this.file_path = file_name;
     }
+
+    @Override
+    public String toString()
+    {
+        return this.paper_title;
+    }
 }

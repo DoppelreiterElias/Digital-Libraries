@@ -7,12 +7,14 @@ import javafx.embed.swing.SwingNode;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import tugraz.digitallibraries.dataclasses.Author;
+import tugraz.digitallibraries.graph.EdgeCitation;
 import tugraz.digitallibraries.graph.EdgeCoAuthorship;
 import tugraz.digitallibraries.graph.GraphCreator;
 import tugraz.digitallibraries.graph.GraphVisualizer;
+import tugraz.digitallibraries.ui.MainController;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -29,23 +31,30 @@ public class App extends Application {
     final SwingNode swing_node_ = new SwingNode();
     GraphCreator graphCreator;
     GraphVisualizer graphVisualizer;
+    MainController main_controller_;
+
 
     @Override
     public void start(Stage stage) throws IOException {
 
         scene = new Scene(loadFXML("main_view"), 1500, 1000);
         stage.setScene(scene);
+
         stage.show();
 
-        AnchorPane anchor = (AnchorPane)scene.lookup("#graphAnchor");
+        VBox anchor = (VBox)scene.lookup("#cit_graph_view_");
         anchor.getChildren().add(swing_node_);
 
         createAndSetSwingContent();
+        ///TODO CHANGE second, fourth variable
+        main_controller_.setDependencies(graphVisualizer, graphVisualizer);
     }
 
     private Parent loadFXML(String fxml) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
         Parent scene_loaded = fxmlLoader.load();
+        main_controller_ = fxmlLoader.getController();
+
         return scene_loaded;
     }
 
@@ -77,7 +86,7 @@ public class App extends Application {
 
     private void showCoAuthorGraph(final Graph g)
     {
-        VisualizationViewer<Author, EdgeCoAuthorship> vv = graphVisualizer.createCoAuthorVisualizer(g);
+        VisualizationViewer<Author, EdgeCoAuthorship> vv = graphVisualizer.createCoAuthorVisualizer(g, main_controller_);
         swing_node_.setContent(vv);
     }
 

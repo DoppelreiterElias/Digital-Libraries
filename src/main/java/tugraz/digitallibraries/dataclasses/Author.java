@@ -1,6 +1,13 @@
 package tugraz.digitallibraries.dataclasses;
 
 
+import javafx.scene.control.TreeItem;
+import javafx.scene.input.ContextMenuEvent;
+import javafx.scene.input.InputEvent;
+import tugraz.digitallibraries.ui.PaperContextMenuListener;
+
+import java.util.ArrayList;
+
 // Author of a paper
 public class Author {
 
@@ -92,4 +99,72 @@ public class Author {
     public String toString() {
         return fullname;
     }
+
+    public TreeItem<String> toDetailTree()
+    {
+        TreeItem<String> root = new TreeItem<>(getFullname());
+        root.setExpanded(true);
+
+        TreeItem<String> fornames = new TreeItem<>("Fornames");
+        fornames.getChildren().add(new TreeItem<String>(String.join(" ", this.forenames)));
+
+        TreeItem<String> surnames = new TreeItem<>("Surnames");
+        surnames.getChildren().add(new TreeItem<String>(String.join(" ", this.surnames)));
+
+        TreeItem papers_root = new TreeItem<String>("Papers of Author");
+
+        for(MetadataEntry cur_paper : getPapersOfAuthor())
+        {
+            TreeItem new_paper = new TreeItem<MetadataEntry>(cur_paper);
+//            new_paper.addEventHandler(ContextMenuEvent.CONTEXT_MENU_REQUESTED, new PaperContextMenuListener());
+            papers_root.getChildren().add(new_paper);
+        }
+
+        ///Testcode for Paper handler
+        MetadataEntry test_paper = new MetadataEntry();
+        test_paper.setPaper_title("TestPaper");
+        TreeItem new_paper = new TreeItem<MetadataEntry>(test_paper);
+
+        papers_root.getChildren().add(new_paper);
+        ////
+
+        TreeItem co_authors_root = new TreeItem("Co-Authors");
+
+        for(Author cur_co_author : getCoAuthors())
+        {
+            co_authors_root.getChildren().add(new TreeItem(cur_co_author));
+        }
+
+        TreeItem sources_root = new TreeItem("Sources of Author");
+
+        for(MetadataEntry cur_paper : getSources())
+        {
+            sources_root.getChildren().add(new TreeItem<MetadataEntry>(cur_paper));
+            ///Todo Register Event Handler for Paper
+        }
+
+
+        root.getChildren().addAll(fornames, surnames, papers_root, co_authors_root, sources_root);
+
+        return root;
+    }
+
+    public ArrayList<MetadataEntry> getPapersOfAuthor()
+    {
+        ///Todo implement
+        return new ArrayList<>();
+    }
+
+    public ArrayList<Author> getCoAuthors()
+    {
+        ///Todo implement
+        return new ArrayList<>();
+    }
+
+    public ArrayList<MetadataEntry> getSources()
+    {
+        ///Todo implement
+        return new ArrayList<>();
+    }
+
 }

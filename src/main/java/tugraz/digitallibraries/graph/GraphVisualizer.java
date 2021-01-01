@@ -13,6 +13,7 @@ import org.apache.commons.collections15.Transformer;
 import org.apache.commons.collections15.functors.ConstantTransformer;
 import tugraz.digitallibraries.PopupGraphMousePlugin;
 import tugraz.digitallibraries.dataclasses.Author;
+import tugraz.digitallibraries.ui.MainController;
 
 import javax.swing.*;
 import java.awt.*;
@@ -41,11 +42,11 @@ public class GraphVisualizer {
         this.graphCreator = graphCr;
     }
 
-    public VisualizationViewer<Author, EdgeCoAuthorship>  createCoAuthorVisualizer(Graph g) {
+    public VisualizationViewer<Author, EdgeCoAuthorship>  createCoAuthorVisualizer(Graph g, MainController main_controller) {
 
         // KKLayout or FRLayout or ISOMLayout
         FRLayout2<Author, EdgeCoAuthorship> layout = new FRLayout2<Author, EdgeCoAuthorship>(g);
-        layout.setSize(new Dimension(400, 400));
+        layout.setSize(new Dimension(800, 800));
         layout.initialize();
 
         vv = new VisualizationViewer<Author, EdgeCoAuthorship>(layout);
@@ -64,7 +65,7 @@ public class GraphVisualizer {
 
 
         // right click menu
-        gm.add(new PopupGraphMousePlugin());
+        gm.add(new PopupGraphMousePlugin(main_controller));
 
         return vv;
     }
@@ -120,18 +121,22 @@ public class GraphVisualizer {
 
     public void hideVertexLabels() {
         vv.getRenderContext().setVertexLabelTransformer(vertex_label_none);
+        vv.repaint();
     }
 
     public void showVertexLabels() {
         vv.getRenderContext().setVertexLabelTransformer(vertex_label);
+        vv.repaint();
     }
 
     public void showEdgeLabels() {
         vv.getRenderContext().setEdgeLabelTransformer(edge_label);
+        vv.repaint();
     }
 
     public void hideEdgeLabels() {
         vv.getRenderContext().setEdgeLabelTransformer(edge_label_none);
+        vv.repaint();
     }
 
     private void setEdgeLabel() {

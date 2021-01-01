@@ -5,6 +5,7 @@ import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.AbstractPopupGraphMousePlugin;
 import tugraz.digitallibraries.dataclasses.Author;
 import tugraz.digitallibraries.graph.EdgeCoAuthorship;
+import tugraz.digitallibraries.ui.MainController;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -18,8 +19,11 @@ import java.awt.geom.Point2D;
 public class PopupGraphMousePlugin extends AbstractPopupGraphMousePlugin
     implements MouseListener {
 
-    public PopupGraphMousePlugin() {
+    private MainController main_controller_;
+
+    public PopupGraphMousePlugin(MainController main_controller) {
         this(MouseEvent.BUTTON3_MASK);
+        main_controller_ = main_controller;
     }
 
     public PopupGraphMousePlugin(int modifiers) {
@@ -51,8 +55,8 @@ public class PopupGraphMousePlugin extends AbstractPopupGraphMousePlugin
                     public void actionPerformed(ActionEvent e) {
                         System.out.println("action performed" + e.getActionCommand());
                         // TODO: open author into detailed view
-
-
+                        System.out.println(v.toString());
+                        main_controller_.setCitGraphDetail(v);
                         vv.repaint();
                     }
                 });

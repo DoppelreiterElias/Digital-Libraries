@@ -1,16 +1,26 @@
 package tugraz.digitallibraries.ui;
 
+import edu.uci.ics.jung.visualization.VisualizationViewer;
+import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.embed.swing.SwingNode;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.robot.Robot;
 
+import tugraz.digitallibraries.dataclasses.Author;
+import tugraz.digitallibraries.dataclasses.MetadataEntry;
+import tugraz.digitallibraries.graph.GraphVisualizer;
 
-import javafx.embed.swing.SwingNode;
-import javafx.stage.Window;
-
-import javax.swing.*;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -18,7 +28,25 @@ public class MainController implements Initializable
 {
 
     @FXML
-    private AnchorPane graphAnchor;
+    private VBox cit_graph_view_;
+
+    @FXML
+    private TreeView cit_graph_detail_;
+
+    @FXML
+    private ChoiceBox search_by_choice_;
+
+    @FXML
+    private TextField search_field_;
+
+    @FXML
+    private CheckMenuItem check_show_names_;
+
+    @FXML
+    private RadioMenuItem radio_picking_mode_;
+
+    @FXML
+    private RadioMenuItem radio_transform_mode_;
 
     @FXML
     private Font x1;
@@ -44,8 +72,76 @@ public class MainController implements Initializable
     @FXML
     private Color x23;
 
+    GraphVisualizer citation_graph_visualizer_;
+    GraphVisualizer co_author_graph_visualizer_;
 
     public void initialize(URL location, ResourceBundle resources)
     {
+        cit_graph_detail_.setShowRoot(true);
+        cit_graph_detail_.getSelectionModel().selectedItemProperty().addListener(new PaperContextMenuListener(cit_graph_detail_));
+
+        search_by_choice_.setItems(FXCollections.observableArrayList("Author","Paper"));
+        search_by_choice_.setValue("Author");
+    }
+
+    public void setCitGraphDetail(Author auth)
+    {
+        Platform.runLater(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                TreeItem<Author> detail_name = new TreeItem<>(auth);
+                cit_graph_detail_.setRoot(auth.toDetailTree());
+            }
+        });
+    }
+
+    public void setDependencies(GraphVisualizer cit_vis, GraphVisualizer co_auth_vis)
+    {
+        co_author_graph_visualizer_ = co_auth_vis;
+        citation_graph_visualizer_ = cit_vis;
+    }
+
+    @FXML
+    void showNamesAction(ActionEvent event)
+    {
+        if(check_show_names_.isSelected())
+        {
+            System.out.println("Showing Edge Labels");
+
+            co_author_graph_visualizer_.showEdgeLabels();
+            co_author_graph_visualizer_.showVertexLabels();
+            citation_graph_visualizer_.showEdgeLabels();
+            citation_graph_visualizer_.showVertexLabels();
+        }
+        else
+        {
+            System.out.println("Hiding Edge Labels");
+
+            co_author_graph_visualizer_.hideEdgeLabels();
+            co_author_graph_visualizer_.hideVertexLabels();
+            citation_graph_visualizer_.hideEdgeLabels();
+            citation_graph_visualizer_.hideVertexLabels();
+
+        }
+    }
+
+    @FXML
+    void radioPickingModeAction(ActionEvent event)
+    {
+        if(radio_picking_mode_.isSelected())
+        {
+            citation_graph_visualizer_.setToPickingMode();
+        }
+    }
+
+    @FXML
+    void radioTransformModeAction(ActionEvent event)
+    {
+        if(radio_transform_mode_.isSelected())
+        {
+            citation_graph_visualizer_.setToTransformingMode();
+        }
     }
 }
