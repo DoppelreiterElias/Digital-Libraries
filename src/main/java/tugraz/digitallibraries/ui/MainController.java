@@ -69,6 +69,9 @@ public class MainController implements Initializable
     private Button co_auth_detail_open_;
 
     @FXML
+    private Button search_detail_open_;
+
+    @FXML
     private Button search_button_;
 
     @FXML
@@ -106,6 +109,8 @@ public class MainController implements Initializable
 
     private DetailViewListener cit_graph_detail_listener_;
     private DetailViewListener co_auth_detail_listener_;
+    private DetailViewListener search_detail_listener_;
+
 
     int selected_tab_index_;
 
@@ -120,6 +125,11 @@ public class MainController implements Initializable
         co_auth_graph_detail_.setShowRoot(true);
         co_auth_detail_listener_ = new DetailViewListener(co_auth_graph_detail_, co_auth_detail_open_);
         co_auth_graph_detail_.getSelectionModel().selectedItemProperty().addListener(co_auth_detail_listener_);
+
+        search_detail_.setShowRoot(true);
+        search_detail_listener_= new DetailViewListener(search_detail_, search_detail_open_);
+        search_detail_.getSelectionModel().selectedItemProperty().addListener(search_detail_listener_);
+
 
         search_by_choice_.setItems(FXCollections.observableArrayList("Author","Paper"));
         search_by_choice_.setValue("Author");
@@ -162,6 +172,12 @@ public class MainController implements Initializable
     public void coAuthGraphDetailButtonPressed(ActionEvent event)
     {
         setDetailNode(co_auth_detail_listener_.getCurrentSelection());
+    }
+
+    @FXML
+    public void searchDetailButtonPressed(ActionEvent event)
+    {
+        setDetailNode(search_detail_listener_.getCurrentSelection());
     }
 
     @FXML

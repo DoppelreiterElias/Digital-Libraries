@@ -133,7 +133,7 @@
                <content>
                   <VBox prefHeight="200.0" prefWidth="100.0">
                      <children>
-                        <SplitPane dividerPositions="0.6814244465832531" prefHeight="511.0" prefWidth="350.0">
+                        <SplitPane dividerPositions="0.5" prefHeight="511.0" prefWidth="350.0">
                            <items>
                               <VBox prefHeight="200.0" prefWidth="100.0">
                                  <children>
@@ -152,21 +152,22 @@
                                     <ListView fx:id="search_results_" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="400.0" prefWidth="688.0" />
                                  </children>
                               </VBox>
-                              <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="509.0" prefWidth="324.0">
+                              <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                                  <children>
                                     <Label alignment="CENTER" style="&#10;" text="Details" textAlignment="CENTER" wrapText="false">
                                        <font>
-                                          <Font size="18.0" fx:id="x251" />
+                                          <Font size="18.0" fx:id="x2521" />
                                        </font>
                                        <textFill>
-                                          <Color blue="0.624" green="0.624" red="0.624" fx:id="x261" />
+                                          <Color blue="0.624" green="0.624" red="0.624" fx:id="x2621" />
                                        </textFill>
                                     </Label>
-                                    <TreeView fx:id="search_detail_" prefHeight="469.0" prefWidth="298.0" VBox.vgrow="ALWAYS">
+                                    <TreeView fx:id="search_detail_" prefHeight="469.0" prefWidth="345.0" VBox.vgrow="ALWAYS">
                                        <VBox.margin>
                                           <Insets bottom="20.0" />
                                        </VBox.margin>
                                     </TreeView>
+                                    <Button fx:id="search_detail_open_" disable="true" mnemonicParsing="false" onAction="#searchDetailButtonPressed" prefHeight="14.0" prefWidth="110.0" text="Open" />
                                  </children>
                               </VBox>
                            </items>
