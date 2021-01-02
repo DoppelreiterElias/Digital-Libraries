@@ -17,7 +17,6 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.control.TreeView?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
@@ -28,9 +27,9 @@
       <menus>
         <Menu mnemonicParsing="false" text="File">
           <items>
-            <MenuItem id="openFileButton" mnemonicParsing="false" text="Open Directory" />
+            <MenuItem id="openFileButton" fx:id="open_directory_btn_" mnemonicParsing="false" text="Open Directory" />
             <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Quit" />
+            <MenuItem fx:id="quit_btn_" mnemonicParsing="false" onAction="#quitBtnPressed" text="Quit" />
           </items>
         </Menu>
             <Menu mnemonicParsing="false" text="Settings">
@@ -54,7 +53,7 @@
     </MenuBar>
       <TabPane tabClosingPolicy="UNAVAILABLE">
         <tabs>
-            <Tab closable="false" text="Citation Graph">
+            <Tab closable="false" onSelectionChanged="#tabSelectionChanged" text="Citation Graph">
                <content>
                   <SplitPane dividerPositions="0.6644444444444444" focusTraversable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0">
                      <items>
@@ -80,29 +79,65 @@
                                     <Color blue="0.624" green="0.624" red="0.624" fx:id="x26" />
                                  </textFill>
                               </Label>
-                              <TreeView fx:id="cit_graph_detail_" prefHeight="469.0" prefWidth="298.0" VBox.vgrow="ALWAYS">
+                              <TreeView fx:id="cit_graph_detail_" prefHeight="469.0" prefWidth="345.0" VBox.vgrow="ALWAYS">
                                  <VBox.margin>
                                     <Insets bottom="20.0" />
                                  </VBox.margin>
                               </TreeView>
+                              <Button fx:id="cit_graph_detail_open_" disable="true" mnemonicParsing="false" onAction="#citGraphDetailButtonPressed" prefHeight="14.0" prefWidth="110.0" text="Open" />
                            </children>
                         </VBox>
                      </items>
                   </SplitPane>
                </content>
             </Tab>
-          <Tab text="Search">
+            <Tab closable="false" onSelectionChanged="#tabSelectionChanged" text="Co-Author Graph">
+               <content>
+                  <SplitPane dividerPositions="0.6644444444444444" focusTraversable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0">
+                     <items>
+                        <VBox fx:id="co_auth_graph_view_" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+                           <children>
+                              <Label alignment="CENTER" style="&#10;" text="View" textAlignment="CENTER" wrapText="false">
+                                 <font>
+                                    <Font size="18.0" fx:id="x121" />
+                                 </font>
+                                 <textFill>
+                                    <Color blue="0.624" green="0.624" red="0.624" fx:id="x241" />
+                                 </textFill>
+                              </Label>
+                           </children>
+                        </VBox>
+                        <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+                           <children>
+                              <Label alignment="CENTER" style="&#10;" text="Details" textAlignment="CENTER" wrapText="false">
+                                 <font>
+                                    <Font size="18.0" fx:id="x252" />
+                                 </font>
+                                 <textFill>
+                                    <Color blue="0.624" green="0.624" red="0.624" fx:id="x262" />
+                                 </textFill>
+                              </Label>
+                              <TreeView fx:id="co_auth_graph_detail_" prefHeight="469.0" prefWidth="345.0" VBox.vgrow="ALWAYS">
+                                 <VBox.margin>
+                                    <Insets bottom="20.0" />
+                                 </VBox.margin>
+                              </TreeView>
+                              <Button fx:id="co_auth_detail_open_" disable="true" mnemonicParsing="false" onAction="#coAuthGraphDetailButtonPressed" prefHeight="14.0" prefWidth="110.0" text="Open" />
+                           </children>
+                        </VBox>
+                     </items>
+                  </SplitPane>
+               </content>
+            </Tab>
+          <Tab onSelectionChanged="#tabSelectionChanged" text="Search">
                <content>
                   <VBox prefHeight="200.0" prefWidth="100.0">
                      <children>
                         <SplitPane dividerPositions="0.6814244465832531" prefHeight="511.0" prefWidth="350.0">
                            <items>
-                              <Pane prefHeight="509.0" prefWidth="601.0">
+                              <VBox prefHeight="200.0" prefWidth="100.0">
                                  <children>
-                                    <ChoiceBox fx:id="search_by_choice_" layoutX="143.0" layoutY="26.0" prefHeight="26.0" prefWidth="164.0" />
-                                    <TextField fx:id="search_field_" layoutX="143.0" layoutY="52.0" prefHeight="26.0" prefWidth="319.0" />
-                                    <Button layoutX="462.0" layoutY="52.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="178.0" text="Search" />
-                                    <Label alignment="CENTER" layoutX="8.0" layoutY="29.0" prefHeight="19.0" prefWidth="135.0" style="&#10;" text="Search by" textAlignment="CENTER" wrapText="false">
+                                    <Label alignment="CENTER" prefHeight="19.0" prefWidth="135.0" style="&#10;" text="Search by" textAlignment="CENTER" wrapText="false">
                                        <font>
                                           <Font size="18.0" fx:id="x2511" />
                                        </font>
@@ -110,9 +145,13 @@
                                           <Color blue="0.624" green="0.624" red="0.624" fx:id="x2611" />
                                        </textFill>
                                     </Label>
-                                    <ListView fx:id="search_results_" layoutX="14.0" layoutY="101.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="400.0" prefWidth="688.0" />
+                                    <ChoiceBox fx:id="search_by_choice_" prefHeight="26.0" prefWidth="164.0" />
+                                    <TextField fx:id="search_field_" prefHeight="26.0" prefWidth="319.0" />
+                                    <Button fx:id="search_button_" mnemonicParsing="false" onAction="#searchButtonPressed" prefHeight="26.0" prefWidth="178.0" text="Search" />
+                                    <Button fx:id="search_show_selected_" mnemonicParsing="false" onAction="#searchShowSelected" prefHeight="26.0" prefWidth="177.0" text="Show Selected" />
+                                    <ListView fx:id="search_results_" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="400.0" prefWidth="688.0" />
                                  </children>
-                              </Pane>
+                              </VBox>
                               <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="509.0" prefWidth="324.0">
                                  <children>
                                     <Label alignment="CENTER" style="&#10;" text="Details" textAlignment="CENTER" wrapText="false">

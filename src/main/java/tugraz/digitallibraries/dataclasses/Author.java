@@ -2,14 +2,14 @@ package tugraz.digitallibraries.dataclasses;
 
 
 import javafx.scene.control.TreeItem;
-import javafx.scene.input.ContextMenuEvent;
-import javafx.scene.input.InputEvent;
-import tugraz.digitallibraries.ui.PaperContextMenuListener;
+import tugraz.digitallibraries.ui.DetailViewObject;
+import tugraz.digitallibraries.ui.DetailViewStringNode;
 
 import java.util.ArrayList;
 
 // Author of a paper
-public class Author {
+public class Author extends DetailViewObject
+{
 
     private static int counter = 0;
     private int id;
@@ -18,9 +18,9 @@ public class Author {
     private String fullname;
     AuthorType authorType;
 
-
     public Author(String[] forenames, String[] surnames)
     {
+        super(String.join(" ", forenames) + String.join(" ", surnames), true);
         this.id = counter++;
         this.forenames = forenames;
         this.surnames = surnames;
@@ -28,6 +28,7 @@ public class Author {
     }
 
     public Author(String[] forenames, String[] surnames, AuthorType type) {
+        super(String.join(" ", forenames) + String.join(" ", surnames), true);
         this.id = counter++;
         this.forenames = forenames;
         this.surnames = surnames;
@@ -37,10 +38,12 @@ public class Author {
 
 
     public Author(){
+        super("", true);
         this.id = counter++;
     }
 
     public Author(AuthorType type) {
+        super("", true);
         this.id = counter++;
         this.authorType = type;
         createFullName();
@@ -53,6 +56,8 @@ public class Author {
 
     public void setForenames(String[] forenames) {
         this.forenames = forenames;
+        createFullName();
+        name_ = fullname;
     }
 
 
@@ -63,6 +68,8 @@ public class Author {
 
     public void setSurnames(String[] surnames) {
         this.surnames = surnames;
+        createFullName();
+        name_ = fullname;
     }
 
     public void setAuthorType(AuthorType type) {
@@ -100,49 +107,54 @@ public class Author {
         return fullname;
     }
 
-    public TreeItem<String> toDetailTree()
+    @Override
+    public DetailViewStringNode toDetailTreeview()
     {
-        TreeItem<String> root = new TreeItem<>(getFullname());
+        DetailViewStringNode root = new DetailViewStringNode(getFullname());
         root.setExpanded(true);
 
-        TreeItem<String> fornames = new TreeItem<>("Fornames");
-        fornames.getChildren().add(new TreeItem<String>(String.join(" ", this.forenames)));
+        DetailViewStringNode fornames = new DetailViewStringNode("Fornames");
+        fornames.getChildren().add(new DetailViewStringNode(String.join(" ", this.forenames)));
 
-        TreeItem<String> surnames = new TreeItem<>("Surnames");
-        surnames.getChildren().add(new TreeItem<String>(String.join(" ", this.surnames)));
+        DetailViewStringNode surnames = new DetailViewStringNode("Surnames");
+        surnames.getChildren().add(new DetailViewStringNode(String.join(" ", this.surnames)));
 
-        TreeItem papers_root = new TreeItem<String>("Papers of Author");
+        DetailViewStringNode papers_root = new DetailViewStringNode("Papers of Author");
 
         for(MetadataEntry cur_paper : getPapersOfAuthor())
         {
-            TreeItem new_paper = new TreeItem<MetadataEntry>(cur_paper);
-//            new_paper.addEventHandler(ContextMenuEvent.CONTEXT_MENU_REQUESTED, new PaperContextMenuListener());
-            papers_root.getChildren().add(new_paper);
+            papers_root.getChildren().add(new TreeItem<>(cur_paper));
         }
 
         ///Testcode for Paper handler
+        ///TODO remove if search is implemented
         MetadataEntry test_paper = new MetadataEntry();
         test_paper.setPaper_title("TestPaper");
-        TreeItem new_paper = new TreeItem<MetadataEntry>(test_paper);
-
-        papers_root.getChildren().add(new_paper);
+//        System.out.println("test: " + test_paper.getValue().canBeOpened());
+        papers_root.getChildren().add(new TreeItem<>(test_paper));
         ////
 
-        TreeItem co_authors_root = new TreeItem("Co-Authors");
+        DetailViewStringNode co_authors_root = new DetailViewStringNode("Co-Authors");
 
         for(Author cur_co_author : getCoAuthors())
         {
-            co_authors_root.getChildren().add(new TreeItem(cur_co_author));
+            co_authors_root.getChildren().add(new TreeItem<>(cur_co_author));
         }
 
-        TreeItem sources_root = new TreeItem("Sources of Author");
+        ///Testcode for Author Handler
+        ///TODO remove if search is implemented
+        Author test_author = new Author(new String[]{"Test"}, new String[]{"Author"});
+//        System.out.println("test: " + test_paper.getValue().canBeOpened());
+        co_authors_root.getChildren().add(new TreeItem<>(test_author));
+        ////
+
+
+        DetailViewStringNode sources_root = new DetailViewStringNode("Sources of Author");
 
         for(MetadataEntry cur_paper : getSources())
         {
-            sources_root.getChildren().add(new TreeItem<MetadataEntry>(cur_paper));
-            ///Todo Register Event Handler for Paper
+            sources_root.getChildren().add(new TreeItem<>(cur_paper));
         }
-
 
         root.getChildren().addAll(fornames, surnames, papers_root, co_authors_root, sources_root);
 
