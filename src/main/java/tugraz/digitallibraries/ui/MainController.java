@@ -10,17 +10,25 @@ import javafx.embed.swing.SwingNode;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.robot.Robot;
 
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import tugraz.digitallibraries.App;
 import tugraz.digitallibraries.dataclasses.Author;
 import tugraz.digitallibraries.dataclasses.MetadataEntry;
 import tugraz.digitallibraries.graph.GraphVisualizer;
 
+import java.awt.event.MouseEvent;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -47,6 +55,10 @@ public class MainController implements Initializable
 
     @FXML
     private RadioMenuItem radio_transform_mode_;
+
+    @FXML
+    MenuItem about_show_button_;
+
 
     @FXML
     private Font x1;
@@ -143,5 +155,24 @@ public class MainController implements Initializable
         {
             citation_graph_visualizer_.setToTransformingMode();
         }
+    }
+
+    @FXML
+    void aboutShowClicked(ActionEvent event)
+    {
+        try
+        {
+            FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("about.fxml"));
+            Scene scene_loaded = new Scene(fxmlLoader.load());
+            Stage stage = new Stage(StageStyle.DECORATED);
+            stage.setScene(scene_loaded);
+            stage.setTitle("About " + App.APP_NAME);
+            stage.show();
+
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
     }
 }

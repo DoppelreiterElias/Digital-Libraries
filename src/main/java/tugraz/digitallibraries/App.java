@@ -33,13 +33,14 @@ public class App extends Application {
     GraphVisualizer graphVisualizer;
     MainController main_controller_;
 
+    public static final String APP_NAME = new String("Libraliz0r");
 
     @Override
     public void start(Stage stage) throws IOException {
 
         scene = new Scene(loadFXML("main_view"), 1500, 1000);
         stage.setScene(scene);
-
+        stage.setTitle(APP_NAME);
         stage.show();
 
         VBox anchor = (VBox)scene.lookup("#cit_graph_view_");
