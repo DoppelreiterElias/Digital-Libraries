@@ -34,17 +34,9 @@ public class EdgeCitation {
         references.add(new_ref);
     }
 
+    public ArrayList<Reference> getReferences() {
+        return this.references;
+    }
 
 
-
-    // shallow copy because we want that edges refers to the same object
-    //    public EdgeCitation(EdgeCitation edge) {
-    //        this.reference = edge.reference;
-    //    }
-
-    // shallow copy because we want that edges refers to the same object
-    //    public EdgeCitation(EdgeCitation edge, Author a1, Author a2) {
-    //        this.reference = edge.reference;
-    //        this.authors = new Pair<>(a1, a2);
-    //    }
 }

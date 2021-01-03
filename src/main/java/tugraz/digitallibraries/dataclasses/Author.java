@@ -2,6 +2,7 @@ package tugraz.digitallibraries.dataclasses;
 
 
 import javafx.scene.control.TreeItem;
+import tugraz.digitallibraries.graph.EdgeCitation;
 import tugraz.digitallibraries.ui.DetailViewObject;
 import tugraz.digitallibraries.ui.DetailViewStringNode;
 import tugraz.digitallibraries.graph.EdgeCoAuthorship;
@@ -129,14 +130,6 @@ public class Author extends DetailViewObject
             papers_root.getChildren().add(new TreeItem<>(cur_paper));
         }
 
-        ///Testcode for Paper handler
-        ///TODO remove if search is implemented
-        MetadataEntry test_paper = new MetadataEntry();
-        test_paper.setPaper_title("TestPaper");
-//        System.out.println("test: " + test_paper.getValue().canBeOpened());
-        papers_root.getChildren().add(new TreeItem<>(test_paper));
-        ////
-
         DetailViewStringNode co_authors_root = new DetailViewStringNode("Co-Authors");
 
         for(Author cur_co_author : getCoAuthors())
@@ -144,17 +137,10 @@ public class Author extends DetailViewObject
             co_authors_root.getChildren().add(new TreeItem<>(cur_co_author));
         }
 
-        ///Testcode for Author Handler
-        ///TODO remove if search is implemented
-        Author test_author = new Author(new String[]{"Test"}, new String[]{"Author"});
-//        System.out.println("test: " + test_paper.getValue().canBeOpened());
-        co_authors_root.getChildren().add(new TreeItem<>(test_author));
-        ////
-
 
         DetailViewStringNode sources_root = new DetailViewStringNode("Sources of Author");
 
-        for(MetadataEntry cur_paper : getSources())
+        for(Reference cur_paper : getSources())
         {
             sources_root.getChildren().add(new TreeItem<>(cur_paper));
         }
@@ -180,10 +166,13 @@ public class Author extends DetailViewObject
         return new ArrayList<>(neighbours);
     }
 
-    public ArrayList<MetadataEntry> getSources()
+    public ArrayList<Reference> getSources()
     {
-        ///Todo implement
-        return new ArrayList<>();
+        Collection<EdgeCitation> edges = GraphCreator.getInstance().getCitationGraph().getOutEdges(this);
+        ArrayList<Reference> cited_papers = new ArrayList<>();
+        for(EdgeCitation edge : edges)
+            cited_papers.addAll(edge.getReferences());
+        return cited_papers;
     }
 
 }
