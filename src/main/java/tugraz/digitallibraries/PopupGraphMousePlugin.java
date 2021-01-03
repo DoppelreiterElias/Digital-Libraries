@@ -56,7 +56,7 @@ public class PopupGraphMousePlugin extends AbstractPopupGraphMousePlugin
                         System.out.println("action performed" + e.getActionCommand());
                         // TODO: open author into detailed view
                         System.out.println(v.toString());
-                        main_controller_.setCitGraphDetail(v);
+                        main_controller_.setDetailNode(v);
                         vv.repaint();
                     }
                 });

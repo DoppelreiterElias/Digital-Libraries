@@ -1,13 +1,20 @@
 package tugraz.digitallibraries.dataclasses;
 
+import javafx.scene.control.TreeItem;
+import tugraz.digitallibraries.ui.DetailViewObject;
+import tugraz.digitallibraries.ui.DetailViewStringNode;
 import java.awt.*;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 
+import java.util.ArrayList;
+
+
 // ONE PAPER
-public class MetadataEntry {
+public class MetadataEntry extends DetailViewObject
+{
 
     private String file_path;
     private String pdf_path;
@@ -16,15 +23,16 @@ public class MetadataEntry {
     private String paper_title;
     private String publication_date;
 
-    private List<Author> authors;
-
+    private List<Author> authors = new ArrayList<Author>();
     private String idno;
-    private String[] keywords;
+    private String[] keywords = new String[]{};
     private String paper_abstract;
 
     private List<Reference> references;
 
     public MetadataEntry(String file_path, String pdf_path, String desc_ref, String paper_title, String publication_date, List<Author> authors, String idno, String[] keywords, String paper_abstract, List<Reference> references){
+        super(paper_title, true);
+
         this.file_path = file_path;
         this.pdf_path = pdf_path;
         this.desc_ref = desc_ref;
@@ -38,7 +46,8 @@ public class MetadataEntry {
     }
 
 
-    public MetadataEntry(){}
+    public MetadataEntry(){super("", true);
+    }
 
 
     public String getDesc_ref() {
@@ -58,6 +67,7 @@ public class MetadataEntry {
 
     public void setPaper_title(String paper_title) {
         this.paper_title = paper_title;
+        this.name_ = paper_title;
     }
 
 
@@ -140,6 +150,29 @@ public class MetadataEntry {
     public String toString()
     {
         return this.paper_title;
+    }
+
+    @Override
+    public DetailViewStringNode toDetailTreeview()
+    {
+        DetailViewStringNode root = new DetailViewStringNode(paper_title);
+        root.setExpanded(true);
+
+        DetailViewStringNode authors_root = new DetailViewStringNode("Authors");
+        for(Author cur_author : authors)
+            authors_root.getChildren().add(new TreeItem<>(cur_author));
+
+        DetailViewStringNode keywords_root = new DetailViewStringNode("Keywords");
+        for(String act_keyword : keywords)
+            keywords_root.getChildren().add(new DetailViewStringNode(act_keyword));
+
+
+        DetailViewStringNode publication_date_root = new DetailViewStringNode("Publication Date");
+        publication_date_root.getChildren().add(new DetailViewStringNode(publication_date));
+
+        root.getChildren().addAll(authors_root, keywords_root, publication_date_root);
+
+        return root;
     }
 
     public void openPdfInBrowser() {
