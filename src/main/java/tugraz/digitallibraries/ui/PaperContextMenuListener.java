@@ -52,6 +52,8 @@ public class PaperContextMenuListener implements ChangeListener<TreeItem<Metadat
                 {
                     ///Todo actually open paper
                     System.out.println("Opening " + cur_paper_.getPaper_title());
+                    cur_paper_.openPdfInBrowser();
+
                 }
             });
 

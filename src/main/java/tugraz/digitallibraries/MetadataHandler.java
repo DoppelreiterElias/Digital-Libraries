@@ -88,6 +88,7 @@ public class MetadataHandler {
         MetadataEntry entry = new MetadataEntry();
 
         entry.setFile_path(filepath);
+        entry.SetPdf_path(filepath.substring(0,filepath.length() - 8));
 
         FencodingDesc_ref(doc, entry);
         Fpaper_title(doc, entry);

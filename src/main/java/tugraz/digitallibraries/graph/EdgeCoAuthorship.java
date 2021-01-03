@@ -35,7 +35,13 @@ public class EdgeCoAuthorship {
     }
 
     public void addPaperToEdge(MetadataEntry new_paper) {
-        this.papers.add(new_paper);
+        boolean already_exist = false;
+        for(MetadataEntry cur : papers) {
+            if(cur.getPaper_title().equals(new_paper.getPaper_title()))
+                already_exist = true;
+        }
+        if(!already_exist)
+            papers.add(new_paper);
     }
 
     public int getWeight() {

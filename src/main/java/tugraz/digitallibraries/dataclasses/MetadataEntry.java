@@ -1,12 +1,16 @@
 package tugraz.digitallibraries.dataclasses;
 
+import java.awt.*;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
-
 
 // ONE PAPER
 public class MetadataEntry {
 
     private String file_path;
+    private String pdf_path;
 
     private String desc_ref;
     private String paper_title;
@@ -20,8 +24,9 @@ public class MetadataEntry {
 
     private List<Reference> references;
 
-    public MetadataEntry(String file_path, String desc_ref, String paper_title, String publication_date, List<Author> authors, String idno, String[] keywords, String paper_abstract, List<Reference> references){
+    public MetadataEntry(String file_path, String pdf_path, String desc_ref, String paper_title, String publication_date, List<Author> authors, String idno, String[] keywords, String paper_abstract, List<Reference> references){
         this.file_path = file_path;
+        this.pdf_path = pdf_path;
         this.desc_ref = desc_ref;
         this.paper_title = paper_title;
         this.publication_date = publication_date;
@@ -125,9 +130,36 @@ public class MetadataEntry {
         this.file_path = file_name;
     }
 
+    public String getPdf_path() { return pdf_path;}
+
+    public void SetPdf_path(String pdf_name) {
+        this.pdf_path = pdf_name;
+    }
+
     @Override
     public String toString()
     {
         return this.paper_title;
     }
+
+    public void openPdfInBrowser() {
+
+        String os = System.getProperty("os.name");
+        try {
+            if (os.contains("Linux")) {
+                // TODO implement
+                System.out.println("Browse URL currently not implemented for linux");
+            } else {
+                if (Desktop.isDesktopSupported())
+                {
+                    Desktop.getDesktop().browse(new URI(pdf_path));
+                } else {
+                    System.out.println("Browse URL xdg-open not supported!");
+                }
+            }
+        } catch (IOException | URISyntaxException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
