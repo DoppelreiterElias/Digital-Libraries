@@ -1,6 +1,7 @@
 package tugraz.digitallibraries.graph;
 
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
+import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 import edu.uci.ics.jung.graph.util.EdgeType;
 import javafx.util.Pair;
@@ -11,8 +12,11 @@ import tugraz.digitallibraries.dataclasses.Reference;
 import java.util.ArrayList;
 import java.util.List;
 
+
+
 public class GraphCreator {
 
+    private static GraphCreator instance;
     private ArrayList<MetadataEntry> metadata;
     UndirectedSparseGraph<Author, EdgeCoAuthorship> coAuthorGraph;
     private int coAuthorMaxDegree = 0;
@@ -22,11 +26,23 @@ public class GraphCreator {
     private int citationMaxDegree = 0;
     private int citationMaxEdgeWith = 1;
 
-    public GraphCreator(ArrayList<MetadataEntry> list) {
-        coAuthorGraph = new UndirectedSparseGraph<>();
-        citationGraph = new DirectedSparseGraph<>();
+    public static GraphCreator getInstance() {
+        if(GraphCreator.instance == null) {
+            GraphCreator.instance = new GraphCreator();
+            GraphCreator.instance.coAuthorGraph = new UndirectedSparseGraph<>();
+            GraphCreator.instance.citationGraph = new DirectedSparseGraph<>();
+        }
+
+        return GraphCreator.instance;
+    }
+
+    private GraphCreator() {   }
+
+    public void initializeList(ArrayList<MetadataEntry> list) {
         this.metadata = list;
     }
+
+
 
     public int getCoAuthorMaxDegree() {
         return this.coAuthorMaxDegree;
@@ -92,7 +108,7 @@ public class GraphCreator {
                         EdgeCoAuthorship current_edge = new EdgeCoAuthorship(paper);
                         current_edge.authors = new Pair<>(current_authors.get(i),current_authors.get(j));
                         boolean success = coAuthorGraph.addEdge(current_edge, current_authors.get(i), current_authors.get(j), EdgeType.UNDIRECTED);
-                        assert !success;
+//                        assert !success;
                         int current_degree_i = coAuthorGraph.inDegree(current_authors.get(i));
                         int current_degree_j = coAuthorGraph.inDegree(current_authors.get(i));
                         if(coAuthorMaxDegree < current_degree_i)
@@ -106,8 +122,6 @@ public class GraphCreator {
         }
         System.out.println("Finished import Co-AuthorGraph");
     }
-
-
 
     public void createCitationGraph() {
 
@@ -133,7 +147,7 @@ public class GraphCreator {
                     for(Author ref_author : authors_of_referenced_paper) {
                         EdgeCitation existing_edge = citationGraph.findEdge(paper_author, ref_author);
                         if(existing_edge != null) { // already exists an edge between these two
-//                            System.out.println("adding reference allready exists");
+//                            System.out.println("adding reference already exists");
                             existing_edge.addReferenceToEdge(reference);
                             if(citationMaxEdgeWith < existing_edge.getWeight())
                                 citationMaxEdgeWith = existing_edge.getWeight();
@@ -141,7 +155,7 @@ public class GraphCreator {
                         else {
                             EdgeCitation current_edge = new EdgeCitation(reference);
                             boolean success = citationGraph.addEdge(current_edge, paper_author, ref_author, EdgeType.DIRECTED);
-                            assert !success;
+//                            assert !success;
                             int current_degree_i = citationGraph.inDegree(paper_author);
                             int current_degree_j = citationGraph.inDegree(ref_author);
                             if(citationMaxDegree < current_degree_i)
@@ -156,4 +170,20 @@ public class GraphCreator {
         }
         System.out.println("Finished import Citation Graph");
     }
+
+    public Graph createSubgraph(GraphUtils.GraphType type, Author vertex) {
+
+        if(type == GraphUtils.GraphType.COAUTHOR_GRAPH) {
+            UndirectedSparseGraph<Author, EdgeCoAuthorship> coAuthorsubGraph = new UndirectedSparseGraph<>();
+
+            return coAuthorsubGraph;
+        }
+        else
+        {
+            DirectedSparseGraph<Author, EdgeCitation> citationsubGraph = new DirectedSparseGraph<>();
+
+            return citationsubGraph;
+        }
+    }
+
 }

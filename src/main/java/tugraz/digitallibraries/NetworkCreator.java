@@ -6,12 +6,13 @@ import tugraz.digitallibraries.graph.GraphCreator;
 import java.io.File;
 import java.util.ArrayList;
 
-import static tugraz.digitallibraries.graph.GraphUtils.*;
+import static tugraz.digitallibraries.graph.GraphUtils.NR_PAPERS;
+import static tugraz.digitallibraries.graph.GraphUtils.USE_SMALL_DATASET;
 
 // static class
 public class NetworkCreator {
 
-    private static GraphCreator graphCreator;
+    private static GraphCreator graphCreator = GraphCreator.getInstance();
     private static MetadataHandler metadataHandler;
 
 
@@ -27,7 +28,7 @@ public class NetworkCreator {
     public static ArrayList<Graph> createGraphs() {
 
         ArrayList<Graph> graphs = new ArrayList<>();
-        graphCreator = new GraphCreator(metadataHandler.getMetadata());
+        graphCreator.initializeList(metadataHandler.getMetadata());
 
         // create the graphs
         graphCreator.createCoAuthorGraph();
@@ -55,7 +56,8 @@ public class NetworkCreator {
                     files.addAll(ListAllFilesFromFolder(foldername + "/" + filename.getName()));
                 }
                 else {
-                    files.add(foldername + "/" + filename.getName());
+                    if(getExtension(filename.getName()).equals("xml")) // only import xml files
+                        files.add(foldername + "/" + filename.getName());
                 }
             }
         } catch(NullPointerException e)
@@ -73,5 +75,9 @@ public class NetworkCreator {
             return tmp_list;
         }
         return files;
+    }
+
+    public static String getExtension(String filename) {
+        return filename.substring(filename.lastIndexOf(".") + 1, filename.length());
     }
 }

@@ -10,9 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import tugraz.digitallibraries.dataclasses.Author;
-import tugraz.digitallibraries.graph.EdgeCitation;
 import tugraz.digitallibraries.graph.EdgeCoAuthorship;
-import tugraz.digitallibraries.graph.GraphCreator;
 import tugraz.digitallibraries.graph.GraphVisualizer;
 import tugraz.digitallibraries.ui.MainController;
 
@@ -29,7 +27,7 @@ public class App extends Application {
 
     // swing node is a javaFX element, we can insert into swingNode java swing elements, and make them in javafx visible
     final SwingNode swing_node_ = new SwingNode();
-    GraphCreator graphCreator;
+
     GraphVisualizer graphVisualizer;
     MainController main_controller_;
 
@@ -70,8 +68,7 @@ public class App extends Application {
     {
         NetworkCreator.createNetwork("Document and Metadata Collection");
         ArrayList<Graph>  graphs  = NetworkCreator.createGraphs();
-        graphCreator = NetworkCreator.getGraphCreator();
-        graphVisualizer = new GraphVisualizer(graphCreator);
+        graphVisualizer = new GraphVisualizer();
 
         SwingUtilities.invokeLater(new Runnable() {
             @Override

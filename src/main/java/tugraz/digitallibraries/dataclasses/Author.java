@@ -2,11 +2,11 @@ package tugraz.digitallibraries.dataclasses;
 
 
 import javafx.scene.control.TreeItem;
-import javafx.scene.input.ContextMenuEvent;
-import javafx.scene.input.InputEvent;
-import tugraz.digitallibraries.ui.PaperContextMenuListener;
+import tugraz.digitallibraries.graph.EdgeCoAuthorship;
+import tugraz.digitallibraries.graph.GraphCreator;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 // Author of a paper
 public class Author {
@@ -121,11 +121,10 @@ public class Author {
         }
 
         ///Testcode for Paper handler
-        MetadataEntry test_paper = new MetadataEntry();
-        test_paper.setPaper_title("TestPaper");
-        TreeItem new_paper = new TreeItem<MetadataEntry>(test_paper);
-
-        papers_root.getChildren().add(new_paper);
+//        MetadataEntry test_paper = new MetadataEntry();
+//        test_paper.setPaper_title("TestPaper");
+//        TreeItem new_paper = new TreeItem<MetadataEntry>(test_paper);
+//        papers_root.getChildren().add(new_paper);
         ////
 
         TreeItem co_authors_root = new TreeItem("Co-Authors");
@@ -151,14 +150,18 @@ public class Author {
 
     public ArrayList<MetadataEntry> getPapersOfAuthor()
     {
-        ///Todo implement
-        return new ArrayList<>();
+        Collection<EdgeCoAuthorship> edges = GraphCreator.getInstance().getCoAuthorGraph().getOutEdges(this);
+        ArrayList<MetadataEntry> papers = new ArrayList<>();
+        for (EdgeCoAuthorship edge : edges) {
+            papers.addAll(edge.getPapers());
+        }
+        return papers;
     }
 
     public ArrayList<Author> getCoAuthors()
     {
-        ///Todo implement
-        return new ArrayList<>();
+        Collection<Author> neighbours = GraphCreator.getInstance().getCoAuthorGraph().getNeighbors(this);
+        return new ArrayList<>(neighbours);
     }
 
     public ArrayList<MetadataEntry> getSources()

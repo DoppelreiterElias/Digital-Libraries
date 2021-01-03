@@ -11,4 +11,5 @@ public class GraphUtils {
     public static int NR_PAPERS = 20; // nr paper to import - only if USE_SMALL_DATASET = true
     //--------------------------------------------------------------------------------------------------
 
+    enum GraphType {COAUTHOR_GRAPH, CITATION_GRAPH};
 }

@@ -1,24 +1,15 @@
 package tugraz.digitallibraries.ui;
 
-import edu.uci.ics.jung.visualization.VisualizationViewer;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.embed.swing.SwingNode;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import javafx.scene.robot.Robot;
-
 import tugraz.digitallibraries.dataclasses.Author;
-import tugraz.digitallibraries.dataclasses.MetadataEntry;
 import tugraz.digitallibraries.graph.GraphVisualizer;
 
 import java.net.URL;
@@ -75,6 +66,7 @@ public class MainController implements Initializable
     GraphVisualizer citation_graph_visualizer_;
     GraphVisualizer co_author_graph_visualizer_;
 
+
     public void initialize(URL location, ResourceBundle resources)
     {
         cit_graph_detail_.setShowRoot(true);
@@ -82,6 +74,7 @@ public class MainController implements Initializable
 
         search_by_choice_.setItems(FXCollections.observableArrayList("Author","Paper"));
         search_by_choice_.setValue("Author");
+
     }
 
     public void setCitGraphDetail(Author auth)
@@ -91,7 +84,6 @@ public class MainController implements Initializable
             @Override
             public void run()
             {
-                TreeItem<Author> detail_name = new TreeItem<>(auth);
                 cit_graph_detail_.setRoot(auth.toDetailTree());
             }
         });

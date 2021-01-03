@@ -38,8 +38,8 @@ public class GraphVisualizer {
     protected DefaultModalGraphMouse gm = new DefaultModalGraphMouse();
 
 
-    public GraphVisualizer(GraphCreator graphCr) {
-        this.graphCreator = graphCr;
+    public GraphVisualizer() {
+        this.graphCreator = GraphCreator.getInstance();
     }
 
     public VisualizationViewer<Author, EdgeCoAuthorship>  createCoAuthorVisualizer(Graph g, MainController main_controller) {
