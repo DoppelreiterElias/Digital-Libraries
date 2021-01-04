@@ -73,7 +73,7 @@ public class GraphVisualizer {
     private void setEdgeSize() {
         Transformer<EdgeCoAuthorship, Stroke> edgeStroke = new Transformer<EdgeCoAuthorship, Stroke>() {
             public Stroke transform(EdgeCoAuthorship s) {
-                // EDGE SIZE
+                // EDGE SIZE - shows how many papers two authors have released together
                 int max_size_of_graph = graphCreator.getCoAuthorMaxEdgeWith();
                 float scaling = ((float)s.getWeight() / max_size_of_graph) * MAX_EDGE_WIDTH;
                 scaling = Math.max(scaling, 1);
@@ -87,6 +87,7 @@ public class GraphVisualizer {
 
         Transformer<Author,Shape> vertexSize = new Transformer<Author,Shape>(){
             public Shape transform(Author i){
+                // VERTEX SIZE - the bigger the vertex, the more coAuthors this author has
                 Ellipse2D circle = new Ellipse2D.Double(-10, -10, 20, 20);
                 int max_size_of_graph = graphCreator.getCoAuthorMaxDegree();
                 float scaling = ((float)g.inDegree(i) / max_size_of_graph) * MAX_VERTEX_SIZE;

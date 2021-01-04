@@ -155,7 +155,11 @@ public class Author extends DetailViewObject
         Collection<EdgeCoAuthorship> edges = GraphCreator.getInstance().getCoAuthorGraph().getOutEdges(this);
         ArrayList<MetadataEntry> papers = new ArrayList<>();
         for (EdgeCoAuthorship edge : edges) {
-            papers.addAll(edge.getPapers());
+            for(MetadataEntry paper : edge.getPapers()) {
+                if(!papers.contains(paper))
+                    papers.add(paper);
+            }
+//            papers.addAll(edge.getPapers());
         }
         return papers;
     }

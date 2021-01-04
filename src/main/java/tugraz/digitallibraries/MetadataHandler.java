@@ -380,6 +380,8 @@ public class MetadataHandler {
                 //System.out.println("Titel: " + eTitel.getTextContent());
 
                 reference.setTitle(eTitel.getTextContent());
+                if(reference.getTitle().isEmpty())
+                    continue; // do not add empty references (bugs in xml)
 
                 // Authors of Reference
                 NodeList nlAuthor = eElement.getElementsByTagName("author");

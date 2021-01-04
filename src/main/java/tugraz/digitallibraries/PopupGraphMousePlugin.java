@@ -60,6 +60,7 @@ public class PopupGraphMousePlugin extends AbstractPopupGraphMousePlugin
                         vv.repaint();
                     }
                 });
+                /*
                 popup.add(new AbstractAction("...") {
                     @Override
                     public void actionPerformed(ActionEvent e) {
@@ -67,6 +68,7 @@ public class PopupGraphMousePlugin extends AbstractPopupGraphMousePlugin
                         vv.repaint();
                     }
                 });
+                */
                 popup.show(vv, e.getX(), e.getY());
             } else {
 
