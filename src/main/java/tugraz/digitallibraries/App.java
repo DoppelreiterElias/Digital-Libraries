@@ -12,7 +12,7 @@ import javafx.stage.Stage;
 import tugraz.digitallibraries.dataclasses.Author;
 import tugraz.digitallibraries.graph.EdgeCitation;
 import tugraz.digitallibraries.graph.EdgeCoAuthorship;
-import tugraz.digitallibraries.graph.GraphCreator;
+import tugraz.digitallibraries.graph.GraphUtils;
 import tugraz.digitallibraries.graph.GraphVisualizer;
 import tugraz.digitallibraries.ui.MainController;
 
@@ -73,7 +73,7 @@ public class App extends Application {
         cit_graph_vbox.getChildren().add(cit_graph_node_);
 
         VBox co_auth_graph_vbox = (VBox)scene.lookup("#co_auth_graph_view_");
-        co_auth_graph_vbox.getChildren().add(cit_graph_node_);
+        co_auth_graph_vbox.getChildren().add(co_auth_graph_node_);
 
 
         NetworkCreator.createNetwork("Document and Metadata Collection");
@@ -84,8 +84,8 @@ public class App extends Application {
             @Override
             public void run()
             {
-                showCoAuthorGraph(graphs.get(0));
-//                showCitationGraph(graphs.get(0));
+                showCoAuthorGraph(graphs.get(GraphUtils.GraphType.COAUTHOR_GRAPH.ordinal()));
+                showCitationGraph(graphs.get(GraphUtils.GraphType.CITATION_GRAPH.ordinal()));
             }
         });
     }
@@ -95,14 +95,14 @@ public class App extends Application {
     private void showCoAuthorGraph(final Graph g)
     {
         VisualizationViewer<Author, EdgeCoAuthorship> vv = graphVisualizer.createCoAuthorVisualizer(g, main_controller_);
-        cit_graph_node_.setContent(vv);
+        co_auth_graph_node_.setContent(vv);
     }
 
     private void showCitationGraph(final Graph g)
     {
         // todo make citation graph similar to coauthor graph
-        VisualizationViewer<Author, EdgeCitation> vv = graphVisualizer.createCitationVisualizer(g);
-        co_auth_graph_node_.setContent(vv);
+        VisualizationViewer<Author, EdgeCitation> vv = graphVisualizer.createCitationVisualizer(g, main_controller_);
+        cit_graph_node_.setContent(vv);
     }
 
 

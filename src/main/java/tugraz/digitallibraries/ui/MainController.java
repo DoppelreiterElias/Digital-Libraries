@@ -12,7 +12,6 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import tugraz.digitallibraries.dataclasses.Author;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import tugraz.digitallibraries.App;
@@ -218,19 +217,19 @@ public class MainController implements Initializable
         {
             System.out.println("Showing Edge Labels");
 
-            co_author_graph_visualizer_.showEdgeLabels();
-            co_author_graph_visualizer_.showVertexLabels();
-            citation_graph_visualizer_.showEdgeLabels();
-            citation_graph_visualizer_.showVertexLabels();
+            co_author_graph_visualizer_.showEdgeLabelsCO();
+            co_author_graph_visualizer_.showVertexLabelsCO();
+            citation_graph_visualizer_.showEdgeLabelsCI();
+            citation_graph_visualizer_.showVertexLabelsCI();
         }
         else
         {
             System.out.println("Hiding Edge Labels");
 
-            co_author_graph_visualizer_.hideEdgeLabels();
-            co_author_graph_visualizer_.hideVertexLabels();
-            citation_graph_visualizer_.hideEdgeLabels();
-            citation_graph_visualizer_.hideVertexLabels();
+            co_author_graph_visualizer_.hideEdgeLabelsCO();
+            co_author_graph_visualizer_.hideVertexLabelsCO();
+            citation_graph_visualizer_.hideEdgeLabelsCI();
+            citation_graph_visualizer_.hideVertexLabelsCI();
 
         }
     }

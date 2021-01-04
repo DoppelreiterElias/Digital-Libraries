@@ -13,6 +13,7 @@ import org.apache.commons.collections15.Transformer;
 import org.apache.commons.collections15.functors.ConstantTransformer;
 import tugraz.digitallibraries.PopupGraphMousePlugin;
 import tugraz.digitallibraries.dataclasses.Author;
+import tugraz.digitallibraries.dataclasses.AuthorType;
 import tugraz.digitallibraries.ui.MainController;
 
 import javax.swing.*;
@@ -27,13 +28,17 @@ public class GraphVisualizer {
 
 
     GraphCreator graphCreator;
-    VisualizationViewer<Author, EdgeCoAuthorship> vv;
+    VisualizationViewer<Author, EdgeCoAuthorship> vv_co;
+    VisualizationViewer<Author, EdgeCitation> vv_ci;
 
     protected Transformer<Author, String> vertex_label_none = new ConstantTransformer(null);
     protected Transformer<Author, String> vertex_label;
 
-    protected Transformer<EdgeCoAuthorship, String> edge_label_none = new ConstantTransformer(null);
-    protected Transformer<EdgeCoAuthorship, String> edge_label;
+    protected Transformer<EdgeCoAuthorship, String> co_edge_label_none = new ConstantTransformer(null);
+    protected Transformer<EdgeCoAuthorship, String> co_edge_label;
+
+    protected Transformer<EdgeCitation, String> ci_edge_label_none = new ConstantTransformer(null);
+    protected Transformer<EdgeCitation, String> ci_edge_label;
 
     protected DefaultModalGraphMouse gm = new DefaultModalGraphMouse();
 
@@ -42,130 +47,8 @@ public class GraphVisualizer {
         this.graphCreator = GraphCreator.getInstance();
     }
 
-    public VisualizationViewer<Author, EdgeCoAuthorship>  createCoAuthorVisualizer(Graph g, MainController main_controller) {
 
-        // KKLayout or FRLayout or ISOMLayout
-        FRLayout2<Author, EdgeCoAuthorship> layout = new FRLayout2<Author, EdgeCoAuthorship>(g);
-        layout.setSize(new Dimension(800, 800));
-        layout.initialize();
-
-        vv = new VisualizationViewer<Author, EdgeCoAuthorship>(layout);
-        vv.setPreferredSize(new Dimension(950, 950));
-
-        setToTransformingMode();
-        vv.setGraphMouse(gm);
-        vv.setBackground(Color.gray);
-
-        setVertexColor();
-        setVertexSize(g);
-        setVertexLabel();
-
-        setEdgeLabel();
-        setEdgeSize();
-
-
-        // right click menu
-        gm.add(new PopupGraphMousePlugin(main_controller));
-
-        return vv;
-    }
-
-    private void setEdgeSize() {
-        Transformer<EdgeCoAuthorship, Stroke> edgeStroke = new Transformer<EdgeCoAuthorship, Stroke>() {
-            public Stroke transform(EdgeCoAuthorship s) {
-                // EDGE SIZE - shows how many papers two authors have released together
-                int max_size_of_graph = graphCreator.getCoAuthorMaxEdgeWith();
-                float scaling = ((float)s.getWeight() / max_size_of_graph) * MAX_EDGE_WIDTH;
-                scaling = Math.max(scaling, 1);
-                return new BasicStroke(scaling);
-            }
-        };
-        vv.getRenderContext().setEdgeStrokeTransformer(edgeStroke);
-    }
-
-    private void setVertexSize(final Graph g) {
-
-        Transformer<Author,Shape> vertexSize = new Transformer<Author,Shape>(){
-            public Shape transform(Author i){
-                // VERTEX SIZE - the bigger the vertex, the more coAuthors this author has
-                Ellipse2D circle = new Ellipse2D.Double(-10, -10, 20, 20);
-                int max_size_of_graph = graphCreator.getCoAuthorMaxDegree();
-                float scaling = ((float)g.inDegree(i) / max_size_of_graph) * MAX_VERTEX_SIZE;
-
-                scaling = Math.max(scaling, 1);
-                return AffineTransform.getScaleInstance(scaling, scaling).createTransformedShape(circle);
-            }
-        };
-
-        vv.getRenderContext().setVertexShapeTransformer(vertexSize);
-    }
-
-
-    private void setVertexColor() {
-        Transformer<Author,Paint> vertexColor = new Transformer<Author,Paint>() {
-            public Paint transform(Author i) {
-                // TODO: make costum vertex color
-                return Color.GREEN;
-            }
-        };
-        vv.getRenderContext().setVertexFillPaintTransformer(vertexColor);
-
-    }
-
-    public void setToPickingMode() {
-        gm.setMode(ModalGraphMouse.Mode.PICKING);
-    }
-
-    public void setToTransformingMode() {
-        gm.setMode(ModalGraphMouse.Mode.TRANSFORMING);
-    }
-
-    public void hideVertexLabels() {
-        vv.getRenderContext().setVertexLabelTransformer(vertex_label_none);
-        vv.repaint();
-    }
-
-    public void showVertexLabels() {
-        vv.getRenderContext().setVertexLabelTransformer(vertex_label);
-        vv.repaint();
-    }
-
-    public void showEdgeLabels() {
-        vv.getRenderContext().setEdgeLabelTransformer(edge_label);
-        vv.repaint();
-    }
-
-    public void hideEdgeLabels() {
-        vv.getRenderContext().setEdgeLabelTransformer(edge_label_none);
-        vv.repaint();
-    }
-
-    private void setEdgeLabel() {
-
-        final Color vertexLabelColor = Color.ORANGE;
-        DefaultEdgeLabelRenderer edgeLabelRenderer =
-            new DefaultEdgeLabelRenderer(vertexLabelColor)
-            {
-                @Override
-                public <V> Component getEdgeLabelRendererComponent(
-                    JComponent vv, Object value, Font font,
-                    boolean isSelected, V vertex)
-                {
-                    super.getEdgeLabelRendererComponent(
-                        vv, value, font, isSelected, vertex);
-                    setForeground(vertexLabelColor);
-                    return this;
-                }
-            };
-
-
-        vv.getRenderContext().setEdgeLabelRenderer(edgeLabelRenderer);
-
-        edge_label = new ToStringLabeller<EdgeCoAuthorship>();
-        showEdgeLabels();
-
-    }
-    private void setVertexLabel() {
+    private void setVertexLabel(VisualizationViewer vv) {
 
         final Color vertexLabelColor = Color.WHITE;
         DefaultVertexLabelRenderer vertexLabelRenderer =
@@ -185,18 +68,235 @@ public class GraphVisualizer {
 
         vv.getRenderContext().setVertexLabelRenderer(vertexLabelRenderer);
         vv.getRenderer().getVertexLabelRenderer().setPosition(Renderer.VertexLabel.Position.AUTO);
+
         vertex_label = new ToStringLabeller<Author>();
 
         // make names bold
         vv.getRenderContext().setVertexFontTransformer(new VertexFontTransformer<Author>());
 
-        showVertexLabels();
+        showVertexLabelsCO();
     }
 
-    public VisualizationViewer<Author, EdgeCitation> createCitationVisualizer(Graph g) {
+    private void setVertexSize(final Graph g, VisualizationViewer vv) {
 
-        return null;
+        Transformer<Author,Shape> vertexSize = new Transformer<Author,Shape>(){
+            public Shape transform(Author i){
+                // VERTEX SIZE - the bigger the vertex, the more coAuthors this author has
+                Ellipse2D circle = new Ellipse2D.Double(-10, -10, 20, 20);
+                int max_size_of_graph = graphCreator.getCoAuthorMaxDegree();
+                float scaling = ((float)g.inDegree(i) / max_size_of_graph) * MAX_VERTEX_SIZE;
+
+                scaling = Math.max(scaling, 1);
+                return AffineTransform.getScaleInstance(scaling, scaling).createTransformedShape(circle);
+            }
+        };
+
+        vv.getRenderContext().setVertexShapeTransformer(vertexSize);
     }
+
+    private void setVertexColor(VisualizationViewer vv) {
+        Transformer<Author,Paint> vertexColor = new Transformer<Author,Paint>() {
+            public Paint transform(Author i) {
+                if(i.getAuthorType().equals(AuthorType.PaperAuthor))
+                    return Color.GREEN;
+                else
+                    return Color.YELLOW;
+            }
+        };
+        vv.getRenderContext().setVertexFillPaintTransformer(vertexColor);
+
+    }
+
+    public void setToPickingMode() {
+        gm.setMode(ModalGraphMouse.Mode.PICKING);
+    }
+
+    public void setToTransformingMode() {
+        gm.setMode(ModalGraphMouse.Mode.TRANSFORMING);
+    }
+
+    /*
+    --------------------------------------------------------------------------------------------------------------------
+    ---------------------------------------------------- CO AUTHOR GRAPH -----------------------------------------------
+    --------------------------------------------------------------------------------------------------------------------
+    */
+    public VisualizationViewer<Author, EdgeCoAuthorship>  createCoAuthorVisualizer(Graph g, MainController main_controller) {
+
+        // KKLayout or FRLayout or ISOMLayout
+        FRLayout2<Author, EdgeCoAuthorship> layout = new FRLayout2<Author, EdgeCoAuthorship>(g);
+        layout.setSize(new Dimension(800, 800));
+        layout.initialize();
+
+        vv_co = new VisualizationViewer<Author, EdgeCoAuthorship>(layout);
+        vv_co.setPreferredSize(new Dimension(950, 950));
+
+        setToTransformingMode();
+        vv_co.setGraphMouse(gm);
+        vv_co.setBackground(Color.gray);
+
+        setVertexColor(vv_co);
+        setVertexSize(g, vv_co);
+        setVertexLabel(vv_co);
+
+        setEdgeLabelCO();
+        setEdgeSizeCO();
+
+
+        // right click menu
+        gm.add(new PopupGraphMousePlugin(main_controller));
+
+        return vv_co;
+    }
+
+    private void setEdgeSizeCO() {
+        Transformer<EdgeCoAuthorship, Stroke> edgeStroke = new Transformer<EdgeCoAuthorship, Stroke>() {
+            public Stroke transform(EdgeCoAuthorship s) {
+                // EDGE SIZE - shows how many papers two authors have released together
+                int max_size_of_graph = graphCreator.getCoAuthorMaxEdgeWith();
+                float scaling = ((float)s.getWeight() / max_size_of_graph) * MAX_EDGE_WIDTH;
+                scaling = Math.max(scaling, 1);
+                return new BasicStroke(scaling);
+            }
+        };
+        vv_co.getRenderContext().setEdgeStrokeTransformer(edgeStroke);
+    }
+
+    public void hideVertexLabelsCO() {
+        vv_co.getRenderContext().setVertexLabelTransformer(vertex_label_none);
+        vv_co.repaint();
+    }
+
+    public void showVertexLabelsCO() {
+        vv_co.getRenderContext().setVertexLabelTransformer(vertex_label);
+        vv_co.repaint();
+
+    }
+
+    public void showEdgeLabelsCO() {
+        vv_co.getRenderContext().setEdgeLabelTransformer(co_edge_label);
+        vv_co.repaint();
+    }
+
+    public void hideEdgeLabelsCO() {
+        vv_co.getRenderContext().setEdgeLabelTransformer(co_edge_label_none);
+        vv_co.repaint();
+    }
+
+    private void setEdgeLabelCO() {
+        final Color vertexLabelColor = Color.ORANGE;
+        DefaultEdgeLabelRenderer edgeLabelRenderer =
+            new DefaultEdgeLabelRenderer(vertexLabelColor)
+            {
+                @Override
+                public <V> Component getEdgeLabelRendererComponent(
+                    JComponent vv, Object value, Font font,
+                    boolean isSelected, V vertex)
+                {
+                    super.getEdgeLabelRendererComponent(
+                        vv, value, font, isSelected, vertex);
+                    setForeground(vertexLabelColor);
+                    return this;
+                }
+            };
+
+        vv_co.getRenderContext().setEdgeLabelRenderer(edgeLabelRenderer);
+
+        co_edge_label = new ToStringLabeller<EdgeCoAuthorship>();
+        showEdgeLabelsCO();
+    }
+
+
+    /*
+    --------------------------------------------------------------------------------------------------------------------
+    ---------------------------------------------------- CO AUTHOR GRAPH -----------------------------------------------
+    --------------------------------------------------------------------------------------------------------------------
+    */
+    public VisualizationViewer<Author, EdgeCitation> createCitationVisualizer(Graph g, MainController main_controller) {
+
+        // KKLayout or FRLayout or ISOMLayout
+        FRLayout2<Author, EdgeCitation> layout = new FRLayout2<Author, EdgeCitation>(g);
+        layout.setSize(new Dimension(800, 800));
+        layout.initialize();
+
+        vv_ci = new VisualizationViewer<Author, EdgeCitation>(layout);
+        vv_ci.setPreferredSize(new Dimension(950, 950));
+
+        setToTransformingMode();
+        vv_ci.setGraphMouse(gm);
+        vv_ci.setBackground(Color.gray);
+
+        setVertexColor(vv_ci);
+        setVertexSize(g, vv_ci);
+//        setVertexLabel(vv_ci);
+
+
+//        setEdgeLabelCI();
+        setEdgeSizeCI();
+
+
+        // right click menu
+        gm.add(new PopupGraphMousePlugin(main_controller));
+
+        return vv_ci;
+    }
+
+    private void setEdgeSizeCI() {
+        Transformer<EdgeCitation, Stroke> edgeStroke = new Transformer<EdgeCitation, Stroke>() {
+            public Stroke transform(EdgeCitation s) {
+                // EDGE SIZE - shows how many papers two authors have released together
+                int max_size_of_graph = graphCreator.getCitationMaxEdgeWith();
+                float scaling = ((float)s.getWeight() / max_size_of_graph) * MAX_EDGE_WIDTH;
+                scaling = Math.max(scaling, 1);
+                return new BasicStroke(scaling);
+            }
+        };
+        vv_ci.getRenderContext().setEdgeStrokeTransformer(edgeStroke);
+    }
+
+    private void setEdgeLabelCI() {
+        final Color vertexLabelColor = Color.ORANGE;
+        DefaultEdgeLabelRenderer edgeLabelRenderer =
+            new DefaultEdgeLabelRenderer(vertexLabelColor)
+            {
+                @Override
+                public <V> Component getEdgeLabelRendererComponent(
+                    JComponent vv, Object value, Font font,
+                    boolean isSelected, V vertex)
+                {
+                    super.getEdgeLabelRendererComponent(
+                        vv, value, font, isSelected, vertex);
+                    setForeground(vertexLabelColor);
+                    return this;
+                }
+            };
+
+        vv_ci.getRenderContext().setEdgeLabelRenderer(edgeLabelRenderer);
+
+        ci_edge_label = new ToStringLabeller<EdgeCitation>();
+        showEdgeLabelsCI();
+    }
+
+    public void hideVertexLabelsCI() {
+        vv_co.getRenderContext().setVertexLabelTransformer(vertex_label_none);
+        vv_co.repaint();
+    }
+
+    public void showVertexLabelsCI() {
+        vv_co.getRenderContext().setVertexLabelTransformer(vertex_label);
+        vv_co.repaint();
+
+    }
+
+    public void showEdgeLabelsCI() {
+        vv_ci.getRenderContext().setEdgeLabelTransformer(ci_edge_label);
+        vv_ci.repaint();
+    }
+
+    public void hideEdgeLabelsCI() {
+        vv_ci.getRenderContext().setEdgeLabelTransformer(ci_edge_label_none);
+        vv_ci.repaint();
+    }
+
 
 
     private final static class VertexFontTransformer<E> implements Transformer<E, Font> {
