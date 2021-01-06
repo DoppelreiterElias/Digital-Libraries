@@ -297,7 +297,15 @@ public class GraphVisualizer {
         vv_ci.repaint();
     }
 
+    public void repaintCO()
+    {
+        vv_co.repaint();
+    }
 
+    public void repaintCI()
+    {
+        vv_ci.repaint();
+    }
 
     private final static class VertexFontTransformer<E> implements Transformer<E, Font> {
         @Override

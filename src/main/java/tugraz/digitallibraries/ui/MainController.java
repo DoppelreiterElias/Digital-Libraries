@@ -1,7 +1,10 @@
 package tugraz.digitallibraries.ui;
 
+import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.visualization.VisualizationViewer;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
+import javafx.embed.swing.SwingNode;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
@@ -12,14 +15,24 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import tugraz.digitallibraries.App;
+import tugraz.digitallibraries.NetworkCreator;
 import tugraz.digitallibraries.Searcher;
+import tugraz.digitallibraries.dataclasses.Author;
+import tugraz.digitallibraries.graph.EdgeCitation;
+import tugraz.digitallibraries.graph.EdgeCoAuthorship;
+import tugraz.digitallibraries.graph.GraphUtils;
 import tugraz.digitallibraries.graph.GraphVisualizer;
 
+import javax.swing.*;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class MainController implements Initializable
@@ -103,13 +116,13 @@ public class MainController implements Initializable
     @FXML
     private Color x23;
 
-    private GraphVisualizer citation_graph_visualizer_;
-    private GraphVisualizer co_author_graph_visualizer_;
+    private GraphVisualizer graph_visualizer_;
 
     private DetailViewListener cit_graph_detail_listener_;
     private DetailViewListener co_auth_detail_listener_;
     private DetailViewListener search_detail_listener_;
-
+    private SwingNode co_auth_swing_node_;
+    private SwingNode cit_swing_node_;
 
     int selected_tab_index_;
 
@@ -203,11 +216,12 @@ public class MainController implements Initializable
         }
     }
 
-    public void setDependencies(GraphVisualizer cit_vis, GraphVisualizer co_auth_vis, Searcher searcher)
+    public void setDependencies(GraphVisualizer graph_vis, Searcher searcher, SwingNode co_auth_swing_node, SwingNode cit_swing_node)
     {
-        co_author_graph_visualizer_ = co_auth_vis;
-        citation_graph_visualizer_ = cit_vis;
+        graph_visualizer_ = graph_vis;
         searcher_ = searcher;
+        co_auth_swing_node_ = co_auth_swing_node;
+        cit_swing_node_ = cit_swing_node;
     }
 
     @FXML
@@ -217,19 +231,15 @@ public class MainController implements Initializable
         {
             System.out.println("Showing Edge Labels");
 
-            co_author_graph_visualizer_.showEdgeLabelsCO();
-            co_author_graph_visualizer_.showVertexLabelsCO();
-            citation_graph_visualizer_.showEdgeLabelsCI();
-            citation_graph_visualizer_.showVertexLabelsCI();
+            graph_visualizer_.showEdgeLabelsCI();
+            graph_visualizer_.showVertexLabelsCI();
         }
         else
         {
             System.out.println("Hiding Edge Labels");
 
-            co_author_graph_visualizer_.hideEdgeLabelsCO();
-            co_author_graph_visualizer_.hideVertexLabelsCO();
-            citation_graph_visualizer_.hideEdgeLabelsCI();
-            citation_graph_visualizer_.hideVertexLabelsCI();
+            graph_visualizer_.hideEdgeLabelsCI();
+            graph_visualizer_.hideVertexLabelsCI();
 
         }
     }
@@ -239,8 +249,7 @@ public class MainController implements Initializable
     {
         if(radio_picking_mode_.isSelected())
         {
-            citation_graph_visualizer_.setToPickingMode();
-            co_author_graph_visualizer_.setToPickingMode();
+            graph_visualizer_.setToPickingMode();
         }
     }
 
@@ -249,8 +258,7 @@ public class MainController implements Initializable
     {
         if(radio_transform_mode_.isSelected())
         {
-            citation_graph_visualizer_.setToTransformingMode();
-            co_author_graph_visualizer_.setToTransformingMode();
+            graph_visualizer_.setToTransformingMode();
         }
     }
 
@@ -283,6 +291,41 @@ public class MainController implements Initializable
             return;
 
         selected_tab_index_ = source.getTabPane().getSelectionModel().getSelectedIndex();
+
+        if(selected_tab_index_ == 0)
+            graph_visualizer_.repaintCI();
+
+        if(selected_tab_index_ == 1)
+            graph_visualizer_.repaintCO();
+    }
+
+    @FXML
+    void openDirectory(ActionEvent event)
+    {
+        DirectoryChooser dir_chooser = new DirectoryChooser();
+        dir_chooser.setTitle("Open Folder with Papers");
+        File chosen_folder = dir_chooser.showDialog(search_button_.getScene().getWindow());
+
+        if(chosen_folder == null)
+            return;
+
+        NetworkCreator.createNetwork(chosen_folder.getAbsolutePath());
+        ArrayList<Graph> graphs  = NetworkCreator.createGraphs();
+
+        MainController this_ = this;
+
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run()
+            {
+
+                VisualizationViewer<Author, EdgeCoAuthorship> vv = graph_visualizer_.createCoAuthorVisualizer(graphs.get(GraphUtils.GraphType.COAUTHOR_GRAPH.ordinal()), this_);
+                co_auth_swing_node_.setContent(vv);
+
+                VisualizationViewer<Author, EdgeCitation> vv2 = graph_visualizer_.createCitationVisualizer(graphs.get(GraphUtils.GraphType.CITATION_GRAPH.ordinal()),this_);
+                cit_swing_node_.setContent(vv2);
+            }
+        });
     }
 
     @FXML

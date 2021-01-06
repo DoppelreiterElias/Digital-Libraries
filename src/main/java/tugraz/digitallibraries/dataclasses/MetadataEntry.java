@@ -175,7 +175,8 @@ public class MetadataEntry extends DetailViewObject
         return root;
     }
 
-    public void openPdfInBrowser() {
+    public void openPdfInBrowser()
+    {
         // TODO: implementation failing. on linux/ubuntu does not work
 
         String os = System.getProperty("os.name");
