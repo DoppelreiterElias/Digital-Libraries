@@ -154,6 +154,10 @@ public class Author extends DetailViewObject
     {
         Collection<EdgeCoAuthorship> edges = GraphCreator.getInstance().getCoAuthorGraph().getOutEdges(this);
         ArrayList<MetadataEntry> papers = new ArrayList<>();
+
+        if(edges == null)
+            return papers;
+
         for (EdgeCoAuthorship edge : edges) {
             for(MetadataEntry paper : edge.getPapers()) {
                 if(!papers.contains(paper))
@@ -167,6 +171,10 @@ public class Author extends DetailViewObject
     public ArrayList<Author> getCoAuthors()
     {
         Collection<Author> neighbours = GraphCreator.getInstance().getCoAuthorGraph().getNeighbors(this);
+
+        if(neighbours == null)
+            return new ArrayList<>();
+
         return new ArrayList<>(neighbours);
     }
 
@@ -174,6 +182,10 @@ public class Author extends DetailViewObject
     {
         Collection<EdgeCitation> edges = GraphCreator.getInstance().getCitationGraph().getOutEdges(this);
         ArrayList<Reference> cited_papers = new ArrayList<>();
+
+        if(edges == null)
+            return cited_papers;
+
         for(EdgeCitation edge : edges)
             cited_papers.addAll(edge.getReferences());
         return cited_papers;
