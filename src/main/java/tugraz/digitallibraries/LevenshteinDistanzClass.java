@@ -5,6 +5,20 @@ import java.util.Arrays;
 public class LevenshteinDistanzClass {
 
 
+    static public int[] calculateLevenshteinDistanzs(String target, String source[])
+    {
+        int array[] = new int[source.length];
+
+
+        for (int i = 0; i < source.length; i++)
+        {
+            array[i] = calculateLevenshteinDistanz(target,source[i]);
+        }
+
+        return array;
+    }
+
+
     static public int calculateLevenshteinDistanz(String target, String source)
     {
         if (target.isEmpty()) {
