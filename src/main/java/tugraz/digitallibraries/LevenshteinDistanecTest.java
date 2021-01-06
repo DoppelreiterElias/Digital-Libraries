@@ -1,6 +1,6 @@
 package tugraz.digitallibraries;
 
-public class LevenshteinDistanzTest {
+public class LevenshteinDistanecTest {
 
     public static void main(String[] args) {
 
@@ -10,11 +10,11 @@ public class LevenshteinDistanzTest {
         String[] c = {"Dwayne The Rock Johnson", "house", "Apple", "car"};
 
 
-        int i = LevenshteinDistanzClass.calculateLevenshteinDistanz(a,b);
+        int i = LevenshteinDistancsClass.calculateLevenshteinDistance(a,b);
 
         System.out.println("Levenshtein distance: " + i);
 
-        int j[] = LevenshteinDistanzClass.calculateLevenshteinDistanzs(a,c);
+        int j[] = LevenshteinDistancsClass.calculateLevenshteinDistances(a,c);
 
         System.out.print("Levenshtein distance: ");
 

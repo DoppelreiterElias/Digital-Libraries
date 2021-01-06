@@ -2,24 +2,24 @@ package tugraz.digitallibraries;
 
 import java.util.Arrays;
 
-public class LevenshteinDistanzClass {
+public class LevenshteinDistancsClass {
 
 
-    static public int[] calculateLevenshteinDistanzs(String target, String source[])
+    static public int[] calculateLevenshteinDistances(String target, String source[])
     {
         int array[] = new int[source.length];
 
 
         for (int i = 0; i < source.length; i++)
         {
-            array[i] = calculateLevenshteinDistanz(target,source[i]);
+            array[i] = calculateLevenshteinDistance(target,source[i]);
         }
 
         return array;
     }
 
 
-    static public int calculateLevenshteinDistanz(String target, String source)
+    static public int calculateLevenshteinDistance(String target, String source)
     {
         if (target.isEmpty()) {
             return source.length();
