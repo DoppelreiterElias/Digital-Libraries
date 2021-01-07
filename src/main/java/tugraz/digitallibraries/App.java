@@ -29,6 +29,8 @@ public class App extends Application {
     Searcher searcher_ = new Searcher();
 
     public static final String APP_NAME = new String("Libraliz0r");
+    public static final String DEFAULT_FOLDER = new String("Document and Metadata Collection");
+
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -71,7 +73,7 @@ public class App extends Application {
         co_auth_graph_vbox.getChildren().add(graph_visualizer_.getCoAuthGraphNode());
 
 
-        NetworkCreator.createNetwork("Document and Metadata Collection");
+        NetworkCreator.createNetwork(DEFAULT_FOLDER);
         ArrayList<Graph>  graphs  = NetworkCreator.createGraphs();
 
 

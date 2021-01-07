@@ -27,7 +27,7 @@
       <menus>
         <Menu mnemonicParsing="false" text="File">
           <items>
-            <MenuItem id="openFileButton" fx:id="open_directory_btn_" mnemonicParsing="false" text="Open Directory" />
+            <MenuItem id="openFileButton" fx:id="open_directory_btn_" mnemonicParsing="false" onAction="#openDirectory" text="Open Directory" />
             <SeparatorMenuItem mnemonicParsing="false" />
             <MenuItem fx:id="quit_btn_" mnemonicParsing="false" onAction="#quitBtnPressed" text="Quit" />
           </items>
@@ -85,6 +85,7 @@
                                  </VBox.margin>
                               </TreeView>
                               <Button fx:id="cit_graph_detail_open_" disable="true" mnemonicParsing="false" onAction="#citGraphDetailButtonPressed" prefHeight="14.0" prefWidth="110.0" text="Open" />
+                              <Button fx:id="cit_global_view_" disable="true" mnemonicParsing="false" onAction="#globalViewButtonPressed" prefHeight="26.0" prefWidth="124.0" text="Global View" />
                            </children>
                         </VBox>
                      </items>
@@ -123,6 +124,7 @@
                                  </VBox.margin>
                               </TreeView>
                               <Button fx:id="co_auth_detail_open_" disable="true" mnemonicParsing="false" onAction="#coAuthGraphDetailButtonPressed" prefHeight="14.0" prefWidth="110.0" text="Open" />
+                              <Button fx:id="co_auth_global_view_" disable="true" mnemonicParsing="false" onAction="#globalViewButtonPressed" prefHeight="26.0" prefWidth="124.0" text="Global View" />
                            </children>
                         </VBox>
                      </items>
@@ -168,6 +170,7 @@
                                        </VBox.margin>
                                     </TreeView>
                                     <Button fx:id="search_detail_open_" disable="true" mnemonicParsing="false" onAction="#searchDetailButtonPressed" prefHeight="14.0" prefWidth="110.0" text="Open" />
+                                    <Button fx:id="search_global_view_" disable="true" mnemonicParsing="false" onAction="#globalViewButtonPressed" prefHeight="26.0" prefWidth="124.0" text="Global View" />
                                  </children>
                               </VBox>
                            </items>
