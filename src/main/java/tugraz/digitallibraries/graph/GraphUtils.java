@@ -8,7 +8,7 @@ public class GraphUtils {
     //--------------------------------------------------------------------------------------------------
     // only to import a smaller dataset
     public static final boolean USE_SMALL_DATASET = true;
-    public static int NR_PAPERS = 5; // nr paper to import - only if USE_SMALL_DATASET = true
+    public static int NR_PAPERS = 10; // nr paper to import - only if USE_SMALL_DATASET = true
     //--------------------------------------------------------------------------------------------------
 
     public enum GraphType {COAUTHOR_GRAPH, CITATION_GRAPH};

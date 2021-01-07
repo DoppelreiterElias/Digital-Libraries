@@ -1,5 +1,7 @@
 package tugraz.digitallibraries.graph;
 
+import edu.uci.ics.jung.algorithms.filters.Filter;
+import edu.uci.ics.jung.algorithms.filters.KNeighborhoodFilter;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.UndirectedSparseGraph;
@@ -174,15 +176,13 @@ public class GraphCreator {
     public Graph createSubgraph(GraphUtils.GraphType type, Author vertex) {
 
         if(type == GraphUtils.GraphType.COAUTHOR_GRAPH) {
-            UndirectedSparseGraph<Author, EdgeCoAuthorship> coAuthorsubGraph = new UndirectedSparseGraph<>();
-
-            return coAuthorsubGraph;
+            Filter<Author, EdgeCoAuthorship> filter = new KNeighborhoodFilter<>(vertex, 1, KNeighborhoodFilter.EdgeType.IN_OUT);
+            return filter.transform(coAuthorGraph);
         }
         else
         {
-            DirectedSparseGraph<Author, EdgeCitation> citationsubGraph = new DirectedSparseGraph<>();
-
-            return citationsubGraph;
+            Filter<Author, EdgeCitation> filter = new KNeighborhoodFilter<>(vertex, 1, KNeighborhoodFilter.EdgeType.IN_OUT);
+            return filter.transform(citationGraph);
         }
     }
 

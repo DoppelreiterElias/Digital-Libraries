@@ -1,5 +1,7 @@
 package tugraz.digitallibraries.ui;
 
+import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.visualization.VisualizationViewer;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -16,7 +18,9 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import tugraz.digitallibraries.App;
 import tugraz.digitallibraries.Searcher;
-import tugraz.digitallibraries.graph.GraphVisualizer;
+import tugraz.digitallibraries.dataclasses.Author;
+import tugraz.digitallibraries.dataclasses.AuthorType;
+import tugraz.digitallibraries.graph.*;
 
 import java.io.IOException;
 import java.net.URL;
@@ -103,6 +107,8 @@ public class MainController implements Initializable
     @FXML
     private Color x23;
 
+
+
     private GraphVisualizer citation_graph_visualizer_;
     private GraphVisualizer co_author_graph_visualizer_;
 
@@ -114,6 +120,8 @@ public class MainController implements Initializable
     int selected_tab_index_;
 
     private Searcher searcher_;
+
+
 
     public void initialize(URL location, ResourceBundle resources)
     {
@@ -132,6 +140,18 @@ public class MainController implements Initializable
 
         search_by_choice_.setItems(FXCollections.observableArrayList("Author","Paper"));
         search_by_choice_.setValue("Author");
+    }
+
+    public void showCoAuthorGraph(final Graph g)
+    {
+        VisualizationViewer<Author, EdgeCoAuthorship> vv = co_author_graph_visualizer_.createCoAuthorVisualizationView(g, this);
+        co_author_graph_visualizer_.getCoAuthGraphNode().setContent(vv);
+    }
+
+    public void showCitationGraph(final Graph g)
+    {
+        VisualizationViewer<Author, EdgeCitation> vv = citation_graph_visualizer_.createCitationVisualizationView(g, this);
+        citation_graph_visualizer_.getCitGraphNode().setContent(vv);
     }
 
 
@@ -160,6 +180,8 @@ public class MainController implements Initializable
             }
         });
     }
+
+
 
     @FXML
     public void citGraphDetailButtonPressed(ActionEvent event)
@@ -199,7 +221,15 @@ public class MainController implements Initializable
 
         if(selected != null)
         {
-            setDetailNode(selected);
+            Author a = (Author) selected;
+            if(a.getAuthorType() == AuthorType.PaperAuthor) {
+                setDetailNode(a);
+                Graph coauthor_subgraph = GraphCreator.getInstance().createSubgraph(GraphUtils.GraphType.COAUTHOR_GRAPH, a);
+                showCoAuthorGraph(coauthor_subgraph);
+            }
+
+            Graph citation_subgraph = GraphCreator.getInstance().createSubgraph(GraphUtils.GraphType.CITATION_GRAPH, (Author) selected);
+            showCitationGraph(citation_subgraph);
         }
     }
 

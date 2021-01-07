@@ -1,17 +1,12 @@
 package tugraz.digitallibraries;
 
 import edu.uci.ics.jung.graph.Graph;
-import edu.uci.ics.jung.visualization.VisualizationViewer;
 import javafx.application.Application;
-import javafx.embed.swing.SwingNode;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import tugraz.digitallibraries.dataclasses.Author;
-import tugraz.digitallibraries.graph.EdgeCitation;
-import tugraz.digitallibraries.graph.EdgeCoAuthorship;
 import tugraz.digitallibraries.graph.GraphUtils;
 import tugraz.digitallibraries.graph.GraphVisualizer;
 import tugraz.digitallibraries.ui.MainController;
@@ -27,11 +22,9 @@ public class App extends Application {
 
     private static Scene scene;
 
-    // swing node is a javaFX element, we can insert into swingNode java swing elements, and make them in javafx visible
-    final SwingNode cit_graph_node_ = new SwingNode();
-    final SwingNode co_auth_graph_node_ = new SwingNode();
 
-    GraphVisualizer graphVisualizer;
+
+    GraphVisualizer graph_visualizer_;
     MainController main_controller_;
     Searcher searcher_ = new Searcher();
 
@@ -48,7 +41,7 @@ public class App extends Application {
         createAndSetSwingContent();
 
         ///TODO maybe better initialization
-        main_controller_.setDependencies(graphVisualizer, graphVisualizer, searcher_);
+        main_controller_.setDependencies(graph_visualizer_, graph_visualizer_, searcher_);
     }
 
     private Parent loadFXML(String fxml) throws IOException {
@@ -69,41 +62,32 @@ public class App extends Application {
 
     private void createAndSetSwingContent()
     {
+        graph_visualizer_ = new GraphVisualizer();
+
         VBox cit_graph_vbox = (VBox)scene.lookup("#cit_graph_view_");
-        cit_graph_vbox.getChildren().add(cit_graph_node_);
+        cit_graph_vbox.getChildren().add(graph_visualizer_.getCitGraphNode());
 
         VBox co_auth_graph_vbox = (VBox)scene.lookup("#co_auth_graph_view_");
-        co_auth_graph_vbox.getChildren().add(co_auth_graph_node_);
+        co_auth_graph_vbox.getChildren().add(graph_visualizer_.getCoAuthGraphNode());
 
 
         NetworkCreator.createNetwork("Document and Metadata Collection");
         ArrayList<Graph>  graphs  = NetworkCreator.createGraphs();
-        graphVisualizer = new GraphVisualizer();
+
 
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run()
             {
-                showCoAuthorGraph(graphs.get(GraphUtils.GraphType.COAUTHOR_GRAPH.ordinal()));
-                showCitationGraph(graphs.get(GraphUtils.GraphType.CITATION_GRAPH.ordinal()));
+                main_controller_.showCoAuthorGraph(graphs.get(GraphUtils.GraphType.COAUTHOR_GRAPH.ordinal()));
+                main_controller_.showCitationGraph(graphs.get(GraphUtils.GraphType.CITATION_GRAPH.ordinal()));
             }
         });
     }
 
 
 
-    private void showCoAuthorGraph(final Graph g)
-    {
-        VisualizationViewer<Author, EdgeCoAuthorship> vv = graphVisualizer.createCoAuthorVisualizer(g, main_controller_);
-        co_auth_graph_node_.setContent(vv);
-    }
 
-    private void showCitationGraph(final Graph g)
-    {
-        // todo make citation graph similar to coauthor graph
-        VisualizationViewer<Author, EdgeCitation> vv = graphVisualizer.createCitationVisualizer(g, main_controller_);
-        cit_graph_node_.setContent(vv);
-    }
 
 
 }

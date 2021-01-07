@@ -38,5 +38,9 @@ public class EdgeCitation {
         return this.references;
     }
 
+    @Override
+    public String toString() {
+        return new String(authors.getKey().getSurname() + "<->" + authors.getValue().getSurname());
+    }
 
 }

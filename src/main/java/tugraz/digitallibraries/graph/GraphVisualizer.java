@@ -9,6 +9,7 @@ import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import edu.uci.ics.jung.visualization.renderers.DefaultEdgeLabelRenderer;
 import edu.uci.ics.jung.visualization.renderers.DefaultVertexLabelRenderer;
 import edu.uci.ics.jung.visualization.renderers.Renderer;
+import javafx.embed.swing.SwingNode;
 import org.apache.commons.collections15.Transformer;
 import org.apache.commons.collections15.functors.ConstantTransformer;
 import tugraz.digitallibraries.PopupGraphMousePlugin;
@@ -27,7 +28,6 @@ import static tugraz.digitallibraries.graph.GraphUtils.MAX_VERTEX_SIZE;
 public class GraphVisualizer {
 
 
-    GraphCreator graphCreator;
     VisualizationViewer<Author, EdgeCoAuthorship> vv_co;
     VisualizationViewer<Author, EdgeCitation> vv_ci;
 
@@ -43,9 +43,16 @@ public class GraphVisualizer {
     protected DefaultModalGraphMouse gm = new DefaultModalGraphMouse();
 
 
+    // swing node is a javaFX element, we can insert into swingNode java swing elements, and make them in javafx visible
+    private final SwingNode cit_graph_node_ = new SwingNode();
+    private final SwingNode co_auth_graph_node_ = new SwingNode();
+
     public GraphVisualizer() {
-        this.graphCreator = GraphCreator.getInstance();
     }
+
+    public SwingNode getCoAuthGraphNode() { return co_auth_graph_node_;}
+    public SwingNode getCitGraphNode() { return cit_graph_node_;}
+
 
 
     private void setVertexLabel(VisualizationViewer vv) {
@@ -74,7 +81,6 @@ public class GraphVisualizer {
         // make names bold
         vv.getRenderContext().setVertexFontTransformer(new VertexFontTransformer<Author>());
 
-        showVertexLabelsCO();
     }
 
     private void setVertexSize(final Graph g, VisualizationViewer vv) {
@@ -83,7 +89,7 @@ public class GraphVisualizer {
             public Shape transform(Author i){
                 // VERTEX SIZE - the bigger the vertex, the more coAuthors this author has
                 Ellipse2D circle = new Ellipse2D.Double(-10, -10, 20, 20);
-                int max_size_of_graph = graphCreator.getCoAuthorMaxDegree();
+                int max_size_of_graph = GraphCreator.getInstance().getCoAuthorMaxDegree();
                 float scaling = ((float)g.inDegree(i) / max_size_of_graph) * MAX_VERTEX_SIZE;
 
                 scaling = Math.max(scaling, 1);
@@ -99,8 +105,10 @@ public class GraphVisualizer {
             public Paint transform(Author i) {
                 if(i.getAuthorType().equals(AuthorType.PaperAuthor))
                     return Color.GREEN;
-                else
+                else if(i.getAuthorType().equals(AuthorType.ReferenceAuthor))
                     return Color.YELLOW;
+                else
+                    return Color.RED;
             }
         };
         vv.getRenderContext().setVertexFillPaintTransformer(vertexColor);
@@ -120,7 +128,7 @@ public class GraphVisualizer {
     ---------------------------------------------------- CO AUTHOR GRAPH -----------------------------------------------
     --------------------------------------------------------------------------------------------------------------------
     */
-    public VisualizationViewer<Author, EdgeCoAuthorship>  createCoAuthorVisualizer(Graph g, MainController main_controller) {
+    public VisualizationViewer<Author, EdgeCoAuthorship> createCoAuthorVisualizationView(Graph g, MainController main_controller) {
 
         // KKLayout or FRLayout or ISOMLayout
         FRLayout2<Author, EdgeCoAuthorship> layout = new FRLayout2<Author, EdgeCoAuthorship>(g);
@@ -137,6 +145,7 @@ public class GraphVisualizer {
         setVertexColor(vv_co);
         setVertexSize(g, vv_co);
         setVertexLabel(vv_co);
+        showVertexLabelsCO();
 
         setEdgeLabelCO();
         setEdgeSizeCO();
@@ -152,7 +161,7 @@ public class GraphVisualizer {
         Transformer<EdgeCoAuthorship, Stroke> edgeStroke = new Transformer<EdgeCoAuthorship, Stroke>() {
             public Stroke transform(EdgeCoAuthorship s) {
                 // EDGE SIZE - shows how many papers two authors have released together
-                int max_size_of_graph = graphCreator.getCoAuthorMaxEdgeWith();
+                int max_size_of_graph = GraphCreator.getInstance().getCoAuthorMaxEdgeWith();
                 float scaling = ((float)s.getWeight() / max_size_of_graph) * MAX_EDGE_WIDTH;
                 scaling = Math.max(scaling, 1);
                 return new BasicStroke(scaling);
@@ -208,10 +217,10 @@ public class GraphVisualizer {
 
     /*
     --------------------------------------------------------------------------------------------------------------------
-    ---------------------------------------------------- CO AUTHOR GRAPH -----------------------------------------------
+    ---------------------------------------------------- CITATION GRAPH -----------------------------------------------
     --------------------------------------------------------------------------------------------------------------------
     */
-    public VisualizationViewer<Author, EdgeCitation> createCitationVisualizer(Graph g, MainController main_controller) {
+    public VisualizationViewer<Author, EdgeCitation> createCitationVisualizationView(Graph g, MainController main_controller) {
 
         // KKLayout or FRLayout or ISOMLayout
         FRLayout2<Author, EdgeCitation> layout = new FRLayout2<Author, EdgeCitation>(g);
@@ -227,8 +236,8 @@ public class GraphVisualizer {
 
         setVertexColor(vv_ci);
         setVertexSize(g, vv_ci);
-//        setVertexLabel(vv_ci);
-
+        setVertexLabel(vv_ci);
+        showVertexLabelsCI();
 
 //        setEdgeLabelCI();
         setEdgeSizeCI();
@@ -244,7 +253,7 @@ public class GraphVisualizer {
         Transformer<EdgeCitation, Stroke> edgeStroke = new Transformer<EdgeCitation, Stroke>() {
             public Stroke transform(EdgeCitation s) {
                 // EDGE SIZE - shows how many papers two authors have released together
-                int max_size_of_graph = graphCreator.getCitationMaxEdgeWith();
+                int max_size_of_graph = GraphCreator.getInstance().getCitationMaxEdgeWith();
                 float scaling = ((float)s.getWeight() / max_size_of_graph) * MAX_EDGE_WIDTH;
                 scaling = Math.max(scaling, 1);
                 return new BasicStroke(scaling);

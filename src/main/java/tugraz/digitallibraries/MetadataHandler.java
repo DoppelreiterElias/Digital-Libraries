@@ -220,6 +220,8 @@ public class MetadataHandler {
                         authors.add(author);
                     }
                     else {
+                        if(author_found.getAuthorType() == AuthorType.ReferenceAuthor)
+                            author_found.setAuthorType(AuthorType.BOTH);
                         authors.add(author_found);
                     }
                 }
@@ -432,6 +434,8 @@ public class MetadataHandler {
                         authors.add(author);
                     }
                     else {
+                        if(author_found.getAuthorType() == AuthorType.PaperAuthor)
+                            author_found.setAuthorType(AuthorType.BOTH);
                         authors.add(author_found);
                     }
                 }

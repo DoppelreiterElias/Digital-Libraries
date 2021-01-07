@@ -3,6 +3,7 @@ package tugraz.digitallibraries;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import tugraz.digitallibraries.dataclasses.Author;
+import tugraz.digitallibraries.dataclasses.AuthorType;
 import tugraz.digitallibraries.graph.EdgeCoAuthorship;
 import tugraz.digitallibraries.graph.GraphCreator;
 import tugraz.digitallibraries.ui.DetailViewObject;
@@ -20,10 +21,16 @@ public class Searcher
         {
             ///Todo implement search function - currently hardcoded
             // go through all authors and match them with the levenshtein distance
+
+            // Citation Graph contains all Authors and ReferenceAuthors - would we print both?
             Collection<Author> authors = GraphCreator.getInstance().getCitationGraph().getVertices();
             ArrayList<Author> authors_list = new ArrayList<>(authors);
-            test_list.add(authors_list.get(0));
-            test_list.add(authors_list.get(1));
+            for(Author a : authors_list) {
+                test_list.add(a);
+                if(a.getAuthorType() == AuthorType.PaperAuthor)
+                    break;
+            }
+
 
         }
         else if(mode.equals("Paper"))
