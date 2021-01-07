@@ -265,17 +265,21 @@ public class MainController implements Initializable
     {
         if(check_show_names_.isSelected())
         {
-            System.out.println("Showing Edge Labels");
+            System.out.println("Showing Labels");
 
-            graph_visualizer_.showEdgeLabelsCI();
+//            graph_visualizer_.showEdgeLabelsCI();
             graph_visualizer_.showVertexLabelsCI();
+            graph_visualizer_.showVertexLabelsCO();
+            graph_visualizer_.showEdgeLabelsCO();
         }
         else
         {
-            System.out.println("Hiding Edge Labels");
+            System.out.println("Hiding Labels");
 
             graph_visualizer_.hideEdgeLabelsCI();
             graph_visualizer_.hideVertexLabelsCI();
+            graph_visualizer_.hideVertexLabelsCO();
+            graph_visualizer_.hideEdgeLabelsCO();
 
         }
     }

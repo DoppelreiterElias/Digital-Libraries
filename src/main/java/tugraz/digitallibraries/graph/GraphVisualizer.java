@@ -32,7 +32,8 @@ public class GraphVisualizer {
     VisualizationViewer<Author, EdgeCitation> vv_ci;
 
     protected Transformer<Author, String> vertex_label_none = new ConstantTransformer(null);
-    protected Transformer<Author, String> vertex_label;
+    protected Transformer<Author, String> vertex_labels_co;
+    protected Transformer<Author, String> vertex_labels_ci;
 
     protected Transformer<EdgeCoAuthorship, String> co_edge_label_none = new ConstantTransformer(null);
     protected Transformer<EdgeCoAuthorship, String> co_edge_label;
@@ -55,35 +56,8 @@ public class GraphVisualizer {
 
 
 
-    private void setVertexLabel(VisualizationViewer vv) {
 
-        final Color vertexLabelColor = Color.WHITE;
-        DefaultVertexLabelRenderer vertexLabelRenderer =
-            new DefaultVertexLabelRenderer(vertexLabelColor)
-            {
-                @Override
-                public <V> Component getVertexLabelRendererComponent(
-                    JComponent vv, Object value, Font font,
-                    boolean isSelected, V vertex)
-                {
-                    super.getVertexLabelRendererComponent(
-                        vv, value, font, isSelected, vertex);
-                    setForeground(vertexLabelColor);
-                    return this;
-                }
-            };
-
-        vv.getRenderContext().setVertexLabelRenderer(vertexLabelRenderer);
-        vv.getRenderer().getVertexLabelRenderer().setPosition(Renderer.VertexLabel.Position.AUTO);
-
-        vertex_label = new ToStringLabeller<Author>();
-
-        // make names bold
-        vv.getRenderContext().setVertexFontTransformer(new VertexFontTransformer<Author>());
-
-    }
-
-    private void setVertexSize(final Graph g, VisualizationViewer vv) {
+    private void setVertexSizeCO(final Graph g) {
 
         Transformer<Author,Shape> vertexSize = new Transformer<Author,Shape>(){
             public Shape transform(Author i){
@@ -97,7 +71,7 @@ public class GraphVisualizer {
             }
         };
 
-        vv.getRenderContext().setVertexShapeTransformer(vertexSize);
+        vv_co.getRenderContext().setVertexShapeTransformer(vertexSize);
     }
 
     private void setVertexColor(VisualizationViewer vv) {
@@ -125,10 +99,8 @@ public class GraphVisualizer {
 
     public void setToGlobalView( MainController main)
     {
-
         showCitationGraph(GraphCreator.getInstance().getCitationGraph(), main);
         showCoAuthorGraph(GraphCreator.getInstance().getCoAuthorGraph(), main);
-
     }
 
     public void showCoAuthorGraph(final Graph g, MainController main)
@@ -164,18 +136,46 @@ public class GraphVisualizer {
         vv_co.setBackground(Color.gray);
 
         setVertexColor(vv_co);
-        setVertexSize(g, vv_co);
-        setVertexLabel(vv_co);
+        setVertexSizeCO(g);
+        setVertexLabelCO();
         showVertexLabelsCO();
 
         setEdgeLabelCO();
         setEdgeSizeCO();
 
-
         // right click menu
         gm.add(new PopupGraphMousePlugin(main_controller));
 
         return vv_co;
+    }
+
+
+    private void setVertexLabelCO() {
+
+        final Color vertexLabelColor = Color.WHITE;
+        DefaultVertexLabelRenderer vertexLabelRenderer =
+            new DefaultVertexLabelRenderer(vertexLabelColor)
+            {
+                @Override
+                public <V> Component getVertexLabelRendererComponent(
+                    JComponent vv, Object value, Font font,
+                    boolean isSelected, V vertex)
+                {
+                    super.getVertexLabelRendererComponent(
+                        vv, value, font, isSelected, vertex);
+                    setForeground(vertexLabelColor);
+                    return this;
+                }
+            };
+
+        vv_co.getRenderContext().setVertexLabelRenderer(vertexLabelRenderer);
+        vv_co.getRenderer().getVertexLabelRenderer().setPosition(Renderer.VertexLabel.Position.AUTO);
+
+        vertex_labels_co = new ToStringLabeller<Author>();
+
+        // make names bold
+        vv_co.getRenderContext().setVertexFontTransformer(new VertexFontTransformer<Author>());
+
     }
 
     private void setEdgeSizeCO() {
@@ -197,7 +197,7 @@ public class GraphVisualizer {
     }
 
     public void showVertexLabelsCO() {
-        vv_co.getRenderContext().setVertexLabelTransformer(vertex_label);
+        vv_co.getRenderContext().setVertexLabelTransformer(vertex_labels_co);
         vv_co.repaint();
 
     }
@@ -235,6 +235,10 @@ public class GraphVisualizer {
         showEdgeLabelsCO();
     }
 
+    public void repaintCO()
+    {
+        vv_co.repaint();
+    }
 
     /*
     --------------------------------------------------------------------------------------------------------------------
@@ -256,11 +260,11 @@ public class GraphVisualizer {
         vv_ci.setBackground(Color.gray);
 
         setVertexColor(vv_ci);
-        setVertexSize(g, vv_ci);
-        setVertexLabel(vv_ci);
+        setVertexSizeCI(g);
+        setVertexLabelCI();
         showVertexLabelsCI();
 
-//        setEdgeLabelCI();
+//        setEdgeLabelCI(); // edge labels not really necessary?
         setEdgeSizeCI();
 
 
@@ -268,6 +272,35 @@ public class GraphVisualizer {
         gm.add(new PopupGraphMousePlugin(main_controller));
 
         return vv_ci;
+    }
+
+
+    private void setVertexLabelCI() {
+
+        final Color vertexLabelColor = Color.WHITE;
+        DefaultVertexLabelRenderer vertexLabelRenderer =
+            new DefaultVertexLabelRenderer(vertexLabelColor)
+            {
+                @Override
+                public <V> Component getVertexLabelRendererComponent(
+                    JComponent vv, Object value, Font font,
+                    boolean isSelected, V vertex)
+                {
+                    super.getVertexLabelRendererComponent(
+                        vv, value, font, isSelected, vertex);
+                    setForeground(vertexLabelColor);
+                    return this;
+                }
+            };
+
+        vv_ci.getRenderContext().setVertexLabelRenderer(vertexLabelRenderer);
+        vv_ci.getRenderer().getVertexLabelRenderer().setPosition(Renderer.VertexLabel.Position.AUTO);
+
+        vertex_labels_ci = new ToStringLabeller<Author>();
+
+        // make names bold
+        vv_ci.getRenderContext().setVertexFontTransformer(new VertexFontTransformer<Author>());
+
     }
 
     private void setEdgeSizeCI() {
@@ -306,14 +339,31 @@ public class GraphVisualizer {
         showEdgeLabelsCI();
     }
 
+    private void setVertexSizeCI(final Graph g) {
+
+        Transformer<Author,Shape> vertexSize = new Transformer<Author,Shape>(){
+            public Shape transform(Author i){
+                // VERTEX SIZE - the bigger the vertex, the more coAuthors this author has
+                Ellipse2D circle = new Ellipse2D.Double(-10, -10, 20, 20);
+                int max_size_of_graph = GraphCreator.getInstance().getCitationMaxDegree();
+                float scaling = ((float)g.inDegree(i) / max_size_of_graph) * MAX_VERTEX_SIZE;
+
+                scaling = Math.max(scaling, 1);
+                return AffineTransform.getScaleInstance(scaling, scaling).createTransformedShape(circle);
+            }
+        };
+
+        vv_ci.getRenderContext().setVertexShapeTransformer(vertexSize);
+    }
+
     public void hideVertexLabelsCI() {
-        vv_co.getRenderContext().setVertexLabelTransformer(vertex_label_none);
-        vv_co.repaint();
+        vv_ci.getRenderContext().setVertexLabelTransformer(vertex_label_none);
+        vv_ci.repaint();
     }
 
     public void showVertexLabelsCI() {
-        vv_co.getRenderContext().setVertexLabelTransformer(vertex_label);
-        vv_co.repaint();
+        vv_ci.getRenderContext().setVertexLabelTransformer(vertex_labels_ci);
+        vv_ci.repaint();
 
     }
 
@@ -327,10 +377,7 @@ public class GraphVisualizer {
         vv_ci.repaint();
     }
 
-    public void repaintCO()
-    {
-        vv_co.repaint();
-    }
+
 
     public void repaintCI()
     {
