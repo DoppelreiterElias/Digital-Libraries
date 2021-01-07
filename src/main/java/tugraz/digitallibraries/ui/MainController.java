@@ -90,6 +90,15 @@ public class MainController implements Initializable
     private Button search_show_selected_;
 
     @FXML
+    private Button search_show_graph_;
+
+    @FXML
+    private Button co_auth_show_graph_;
+
+    @FXML
+    private Button cit_show_graph_;
+
+    @FXML
     private ListView<DetailViewObject> search_results_;
 
     @FXML
@@ -161,12 +170,15 @@ public class MainController implements Initializable
                 {
                     case 0:
                         cit_graph_detail_.setRoot(obj.toDetailTreeview());
+                        cit_show_graph_.setText("Show on Graph");
                         break;
                     case 1:
                         co_auth_graph_detail_.setRoot(obj.toDetailTreeview());
+                        co_auth_show_graph_.setText("Show on Graph");
                         break;
                     case 2:
                         search_detail_.setRoot(obj.toDetailTreeview());
+                        search_show_graph_.setText("Show on Graph");
                         break;
                 }
 
@@ -190,6 +202,12 @@ public class MainController implements Initializable
     public void searchDetailButtonPressed(ActionEvent event)
     {
         setDetailNode(search_detail_listener_.getCurrentSelection());
+    }
+
+    @FXML
+    public void showOnGraphButtonPressed(ActionEvent event)
+    {
+
     }
 
     @FXML
