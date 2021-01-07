@@ -115,6 +115,11 @@ public class GraphVisualizer {
         gm.setMode(ModalGraphMouse.Mode.TRANSFORMING);
     }
 
+    public void setToGlobalView()
+    {
+        ///TODO implement
+    }
+
     /*
     --------------------------------------------------------------------------------------------------------------------
     ---------------------------------------------------- CO AUTHOR GRAPH -----------------------------------------------

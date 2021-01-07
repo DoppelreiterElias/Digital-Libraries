@@ -90,13 +90,13 @@ public class MainController implements Initializable
     private Button search_show_selected_;
 
     @FXML
-    private Button search_show_graph_;
+    private Button co_auth_global_view_;
 
     @FXML
-    private Button co_auth_show_graph_;
+    private Button cit_global_view_;
 
     @FXML
-    private Button cit_show_graph_;
+    private Button search_global_view_;
 
     @FXML
     private ListView<DetailViewObject> search_results_;
@@ -166,19 +166,20 @@ public class MainController implements Initializable
             {
                 TreeItem<DetailViewObject> detail_name = new TreeItem<>(obj);
 
+                cit_global_view_.setDisable(false);
+                co_auth_global_view_.setDisable(false);
+                search_global_view_.setDisable(false);
+
                 switch(selected_tab_index_)
                 {
                     case 0:
                         cit_graph_detail_.setRoot(obj.toDetailTreeview());
-                        cit_show_graph_.setText("Show on Graph");
                         break;
                     case 1:
                         co_auth_graph_detail_.setRoot(obj.toDetailTreeview());
-                        co_auth_show_graph_.setText("Show on Graph");
                         break;
                     case 2:
                         search_detail_.setRoot(obj.toDetailTreeview());
-                        search_show_graph_.setText("Show on Graph");
                         break;
                 }
 
@@ -205,9 +206,13 @@ public class MainController implements Initializable
     }
 
     @FXML
-    public void showOnGraphButtonPressed(ActionEvent event)
+    public void globalViewButtonPressed(ActionEvent event)
     {
+        cit_global_view_.setDisable(true);
+        co_auth_global_view_.setDisable(true);
+        search_global_view_.setDisable(true);
 
+        graph_visualizer_.setToGlobalView();
     }
 
     @FXML
