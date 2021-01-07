@@ -123,10 +123,26 @@ public class GraphVisualizer {
         gm.setMode(ModalGraphMouse.Mode.TRANSFORMING);
     }
 
-    public void setToGlobalView()
+    public void setToGlobalView( MainController main)
     {
-        ///TODO implement
+
+        showCitationGraph(GraphCreator.getInstance().getCitationGraph(), main);
+        showCoAuthorGraph(GraphCreator.getInstance().getCoAuthorGraph(), main);
+
     }
+
+    public void showCoAuthorGraph(final Graph g, MainController main)
+    {
+        VisualizationViewer<Author, EdgeCoAuthorship> vv = createCoAuthorVisualizationView(g, main);
+        co_auth_graph_node_.setContent(vv);
+    }
+
+    public void showCitationGraph(final Graph g, MainController main)
+    {
+        VisualizationViewer<Author, EdgeCitation> vv = createCitationVisualizationView(g, main);
+        cit_graph_node_.setContent(vv);
+    }
+
 
     /*
     --------------------------------------------------------------------------------------------------------------------

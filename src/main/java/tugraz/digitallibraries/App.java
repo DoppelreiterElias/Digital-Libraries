@@ -43,7 +43,7 @@ public class App extends Application {
         createAndSetSwingContent();
 
         ///TODO maybe better initialization
-        main_controller_.setDependencies(graph_visualizer_, graph_visualizer_, searcher_);
+        main_controller_.setDependencies(graph_visualizer_, searcher_);
     }
 
     private Parent loadFXML(String fxml) throws IOException {
@@ -81,8 +81,8 @@ public class App extends Application {
             @Override
             public void run()
             {
-                main_controller_.showCoAuthorGraph(graphs.get(GraphUtils.GraphType.COAUTHOR_GRAPH.ordinal()));
-                main_controller_.showCitationGraph(graphs.get(GraphUtils.GraphType.CITATION_GRAPH.ordinal()));
+                main_controller_.visualizeGraphs(graphs.get(GraphUtils.GraphType.COAUTHOR_GRAPH.ordinal()),
+                    graphs.get(GraphUtils.GraphType.CITATION_GRAPH.ordinal()));
             }
         });
     }

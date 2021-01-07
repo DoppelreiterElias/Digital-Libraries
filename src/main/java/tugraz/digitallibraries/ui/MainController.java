@@ -1,10 +1,8 @@
 package tugraz.digitallibraries.ui;
 
 import edu.uci.ics.jung.graph.Graph;
-import edu.uci.ics.jung.visualization.VisualizationViewer;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
-import javafx.embed.swing.SwingNode;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
@@ -16,7 +14,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.DirectoryChooser;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import tugraz.digitallibraries.App;
@@ -24,10 +21,7 @@ import tugraz.digitallibraries.NetworkCreator;
 import tugraz.digitallibraries.Searcher;
 import tugraz.digitallibraries.dataclasses.Author;
 import tugraz.digitallibraries.dataclasses.AuthorType;
-import tugraz.digitallibraries.graph.*;
-import tugraz.digitallibraries.dataclasses.Author;
-import tugraz.digitallibraries.graph.EdgeCitation;
-import tugraz.digitallibraries.graph.EdgeCoAuthorship;
+import tugraz.digitallibraries.graph.GraphCreator;
 import tugraz.digitallibraries.graph.GraphUtils;
 import tugraz.digitallibraries.graph.GraphVisualizer;
 
@@ -128,15 +122,11 @@ public class MainController implements Initializable
     @FXML
     private Color x23;
 
-
-
-
     private GraphVisualizer graph_visualizer_;
 
     private DetailViewListener cit_graph_detail_listener_;
     private DetailViewListener co_auth_detail_listener_;
     private DetailViewListener search_detail_listener_;
-
 
     int selected_tab_index_;
 
@@ -161,17 +151,12 @@ public class MainController implements Initializable
         search_by_choice_.setValue("Author");
     }
 
-    public void showCoAuthorGraph(final Graph g)
-    {
-        VisualizationViewer<Author, EdgeCoAuthorship> vv = co_author_graph_visualizer_.createCoAuthorVisualizationView(g, this);
-        co_author_graph_visualizer_.getCoAuthGraphNode().setContent(vv);
+    public void visualizeGraphs(Graph co_author_graph, Graph citation_graph) {
+
+        graph_visualizer_.showCoAuthorGraph(co_author_graph, this);
+        graph_visualizer_.showCitationGraph(citation_graph, this);
     }
 
-    public void showCitationGraph(final Graph g)
-    {
-        VisualizationViewer<Author, EdgeCitation> vv = citation_graph_visualizer_.createCitationVisualizationView(g, this);
-        citation_graph_visualizer_.getCitGraphNode().setContent(vv);
-    }
 
 
     public void setDetailNode(DetailViewObject obj)
@@ -229,7 +214,7 @@ public class MainController implements Initializable
         co_auth_global_view_.setDisable(true);
         search_global_view_.setDisable(true);
 
-        graph_visualizer_.setToGlobalView();
+        graph_visualizer_.setToGlobalView(this);
     }
 
     @FXML
@@ -258,20 +243,21 @@ public class MainController implements Initializable
             if(a.getAuthorType() == AuthorType.PaperAuthor) {
 
                 Graph coauthor_subgraph = GraphCreator.getInstance().createSubgraph(GraphUtils.GraphType.COAUTHOR_GRAPH, a);
-                showCoAuthorGraph(coauthor_subgraph);
+                graph_visualizer_.showCoAuthorGraph(coauthor_subgraph, this);
+            }
+            else {
+                // TODO: show emtpy graph instead ?
             }
 
             Graph citation_subgraph = GraphCreator.getInstance().createSubgraph(GraphUtils.GraphType.CITATION_GRAPH, (Author) selected);
-            showCitationGraph(citation_subgraph);
+            graph_visualizer_.showCitationGraph(citation_subgraph, this);
         }
     }
 
-    public void setDependencies(GraphVisualizer graph_vis, Searcher searcher, SwingNode co_auth_swing_node, SwingNode cit_swing_node)
+    public void setDependencies(GraphVisualizer graph_vis, Searcher searcher)
     {
         graph_visualizer_ = graph_vis;
         searcher_ = searcher;
-        co_auth_swing_node_ = co_auth_swing_node;
-        cit_swing_node_ = cit_swing_node;
     }
 
     @FXML
@@ -369,11 +355,9 @@ public class MainController implements Initializable
             public void run()
             {
 
-                VisualizationViewer<Author, EdgeCoAuthorship> vv = graph_visualizer_.createCoAuthorVisualizer(graphs.get(GraphUtils.GraphType.COAUTHOR_GRAPH.ordinal()), this_);
-                co_auth_swing_node_.setContent(vv);
+                visualizeGraphs(graphs.get(GraphUtils.GraphType.COAUTHOR_GRAPH.ordinal()),
+                    graphs.get(GraphUtils.GraphType.CITATION_GRAPH.ordinal()));
 
-                VisualizationViewer<Author, EdgeCitation> vv2 = graph_visualizer_.createCitationVisualizer(graphs.get(GraphUtils.GraphType.CITATION_GRAPH.ordinal()),this_);
-                cit_swing_node_.setContent(vv2);
             }
         });
     }
