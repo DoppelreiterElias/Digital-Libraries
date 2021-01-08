@@ -115,6 +115,14 @@ public class GraphVisualizer {
         cit_graph_node_.setContent(vv);
     }
 
+    private void insertLegendToGraph(VisualizationViewer vv) {
+
+        JLabel label = new JLabel();
+        ImageIcon icon = new ImageIcon("src/main/resources/images/graph_legend.png");
+        label.setIcon(icon);
+        vv.add(label);
+    }
+
 
     /*
     --------------------------------------------------------------------------------------------------------------------
@@ -145,6 +153,8 @@ public class GraphVisualizer {
 
         // right click menu
         gm.add(new PopupGraphMousePlugin(main_controller));
+
+        insertLegendToGraph(vv_co);
 
         return vv_co;
     }
@@ -253,7 +263,7 @@ public class GraphVisualizer {
         layout.initialize();
 
         vv_ci = new VisualizationViewer<Author, EdgeCitation>(layout);
-        vv_ci.setPreferredSize(new Dimension(950, 950));
+        vv_ci.setPreferredSize(new Dimension(900, 1200));
 
         setToTransformingMode();
         vv_ci.setGraphMouse(gm);
@@ -271,6 +281,7 @@ public class GraphVisualizer {
         // right click menu
         gm.add(new PopupGraphMousePlugin(main_controller));
 
+        insertLegendToGraph(vv_ci);
         return vv_ci;
     }
 

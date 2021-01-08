@@ -149,6 +149,7 @@ public class MainController implements Initializable
 
         search_by_choice_.setItems(FXCollections.observableArrayList("Author","Paper"));
         search_by_choice_.setValue("Author");
+
     }
 
     public void visualizeGraphs(Graph co_author_graph, Graph citation_graph) {
