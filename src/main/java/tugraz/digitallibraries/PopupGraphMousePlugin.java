@@ -4,6 +4,7 @@ import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.AbstractPopupGraphMousePlugin;
 import tugraz.digitallibraries.dataclasses.Author;
+import tugraz.digitallibraries.graph.AbstractEdge;
 import tugraz.digitallibraries.graph.EdgeCoAuthorship;
 import tugraz.digitallibraries.ui.MainController;
 
@@ -39,9 +40,11 @@ public class PopupGraphMousePlugin extends AbstractPopupGraphMousePlugin
     @Override
     @SuppressWarnings("unchecked")
     protected void handlePopup(MouseEvent e) {
+
+        System.out.println(e);
         final VisualizationViewer<Author, EdgeCoAuthorship> vv = (VisualizationViewer<Author, EdgeCoAuthorship>) e
             .getSource();
-        Point2D p = e.getPoint();// vv.getRenderContext().getBasicTransformer().inverseViewTransform(e.getPoint());
+        Point2D p = e.getPoint();
 
 //        System.out.println("click at " +  p.getX() + " " + p.getY());
         GraphElementAccessor<Author, EdgeCoAuthorship> pickSupport = vv.getPickSupport();
@@ -72,7 +75,8 @@ public class PopupGraphMousePlugin extends AbstractPopupGraphMousePlugin
                 popup.show(vv, e.getX(), e.getY());
             } else {
 
-                final EdgeCoAuthorship edge = pickSupport.getEdge(vv.getGraphLayout(), p.getX(), p.getY());
+                AbstractEdge edge = pickSupport.getEdge(vv.getGraphLayout(), p.getX(), p.getY());
+
                 if (edge != null) {
                     System.out.println("found edge " + edge.toString());
                     JPopupMenu popup = new JPopupMenu();

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 
 
-public class EdgeCoAuthorship {
+public class EdgeCoAuthorship extends AbstractEdge {
 
     public static int counter = 0;
 

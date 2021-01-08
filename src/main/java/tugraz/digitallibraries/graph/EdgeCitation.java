@@ -6,12 +6,12 @@ import tugraz.digitallibraries.dataclasses.Reference;
 
 import java.util.ArrayList;
 
-public class EdgeCitation {
+public class EdgeCitation extends AbstractEdge {
 
     public static int counter = 0;
     private int id;
     private ArrayList<Reference> references = new ArrayList<>();
-    Pair<Author, Author> authors; // don't know if really necessary, currently null
+    Pair<Author, Author> authors;
 
     public EdgeCitation(Reference ref) {
         this.references.add(ref);
@@ -40,7 +40,10 @@ public class EdgeCitation {
 
     @Override
     public String toString() {
-        return new String(authors.getKey().getSurname() + "<->" + authors.getValue().getSurname());
+        if(authors != null)
+            return new String(authors.getKey().getSurname() + "<->" + authors.getValue().getSurname());
+        else
+            return "";
     }
 
 }
