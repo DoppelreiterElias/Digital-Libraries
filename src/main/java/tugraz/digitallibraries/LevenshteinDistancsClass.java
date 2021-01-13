@@ -6,6 +6,7 @@ public class LevenshteinDistancsClass {
 
 
     //based on pseudo code: https://de.wikipedia.org/wiki/Countingsort
+    //and https://studyflix.de/informatik/counting-sort-1407
     static public String[] getTopTenLevenshteinDistances(String target, String source[],  int number_of_hits)
     {
         //For test purposes
