@@ -195,17 +195,28 @@ public class MainController implements Initializable
     @FXML
     public void citGraphDetailButtonPressed(ActionEvent event)
     {
-        Author author = (Author)cit_graph_detail_listener_.getCurrentSelection();
-        setDetailNode(author);
-        graph_visualizer_.updateBothGraphsAndCreateSubgraphs(author, this);
+        if(cit_graph_detail_listener_.getCurrentSelection().getClass() == Author.class) {
+            Author author = (Author)cit_graph_detail_listener_.getCurrentSelection();
+            setDetailNode(author);
+            graph_visualizer_.updateBothGraphsAndCreateSubgraphs(author, this);
+        }
+        else {
+            // todo: open the paper in pdf
+        }
     }
 
     @FXML
     public void coAuthGraphDetailButtonPressed(ActionEvent event)
     {
-        Author author = (Author)co_auth_detail_listener_.getCurrentSelection();
-        setDetailNode(author);
-        graph_visualizer_.updateBothGraphsAndCreateSubgraphs(author, this);
+        if(co_auth_detail_listener_.getCurrentSelection().getClass() == Author.class) {
+            Author author = (Author)co_auth_detail_listener_.getCurrentSelection();
+            setDetailNode(author);
+            graph_visualizer_.updateBothGraphsAndCreateSubgraphs(author, this);
+        }
+        else {
+            //todo: open the paper in pdf
+        }
+
     }
 
     @FXML
