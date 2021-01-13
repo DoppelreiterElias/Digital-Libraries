@@ -22,6 +22,19 @@ public class LevenshteinDistanecTest {
         {
             System.out.print(j[x] + " ");
         }
+
+
+        System.out.println("------------------");
+        String test = "a";
+        String source[] = {"bcdefg", "bc", "bcdef", "bcd"};
+
+
+        String z[] = LevenshteinDistancsClass.getTopTenLevenshteinDistances(test,source,10);
+        System.out.println("Length: "+ z.length);
+        for (int x = 0; x < z.length; x++)
+        {
+            System.out.print(z[x] + " ");
+        }
     }
 
 
