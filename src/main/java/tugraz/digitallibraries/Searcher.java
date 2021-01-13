@@ -3,14 +3,12 @@ package tugraz.digitallibraries;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import tugraz.digitallibraries.dataclasses.Author;
-import tugraz.digitallibraries.dataclasses.AuthorType;
 import tugraz.digitallibraries.graph.EdgeCoAuthorship;
 import tugraz.digitallibraries.graph.GraphCreator;
 import tugraz.digitallibraries.ui.DetailViewObject;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 public class Searcher
 {
@@ -32,22 +30,24 @@ public class Searcher
 
             for(Author a : authors_list) {
 
-                authors_names[count] = a.getFullname();
+                authors_names[count] = a.getSurname();
                 count++;
             }
 
             String similiar_name[] = LevenshteinDistancsClass.getTopTenLevenshteinDistances(keyword, authors_names, 15);
 
-            for(Author a : authors_list) {
 
-                for (int x = 0; x < similiar_name.length; x++)
-                {
-                    if (a.getFullname() == similiar_name[x])
+            for (int x = 0; x < similiar_name.length; x++)
+            {
+                for(Author a : authors_list) {
+                    if (a.getSurname() == similiar_name[x])
                     {
                         test_list.add(a);
                     }
                 }
+
             }
+
 
 
         }

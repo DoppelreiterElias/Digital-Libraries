@@ -2,6 +2,7 @@ package tugraz.digitallibraries.graph;
 
 import edu.uci.ics.jung.algorithms.layout.FRLayout2;
 import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
@@ -53,6 +54,23 @@ public class GraphVisualizer {
 
     public SwingNode getCoAuthGraphNode() { return co_auth_graph_node_;}
     public SwingNode getCitGraphNode() { return cit_graph_node_;}
+
+
+    public void updateBothGraphsAndCreateSubgraphs(Author author, MainController mainController) {
+
+        if(author.getAuthorType() == AuthorType.PaperAuthor || author.getAuthorType() == AuthorType.BOTH) {
+
+            Graph coauthor_subgraph = GraphCreator.getInstance().createSubgraph(GraphUtils.GraphType.COAUTHOR_GRAPH, author);
+            showCoAuthorGraph(coauthor_subgraph, mainController);
+        }
+        else {
+            // show empty graph in CoAuthorGraph because it is a cited author without CoAuthors
+            showCoAuthorGraph(new UndirectedSparseGraph<>(), mainController);
+        }
+
+        Graph citation_subgraph = GraphCreator.getInstance().createSubgraph(GraphUtils.GraphType.CITATION_GRAPH, (Author) author);
+        showCitationGraph(citation_subgraph, mainController);
+    }
 
 
 

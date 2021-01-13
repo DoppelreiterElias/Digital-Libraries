@@ -5,7 +5,6 @@ import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.AbstractPopupGraphMousePlugin;
 import tugraz.digitallibraries.dataclasses.Author;
 import tugraz.digitallibraries.graph.AbstractEdge;
-import tugraz.digitallibraries.graph.EdgeCoAuthorship;
 import tugraz.digitallibraries.ui.MainController;
 
 import javax.swing.*;
@@ -42,24 +41,25 @@ public class PopupGraphMousePlugin extends AbstractPopupGraphMousePlugin
     protected void handlePopup(MouseEvent e) {
 
         System.out.println(e);
-        final VisualizationViewer<Author, EdgeCoAuthorship> vv = (VisualizationViewer<Author, EdgeCoAuthorship>) e
+        final VisualizationViewer<Author, AbstractEdge> vv = (VisualizationViewer<Author, AbstractEdge>) e
             .getSource();
         Point2D p = e.getPoint();
 
 //        System.out.println("click at " +  p.getX() + " " + p.getY());
-        GraphElementAccessor<Author, EdgeCoAuthorship> pickSupport = vv.getPickSupport();
+        GraphElementAccessor<Author, AbstractEdge> pickSupport = vv.getPickSupport();
         if (pickSupport != null) {
-            final Author v = pickSupport.getVertex(vv.getGraphLayout(), p.getX(), p.getY());
-            if (v != null) {
-                System.out.println("found author " + v.getFullname());
+            final Author author = pickSupport.getVertex(vv.getGraphLayout(), p.getX(), p.getY());
+            if (author != null) {
+                System.out.println("found author " + author.getFullname());
                 JPopupMenu popup = new JPopupMenu();
                 popup.add(new AbstractAction("Open Author") {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         System.out.println("action performed" + e.getActionCommand());
-                        // TODO: open author into detailed view
-                        System.out.println(v.toString());
-                        main_controller_.setDetailNode(v);
+
+                        System.out.println(author.toString());
+                        main_controller_.setDetailNode(author);
+                        main_controller_.getGraphVisualizer().updateBothGraphsAndCreateSubgraphs(author, main_controller_);
                         vv.repaint();
                     }
                 });

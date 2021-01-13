@@ -20,8 +20,6 @@ import tugraz.digitallibraries.App;
 import tugraz.digitallibraries.NetworkCreator;
 import tugraz.digitallibraries.Searcher;
 import tugraz.digitallibraries.dataclasses.Author;
-import tugraz.digitallibraries.dataclasses.AuthorType;
-import tugraz.digitallibraries.graph.GraphCreator;
 import tugraz.digitallibraries.graph.GraphUtils;
 import tugraz.digitallibraries.graph.GraphVisualizer;
 
@@ -132,6 +130,10 @@ public class MainController implements Initializable
 
     private Searcher searcher_;
 
+    public GraphVisualizer getGraphVisualizer() {
+        return this.graph_visualizer_;
+    }
+
     public void initialize(URL location, ResourceBundle resources)
     {
         cit_graph_detail_.setShowRoot(true);
@@ -193,13 +195,17 @@ public class MainController implements Initializable
     @FXML
     public void citGraphDetailButtonPressed(ActionEvent event)
     {
-        setDetailNode(cit_graph_detail_listener_.getCurrentSelection());
+        Author author = (Author)cit_graph_detail_listener_.getCurrentSelection();
+        setDetailNode(author);
+        graph_visualizer_.updateBothGraphsAndCreateSubgraphs(author, this);
     }
 
     @FXML
     public void coAuthGraphDetailButtonPressed(ActionEvent event)
     {
-        setDetailNode(co_auth_detail_listener_.getCurrentSelection());
+        Author author = (Author)co_auth_detail_listener_.getCurrentSelection();
+        setDetailNode(author);
+        graph_visualizer_.updateBothGraphsAndCreateSubgraphs(author, this);
     }
 
     @FXML
@@ -238,20 +244,8 @@ public class MainController implements Initializable
 
         if(selected != null)
         {
-
-            Author a = (Author) selected;
-            setDetailNode(a);
-            if(a.getAuthorType() == AuthorType.PaperAuthor) {
-
-                Graph coauthor_subgraph = GraphCreator.getInstance().createSubgraph(GraphUtils.GraphType.COAUTHOR_GRAPH, a);
-                graph_visualizer_.showCoAuthorGraph(coauthor_subgraph, this);
-            }
-            else {
-                // TODO: show emtpy graph instead ?
-            }
-
-            Graph citation_subgraph = GraphCreator.getInstance().createSubgraph(GraphUtils.GraphType.CITATION_GRAPH, (Author) selected);
-            graph_visualizer_.showCitationGraph(citation_subgraph, this);
+            setDetailNode(selected);
+            graph_visualizer_.updateBothGraphsAndCreateSubgraphs((Author)selected, this);
         }
     }
 
