@@ -20,6 +20,9 @@ import tugraz.digitallibraries.App;
 import tugraz.digitallibraries.NetworkCreator;
 import tugraz.digitallibraries.Searcher;
 import tugraz.digitallibraries.dataclasses.Author;
+import tugraz.digitallibraries.dataclasses.MetadataEntry;
+import tugraz.digitallibraries.graph.EdgeCoAuthorship;
+import tugraz.digitallibraries.graph.GraphCreator;
 import tugraz.digitallibraries.graph.GraphUtils;
 import tugraz.digitallibraries.graph.GraphVisualizer;
 
@@ -28,6 +31,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.ResourceBundle;
 
 public class MainController implements Initializable
@@ -253,10 +257,24 @@ public class MainController implements Initializable
     {
         DetailViewObject selected = search_results_.getSelectionModel().getSelectedItem();
 
-        if(selected != null)
+        if(selected != null) // todo if selected is a methadataentry - a paper
         {
             setDetailNode(selected);
-            graph_visualizer_.updateBothGraphsAndCreateSubgraphs((Author)selected, this);
+            if(selected.getClass() == Author.class) {
+                graph_visualizer_.updateBothGraphsAndCreateSubgraphs((Author)selected, this);
+            }
+            else {
+                assert selected.getClass() == MetadataEntry.class;
+                MetadataEntry paper = (MetadataEntry) selected;
+                EdgeCoAuthorship edge = GraphCreator.getInstance().getEdgeFromPaper(paper);
+                if(edge != null) {
+                    Collection<Author> authors = GraphCreator.getInstance().getCoAuthorGraph().getIncidentVertices(edge);
+                    if(!authors.isEmpty()) {
+                        ArrayList<Author> author_list = new ArrayList<>(authors);
+                        graph_visualizer_.updateBothGraphsAndCreateSubgraphs(author_list.get(0), this);
+                    }
+                }
+            }
         }
     }
 

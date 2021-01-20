@@ -186,4 +186,15 @@ public class GraphCreator {
         }
     }
 
+    public EdgeCoAuthorship getEdgeFromPaper(MetadataEntry paper_to_look) {
+
+        for(EdgeCoAuthorship edge : coAuthorGraph.getEdges()) {
+
+            for(MetadataEntry paper : edge.getPapers()) {
+                if(paper_to_look == paper)
+                    return edge;
+            }
+        }
+        return null;
+    }
 }
