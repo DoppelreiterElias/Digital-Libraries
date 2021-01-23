@@ -13,7 +13,7 @@ public class XMLTestMain {
 
         if(args.length != 1) {
             System.out.println("ERROR WRONG PARAMETER COUNT");
-            System.out.println("Just enter 'Document and Metadata Collection' as path to program argument (in Intellj + " +
+            System.out.println("Just enter 'Document_and_Metadata_Collection' as path to program argument (in Intellj + " +
                 "configure Working Dir) or give the absolute path as argument - we scan the given directory for all files");
             return;
         }
@@ -23,24 +23,6 @@ public class XMLTestMain {
         ArrayList<String> files = ListAllFilesFromFolder(args[0]);
         MetadataHandler handler = new MetadataHandler(files);
 
-
-//        String file1 = "C:\\Users\\elias\\Desktop\\Document and Metadata Collection\\Vast-2014\\1624_20tvcg12-dang-2346572.pdf.tei.xml";
-//        String file2 = "C:\\\\Users\\\\elias\\\\Desktop\\\\Document and Metadata Collection\\\\Vast-2009\\\\09_vast_andrienk.pdf.tei.xml";
-
-//        String[] files = {
-//                "C:\\Users\\elias\\Desktop\\Document and Metadata Collection\\Vast-2006\\06_vast_bethel.pdf.tei.xml",
-//                "C:\\Users\\elias\\Desktop\\Document and Metadata Collection\\Vast-2007\\07_vast_andrienko.pdf.tei.xml",
-//                "C:\\Users\\elias\\Desktop\\Document and Metadata Collection\\Vast-2008\\08_vast_andrienk.pdf.tei.xml",
-//                "C:\\Users\\elias\\Desktop\\Document and Metadata Collection\\Vast-2009\\09_vast_andrienk.pdf.tei.xml",
-//                "C:\\Users\\elias\\Desktop\\Document and Metadata Collection\\Vast-2010\\10_vast_choo.pdf.tei.xml",
-//                "C:\\Users\\elias\\Desktop\\Document and Metadata Collection\\Vast-2012\\12_vast_cottam.pdf.tei.xml",
-//                "C:\\Users\\elias\\Desktop\\Document and Metadata Collection\\Vast-2013\\13_vast_ferreira.pdf.tei.xml"};
-
-//        handler.AddMetadataEntry(path);
-//        handler.AddMetadataEntry(file2);
-//
-
-//        handler.AddMultipleMetadataEntry(files);
 
 
 

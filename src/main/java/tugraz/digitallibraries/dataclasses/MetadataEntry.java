@@ -143,6 +143,7 @@ public class MetadataEntry extends DetailViewObject
     public String getPdf_path() { return pdf_path;}
 
     public void SetPdf_path(String pdf_name) {
+        pdf_name = pdf_name.replaceAll(" ", "%20");
         this.pdf_path = pdf_name;
     }
 
@@ -177,16 +178,17 @@ public class MetadataEntry extends DetailViewObject
 
     public void openPdfInBrowser()
     {
-        // TODO: implementation failing. on linux/ubuntu does not work
-
         String os = System.getProperty("os.name");
         try {
             if (os.contains("Linux")) {
-                // TODO implement
-                System.out.println("Browse URL currently not implemented for linux");
+                String absoult_path = System.getProperty("user.dir");
+                ProcessBuilder pb = new ProcessBuilder("/bin/bash", "-c", "sensible-browser " + absoult_path + "/" + pdf_path);
+                pb.start();
+
             } else {
                 if (Desktop.isDesktopSupported())
                 {
+                    // TODO: not tested - maybe we need here also the absolut path
                     Desktop.getDesktop().browse(new URI(pdf_path));
                 } else {
                     System.out.println("Browse URL xdg-open not supported!");

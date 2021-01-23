@@ -205,7 +205,8 @@ public class MainController implements Initializable
             graph_visualizer_.updateBothGraphsAndCreateSubgraphs(author, this);
         }
         else {
-            // todo: open the paper in pdf
+            MetadataEntry paper = (MetadataEntry) cit_graph_detail_listener_.getCurrentSelection();
+            paper.openPdfInBrowser();
         }
     }
 
@@ -218,7 +219,8 @@ public class MainController implements Initializable
             graph_visualizer_.updateBothGraphsAndCreateSubgraphs(author, this);
         }
         else {
-            //todo: open the paper in pdf
+            MetadataEntry paper = (MetadataEntry) co_auth_detail_listener_.getCurrentSelection();
+            paper.openPdfInBrowser();
         }
 
     }
