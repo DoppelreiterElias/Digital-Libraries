@@ -29,20 +29,19 @@ public class App extends Application {
     Searcher searcher_ = new Searcher();
 
     public static final String APP_NAME = new String("Libraliz0r");
-    public static final String DEFAULT_FOLDER = new String("Document and Metadata Collection");
+    public static final String DEFAULT_FOLDER = new String("Document and Metadata Collection/Vast-2006");
 
 
     @Override
     public void start(Stage stage) throws IOException {
 
-        scene = new Scene(loadFXML("main_view"), 1000, 666);
+        scene = new Scene(loadFXML("main_view"), 1500, 900);
         stage.setScene(scene);
         stage.setTitle(APP_NAME);
         stage.show();
 
         createAndSetSwingContent();
 
-        ///TODO maybe better initialization
         main_controller_.setDependencies(graph_visualizer_, searcher_);
     }
 
@@ -73,7 +72,8 @@ public class App extends Application {
         co_auth_graph_vbox.getChildren().add(graph_visualizer_.getCoAuthGraphNode());
 
 
-        NetworkCreator.createNetwork(DEFAULT_FOLDER);
+//        NetworkCreator.createNetwork(DEFAULT_FOLDER);
+        NetworkCreator.createNetwork(null);
         ArrayList<Graph>  graphs  = NetworkCreator.createGraphs();
 
 

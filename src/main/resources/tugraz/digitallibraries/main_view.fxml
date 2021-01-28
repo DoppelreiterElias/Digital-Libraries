@@ -19,7 +19,7 @@
         </Menu>
             <Menu mnemonicParsing="false" text="Settings">
               <items>
-                  <CheckMenuItem fx:id="check_show_names_" mnemonicParsing="false" onAction="#showNamesAction" selected="true" text="Show Author Names" />
+                  <CheckMenuItem fx:id="check_show_names_" mnemonicParsing="false" onAction="#showNamesAction" text="Show Author Names" />
                   <CheckMenuItem fx:id="check_show_edge_names_" mnemonicParsing="false" onAction="#showEdgeNamesAction" text="Show Edge Labels" />
                   <SeparatorMenuItem mnemonicParsing="false" />
                   <RadioMenuItem fx:id="radio_picking_mode_" mnemonicParsing="false" onAction="#radioPickingModeAction" text="Picking Mode">

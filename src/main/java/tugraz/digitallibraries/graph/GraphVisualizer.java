@@ -164,7 +164,7 @@ public class GraphVisualizer {
         setVertexColor(vv_co);
         setVertexSizeCO(g);
         setVertexLabelCO();
-        showVertexLabelsCO();
+
 
         setEdgeLabelCO();
         setEdgeSizeCO();

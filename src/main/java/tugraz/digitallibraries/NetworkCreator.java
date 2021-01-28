@@ -13,7 +13,7 @@ import static tugraz.digitallibraries.graph.GraphUtils.USE_SMALL_DATASET;
 public class NetworkCreator {
 
     private static GraphCreator graphCreator = GraphCreator.getInstance();
-    private static MetadataHandler metadataHandler;
+    private static MetadataHandler metadataHandler = null;
 
 
 
@@ -21,8 +21,19 @@ public class NetworkCreator {
     private NetworkCreator() { } // private because a static class
 
     public static void createNetwork(String subfoldername) {
+
+        if(subfoldername == null) {
+            metadataHandler = new MetadataHandler();
+            return;
+        }
+
+
         ArrayList<String> files = ListAllFilesFromFolder(subfoldername);
-        metadataHandler = new MetadataHandler(files);
+        if(metadataHandler == null)
+            metadataHandler = new MetadataHandler(files);
+        else {
+            metadataHandler.AddMultipleMetadataEntry(files);
+        }
     }
 
     public static ArrayList<Graph> createGraphs() {

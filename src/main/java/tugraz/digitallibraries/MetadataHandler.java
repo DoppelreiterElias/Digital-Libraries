@@ -21,18 +21,17 @@ import java.util.List;
 // has all papers here
 public class MetadataHandler {
 
-    private ArrayList<MetadataEntry> Metadata;
+    private ArrayList<MetadataEntry> Metadata = new ArrayList<MetadataEntry>();
     private HashMap<String, Author> authorMap = new HashMap<>();
 
 
     public MetadataHandler() {
 
-        Metadata = new ArrayList<MetadataEntry>();
     }
 
     public MetadataHandler(ArrayList<String> directorypath) {
 
-        Metadata = new ArrayList<MetadataEntry>();
+
         AddMultipleMetadataEntry(directorypath);
 
     }
@@ -192,12 +191,12 @@ public class MetadataHandler {
 
                     author.setForenames(first_name);
                     author.setSurnames(last_name);
-                    author.createFullName();
                     author.setAuthorType(AuthorType.PaperAuthor);
 
                     removeInvalidCharsFromNames(author);
                     if(!validAuthor(author)) // empty author - do not append
                         continue;
+                    author.createFullName();
 
 //                    System.out.print("First Names: ");
 //                    for (int i = 0; i < first_name.length; i++) {
@@ -262,6 +261,8 @@ public class MetadataHandler {
             return false;
         if(author.getSurnames().length == 1 && author.getSurnames()[0].equals(" ") &&
             author.getForenames().length == 1 && author.getForenames()[0].equals(" "))
+            return false;
+        if(author.getForenames().length == 1 && author.getForenames()[0].equals("") && author.getSurname().length() == 0)
             return false;
         return true;
     }
