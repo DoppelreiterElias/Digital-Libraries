@@ -180,16 +180,17 @@ public class MetadataEntry extends DetailViewObject
     {
         String os = System.getProperty("os.name");
         try {
+            String absoult_path = System.getProperty("user.dir");
+
             if (os.contains("Linux")) {
-                String absoult_path = System.getProperty("user.dir");
                 ProcessBuilder pb = new ProcessBuilder("/bin/bash", "-c", "sensible-browser " + absoult_path + "/" + pdf_path);
                 pb.start();
 
             } else {
-                if (Desktop.isDesktopSupported())
+                if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE))
                 {
                     // TODO: not tested - maybe we need here also the absolut path
-                    Desktop.getDesktop().browse(new URI(pdf_path));
+                    Desktop.getDesktop().browse(new URI(absoult_path + "/" + pdf_path));
                 } else {
                     System.out.println("Browse URL xdg-open not supported!");
                 }
