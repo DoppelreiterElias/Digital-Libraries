@@ -169,6 +169,16 @@ public class GraphVisualizer {
         setEdgeLabelCO();
         setEdgeSizeCO();
 
+        if(main_controller.IsShowAuthorNamesTrue())
+            showVertexLabelsCO();
+        else
+            hideVertexLabelsCO();
+
+        if(main_controller.IsShowEdgeNamesTrue())
+            showEdgeLabelsCO();
+        else
+            hideEdgeLabelsCO();
+
         // right click menu
         gm.add(new PopupGraphMousePlugin(main_controller));
 
@@ -260,7 +270,7 @@ public class GraphVisualizer {
         vv_co.getRenderContext().setEdgeLabelRenderer(edgeLabelRenderer);
 
         co_edge_label = new ToStringLabeller<EdgeCoAuthorship>();
-        showEdgeLabelsCO();
+
     }
 
     public void repaintCO()
@@ -292,8 +302,18 @@ public class GraphVisualizer {
         setVertexLabelCI();
         showVertexLabelsCI();
 
-//        setEdgeLabelCI(); // edge labels not really necessary?
+        setEdgeLabelCI();
         setEdgeSizeCI();
+
+        if(main_controller.IsShowAuthorNamesTrue())
+            showVertexLabelsCI();
+        else
+            hideVertexLabelsCI();
+
+        if(main_controller.IsShowEdgeNamesTrue())
+            showEdgeLabelsCI();
+        else
+            hideEdgeLabelsCI();
 
 
         // right click menu
@@ -365,7 +385,6 @@ public class GraphVisualizer {
         vv_ci.getRenderContext().setEdgeLabelRenderer(edgeLabelRenderer);
 
         ci_edge_label = new ToStringLabeller<EdgeCitation>();
-        showEdgeLabelsCI();
     }
 
     private void setVertexSizeCI(final Graph g) {

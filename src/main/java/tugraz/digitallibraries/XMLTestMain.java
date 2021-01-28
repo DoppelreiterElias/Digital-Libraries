@@ -13,7 +13,7 @@ public class XMLTestMain {
 
         if(args.length != 1) {
             System.out.println("ERROR WRONG PARAMETER COUNT");
-            System.out.println("Just enter 'Document_and_Metadata_Collection' as path to program argument (in Intellj + " +
+            System.out.println("Just enter 'Document and Metadata Collection' as path to program argument (in Intellj + " +
                 "configure Working Dir) or give the absolute path as argument - we scan the given directory for all files");
             return;
         }

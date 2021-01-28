@@ -10,6 +10,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -62,6 +63,9 @@ public class MainController implements Initializable
     private CheckMenuItem check_show_names_;
 
     @FXML
+    private CheckMenuItem check_show_edge_names_;
+
+    @FXML
     private RadioMenuItem radio_picking_mode_;
 
     @FXML
@@ -84,6 +88,9 @@ public class MainController implements Initializable
 
     @FXML
     private Button search_button_;
+
+    @FXML
+    private Button reset_button_;
 
     @FXML
     private Button search_show_selected_;
@@ -225,6 +232,25 @@ public class MainController implements Initializable
 
     }
 
+
+    public boolean IsShowAuthorNamesTrue() {
+        return check_show_names_.isSelected();
+    }
+
+    public boolean IsShowEdgeNamesTrue() {
+        return check_show_edge_names_.isSelected();
+    }
+
+    @FXML
+    public void resetButtonPressed(ActionEvent event) {
+
+        search_field_.clear();
+        reset_button_.setDisable(true);
+        search_show_selected_.setDisable(true);
+        search_results_.setItems(null);
+        search_detail_.setRoot(null);
+    }
+
     @FXML
     public void searchDetailButtonPressed(ActionEvent event)
     {
@@ -237,6 +263,7 @@ public class MainController implements Initializable
         cit_global_view_.setDisable(true);
         co_auth_global_view_.setDisable(true);
         search_global_view_.setDisable(true);
+        search_show_selected_.setDisable(true);
 
         graph_visualizer_.setToGlobalView(this);
     }
@@ -250,8 +277,15 @@ public class MainController implements Initializable
             public void run()
             {
                 search_results_.setItems(searcher_.Search(search_field_.getText(), (String)search_by_choice_.getValue()));
+                reset_button_.setDisable(false);
+
             }
         });
+    }
+
+    @FXML
+    public void onResultClicked(MouseEvent event) {
+        search_show_selected_.setDisable(false);
     }
 
     @FXML
@@ -259,7 +293,7 @@ public class MainController implements Initializable
     {
         DetailViewObject selected = search_results_.getSelectionModel().getSelectedItem();
 
-        if(selected != null) // todo if selected is a methadataentry - a paper
+        if(selected != null)
         {
             setDetailNode(selected);
             if(selected.getClass() == Author.class) {
@@ -292,21 +326,30 @@ public class MainController implements Initializable
         if(check_show_names_.isSelected())
         {
             System.out.println("Showing Labels");
-
-//            graph_visualizer_.showEdgeLabelsCI();
             graph_visualizer_.showVertexLabelsCI();
             graph_visualizer_.showVertexLabelsCO();
-            graph_visualizer_.showEdgeLabelsCO();
         }
         else
         {
             System.out.println("Hiding Labels");
-
-            graph_visualizer_.hideEdgeLabelsCI();
             graph_visualizer_.hideVertexLabelsCI();
             graph_visualizer_.hideVertexLabelsCO();
-            graph_visualizer_.hideEdgeLabelsCO();
+        }
+    }
 
+    @FXML
+    public void showEdgeNamesAction(ActionEvent event) {
+        if(check_show_edge_names_.isSelected())
+        {
+            System.out.println("Showing Edge Labels");
+            graph_visualizer_.showEdgeLabelsCI();
+            graph_visualizer_.showEdgeLabelsCO();
+        }
+        else
+        {
+            System.out.println("Hiding Edge Labels");
+            graph_visualizer_.hideEdgeLabelsCI();
+            graph_visualizer_.hideEdgeLabelsCO();
         }
     }
 

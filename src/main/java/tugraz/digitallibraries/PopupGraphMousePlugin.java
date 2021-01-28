@@ -5,6 +5,7 @@ import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.AbstractPopupGraphMousePlugin;
 import tugraz.digitallibraries.dataclasses.Author;
 import tugraz.digitallibraries.graph.AbstractEdge;
+import tugraz.digitallibraries.graph.EdgeCoAuthorship;
 import tugraz.digitallibraries.ui.MainController;
 
 import javax.swing.*;
@@ -84,6 +85,14 @@ public class PopupGraphMousePlugin extends AbstractPopupGraphMousePlugin
                         @Override
                         public void actionPerformed(ActionEvent e) {
                             System.out.println("action performed" + e.getActionCommand());
+
+                            if(edge.getClass() == EdgeCoAuthorship.class) {
+                                main_controller_.setDetailNode(((EdgeCoAuthorship) edge).getPapers().get(0));
+                            }
+
+
+
+
                         }
                     });
                     popup.show(vv, e.getX(), e.getY());
