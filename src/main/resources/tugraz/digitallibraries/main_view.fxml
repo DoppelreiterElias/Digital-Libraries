@@ -191,13 +191,14 @@
                                           <Color red="0.624" green="0.624" blue="0.624" fx:id="x2621" />
                                        </textFill>
                                     </Label>
-                                    <TreeView fx:id="search_detail_" prefHeight="469.0" prefWidth="345.0" VBox.vgrow="ALWAYS">
+                                    <TreeView fx:id="search_detail_" prefHeight="469.0" prefWidth="345.0" VBox.vgrow="ALWAYS" onMouseClicked="#onSearchDetailClicked">
                                        <VBox.margin>
                                           <Insets bottom="20.0" />
                                        </VBox.margin>
                                     </TreeView>
                                     <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                                        <children>
+                                          <Button fx:id="search_open_pdf_" disable="true" minHeight="50.0" mnemonicParsing="false" onAction="#searchOpenPdfPressed" prefHeight="50.0" prefWidth="150.0" styleClass="button_click" stylesheets="@style.css" text="Open PDF" />
                                           <Button fx:id="search_detail_open_" disable="true" minHeight="50.0" mnemonicParsing="false" onAction="#searchDetailButtonPressed" prefHeight="50.0" prefWidth="150.0" styleClass="button_click" stylesheets="@style.css" text="Open" />
                                           <Button fx:id="search_global_view_" disable="true" minHeight="50.0" mnemonicParsing="false" onAction="#globalViewButtonPressed" prefHeight="50.0" prefWidth="150.0" styleClass="button_click" stylesheets="@style.css" text="Global View" />
                                        </children>

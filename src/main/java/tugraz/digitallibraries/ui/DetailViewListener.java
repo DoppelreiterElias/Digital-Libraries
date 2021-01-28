@@ -42,6 +42,7 @@ public class DetailViewListener implements ChangeListener<TreeItem<DetailViewObj
 
             open_button_.setDisable(false);
         }
+
         System.out.println(new_value.getValue().toString());
 
         // newValue represents the selected itemTree

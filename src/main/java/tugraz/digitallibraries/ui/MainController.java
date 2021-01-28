@@ -87,6 +87,9 @@ public class MainController implements Initializable
     private Button search_detail_open_;
 
     @FXML
+    private Button search_open_pdf_;
+
+    @FXML
     private Button search_button_;
 
     @FXML
@@ -136,6 +139,8 @@ public class MainController implements Initializable
     private DetailViewListener cit_graph_detail_listener_;
     private DetailViewListener co_auth_detail_listener_;
     private DetailViewListener search_detail_listener_;
+
+    MetadataEntry last_clicked_paper = null;
 
     int selected_tab_index_;
 
@@ -247,6 +252,7 @@ public class MainController implements Initializable
         search_field_.clear();
         reset_button_.setDisable(true);
         search_show_selected_.setDisable(true);
+        search_open_pdf_.setDisable(true);
         search_results_.setItems(null);
         search_detail_.setRoot(null);
     }
@@ -258,13 +264,32 @@ public class MainController implements Initializable
     }
 
     @FXML
+    public void onSearchDetailClicked(MouseEvent event) {
+       // System.out.println("clicked at: " + search_detail_listener_.getCurrentSelection());
+
+        if(search_detail_listener_.getCurrentSelection() == null) {
+            return;
+        }
+
+        if(search_detail_listener_.getCurrentSelection().getClass() == MetadataEntry.class) {
+            search_open_pdf_.setDisable(false);
+            last_clicked_paper = (MetadataEntry) search_detail_listener_.getCurrentSelection();
+        }
+
+        else
+            search_open_pdf_.setDisable(true);
+
+
+    }
+
+    @FXML
     public void globalViewButtonPressed(ActionEvent event)
     {
         cit_global_view_.setDisable(true);
         co_auth_global_view_.setDisable(true);
         search_global_view_.setDisable(true);
         search_show_selected_.setDisable(true);
-
+        search_open_pdf_.setDisable(true);
         graph_visualizer_.setToGlobalView(this);
     }
 
@@ -281,6 +306,21 @@ public class MainController implements Initializable
 
             }
         });
+    }
+
+    @FXML
+    public void searchOpenPdfPressed(ActionEvent event) {
+        System.out.println("opening pdf");
+
+        DetailViewObject selected_object = search_detail_listener_.getCurrentSelection();
+        if(selected_object == null)
+            selected_object = last_clicked_paper;
+        if(selected_object.getClass() == MetadataEntry.class)
+        {
+            ((MetadataEntry)selected_object).openPdfInBrowser();
+            last_clicked_paper = (MetadataEntry)selected_object;
+        }
+
     }
 
     @FXML
