@@ -181,9 +181,14 @@ public class MetadataEntry extends DetailViewObject
         String os = System.getProperty("os.name");
         try {
             String absoult_path = System.getProperty("user.dir");
+            String full_path  = "";
+            if(pdf_path.charAt(0) == '/')
+                full_path = pdf_path;
+            else
+                full_path = absoult_path + "/" + pdf_path;
 
             if (os.contains("Linux")) {
-                ProcessBuilder pb = new ProcessBuilder("/bin/bash", "-c", "sensible-browser " + absoult_path + "/" + pdf_path);
+                ProcessBuilder pb = new ProcessBuilder("/bin/bash", "-c", "sensible-browser " + full_path);
                 pb.start();
 
             } else {
