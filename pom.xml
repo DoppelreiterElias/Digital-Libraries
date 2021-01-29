@@ -75,9 +75,9 @@
             <plugin>
                 <groupId>org.openjfx</groupId>
                 <artifactId>javafx-maven-plugin</artifactId>
-                <version>0.0.4</version>
+                <version>0.0.5</version>
                 <configuration>
-                <mainClass>tugraz.digitallibraries.App</mainClass>
+                <mainClass>tugraz.digitallibraries.AppLauncher</mainClass>
                 </configuration>
             </plugin>
             <plugin>
@@ -89,7 +89,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>tugraz.digitallibraries.App</mainClass>
+                            <mainClass>tugraz.digitallibraries.AppLauncher</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -113,11 +113,33 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>tugraz.digitallibraries.App</mainClass>
+                            <mainClass>tugraz.digitallibraries.AppLauncher</mainClass>
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix>lib/</classpathPrefix>
                         </manifest>
                     </archive>
                 </configuration>
             </plugin>
+            <!--<plugin>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.2.1</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>tugraz.digitallibraries.App</mainClass>
+                                </transformer>
+                            </transformers>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>-->
+
         </plugins>
     </build>
 </project>
