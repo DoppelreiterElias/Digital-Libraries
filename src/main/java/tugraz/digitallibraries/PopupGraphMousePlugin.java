@@ -41,7 +41,7 @@ public class PopupGraphMousePlugin extends AbstractPopupGraphMousePlugin
     @SuppressWarnings("unchecked")
     protected void handlePopup(MouseEvent e) {
 
-        System.out.println(e);
+        //System.out.println(e);
         final VisualizationViewer<Author, AbstractEdge> vv = (VisualizationViewer<Author, AbstractEdge>) e
             .getSource();
         Point2D p = e.getPoint();
@@ -51,14 +51,14 @@ public class PopupGraphMousePlugin extends AbstractPopupGraphMousePlugin
         if (pickSupport != null) {
             final Author author = pickSupport.getVertex(vv.getGraphLayout(), p.getX(), p.getY());
             if (author != null) {
-                System.out.println("found author " + author.getFullname());
+                //System.out.println("found author " + author.getFullname());
                 JPopupMenu popup = new JPopupMenu();
                 popup.add(new AbstractAction("Open Author") {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        System.out.println("action performed" + e.getActionCommand());
+                        //System.out.println("action performed" + e.getActionCommand());
 
-                        System.out.println(author.toString());
+                        //System.out.println(author.toString());
                         main_controller_.setDetailNode(author);
                         main_controller_.getGraphVisualizer().updateBothGraphsAndCreateSubgraphs(author, main_controller_);
                         vv.repaint();
@@ -79,12 +79,12 @@ public class PopupGraphMousePlugin extends AbstractPopupGraphMousePlugin
                 AbstractEdge edge = pickSupport.getEdge(vv.getGraphLayout(), p.getX(), p.getY());
 
                 if (edge != null) {
-                    System.out.println("found edge " + edge.toString());
+                    //System.out.println("found edge " + edge.toString());
                     JPopupMenu popup = new JPopupMenu();
                     popup.add(new AbstractAction(edge.toString()) {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            System.out.println("action performed" + e.getActionCommand());
+                            //System.out.println("action performed" + e.getActionCommand());
 
                             if(edge.getClass() == EdgeCoAuthorship.class) {
                                 main_controller_.setDetailNode(((EdgeCoAuthorship) edge).getPapers().get(0));
@@ -99,7 +99,9 @@ public class PopupGraphMousePlugin extends AbstractPopupGraphMousePlugin
 
                 }
                 else
-                    System.out.println("no author or edge here");
+                {
+                    //System.out.println("no author or edge here");
+                }
             }
         }
     }

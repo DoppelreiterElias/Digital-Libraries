@@ -12,7 +12,7 @@ public class LevenshteinDistanecTest {
 
         int i = LevenshteinDistancsClass.calculateLevenshteinDistance(a,b);
 
-        System.out.println("Levenshtein distance: " + i);
+        //System.out.println("Levenshtein distance: " + i);
 
         int j[] = LevenshteinDistancsClass.calculateLevenshteinDistances(a,c);
 
@@ -24,13 +24,13 @@ public class LevenshteinDistanecTest {
         }
 
 
-        System.out.println("------------------");
+        //System.out.println("------------------");
         String test = "a";
         String source[] = {"bcdefg", "bc", "bcdef", "bcd"};
 
 
         String z[] = LevenshteinDistancsClass.getTopTenLevenshteinDistances(test,source,10);
-        System.out.println("Length: "+ z.length);
+        //System.out.println("Length: "+ z.length);
         for (int x = 0; x < z.length; x++)
         {
             System.out.print(z[x] + " ");

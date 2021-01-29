@@ -93,8 +93,8 @@ public class GraphCreator {
 
             // create edges between authors. If a edge already exists between 2 authors the paper will be added to the paperList
             for(int i = 0; i < current_authors.size(); i++) {
-                if(current_authors.get(i).getForenames().length == 0 && current_authors.get(i).getSurnames().length == 0)
-                    System.out.println("no name here");
+                //if(current_authors.get(i).getForenames().length == 0 && current_authors.get(i).getSurnames().length == 0)
+                  //  System.out.println("no name here");
                 for(int j = i + 1; j < current_authors.size(); j++) {
                     EdgeCoAuthorship existing_edge = coAuthorGraph.findEdge(current_authors.get(i),current_authors.get(j));
                     if(existing_edge != null) // edge between authors already exists

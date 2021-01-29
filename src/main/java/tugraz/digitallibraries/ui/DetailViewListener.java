@@ -32,7 +32,7 @@ public class DetailViewListener implements ChangeListener<TreeItem<DetailViewObj
         if(new_value == null)
             return;
 
-        System.out.println("Can be opened: " + new_value.getValue().canBeOpened());
+        //System.out.println("Can be opened: " + new_value.getValue().canBeOpened());
 
         ///is String if not paper
         if(new_value.getValue().canBeOpened())
