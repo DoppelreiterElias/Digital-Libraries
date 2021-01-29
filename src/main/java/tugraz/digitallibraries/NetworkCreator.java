@@ -29,6 +29,12 @@ public class NetworkCreator {
 
 
         ArrayList<String> files = ListAllFilesFromFolder(subfoldername);
+
+        if(files.isEmpty())
+        {
+            System.out.println("No papers found in this subfolder!\n");
+            return;
+        }
         if(metadataHandler == null)
             metadataHandler = new MetadataHandler(files);
         else {
